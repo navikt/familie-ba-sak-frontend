@@ -23,10 +23,7 @@ const FlexRowDiv = styled.div`
     display: flex;
 `;
 
-const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({
-    lukkNyPeriode,
-    behandlingId,
-}) => {
+const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({ lukkNyPeriode, behandlingId }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
     const { skjema, lagreNyPeriode, valideringErOk } = useRefusjonEøs({
@@ -49,11 +46,7 @@ const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({
                 <FlexColumnDiv>
                     <RefusjonEøsSkjema skjema={skjema} />
                     <FlexRowDiv style={{ gap: '1rem' }}>
-                        <Button
-                            size="small"
-                            onClick={lagre}
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
-                        >
+                        <Button size="small" onClick={lagre} variant={valideringErOk() ? 'primary' : 'secondary'}>
                             Lagre periode
                         </Button>
                         <Button size="small" variant="tertiary" onClick={avbrytLeggTilNy}>

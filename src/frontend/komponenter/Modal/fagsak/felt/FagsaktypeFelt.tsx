@@ -57,20 +57,14 @@ export function FagsaktypeFelt({ readOnly }: Props) {
         .filter(option => {
             if (option.value === FagsakType.SKJERMET_BARN) {
                 const groups = innloggetSaksbehandler?.groups ?? [];
-                const aktuellGruppe = erProd()
-                    ? SKJERMET_BARN_GRUPPE.PROD
-                    : SKJERMET_BARN_GRUPPE.DEV;
+                const aktuellGruppe = erProd() ? SKJERMET_BARN_GRUPPE.PROD : SKJERMET_BARN_GRUPPE.DEV;
                 const harTilgang = groups.some(group => group === aktuellGruppe);
                 return harTilgang && toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
             }
             return true;
         })
         .filter(option => (harNormalFagsak ? option.value !== FagsakType.NORMAL : true))
-        .filter(option =>
-            harBarnEnsligMindreårigFagsak
-                ? option.value !== FagsakType.BARN_ENSLIG_MINDREÅRIG
-                : true
-        );
+        .filter(option => (harBarnEnsligMindreårigFagsak ? option.value !== FagsakType.BARN_ENSLIG_MINDREÅRIG : true));
 
     return (
         <Select

@@ -29,28 +29,17 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
 
     return (
         <section>
-            <PersonInformasjon
-                person={utbetalingsperiodeDetaljer[0].person}
-                erLesevisning={false}
-            />
+            <PersonInformasjon person={utbetalingsperiodeDetaljer[0].person} erLesevisning={false} />
             <Ytelser>
                 {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
                     return (
-                        <Ytelselinje
-                            justify="space-between"
-                            key={utbetalingsperiodeDetalj.person.personIdent}
-                        >
+                        <Ytelselinje justify="space-between" key={utbetalingsperiodeDetalj.person.personIdent}>
                             <BodyShort>
-                                {utbetalingsperiodeDetalj.ytelseType ===
-                                YtelseType.ORDINÆR_BARNETRYGD
-                                    ? genererTekstForOrdinær(
-                                          utbetalingsperiodeDetalj.person.fødselsdato
-                                      )
+                                {utbetalingsperiodeDetalj.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
+                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj.person.fødselsdato)
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </BodyShort>
-                            <BodyShort>
-                                {formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}
-                            </BodyShort>
+                            <BodyShort>{formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}</BodyShort>
                         </Ytelselinje>
                     );
                 })}

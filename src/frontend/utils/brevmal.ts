@@ -26,17 +26,14 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
         case Brevmal.VARSEL_OM_REVURDERING:
         case Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON:
             return (
-                åpenBehandling.type === Behandlingstype.REVURDERING &&
-                åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
+                åpenBehandling.type === Behandlingstype.REVURDERING && åpenBehandling.årsak !== BehandlingÅrsak.SØKNAD
             );
         case Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14:
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
-                [
-                    BehandlingÅrsak.NYE_OPPLYSNINGER,
-                    BehandlingÅrsak.SØKNAD,
-                    BehandlingÅrsak.ÅRLIG_KONTROLL,
-                ].includes(åpenBehandling.årsak)
+                [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD, BehandlingÅrsak.ÅRLIG_KONTROLL].includes(
+                    åpenBehandling.årsak
+                )
             );
         case Brevmal.VARSEL_OM_REVURDERING_SAMBOER:
             return åpenBehandling.type === Behandlingstype.REVURDERING;
@@ -45,9 +42,7 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;
         case Brevmal.FORLENGET_SVARTIDSBREV:
         case Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON:
-            return [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
-                åpenBehandling.type
-            );
+            return [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(åpenBehandling.type);
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD:
             return false;
         case Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON:
@@ -56,24 +51,18 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return (
                 åpenBehandling.type === Behandlingstype.REVURDERING &&
                 åpenBehandling.kategori === BehandlingKategori.EØS &&
-                [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD].includes(
-                    åpenBehandling.årsak
-                )
+                [BehandlingÅrsak.NYE_OPPLYSNINGER, BehandlingÅrsak.SØKNAD].includes(åpenBehandling.årsak)
             );
         case Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED:
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
                 åpenBehandling.kategori === BehandlingKategori.EØS &&
-                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
-                    åpenBehandling.type
-                )
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(åpenBehandling.type)
             );
         case Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT:
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
-                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
-                    åpenBehandling.type
-                )
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(åpenBehandling.type)
             );
         case Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT:
             return åpenBehandling.type === Behandlingstype.REVURDERING;
@@ -81,9 +70,7 @@ const brevmalKanVelgesForBehandling = (brevmal: Brevmal, åpenBehandling: IBehan
             return (
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD &&
                 åpenBehandling.kategori === BehandlingKategori.EØS &&
-                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(
-                    åpenBehandling.type
-                )
+                [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING].includes(åpenBehandling.type)
             );
         case Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON:
             return åpenBehandling.årsak === BehandlingÅrsak.SØKNAD;

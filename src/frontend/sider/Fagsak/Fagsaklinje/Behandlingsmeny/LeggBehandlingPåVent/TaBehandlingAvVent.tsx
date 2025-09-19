@@ -5,12 +5,7 @@ import styled from 'styled-components';
 import { Alert, BodyShort, Button, Dropdown, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
 import { settPåVentÅrsaker } from '../../../../../typer/behandling';
@@ -55,9 +50,7 @@ const TaBehandlingAvVent: React.FC = () => {
 
     return (
         <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                Fortsett behandling
-            </Dropdown.Menu.List.Item>
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>Fortsett behandling</Dropdown.Menu.List.Item>
 
             {visModal && (
                 <Modal
@@ -71,9 +64,7 @@ const TaBehandlingAvVent: React.FC = () => {
                         <BodyShort>
                             Behandlingen er satt på vent.
                             {behandling?.aktivSettPåVent &&
-                                ` Årsak: ${
-                                    settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]
-                                }. `}
+                                ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
                         </BodyShort>
                         <StyledBodyShort>
                             {`Frist: ${isoStringTilFormatertString({
@@ -86,9 +77,7 @@ const TaBehandlingAvVent: React.FC = () => {
                         <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
 
                         {submitRessurs.status === RessursStatus.FEILET && (
-                            <StyledAlert variant="error">
-                                {submitRessurs.frontendFeilmelding}
-                            </StyledAlert>
+                            <StyledAlert variant="error">{submitRessurs.frontendFeilmelding}</StyledAlert>
                         )}
                     </Modal.Body>
                     <Modal.Footer>
@@ -100,12 +89,7 @@ const TaBehandlingAvVent: React.FC = () => {
                             children={'Ja, fortsett'}
                             loading={submitRessurs.status === RessursStatus.HENTER}
                         />
-                        <Button
-                            key={'Nei'}
-                            variant="tertiary"
-                            onClick={lukkModal}
-                            children={'Nei'}
-                        />
+                        <Button key={'Nei'} variant="tertiary" onClick={lukkModal} children={'Nei'} />
                     </Modal.Footer>
                 </Modal>
             )}

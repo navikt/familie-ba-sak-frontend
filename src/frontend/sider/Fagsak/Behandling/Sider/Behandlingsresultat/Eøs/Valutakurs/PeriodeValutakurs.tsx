@@ -9,9 +9,7 @@ interface IStatusBarnCelleOgPeriodeCelleProps {
     valutakurs: IRestValutakurs;
 }
 
-export const PeriodeValutakurs: React.FC<IStatusBarnCelleOgPeriodeCelleProps> = ({
-    valutakurs,
-}) => (
+export const PeriodeValutakurs: React.FC<IStatusBarnCelleOgPeriodeCelleProps> = ({ valutakurs }) => (
     <BodyShort size="small">
         {isoMånedPeriodeTilFormatertString({
             periode: {

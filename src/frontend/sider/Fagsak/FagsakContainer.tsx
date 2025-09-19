@@ -41,14 +41,8 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/saksoversikt"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
-                                        <Saksoversikt
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={brukerRessurs.data} minimalFagsak={fagsak} />
+                                        <Saksoversikt bruker={brukerRessurs.data} minimalFagsak={fagsak} />
                                     </>
                                 }
                             />
@@ -56,10 +50,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/dokumentutsending"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={brukerRessurs.data} minimalFagsak={fagsak} />
                                         <DokumentutsendingProvider fagsakId={fagsak.id}>
                                             <Dokumentutsending bruker={brukerRessurs.data} />
                                         </DokumentutsendingProvider>
@@ -70,10 +61,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/dokumenter"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={brukerRessurs.data} minimalFagsak={fagsak} />
                                         <JournalpostListe bruker={brukerRessurs.data} />
                                     </>
                                 }
@@ -82,10 +70,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/infotrygd"
                                 element={
                                     <>
-                                        <Fagsaklinje
-                                            bruker={brukerRessurs.data}
-                                            minimalFagsak={fagsak}
-                                        />
+                                        <Fagsaklinje bruker={brukerRessurs.data} minimalFagsak={fagsak} />
                                         <InfotrygdFagsak minimalFagsak={fagsak} />
                                     </>
                                 }
@@ -94,10 +79,7 @@ function FagsakContainerInnhold({ fagsak }: { fagsak: IMinimalFagsak }) {
                                 path="/:behandlingId/*"
                                 element={
                                     <HentOgSettBehandlingProvider fagsak={fagsak}>
-                                        <BehandlingContainer
-                                            bruker={brukerRessurs.data}
-                                            fagsak={fagsak}
-                                        />
+                                        <BehandlingContainer bruker={brukerRessurs.data} fagsak={fagsak} />
                                     </HentOgSettBehandlingProvider>
                                 }
                             />
@@ -127,11 +109,7 @@ export function FagsakContainer() {
 
     useScrollTilAnker();
 
-    const {
-        data: fagsak,
-        isPending: isPendingFagsak,
-        error: fagsakError,
-    } = useHentFagsak(fagsakId);
+    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
 
     if (isPendingFagsak) {
         return (
@@ -143,11 +121,7 @@ export function FagsakContainer() {
     }
 
     if (fagsakError) {
-        return (
-            <Alert variant={'error'}>
-                Feil oppstod ved innlasting av fagsak: {fagsakError.message}
-            </Alert>
-        );
+        return <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>;
     }
 
     return (

@@ -42,9 +42,7 @@ const Månedvelger = ({
     tilhørendeFomFelt,
 }: IProps) => {
     const [error, setError] = useState<Feilmelding | undefined>();
-    const [forrigeTilhørendeFomVerdi, settforrigeTilhørendeFomVerdi] = useState(
-        tilhørendeFomFelt?.verdi
-    );
+    const [forrigeTilhørendeFomVerdi, settforrigeTilhørendeFomVerdi] = useState(tilhørendeFomFelt?.verdi);
 
     const hentFromDate = () => {
         if (tilhørendeFomFelt?.verdi !== undefined) return tilhørendeFomFelt.verdi;

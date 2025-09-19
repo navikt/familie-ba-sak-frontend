@@ -42,12 +42,8 @@ export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = (
 
     return (
         <>
-            <StyledButton onClick={gjenomførValutajustering}>
-                Gjennomfør valutajustering
-            </StyledButton>
-            {visFeilmelidng && (
-                <ErrorMessage>Noe gikk galt med gjennomføringen av valutajustering</ErrorMessage>
-            )}
+            <StyledButton onClick={gjenomførValutajustering}>Gjennomfør valutajustering</StyledButton>
+            {visFeilmelidng && <ErrorMessage>Noe gikk galt med gjennomføringen av valutajustering</ErrorMessage>}
         </>
     );
 };

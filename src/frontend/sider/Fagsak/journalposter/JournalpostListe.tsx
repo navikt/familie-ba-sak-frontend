@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-    ArrowDownIcon,
-    ArrowLeftIcon,
-    ArrowRightIcon,
-    MagnifyingGlassIcon,
-} from '@navikt/aksel-icons';
+import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Heading, Alert, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
@@ -142,11 +137,8 @@ const JournalpostListe = ({ bruker }: IProps) => {
     const { request } = useHttp();
     const [journalposterRessurs, settJournalposterRessurs] =
         useState<Ressurs<ITilgangsstyrtJournalpost[]>>(byggTomRessurs());
-    const [sortering, settSortering] = useState<Sorteringsrekkefølge>(
-        Sorteringsrekkefølge.INGEN_SORTERING
-    );
-    const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } =
-        useDokument();
+    const [sortering, settSortering] = useState<Sorteringsrekkefølge>(Sorteringsrekkefølge.INGEN_SORTERING);
+    const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } = useDokument();
     const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
 
     useEffect(() => {
@@ -192,18 +184,16 @@ const JournalpostListe = ({ bruker }: IProps) => {
     }
 
     if (journalposterRessurs.status === RessursStatus.SUKSESS) {
-        const journalposterMedOverstyrtDato: ITilgangsstyrtJournalpost[] =
-            journalposterRessurs.data?.map(tilgangsstyrtJournalpost => {
+        const journalposterMedOverstyrtDato: ITilgangsstyrtJournalpost[] = journalposterRessurs.data?.map(
+            tilgangsstyrtJournalpost => {
                 const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
                 return {
                     journalpostTilgang,
                     journalpost: settRiktigDatoMottatForJournalpost(journalpost),
                 };
-            });
-        const sorterteJournalPoster = hentSorterteJournalposter(
-            journalposterMedOverstyrtDato,
-            sortering
+            }
         );
+        const sorterteJournalPoster = hentSorterteJournalposter(journalposterMedOverstyrtDato, sortering);
         return (
             <Container>
                 <Heading level="2" size="large" spacing>
@@ -252,18 +242,14 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                 <StyledDataCell>
                                     {tilgangsstyrtJournalpost.journalpost.dokumenter?.length ? (
                                         <Vedleggsliste>
-                                            {tilgangsstyrtJournalpost.journalpost.dokumenter?.map(
-                                                dokument => (
-                                                    <JournalpostDokument
-                                                        dokument={dokument}
-                                                        key={dokument.dokumentInfoId}
-                                                        hentForhåndsvisning={hentForhåndsvisning}
-                                                        tilgangsstyrtJournalpost={
-                                                            tilgangsstyrtJournalpost
-                                                        }
-                                                    />
-                                                )
-                                            )}
+                                            {tilgangsstyrtJournalpost.journalpost.dokumenter?.map(dokument => (
+                                                <JournalpostDokument
+                                                    dokument={dokument}
+                                                    key={dokument.dokumentInfoId}
+                                                    hentForhåndsvisning={hentForhåndsvisning}
+                                                    tilgangsstyrtJournalpost={tilgangsstyrtJournalpost}
+                                                />
+                                            ))}
                                         </Vedleggsliste>
                                     ) : (
                                         <BodyShort>Ingen dokumenter</BodyShort>
@@ -292,54 +278,31 @@ const JournalpostListe = ({ bruker }: IProps) => {
                                             variant={'tertiary'}
                                             size={'xsmall'}
                                             onClick={() =>
-                                                settUtsendingsinfo(
-                                                    tilgangsstyrtJournalpost.journalpost
-                                                        .utsendingsinfo
-                                                )
+                                                settUtsendingsinfo(tilgangsstyrtJournalpost.journalpost.utsendingsinfo)
                                             }
                                         >
-                                            {
-                                                tilgangsstyrtJournalpost.journalpost
-                                                    .avsenderMottaker?.navn
-                                            }
+                                            {tilgangsstyrtJournalpost.journalpost.avsenderMottaker?.navn}
                                         </StyledButton>
                                     ) : (
                                         <EllipsisBodyShort
                                             size="small"
-                                            title={
-                                                tilgangsstyrtJournalpost.journalpost
-                                                    .avsenderMottaker?.navn
-                                            }
+                                            title={tilgangsstyrtJournalpost.journalpost.avsenderMottaker?.navn}
                                         >
-                                            {
-                                                tilgangsstyrtJournalpost.journalpost
-                                                    .avsenderMottaker?.navn
-                                            }
+                                            {tilgangsstyrtJournalpost.journalpost.avsenderMottaker?.navn}
                                         </EllipsisBodyShort>
                                     )}
                                 </StyledDataCell>
                                 <StyledDataCell>
-                                    <EllipsisBodyShort
-                                        size="small"
-                                        title={tilgangsstyrtJournalpost.journalpost.tittel}
-                                    >
+                                    <EllipsisBodyShort size="small" title={tilgangsstyrtJournalpost.journalpost.tittel}>
                                         {tilgangsstyrtJournalpost.journalpost.tittel}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                                 <StyledDataCell>
                                     <EllipsisBodyShort
                                         size="small"
-                                        title={
-                                            journalpoststatus[
-                                                tilgangsstyrtJournalpost.journalpost.journalstatus
-                                            ]
-                                        }
+                                        title={journalpoststatus[tilgangsstyrtJournalpost.journalpost.journalstatus]}
                                     >
-                                        {
-                                            journalpoststatus[
-                                                tilgangsstyrtJournalpost.journalpost.journalstatus
-                                            ]
-                                        }
+                                        {journalpoststatus[tilgangsstyrtJournalpost.journalpost.journalstatus]}
                                     </EllipsisBodyShort>
                                 </StyledDataCell>
                             </Table.Row>
@@ -347,16 +310,10 @@ const JournalpostListe = ({ bruker }: IProps) => {
                     </Table.Body>
                 </StyledTable>
                 {visDokumentModal && (
-                    <PdfVisningModal
-                        onRequestClose={() => settVisDokumentModal(false)}
-                        pdfdata={hentetDokument}
-                    />
+                    <PdfVisningModal onRequestClose={() => settVisDokumentModal(false)} pdfdata={hentetDokument} />
                 )}
                 {utsendingsinfo && (
-                    <UtsendingsinfoModal
-                        onClose={() => settUtsendingsinfo(undefined)}
-                        data={utsendingsinfo}
-                    />
+                    <UtsendingsinfoModal onClose={() => settUtsendingsinfo(undefined)} data={utsendingsinfo} />
                 )}
             </Container>
         );

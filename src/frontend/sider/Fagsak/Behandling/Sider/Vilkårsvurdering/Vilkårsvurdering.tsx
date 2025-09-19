@@ -51,12 +51,8 @@ interface IProps {
 const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
 
-    const {
-        erVilkårsvurderingenGyldig,
-        hentVilkårMedFeil,
-        hentAndreVurderingerMedFeil,
-        vilkårsvurdering,
-    } = useVilkårsvurderingContext();
+    const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
+        useVilkårsvurderingContext();
     const {
         vurderErLesevisning,
         oppdaterRegisteropplysninger,
@@ -66,8 +62,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
 
     const erLesevisning = vurderErLesevisning();
 
-    const registeropplysningerHentetTidpsunkt =
-        vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
+    const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
 
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
     const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());
@@ -75,9 +70,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
     const navigate = useNavigate();
 
     const uregistrerteBarn =
-        åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(
-            barn => !barn.erFolkeregistrert
-        ) ?? [];
+        åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
@@ -96,9 +89,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
                     navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/registrer-soknad`);
                 } else {
-                    navigate(
-                        `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/filtreringsregler`
-                    );
+                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/filtreringsregler`);
                 }
             }}
             nesteOnClick={() => {
@@ -144,11 +135,9 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                             title={'Oppdater'}
                             onClick={() => {
                                 settHentOpplysningerRessurs(byggHenterRessurs());
-                                oppdaterRegisteropplysninger().then(
-                                    (response: Ressurs<IBehandling>) => {
-                                        settHentOpplysningerRessurs(response);
-                                    }
-                                );
+                                oppdaterRegisteropplysninger().then((response: Ressurs<IBehandling>) => {
+                                    settHentOpplysningerRessurs(response);
+                                });
                             }}
                             loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
                             variant="tertiary"
@@ -162,18 +151,13 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
             </>
 
-            {!erProd() && (
-                <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
-            )}
+            {!erProd() && <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />}
 
             <VStack gap="space-8">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
                 {uregistrerteBarn.length > 0 && (
                     <Alert variant="info">
-                        <BodyShort>
-                            Du har registrert følgende barn som ikke er registrert i
-                            Folkeregisteret:
-                        </BodyShort>
+                        <BodyShort>Du har registrert følgende barn som ikke er registrert i Folkeregisteret:</BodyShort>
                         <UregistrerteBarnListe>
                             {uregistrerteBarn.map(uregistrertBarn => (
                                 <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
@@ -190,35 +174,26 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                         <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
                     </Alert>
                 )}
-                {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
-                    visFeilmeldinger && (
-                        <ErrorSummary
-                            heading={'For å gå videre må du rette opp følgende:'}
-                            size="small"
-                        >
-                            {[
-                                ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
-                                    feilmelding: `Et vilkår av typen '${
-                                        vilkårConfig[vilkårResultat.vilkårType].tittel
-                                    }' er ikke fullstendig`,
-                                    skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
-                                })),
-                                ...hentAndreVurderingerMedFeil().map(
-                                    (annenVurdering: IAnnenVurdering) => ({
-                                        feilmelding: `Et vilkår av typen '${
-                                            annenVurderingConfig[annenVurdering.type].tittel
-                                        }' er ikke fullstendig`,
-                                        skjemaelementId:
-                                            annenVurderingFeilmeldingId(annenVurdering),
-                                    })
-                                ),
-                            ].map(item => (
-                                <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
-                                    {item.feilmelding}
-                                </ErrorSummary.Item>
-                            ))}
-                        </ErrorSummary>
-                    )}
+                {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) && visFeilmeldinger && (
+                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
+                        {[
+                            ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
+                                feilmelding: `Et vilkår av typen '${
+                                    vilkårConfig[vilkårResultat.vilkårType].tittel
+                                }' er ikke fullstendig`,
+                                skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
+                            })),
+                            ...hentAndreVurderingerMedFeil().map((annenVurdering: IAnnenVurdering) => ({
+                                feilmelding: `Et vilkår av typen '${
+                                    annenVurderingConfig[annenVurdering.type].tittel
+                                }' er ikke fullstendig`,
+                                skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
+                            })),
+                        ].map(item => (
+                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
+                        ))}
+                    </ErrorSummary>
+                )}
                 {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
                     <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
                 )}

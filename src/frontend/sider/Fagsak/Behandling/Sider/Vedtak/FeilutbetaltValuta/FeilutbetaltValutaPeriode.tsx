@@ -36,17 +36,12 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const {
-        skjema,
-        oppdaterEksisterendePeriode,
-        fjernPeriode,
-        valideringErOk,
-        tilbakestillSkjemafelterTilDefault,
-    } = useFeilutbetaltValuta({
-        behandlingId,
-        feilutbetaltValuta,
-        settFeilmelding,
-    });
+    const { skjema, oppdaterEksisterendePeriode, fjernPeriode, valideringErOk, tilbakestillSkjemafelterTilDefault } =
+        useFeilutbetaltValuta({
+            behandlingId,
+            feilutbetaltValuta,
+            settFeilmelding,
+        });
 
     const tilbakestillOgLukkSkjema = () => {
         settErRadEkspandert(false);
@@ -71,16 +66,12 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                 <FlexColumnDiv>
                     <FeilutbetaltValutaSkjema
                         skjema={skjema}
-                        key={`${feilutbetaltValuta.id}-$${
-                            erRadEkspandert ? 'ekspandert' : 'lukket'
-                        }`}
+                        key={`${feilutbetaltValuta.id}-$${erRadEkspandert ? 'ekspandert' : 'lukket'}`}
                     />
                     <FlexRowDiv>
                         <Button
                             size="small"
-                            onClick={() =>
-                                oppdaterEksisterendePeriode(() => settErRadEkspandert(false))
-                            }
+                            onClick={() => oppdaterEksisterendePeriode(() => settErRadEkspandert(false))}
                             variant={valideringErOk() ? 'primary' : 'secondary'}
                         >
                             Lagre periode

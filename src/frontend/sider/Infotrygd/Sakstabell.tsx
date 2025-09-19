@@ -38,9 +38,7 @@ export const Sakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
                                 <Table.DataCell>{infotrygdsak.mottattdato}</Table.DataCell>
                                 <Table.DataCell>{infotrygdsak.kapittelnr}</Table.DataCell>
                                 <Table.DataCell>
-                                    {(infotrygdsak.valg ?? '') +
-                                        ' ' +
-                                        (infotrygdsak.undervalg ?? '')}
+                                    {(infotrygdsak.valg ?? '') + ' ' + (infotrygdsak.undervalg ?? '')}
                                 </Table.DataCell>
                                 <Table.DataCell>{infotrygdsak.type}</Table.DataCell>
                                 <Table.DataCell>{infotrygdsak.nivå}</Table.DataCell>

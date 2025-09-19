@@ -44,11 +44,7 @@ interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({
-    valgt,
-    journalpostId,
-    dokument,
-}) => {
+export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ valgt, journalpostId, dokument }) => {
     return (
         <DokumentInfoStripeContainer>
             <StyledDokumentIkonDiv>

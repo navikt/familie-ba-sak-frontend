@@ -338,9 +338,4 @@ const StyledFamilieValutavelger = styled(FamilieValutavelger)<{ dempetEtikett?: 
     }
 `;
 
-export {
-    FamilieLandvelger,
-    FamilieMultiLandvelger,
-    FamilieValutavelger,
-    StyledFamilieValutavelger,
-};
+export { FamilieLandvelger, FamilieMultiLandvelger, FamilieValutavelger, StyledFamilieValutavelger };

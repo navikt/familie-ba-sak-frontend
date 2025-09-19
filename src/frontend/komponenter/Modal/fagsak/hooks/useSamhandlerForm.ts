@@ -6,11 +6,7 @@ import { useHttp } from '@navikt/familie-http';
 import { hentSamhandler } from '../../../../api/hentSamhandler';
 import { useOnFormSubmitSuccessful } from '../../../../hooks/useOnFormSubmitSuccessful';
 import type { ISamhandlerInfo } from '../../../../typer/samhandler';
-import {
-    SamhandlerFeltnavn,
-    SamhandlerFormServerErrors,
-    type SamhandlerFormValues,
-} from '../form/SamhandlerForm';
+import { SamhandlerFeltnavn, SamhandlerFormServerErrors, type SamhandlerFormValues } from '../form/SamhandlerForm';
 
 const påvirkerSystemLaster = false;
 
@@ -40,8 +36,7 @@ export function useSamhandlerForm({ settSamhandler }: Props) {
             })
             .then(samhandler => settSamhandler(samhandler))
             .catch(error => {
-                const message =
-                    (error as Error)?.message ?? 'En feil oppstod ved henting av institusjon.';
+                const message = (error as Error)?.message ?? 'En feil oppstod ved henting av institusjon.';
                 setError(SamhandlerFormServerErrors.onSubmitError.id, { message });
             });
     }

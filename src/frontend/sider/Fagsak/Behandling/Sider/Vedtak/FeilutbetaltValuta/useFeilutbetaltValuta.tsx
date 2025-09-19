@@ -67,8 +67,7 @@ const useFeilutbetaltValuta = ({ feilutbetaltValuta, settFeilmelding, behandling
         skjema.felter.feilutbetaltBeløp.nullstill();
     };
 
-    const [forrigeFeilutbetaltValuta, settForrigeFeilutbetaltValuta] =
-        useState<IRestFeilutbetaltValuta>();
+    const [forrigeFeilutbetaltValuta, settForrigeFeilutbetaltValuta] = useState<IRestFeilutbetaltValuta>();
 
     if (forrigeFeilutbetaltValuta !== feilutbetaltValuta) {
         settForrigeFeilutbetaltValuta(feilutbetaltValuta);

@@ -16,8 +16,7 @@ export function VisHenlagtBehandlingerSwitch({
     setVisHenlagteBehandlinger,
 }: Props) {
     const finnesHenlagteBehandlingerSomKanFiltreresBort = saksoversiktbehandlinger.some(
-        (behandling: Saksoversiktsbehandling) =>
-            !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
+        (behandling: Saksoversiktsbehandling) => !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
     );
 
     if (!finnesHenlagteBehandlingerSomKanFiltreresBort) {

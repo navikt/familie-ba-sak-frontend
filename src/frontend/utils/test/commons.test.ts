@@ -35,9 +35,7 @@ describe('utils/commons', () => {
 
         whitespaces.forEach(whitespace => {
             test(`Skal fjerne "${whitespace.navn}"`, () => {
-                expect(
-                    fjernWhitespace(String.fromCharCode(whitespace.unicodeDecimalValue))
-                ).toEqual('');
+                expect(fjernWhitespace(String.fromCharCode(whitespace.unicodeDecimalValue))).toEqual('');
             });
         });
     });

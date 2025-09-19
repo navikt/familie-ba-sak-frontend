@@ -6,6 +6,4 @@ export const hentAlleÅrsaker = () =>
 export const hentVelgbareÅrsaker = () =>
     Object.keys(SettPåVentÅrsak)
         .filter(key => isNaN(Number(key)))
-        .filter(
-            årsak => årsak !== SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING
-        ) as SettPåVentÅrsak[];
+        .filter(årsak => årsak !== SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING) as SettPåVentÅrsak[];

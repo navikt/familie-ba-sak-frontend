@@ -9,12 +9,7 @@ interface IKontoSirkel {
     width?: number;
 }
 
-export const KontoSirkel: React.FC<IKontoSirkel> = ({
-    className,
-    filled = false,
-    width = 48,
-    height = 48,
-}) => {
+export const KontoSirkel: React.FC<IKontoSirkel> = ({ className, filled = false, width = 48, height = 48 }) => {
     return filled ? (
         <StyledSvg
             aria-labelledby={'kontosirkel'}

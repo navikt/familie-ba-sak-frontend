@@ -47,24 +47,17 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
         >
             <StyledUl>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {
-                    const fødselshendelsefiltreringResultat =
-                        åpenBehandling.fødselshendelsefiltreringResultater.find(
-                            it => it.filtreringsregel === filtreringsregel
-                        );
+                    const fødselshendelsefiltreringResultat = åpenBehandling.fødselshendelsefiltreringResultater.find(
+                        it => it.filtreringsregel === filtreringsregel
+                    );
 
                     if (!fødselshendelsefiltreringResultat) return null;
 
                     return (
                         <StyledLi key={filtreringsregel}>
-                            <VilkårResultatIkon
-                                resultat={fødselshendelsefiltreringResultat.resultat}
-                            />
+                            <VilkårResultatIkon resultat={fødselshendelsefiltreringResultat.resultat} />
                             <StyledBodyShort>
-                                {
-                                    filtreringsregler[
-                                        fødselshendelsefiltreringResultat.filtreringsregel
-                                    ]
-                                }
+                                {filtreringsregler[fødselshendelsefiltreringResultat.filtreringsregel]}
                             </StyledBodyShort>
                         </StyledLi>
                     );

@@ -17,11 +17,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const KompetanseTabellRad: React.FC<IProps> = ({
-    kompetanse,
-    åpenBehandling,
-    visFeilmeldinger,
-}) => {
+const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, visFeilmeldinger }) => {
     const barn: OptionType[] = kompetanse.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
@@ -90,9 +86,7 @@ const KompetanseTabellRad: React.FC<IProps> = ({
                         toggleForm={toggleForm}
                         slettKompetanse={slettKompetanse}
                         status={kompetanse.status}
-                        erAnnenForelderOmfattetAvNorskLovgivning={
-                            kompetanse.erAnnenForelderOmfattetAvNorskLovgivning
-                        }
+                        erAnnenForelderOmfattetAvNorskLovgivning={kompetanse.erAnnenForelderOmfattetAvNorskLovgivning}
                     />
                 )
             }

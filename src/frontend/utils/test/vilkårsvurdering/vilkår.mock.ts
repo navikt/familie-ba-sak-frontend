@@ -1,8 +1,4 @@
-import type {
-    IRestAnnenVurdering,
-    IRestPersonResultat,
-    IRestVilkårResultat,
-} from '../../../typer/vilkår';
+import type { IRestAnnenVurdering, IRestPersonResultat, IRestVilkårResultat } from '../../../typer/vilkår';
 import { Regelverk, Resultat, VilkårType } from '../../../typer/vilkår';
 import { erIkkeGenereltVilkår } from '../../vilkår';
 

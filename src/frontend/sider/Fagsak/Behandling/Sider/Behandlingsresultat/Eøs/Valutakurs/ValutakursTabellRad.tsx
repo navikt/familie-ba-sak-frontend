@@ -18,13 +18,8 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const ValutakursTabellRad: React.FC<IProps> = ({
-    valutakurs,
-    åpenBehandling,
-    visFeilmeldinger,
-}) => {
-    const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] =
-        React.useState(false);
+const ValutakursTabellRad: React.FC<IProps> = ({ valutakurs, åpenBehandling, visFeilmeldinger }) => {
+    const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] = React.useState(false);
 
     const barn: OptionType[] = valutakurs.barnIdenter.map(barn => ({
         value: barn,

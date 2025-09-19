@@ -7,10 +7,7 @@ import { Button, Fieldset, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
-import {
-    genererIdBasertPåAndreFritekstKulepunkter,
-    lagInitiellFritekst,
-} from '../../../../utils/fritekstfelter';
+import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
@@ -44,11 +41,7 @@ const KanSøkeFritekst = ({
     const leggTilFritekst = () => {
         friteksterFelt.validerOgSettFelt([
             ...friteksterFelt.verdi,
-            lagInitiellFritekst(
-                '',
-                genererIdBasertPåAndreFritekstKulepunkter(friteksterFelt),
-                makslengdeFritekst
-            ),
+            lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(friteksterFelt), makslengdeFritekst),
         ]);
     };
 
@@ -102,8 +95,7 @@ const KanSøkeFritekst = ({
                                 onClick={() => {
                                     friteksterFelt.validerOgSettFelt([
                                         ...friteksterFelt.verdi.filter(
-                                            mapFritekst =>
-                                                mapFritekst.verdi.id !== fritekst.verdi.id
+                                            mapFritekst => mapFritekst.verdi.id !== fritekst.verdi.id
                                         ),
                                     ]);
                                 }}

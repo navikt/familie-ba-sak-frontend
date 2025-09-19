@@ -65,10 +65,7 @@ const hentDatoHeader = (opplysningstype: Registeropplysning): string => {
     }
 };
 
-const hentDatoVerdi = (
-    opplysningstype: Registeropplysning,
-    periode: IRestRegisteropplysning
-): string => {
+const hentDatoVerdi = (opplysningstype: Registeropplysning, periode: IRestRegisteropplysning): string => {
     switch (opplysningstype) {
         case Registeropplysning.SIVILSTAND:
         case Registeropplysning.DØDSBOADRESSE:
@@ -136,9 +133,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                             synligHistorikk.map(periode => (
                                 <Table.Row key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
                                     <Table.DataCell children={periode.verdi} />
-                                    <Table.DataCell
-                                        children={hentDatoVerdi(opplysningstype, periode)}
-                                    />
+                                    <Table.DataCell children={hentDatoVerdi(opplysningstype, periode)} />
                                 </Table.Row>
                             ))}
                     </Table.Body>
@@ -153,9 +148,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         icon={erEkspandert ? <ChevronUpIcon /> : <ChevronDownIcon />}
                         iconPosition="right"
                     >
-                        {erEkspandert
-                            ? 'Skjul'
-                            : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
+                        {erEkspandert ? 'Skjul' : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
                     </Button>
                 </HøyrejustertKnapperad>
             )}

@@ -122,9 +122,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         return (
                             <StyledAlert
                                 variant={'warning'}
-                                children={
-                                    'Brevet kan ikke sendes fordi mottaker har ukjent adresse'
-                                }
+                                children={'Brevet kan ikke sendes fordi mottaker har ukjent adresse'}
                             />
                         );
                     case Distribusjonskanal.DITT_NAV:
@@ -137,12 +135,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
             case RessursStatus.FEILET:
             case RessursStatus.FUNKSJONELL_FEIL:
             case RessursStatus.IKKE_TILGANG:
-                return (
-                    <StyledAlert
-                        variant={'error'}
-                        children={distribusjonskanal.frontendFeilmelding}
-                    />
-                );
+                return <StyledAlert variant={'error'} children={distribusjonskanal.frontendFeilmelding} />;
             case RessursStatus.IKKE_HENTET:
             case RessursStatus.HENTER:
                 return (
@@ -151,12 +144,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                     </StyledAlert>
                 );
             default:
-                return (
-                    <StyledAlert
-                        variant={'error'}
-                        children={'Ukjent feil ved henting av distribusjonskanal'}
-                    />
-                );
+                return <StyledAlert variant={'error'} children={'Ukjent feil ved henting av distribusjonskanal'} />;
         }
     };
 
@@ -201,11 +189,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         })
                         .map(årsak => {
                             return (
-                                <option
-                                    key={årsak}
-                                    aria-selected={skjema.felter.årsak.verdi === årsak}
-                                    value={årsak}
-                                >
+                                <option key={årsak} aria-selected={skjema.felter.årsak.verdi === årsak} value={årsak}>
                                     {dokumentÅrsak[årsak]}
                                 </option>
                             );
@@ -215,9 +199,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                 <ÅrsakSkjema>
                     {skjema.felter.årsak.verdi === DokumentÅrsakPerson.DELT_BOSTED && (
                         <DeltBostedSkjema
-                            avtalerOmDeltBostedPerBarnFelt={
-                                skjema.felter.avtalerOmDeltBostedPerBarn
-                            }
+                            avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
                             barnMedDeltBostedFelt={skjema.felter.barnMedDeltBosted}
                             visFeilmeldinger={skjema.visFeilmeldinger}
                             settVisFeilmeldinger={settVisfeilmeldinger}
@@ -235,9 +217,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                         />
                     )}
 
-                    {skjema.felter.årsak.verdi === DokumentÅrsakPerson.KAN_SØKE && (
-                        <KanSøkeSkjema />
-                    )}
+                    {skjema.felter.årsak.verdi === DokumentÅrsakPerson.KAN_SØKE && <KanSøkeSkjema />}
                     {skjema.felter.fritekstAvsnitt.erSynlig && (
                         <Box paddingBlock={'space-4 0'}>
                             <FritekstAvsnitt />
@@ -253,9 +233,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                 />
 
                 {skjema.felter.årsak.verdi && visForhåndsvisningBeskjed() && (
-                    <StyledAlert variant="info">
-                        Du har gjort endringer i brevet som ikke er forhåndsvist
-                    </StyledAlert>
+                    <StyledAlert variant="info">Du har gjort endringer i brevet som ikke er forhåndsvist</StyledAlert>
                 )}
             </StyledFieldset>
 

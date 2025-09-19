@@ -23,11 +23,7 @@ interface IProps {
     tilgangsstyrtJournalpost: ITilgangsstyrtJournalpost;
 }
 
-export const JournalpostDokument: React.FC<IProps> = ({
-    dokument,
-    hentForhåndsvisning,
-    tilgangsstyrtJournalpost,
-}) => {
+export const JournalpostDokument: React.FC<IProps> = ({ dokument, hentForhåndsvisning, tilgangsstyrtJournalpost }) => {
     const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {

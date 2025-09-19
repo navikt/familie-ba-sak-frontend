@@ -20,10 +20,7 @@ import { useDeltBostedFelter } from '../../../utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import type { ISelectOptionMedBrevtekst } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
-import {
-    Informasjonsbrev,
-    opplysningsdokumenter,
-} from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { Informasjonsbrev, opplysningsdokumenter } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useFagsakContext } from '../FagsakContext';
 import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
@@ -108,17 +105,14 @@ interface DokumentutsendingContextValue {
     dokumentÅrsaker: DokumentÅrsak[];
 }
 
-const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(
-    undefined
-);
+const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(undefined);
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
     const { bruker, fagsak } = useFagsakContext();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-    const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } =
-        useDokument();
+    const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } = useDokument();
 
     const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
         IManueltBrevRequestPåFagsak | undefined
@@ -146,9 +140,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         verdi: [],
         valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
             return felt.verdi.some(
-                fritekst =>
-                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                    fritekst.verdi.tekst.length === 0
+                fritekst => fritekst.valideringsstatus === Valideringsstatus.FEIL || fritekst.verdi.tekst.length === 0
             )
                 ? feil(felt, '')
                 : ok(felt);
@@ -198,8 +190,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         hentDeltBostedMulitiselectVerdierForBarn,
     } = useDeltBostedFelter({
         avhengigheter: { årsakFelt: årsak },
-        skalFeltetVises: avhengigheter =>
-            avhengigheter.årsakFelt.verdi === DokumentÅrsakPerson.DELT_BOSTED,
+        skalFeltetVises: avhengigheter => avhengigheter.årsakFelt.verdi === DokumentÅrsakPerson.DELT_BOSTED,
     });
 
     const { barnIBrev, nullstillBarnIBrev } = useBarnIBrevFelter({
@@ -280,10 +271,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         };
     };
 
-    const hentBarnIBrevSkjemaData = (
-        brevmal: Informasjonsbrev,
-        målform: Målform
-    ): IManueltBrevRequestPåFagsak => {
+    const hentBarnIBrevSkjemaData = (brevmal: Informasjonsbrev, målform: Målform): IManueltBrevRequestPåFagsak => {
         const barnIBrev = skjema.felter.barnIBrev.verdi.filter(barn => barn.merket);
 
         return {
@@ -302,9 +290,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
     };
 
     const hentKanSøkeSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
-        const fritekster = skjema.felter.fritekster.verdi.map(
-            fritekstFelt => fritekstFelt.verdi.tekst
-        );
+        const fritekster = skjema.felter.fritekster.verdi.map(fritekstFelt => fritekstFelt.verdi.tekst);
 
         const dokumenter = skjema.felter.dokumenter.verdi.map(dokumentOption => {
             const dokument = opplysningsdokumenter.find(
@@ -420,8 +406,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
     };
 
     const skjemaErLåst = () =>
-        skjema.submitRessurs.status === RessursStatus.HENTER ||
-        hentetDokument.status === RessursStatus.HENTER;
+        skjema.submitRessurs.status === RessursStatus.HENTER || hentetDokument.status === RessursStatus.HENTER;
 
     const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
         mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
@@ -477,8 +462,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
                 settVisInnsendtBrevModal,
                 settVisfeilmeldinger,
                 skjemaErLåst,
-                visForhåndsvisningBeskjed: () =>
-                    !deepEqual(hentSkjemaData(), sistBrukteDataVedForhåndsvisning),
+                visForhåndsvisningBeskjed: () => !deepEqual(hentSkjemaData(), sistBrukteDataVedForhåndsvisning),
                 visInnsendtBrevModal,
                 skjema,
                 nullstillSkjema,
@@ -497,9 +481,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 export const useDokumentutsendingContext = () => {
     const context = useContext(DokumentutsendingContext);
     if (context === undefined) {
-        throw new Error(
-            'useDokumentutsendingContext må brukes innenfor en DokumentutsendingProvider'
-        );
+        throw new Error('useDokumentutsendingContext må brukes innenfor en DokumentutsendingProvider');
     }
     return context;
 };

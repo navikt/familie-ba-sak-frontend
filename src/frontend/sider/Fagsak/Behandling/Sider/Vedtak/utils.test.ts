@@ -1,8 +1,4 @@
-import {
-    antallMånederIPeriode,
-    summerBeløpForPerioder,
-    summerTotalBeløpForPerioder,
-} from './utils';
+import { antallMånederIPeriode, summerBeløpForPerioder, summerTotalBeløpForPerioder } from './utils';
 
 const REFUSJONSPERIODE_FIRE_MÅNEDER = {
     fom: '2022-06-01',

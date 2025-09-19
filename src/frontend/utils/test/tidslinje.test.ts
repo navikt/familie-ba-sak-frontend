@@ -47,11 +47,9 @@ describe('utils/tidslinje', () => {
     };
 
     test('Utvidet periode blir splittet i 3 av fom og tom fra småbarnstilleggperiode', () => {
-        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
-            periode,
-            utvidetYtelsePeriode,
-            [småbarnstilleggPeriodeMidtIÅret]
-        );
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(periode, utvidetYtelsePeriode, [
+            småbarnstilleggPeriodeMidtIÅret,
+        ]);
 
         expect(splittaPerioder.length).toBe(3);
         expect(dateTilIsoDatoString(splittaPerioder[0].fom)).toBe('2020-01-01');
@@ -65,11 +63,9 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 2 av fom småbarnstilleggperiode', () => {
-        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
-            periode,
-            utvidetYtelsePeriode,
-            [småbarnstilleggPeriodeOverlapperStartenAvÅret]
-        );
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(periode, utvidetYtelsePeriode, [
+            småbarnstilleggPeriodeOverlapperStartenAvÅret,
+        ]);
 
         expect(splittaPerioder.length).toBe(2);
         expect(dateTilIsoDatoString(splittaPerioder[0].fom)).toBe('2020-01-01');
@@ -80,11 +76,9 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 2 av tom småbarnstilleggperiode', () => {
-        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
-            periode,
-            utvidetYtelsePeriode,
-            [småbarnstilleggPeriodeOverlapperSluttenAvÅret]
-        );
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(periode, utvidetYtelsePeriode, [
+            småbarnstilleggPeriodeOverlapperSluttenAvÅret,
+        ]);
 
         expect(splittaPerioder.length).toBe(2);
         expect(dateTilIsoDatoString(splittaPerioder[0].fom)).toBe('2020-01-01');
@@ -95,15 +89,11 @@ describe('utils/tidslinje', () => {
     });
 
     test('Utvidet periode blir splittet i 5 av 3 småbarnstilleggperioder', () => {
-        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(
-            periode,
-            utvidetYtelsePeriode,
-            [
-                småbarnstilleggPeriodeOverlapperStartenAvÅret,
-                småbarnstilleggPeriodeMidtIÅret,
-                småbarnstilleggPeriodeOverlapperSluttenAvÅret,
-            ]
-        );
+        const splittaPerioder = splittYtelseVedEndringerPåAnnenYtelse(periode, utvidetYtelsePeriode, [
+            småbarnstilleggPeriodeOverlapperStartenAvÅret,
+            småbarnstilleggPeriodeMidtIÅret,
+            småbarnstilleggPeriodeOverlapperSluttenAvÅret,
+        ]);
 
         expect(splittaPerioder.length).toBe(5);
         expect(dateTilIsoDatoString(splittaPerioder[0].fom)).toBe('2020-01-01');

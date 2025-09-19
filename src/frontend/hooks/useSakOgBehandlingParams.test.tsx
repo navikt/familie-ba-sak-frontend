@@ -19,8 +19,7 @@ const renderUseSakOgBehandlingParamsHookMedPath = (path: string) => {
 
 describe('useSakOgBehandlingParams', () => {
     it('gir fagsakId og behandlingsId med valid path', () => {
-        const { fagsakId, behandlingId } =
-            renderUseSakOgBehandlingParamsHookMedPath('/fagsak/1111/2222');
+        const { fagsakId, behandlingId } = renderUseSakOgBehandlingParamsHookMedPath('/fagsak/1111/2222');
         expect(fagsakId).toEqual('1111');
         expect(behandlingId).toEqual('2222');
     });
@@ -32,15 +31,12 @@ describe('useSakOgBehandlingParams', () => {
         expect(behandlingId).toEqual(undefined);
     });
     it('gir kun fagsakId igjen', () => {
-        const { fagsakId, behandlingId } =
-            renderUseSakOgBehandlingParamsHookMedPath('/fagsak/545454');
+        const { fagsakId, behandlingId } = renderUseSakOgBehandlingParamsHookMedPath('/fagsak/545454');
         expect(fagsakId).toEqual('545454');
         expect(behandlingId).toEqual(undefined);
     });
     it('fagsakId og behandlingId undefined', () => {
-        const { fagsakId, behandlingId } = renderUseSakOgBehandlingParamsHookMedPath(
-            '/en/random/string/av/ting'
-        );
+        const { fagsakId, behandlingId } = renderUseSakOgBehandlingParamsHookMedPath('/en/random/string/av/ting');
         expect(fagsakId).toEqual(undefined);
         expect(behandlingId).toEqual(undefined);
     });
@@ -50,8 +46,7 @@ describe('useSakOgBehandlingParams', () => {
         expect(behandlingId).toEqual(undefined);
     });
     it('fagsakId og behandlingId fortsatt undefined igjen', () => {
-        const { fagsakId, behandlingId } =
-            renderUseSakOgBehandlingParamsHookMedPath('/fagsakId/noe-greier');
+        const { fagsakId, behandlingId } = renderUseSakOgBehandlingParamsHookMedPath('/fagsakId/noe-greier');
         expect(fagsakId).toEqual(undefined);
         expect(behandlingId).toEqual(undefined);
     });

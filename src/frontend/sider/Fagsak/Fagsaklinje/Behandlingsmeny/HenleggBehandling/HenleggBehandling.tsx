@@ -40,26 +40,14 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
 
     const navigate = useNavigate();
     const [visModal, settVisModal] = useState(false);
-    const {
-        hentForhåndsvisning,
-        nullstillDokument,
-        visDokumentModal,
-        hentetDokument,
-        settVisDokumentModal,
-    } = useDokument();
+    const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
+        useDokument();
     const { toggles } = useAppContext();
 
-    const {
-        skjema,
-        nullstillSkjema,
-        onBekreft,
-        settVisVeivalgModal,
-        visVeivalgModal,
-        hentSkjemaData,
-        årsak,
-    } = useHenleggBehandling(() => {
-        settVisModal(false);
-    });
+    const { skjema, nullstillSkjema, onBekreft, settVisVeivalgModal, visVeivalgModal, hentSkjemaData, årsak } =
+        useHenleggBehandling(() => {
+            settVisModal(false);
+        });
 
     const erPåHenleggbartSteg = [
         BehandlingSteg.REGISTRERE_SØKNAD,
@@ -70,12 +58,9 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
         BehandlingSteg.SEND_TIL_BESLUTTER,
     ].includes(behandling.steg);
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse =
-        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
 
-    const kanHenlegge =
-        harTilgangTilTekniskVedlikeholdHenleggelse ||
-        (!vurderErLesevisning() && erPåHenleggbartSteg);
+    const kanHenlegge = harTilgangTilTekniskVedlikeholdHenleggelse || (!vurderErLesevisning() && erPåHenleggbartSteg);
 
     if (!kanHenlegge) {
         return null;
@@ -105,16 +90,13 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
                     <Modal.Body>
                         <Fieldset
                             error={
-                                hentFrontendFeilmelding(skjema.submitRessurs) ||
-                                hentFrontendFeilmelding(hentetDokument)
+                                hentFrontendFeilmelding(skjema.submitRessurs) || hentFrontendFeilmelding(hentetDokument)
                             }
                             legend={'Henlegg behandling'}
                             hideLegend
                         >
                             <Select
-                                {...skjema.felter.årsak.hentNavBaseSkjemaProps(
-                                    skjema.visFeilmeldinger
-                                )}
+                                {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                                 label={'Velg årsak'}
                                 value={skjema.felter.årsak.verdi}
                                 onChange={(event: React.ChangeEvent<HenleggÅrsakSelect>): void => {
@@ -125,14 +107,10 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
                                     Velg
                                 </option>
                                 {Object.values(HenleggÅrsak)
+                                    .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)
                                     .filter(
                                         årsak =>
-                                            årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL
-                                    )
-                                    .filter(
-                                        årsak =>
-                                            (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                                                erPåHenleggbartSteg) ||
+                                            (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD && erPåHenleggbartSteg) ||
                                             (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
                                                 harTilgangTilTekniskVedlikeholdHenleggelse)
                                     )
@@ -150,9 +128,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
                             </Select>
 
                             <Textarea
-                                {...skjema.felter.begrunnelse.hentNavInputProps(
-                                    skjema.visFeilmeldinger
-                                )}
+                                {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                                 label={'Begrunnelse'}
                                 maxLength={4000}
                             />
@@ -245,10 +221,7 @@ const HenleggBehandling: React.FC<IProps> = ({ fagsakId }) => {
                 </Modal>
             )}
             {visDokumentModal && (
-                <PdfVisningModal
-                    onRequestClose={() => settVisDokumentModal(false)}
-                    pdfdata={hentetDokument}
-                />
+                <PdfVisningModal onRequestClose={() => settVisDokumentModal(false)} pdfdata={hentetDokument} />
             )}
         </>
     );

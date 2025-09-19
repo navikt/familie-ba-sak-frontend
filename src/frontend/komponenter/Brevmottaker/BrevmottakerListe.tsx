@@ -23,18 +23,14 @@ const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
     );
     const harFullmektig = brevmottakere.some(mottaker => mottaker.type === Mottaker.FULLMEKTIG);
     const harVerge = brevmottakere.some(mottaker => mottaker.type === Mottaker.VERGE);
-    const harManuellDødsboadresse = brevmottakere.some(
-        mottaker => mottaker.type === Mottaker.DØDSBO
-    );
+    const harManuellDødsboadresse = brevmottakere.some(mottaker => mottaker.type === Mottaker.DØDSBO);
 
     const skalViseSøker = !institusjon && !harManuellDødsboadresse && !harUtenlandskAdresse;
     const skalViseEnsligMindreårig = fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 
     return (
         <ul>
-            {(skalViseSøker || skalViseEnsligMindreårig) && (
-                <li key="søker">{lagBrukerLabel(bruker)}</li>
-            )}
+            {(skalViseSøker || skalViseEnsligMindreårig) && <li key="søker">{lagBrukerLabel(bruker)}</li>}
             {harUtenlandskAdresse && !harFullmektig && (
                 <li key="utenlandsk-adresse">{lagBrukerLabel(bruker)} | Utenlandsk adresse</li>
             )}
@@ -52,15 +48,11 @@ const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
             {harFullmektig &&
                 brevmottakere
                     .filter(mottaker => mottaker.type === Mottaker.FULLMEKTIG)
-                    .map(mottaker => (
-                        <li key={`fullmektig-${mottaker.navn}`}>{mottaker.navn} | Fullmektig</li>
-                    ))}
+                    .map(mottaker => <li key={`fullmektig-${mottaker.navn}`}>{mottaker.navn} | Fullmektig</li>)}
             {harVerge &&
                 brevmottakere
                     .filter(mottaker => mottaker.type === Mottaker.VERGE)
-                    .map(mottaker => (
-                        <li key={`verge-${mottaker.navn}`}>{mottaker.navn} | Verge</li>
-                    ))}
+                    .map(mottaker => <li key={`verge-${mottaker.navn}`}>{mottaker.navn} | Verge</li>)}
         </ul>
     );
 };

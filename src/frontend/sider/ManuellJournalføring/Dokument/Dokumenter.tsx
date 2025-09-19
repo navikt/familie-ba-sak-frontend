@@ -18,19 +18,17 @@ export const Dokumenter: React.FC = () => {
                     dokument={dokument}
                     key={index}
                     visFeilmeldinger={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.dokumenter.valideringsstatus === Valideringsstatus.FEIL
+                        skjema.visFeilmeldinger && skjema.felter.dokumenter.valideringsstatus === Valideringsstatus.FEIL
                     }
                 />
             ))}
 
-            {skjema.visFeilmeldinger &&
-                skjema.felter.dokumenter.valideringsstatus === Valideringsstatus.FEIL && (
-                    <>
-                        <br />
-                        <ErrorMessage>{skjema.felter.dokumenter.feilmelding}</ErrorMessage>
-                    </>
-                )}
+            {skjema.visFeilmeldinger && skjema.felter.dokumenter.valideringsstatus === Valideringsstatus.FEIL && (
+                <>
+                    <br />
+                    <ErrorMessage>{skjema.felter.dokumenter.feilmelding}</ErrorMessage>
+                </>
+            )}
         </div>
     );
 };

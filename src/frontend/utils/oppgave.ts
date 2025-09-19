@@ -8,8 +8,6 @@ import { IdentGruppe } from '../typer/oppgave';
 - Oppgaver med aktør ID har alltid en tilsvarende folkeregisterident. Feltet aktoerId kan også ignoreres.
 */
 export const hentFnrFraOppgaveIdenter = (identer: IOppgaveIdent[] | undefined) => {
-    const ident = identer?.find(
-        (ident: IOppgaveIdent) => ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT
-    );
+    const ident = identer?.find((ident: IOppgaveIdent) => ident.gruppe === IdentGruppe.FOLKEREGISTERIDENT);
     return ident?.ident;
 };

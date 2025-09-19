@@ -13,10 +13,7 @@ export const summerBeløpForPerioder = (periodeListe: PeriodeMedBeløp[]): numbe
 };
 
 export const summerTotalBeløpForPerioder = (periodeListe: PeriodeMedBeløp[]): number => {
-    return periodeListe.reduce(
-        (sum, periode) => sum + periode.beløp * antallMånederIPeriode(periode),
-        0
-    );
+    return periodeListe.reduce((sum, periode) => sum + periode.beløp * antallMånederIPeriode(periode), 0);
 };
 
 export const antallMånederIPeriode = (periode: PeriodeMedBeløp): number => {

@@ -10,18 +10,8 @@ import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type {
-    BehandlingSteg,
-    IBehandling,
-    IOpprettBehandlingData,
-    ISettPåVent,
-} from '../../../../typer/behandling';
-import {
-    BehandlerRolle,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-} from '../../../../typer/behandling';
+import type { BehandlingSteg, IBehandling, IOpprettBehandlingData, ISettPåVent } from '../../../../typer/behandling';
+import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
 import { FagsakType } from '../../../../typer/fagsak';
 import type { ILogg } from '../../../../typer/logg';
@@ -46,10 +36,7 @@ interface Props extends React.PropsWithChildren {
 }
 
 interface BehandlingContextValue {
-    vurderErLesevisning: (
-        sjekkTilgangTilEnhet?: boolean,
-        skalIgnorereOmEnhetErMidlertidig?: boolean
-    ) => boolean;
+    vurderErLesevisning: (sjekkTilgangTilEnhet?: boolean, skalIgnorereOmEnhetErMidlertidig?: boolean) => boolean;
     forrigeÅpneSide: ISide | undefined;
     hentStegPåÅpenBehandling: () => BehandlingSteg | undefined;
     leggTilBesøktSide: (besøktSide: SideId) => void;
@@ -102,8 +89,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
-    const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } =
-        useBehandlingApi(settBehandlingRessurs);
+    const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(settBehandlingRessurs);
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -130,9 +116,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                     [sideId]: {
                         ...side,
                         kontrollert:
-                            sideHref === side.href
-                                ? KontrollertStatus.KONTROLLERT
-                                : KontrollertStatus.IKKE_KONTROLLERT,
+                            sideHref === side.href ? KontrollertStatus.KONTROLLERT : KontrollertStatus.IKKE_KONTROLLERT,
                     },
                 };
             }, {})
@@ -142,9 +126,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     }, [behandling.behandlingId]);
 
     useEffect(() => {
-        settForrigeÅpneSide(
-            Object.values(sider).find((side: ISide) => location.pathname.includes(side.href))
-        );
+        settForrigeÅpneSide(Object.values(sider).find((side: ISide) => location.pathname.includes(side.href)));
     }, [location.pathname]);
 
     const leggTilBesøktSide = (besøktSide: SideId) => {
@@ -179,10 +161,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         return behandling?.steg;
     };
 
-    const vurderErLesevisning = (
-        sjekkTilgangTilEnhet = true,
-        skalIgnorereOmEnhetErMidlertidig = false
-    ): boolean => {
+    const vurderErLesevisning = (sjekkTilgangTilEnhet = true, skalIgnorereOmEnhetErMidlertidig = false): boolean => {
         const åpenBehandlingData = behandling;
         if (
             åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_VENT ||
@@ -223,8 +202,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         const sideForSteg: ISide | undefined = finnSideForBehandlingssteg(behandling);
 
         if (
-            (erViPåUdefinertFagsakSide(location.pathname) ||
-                erViPåUlovligSteg(location.pathname, sideForSteg)) &&
+            (erViPåUdefinertFagsakSide(location.pathname) || erViPåUlovligSteg(location.pathname, sideForSteg)) &&
             sideForSteg
         ) {
             navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/${sideForSteg.href}`, {
@@ -244,8 +222,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const erMigreringsbehandling = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const erBehandleneEnhetMidlertidig =
-        behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
-        MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
+        behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
 
     const erBehandlingAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;
 

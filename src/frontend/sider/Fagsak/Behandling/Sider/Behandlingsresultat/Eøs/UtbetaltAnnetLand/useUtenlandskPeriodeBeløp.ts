@@ -10,9 +10,7 @@ interface IProps {
 }
 
 const useUtenlandskPeriodeBeløp = ({ åpenBehandling }: IProps) => {
-    const [utbetaltAnnetLandBeløp, settUtbetaltAnnetLandBeløp] = useState<
-        IRestUtenlandskPeriodeBeløp[]
-    >([]);
+    const [utbetaltAnnetLandBeløp, settUtbetaltAnnetLandBeløp] = useState<IRestUtenlandskPeriodeBeløp[]>([]);
 
     useEffect(() => {
         if (åpenBehandling) {

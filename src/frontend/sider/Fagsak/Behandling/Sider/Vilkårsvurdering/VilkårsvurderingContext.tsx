@@ -37,9 +37,7 @@ interface VilkårsvurderingContextValue {
         vilkårsvurderingForPerson: IPersonResultat,
         redigerbartVilkår: FeltState<IVilkårResultat>
     ) => Promise<Ressurs<IBehandling>>;
-    putAnnenVurdering: (
-        redigerbartAnnenVurdering: FeltState<IAnnenVurdering>
-    ) => Promise<Ressurs<IBehandling>>;
+    putAnnenVurdering: (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => Promise<Ressurs<IBehandling>>;
     deleteVilkår: (personIdent: string, vilkårId: number) => Promise<Ressurs<IBehandling>>;
     postVilkår: (personIdent: string, vilkårType: VilkårType) => Promise<Ressurs<IBehandling>>;
     erVilkårsvurderingenGyldig: () => boolean;
@@ -47,38 +45,25 @@ interface VilkårsvurderingContextValue {
     hentAndreVurderingerMedFeil: () => IAnnenVurdering[];
 }
 
-const VilkårsvurderingContext = React.createContext<VilkårsvurderingContextValue | undefined>(
-    undefined
-);
+const VilkårsvurderingContext = React.createContext<VilkårsvurderingContextValue | undefined>(undefined);
 
 export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps) => {
     const { request } = useHttp();
     const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
 
     const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
-        åpenBehandling
-            ? mapFraRestVilkårsvurderingTilUi(
-                  åpenBehandling.personResultater,
-                  åpenBehandling.personer
-              )
-            : []
+        åpenBehandling ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer) : []
     );
 
     React.useEffect(() => {
         settVilkårsvurdering(
             åpenBehandling
-                ? mapFraRestVilkårsvurderingTilUi(
-                      åpenBehandling.personResultater,
-                      åpenBehandling.personer
-                  )
+                ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer)
                 : []
         );
     }, [åpenBehandling]);
 
-    const putVilkår = (
-        vilkårsvurderingForPerson: IPersonResultat,
-        redigerbartVilkår: FeltState<IVilkårResultat>
-    ) => {
+    const putVilkår = (vilkårsvurderingForPerson: IPersonResultat, redigerbartVilkår: FeltState<IVilkårResultat>) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
         return request<IRestPersonResultat, IBehandling>({
@@ -99,15 +84,12 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
                         periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
                         resultat: redigerbartVilkår.verdi.resultat.verdi,
                         resultatBegrunnelse: redigerbartVilkår.verdi.resultatBegrunnelse,
-                        erEksplisittAvslagPåSøknad:
-                            redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
+                        erEksplisittAvslagPåSøknad: redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                         avslagBegrunnelser: redigerbartVilkår.verdi.avslagBegrunnelser.verdi,
                         vilkårType: redigerbartVilkår.verdi.vilkårType,
                         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
-                        utdypendeVilkårsvurderinger:
-                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                        begrunnelseForManuellKontroll:
-                            redigerbartVilkår.verdi.begrunnelseForManuellKontroll,
+                        utdypendeVilkårsvurderinger: redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
+                        begrunnelseForManuellKontroll: redigerbartVilkår.verdi.begrunnelseForManuellKontroll,
                     },
                 ],
                 andreVurderinger: [],
@@ -172,20 +154,17 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
     };
 
     const hentVilkårMedFeil = (): IVilkårResultat[] => {
-        return vilkårsvurdering.reduce(
-            (accVilkårMedFeil: IVilkårResultat[], personResultat: IPersonResultat) => {
-                return [
-                    ...accVilkårMedFeil,
-                    ...personResultat.vilkårResultater
-                        .filter(
-                            (vilkårResultat: FeltState<IVilkårResultat>) =>
-                                vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
-                        )
-                        .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.verdi),
-                ];
-            },
-            []
-        );
+        return vilkårsvurdering.reduce((accVilkårMedFeil: IVilkårResultat[], personResultat: IPersonResultat) => {
+            return [
+                ...accVilkårMedFeil,
+                ...personResultat.vilkårResultater
+                    .filter(
+                        (vilkårResultat: FeltState<IVilkårResultat>) =>
+                            vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
+                    )
+                    .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.verdi),
+            ];
+        }, []);
     };
 
     const hentAndreVurderingerMedFeil = (): IAnnenVurdering[] => {
@@ -230,9 +209,7 @@ export const useVilkårsvurderingContext = () => {
     const context = React.useContext(VilkårsvurderingContext);
 
     if (context === undefined) {
-        throw new Error(
-            'useVilkårsvurderingContext må brukes innenfor en VilkårsvurderingProvider'
-        );
+        throw new Error('useVilkårsvurderingContext må brukes innenfor en VilkårsvurderingProvider');
     }
     return context;
 };

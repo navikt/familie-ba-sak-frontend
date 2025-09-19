@@ -1,8 +1,5 @@
 import { VedtakBegrunnelseType } from '../../../typer/vedtak';
-import type {
-    IRestVedtaksbegrunnelse,
-    IVedtaksperiodeMedBegrunnelser,
-} from '../../../typer/vedtaksperiode';
+import type { IRestVedtaksbegrunnelse, IVedtaksperiodeMedBegrunnelser } from '../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../dato';
 

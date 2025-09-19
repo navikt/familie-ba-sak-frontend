@@ -84,15 +84,11 @@ export interface IRestOverstyrtEndringstidspunkt {
     behandlingId: number;
 }
 
-export const hentVedtaksperiodeTittel = (
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
-) => {
+export const hentVedtaksperiodeTittel = (vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) => {
     const { type, utbetalingsperiodeDetaljer } = vedtaksperiodeMedBegrunnelser;
 
     const ytelseTyperUtenEndring =
-        utbetalingsperiodeDetaljer.map(
-            utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType
-        ) ?? [];
+        utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => utbetalingsperiodeDetalj.ytelseType) ?? [];
 
     if (
         (type === Vedtaksperiodetype.UTBETALING ||

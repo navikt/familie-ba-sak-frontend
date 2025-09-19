@@ -24,10 +24,7 @@ export const useInstitusjon = (åpenBehandling: IBehandling) => {
     const institusjon = fagsak.institusjon;
 
     const onSubmitMottaker = () => {
-        if (
-            vurderErLesevisning() ||
-            åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON
-        ) {
+        if (vurderErLesevisning() || åpenBehandling.steg !== BehandlingSteg.REGISTRERE_INSTITUSJON) {
             navigate(
                 åpenBehandling.årsak === BehandlingÅrsak.SØKNAD
                     ? `/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/registrer-soknad`

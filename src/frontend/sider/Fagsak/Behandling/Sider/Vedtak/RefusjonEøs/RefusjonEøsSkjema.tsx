@@ -54,8 +54,7 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 kunEøs
                 eksluderLand={['NO']}
                 feil={
-                    skjema.visFeilmeldinger &&
-                    skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
+                    skjema.visFeilmeldinger && skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
                         ? skjema.felter.land.feilmelding?.toString()
                         : ''
                 }
@@ -66,29 +65,17 @@ const RefusjonEøsSkjema: React.FunctionComponent<IRefusjonEøsSkjemaProps> = ({
                 legend="Tekst i vedtaksbrev"
                 value={
                     erLesevisning
-                        ? `Refusjon ${
-                              skjema.felter.refusjonAvklart.verdi ? 'avklart' : 'ikke avklart'
-                          }`
+                        ? `Refusjon ${skjema.felter.refusjonAvklart.verdi ? 'avklart' : 'ikke avklart'}`
                         : skjema.felter.refusjonAvklart.verdi
                 }
-                onChange={(val: boolean | undefined) =>
-                    skjema.felter.refusjonAvklart.validerOgSettFelt(val)
-                }
+                onChange={(val: boolean | undefined) => skjema.felter.refusjonAvklart.validerOgSettFelt(val)}
                 error={skjema.visFeilmeldinger && skjema.felter.refusjonAvklart.feilmelding}
                 size="small"
             >
-                <Radio
-                    name={'refusjonAvklart'}
-                    value={true}
-                    id={`ja-refusjon-er-avklart-${inputUuid}`}
-                >
+                <Radio name={'refusjonAvklart'} value={true} id={`ja-refusjon-er-avklart-${inputUuid}`}>
                     {'Refusjon avklart'}
                 </Radio>
-                <Radio
-                    name={'refusjonAvklart'}
-                    value={false}
-                    id={`nei-refusjon-er-ikke-avklart-${inputUuid}`}
-                >
+                <Radio name={'refusjonAvklart'} value={false} id={`nei-refusjon-er-ikke-avklart-${inputUuid}`}>
                     {'Refusjon ikke avklart'}
                 </Radio>
             </RadioGroup>

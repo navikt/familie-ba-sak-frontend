@@ -30,9 +30,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
     return (
         <>
             {toggles[ToggleNavn.brukNyHenleggModal] && <HenleggBehandlingNy />}
-            {!toggles[ToggleNavn.brukNyHenleggModal] && (
-                <HenleggBehandling fagsakId={minimalFagsak.id} />
-            )}
+            {!toggles[ToggleNavn.brukNyHenleggModal] && <HenleggBehandling fagsakId={minimalFagsak.id} />}
             <EndreBehandlendeEnhet />
             {minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && <EndreBehandlingstema />}
             {!vurderErLesevisning() &&
@@ -41,9 +39,7 @@ const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
                     åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                     åpenBehandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
                     åpenBehandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
-                    åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && (
-                    <LeggTilBarnPåBehandling />
-                )}
+                    åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) && <LeggTilBarnPåBehandling />}
             {åpenBehandling.status === BehandlingStatus.UTREDES && <SettEllerOppdaterVenting />}
             {åpenBehandling.aktivSettPåVent && <TaBehandlingAvVent />}
             {minimalFagsak.fagsakType !== FagsakType.INSTITUSJON &&

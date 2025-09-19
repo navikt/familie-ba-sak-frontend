@@ -14,17 +14,10 @@ const SettEllerOppdaterVenting: React.FC = () => {
     return (
         <>
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                {erBehandlingAlleredePåVent
-                    ? 'Endre ventende behandling'
-                    : 'Sett behandling på vent'}
+                {erBehandlingAlleredePåVent ? 'Endre ventende behandling' : 'Sett behandling på vent'}
             </Dropdown.Menu.List.Item>
 
-            {visModal && (
-                <SettBehandlingPåVentModal
-                    lukkModal={() => settVisModal(false)}
-                    behandling={behandling}
-                />
-            )}
+            {visModal && <SettBehandlingPåVentModal lukkModal={() => settVisModal(false)} behandling={behandling} />}
         </>
     );
 };

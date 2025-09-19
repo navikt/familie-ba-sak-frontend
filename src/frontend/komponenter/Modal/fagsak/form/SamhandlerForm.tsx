@@ -1,11 +1,6 @@
 import React from 'react';
 
-import {
-    type FieldErrors,
-    FormProvider,
-    type SubmitHandler,
-    type UseFormReturn,
-} from 'react-hook-form';
+import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
 

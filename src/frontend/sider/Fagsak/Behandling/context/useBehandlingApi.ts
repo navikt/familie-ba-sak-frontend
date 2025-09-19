@@ -5,12 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
@@ -30,9 +25,7 @@ const useBehandlingApi = (
 
     const { skalObfuskereData } = useAppContext();
 
-    const opprettBehandling = (
-        data: IOpprettBehandlingData
-    ): Promise<void | Ressurs<IBehandling>> => {
+    const opprettBehandling = (data: IOpprettBehandlingData): Promise<void | Ressurs<IBehandling>> => {
         return request<IOpprettBehandlingData, IBehandling>({
             data,
             method: 'POST',
@@ -51,9 +44,7 @@ const useBehandlingApi = (
                                 : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
-                        navigate(
-                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
-                        );
+                        navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
                     }
                 }
             })
@@ -104,9 +95,7 @@ const useBehandlingApi = (
                 }
             })
             .catch((_error: AxiosError) => {
-                return byggFeiletRessurs(
-                    'Ukjent feil ved oppdatering av registeropplysninger'
-                ) as Ressurs<IBehandling>;
+                return byggFeiletRessurs('Ukjent feil ved oppdatering av registeropplysninger') as Ressurs<IBehandling>;
             });
     };
 

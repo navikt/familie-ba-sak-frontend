@@ -23,16 +23,13 @@ interface HentOgSettBehandlingContextValue {
     settBehandlingRessurs: (behandling: Ressurs<IBehandling>) => void;
 }
 
-const HentOgSettBehandlingContext = createContext<HentOgSettBehandlingContextValue | undefined>(
-    undefined
-);
+const HentOgSettBehandlingContext = createContext<HentOgSettBehandlingContextValue | undefined>(undefined);
 
 export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
     const { request } = useHttp();
     const { behandlingId } = useSakOgBehandlingParams();
     const queryClient = useQueryClient();
-    const [behandlingRessurs, privatSettBehandlingRessurs] =
-        useState<Ressurs<IBehandling>>(byggTomRessurs());
+    const [behandlingRessurs, privatSettBehandlingRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const navigate = useNavigate();
     const { skalObfuskereData } = useAppContext();
 
@@ -71,9 +68,7 @@ export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
                     privatSettBehandlingRessurs(response);
                 })
                 .catch((_error: AxiosError) => {
-                    privatSettBehandlingRessurs(
-                        byggFeiletRessurs('Ukjent ved innhenting av behandling')
-                    );
+                    privatSettBehandlingRessurs(byggFeiletRessurs('Ukjent ved innhenting av behandling'));
                 });
         }
     }, [behandlingId]);
@@ -89,9 +84,7 @@ export const useHentOgSettBehandlingContext = () => {
     const context = useContext(HentOgSettBehandlingContext);
 
     if (context === undefined) {
-        throw new Error(
-            'useHentOgSettBehandlingContext må brukes innenfor HentOgSettBehandlingProvider'
-        );
+        throw new Error('useHentOgSettBehandlingContext må brukes innenfor HentOgSettBehandlingProvider');
     }
     return context;
 };

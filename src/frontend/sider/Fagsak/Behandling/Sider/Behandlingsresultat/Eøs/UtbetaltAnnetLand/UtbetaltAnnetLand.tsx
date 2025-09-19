@@ -57,9 +57,7 @@ const UtbetaltAnnetLand: React.FC<IProps> = ({
                 <Alert
                     variant={'warning'}
                     fullWidth
-                    children={
-                        'I periodene Norge er sekundærland må beløpene fra det andre medlemslandet registreres'
-                    }
+                    children={'I periodene Norge er sekundærland må beløpene fra det andre medlemslandet registreres'}
                 />
             )}
             <StyledTable>

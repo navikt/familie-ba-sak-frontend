@@ -14,11 +14,7 @@ const Informasjonsbolk: React.FC<IProps> = ({ label, tekst, tekstHover, tekstFar
     return (
         <HGrid columns={2}>
             <BodyShort>{label}</BodyShort>
-            <BodyShort
-                weight="semibold"
-                style={{ color: tekstFarge ?? ATextDefault }}
-                title={tekstHover}
-            >
+            <BodyShort weight="semibold" style={{ color: tekstFarge ?? ATextDefault }} title={tekstHover}>
                 {tekst}
             </BodyShort>
         </HGrid>

@@ -9,13 +9,7 @@ interface IProps {
 }
 const AppInfoModal = ({ modal }: IProps) => {
     return (
-        <Modal
-            open
-            onClose={modal.onClose}
-            header={{ heading: modal.tittel, size: 'small' }}
-            width={'medium'}
-            portal
-        >
+        <Modal open onClose={modal.onClose} header={{ heading: modal.tittel, size: 'small' }} width={'medium'} portal>
             <Modal.Body>{modal.innhold && modal.innhold()}</Modal.Body>
             <Modal.Footer>{modal.actions}</Modal.Footer>
         </Modal>

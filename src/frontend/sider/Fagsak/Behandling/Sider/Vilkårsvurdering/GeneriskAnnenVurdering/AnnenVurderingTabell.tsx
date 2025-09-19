@@ -57,19 +57,17 @@ const AnnenVurderingTabell: React.FC<IProps> = ({
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {andreVurderinger.map(
-                    (annenVurdering: FeltState<IAnnenVurdering>, index: number) => {
-                        return (
-                            <AnnenVurderingTabellRad
-                                key={`${index}_${person.fødselsdato}_${annenVurdering.verdi.type}`}
-                                annenVurderingConfig={annenVurderingConfig}
-                                person={person}
-                                annenVurdering={annenVurdering}
-                                visFeilmeldinger={visFeilmeldinger}
-                            />
-                        );
-                    }
-                )}
+                {andreVurderinger.map((annenVurdering: FeltState<IAnnenVurdering>, index: number) => {
+                    return (
+                        <AnnenVurderingTabellRad
+                            key={`${index}_${person.fødselsdato}_${annenVurdering.verdi.type}`}
+                            annenVurderingConfig={annenVurderingConfig}
+                            person={person}
+                            annenVurdering={annenVurdering}
+                            visFeilmeldinger={visFeilmeldinger}
+                        />
+                    );
+                })}
             </Table.Body>
         </Table>
     );

@@ -131,10 +131,7 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                     },
                     {
                         ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
-                        ytelserSomSplitterOpp: [
-                            YtelseType.FINNMARKSTILLEGG,
-                            YtelseType.SVALBARDTILLEGG,
-                        ],
+                        ytelserSomSplitterOpp: [YtelseType.FINNMARKSTILLEGG, YtelseType.SVALBARDTILLEGG],
                     },
                 ];
             case FagsakType.BARN_ENSLIG_MINDREÅRIG:
@@ -152,10 +149,7 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                 return [
                     {
                         ytelseSomSkalSplittesOpp: YtelseType.ORDINÆR_BARNETRYGD,
-                        ytelserSomSplitterOpp: [
-                            YtelseType.FINNMARKSTILLEGG,
-                            YtelseType.SVALBARDTILLEGG,
-                        ],
+                        ytelserSomSplitterOpp: [YtelseType.FINNMARKSTILLEGG, YtelseType.SVALBARDTILLEGG],
                     },
                 ];
             case undefined:
@@ -177,29 +171,24 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                               const periode: Periode = {
                                   fom,
                                   tom: endOfMonth(isoStringTilDate(ytelsePeriode.stønadTom)),
-                                  id: `${
-                                      personMedAndelerTilkjentYtelse.personIdent
-                                  }_${fom.getMonth()}_${fom.getDay()}`,
+                                  id: `${personMedAndelerTilkjentYtelse.personIdent}_${fom.getMonth()}_${fom.getDay()}`,
                                   status: ytelsePeriode.skalUtbetales ? 'suksess' : 'feil',
                               };
 
                               const ytelseSomMåSplittes = ytelserSomMåSplittes.find(
-                                  ytelse =>
-                                      ytelse.ytelseSomSkalSplittesOpp === ytelsePeriode.ytelseType
+                                  ytelse => ytelse.ytelseSomSkalSplittesOpp === ytelsePeriode.ytelseType
                               );
 
                               if (
                                   ytelseSomMåSplittes &&
-                                  ytelsePeriode.ytelseType ===
-                                      ytelseSomMåSplittes.ytelseSomSkalSplittesOpp
+                                  ytelsePeriode.ytelseType === ytelseSomMåSplittes.ytelseSomSkalSplittesOpp
                               ) {
-                                  const andelerSomSkalSplitteOpp =
-                                      personMedAndelerTilkjentYtelse.ytelsePerioder.filter(
-                                          ytelsePeriodeFilter =>
-                                              ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(
-                                                  ytelsePeriodeFilter.ytelseType
-                                              )
-                                      );
+                                  const andelerSomSkalSplitteOpp = personMedAndelerTilkjentYtelse.ytelsePerioder.filter(
+                                      ytelsePeriodeFilter =>
+                                          ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(
+                                              ytelsePeriodeFilter.ytelseType
+                                          )
+                                  );
 
                                   return [
                                       ...acc,
@@ -211,9 +200,7 @@ export const TidslinjeProvider = (props: PropsWithChildren) => {
                                   ];
                               } else if (
                                   ytelseSomMåSplittes &&
-                                  !ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(
-                                      ytelsePeriode.ytelseType
-                                  )
+                                  !ytelseSomMåSplittes.ytelserSomSplitterOpp.includes(ytelsePeriode.ytelseType)
                               ) {
                                   return [...acc, periode];
                               } else {

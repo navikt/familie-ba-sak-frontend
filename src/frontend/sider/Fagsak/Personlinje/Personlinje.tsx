@@ -70,9 +70,7 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                         fagsakType={minimalFagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
                         erBarn={fagsakeier.alder < 18}
-                        erAdresseBeskyttet={erAdresseBeskyttet(
-                            søkerData?.adressebeskyttelseGradering
-                        )}
+                        erAdresseBeskyttet={erAdresseBeskyttet(søkerData?.adressebeskyttelseGradering)}
                         erEgenAnsatt={fagsakeier.erEgenAnsatt}
                     />
                     <HStack align="center" gap="3 4">
@@ -113,19 +111,18 @@ export const Personlinje = ({ bruker, minimalFagsak }: PersonlinjeProps) => {
                         <DødsfallTag dødsfallDato={søkerData.dødsfallDato} />
                     </>
                 )}
-                {minimalFagsak?.migreringsdato &&
-                    sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
-                        <>
-                            <Divider />
-                            <Tag variant="info" size="small">
-                                Migrert{' '}
-                                {isoStringTilFormatertString({
-                                    isoString: minimalFagsak?.migreringsdato,
-                                    tilFormat: Datoformat.DATO,
-                                })}
-                            </Tag>
-                        </>
-                    )}
+                {minimalFagsak?.migreringsdato && sjekkOmMigreringsdatoErEldreEnn3År(minimalFagsak.migreringsdato) && (
+                    <>
+                        <Divider />
+                        <Tag variant="info" size="small">
+                            Migrert{' '}
+                            {isoStringTilFormatertString({
+                                isoString: minimalFagsak?.migreringsdato,
+                                tilFormat: Datoformat.DATO,
+                            })}
+                        </Tag>
+                    </>
+                )}
             </HStack>
         </InnholdContainer>
     );

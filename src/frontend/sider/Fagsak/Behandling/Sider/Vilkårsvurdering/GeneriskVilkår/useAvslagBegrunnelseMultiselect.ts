@@ -41,10 +41,7 @@ const useAvslagBegrunnelseMultiselect = (
 
         const avslagBegrunnelseTeksterForGjeldendeVilkår = alleBegrunnelserRessurs.data[
             begrunnelsestypeGyldigForBehandling
-        ].filter(
-            (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                begrunnelse.vilkår === vilkårType
-        );
+        ].filter((begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType);
 
         return avslagBegrunnelseTeksterForGjeldendeVilkår;
     };

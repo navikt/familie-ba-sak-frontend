@@ -4,12 +4,7 @@ import { useNavigate } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
@@ -121,14 +116,9 @@ const useBehandlingssteg = (
                         'Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
                 )
             );
-        } else if (
-            !kanSendeInnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) &&
-            !erSammensattKontrollsak
-        ) {
+        } else if (!kanSendeInnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) && !erSammensattKontrollsak) {
             settSubmitRessurs(
-                byggFeiletRessurs(
-                    'Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.'
-                )
+                byggFeiletRessurs('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.')
             );
         } else {
             settSubmitRessurs(byggHenterRessurs());
@@ -136,9 +126,7 @@ const useBehandlingssteg = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/behandlinger/${
                     behandling?.behandlingId
-                }/steg/send-til-beslutter?behandlendeEnhet=${
-                    innloggetSaksbehandler?.enhet ?? '9999'
-                }`,
+                }/steg/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
             }).then((response: Ressurs<IBehandling>) => {
                 settSubmitRessurs(response);
 

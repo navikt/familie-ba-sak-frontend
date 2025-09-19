@@ -30,9 +30,7 @@ export function MenyvalgFagsak({ bruker, minimalFagsak }: Props) {
             {!!bruker && <OpprettFagsak fagsak={minimalFagsak} bruker={bruker} />}
             {erPåDokumentutsending && <LeggTilEllerFjernBrevmottakerePåFagsak />}
             {!erPåDokumentutsending && erSaksbehandlerEllerHøyere && (
-                <Dropdown.Menu.List.Item
-                    onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}
-                >
+                <Dropdown.Menu.List.Item onClick={() => navigate(`/fagsak/${minimalFagsak.id}/dokumentutsending`)}>
                     Send informasjonsbrev
                 </Dropdown.Menu.List.Item>
             )}

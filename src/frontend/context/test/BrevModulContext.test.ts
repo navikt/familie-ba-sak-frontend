@@ -3,10 +3,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { Brevmal } from '../../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
-import {
-    hentMuligeBrevmalerImplementering,
-    mottakersMålformImplementering,
-} from '../../utils/brevmal';
+import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '../../utils/brevmal';
 import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
 import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
 
@@ -55,9 +52,7 @@ describe('BrevmodulContext', () => {
         );
         const hentTilpassetInstitusjon = true;
         test('Skal returnere liste med brev tilpasset institusjon', () => {
-            expect(
-                hentMuligeBrevmalerImplementering(behandlingSøknad, hentTilpassetInstitusjon).sort()
-            ).toEqual(
+            expect(hentMuligeBrevmalerImplementering(behandlingSøknad, hentTilpassetInstitusjon).sort()).toEqual(
                 [
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
                     Brevmal.SVARTIDSBREV_INSTITUSJON,
@@ -73,20 +68,16 @@ describe('BrevmodulContext', () => {
         const personerNB = [mockBarn, mockSøker({ målform: Målform.NB, personIdent })];
         const personerNN = [mockBarn, mockSøker({ målform: Målform.NN, personIdent })];
         test('Skal returnere NB når søkers målform er NB', () => {
-            expect(
-                mottakersMålformImplementering(personerNB, Valideringsstatus.OK, personIdent)
-            ).toEqual(Målform.NB);
+            expect(mottakersMålformImplementering(personerNB, Valideringsstatus.OK, personIdent)).toEqual(Målform.NB);
         });
 
         test('Skal returnere NN når søkers målform er NN', () => {
-            expect(
-                mottakersMålformImplementering(personerNN, Valideringsstatus.OK, personIdent)
-            ).toEqual(Målform.NN);
+            expect(mottakersMålformImplementering(personerNN, Valideringsstatus.OK, personIdent)).toEqual(Målform.NN);
         });
         test('Skal returnere målformen registrert på barnet når mottakeren er en institusjon', () => {
-            expect(
-                mottakersMålformImplementering([mockBarn], Valideringsstatus.OK, orgNummer)
-            ).toEqual(mockBarn.målform);
+            expect(mottakersMålformImplementering([mockBarn], Valideringsstatus.OK, orgNummer)).toEqual(
+                mockBarn.målform
+            );
         });
     });
 });

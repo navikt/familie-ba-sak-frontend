@@ -21,38 +21,24 @@ interface IProps {
     erLesevisning: boolean;
 }
 
-const KorrigerVedtakModal = ({
-    lukkModal,
-    korrigertVedtak,
-    behandlingId,
-    erLesevisning,
-}: IProps) => {
-    const { skjema, valideringErOk, lagreKorrigertVedtak, angreKorrigering, restFeil } =
-        useKorrigerVedtakSkjema({
-            lukkModal,
-            korrigertVedtak,
-            behandlingId,
-        });
+const KorrigerVedtakModal = ({ lukkModal, korrigertVedtak, behandlingId, erLesevisning }: IProps) => {
+    const { skjema, valideringErOk, lagreKorrigertVedtak, angreKorrigering, restFeil } = useKorrigerVedtakSkjema({
+        lukkModal,
+        korrigertVedtak,
+        behandlingId,
+    });
 
     const visAngreKnapp = korrigertVedtak != null;
 
     return (
-        <Modal
-            open
-            onClose={lukkModal}
-            header={{ heading: 'Korriger vedtak', size: 'medium' }}
-            width={'35rem'}
-            portal
-        >
+        <Modal open onClose={lukkModal} header={{ heading: 'Korriger vedtak', size: 'medium' }} width={'35rem'} portal>
             <Modal.Body>
                 <BodyLong>
-                    Dersom det har blitt gjort feil tidligere vedtak, kan denne teksten legges til i
-                    vedtaksbrevet:
+                    Dersom det har blitt gjort feil tidligere vedtak, kan denne teksten legges til i vedtaksbrevet:
                 </BodyLong>
                 <ul>
                     <li>
-                        Vi har oppdaget en feil i vedtaket vi gjorde [DATO]. Derfor har vi vurdert
-                        saken din på nytt.
+                        Vi har oppdaget en feil i vedtaket vi gjorde [DATO]. Derfor har vi vurdert saken din på nytt.
                     </li>
                 </ul>
                 <Fieldset
@@ -69,17 +55,13 @@ const KorrigerVedtakModal = ({
                         kanKunVelgeFortid
                     />
                     <Textarea
-                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
-                            skjema.visFeilmeldinger
-                        )}
+                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         id={'korriger-vedtak-begrunnelse'}
                         label={'Begrunnelse (valgfri)'}
                         description={'Begrunn hva som er gjort feil i tidligere vedtak'}
                         readOnly={erLesevisning}
                         value={skjema.felter.begrunnelse.verdi}
-                        onChange={changeEvent =>
-                            skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
-                        }
+                        onChange={changeEvent => skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)}
                     />
                 </Fieldset>
             </Modal.Body>

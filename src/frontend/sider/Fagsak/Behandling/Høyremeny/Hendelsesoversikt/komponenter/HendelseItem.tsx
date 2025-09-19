@@ -3,13 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
-import {
-    ABorderDefault,
-    ABorderSubtle,
-    ASpacing1,
-    ASpacing4,
-    ASpacing6,
-} from '@navikt/ds-tokens/dist/tokens';
+import { ABorderDefault, ABorderSubtle, ASpacing1, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
 import { BehandlerRolle, behandlerRoller } from '../../../../../../typer/behandling';
 import type { Hendelse } from '../typer';
@@ -53,9 +47,7 @@ const HendelseItem = ({ hendelse }: IHendelseItemProps) => (
             </VStack>
             <StyledVStack>
                 <BodyShort weight="semibold">{hendelse.tittel}</BodyShort>
-                {hendelse.beskrivelse && (
-                    <Hendelsesbeskrivelse>{hendelse.beskrivelse}</Hendelsesbeskrivelse>
-                )}
+                {hendelse.beskrivelse && <Hendelsesbeskrivelse>{hendelse.beskrivelse}</Hendelsesbeskrivelse>}
                 <BodyShort textColor="subtle">{`${hendelse.dato}`}</BodyShort>
                 <BodyShort textColor="subtle">{`${hendelse.utførtAv} ${
                     hendelse.rolle.toString() !== BehandlerRolle[BehandlerRolle.SYSTEM] &&

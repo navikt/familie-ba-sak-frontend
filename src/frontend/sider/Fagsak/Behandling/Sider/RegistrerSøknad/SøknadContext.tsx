@@ -61,10 +61,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
-    const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
-        SøknadSkjema,
-        IBehandling
-    >({
+    const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<SøknadSkjema, IBehandling>({
         felter: {
             underkategori: useFelt<BehandlingUnderkategori>({
                 verdi:
@@ -150,12 +147,8 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                 )
             );
 
-            skjema.felter.målform.validerOgSettFelt(
-                åpenBehandling.søknadsgrunnlag.søkerMedOpplysninger.målform
-            );
-            skjema.felter.underkategori.validerOgSettFelt(
-                åpenBehandling.søknadsgrunnlag.underkategori
-            );
+            skjema.felter.målform.validerOgSettFelt(åpenBehandling.søknadsgrunnlag.søkerMedOpplysninger.målform);
+            skjema.felter.underkategori.validerOgSettFelt(åpenBehandling.søknadsgrunnlag.underkategori);
             skjema.felter.endringAvOpplysningerBegrunnelse.validerOgSettFelt(
                 åpenBehandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse
             );
@@ -186,8 +179,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                                         inkludertISøknaden: barn.merket,
                                     })
                                 ),
-                                endringAvOpplysningerBegrunnelse:
-                                    skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
+                                endringAvOpplysningerBegrunnelse: skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
                                 erAutomatiskRegistrert: false,
                             },
                             bekreftEndringerViaFrontend,
@@ -197,9 +189,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                     (response: Ressurs<IBehandling>) => {
                         if (response.status === RessursStatus.SUKSESS) {
                             settÅpenBehandling(response);
-                            navigate(
-                                `/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`
-                            );
+                            navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
                         }
                     },
                     (errorResponse: Ressurs<IBehandling>) => {

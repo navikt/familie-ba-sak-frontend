@@ -6,18 +6,9 @@ export interface IFritekstFelt {
     id: number;
 }
 
-export const genererIdBasertPåAndreFritekstKulepunkter = (
-    fritekstKulepunkter?: Felt<FeltState<IFritekstFelt>[]>
-) => {
+export const genererIdBasertPåAndreFritekstKulepunkter = (fritekstKulepunkter?: Felt<FeltState<IFritekstFelt>[]>) => {
     if (fritekstKulepunkter && fritekstKulepunkter.verdi.length > 0) {
-        return (
-            Math.max(
-                ...fritekstKulepunkter.verdi.map(
-                    fritekstKulepunkt => fritekstKulepunkt.verdi.id,
-                    10
-                )
-            ) + 1
-        );
+        return Math.max(...fritekstKulepunkter.verdi.map(fritekstKulepunkt => fritekstKulepunkt.verdi.id, 10)) + 1;
     } else {
         return 1;
     }
@@ -40,13 +31,11 @@ export const lagInitiellFritekst = (
         } else if (felt.verdi.tekst.trim().length === 0) {
             return feil(
                 felt,
-                valideringsmelding ||
-                    'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+                valideringsmelding || 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
             );
         } else {
             return ok(felt);
         }
     },
-    valideringsstatus:
-        initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
+    valideringsstatus: initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
 });

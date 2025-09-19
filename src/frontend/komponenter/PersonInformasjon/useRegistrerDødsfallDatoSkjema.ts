@@ -18,9 +18,7 @@ interface IProps {
 }
 
 const erBegrunnelseFyltUt = (felt: FeltState<string>): FeltState<string> =>
-    !isEmpty(felt.verdi)
-        ? ok(felt)
-        : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Begrunnelse for manuell registrering av dødsfall er påkrevd.');
 
 export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -61,11 +59,7 @@ export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) =
     ];
 
     useEffect(() => {
-        if (
-            valideringsstatuser.some(
-                valideringsstatus => valideringsstatus === Valideringsstatus.IKKE_VALIDERT
-            )
-        ) {
+        if (valideringsstatuser.some(valideringsstatus => valideringsstatus === Valideringsstatus.IKKE_VALIDERT)) {
             validerAlleSynligeFelter();
         }
     }, [valideringsstatuser]);
@@ -95,10 +89,7 @@ export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) =
                     }
                 },
                 (error: Ressurs<IBehandling>) => {
-                    if (
-                        error.status === RessursStatus.FEILET ||
-                        error.status === RessursStatus.FUNKSJONELL_FEIL
-                    ) {
+                    if (error.status === RessursStatus.FEILET || error.status === RessursStatus.FUNKSJONELL_FEIL) {
                         settRestFeil(error.frontendFeilmelding);
                     } else {
                         settRestFeil('Teknisk feil ved lagring av manuell dødsfall dato');

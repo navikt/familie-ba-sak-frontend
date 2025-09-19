@@ -4,12 +4,7 @@ import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, BodyShort, Box, HStack, Link, LinkCard, VStack } from '@navikt/ds-react';
-import {
-    AFontSizeHeadingMedium,
-    AFontSizeXlarge,
-    ASpacing16,
-    ASpacing8,
-} from '@navikt/ds-tokens/dist/tokens';
+import { AFontSizeHeadingMedium, AFontSizeXlarge, ASpacing16, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
@@ -60,9 +55,7 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
         <HStack gap="20">
             <div>
                 <HeaderTekst spacing>Behandlingstema</HeaderTekst>
-                <BodyTekst weight="semibold">
-                    {behandlingstema ? behandlingstema.navn : '-'}
-                </BodyTekst>
+                <BodyTekst weight="semibold">{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
             </div>
             <div>
                 <HeaderTekst spacing>Status</HeaderTekst>
@@ -86,14 +79,11 @@ const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
 };
 
 const genererHoverTekst = (behandling: VisningBehandling) => {
-    return behandling.status === BehandlingStatus.AVSLUTTET
-        ? 'Gå til gjeldende vedtak'
-        : 'Gå til åpen behandling';
+    return behandling.status === BehandlingStatus.AVSLUTTET ? 'Gå til gjeldende vedtak' : 'Gå til åpen behandling';
 };
 
 const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) => {
-    const aktivBehandling: VisningBehandling | undefined =
-        hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
+    const aktivBehandling: VisningBehandling | undefined = hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
 
     return (
         <>
@@ -118,12 +108,7 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
                     </LinkCard>
                 </Box>
             ) : (
-                <FagsakPanel
-                    borderColor="border-strong"
-                    borderWidth="1"
-                    borderRadius="small"
-                    padding="8"
-                >
+                <FagsakPanel borderColor="border-strong" borderWidth="1" borderRadius="small" padding="8">
                     <Innholdstabell minimalFagsak={minimalFagsak} />
                 </FagsakPanel>
             )}

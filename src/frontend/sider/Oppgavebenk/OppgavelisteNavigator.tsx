@@ -6,8 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgave } from '../../typer/oppgave';
 
-const beregnAntallSider = (oppgaver: IOppgave[]): number =>
-    Math.ceil(oppgaver.length / oppgaveSideLimit);
+const beregnAntallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
 
 const OppgavelisteNavigator: React.FunctionComponent = () => {
     const { oppgaver, side, settSide } = useOppgavebenkContext();
@@ -23,8 +22,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
             <Box paddingInline="space-16">
                 Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
                 {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
-                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt}{' '}
-                oppgaver)
+                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
             </Box>
             |
             <Box paddingInline="space-16 0">

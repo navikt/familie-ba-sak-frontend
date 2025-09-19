@@ -75,8 +75,7 @@ export const tilBehandlingstema = (
     underkategori: BehandlingUnderkategori
 ): IBehandlingstema | undefined => {
     return Object.values(behandlingstemaer).find(
-        (tema: IBehandlingstema) =>
-            tema.kategori === kategori && tema.underkategori === underkategori
+        (tema: IBehandlingstema) => tema.kategori === kategori && tema.underkategori === underkategori
     );
 };
 

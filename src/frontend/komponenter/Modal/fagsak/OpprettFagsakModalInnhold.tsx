@@ -56,9 +56,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     const fagsaktype = opprettFagsakForm.watch(OpprettFagsakFeltnavn.FAGSAKTYPE);
     const samhandler = opprettFagsakForm.watch(OpprettFagsakFeltnavn.SAMHANDLER);
 
-    const onSubmitFeilmelding = OpprettFagsakServerErrors.onSubmitError.lookup(
-        opprettFagsakForm.formState.errors
-    );
+    const onSubmitFeilmelding = OpprettFagsakServerErrors.onSubmitError.lookup(opprettFagsakForm.formState.errors);
 
     if (erPersonPending || erFagsakerPending) {
         return (
@@ -120,9 +118,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     {fagsaktype === FagsakType.INSTITUSJON && samhandler && (
                         <SamhandlerTabell
                             samhandler={samhandler}
-                            slettSamhandler={() =>
-                                opprettFagsakForm.setValue(OpprettFagsakFeltnavn.SAMHANDLER, null)
-                            }
+                            slettSamhandler={() => opprettFagsakForm.setValue(OpprettFagsakFeltnavn.SAMHANDLER, null)}
                             readOnly={opprettFagsakForm.formState.isSubmitting}
                         />
                     )}
@@ -130,11 +126,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                         <Alert
                             variant={'error'}
                             closeButton={true}
-                            onClose={() =>
-                                opprettFagsakForm.clearErrors(
-                                    OpprettFagsakServerErrors.onSubmitError.id
-                                )
-                            }
+                            onClose={() => opprettFagsakForm.clearErrors(OpprettFagsakServerErrors.onSubmitError.id)}
                         >
                             {onSubmitFeilmelding}
                         </Alert>
@@ -146,10 +138,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     type={'submit'}
                     variant={'primary'}
                     form={OPPRETT_FAGSAK_FORM}
-                    disabled={
-                        opprettFagsakForm.formState.isSubmitting ||
-                        samhandlerForm.formState.isSubmitting
-                    }
+                    disabled={opprettFagsakForm.formState.isSubmitting || samhandlerForm.formState.isSubmitting}
                     loading={opprettFagsakForm.formState.isSubmitting}
                 >
                     Opprett fagsak

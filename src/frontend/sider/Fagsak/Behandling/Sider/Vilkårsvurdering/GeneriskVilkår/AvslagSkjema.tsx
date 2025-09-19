@@ -30,8 +30,8 @@ const AvslagSkjema: React.FC<IProps> = ({
     return (
         <Fieldset
             error={
-                redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus ===
-                    Valideringsstatus.FEIL && visFeilmeldinger
+                redigerbartVilkår.verdi.avslagBegrunnelser.valideringsstatus === Valideringsstatus.FEIL &&
+                visFeilmeldinger
                     ? redigerbartVilkår.verdi.avslagBegrunnelser.feilmelding
                     : undefined
             }
@@ -55,8 +55,7 @@ const AvslagSkjema: React.FC<IProps> = ({
                                 ...redigerbartVilkår,
                                 verdi: {
                                     ...redigerbartVilkår.verdi,
-                                    erEksplisittAvslagPåSøknad:
-                                        !redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
+                                    erEksplisittAvslagPåSøknad: !redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
                                     avslagBegrunnelser: {
                                         ...redigerbartVilkår.verdi.avslagBegrunnelser,
                                         verdi: [],

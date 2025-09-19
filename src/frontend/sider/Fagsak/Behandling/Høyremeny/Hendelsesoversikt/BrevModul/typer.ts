@@ -64,16 +64,12 @@ export const brevmaler: Record<Brevmal, string> = {
     SVARTIDSBREV_INSTITUSJON: 'Svartidsbrev institusjon',
     FORLENGET_SVARTIDSBREV_INSTITUSJON: 'Forlenget svartidsbrev institusjon',
     VARSEL_OM_ÅRLIG_REVURDERING_EØS: 'Varsel årlig revurdering EØS',
-    VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER:
-        'Varsel årlig revurdering EØS med innhenting',
-    VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT:
-        'Varsel annen forelder med selvstendig rett søkt',
+    VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER: 'Varsel årlig revurdering EØS med innhenting',
+    VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT: 'Varsel annen forelder med selvstendig rett søkt',
     UTBETALING_ETTER_KA_VEDTAK: 'Utbetaling etter KA-vedtak',
 };
 
-export const leggTilValuePåOption = (
-    option: Omit<ISelectOptionMedBrevtekst, 'value'>
-): ISelectOptionMedBrevtekst => ({
+export const leggTilValuePåOption = (option: Omit<ISelectOptionMedBrevtekst, 'value'>): ISelectOptionMedBrevtekst => ({
     ...option,
     value: option.label.toLocaleLowerCase().replace(' ', '_'),
 });

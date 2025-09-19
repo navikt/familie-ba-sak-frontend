@@ -20,9 +20,7 @@ export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkMod
     const { settÅpenBehandling } = useBehandlingContext();
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
-    const opprinneligVedtaksdato = korrigertVedtak
-        ? new Date(korrigertVedtak.vedtaksdato)
-        : undefined;
+    const opprinneligVedtaksdato = korrigertVedtak ? new Date(korrigertVedtak.vedtaksdato) : undefined;
 
     const {
         skjema,
@@ -76,10 +74,7 @@ export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkMod
                     }
                 },
                 (error: Ressurs<IBehandling>) => {
-                    if (
-                        error.status === RessursStatus.FEILET ||
-                        error.status === RessursStatus.FUNKSJONELL_FEIL
-                    ) {
+                    if (error.status === RessursStatus.FEILET || error.status === RessursStatus.FUNKSJONELL_FEIL) {
                         settRestFeil(error.frontendFeilmelding);
                     } else {
                         settRestFeil('Teknisk feil ved lagring av korrigert vedtak');

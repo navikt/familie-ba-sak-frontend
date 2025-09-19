@@ -4,10 +4,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Textarea } from '@navikt/ds-react';
 
-import {
-    HenleggBehandlingFormFields,
-    type HenleggBehandlingFormValues,
-} from './useHenleggBehandlingForm';
+import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from './useHenleggBehandlingForm';
 
 export function BegrunnelseFelt() {
     const { control } = useFormContext<HenleggBehandlingFormValues>();

@@ -15,10 +15,7 @@ import { obfuskerSamhandler } from '../../utils/obfuskerData';
 import { orgnummerValidator } from '../../utils/validators';
 
 export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: string) => void) => {
-    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
-        ISamhandlerInfoRequest,
-        ISamhandlerInfo
-    >({
+    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<ISamhandlerInfoRequest, ISamhandlerInfo>({
         felter: {
             orgnr: useFelt({
                 verdi: '',
@@ -53,8 +50,7 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: st
 
 export const useSamhandlerRequest = () => {
     const { request } = useHttp();
-    const [samhandlerRessurs, settSamhandlerRessurs] =
-        useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
+    const [samhandlerRessurs, settSamhandlerRessurs] = useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
     const { skalObfuskereData } = useAppContext();
 
@@ -69,9 +65,7 @@ export const useSamhandlerRequest = () => {
     };
 
     const hentSamhandler = async (behandlingId: string): Promise<Ressurs<ISamhandlerInfo>> => {
-        return request<ISamhandlerInfoRequest, ISamhandlerInfo>(
-            hentSamhandlerdataForBehandlingConfig(behandlingId)
-        )
+        return request<ISamhandlerInfoRequest, ISamhandlerInfo>(hentSamhandlerdataForBehandlingConfig(behandlingId))
             .then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 return ressurs;
             })
@@ -87,9 +81,7 @@ export const useSamhandlerRequest = () => {
     };
 };
 
-const hentSamhandlerdataForBehandlingConfig = (
-    behandlingId: string
-): FamilieRequestConfig<ISamhandlerInfoRequest> => {
+const hentSamhandlerdataForBehandlingConfig = (behandlingId: string): FamilieRequestConfig<ISamhandlerInfoRequest> => {
     return {
         method: 'GET',
         url: '/familie-ba-sak/api/samhandler/behandling/' + behandlingId,

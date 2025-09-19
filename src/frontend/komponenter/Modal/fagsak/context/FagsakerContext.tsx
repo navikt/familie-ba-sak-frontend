@@ -1,10 +1,6 @@
 import React, { createContext, type PropsWithChildren, useContext } from 'react';
 
-import {
-    type IBaseFagsak,
-    sjekkHarBarnEnsligMindreårigFagsak,
-    sjekkHarNormalFagsak,
-} from '../../../../typer/fagsak';
+import { type IBaseFagsak, sjekkHarBarnEnsligMindreårigFagsak, sjekkHarNormalFagsak } from '../../../../typer/fagsak';
 
 interface FagsakerValue {
     fagsaker: IBaseFagsak[];

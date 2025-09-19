@@ -12,24 +12,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../../../context/AppContext';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import {
-    BehandlingSteg,
-    BehandlingÅrsak,
-    type IBehandling,
-} from '../../../../../../typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../typer/person';
 import { ToggleNavn } from '../../../../../../typer/toggles';
-import type {
-    IPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-} from '../../../../../../typer/vilkår';
-import {
-    annenVurderingConfig,
-    Resultat,
-    vilkårConfig,
-    VilkårType,
-} from '../../../../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
+import { annenVurderingConfig, Resultat, vilkårConfig, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -65,18 +52,11 @@ const VilkårDiv = styled.div`
     }
 `;
 
-const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({
-    visFeilmeldinger,
-}) => {
+const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({ visFeilmeldinger }) => {
     const { toggles } = useAppContext();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
-    const {
-        vurderErLesevisning,
-        erMigreringsbehandling,
-        settÅpenBehandling,
-        aktivSettPåVent,
-        behandling,
-    } = useBehandlingContext();
+    const { vurderErLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent, behandling } =
+        useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const kanLeggeTilUtvidetVilkår =
@@ -96,8 +76,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
         vilkårsvurdering.reduce(
             (personMapEkspandert, personResultat) => ({
                 ...personMapEkspandert,
-                [personResultat.personIdent]:
-                    erLesevisning || personHarIkkevurdertVilkår(personResultat),
+                [personResultat.personIdent]: erLesevisning || personHarIkkevurdertVilkår(personResultat),
             }),
             {}
         );
@@ -127,8 +106,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
     const skalViseVarselboksForVilkårSomMåKontrolleres =
         toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
         vilkårSomMåKontrolleresPerPerson.length > 0 &&
-        (behandling.steg == BehandlingSteg.VILKÅRSVURDERING ||
-            behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
+        (behandling.steg == BehandlingSteg.VILKÅRSVURDERING || behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
 
     return (
         <>
@@ -158,8 +136,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 const andreVurderinger = personResultat.andreVurderinger;
                 const harUtvidet = personResultat.vilkårResultater.find(
-                    vilkårResultat =>
-                        vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+                    vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
 
                 return (
@@ -184,13 +161,9 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                             <Button
                                                 variant={'tertiary'}
                                                 id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
-                                                onClick={() =>
-                                                    leggTilVilkårUtvidet(personResultat.personIdent)
-                                                }
+                                                onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
                                                 size={'small'}
-                                                icon={
-                                                    <PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />
-                                                }
+                                                icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
                                             >
                                                 {`Legg til vilkår utvidet barnetrygd`}
                                             </Button>
@@ -204,8 +177,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 onClick={() =>
                                     settPersonErEkspandert({
                                         ...personErEkspandert,
-                                        [personResultat.personIdent]:
-                                            !personErEkspandert[personResultat.personIdent],
+                                        [personResultat.personIdent]: !personErEkspandert[personResultat.personIdent],
                                     })
                                 }
                                 icon={
@@ -228,23 +200,16 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                 <>
                                     {personResultat.person.registerhistorikk ? (
                                         <Registeropplysninger
-                                            registerHistorikk={
-                                                personResultat.person.registerhistorikk
-                                            }
+                                            registerHistorikk={personResultat.person.registerhistorikk}
                                             fødselsdato={personResultat.person.fødselsdato}
                                         />
                                     ) : (
-                                        <Alert
-                                            variant="warning"
-                                            children={'Klarte ikke hente registeropplysninger'}
-                                        />
+                                        <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
                                     )}
                                 </>
                                 {Object.values(vilkårConfig)
                                     .filter((vc: IVilkårConfig) =>
-                                        vc.parterDetteGjelderFor.includes(
-                                            personResultat.person.type
-                                        )
+                                        vc.parterDetteGjelderFor.includes(personResultat.person.type)
                                     )
                                     .map((vc: IVilkårConfig) => {
                                         const vilkårResultater: FeltState<IVilkårResultat>[] =

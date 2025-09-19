@@ -13,9 +13,7 @@ export function useScrollTilAnker() {
 
         if (lastHash.current && document.getElementById(lastHash.current)) {
             return setTimeout(() => {
-                document
-                    .getElementById(lastHash.current)
-                    ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById(lastHash.current)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 lastHash.current = '';
             }, 100);
         }

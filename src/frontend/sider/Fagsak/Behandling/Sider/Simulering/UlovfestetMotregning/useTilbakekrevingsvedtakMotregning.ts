@@ -34,8 +34,7 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
                 vurderingAvSkyld: tilbakekrevingsvedtakMotregning.vurderingAvSkyld,
                 varselDato: tilbakekrevingsvedtakMotregning.varselDato,
                 samtykke: tilbakekrevingsvedtakMotregning.samtykke,
-                heleBeløpetSkalKrevesTilbake:
-                    tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake,
+                heleBeløpetSkalKrevesTilbake: tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake,
             },
         }).then(behandling => {
             settÅpenBehandling(behandling);

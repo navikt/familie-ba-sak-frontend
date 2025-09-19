@@ -55,12 +55,7 @@ backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }
         next();
     });
 
-    app.use(
-        '/familie-ba-sak/api',
-        ensureAuthenticated(azureAuthClient, true),
-        attachToken(azureAuthClient),
-        doProxy()
-    );
+    app.use('/familie-ba-sak/api', ensureAuthenticated(azureAuthClient, true), attachToken(azureAuthClient), doProxy());
 
     app.use(
         '/endringslogg',

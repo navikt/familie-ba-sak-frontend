@@ -2,10 +2,7 @@ import React from 'react';
 
 import { Switch } from '@navikt/ds-react';
 
-import {
-    type Saksoversiktsbehandling,
-    skalVisesNårMånedligeValutajusteringerSkjules,
-} from './utils';
+import { type Saksoversiktsbehandling, skalVisesNårMånedligeValutajusteringerSkjules } from './utils';
 
 type Props = {
     saksoversiktbehandlinger: Saksoversiktsbehandling[];
@@ -19,8 +16,7 @@ export function VisMånedligValutajuseringBehandlingerSwitch({
     setVisMånedligeValutajusteringer,
 }: Props) {
     const finnesMånedligValutajusteringerSomKanFiltreresBort = saksoversiktbehandlinger.some(
-        (behandling: Saksoversiktsbehandling) =>
-            !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
+        (behandling: Saksoversiktsbehandling) => !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
     );
 
     if (!finnesMånedligValutajusteringerSomKanFiltreresBort) {

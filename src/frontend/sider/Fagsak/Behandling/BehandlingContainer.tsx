@@ -56,11 +56,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                     <HenleggBehandlingModal />
                     <HenleggBehandlingVeivalgModal />
                     <KorrigerEtterbetalingModal />
-                    <Fagsaklinje
-                        bruker={bruker}
-                        minimalFagsak={fagsak}
-                        behandling={behandlingRessurs.data}
-                    />
+                    <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} behandling={behandlingRessurs.data} />
                     <FlexContainer>
                         <VenstremenyContainer>
                             <Venstremeny />
@@ -75,12 +71,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                 </BehandlingProvider>
             );
         case RessursStatus.IKKE_TILGANG:
-            return (
-                <Alert
-                    variant="warning"
-                    children={`Du har ikke tilgang til å se denne behandlingen.`}
-                />
-            );
+            return <Alert variant="warning" children={`Du har ikke tilgang til å se denne behandlingen.`} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
             return <Alert children={behandlingRessurs.frontendFeilmelding} variant="error" />;

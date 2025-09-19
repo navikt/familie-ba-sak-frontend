@@ -96,9 +96,7 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
     if (muligeUtdypendeVilkårsvurderinger.length === 0) {
         return;
     }
-    if (
-        !utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))
-    ) {
+    if (!utdypendeVilkårsvurderinger.every(item => muligeUtdypendeVilkårsvurderinger.includes(item))) {
         return 'Du har valgt en ugyldig kombinasjon';
     }
 
@@ -123,15 +121,12 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
                 return 'Du må velge ett alternativ';
             }
             if (antallValgteEøsAlternativerForBosattIRiket.length > 1) {
-                return (
-                    'Du kan kun velge ett av disse alternativene: ' +
-                    antallValgteEøsAlternativerForBosattIRiket
-                );
+                return 'Du kan kun velge ett av disse alternativene: ' + antallValgteEøsAlternativerForBosattIRiket;
             }
         }
         if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
-            const antallValgteAlternativerForHvemBarnetBorMed = utdypendeVilkårsvurderinger.filter(
-                item => Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
+            const antallValgteAlternativerForHvemBarnetBorMed = utdypendeVilkårsvurderinger.filter(item =>
+                Object.keys(UtdypendeVilkårsvurderingEøsBarnBorMedSøker).includes(item)
             ).length;
             if (antallValgteAlternativerForHvemBarnetBorMed === 0) {
                 return 'Du må velge ett alternativ for hvem barnet bor med';
@@ -162,12 +157,7 @@ export const fjernUmuligeAlternativerFraRedigerbartVilkår = (
     redigerbartVilkår: FeltState<IVilkårResultat>,
     muligeAlternativer: UtdypendeVilkårsvurdering[]
 ) => {
-    if (
-        inneholderUmuligeAlternativer(
-            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-            muligeAlternativer
-        )
-    ) {
+    if (inneholderUmuligeAlternativer(redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi, muligeAlternativer)) {
         validerOgSettRedigerbartVilkår({
             ...redigerbartVilkår,
             verdi: {

@@ -9,9 +9,5 @@ export const hentFrontendFeilmelding = <T>(ressurs: Ressurs<T>): string | undefi
         : undefined;
 
 export const ressursHarFeilet = (ressursStatus: RessursStatus): boolean => {
-    return [
-        RessursStatus.FEILET,
-        RessursStatus.FUNKSJONELL_FEIL,
-        RessursStatus.IKKE_TILGANG,
-    ].includes(ressursStatus);
+    return [RessursStatus.FEILET, RessursStatus.FUNKSJONELL_FEIL, RessursStatus.IKKE_TILGANG].includes(ressursStatus);
 };

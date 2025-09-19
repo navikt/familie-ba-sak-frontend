@@ -12,11 +12,7 @@ interface IKorrigerVedtak {
     erLesevisning: boolean;
 }
 
-const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({
-    korrigertVedtak,
-    behandlingId,
-    erLesevisning,
-}) => {
+const KorrigerVedtak: React.FC<IKorrigerVedtak> = ({ korrigertVedtak, behandlingId, erLesevisning }) => {
     const [visModal, settVisModal] = React.useState<boolean>(false);
 
     return (

@@ -54,12 +54,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erLesevisning = vurderErLesevisning();
 
     const erAvregningOgToggleErPå =
-        avregningsperioder.length > 0 &&
-        toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+        avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
 
     const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.length > 0 &&
-        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+        overlappendePerioderMedAndreFagsaker.length > 0 && toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -94,13 +92,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const tilbakekrevingsvedtakMotregning = åpenBehandling.tilbakekrevingsvedtakMotregning;
 
-    const heleBeløpetSkalKrevesTilbake =
-        tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
+    const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp = erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake;
 
-    const skalViseTilbakekrevingSkjema =
-        erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
+    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
 
     return (
         <Skjemasteg
@@ -131,9 +127,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             behandlingErMigreringMedAvvikUtenforBeløpsgrenser={
                                 behandlingErMigreringMedAvvikUtenforBeløpsgrenser
                             }
-                            behandlingErMigreringMedManuellePosteringer={
-                                behandlingErMigreringMedManuellePosteringer
-                            }
+                            behandlingErMigreringMedManuellePosteringer={behandlingErMigreringMedManuellePosteringer}
                             behandlingErMigreringFraInfotrygdMedKun0Utbetalinger={
                                 behandlingErMigreringFraInfotrygdMedKun0Utbetalinger
                             }
@@ -143,15 +137,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             <Box marginBlock="10 0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
-                                        En annen fagsak tilknyttet personen, inneholder en
-                                        feilutbetaling for samme periode som det skal etterbetales i
-                                        denne behandlingen. Feilutbetalingen i den andre fagsaken må
-                                        behandles ferdig før du fullfører denne behandlingen. Det er
+                                        En annen fagsak tilknyttet personen, inneholder en feilutbetaling for samme
+                                        periode som det skal etterbetales i denne behandlingen. Feilutbetalingen i den
+                                        andre fagsaken må behandles ferdig før du fullfører denne behandlingen. Det er
                                         for å hindre at beløpene motregnes.
                                     </BodyShort>
                                     <BodyShort spacing>
-                                        Fagsak med feilutbetaling:{' '}
-                                        {overlappendePerioderMedAndreFagsaker[0].fagsaker[0]}
+                                        Fagsak med feilutbetaling: {overlappendePerioderMedAndreFagsaker[0].fagsaker[0]}
                                     </BodyShort>
                                     <BodyShort>Perioder med overlapp:</BodyShort>
                                     <List as="ul">
@@ -196,9 +188,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                     </>
                 )
             ) : (
-                <Alert variant="info">
-                    Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}
-                </Alert>
+                <Alert variant="info">Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}</Alert>
             )}
 
             {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||

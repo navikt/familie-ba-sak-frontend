@@ -9,10 +9,7 @@ interface Parameters extends HenleggBehandlingPayload {
     behandling: IBehandling;
 }
 
-type Options = Omit<
-    UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>,
-    'mutationFn'
->;
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'>;
 
 export function useHenleggBehandling(options?: Options) {
     const { request } = useHttp();

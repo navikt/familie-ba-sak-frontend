@@ -2,9 +2,7 @@ import { KorrigertEtterbetalingÅrsak } from '../../../../../../typer/vedtak';
 import { erLik0, erPositivtHeltall } from '../../../../../../utils/validators';
 
 export const erÅrsakForKorrigeringGyldig = (årsak: string) => {
-    return Object.keys(KorrigertEtterbetalingÅrsak).some(aarsak => aarsak === årsak)
-        ? true
-        : 'Ugyldig årsak';
+    return Object.keys(KorrigertEtterbetalingÅrsak).some(aarsak => aarsak === årsak) ? true : 'Ugyldig årsak';
 };
 
 export const erEtterbetalingsbeløpGyldig = (beløp: string) => {

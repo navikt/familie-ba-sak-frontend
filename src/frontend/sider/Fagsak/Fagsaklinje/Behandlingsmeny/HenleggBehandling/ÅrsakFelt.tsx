@@ -4,10 +4,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import {
-    HenleggBehandlingFormFields,
-    type HenleggBehandlingFormValues,
-} from './useHenleggBehandlingForm';
+import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from './useHenleggBehandlingForm';
 import { useAppContext } from '../../../../../context/AppContext';
 import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
@@ -26,17 +23,14 @@ export function ÅrsakFelt() {
         rules: { required: 'Årsak er påkrevd.' },
     });
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse =
-        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
 
     const valgmuligheter = Object.values(HenleggÅrsak)
         .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)
         .filter(
             årsak =>
-                (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                    erPåHenleggbartSteg(behandling.steg)) ||
-                (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD &&
-                    harTilgangTilTekniskVedlikeholdHenleggelse)
+                (årsak !== HenleggÅrsak.TEKNISK_VEDLIKEHOLD && erPåHenleggbartSteg(behandling.steg)) ||
+                (årsak === HenleggÅrsak.TEKNISK_VEDLIKEHOLD && harTilgangTilTekniskVedlikeholdHenleggelse)
         )
         .map(årsak => (
             <option key={årsak} aria-selected={field.value === årsak} value={årsak}>

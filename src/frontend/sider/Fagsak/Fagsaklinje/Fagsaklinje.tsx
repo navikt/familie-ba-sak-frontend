@@ -60,11 +60,7 @@ export const Fagsaklinje = ({ minimalFagsak, bruker, behandling }: FagsaklinjePr
                         Dokumenter
                     </Button>
                 </HStack>
-                <Behandlingsmeny
-                    minimalFagsak={minimalFagsak}
-                    bruker={bruker}
-                    behandling={behandling}
-                />
+                <Behandlingsmeny minimalFagsak={minimalFagsak} bruker={bruker} behandling={behandling} />
             </HStack>
         </Box>
     );

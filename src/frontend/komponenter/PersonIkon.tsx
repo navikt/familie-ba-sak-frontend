@@ -4,13 +4,7 @@ import styled from 'styled-components';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import { AGreen400, AOrange600 } from '@navikt/ds-tokens/dist/tokens';
-import {
-    GuttIkon,
-    JenteIkon,
-    KvinneIkon,
-    MannIkon,
-    NøytralPersonIkon,
-} from '@navikt/familie-ikoner';
+import { GuttIkon, JenteIkon, KvinneIkon, MannIkon, NøytralPersonIkon } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
 import KontorIkonGrønn from '../ikoner/KontorIkonGrønn';
@@ -200,11 +194,7 @@ export const PersonIkon = ({
 
     if (erEgenAnsatt) {
         return (
-            <StyledNavIkonContaier
-                $adresseBeskyttet={erAdresseBeskyttet}
-                $kjønn={kjønn}
-                $størrelse={størrelse}
-            >
+            <StyledNavIkonContaier $adresseBeskyttet={erAdresseBeskyttet} $kjønn={kjønn} $størrelse={størrelse}>
                 <StyledNavIkon />
             </StyledNavIkonContaier>
         );
@@ -212,21 +202,9 @@ export const PersonIkon = ({
 
     if (fagsakType === FagsakType.INSTITUSJON) {
         if (størrelse === 'm') {
-            return (
-                <KontorIkonGrønn
-                    height="32"
-                    width="32"
-                    color={erAdresseBeskyttet ? AOrange600 : AGreen400}
-                />
-            );
+            return <KontorIkonGrønn height="32" width="32" color={erAdresseBeskyttet ? AOrange600 : AGreen400} />;
         }
-        return (
-            <KontorIkonGrønn
-                height="24"
-                width="24"
-                color={erAdresseBeskyttet ? AOrange600 : AGreen400}
-            />
-        );
+        return <KontorIkonGrønn height="24" width="24" color={erAdresseBeskyttet ? AOrange600 : AGreen400} />;
     }
     let ikonProps = størrelse === 's' ? { height: 28, width: 28 } : { height: 36, width: 36 };
     if (fagsakType === FagsakType.SKJERMET_BARN) {

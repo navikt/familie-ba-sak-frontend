@@ -3,9 +3,7 @@ import { addMonths, differenceInCalendarMonths, isAfter, isSameDay } from 'date-
 import { dateTilIsoDatoString, isoStringTilDate } from './dato';
 import type { ISimuleringPeriode } from '../typer/simulering';
 
-export const hentPeriodelisteMedTommePerioder = (
-    perioder: ISimuleringPeriode[]
-): ISimuleringPeriode[] => {
+export const hentPeriodelisteMedTommePerioder = (perioder: ISimuleringPeriode[]): ISimuleringPeriode[] => {
     const fomDatoerISimulering = hentSorterteFomdatoer(perioder);
     const førstePeriodeFom = fomDatoerISimulering[0];
     const antallMånederISimulering = hentAntallMånederISimuleringen(fomDatoerISimulering);
@@ -23,9 +21,7 @@ export const hentPeriodelisteMedTommePerioder = (
         }
     }
 
-    periodelisteMedTommePerioder.sort((a, b) =>
-        isAfter(isoStringTilDate(a.fom), isoStringTilDate(b.fom)) ? 1 : -1
-    );
+    periodelisteMedTommePerioder.sort((a, b) => (isAfter(isoStringTilDate(a.fom), isoStringTilDate(b.fom)) ? 1 : -1));
     return periodelisteMedTommePerioder;
 };
 

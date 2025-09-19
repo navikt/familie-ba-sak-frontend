@@ -8,11 +8,7 @@ import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type {
-    BrevmottakerUseSkjema,
-    IRestBrevmottaker,
-    SkjemaBrevmottaker,
-} from './useBrevmottakerSkjema';
+import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 import { ModalKnapperad } from '../../../../../komponenter/Modal/ModalKnapperad';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
@@ -103,13 +99,10 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     medFlag
                     utenMargin
                     eksluderLand={
-                        skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
-                            ? ['NO', 'XU']
-                            : ['XU']
+                        skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE ? ['NO', 'XU'] : ['XU']
                     }
                     feil={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
+                        skjema.visFeilmeldinger && skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.land.feilmelding?.toString()
                             : ''
                     }
@@ -122,9 +115,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 {skjema.felter.land.verdi && (
                     <>
                         <TextField
-                            {...skjema.felter.adresselinje1.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
+                            {...skjema.felter.adresselinje1.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                             readOnly={erLesevisning}
                             label={'Adresselinje 1'}
                             onChange={(event): void => {
@@ -132,9 +123,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                             }}
                         />
                         <TextField
-                            {...skjema.felter.adresselinje2.hentNavBaseSkjemaProps(
-                                skjema.visFeilmeldinger
-                            )}
+                            {...skjema.felter.adresselinje2.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                             readOnly={erLesevisning}
                             label={'Adresselinje 2 (valgfri)'}
                             onChange={(event): void => {
@@ -143,16 +132,13 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         />
                         {skjema.felter.land.verdi !== 'NO' && (
                             <Alert variant="info">
-                                Ved utenlandsk adresse skal postnummer og poststed legges i
-                                adresselinjene.
+                                Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
                             </Alert>
                         )}
 
                         <PostnummerOgStedContainer>
                             <TextField
-                                {...skjema.felter.postnummer.hentNavBaseSkjemaProps(
-                                    skjema.visFeilmeldinger
-                                )}
+                                {...skjema.felter.postnummer.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                                 readOnly={erLesevisning}
                                 disabled={skjema.felter.land.verdi !== 'NO'}
                                 label={'Postnummer'}
@@ -161,9 +147,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                 }}
                             />
                             <TextField
-                                {...skjema.felter.poststed.hentNavBaseSkjemaProps(
-                                    skjema.visFeilmeldinger
-                                )}
+                                {...skjema.felter.poststed.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                                 readOnly={erLesevisning}
                                 disabled={skjema.felter.land.verdi !== 'NO'}
                                 label={'Poststed'}

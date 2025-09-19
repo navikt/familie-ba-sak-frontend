@@ -10,11 +10,7 @@ import { byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
-import type {
-    EøsPeriodeStatus,
-    IRestValutakurs,
-    IValutakurs,
-} from '../../../../../../../typer/eøsPerioder';
+import type { EøsPeriodeStatus, IRestValutakurs, IValutakurs } from '../../../../../../../typer/eøsPerioder';
 import type { IIsoMånedPeriode } from '../../../../../../../utils/dato';
 import {
     dateTilIsoDatoString,
@@ -22,10 +18,7 @@ import {
     nyIsoMånedPeriode,
     validerGyldigDato,
 } from '../../../../../../../utils/dato';
-import {
-    konverterDesimalverdiTilSkjemaVisning,
-    konverterSkjemaverdiTilDesimal,
-} from '../../../../../../../utils/eøs';
+import { konverterDesimalverdiTilSkjemaVisning, konverterSkjemaverdiTilDesimal } from '../../../../../../../utils/eøs';
 import {
     erBarnGyldig,
     erEøsPeriodeGyldig,
@@ -185,9 +178,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
                         tom: skjema.felter.periode.verdi.tom,
                         barnIdenter: skjema.felter.barnIdenter.verdi.map(barn => barn.value),
                         valutakode: skjema.felter.valutakode?.verdi,
-                        valutakursdato: dateTilIsoDatoStringEllerUndefined(
-                            skjema.felter.valutakursdato?.verdi
-                        ),
+                        valutakursdato: dateTilIsoDatoStringEllerUndefined(skjema.felter.valutakursdato?.verdi),
                         kurs: konverterSkjemaverdiTilDesimal(skjema.felter.kurs?.verdi),
                     },
                     url: `/familie-ba-sak/api/differanseberegning/valutakurs/${behandling.behandlingId}`,
@@ -228,8 +219,7 @@ const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
         dateTilIsoDatoStringEllerUndefined(valutakursdato?.verdi) === valutakurs.valutakursdato;
 
     const erValutakurserLike = () =>
-        (!kurs.verdi && !valutakurs.kurs) ||
-        kurs.verdi === konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs);
+        (!kurs.verdi && !valutakurs.kurs) || kurs.verdi === konverterDesimalverdiTilSkjemaVisning(valutakurs.kurs);
 
     const erValutakursSkjemaEndret = () => {
         const barnFjernetISkjema = valutakurs.barnIdenter.filter(

@@ -11,10 +11,7 @@ import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import {
-    kanFjerneSmåbarnstilleggFraPeriode,
-    kanLeggeSmåbarnstilleggTilPeriode,
-} from './OppsummeringsboksUtils';
+import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 import { useAppContext } from '../../../../../context/AppContext';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
@@ -31,12 +28,7 @@ import type {
 import { EøsPeriodeStatus, KompetanseResultat } from '../../../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { dateTilFormatertString, Datoformat } from '../../../../../utils/dato';
-import {
-    formaterBeløp,
-    formaterIdent,
-    hentAlderSomString,
-    sorterUtbetaling,
-} from '../../../../../utils/formatter';
+import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '../../../../../utils/formatter';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const AlertWithBottomMargin = styled(Alert)`
@@ -81,8 +73,7 @@ const finnUtbetalingsBeløpStatusMap = (
         const barnIdent = upd.person.personIdent;
         const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
         const norgeErSekundærland = kompetanserForBarn.some(
-            kompetanseForBarn =>
-                kompetanseForBarn.resultat === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
+            kompetanseForBarn => kompetanseForBarn.resultat === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
         );
         let skalViseUtbetalingsBeløp = !norgeErSekundærland;
 
@@ -91,35 +82,20 @@ const finnUtbetalingsBeløpStatusMap = (
             const utbetaltAnnetLandStatusOk = erAllePerioderUtfyltForBarn(
                 finnEøsPerioderForBarn(utbetaltAnnetLandBeløp, barnIdent)
             );
-            const valutakursStatusOk = erAllePerioderUtfyltForBarn(
-                finnEøsPerioderForBarn(valutakurser, barnIdent)
-            );
-            skalViseUtbetalingsBeløp =
-                kompetanseStatusOk && utbetaltAnnetLandStatusOk && valutakursStatusOk;
+            const valutakursStatusOk = erAllePerioderUtfyltForBarn(finnEøsPerioderForBarn(valutakurser, barnIdent));
+            skalViseUtbetalingsBeløp = kompetanseStatusOk && utbetaltAnnetLandStatusOk && valutakursStatusOk;
         }
         utbetalingsMap.set(barnIdent, skalViseUtbetalingsBeløp);
     });
     return utbetalingsMap;
 };
 
-const finnEøsPerioderForBarn = (
-    restEøsPerioder: IRestEøsPeriode[],
-    barnIdent: string
-): IRestEøsPeriode[] => {
-    return (
-        restEøsPerioder.filter(restEøsPeriode => restEøsPeriode.barnIdenter.includes(barnIdent)) ??
-        []
-    );
+const finnEøsPerioderForBarn = (restEøsPerioder: IRestEøsPeriode[], barnIdent: string): IRestEøsPeriode[] => {
+    return restEøsPerioder.filter(restEøsPeriode => restEøsPeriode.barnIdenter.includes(barnIdent)) ?? [];
 };
 
-const finnKompetanserForBarn = (
-    kompetanseFelter: IRestKompetanse[],
-    barnIdent: string
-): IRestKompetanse[] => {
-    return (
-        kompetanseFelter.filter(kompetanseFelt => kompetanseFelt.barnIdenter.includes(barnIdent)) ??
-        []
-    );
+const finnKompetanserForBarn = (kompetanseFelter: IRestKompetanse[], barnIdent: string): IRestKompetanse[] => {
+    return kompetanseFelter.filter(kompetanseFelt => kompetanseFelt.barnIdenter.includes(barnIdent)) ?? [];
 };
 
 const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) => {
@@ -139,9 +115,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settToast } = useAppContext();
     const { settAktivEtikett } = useTidslinjeContext();
 
-    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(
-        new Map<string, boolean>()
-    );
+    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
@@ -158,9 +132,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     };
     const småbarnstilleggkorrigeringUrl = `/familie-ba-sak/api/småbarnstilleggkorrigering/behandling`;
 
-    const fjernSmåbarnstilleggFraMåned = (
-        småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering
-    ) => {
+    const fjernSmåbarnstilleggFraMåned = (småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering) => {
         setJustererSmåbarnstillegg(true);
 
         request<ISmåbarnstilleggkorrigering, IBehandling>({
@@ -182,9 +154,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         });
     };
 
-    const leggSmåbarnstilleggTilIMåned = (
-        småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering
-    ) => {
+    const leggSmåbarnstilleggTilIMåned = (småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering) => {
         setJustererSmåbarnstillegg(true);
 
         request<ISmåbarnstilleggkorrigering, IBehandling>({
@@ -208,12 +178,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
 
     React.useEffect(() => {
         setUtbetalingsBeløpStatusMap(
-            finnUtbetalingsBeløpStatusMap(
-                utbetalingsperiode,
-                kompetanser,
-                utbetaltAnnetLandBeløp,
-                valutakurser
-            )
+            finnUtbetalingsBeløpStatusMap(utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser)
         );
     }, [utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser]);
 
@@ -246,28 +211,19 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             <BodyShort>Sats</BodyShort>
                             <BodyShort align="end">Beløp</BodyShort>
                         </UtbetalingsbeløpRad>
-                        {utbetalingsperiode.utbetalingsperiodeDetaljer
-                            .sort(sorterUtbetaling)
-                            .map(detalj => (
-                                <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
-                                    <BodyShort>{`${detalj.person.navn} (${hentAlderSomString(
-                                        detalj.person.fødselsdato
-                                    )}) | ${formaterIdent(detalj.person.personIdent)}`}</BodyShort>
-                                    <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
-                                    {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
-                                        <BodyShort align="end">
-                                            {formaterBeløp(detalj.utbetaltPerMnd)}
-                                        </BodyShort>
-                                    ) : (
-                                        <Alert
-                                            variant="warning"
-                                            children={'Må beregnes'}
-                                            size={'small'}
-                                            inline
-                                        />
-                                    )}
-                                </UtbetalingsbeløpRad>
-                            ))}
+                        {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => (
+                            <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
+                                <BodyShort>{`${detalj.person.navn} (${hentAlderSomString(
+                                    detalj.person.fødselsdato
+                                )}) | ${formaterIdent(detalj.person.personIdent)}`}</BodyShort>
+                                <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
+                                {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
+                                    <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
+                                ) : (
+                                    <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
+                                )}
+                            </UtbetalingsbeløpRad>
+                        ))}
                         <TotaltUtbetaltRad columns="1fr 5rem">
                             <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
                             <BodyShort weight="semibold" align="end">
@@ -284,9 +240,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning}
-                                onClick={() =>
-                                    fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)
-                                }
+                                onClick={() => fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)}
                                 icon={<TrashIcon aria-hidden />}
                             >
                                 Fjern småbarnstillegg
@@ -300,9 +254,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning}
-                                onClick={() =>
-                                    leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)
-                                }
+                                onClick={() => leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)}
                                 icon={<PlusCircleIcon aria-hidden />}
                             >
                                 Legg til småbarnstillegg

@@ -49,8 +49,7 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
             ) {
                 settVisFrontendFeilmelding(true);
                 settFeilmelding(
-                    oppdatertBehandling.frontendFeilmelding ??
-                        'Ukjent feil ved fjerning av vilkåret utvidet barnetrygd'
+                    oppdatertBehandling.frontendFeilmelding ?? 'Ukjent feil ved fjerning av vilkåret utvidet barnetrygd'
                 );
                 settDisabled(false);
             }
@@ -88,25 +87,13 @@ const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVil
                 >
                     <Modal.Body>
                         Er du sikker?
-                        {visFrontendFeilmelding && (
-                            <ErrorMessage size="small">{feilmelding}</ErrorMessage>
-                        )}
+                        {visFrontendFeilmelding && <ErrorMessage size="small">{feilmelding}</ErrorMessage>}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            disabled={disabled}
-                            key={'bekreft'}
-                            onClick={() => fjernVilkårUtvidet()}
-                            size="small"
-                        >
+                        <Button disabled={disabled} key={'bekreft'} onClick={() => fjernVilkårUtvidet()} size="small">
                             Bekreft
                         </Button>
-                        <Button
-                            variant="tertiary"
-                            key={'avbryt'}
-                            onClick={onCloseModal}
-                            size="small"
-                        >
+                        <Button variant="tertiary" key={'avbryt'} onClick={onCloseModal} size="small">
                             Avbryt
                         </Button>
                     </Modal.Footer>

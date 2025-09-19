@@ -12,8 +12,7 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 const EndreBehandlendeEnhet: React.FC = () => {
-    const { behandling, vurderErLesevisning, erBehandleneEnhetMidlertidig } =
-        useBehandlingContext();
+    const { behandling, vurderErLesevisning, erBehandleneEnhetMidlertidig } = useBehandlingContext();
     const [visModal, settVisModal] = useState(erBehandleneEnhetMidlertidig);
     const { innloggetSaksbehandler } = useAppContext();
 
@@ -63,11 +62,7 @@ const EndreBehandlendeEnhet: React.FC = () => {
                     portal
                 >
                     <Modal.Body>
-                        <Fieldset
-                            error={hentFrontendFeilmelding(submitRessurs)}
-                            legend="Endre enhet"
-                            hideLegend
-                        >
+                        <Fieldset error={hentFrontendFeilmelding(submitRessurs)} legend="Endre enhet" hideLegend>
                             <Select
                                 readOnly={erLesevisningPåBehandling()}
                                 name="enhet"
@@ -85,8 +80,8 @@ const EndreBehandlendeEnhet: React.FC = () => {
                                             key={enhet.enhetId}
                                             value={enhet.enhetId}
                                             disabled={
-                                                behandling.arbeidsfordelingPåBehandling
-                                                    .behandlendeEnhetId === enhet.enhetId
+                                                behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId ===
+                                                enhet.enhetId
                                             }
                                         >
                                             {`${enhet.enhetId} ${enhet.enhetNavn}`}

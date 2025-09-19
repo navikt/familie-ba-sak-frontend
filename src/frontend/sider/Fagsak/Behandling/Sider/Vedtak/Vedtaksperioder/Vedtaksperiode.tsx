@@ -17,8 +17,7 @@ interface IProps {
 }
 
 const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
-    const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } =
-        useVedtaksperiodeContext();
+    const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } = useVedtaksperiodeContext();
 
     const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
         Standardbegrunnelse.REDUKSJON_SATSENDRING,
@@ -58,9 +57,7 @@ const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => 
             onClick={() => onPanelClose(true)}
         >
             <Utbetalingsresultat
-                utbetalingsperiodeDetaljer={
-                    vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer
-                }
+                utbetalingsperiodeDetaljer={vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer}
             />
             {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
                 <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
@@ -70,13 +67,11 @@ const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => 
                     <>
                         <Label>Begrunnelse(r)</Label>
                         <ul>
-                            {genererteBrevbegrunnelser.data.map(
-                                (begrunnelse: string, index: number) => (
-                                    <li key={`begrunnelse-${index}`}>
-                                        <BodyShort children={begrunnelse} />
-                                    </li>
-                                )
-                            )}
+                            {genererteBrevbegrunnelser.data.map((begrunnelse: string, index: number) => (
+                                <li key={`begrunnelse-${index}`}>
+                                    <BodyShort children={begrunnelse} />
+                                </li>
+                            ))}
                         </ul>
                     </>
                 )}

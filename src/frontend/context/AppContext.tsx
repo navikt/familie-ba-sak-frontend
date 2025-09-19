@@ -47,16 +47,12 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
             <HStack gap="4" align="center" marginBlock="2">
                 <StatusIkon status={Status.FEIL} />
                 <BodyShort>
-                    {`Bruker har diskresjonskode ${
-                        adressebeskyttelsestyper[data.adressebeskyttelsegradering]
-                    }`}
+                    {`Bruker har diskresjonskode ${adressebeskyttelsestyper[data.adressebeskyttelsegradering]}`}
                 </BodyShort>
             </HStack>
         );
     },
-    actions: [
-        <Button key="lukk" variant="primary" size="small" onClick={lukkModal} children="Lukk" />,
-    ],
+    actions: [<Button key="lukk" variant="primary" size="small" onClick={lukkModal} children="Lukk" />],
 });
 
 interface AppContextValue {
@@ -102,8 +98,8 @@ const AppProvider = (props: PropsWithChildren) => {
                         innhold: () => {
                             return (
                                 <Alert variant={'info'} inline>
-                                    Det finnes en oppdatert versjon av løsningen. Det anbefales at
-                                    du oppdaterer med en gang.
+                                    Det finnes en oppdatert versjon av løsningen. Det anbefales at du oppdaterer med en
+                                    gang.
                                 </Alert>
                             );
                         },
@@ -183,10 +179,7 @@ const AppProvider = (props: PropsWithChildren) => {
         });
     };
 
-    const sjekkTilgang = async (
-        brukerIdent: string,
-        visSystemetLaster = true
-    ): Promise<boolean> => {
+    const sjekkTilgang = async (brukerIdent: string, visSystemetLaster = true): Promise<boolean> => {
         return request<{ brukerIdent: string }, IRestTilgang>({
             method: 'POST',
             url: '/familie-ba-sak/api/tilgang',
@@ -231,8 +224,7 @@ const AppProvider = (props: PropsWithChildren) => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
-    const skalObfuskereData =
-        toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
+    const skalObfuskereData = toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
     return (
         <AppContext.Provider

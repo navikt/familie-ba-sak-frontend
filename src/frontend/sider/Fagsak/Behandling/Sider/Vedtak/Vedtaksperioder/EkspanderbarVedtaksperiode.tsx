@@ -42,10 +42,7 @@ interface EkspanderbarVedtaksperiodeProps extends PropsWithChildren {
 }
 
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
-    isAfter(
-        isoStringTilDateMedFallback({ isoString: tom, fallbackDate: tidenesEnde }),
-        endOfMonth(dagensDato)
-    );
+    isAfter(isoStringTilDateMedFallback({ isoString: tom, fallbackDate: tidenesEnde }), endOfMonth(dagensDato));
 
 const EkspanderbarVedtaksperiode: React.FC<EkspanderbarVedtaksperiodeProps> = ({
     vedtaksperiodeMedBegrunnelser,
@@ -79,9 +76,7 @@ const EkspanderbarVedtaksperiode: React.FC<EkspanderbarVedtaksperiodeProps> = ({
                         <Label>
                             {isoDatoPeriodeTilFormatertString({
                                 fom: periode.fom,
-                                tom: slutterSenereEnnInneværendeMåned(periode.tom)
-                                    ? ''
-                                    : periode.tom,
+                                tom: slutterSenereEnnInneværendeMåned(periode.tom) ? '' : periode.tom,
                             })}
                         </Label>
                     )}

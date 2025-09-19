@@ -94,9 +94,7 @@ export const profileMock = {
     ],
 };
 
-export const klagebehandlingFixture = (
-    overstyrendeVerdier: Partial<IKlagebehandling> = {}
-): IKlagebehandling => {
+export const klagebehandlingFixture = (overstyrendeVerdier: Partial<IKlagebehandling> = {}): IKlagebehandling => {
     const defaultVerdier: IKlagebehandling = {
         id: '0',
         fagsakId: '0',

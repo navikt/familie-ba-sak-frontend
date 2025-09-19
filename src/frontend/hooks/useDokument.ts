@@ -22,8 +22,7 @@ const useDokument = () => {
 
     const [hentetDokument, settHentetDokument] = React.useState<Ressurs<string>>(byggTomRessurs());
 
-    const [distribusjonskanal, settDistribusjonskanal] =
-        React.useState<Ressurs<Distribusjonskanal>>(byggTomRessurs());
+    const [distribusjonskanal, settDistribusjonskanal] = React.useState<Ressurs<Distribusjonskanal>>(byggTomRessurs());
 
     const nullstillDokument = () => {
         settHentetDokument(byggTomRessurs);
@@ -51,9 +50,7 @@ const useDokument = () => {
                 settDistribusjonskanal(response);
             })
             .catch((_error: AxiosError) => {
-                settDistribusjonskanal(
-                    byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.')
-                );
+                settDistribusjonskanal(byggFeiletRessurs('Ukjent feil, kunne ikke hente distribusjonskanal.'));
             });
     };
     const hentForhåndsvisning = <D>(familieAxiosRequestConfig: FamilieAxiosRequestConfig<D>) => {
@@ -74,15 +71,11 @@ const useDokument = () => {
                 ) {
                     settHentetDokument(response);
                 } else {
-                    settHentetDokument(
-                        byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                    );
+                    settHentetDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.'));
                 }
             })
             .catch((_error: AxiosError) => {
-                settHentetDokument(
-                    byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.')
-                );
+                settHentetDokument(byggFeiletRessurs('Ukjent feil, kunne ikke generere forhåndsvisning.'));
             });
     };
 

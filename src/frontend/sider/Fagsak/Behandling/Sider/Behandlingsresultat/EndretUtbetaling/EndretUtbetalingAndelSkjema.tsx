@@ -4,16 +4,7 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    Button,
-    Fieldset,
-    Label,
-    Radio,
-    RadioGroup,
-    Select,
-    Textarea,
-    UNSAFE_Combobox,
-} from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -139,9 +130,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         selectedOptions={skjema.felter.personer.verdi}
                         onToggleSelected={onPersonSelected}
                         readOnly={erLesevisning}
-                        error={
-                            skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger).error
-                        }
+                        error={skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger).error}
                     />
                 </Feltmargin>
 
@@ -187,9 +176,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         value={skjema.felter.årsak.verdi ?? ''}
                         label={'Årsak'}
                         onChange={(event): void => {
-                            skjema.felter.årsak.validerOgSettFelt(
-                                event.target.value as IEndretUtbetalingAndelÅrsak
-                            );
+                            skjema.felter.årsak.validerOgSettFelt(event.target.value as IEndretUtbetalingAndelÅrsak);
                         }}
                         readOnly={erLesevisning}
                     >
@@ -218,12 +205,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                             )
                             .map(utbetaling => {
                                 return (
-                                    <Radio
-                                        name={'utbetaling'}
-                                        value={utbetaling}
-                                        id={utbetaling}
-                                        key={utbetaling}
-                                    >
+                                    <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling}>
                                         {utbetalingTilLabel(utbetaling)}
                                     </Radio>
                                 );
@@ -259,8 +241,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         label={'Begrunnelse'}
                         resize
                         value={
-                            skjema.felter.begrunnelse.verdi !== null &&
-                            skjema.felter.begrunnelse.verdi !== undefined
+                            skjema.felter.begrunnelse.verdi !== null && skjema.felter.begrunnelse.verdi !== undefined
                                 ? skjema.felter.begrunnelse.verdi
                                 : ''
                         }

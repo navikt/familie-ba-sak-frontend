@@ -26,9 +26,9 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
-    const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<
-        ISaksbehandler | undefined
-    >(undefined);
+    const [autentisertSaksbehandler, settInnloggetSaksbehandler] = React.useState<ISaksbehandler | undefined>(
+        undefined
+    );
     useStartUmami();
 
     React.useEffect(() => {

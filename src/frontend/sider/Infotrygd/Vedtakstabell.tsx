@@ -79,18 +79,10 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                         const stønad = sak.stønad;
                         return (
                             <Table.Row key={index}>
-                                <Table.DataCell>
-                                    {(sak.saksblokk ?? '') + (sak.saksnr ?? '')}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {seqYearMonthTilYearMonth(stønad?.iverksattFom)}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {seqYearMonthTilYearMonth(stønad?.virkningFom)}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {/* kommer når vi finner dataene i replikasettet */}
-                                </Table.DataCell>
+                                <Table.DataCell>{(sak.saksblokk ?? '') + (sak.saksnr ?? '')}</Table.DataCell>
+                                <Table.DataCell>{seqYearMonthTilYearMonth(stønad?.iverksattFom)}</Table.DataCell>
+                                <Table.DataCell>{seqYearMonthTilYearMonth(stønad?.virkningFom)}</Table.DataCell>
+                                <Table.DataCell>{/* kommer når vi finner dataene i replikasettet */}</Table.DataCell>
                                 <Table.DataCell>{stønad?.status}</Table.DataCell>
                                 <Table.DataCell>{stønad?.tekstkode}</Table.DataCell>
                                 <Table.DataCell>{stønad ? antallBarn(stønad) : ''}</Table.DataCell>
@@ -98,20 +90,14 @@ export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) =
                                 <Table.DataCell>{stønad?.opphørtFom}</Table.DataCell>
                                 <Table.DataCell>{stønad?.opphørsgrunn}</Table.DataCell>
                                 <Table.DataCell>{stønad ? visBeløp(stønad) : ''}</Table.DataCell>
-                                <Table.DataCell>
-                                    {stønad ? visDelytelseFom(stønad) : ''}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {stønad ? visDelytelseTom(stønad) : ''}
-                                </Table.DataCell>
+                                <Table.DataCell>{stønad ? visDelytelseFom(stønad) : ''}</Table.DataCell>
+                                <Table.DataCell>{stønad ? visDelytelseTom(stønad) : ''}</Table.DataCell>
                             </Table.Row>
                         );
                     })}
                 </Table.Body>
             </Table>
-            {sakerMedVedtak.length === 0 ? (
-                <IngenVedtakTekst>Ingen vedtak.</IngenVedtakTekst>
-            ) : undefined}
+            {sakerMedVedtak.length === 0 ? <IngenVedtakTekst>Ingen vedtak.</IngenVedtakTekst> : undefined}
         </>
     );
 };

@@ -2,12 +2,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './Vilkårsvurdering/utils';
 import type { IBehandling } from '../../../../typer/behandling';
-import {
-    BehandlingSteg,
-    BehandlingStegStatus,
-    BehandlingÅrsak,
-    hentStegNummer,
-} from '../../../../typer/behandling';
+import { BehandlingSteg, BehandlingStegStatus, BehandlingÅrsak, hentStegNummer } from '../../../../typer/behandling';
 import type { IPersonResultat, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
 import { formaterIdent } from '../../../../utils/formatter';
@@ -85,25 +80,16 @@ export const sider: Record<SideId, ISide> = {
                 åpenBehandling.personer
             );
 
-            return personResultater.map(
-                (personResultat: IPersonResultat, index: number): IUnderside => {
-                    return {
-                        navn: `${personResultat.person.navn}, ${formaterIdent(
-                            personResultat.person.personIdent
-                        )}`,
-                        hash: `${index}_${personResultat.person.fødselsdato}`,
-                        antallAksjonspunkter: () =>
-                            personResultat.vilkårResultater.filter(
-                                (vilkårResultat: FeltState<IVilkårResultat>) => {
-                                    return (
-                                        vilkårResultat.verdi.resultat.verdi ===
-                                        Resultat.IKKE_VURDERT
-                                    );
-                                }
-                            ).length,
-                    };
-                }
-            );
+            return personResultater.map((personResultat: IPersonResultat, index: number): IUnderside => {
+                return {
+                    navn: `${personResultat.person.navn}, ${formaterIdent(personResultat.person.personIdent)}`,
+                    hash: `${index}_${personResultat.person.fødselsdato}`,
+                    antallAksjonspunkter: () =>
+                        personResultat.vilkårResultater.filter((vilkårResultat: FeltState<IVilkårResultat>) => {
+                            return vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;
+                        }).length,
+                };
+            });
         },
     },
     BEHANDLINGRESULTAT: {
@@ -143,9 +129,7 @@ export const erSidenAktiv = (side: ISide, behandling: IBehandling): boolean => {
     return hentStegNummer(side.steg) <= hentStegNummer(steg);
 };
 
-export const hentTrinnForBehandling = (
-    åpenBehandling: IBehandling
-): { [sideId: string]: ISide } => {
+export const hentTrinnForBehandling = (åpenBehandling: IBehandling): { [sideId: string]: ISide } => {
     const visSide = (side: ISide) => {
         if (side.visSide) {
             return side.visSide(åpenBehandling);
@@ -168,9 +152,7 @@ export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | und
     const steg = finnSteg(behandling);
 
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        return sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)
-            ? sider.VEDTAK
-            : sider.SIMULERING;
+        return sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling) ? sider.VEDTAK : sider.SIMULERING;
     }
 
     const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
@@ -189,9 +171,7 @@ export const erViPåUdefinertFagsakSide = (pathname: string) => {
 export const erViPåUlovligSteg = (pathname: string, behandlingSide?: ISide) => {
     if (!behandlingSide) return false;
 
-    const ønsketSteg: ISide | undefined = Object.values(sider).find((side: ISide) =>
-        pathname.includes(side.href)
-    );
+    const ønsketSteg: ISide | undefined = Object.values(sider).find((side: ISide) => pathname.includes(side.href));
 
     if (ønsketSteg) {
         if (hentStegNummer(ønsketSteg?.steg) > hentStegNummer(behandlingSide.steg)) {
@@ -206,10 +186,8 @@ const finnSteg = (behandling: IBehandling): BehandlingSteg => {
     const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
 
     if (erHenlagt) {
-        if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER))
-            return BehandlingSteg.SEND_TIL_BESLUTTER;
-        if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING))
-            return BehandlingSteg.VILKÅRSVURDERING;
+        if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER)) return BehandlingSteg.SEND_TIL_BESLUTTER;
+        if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING)) return BehandlingSteg.VILKÅRSVURDERING;
         if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_FØDSELSHENDELSER))
             return BehandlingSteg.FILTRERING_FØDSELSHENDELSER;
         return BehandlingSteg.REGISTRERE_SØKNAD;
@@ -220,7 +198,5 @@ const finnSteg = (behandling: IBehandling): BehandlingSteg => {
 
 const inneholderSteg = (behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean =>
     behandling.stegTilstand
-        .filter(
-            stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT
-        )
+        .filter(stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT)
         .some(stegTilstand => stegTilstand.behandlingSteg === behandlingSteg);

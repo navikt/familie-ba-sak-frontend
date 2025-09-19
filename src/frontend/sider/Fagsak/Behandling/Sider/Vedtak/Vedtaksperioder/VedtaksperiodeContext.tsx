@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    type PropsWithChildren,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 
 import deepEqual from 'deep-equal';
 
@@ -13,12 +7,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { FeiloppsummeringFeil, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
@@ -30,10 +19,7 @@ import type {
 } from '../../../../../../typer/vedtaksperiode';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import {
-    genererIdBasertPåAndreFritekstKulepunkter,
-    lagInitiellFritekst,
-} from '../../../../../../utils/fritekstfelter';
+import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
 import { useVedtakContext } from '../VedtakContext';
 import { grupperBegrunnelser } from './utils';
 
@@ -67,11 +53,7 @@ interface VedtaksperiodeContextValue {
 
 const VedtaksperiodeContext = createContext<VedtaksperiodeContextValue | undefined>(undefined);
 
-export const VedtaksperiodeProvider = ({
-    åpenBehandling,
-    vedtaksperiodeMedBegrunnelser,
-    children,
-}: IProps) => {
+export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegrunnelser, children }: IProps) => {
     const { request } = useHttp();
     const { alleBegrunnelserRessurs } = useVedtakContext();
     const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
@@ -81,10 +63,8 @@ export const VedtaksperiodeProvider = ({
             vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
             vedtaksperiodeMedBegrunnelser.fritekster.length === 0
     );
-    const [standardBegrunnelserPut, settStandardBegrunnelserPut] =
-        useState<Ressurs<string>>(byggTomRessurs());
-    const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] =
-        useState<Ressurs<string[]>>(byggTomRessurs());
+    const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState<Ressurs<string>>(byggTomRessurs());
+    const [genererteBrevbegrunnelser, settGenererteBrevbegrunnelser] = useState<Ressurs<string[]>>(byggTomRessurs());
 
     const maksAntallKulepunkter = 3;
     const makslengdeFritekst = 350;
@@ -100,9 +80,7 @@ export const VedtaksperiodeProvider = ({
         verdi: [],
         valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
             return felt.verdi.some(
-                fritekst =>
-                    fritekst.valideringsstatus === Valideringsstatus.FEIL ||
-                    fritekst.verdi.tekst.length === 0
+                fritekst => fritekst.valideringsstatus === Valideringsstatus.FEIL || fritekst.verdi.tekst.length === 0
             )
                 ? feil(felt, '')
                 : ok(felt);
@@ -186,16 +164,12 @@ export const VedtaksperiodeProvider = ({
             if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
                 settStandardBegrunnelserPut(byggTomRessurs());
                 settVedtaksperioderMedBegrunnelserRessurs(vedtaksperioderMedBegrunnelserRessurs);
-            } else if (
-                vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-            ) {
+            } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
                 settStandardBegrunnelserPut(
                     byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
                 );
             } else {
-                settStandardBegrunnelserPut(
-                    byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser')
-                );
+                settStandardBegrunnelserPut(byggFeiletRessurs('Klarte ikke oppdatere standardbegrunnelser'));
             }
         });
     };
@@ -209,9 +183,7 @@ export const VedtaksperiodeProvider = ({
             if (hentedeBegrunnelser.status === RessursStatus.SUKSESS) {
                 settGenererteBrevbegrunnelser(hentedeBegrunnelser);
             } else if (hentedeBegrunnelser.status === RessursStatus.FUNKSJONELL_FEIL) {
-                settGenererteBrevbegrunnelser(
-                    byggFeiletRessurs(hentedeBegrunnelser.frontendFeilmelding)
-                );
+                settGenererteBrevbegrunnelser(byggFeiletRessurs(hentedeBegrunnelser.frontendFeilmelding));
             } else {
                 settGenererteBrevbegrunnelser(
                     byggFeiletRessurs(
@@ -256,26 +228,18 @@ export const VedtaksperiodeProvider = ({
                 method: 'PUT',
                 url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${vedtaksperiodeMedBegrunnelser.id}`,
                 data: {
-                    fritekster: skjema.felter.fritekster.verdi.map(
-                        fritekst => fritekst.verdi.tekst
-                    ),
+                    fritekster: skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
                 },
             }).then(vedtaksperioderMedBegrunnelserRessurs => {
                 if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                    settVedtaksperioderMedBegrunnelserRessurs(
-                        vedtaksperioderMedBegrunnelserRessurs
-                    );
+                    settVedtaksperioderMedBegrunnelserRessurs(vedtaksperioderMedBegrunnelserRessurs);
                     onPanelClose(false);
-                } else if (
-                    vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-                ) {
+                } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settStandardBegrunnelserPut(
                         byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
                     );
                 } else {
-                    settStandardBegrunnelserPut(
-                        byggFeiletRessurs('Klarte ikke oppdatere fritekst på vedtaksperiode')
-                    );
+                    settStandardBegrunnelserPut(byggFeiletRessurs('Klarte ikke oppdatere fritekst på vedtaksperiode'));
                 }
             });
         }
@@ -285,10 +249,7 @@ export const VedtaksperiodeProvider = ({
         <VedtaksperiodeContext.Provider
             value={{
                 erPanelEkspandert,
-                grupperteBegrunnelser: grupperBegrunnelser(
-                    vedtaksperiodeMedBegrunnelser,
-                    alleBegrunnelserRessurs
-                ),
+                grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs),
                 hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,

@@ -21,9 +21,8 @@ export const ManglendeFinnmarkmerkingVarsel = () => {
             </Heading>
             <VStack gap={'space-8'}>
                 <BodyLong>
-                    Institusjonen har forretningsadresse i Finnmark eller Nord-Troms i en periode
-                    hvor «Bosatt i Finnmark/Nord-Troms» ikke er lagt til i "Bosatt i
-                    riket"-vilkåret. Dette gjelder:
+                    Institusjonen har forretningsadresse i Finnmark eller Nord-Troms i en periode hvor «Bosatt i
+                    Finnmark/Nord-Troms» ikke er lagt til i "Bosatt i riket"-vilkåret. Dette gjelder:
                 </BodyLong>
                 <Table size={'small'} style={{ width: '20rem' }}>
                     <Table.Header>
@@ -36,13 +35,8 @@ export const ManglendeFinnmarkmerkingVarsel = () => {
                         {manglendeFinnmarkmerking?.manglendeFinnmarkSvalbardMerkingPerioder.map(
                             (manglendeFinnmarkSvalbardMerkingPeriode, i) => {
                                 return (
-                                    <Table.Row
-                                        key={i + manglendeFinnmarkmerking.ident}
-                                        shadeOnHover={false}
-                                    >
-                                        <Table.DataCell>
-                                            {manglendeFinnmarkmerking.ident}
-                                        </Table.DataCell>
+                                    <Table.Row key={i + manglendeFinnmarkmerking.ident} shadeOnHover={false}>
+                                        <Table.DataCell>{manglendeFinnmarkmerking.ident}</Table.DataCell>
                                         <Table.DataCell>
                                             {isoDatoPeriodeTilFormatertString({
                                                 fom: manglendeFinnmarkSvalbardMerkingPeriode.fom,

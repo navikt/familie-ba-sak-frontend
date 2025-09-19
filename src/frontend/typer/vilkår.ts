@@ -3,11 +3,7 @@ import type { FeltState } from '@navikt/familie-skjema';
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';
 import { PersonType } from './person';
-import type {
-    IRestVedtakBegrunnelseTilknyttetVilkår,
-    VedtakBegrunnelse,
-    VedtakBegrunnelseType,
-} from './vedtak';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 import type { IIsoDatoPeriode, IsoDatoString } from '../utils/dato';
 
 export enum Resultat {

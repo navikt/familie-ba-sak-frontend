@@ -26,9 +26,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     const { vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
-    const personResultat = vilkårsvurdering.find(
-        (value: IPersonResultat) => value.person.type === PersonType.BARN
-    );
+    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
 
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
@@ -36,11 +34,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     return personResultat ? (
         <>
             <PersonHeader>
-                <PersonInformasjon
-                    person={personResultat.person}
-                    somOverskrift
-                    erLesevisning={vurderErLesevisning()}
-                />
+                <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
             </PersonHeader>
 
             <IndentertInnhold>
@@ -56,9 +50,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                     <GeneriskAnnenVurdering
                         person={personResultat.person}
                         andreVurderinger={personResultat.andreVurderinger}
-                        annenVurderingConfig={
-                            annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]
-                        }
+                        annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
                         visFeilmeldinger={visFeilmeldinger}
                     />
                 )}
@@ -78,8 +70,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                             generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
                             person={personResultat.person}
                             vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat =>
-                                    vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
                             visFeilmeldinger={visFeilmeldinger}

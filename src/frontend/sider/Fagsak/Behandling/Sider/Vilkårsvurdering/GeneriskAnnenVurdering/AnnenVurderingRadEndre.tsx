@@ -8,17 +8,10 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
 
-import {
-    annenVurderingBegrunnelseFeilmeldingId,
-    annenVurderingResultatFeilmeldingId,
-} from './AnnenVurderingTabell';
+import { annenVurderingBegrunnelseFeilmeldingId, annenVurderingResultatFeilmeldingId } from './AnnenVurderingTabell';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import type {
-    IAnnenVurdering,
-    IAnnenVurderingConfig,
-    IPersonResultat,
-} from '../../../../../../typer/vilkår';
+import type { IAnnenVurdering, IAnnenVurderingConfig, IPersonResultat } from '../../../../../../typer/vilkår';
 import { Resultat, resultater } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
@@ -51,17 +44,14 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     settRedigerbartAnnenVurdering,
     settEkspandertAnnenVurdering,
 }) => {
-    const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurderingContext();
+    const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 
-    const validerOgSettRedigerbartAnnenVurdering = (
-        endretAnnenVurdering: FeltState<IAnnenVurdering>
-    ) => {
+    const validerOgSettRedigerbartAnnenVurdering = (endretAnnenVurdering: FeltState<IAnnenVurdering>) => {
         settRedigerbartAnnenVurdering(validerAnnenVurdering(endretAnnenVurdering));
     };
 
@@ -129,8 +119,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     settRedigerbartAnnenVurdering({
                         ...redigerbartAnnenVurdering,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding:
-                            'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                        feilmelding: 'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                     });
                 }
             })
@@ -139,8 +128,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                 settRedigerbartAnnenVurdering({
                     ...redigerbartAnnenVurdering,
                     valideringsstatus: Valideringsstatus.FEIL,
-                    feilmelding:
-                        'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                    feilmelding: 'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                 });
                 settVisFeilmeldingerForEttVilkår(true);
             });
@@ -167,8 +155,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             : annenVurderingConfig.beskrivelse
                     }
                     error={
-                        redigerbartAnnenVurdering.verdi.resultat.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                        redigerbartAnnenVurdering.verdi.resultat.valideringsstatus === Valideringsstatus.FEIL &&
+                        skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.resultat.feilmelding
                             : ''
                     }
@@ -177,9 +165,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     <Radio
                         value={'Ja'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
-                        checked={
-                            redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.OPPFYLT
-                        }
+                        checked={redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.OPPFYLT}
                         onChange={() => radioOnChange(Resultat.OPPFYLT)}
                     >
                         {'Ja'}
@@ -187,9 +173,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     <Radio
                         value={'Nei'}
                         name={`${redigerbartAnnenVurdering.verdi.type}_${redigerbartAnnenVurdering.verdi.id}`}
-                        checked={
-                            redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT
-                        }
+                        checked={redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT}
                         onChange={() => radioOnChange(Resultat.IKKE_OPPFYLT)}
                     >
                         {'Nei'}
@@ -204,8 +188,8 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                     className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på annen vurdering'}
                     error={
-                        redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                        redigerbartAnnenVurdering.verdi.begrunnelse.valideringsstatus === Valideringsstatus.FEIL &&
+                        skalViseFeilmeldinger()
                             ? redigerbartAnnenVurdering.verdi.begrunnelse.feilmelding
                             : ''
                     }

@@ -9,10 +9,7 @@ interface IHeaderMedSøkProps {
     brukerEnhet?: string;
 }
 
-export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({
-    brukerNavn,
-    brukerEnhet,
-}) => {
+export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ brukerNavn, brukerEnhet }) => {
     return (
         <Header
             tittel="Nav Barnetrygd"

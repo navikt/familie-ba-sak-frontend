@@ -13,10 +13,7 @@ interface MutationParameters {
     payload: OpprettForhåndsvisTilbakekrevingVarselbrevRequest;
 }
 
-type Options = Omit<
-    UseMutationOptions<Blob, DefaultError, MutationParameters>,
-    'mutationKey' | 'mutationFn'
->;
+type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationKey' | 'mutationFn'>;
 
 export const mutationKey = ['opprett_forhaandsvisbar_tilbakekreving_varsel_brev_pdf'];
 
@@ -26,11 +23,7 @@ export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options?: O
         mutationKey,
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {
             try {
-                const bytes = await opprettForhåndsvisbarTilbakekrevingVarselbrev(
-                    request,
-                    behandlingId,
-                    payload
-                );
+                const bytes = await opprettForhåndsvisbarTilbakekrevingVarselbrev(request, behandlingId, payload);
                 const blob = opprettPdfBlob(bytes);
                 return Promise.resolve(blob);
             } catch (e) {

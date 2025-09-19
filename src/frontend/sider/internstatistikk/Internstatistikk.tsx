@@ -25,13 +25,9 @@ const Internstatistikk: React.FC = () => {
             {internstatistikk.status === RessursStatus.SUKSESS && (
                 <>
                     <Heading level="2" size="large" children={'Internstatistikk BA-SAK'} />
-                    <BodyShort>
-                        {`Antall fagsaker totalt: ${internstatistikk.data.antallFagsakerTotalt}`}
-                    </BodyShort>
+                    <BodyShort>{`Antall fagsaker totalt: ${internstatistikk.data.antallFagsakerTotalt}`}</BodyShort>
 
-                    <BodyShort>
-                        {`Antall løpende saker: ${internstatistikk.data.antallFagsakerLøpende}`}
-                    </BodyShort>
+                    <BodyShort>{`Antall løpende saker: ${internstatistikk.data.antallFagsakerLøpende}`}</BodyShort>
 
                     <BodyShort spacing>
                         {`Antall behandlinger som ikke er ferdigstilt: ${internstatistikk.data.antallBehandlingerIkkeFerdigstilt}`}

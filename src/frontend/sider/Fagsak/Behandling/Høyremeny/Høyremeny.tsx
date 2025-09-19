@@ -68,21 +68,19 @@ const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
                 <>
                     <Behandlingskort åpenBehandling={behandling} />
                     <Hendelsesoversikt
-                        hendelser={hentDataFraRessursMedFallback(logg, []).map(
-                            (loggElement: ILogg): Hendelse => {
-                                return {
-                                    id: loggElement.id.toString(),
-                                    dato: isoStringTilFormatertString({
-                                        isoString: loggElement.opprettetTidspunkt,
-                                        tilFormat: Datoformat.DATO_TID,
-                                    }),
-                                    utførtAv: loggElement.opprettetAv,
-                                    rolle: loggElement.rolle,
-                                    tittel: loggElement.tittel,
-                                    beskrivelse: loggElement.tekst,
-                                };
-                            }
-                        )}
+                        hendelser={hentDataFraRessursMedFallback(logg, []).map((loggElement: ILogg): Hendelse => {
+                            return {
+                                id: loggElement.id.toString(),
+                                dato: isoStringTilFormatertString({
+                                    isoString: loggElement.opprettetTidspunkt,
+                                    tilFormat: Datoformat.DATO_TID,
+                                }),
+                                utførtAv: loggElement.opprettetAv,
+                                rolle: loggElement.rolle,
+                                tittel: loggElement.tittel,
+                                beskrivelse: loggElement.tekst,
+                            };
+                        })}
                         åpenBehandling={behandling}
                         bruker={bruker}
                     />

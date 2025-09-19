@@ -21,11 +21,7 @@ import { FagsakType } from '../../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../../typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import type { IsoDatoString } from '../../../../../utils/dato';
-import {
-    dateTilIsoDatoString,
-    dateTilIsoDatoStringEllerUndefined,
-    validerGyldigDato,
-} from '../../../../../utils/dato';
+import { dateTilIsoDatoString, dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../../../../../utils/dato';
 import { useFagsakContext } from '../../../FagsakContext';
 
 export interface IOpprettBehandlingSkjemaBase {
@@ -41,11 +37,7 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
     valgteBarn: OptionType[];
 }
 
-const useOpprettBehandling = (
-    fagsakId: number,
-    lukkModal: () => void,
-    onOpprettTilbakekrevingSuccess: () => void
-) => {
+const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprettTilbakekrevingSuccess: () => void) => {
     const { bruker: brukerRessurs, fagsak } = useFagsakContext();
     const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
@@ -53,9 +45,7 @@ const useOpprettBehandling = (
 
     const bruker = brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data : undefined;
 
-    const behandlingstype = useFelt<
-        Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''
-    >({
+    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''>({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''
@@ -82,10 +72,7 @@ const useOpprettBehandling = (
     });
 
     const behandlingstema = useFelt<IBehandlingstema | undefined>({
-        verdi:
-            fagsak.fagsakType === FagsakType.INSTITUSJON
-                ? behandlingstemaer.NASJONAL_INSTITUSJON
-                : undefined,
+        verdi: fagsak.fagsakType === FagsakType.INSTITUSJON ? behandlingstemaer.NASJONAL_INSTITUSJON : undefined,
         valideringsfunksjon: (felt: FeltState<IBehandlingstema | undefined>) =>
             felt.verdi ? ok(felt) : feil(felt, 'Behandlingstema må settes.'),
         avhengigheter: { behandlingstype, behandlingsårsak },
@@ -139,8 +126,7 @@ const useOpprettBehandling = (
         verdi: undefined,
         valideringsfunksjon: validerGyldigDato,
         avhengigheter: { behandlingstype },
-        skalFeltetVises: avhengigheter =>
-            avhengigheter.behandlingstype.verdi === Klagebehandlingstype.KLAGE,
+        skalFeltetVises: avhengigheter => avhengigheter.behandlingstype.verdi === Klagebehandlingstype.KLAGE,
     });
 
     const valgteBarn = useFelt({
@@ -157,19 +143,21 @@ const useOpprettBehandling = (
         },
     });
 
-    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs, valideringErOk } =
-        useSkjema<IOpprettBehandlingSkjemaFelter, IBehandling>({
-            felter: {
-                behandlingstype,
-                behandlingsårsak,
-                behandlingstema,
-                migreringsdato,
-                søknadMottattDato,
-                klageMottattDato,
-                valgteBarn,
-            },
-            skjemanavn: 'Opprett behandling modal',
-        });
+    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs, valideringErOk } = useSkjema<
+        IOpprettBehandlingSkjemaFelter,
+        IBehandling
+    >({
+        felter: {
+            behandlingstype,
+            behandlingsårsak,
+            behandlingstema,
+            migreringsdato,
+            søknadMottattDato,
+            klageMottattDato,
+            valgteBarn,
+        },
+        skjemanavn: 'Opprett behandling modal',
+    });
 
     useEffect(() => {
         if (behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING) {
@@ -220,11 +208,9 @@ const useOpprettBehandling = (
     };
 
     const opprettBehandling = (søkersIdent: string, fagsakType: FagsakType) => {
-        const erMigreringFraInfoTrygd =
-            behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+        const erMigreringFraInfoTrygd = behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
         const erHelmanuellMigrering =
-            erMigreringFraInfoTrygd &&
-            behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+            erMigreringFraInfoTrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
         onSubmit<IRestNyBehandling>(
             {
@@ -239,9 +225,7 @@ const useOpprettBehandling = (
                         ? dateTilIsoDatoStringEllerUndefined(migreringsdato.verdi)
                         : undefined,
                     søknadMottattDato: dateTilIsoDatoStringEllerUndefined(søknadMottattDato.verdi),
-                    barnasIdenter: erHelmanuellMigrering
-                        ? valgteBarn.verdi.map(option => option.value)
-                        : undefined,
+                    barnasIdenter: erHelmanuellMigrering ? valgteBarn.verdi.map(option => option.value) : undefined,
                     fagsakType: fagsakType,
                     fagsakId: fagsakId,
                 },
@@ -270,9 +254,7 @@ const useOpprettBehandling = (
                                 : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
                         );
                     } else {
-                        navigate(
-                            `/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`
-                        );
+                        navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
                     }
                 }
             }

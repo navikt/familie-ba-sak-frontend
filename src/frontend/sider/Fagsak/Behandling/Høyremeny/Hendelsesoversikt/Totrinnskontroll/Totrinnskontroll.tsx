@@ -52,8 +52,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
     const { request } = useHttp();
     const navigate = useNavigate();
 
-    const [innsendtVedtak, settInnsendtVedtak] =
-        React.useState<Ressurs<IBehandling>>(byggTomRessurs());
+    const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IBehandling>>(byggTomRessurs());
     const [modalVerdi, settModalVerdi] = React.useState<IModalVerdier>(initiellModalVerdi);
     React.useEffect(() => {
         settModalVerdi({
@@ -84,28 +83,19 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
         nullstillFeilmelding();
     }, [trinnPåBehandling]);
 
-    const sendInnVedtak = (
-        beslutning: TotrinnskontrollBeslutning,
-        begrunnelse: string,
-        egetVedtak: boolean
-    ) => {
+    const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string, egetVedtak: boolean) => {
         if (
             !egetVedtak &&
-            Object.values(trinnPåBehandling).some(
-                trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT
-            )
+            Object.values(trinnPåBehandling).some(trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT)
         ) {
             settIkkeKontrollerteSiderTilManglerKontroll();
-            settInnsendtVedtak(
-                byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.')
-            );
+            settInnsendtVedtak(byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.'));
             return;
         }
 
         settInnsendtVedtak(byggHenterRessurs());
         settModalVerdi({ ...modalVerdi, beslutning });
-        const manglerBegrunnelse =
-            beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
+        const manglerBegrunnelse = beslutning === TotrinnskontrollBeslutning.UNDERKJENT && !begrunnelse;
         if (beslutning === TotrinnskontrollBeslutning.IKKE_VURDERT) {
             settInnsendtVedtak(byggFeiletRessurs('Totrinnskontroll ikke vurdert ved innsending'));
         } else if (manglerBegrunnelse) {

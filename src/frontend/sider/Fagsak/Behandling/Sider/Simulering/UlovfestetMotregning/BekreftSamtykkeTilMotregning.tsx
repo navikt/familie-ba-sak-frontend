@@ -6,9 +6,7 @@ import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '../../../../../
 
 interface IProps {
     slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    oppdaterTilbakekrevingsvedtakMotregning: (
-        dto: OppdaterTilbakekrevingsvedtakMotregningDTO
-    ) => Promise<void>;
+    oppdaterTilbakekrevingsvedtakMotregning: (dto: OppdaterTilbakekrevingsvedtakMotregningDTO) => Promise<void>;
 }
 
 export const BekreftSamtykkeTilMotregning = ({
@@ -21,8 +19,7 @@ export const BekreftSamtykkeTilMotregning = ({
     return (
         <Alert variant={'info'}>
             <BodyLong spacing>
-                Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert
-                feilutbetalingen
+                Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert feilutbetalingen
             </BodyLong>
             <HStack gap="4" justify="center">
                 <Button

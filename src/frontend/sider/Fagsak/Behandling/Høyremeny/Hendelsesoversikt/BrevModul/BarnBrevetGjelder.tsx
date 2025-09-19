@@ -38,32 +38,26 @@ interface IProps {
 }
 
 const BarnBrevetGjelder = (props: IProps) => {
-    const { barnBrevetGjelderFelt, behandlingsSteg, visFeilmeldinger, settVisFeilmeldinger } =
-        props;
+    const { barnBrevetGjelderFelt, behandlingsSteg, visFeilmeldinger, settVisFeilmeldinger } = props;
 
     const skalViseVarselOmManglendeBarn =
         behandlingsSteg &&
         hentStegNummer(behandlingsSteg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
         barnBrevetGjelderFelt.verdi.length === 0;
 
-    const sorterteBarn = barnBrevetGjelderFelt.verdi.sort(
-        (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-            if (!a.fødselsdato || a.fødselsdato === '') {
-                return 1;
-            }
-
-            if (!b.fødselsdato || b.fødselsdato === '') {
-                return -1;
-            }
-
-            return !a.ident
-                ? 1
-                : differenceInMilliseconds(
-                      isoStringTilDate(b.fødselsdato),
-                      isoStringTilDate(a.fødselsdato)
-                  );
+    const sorterteBarn = barnBrevetGjelderFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+        if (!a.fødselsdato || a.fødselsdato === '') {
+            return 1;
         }
-    );
+
+        if (!b.fødselsdato || b.fødselsdato === '') {
+            return -1;
+        }
+
+        return !a.ident
+            ? 1
+            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
+    });
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         barnBrevetGjelderFelt.validerOgSettFelt(

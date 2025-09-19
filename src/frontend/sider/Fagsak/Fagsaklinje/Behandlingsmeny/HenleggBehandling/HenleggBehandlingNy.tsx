@@ -14,20 +14,14 @@ export function HenleggBehandlingNy() {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { åpneModal } = useModal(ModalType.HENLEGG_BEHANDLING);
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse =
-        toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
 
     const kanHenlegge =
-        harTilgangTilTekniskVedlikeholdHenleggelse ||
-        (!vurderErLesevisning() && erPåHenleggbartSteg(behandling.steg));
+        harTilgangTilTekniskVedlikeholdHenleggelse || (!vurderErLesevisning() && erPåHenleggbartSteg(behandling.steg));
 
     if (!kanHenlegge) {
         return null;
     }
 
-    return (
-        <Dropdown.Menu.List.Item onClick={() => åpneModal()}>
-            Henlegg behandling
-        </Dropdown.Menu.List.Item>
-    );
+    return <Dropdown.Menu.List.Item onClick={() => åpneModal()}>Henlegg behandling</Dropdown.Menu.List.Item>;
 }

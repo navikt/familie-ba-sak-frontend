@@ -54,9 +54,7 @@ export const Samhandler: React.FC = () => {
                     hideLegend
                 >
                     <TextField
-                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(
-                            samhandlerSkjema.visFeilmeldinger
-                        )}
+                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(samhandlerSkjema.visFeilmeldinger)}
                         id={'hent-samhandler'}
                         label={'Skriv inn orgnr'}
                         size="medium"
@@ -74,8 +72,7 @@ export const Samhandler: React.FC = () => {
             </HentSakerFlex>
             {samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS ? (
                 <Heading size={'large'}>
-                    {samhandlerSkjema.submitRessurs.data.tssEksternId}{' '}
-                    {samhandlerSkjema.submitRessurs.data.navn} <br />
+                    {samhandlerSkjema.submitRessurs.data.tssEksternId} {samhandlerSkjema.submitRessurs.data.navn} <br />
                     {samhandlerSkjema.submitRessurs.data.adresser[0].adresseType}{' '}
                     {samhandlerSkjema.submitRessurs.data.adresser[0].postSted}
                 </Heading>

@@ -36,58 +36,43 @@ interface Props {
 const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string> = {
     [UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG]: 'Vurdering annet grunnlag',
     [UtdypendeVilkårsvurderingGenerell.BOSATT_PÅ_SVALBARD]: 'Bosatt på Svalbard',
-    [UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS]:
-        'Bosatt i Finnmark/Nord-Troms',
+    [UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS]: 'Bosatt i Finnmark/Nord-Troms',
     [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP]: 'Vurdert medlemskap',
     [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED]: 'Delt bosted: skal deles',
-    [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES]:
-        'Delt bosted: skal ikke deles',
-    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING]:
-        'Søker omfattet av norsk lovgivning',
+    [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED_SKAL_IKKE_DELES]: 'Delt bosted: skal ikke deles',
+    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING]: 'Søker omfattet av norsk lovgivning',
     [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING_UTLAND]:
         'Søker omfattet av norsk lovgivning Utland',
     [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING]:
         'Annen forelder omfattet av norsk lovgivning',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE]: 'Barn bor i Norge',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS]: 'Barn bor i EØS-land',
-    [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA]:
-        'Barn bor i Storbritannia',
-    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER]:
-        'Barn bor i Norge med søker',
-    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER]:
-        'Barn bor i EØS-land med søker',
+    [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA]: 'Barn bor i Storbritannia',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_NORGE_MED_SØKER]: 'Barn bor i Norge med søker',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER]: 'Barn bor i EØS-land med søker',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_ANNEN_FORELDER]:
         'Barn bor i EØS-land med annen forelder (EFTA)',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_SØKER]:
         'Barn bor i Storbritannia med søker',
     [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_STORBRITANNIA_MED_ANNEN_FORELDER]:
         'Barn bor i Storbritannia med annen forelder (EFTA)',
-    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND]:
-        'Barn bor alene i annet EØS-land',
+    [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_ALENE_I_ANNET_EØS_LAND]: 'Barn bor alene i annet EØS-land',
 };
 
-const mapUtdypendeVilkårsvurderingTilOption = (
-    utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering
-): OptionType => ({
+const mapUtdypendeVilkårsvurderingTilOption = (utdypendeVilkårsvurdering: UtdypendeVilkårsvurdering): OptionType => ({
     value: utdypendeVilkårsvurdering,
     label: utdypendeVilkårsvurderingTekst[utdypendeVilkårsvurdering],
 });
 const mapOptionTilUtdypendeVilkårsvurdering = (option: OptionType): UtdypendeVilkårsvurdering =>
     option.value as UtdypendeVilkårsvurdering;
 
-function mapOgLeggTilUtdypendeVilkårsvurdering(
-    option: OptionType,
-    vilkår: IVilkårResultat
-): IVilkårResultat {
+function mapOgLeggTilUtdypendeVilkårsvurdering(option: OptionType, vilkår: IVilkårResultat): IVilkårResultat {
     return option
         ? {
               ...vilkår,
               utdypendeVilkårsvurderinger: {
                   ...vilkår.utdypendeVilkårsvurderinger,
-                  verdi: [
-                      ...vilkår.utdypendeVilkårsvurderinger.verdi,
-                      mapOptionTilUtdypendeVilkårsvurdering(option),
-                  ],
+                  verdi: [...vilkår.utdypendeVilkårsvurderinger.verdi, mapOptionTilUtdypendeVilkårsvurdering(option)],
               },
           }
         : vilkår;
@@ -116,13 +101,10 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     ).filter(
         utdypendeVilkårsvurdering =>
             bosattFinnmarkNordtromsToggleErPå ||
-            utdypendeVilkårsvurdering !==
-                UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
+            utdypendeVilkårsvurdering !== UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
     );
 
-    const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(
-        mapUtdypendeVilkårsvurderingTilOption
-    );
+    const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(mapUtdypendeVilkårsvurderingTilOption);
 
     useEffect(() => {
         fjernUmuligeAlternativerFraRedigerbartVilkår(
@@ -148,9 +130,9 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
                     ...redigerbartVilkår.verdi,
                     utdypendeVilkårsvurderinger: {
                         ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                        verdi: [
-                            ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                        ].filter(e => e !== optionValue),
+                        verdi: [...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi].filter(
+                            e => e !== optionValue
+                        ),
                     },
                 },
             });

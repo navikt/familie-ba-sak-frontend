@@ -24,10 +24,7 @@ import {
     isoStringTilDate,
     isoStringTilFormatertString,
 } from '../../../../../utils/dato';
-import {
-    hentPeriodelisteMedTommePerioder,
-    hentÅrISimuleringen,
-} from '../../../../../utils/simulering';
+import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../../../utils/simulering';
 
 const IkkeFullBreddeTabell = styled(Table)`
     width: unset;
@@ -62,8 +59,7 @@ const DataCellMedFarge = styled(DataCelle)<{
         }
         return ATextDefault;
     }};
-    font-weight: ${props =>
-        props.$erNesteUtbetalingsperiode ? AFontWeightBold : AFontWeightRegular};
+    font-weight: ${props => (props.$erNesteUtbetalingsperiode ? AFontWeightBold : AFontWeightRegular)};
 `;
 
 const StyledSwitch = styled(Switch)`
@@ -97,10 +93,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
 
     const erManuellPosteringSamtidigSomResultatIkkeErNull = perioder.some(
         periode =>
-            periode.manuellPostering &&
-            periode.manuellPostering !== 0 &&
-            periode.resultat &&
-            periode.resultat !== 0
+            periode.manuellPostering && periode.manuellPostering !== 0 && periode.resultat && periode.resultat !== 0
     );
     const [visManuellePosteringer, setVisManuellePosteringer] = useState(
         erManuellPosteringSamtidigSomResultatIkkeErNull
@@ -110,14 +103,12 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     const erMerEnn12MånederISimulering = perioder.length > 12;
 
     const periodeErEtterNesteUtbetalingsPeriode = (periode: ISimuleringPeriode) =>
-        fomDatoNestePeriode &&
-        isAfter(isoStringTilDate(periode.fom), isoStringTilDate(fomDatoNestePeriode));
+        fomDatoNestePeriode && isAfter(isoStringTilDate(periode.fom), isoStringTilDate(fomDatoNestePeriode));
 
     const perioderSomSkalVisesITabellen = perioder.filter(
         periode =>
             !periodeErEtterNesteUtbetalingsPeriode(periode) &&
-            (!erMerEnn12MånederISimulering ||
-                isoStringTilDate(periode.fom).getFullYear() === aktueltÅr)
+            (!erMerEnn12MånederISimulering || isoStringTilDate(periode.fom).getFullYear() === aktueltÅr)
     );
 
     const erISisteÅrAvPerioden = indexFramvistÅr === hentÅrISimuleringen(perioder).length - 1;
@@ -127,16 +118,14 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
         tom: tomDatoNestePeriode ?? tomSisteUtbetaling,
     })}`;
 
-    const erNesteUtbetalingsperiode = (periode: ISimuleringPeriode): boolean =>
-        fomDatoNestePeriode === periode.fom;
+    const erNesteUtbetalingsperiode = (periode: ISimuleringPeriode): boolean => fomDatoNestePeriode === periode.fom;
 
     return (
         <>
             {erManuellPosteringSamtidigSomResultatIkkeErNull && (
                 <StyledAlert variant={'warning'}>
-                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest
-                    sannsynlig sende en oppgave til NØS og be dem gjøre manuelle posteringer
-                    tilsvarende de manuelle posteringene i tabellen.
+                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest sannsynlig sende en oppgave
+                    til NØS og be dem gjøre manuelle posteringer tilsvarende de manuelle posteringene i tabellen.
                 </StyledAlert>
             )}
             <Heading size={'small'} level={'2'} spacing>
@@ -160,9 +149,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
             )}
             <IkkeFullBreddeTabell
                 aria-label={`Simuleringsresultat for ${
-                    erMerEnn12MånederISimulering
-                        ? aktueltÅr
-                        : `perioden ${tilOgFraDatoForSimulering}`
+                    erMerEnn12MånederISimulering ? aktueltÅr : `perioden ${tilOgFraDatoForSimulering}`
                 }`}
             >
                 <Table.Header>
