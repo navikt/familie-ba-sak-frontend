@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, CopyButton, Dropdown, Heading, HStack } from '@navikt/ds-react';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import RegistrerDødsfallDato from './RegistrerDødsfallDato';
+import { useBrukerContext } from '../../sider/Fagsak/BrukerContext';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '../../typer/person';
 import { formaterIdent, hentAlder } from '../../utils/formatter';
@@ -32,21 +32,16 @@ const HeadingUtenOverflow = styled(Heading)`
 `;
 
 const hentAdresseBeskyttelseGradering = (
-    brukerRessurs: Ressurs<IPersonInfo>,
+    bruker: IPersonInfo,
     personIdent: string
 ): boolean | undefined => {
-    if (brukerRessurs.status === RessursStatus.SUKSESS) {
-        const bruker = brukerRessurs.data;
-        const forelderBarnRelasjoner = brukerRessurs.data.forelderBarnRelasjon;
-
-        const forelderBarnRelasjon = forelderBarnRelasjoner.find(
-            rel => rel.personIdent === personIdent
-        );
-        if (bruker.personIdent === personIdent) {
-            return erAdresseBeskyttet(bruker.adressebeskyttelseGradering);
-        } else if (forelderBarnRelasjon?.personIdent === personIdent) {
-            return erAdresseBeskyttet(forelderBarnRelasjon.adressebeskyttelseGradering);
-        }
+    const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(
+        rel => rel.personIdent === personIdent
+    );
+    if (bruker.personIdent === personIdent) {
+        return erAdresseBeskyttet(bruker.adressebeskyttelseGradering);
+    } else if (forelderBarnRelasjon?.personIdent === personIdent) {
+        return erAdresseBeskyttet(forelderBarnRelasjon.adressebeskyttelseGradering);
     }
 };
 
@@ -69,11 +64,12 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
-    const { fagsak, bruker: brukerRessurs } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
 
-    const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(brukerRessurs, person.personIdent);
-    const erEgenAnsatt =
-        brukerRessurs.status === RessursStatus.SUKSESS ? brukerRessurs.data.erEgenAnsatt : false;
+    const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(bruker, person.personIdent);
+    const erEgenAnsatt = bruker.erEgenAnsatt;
+
     if (somOverskrift) {
         return (
             <HStack gap="6" wrap={false} align="center">
