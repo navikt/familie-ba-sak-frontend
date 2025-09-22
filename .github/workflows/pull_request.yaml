@@ -13,8 +13,7 @@ jobs:
     name: Build, test, validate
     permissions:
       contents: read
-      actions: write
-    uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-yarn.yaml@pull-request # ratchet:exclude
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-yarn.yaml@main # ratchet:exclude
     with:
       skip-cypress: false
     secrets: inherit
