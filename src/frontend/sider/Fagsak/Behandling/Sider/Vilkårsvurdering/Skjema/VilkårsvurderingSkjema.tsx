@@ -20,12 +20,7 @@ const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
         return <VilkårsvurderingSkjemaNormal visFeilmeldinger={visFeilmeldinger} />;
     }
     if (fagsak.fagsakType === FagsakType.INSTITUSJON && samhandlerOrgnr) {
-        return (
-            <VilkårsvurderingSkjemaInstitusjon
-                visFeilmeldinger={visFeilmeldinger}
-                orgNummer={samhandlerOrgnr}
-            />
-        );
+        return <VilkårsvurderingSkjemaInstitusjon visFeilmeldinger={visFeilmeldinger} />;
     }
     if (fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
         return <VilkårsvurderingSkjemaEnsligMindreårig visFeilmeldinger={visFeilmeldinger} />;

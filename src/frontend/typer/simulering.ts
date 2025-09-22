@@ -8,6 +8,7 @@ export interface ISimuleringDTO {
     tomDatoNestePeriode?: string;
     tomSisteUtbetaling?: string;
     avregningsperioder: IAvregningsperiode[];
+    overlappendePerioderMedAndreFagsaker: IOverlappendePeriodeMedAndreFagsaker[];
 }
 
 export interface ISimuleringPeriode {
@@ -27,6 +28,12 @@ export interface IAvregningsperiode {
     tom: string;
     totalEtterbetaling: number;
     totalFeilutbetaling: number;
+}
+
+export interface IOverlappendePeriodeMedAndreFagsaker {
+    fom: string;
+    tom: string;
+    fagsaker: string[];
 }
 
 export enum Tilbakekrevingsvalg {

@@ -27,13 +27,13 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     const erLesevisning = vurderErLesevisning();
 
     if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentOgSettSamhandler(institusjon.orgNummer);
+        hentOgSettSamhandler(åpenBehandling.behandlingId);
     }
 
     return (
         <StyledSkjemasteg
             className={'mottaker'}
-            tittel={'Registrer institusjon'}
+            tittel={'Info om institusjon'}
             nesteOnClick={onSubmitMottaker}
             nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}

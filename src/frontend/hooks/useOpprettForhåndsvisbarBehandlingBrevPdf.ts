@@ -11,11 +11,17 @@ interface MutationParameters {
     payload: IManueltBrevRequestPåBehandling;
 }
 
-type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationFn'>;
+type Options = Omit<
+    UseMutationOptions<Blob, DefaultError, MutationParameters>,
+    'mutationKey' | 'mutationFn'
+>;
 
-export function useOpprettForhåndsvisbarBehandlingBrevPdf(options: Options) {
+export const mutationKey = ['opprett_forhaandsvisbar_behandling_brev_pdf'];
+
+export function useOpprettForhåndsvisbarBehandlingBrevPdf(options?: Options) {
     const { request } = useHttp();
     return useMutation({
+        mutationKey,
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {
             try {
                 const bytes = await opprettForhåndsvisBehandlingBrev(

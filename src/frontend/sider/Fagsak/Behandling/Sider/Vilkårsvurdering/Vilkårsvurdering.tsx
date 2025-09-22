@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, ErrorMessage, ErrorSummary } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, ErrorSummary, VStack } from '@navikt/ds-react';
 import { ASpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -15,17 +15,23 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
+import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
-import type { IAnnenVurdering, IVilkårResultat } from '../../../../../typer/vilkår';
-import { annenVurderingConfig, vilkårConfig } from '../../../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    type IAnnenVurdering,
+    type IVilkårResultat,
+    vilkårConfig,
+} from '../../../../../typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
+import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -160,59 +166,65 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
             )}
 
-            <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
-            {uregistrerteBarn.length > 0 && (
-                <Alert variant="info">
-                    <BodyShort>
-                        Du har registrert følgende barn som ikke er registrert i Folkeregisteret:
-                    </BodyShort>
-                    <UregistrerteBarnListe>
-                        {uregistrerteBarn.map(uregistrertBarn => (
-                            <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
-                                <BodyShort>
-                                    {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
-                                        isoString: uregistrertBarn.fødselsdato,
-                                        tilFormat: Datoformat.DATO,
-                                    })}`}
-                                </BodyShort>
-                            </li>
-                        ))}
-                    </UregistrerteBarnListe>
+            <VStack gap="space-8">
+                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+                {uregistrerteBarn.length > 0 && (
+                    <Alert variant="info">
+                        <BodyShort>
+                            Du har registrert følgende barn som ikke er registrert i
+                            Folkeregisteret:
+                        </BodyShort>
+                        <UregistrerteBarnListe>
+                            {uregistrerteBarn.map(uregistrertBarn => (
+                                <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
+                                    <BodyShort>
+                                        {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
+                                            isoString: uregistrertBarn.fødselsdato,
+                                            tilFormat: Datoformat.DATO,
+                                        })}`}
+                                    </BodyShort>
+                                </li>
+                            ))}
+                        </UregistrerteBarnListe>
 
-                    <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
-                </Alert>
-            )}
-            {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
-                visFeilmeldinger && (
-                    <ErrorSummary
-                        heading={'For å gå videre må du rette opp følgende:'}
-                        size="small"
-                    >
-                        {[
-                            ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
-                                feilmelding: `Et vilkår av typen '${
-                                    vilkårConfig[vilkårResultat.vilkårType].tittel
-                                }' er ikke fullstendig`,
-                                skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
-                            })),
-                            ...hentAndreVurderingerMedFeil().map(
-                                (annenVurdering: IAnnenVurdering) => ({
-                                    feilmelding: `Et vilkår av typen '${
-                                        annenVurderingConfig[annenVurdering.type].tittel
-                                    }' er ikke fullstendig`,
-                                    skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
-                                })
-                            ),
-                        ].map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
-                                {item.feilmelding}
-                            </ErrorSummary.Item>
-                        ))}
-                    </ErrorSummary>
+                        <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
+                    </Alert>
                 )}
-            {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
-                <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
-            )}
+                {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) &&
+                    visFeilmeldinger && (
+                        <ErrorSummary
+                            heading={'For å gå videre må du rette opp følgende:'}
+                            size="small"
+                        >
+                            {[
+                                ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
+                                    feilmelding: `Et vilkår av typen '${
+                                        vilkårConfig[vilkårResultat.vilkårType].tittel
+                                    }' er ikke fullstendig`,
+                                    skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
+                                })),
+                                ...hentAndreVurderingerMedFeil().map(
+                                    (annenVurdering: IAnnenVurdering) => ({
+                                        feilmelding: `Et vilkår av typen '${
+                                            annenVurderingConfig[annenVurdering.type].tittel
+                                        }' er ikke fullstendig`,
+                                        skjemaelementId:
+                                            annenVurderingFeilmeldingId(annenVurdering),
+                                    })
+                                ),
+                            ].map(item => (
+                                <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
+                                    {item.feilmelding}
+                                </ErrorSummary.Item>
+                            ))}
+                        </ErrorSummary>
+                    )}
+                {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
+                    <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
+                )}
+                <ManglendeSvalbardmerkingVarsel />
+                <ManglendeFinnmarkmerkingVarsel />
+            </VStack>
         </Skjemasteg>
     );
 };

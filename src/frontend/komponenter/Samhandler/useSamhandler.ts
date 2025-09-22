@@ -30,7 +30,7 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: st
 
     const onSubmitWrapper = () => {
         onSubmit(
-            hentSamhandlerdataForOrgnrConfig(skjema.felter.orgnr.verdi),
+            hentSamhandlerdataForBehandlingConfig(skjema.felter.orgnr.verdi),
             (ressurs: Ressurs<ISamhandlerInfo>) => {
                 settSubmitRessurs(ressurs);
                 if (onSuccess) {
@@ -58,9 +58,9 @@ export const useSamhandlerRequest = () => {
 
     const { skalObfuskereData } = useAppContext();
 
-    const hentOgSettSamhandler = (orgnr: string) => {
+    const hentOgSettSamhandler = (behandlingId: number) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
-        hentSamhandler(orgnr).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+        hentSamhandler(behandlingId.toString()).then((ressurs: Ressurs<ISamhandlerInfo>) => {
             if (skalObfuskereData) {
                 obfuskerSamhandler(ressurs);
             }
@@ -68,9 +68,9 @@ export const useSamhandlerRequest = () => {
         });
     };
 
-    const hentSamhandler = async (orgnr: string): Promise<Ressurs<ISamhandlerInfo>> => {
+    const hentSamhandler = async (behandlingId: string): Promise<Ressurs<ISamhandlerInfo>> => {
         return request<ISamhandlerInfoRequest, ISamhandlerInfo>(
-            hentSamhandlerdataForOrgnrConfig(orgnr)
+            hentSamhandlerdataForBehandlingConfig(behandlingId)
         )
             .then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 return ressurs;
@@ -87,11 +87,11 @@ export const useSamhandlerRequest = () => {
     };
 };
 
-const hentSamhandlerdataForOrgnrConfig = (
-    orgnr: string
+const hentSamhandlerdataForBehandlingConfig = (
+    behandlingId: string
 ): FamilieRequestConfig<ISamhandlerInfoRequest> => {
     return {
         method: 'GET',
-        url: '/familie-ba-sak/api/samhandler/orgnr/' + orgnr,
+        url: '/familie-ba-sak/api/samhandler/behandling/' + behandlingId,
     };
 };
