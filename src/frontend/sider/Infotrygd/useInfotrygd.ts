@@ -12,10 +12,7 @@ import { identValidator } from '../../utils/validators';
 export const useInfotrygdSkjema = () => {
     const [ident, settIdent] = useState('');
 
-    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
-        IInfotrygdsakerRequest,
-        IInfotrygdsaker
-    >({
+    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<IInfotrygdsakerRequest, IInfotrygdsaker>({
         felter: {
             ident: useFelt({
                 verdi: '',
@@ -26,13 +23,10 @@ export const useInfotrygdSkjema = () => {
     });
 
     const onSubmitWrapper = () => {
-        onSubmit(
-            hentInfotrygdsakerRequestConfig(skjema.felter.ident.verdi),
-            (ressurs: Ressurs<IInfotrygdsaker>) => {
-                settIdent(skjema.felter.ident.verdi);
-                settSubmitRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs));
-            }
-        );
+        onSubmit(hentInfotrygdsakerRequestConfig(skjema.felter.ident.verdi), (ressurs: Ressurs<IInfotrygdsaker>) => {
+            settIdent(skjema.felter.ident.verdi);
+            settSubmitRessurs(konverterTilFeiletRessursDersomIkkeTilgang(ressurs));
+        });
     };
 
     return {
@@ -42,9 +36,7 @@ export const useInfotrygdSkjema = () => {
     };
 };
 
-const hentInfotrygdsakerRequestConfig = (
-    ident: string
-): FamilieRequestConfig<IInfotrygdsakerRequest> => {
+const hentInfotrygdsakerRequestConfig = (ident: string): FamilieRequestConfig<IInfotrygdsakerRequest> => {
     return {
         method: 'POST',
         data: { ident },
@@ -53,9 +45,7 @@ const hentInfotrygdsakerRequestConfig = (
     };
 };
 
-const tilgangFeilmelding = (
-    adressebeskyttelsegradering: Adressebeskyttelsegradering | undefined
-): string => {
+const tilgangFeilmelding = (adressebeskyttelsegradering: Adressebeskyttelsegradering | undefined): string => {
     if (adressebeskyttelsegradering === Adressebeskyttelsegradering.FORTROLIG) {
         return 'Brukeren har diskresjonskode fortrolig adresse.';
     } else if (

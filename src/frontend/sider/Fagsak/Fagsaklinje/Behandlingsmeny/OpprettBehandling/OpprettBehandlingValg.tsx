@@ -23,19 +23,14 @@ import type { IPersonInfo } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
-import {
-    hentAktivBehandlingPåMinimalFagsak,
-    hentSisteIkkeHenlagteBehandling,
-} from '../../../../../utils/fagsak';
+import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
 import { onOptionSelected } from '../../../../../utils/skjema';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../ManuellJournalføring/ManuellJournalføringContext';
 import type { VisningBehandling } from '../../../Saksoversikt/visningBehandling';
 
 const erOpprettBehandlingSkjema = (
-    skjema:
-        | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
-        | ISkjema<ManuellJournalføringSkjemaFelter, string>
+    skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>
 ): skjema is ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> => {
     return Object.hasOwn(skjema.felter, 'valgteBarn');
 };
@@ -74,8 +69,7 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
-                  (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
-                      kanManueltKorrigereMedVedtaksbrev) &&
+                  (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV || kanManueltKorrigereMedVedtaksbrev) &&
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
@@ -86,9 +80,7 @@ const hentTilgjengeligeBehandlingsårsaker = (
           );
 
 interface IProps {
-    skjema:
-        | ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling>
-        | ISkjema<ManuellJournalføringSkjemaFelter, string>;
+    skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>;
     minimalFagsak?: IMinimalFagsak;
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
@@ -115,29 +107,24 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
 
-    const kanOppretteBehandling =
-        !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
+    const kanOppretteBehandling = !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
     const kanOppretteFørstegangsbehandling = !minimalFagsak
         ? true
         : minimalFagsak.status !== FagsakStatus.LØPENDE && kanOppretteBehandling;
     const kanOppretteRevurdering = !minimalFagsak
         ? false
-        : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat))
-              .length > 0 && kanOppretteBehandling;
-    const kanOppretteTekniskEndring =
-        kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
+        : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
+          kanOppretteBehandling;
+    const kanOppretteTekniskEndring = kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
-        !manuellJournalfør &&
-        skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+        !manuellJournalfør && skjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const erHelmanuellMigrering =
-        erMigreringFraInfotrygd &&
-        skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
+        erMigreringFraInfotrygd && skjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
     const kanOpprettMigreringsbehandlingMedHelmanuellMigrering =
         kanOppretteMigreringFraInfotrygd &&
-        (forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak) ||
-            minimalFagsak?.status !== FagsakStatus.LØPENDE);
+        (forrigeBehandlingVarTekniskEndringMedOpphør(minimalFagsak) || minimalFagsak?.status !== FagsakStatus.LØPENDE);
 
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
@@ -168,9 +155,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </option>
                 {kanOppretteFørstegangsbehandling && (
                     <option
-                        aria-selected={
-                            behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING
-                        }
+                        aria-selected={behandlingstype.verdi === Behandlingstype.FØRSTEGANGSBEHANDLING}
                         value={Behandlingstype.FØRSTEGANGSBEHANDLING}
                     >
                         Førstegangsbehandling
@@ -196,9 +181,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
                 {kanOppretteTilbakekreving && (
                     <option
-                        aria-selected={
-                            behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING
-                        }
+                        aria-selected={behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
                         value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
                     >
                         Tilbakekreving
@@ -212,9 +195,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </option>
                 {kanOppretteMigreringFraInfotrygd && (
                     <option
-                        aria-selected={
-                            behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD
-                        }
+                        aria-selected={behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD}
                         value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
                     >
                         Migrering fra infotrygd
@@ -243,11 +224,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         toggles[ToggleNavn.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
                     ).map(årsak => {
                         return (
-                            <option
-                                key={årsak}
-                                aria-selected={behandlingsårsak.verdi === årsak}
-                                value={årsak}
-                            >
+                            <option key={årsak} aria-selected={behandlingsårsak.verdi === årsak} value={årsak}>
                                 {behandlingÅrsak[årsak]}
                             </option>
                         );
@@ -255,29 +232,19 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 </Select>
             )}
 
-            {erHelmanuellMigrering &&
-                erOpprettBehandlingSkjema(skjema) &&
-                skjema.felter.valgteBarn?.erSynlig && (
-                    <UNSAFE_Combobox
-                        label={'Legg til juridiske barn for migrering'}
-                        isMultiSelect
-                        readOnly={erLesevisning}
-                        options={barn}
-                        onToggleSelected={(valgtOption: string, isSelected: boolean) =>
-                            onOptionSelected(
-                                valgtOption,
-                                isSelected,
-                                skjema.felter.valgteBarn,
-                                barn
-                            )
-                        }
-                        selectedOptions={skjema.felter.valgteBarn.verdi.map(barn => barn.value)}
-                        error={
-                            skjema.felter.valgteBarn.hentNavInputProps(skjema.visFeilmeldinger)
-                                .error
-                        }
-                    />
-                )}
+            {erHelmanuellMigrering && erOpprettBehandlingSkjema(skjema) && skjema.felter.valgteBarn?.erSynlig && (
+                <UNSAFE_Combobox
+                    label={'Legg til juridiske barn for migrering'}
+                    isMultiSelect
+                    readOnly={erLesevisning}
+                    options={barn}
+                    onToggleSelected={(valgtOption: string, isSelected: boolean) =>
+                        onOptionSelected(valgtOption, isSelected, skjema.felter.valgteBarn, barn)
+                    }
+                    selectedOptions={skjema.felter.valgteBarn.verdi.map(barn => barn.value)}
+                    error={skjema.felter.valgteBarn.hentNavInputProps(skjema.visFeilmeldinger).error}
+                />
+            )}
             {behandlingstema.erSynlig && (
                 <BehandlingstemaSelect
                     behandlingstema={behandlingstema}

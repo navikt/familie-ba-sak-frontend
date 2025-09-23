@@ -13,9 +13,7 @@ import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../typer/vilkår';
 
 const harFyltInnIdent = (felt: FeltState<string>): FeltState<string> => {
-    return /^\d{11}$/.test(felt.verdi.replace(' ', ''))
-        ? ok(felt)
-        : feil(felt, 'Identen har ikke 11 tall');
+    return /^\d{11}$/.test(felt.verdi.replace(' ', '')) ? ok(felt) : feil(felt, 'Identen har ikke 11 tall');
 };
 
 const validerIdent = (felt: FeltState<string>): FeltState<string> => {
@@ -32,9 +30,7 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
 };
 
 const harFyltInnOrgnr = (felt: FeltState<string>): FeltState<string> => {
-    return /^\d{9}$/.test(felt.verdi.replace(' ', ''))
-        ? ok(felt)
-        : feil(felt, 'Orgnummer har ikke 9 tall');
+    return /^\d{9}$/.test(felt.verdi.replace(' ', '')) ? ok(felt) : feil(felt, 'Orgnummer har ikke 9 tall');
 };
 
 export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<string> => {
@@ -70,8 +66,7 @@ export const erPeriodeGyldig = (
     avhengigheter?: Avhengigheter
 ): FeltState<IIsoDatoPeriode> => {
     const person: IGrunnlagPerson | undefined = avhengigheter?.person;
-    const erEksplisittAvslagPåSøknad: boolean | undefined =
-        avhengigheter?.erEksplisittAvslagPåSøknad;
+    const erEksplisittAvslagPåSøknad: boolean | undefined = avhengigheter?.erEksplisittAvslagPåSøknad;
     const er18ÅrsVilkår: boolean | undefined = avhengigheter?.er18ÅrsVilkår;
 
     if (felt.verdi.fom) {
@@ -89,10 +84,7 @@ export const erPeriodeGyldig = (
                 return feil(felt, 'Du kan ikke legge til periode før barnets fødselsdato');
             }
             if (er18ÅrsVilkår && finnesDatoEtterFødselsdatoPluss18(person, fom, tom)) {
-                return feil(
-                    felt,
-                    'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år'
-                );
+                return feil(felt, 'Du kan ikke legge til periode på dette vilkåret fra barnet har fylt 18 år');
             }
         }
 
@@ -101,18 +93,12 @@ export const erPeriodeGyldig = (
             !!person?.dødsfallDato && isSameDay(fom, isoStringTilDate(person.dødsfallDato));
 
         if (erNesteMånedEllerSenere(fom)) {
-            return feil(
-                felt,
-                'Du kan ikke legge inn fra og med dato som er i neste måned eller senere'
-            );
+            return feil(felt, 'Du kan ikke legge inn fra og med dato som er i neste måned eller senere');
         }
 
         if (!erUendelig(tom)) {
             if (!er18ÅrsVilkår && erNesteMånedEllerSenere(tom)) {
-                return feil(
-                    felt,
-                    'Du kan ikke legge inn til og med dato som er i neste måned eller senere'
-                );
+                return feil(felt, 'Du kan ikke legge inn til og med dato som er i neste måned eller senere');
             }
 
             if (person?.dødsfallDato) {
@@ -138,10 +124,7 @@ export const erPeriodeGyldig = (
     }
 };
 
-export const erResultatGyldig = (
-    felt: FeltState<Resultat>,
-    avhengigheter?: Avhengigheter
-): FeltState<Resultat> => {
+export const erResultatGyldig = (felt: FeltState<Resultat>, avhengigheter?: Avhengigheter): FeltState<Resultat> => {
     return (avhengigheter?.vurderesEtter !== Regelverk.EØS_FORORDNINGEN &&
         avhengigheter?.resultatBegrunnelse === ResultatBegrunnelse.IKKE_AKTUELT) ||
         felt.verdi === Resultat.IKKE_VURDERT
@@ -153,8 +136,7 @@ export const erAvslagBegrunnelserGyldig = (
     felt: FeltState<VedtakBegrunnelse[]>,
     avhengigheter?: Avhengigheter
 ): FeltState<VedtakBegrunnelse[]> => {
-    const erEksplisittAvslagPåSøknad: boolean | undefined =
-        avhengigheter?.erEksplisittAvslagPåSøknad;
+    const erEksplisittAvslagPåSøknad: boolean | undefined = avhengigheter?.erEksplisittAvslagPåSøknad;
     return erEksplisittAvslagPåSøknad && !felt.verdi.length
         ? feil(felt, 'Du må velge minst en begrunnelse ved avslag')
         : ok(felt);
@@ -162,10 +144,7 @@ export const erAvslagBegrunnelserGyldig = (
 
 const ikkeUtfyltFelt = 'Feltet er påkrevd, men mangler input';
 
-export const lagInitiellFelt = <Value>(
-    value: Value,
-    valideringsfunksjon: ValiderFelt<Value>
-): FeltState<Value> => {
+export const lagInitiellFelt = <Value>(value: Value, valideringsfunksjon: ValiderFelt<Value>): FeltState<Value> => {
     return {
         feilmelding: ikkeUtfyltFelt,
         valider: valideringsfunksjon,
@@ -178,10 +157,7 @@ export const ikkeValider = <Value>(felt: FeltState<Value>): FeltState<Value> => 
     return ok(felt);
 };
 
-export const erBegrunnelseGyldig = (
-    felt: FeltState<string>,
-    avhengigheter?: Avhengigheter
-): FeltState<string> => {
+export const erBegrunnelseGyldig = (felt: FeltState<string>, avhengigheter?: Avhengigheter): FeltState<string> => {
     if (avhengigheter?.vilkårType === VilkårType.UTVIDET_BARNETRYGD) {
         return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
     }
@@ -202,9 +178,7 @@ export const erBegrunnelseGyldig = (
                 avhengigheter?.personType === PersonType.SØKER &&
                 avhengigheter?.vilkårType === VilkårType.BOSATT_I_RIKET
             ) {
-                return felt.verdi.length > 0
-                    ? ok(felt)
-                    : feil(felt, 'Du må fylle inn en begrunnelse');
+                return felt.verdi.length > 0 ? ok(felt) : feil(felt, 'Du må fylle inn en begrunnelse');
             }
             return ok(felt);
         }
@@ -242,9 +216,7 @@ export const erLik0 = (string: string) => {
     return Number.isInteger(tall) && tall === 0;
 };
 
-export const erAdresseBeskyttet = (
-    adresseBeskyttelsesGradering: Adressebeskyttelsegradering | undefined
-) => {
+export const erAdresseBeskyttet = (adresseBeskyttelsesGradering: Adressebeskyttelsegradering | undefined) => {
     return (
         adresseBeskyttelsesGradering !== undefined &&
         adresseBeskyttelsesGradering !== null &&

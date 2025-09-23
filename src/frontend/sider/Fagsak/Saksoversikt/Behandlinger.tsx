@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-    Alert,
-    BodyShort,
-    Fieldset,
-    Heading,
-    HStack,
-    Skeleton,
-    Table,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Fieldset, Heading, HStack, Skeleton, Table, VStack } from '@navikt/ds-react';
 
 import { Behandling } from './Behandling';
 import { filtrertOgSorterSaksoversiktbehandlinger, type Saksoversiktsbehandling } from './utils';
@@ -73,9 +64,7 @@ export function Behandlinger({ fagsakId }: Props) {
     const [visMånedligeValutajusteringer, setVisMånedligeValutajusteringer] = useState(false);
 
     const behandlingerLaster =
-        hentKlagebehandlingLaster ||
-        hentTilbakekrevingsbehandlingerLaster ||
-        hentBarnetrygdbehandlingerLaster;
+        hentKlagebehandlingLaster || hentTilbakekrevingsbehandlingerLaster || hentBarnetrygdbehandlingerLaster;
 
     if (behandlingerLaster) {
         return (
@@ -105,13 +94,9 @@ export function Behandlinger({ fagsakId }: Props) {
             {hentBarnetrygdbehandlingerError !== null && (
                 <Alert variant={'warning'}>
                     <VStack gap={'4'}>
-                        <BodyShort>
-                            Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.
-                        </BodyShort>
+                        <BodyShort>Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {hentBarnetrygdbehandlingerError.message && (
-                            <BodyShort>
-                                Feilmelding: {hentBarnetrygdbehandlingerError.message}
-                            </BodyShort>
+                            <BodyShort>Feilmelding: {hentBarnetrygdbehandlingerError.message}</BodyShort>
                         )}
                     </VStack>
                 </Alert>
@@ -119,9 +104,7 @@ export function Behandlinger({ fagsakId }: Props) {
             {hentKlagebehandlingError !== null && (
                 <Alert variant={'warning'}>
                     <VStack gap={'4'}>
-                        <BodyShort>
-                            Klagebehandlinger er ikke tilgjengelig for øyeblikket.
-                        </BodyShort>
+                        <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {hentKlagebehandlingError.message && (
                             <BodyShort>Feilmelding: {hentKlagebehandlingError.message}</BodyShort>
                         )}
@@ -131,13 +114,9 @@ export function Behandlinger({ fagsakId }: Props) {
             {hentTilbakekrevingsbehandlingerError !== null && (
                 <Alert variant={'warning'}>
                     <VStack gap={'4'}>
-                        <BodyShort>
-                            Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.
-                        </BodyShort>
+                        <BodyShort>Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {hentTilbakekrevingsbehandlingerError.message && (
-                            <BodyShort>
-                                Feilmelding: {hentTilbakekrevingsbehandlingerError.message}
-                            </BodyShort>
+                            <BodyShort>Feilmelding: {hentTilbakekrevingsbehandlingerError.message}</BodyShort>
                         )}
                     </VStack>
                 </Alert>
@@ -177,9 +156,7 @@ export function Behandlinger({ fagsakId }: Props) {
                     </Table.Body>
                 </Table>
             )}
-            {saksoversiktbehandlinger.length === 0 && (
-                <BodyShort>Ingen tidligere behandlinger</BodyShort>
-            )}
+            {saksoversiktbehandlinger.length === 0 && <BodyShort>Ingen tidligere behandlinger</BodyShort>}
         </VStack>
     );
 }

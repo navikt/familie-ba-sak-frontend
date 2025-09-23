@@ -8,10 +8,7 @@ export const HentPersonEnkelQueryKeyFactory = {
     personEnkel: (personIdent: string) => ['person_enkel', personIdent],
 };
 
-type Parameters = Omit<
-    UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>,
-    'queryKey' | 'queryFn' | 'gcTime'
-> & {
+type Parameters = Omit<UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>, 'queryKey' | 'queryFn' | 'gcTime'> & {
     personIdent: string;
 };
 

@@ -151,9 +151,7 @@ describe('Utdypende Vilkårsvurderinger', () => {
                 vilkårType: VilkårType.BOR_MED_SØKER,
             }
         );
-        expect(actualKombinasjonUgyldig).toBe(
-            'Du kan kun velge ett alternativ for hvem barnet bor med'
-        );
+        expect(actualKombinasjonUgyldig).toBe('Du kan kun velge ett alternativ for hvem barnet bor med');
     });
 
     it('EØS - vilkår ikke oppfylt - feltet skal ikke fylles ut og skal ikke være obligatorisk', () => {

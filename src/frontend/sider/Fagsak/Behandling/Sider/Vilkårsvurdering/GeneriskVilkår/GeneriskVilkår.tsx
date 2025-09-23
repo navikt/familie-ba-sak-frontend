@@ -49,8 +49,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     generiskVilkårKey,
 }) => {
     const { toggles } = useAppContext();
-    const { behandling, vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } =
-        useBehandlingContext();
+    const { behandling, vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
@@ -79,9 +78,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     settFeilmelding(oppdatertBehandling.frontendFeilmelding);
                     settVisFeilmeldingerForVilkår(true);
                 } else {
-                    settFeilmelding(
-                        'En ukjent feil har oppstått, vi har ikke klart å legge til periode.'
-                    );
+                    settFeilmelding('En ukjent feil har oppstått, vi har ikke klart å legge til periode.');
                     settVisFeilmeldingerForVilkår(true);
                 }
             })
@@ -128,9 +125,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 hideLegend
             >
                 <HStack gap="4" align="center">
-                    {skalViseLyspære && (
-                        <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />
-                    )}
+                    {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />}
                     <Heading size="medium" level="3">
                         {vilkårFraConfig.tittel}
                     </Heading>
@@ -145,10 +140,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 {skalViseLeggTilKnapp() && (
                     <UtførKnapp
                         onClick={() => {
-                            const promise = postVilkår(
-                                person.personIdent,
-                                vilkårFraConfig.key as VilkårType
-                            );
+                            const promise = postVilkår(person.personIdent, vilkårFraConfig.key as VilkårType);
                             håndterNyPeriodeVilkårsvurdering(promise);
                         }}
                         id={leggTilPeriodeKnappId}

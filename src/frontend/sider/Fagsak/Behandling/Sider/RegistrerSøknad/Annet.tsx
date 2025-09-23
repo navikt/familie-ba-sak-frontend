@@ -21,9 +21,7 @@ const Annet: React.FunctionComponent = () => {
             <Heading size={'medium'} level={'2'} children={'Annet'} />
             <br />
             <Textarea
-                {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(
-                    skjema.visFeilmeldinger
-                )}
+                {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
                 readOnly={lesevisning}
                 label={!lesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
                 maxLength={2000}

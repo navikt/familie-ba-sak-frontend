@@ -8,10 +8,7 @@ interface IProps {
     data: Utsendingsinfo;
 }
 
-export const UtsendingsinfoModal: React.FC<IProps> = ({
-    onClose,
-    data: { digitalpostSendt, fysiskpostSendt },
-}) => {
+export const UtsendingsinfoModal: React.FC<IProps> = ({ onClose, data: { digitalpostSendt, fysiskpostSendt } }) => {
     const tittel = digitalpostSendt ? 'Digital post sendt' : 'Sendt per post';
     const adresse = digitalpostSendt?.adresse || fysiskpostSendt?.adressetekstKonvolutt;
     return (

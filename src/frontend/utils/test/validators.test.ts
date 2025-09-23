@@ -51,9 +51,7 @@ describe('utils/validators', () => {
     };
 
     test('Periode med ugyldig fom gir feil', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('400220', undefined)
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('400220', undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -63,9 +61,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med ugyldig tom gir feil', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2020-06-17', '400220')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2020-06-17', '400220'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -75,9 +71,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode uten datoer gir feil hvis ikke avslag', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode(undefined, undefined)
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode(undefined, undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -87,9 +81,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode uten fom-dato gir feil hvis avslag og tom-dato er satt', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode(undefined, '2010-05-17')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode(undefined, '2010-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
@@ -101,9 +93,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode uten fom-dato, tom-dato og som er avslag gir ok', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode(undefined, undefined)
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode(undefined, undefined));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
@@ -112,9 +102,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med fom-dato på oppfylt periode senere enn tom', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2010-06-17', '2010-01-17')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2010-06-17', '2010-01-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: true,
@@ -124,37 +112,27 @@ describe('utils/validators', () => {
     });
 
     test('Periode med fom-dato før barnets fødselsdato på oppfylt periode gir feil', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('1999-05-17', '2018-05-17')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('1999-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
-        expect(valideringsresultat.feilmelding).toEqual(
-            'Du kan ikke legge til periode før barnets fødselsdato'
-        );
+        expect(valideringsresultat.feilmelding).toEqual('Du kan ikke legge til periode før barnets fødselsdato');
     });
 
     test('Periode med tom-dato etter barnets dødsfalldato gir feil', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2000-05-17', '2021-05-17')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2000-05-17', '2021-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture({ dødsfallDato: '2020-12-12' }),
             erEksplisittAvslagPåSøknad: false,
         });
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.FEIL);
-        expect(valideringsresultat.feilmelding).toEqual(
-            'Du kan ikke sette til og med dato etter dødsfalldato'
-        );
+        expect(valideringsresultat.feilmelding).toEqual('Du kan ikke sette til og med dato etter dødsfalldato');
     });
 
     test('Periode med fom-dato lik som tom-dato skal ikke være mulig dersom det ikke er barnets dødsfallsdato', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2020-12-12', '2020-12-12')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2020-12-12', '2020-12-12'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -164,9 +142,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med fom-dato lik som tom-dato skal være mulig dersom det er barnets dødsfallsdato', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2020-12-12', '2020-12-12')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2020-12-12', '2020-12-12'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture({ dødsfallDato: '2020-12-12' }),
             erEksplisittAvslagPåSøknad: false,
@@ -175,9 +151,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med etter barnets fødselsdato gir feil på 18 årsvilkåret', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2000-05-17', '2018-05-17')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2000-05-17', '2018-05-17'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -190,9 +164,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med etter barnets fødselsdato gir ok på andre vilkår', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2000-05-17', '2018-05-18')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2000-05-17', '2018-05-18'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -201,9 +173,7 @@ describe('utils/validators', () => {
     });
 
     test('Periode med innenfor 18 år gir ok på 18 årsvilkåret', () => {
-        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(
-            nyIsoDatoPeriode('2000-05-17', '2018-05-16')
-        );
+        const periode: FeltState<IIsoDatoPeriode> = nyFeltState(nyIsoDatoPeriode('2000-05-17', '2018-05-16'));
         const valideringsresultat = erPeriodeGyldig(periode, {
             person: grunnlagPersonFixture(),
             erEksplisittAvslagPåSøknad: false,
@@ -227,25 +197,16 @@ describe('utils/validators', () => {
             utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingNasjonal.VURDERT_MEDLEMSKAP],
             regelverk: Regelverk.NASJONALE_REGLER,
         });
-        expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
+        expect(valideringMedlemskapVurdertManglerBegrunnelse.valideringsstatus).toEqual(Valideringsstatus.FEIL);
         expect(valideringMedlemskapVurdertManglerBegrunnelse.feilmelding).toBe(
             'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
 
-        const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [
-                    UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG,
-                ],
-                regelverk: Regelverk.NASJONALE_REGLER,
-            }
-        );
-        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
+        const valideringSkjønnsmessigVurderingManglerBegrunnelse = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingGenerell.VURDERING_ANNET_GRUNNLAG],
+            regelverk: Regelverk.NASJONALE_REGLER,
+        });
+        expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.valideringsstatus).toEqual(Valideringsstatus.FEIL);
         expect(valideringSkjønnsmessigVurderingManglerBegrunnelse.feilmelding).toBe(
             'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
@@ -254,97 +215,66 @@ describe('utils/validators', () => {
             utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingDeltBosted.DELT_BOSTED],
             regelverk: Regelverk.NASJONALE_REGLER,
         });
-        expect(valideringDeltBostedManglerBegrunnelse.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
+        expect(valideringDeltBostedManglerBegrunnelse.valideringsstatus).toEqual(Valideringsstatus.FEIL);
         expect(valideringDeltBostedManglerBegrunnelse.feilmelding).toBe(
             'Du har gjort ett eller flere valg under "Utdypende vilkårsvurdering" og må derfor fylle inn en begrunnelse'
         );
 
-        const valideringManglerBegrunnelseForSøkerMedUtvidetVilkår = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [],
-                regelverk: Regelverk.NASJONALE_REGLER,
-                vilkårType: VilkårType.UTVIDET_BARNETRYGD,
-                personType: PersonType.SØKER,
-            }
-        );
-        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
-        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.feilmelding).toBe(
-            'Du må fylle inn en begrunnelse'
-        );
+        const valideringManglerBegrunnelseForSøkerMedUtvidetVilkår = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [],
+            regelverk: Regelverk.NASJONALE_REGLER,
+            vilkårType: VilkårType.UTVIDET_BARNETRYGD,
+            personType: PersonType.SØKER,
+        });
+        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.feilmelding).toBe('Du må fylle inn en begrunnelse');
 
-        const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [],
-            }
-        );
-        expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(
-            Valideringsstatus.OK
-        );
+        const valideringBegrunnelseIkkeOppgittNårIngenErValgt = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [],
+        });
+        expect(valideringBegrunnelseIkkeOppgittNårIngenErValgt.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
 
     test('Begrunnelse validering for EØS forordningen', () => {
         const valideringValgfriBegrunnelseForBarn = erBegrunnelseGyldig(nyFeltState(''), {
-            utdypendeVilkårsvurderinger: [
-                UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER,
-            ],
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingEøsBarnBorMedSøker.BARN_BOR_I_EØS_MED_SØKER],
             regelverk: Regelverk.EØS_FORORDNINGEN,
             vilkårType: VilkårType.BOR_MED_SØKER,
             personType: PersonType.BARN,
         });
         expect(valideringValgfriBegrunnelseForBarn.valideringsstatus).toEqual(Valideringsstatus.OK);
 
-        const valideringValgfriBegrunnelseForSøkedMedVilkårTypeLovligOpphold = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [],
-                regelverk: Regelverk.EØS_FORORDNINGEN,
-                vilkårType: VilkårType.LOVLIG_OPPHOLD,
-                personType: PersonType.SØKER,
-            }
+        const valideringValgfriBegrunnelseForSøkedMedVilkårTypeLovligOpphold = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [],
+            regelverk: Regelverk.EØS_FORORDNINGEN,
+            vilkårType: VilkårType.LOVLIG_OPPHOLD,
+            personType: PersonType.SØKER,
+        });
+        expect(valideringValgfriBegrunnelseForSøkedMedVilkårTypeLovligOpphold.valideringsstatus).toEqual(
+            Valideringsstatus.OK
         );
-        expect(
-            valideringValgfriBegrunnelseForSøkedMedVilkårTypeLovligOpphold.valideringsstatus
-        ).toEqual(Valideringsstatus.OK);
 
-        const valideringManglerBegrunnelseForSøkerMedVilkårTypeBosattIRiket = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [
-                    UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING,
-                ],
-                regelverk: Regelverk.EØS_FORORDNINGEN,
-                vilkårType: VilkårType.BOSATT_I_RIKET,
-                personType: PersonType.SØKER,
-            }
+        const valideringManglerBegrunnelseForSøkerMedVilkårTypeBosattIRiket = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.OMFATTET_AV_NORSK_LOVGIVNING],
+            regelverk: Regelverk.EØS_FORORDNINGEN,
+            vilkårType: VilkårType.BOSATT_I_RIKET,
+            personType: PersonType.SØKER,
+        });
+        expect(valideringManglerBegrunnelseForSøkerMedVilkårTypeBosattIRiket.valideringsstatus).toEqual(
+            Valideringsstatus.FEIL
         );
-        expect(
-            valideringManglerBegrunnelseForSøkerMedVilkårTypeBosattIRiket.valideringsstatus
-        ).toEqual(Valideringsstatus.FEIL);
         expect(valideringManglerBegrunnelseForSøkerMedVilkårTypeBosattIRiket.feilmelding).toBe(
             'Du må fylle inn en begrunnelse'
         );
 
-        const valideringManglerBegrunnelseForSøkerMedUtvidetVilkår = erBegrunnelseGyldig(
-            nyFeltState(''),
-            {
-                utdypendeVilkårsvurderinger: [],
-                regelverk: Regelverk.EØS_FORORDNINGEN,
-                vilkårType: VilkårType.UTVIDET_BARNETRYGD,
-                personType: PersonType.SØKER,
-            }
-        );
-        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
-        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.feilmelding).toBe(
-            'Du må fylle inn en begrunnelse'
-        );
+        const valideringManglerBegrunnelseForSøkerMedUtvidetVilkår = erBegrunnelseGyldig(nyFeltState(''), {
+            utdypendeVilkårsvurderinger: [],
+            regelverk: Regelverk.EØS_FORORDNINGEN,
+            vilkårType: VilkårType.UTVIDET_BARNETRYGD,
+            personType: PersonType.SØKER,
+        });
+        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.valideringsstatus).toEqual(Valideringsstatus.FEIL);
+        expect(valideringManglerBegrunnelseForSøkerMedUtvidetVilkår.feilmelding).toBe('Du må fylle inn en begrunnelse');
     });
 
     test('Validering av ident', () => {
@@ -403,8 +333,6 @@ describe('utils/validators', () => {
             nyFeltState(utdypendeVilkårsvurderinger),
             utdypendeVilkårsvurderingAvhengigheter
         );
-        expect(valideringForMangeValgteAlternativer.valideringsstatus).toEqual(
-            Valideringsstatus.FEIL
-        );
+        expect(valideringForMangeValgteAlternativer.valideringsstatus).toEqual(Valideringsstatus.FEIL);
     });
 });

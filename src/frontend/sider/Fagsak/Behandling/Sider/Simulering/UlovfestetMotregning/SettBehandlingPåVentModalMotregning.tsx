@@ -3,22 +3,9 @@ import React, { useState } from 'react';
 import { addDays } from 'date-fns';
 import styled from 'styled-components';
 
-import {
-    BodyShort,
-    Button,
-    DatePicker,
-    Fieldset,
-    Modal,
-    Select,
-    useDatepicker,
-} from '@navikt/ds-react';
+import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import {
-    byggHenterRessurs,
-    byggTomRessurs,
-    type Ressurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { byggHenterRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 import {
@@ -43,10 +30,7 @@ interface IProps {
     behandling: IBehandling;
 }
 
-export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
-    lukkModal,
-    behandling,
-}) => {
+export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({ lukkModal, behandling }) => {
     const { settÅpenBehandling } = useBehandlingContext();
 
     const { request } = useHttp();
@@ -84,9 +68,7 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
             onClose={lukkModal}
             width={'37rem'}
             header={{
-                heading: erBehandlingAlleredePåVent
-                    ? 'Endre ventende behandling'
-                    : 'Sett behandling på vent',
+                heading: erBehandlingAlleredePåVent ? 'Endre ventende behandling' : 'Sett behandling på vent',
                 size: 'small',
             }}
             portal
@@ -98,14 +80,11 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
                     legend="Sett behandling på vent"
                     hideLegend
                 >
-                    {erBehandlingAlleredePåVent && (
-                        <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>
-                    )}
+                    {erBehandlingAlleredePåVent && <StyledBodyShort>Behandlingen er satt på vent.</StyledBodyShort>}
 
                     <StyledBodyShort>
-                        Behandlingen settes på vent i{' '}
-                        {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager mens vi venter på
-                        svar fra bruker.
+                        Behandlingen settes på vent i {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager mens vi
+                        venter på svar fra bruker.
                     </StyledBodyShort>
 
                     <Feltmargin>
@@ -130,13 +109,7 @@ export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({
                     loading={submitRessurs.status === RessursStatus.HENTER}
                     disabled={submitRessurs.status === RessursStatus.HENTER}
                 />
-                <Button
-                    variant={'tertiary'}
-                    key={'Avbryt'}
-                    size="medium"
-                    onClick={lukkModal}
-                    children={'Avbryt'}
-                />
+                <Button variant={'tertiary'} key={'Avbryt'} size="medium" onClick={lukkModal} children={'Avbryt'} />
             </Modal.Footer>
         </Modal>
     );

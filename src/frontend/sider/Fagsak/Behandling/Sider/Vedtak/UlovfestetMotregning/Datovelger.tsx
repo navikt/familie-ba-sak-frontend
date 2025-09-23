@@ -5,10 +5,7 @@ import { useController } from 'react-hook-form';
 
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
-import {
-    senesteRelevanteDato,
-    tidligsteRelevanteDato,
-} from '../../../../../../komponenter/Datovelger/utils';
+import { senesteRelevanteDato, tidligsteRelevanteDato } from '../../../../../../komponenter/Datovelger/utils';
 import { dateTilFormatertString, Datoformat } from '../../../../../../utils/dato';
 
 interface Props {

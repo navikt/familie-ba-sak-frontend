@@ -2,16 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {
-    Alert,
-    BodyShort,
-    Button,
-    ErrorMessage,
-    Fieldset,
-    Label,
-    Loader,
-    Modal,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, Fieldset, Label, Loader, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useEndringstidspunkt } from './useEndringstidspunkt';
@@ -36,8 +27,10 @@ interface IProps {
 
 export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, behandlingId }) => {
     const erLesevisning = useBehandlingContext().vurderErLesevisning();
-    const { endringstidspunktRessurs, endringstidspunkt, skjema, oppdaterEndringstidspunkt } =
-        useEndringstidspunkt({ behandlingId, lukkModal });
+    const { endringstidspunktRessurs, endringstidspunkt, skjema, oppdaterEndringstidspunkt } = useEndringstidspunkt({
+        behandlingId,
+        lukkModal,
+    });
 
     return (
         <Modal
@@ -49,8 +42,8 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
         >
             <Modal.Body>
                 <StyledAlert inline variant={'info'}>
-                    Dersom du ønsker å vise perioder som er filtrert bort i vedtaksbildet, kan du
-                    oppdatere endringstidspunktet tilbake i tid.
+                    Dersom du ønsker å vise perioder som er filtrert bort i vedtaksbildet, kan du oppdatere
+                    endringstidspunktet tilbake i tid.
                 </StyledAlert>
 
                 <Label size="medium">Endringstidspunkt</Label>
@@ -72,8 +65,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                     endringstidspunktRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                     endringstidspunktRessurs.status === RessursStatus.IKKE_TILGANG) && (
                     <ErrorMessage>
-                        Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt
-                        brukerstøtte.
+                        Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt brukerstøtte.
                     </ErrorMessage>
                 )}
 
@@ -107,12 +99,7 @@ export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, be
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         />
-                        <Button
-                            variant={'tertiary'}
-                            key={'Avbryt'}
-                            onClick={lukkModal}
-                            children={'Avbryt'}
-                        />
+                        <Button variant={'tertiary'} key={'Avbryt'} onClick={lukkModal} children={'Avbryt'} />
                     </>
                 )}
             </Modal.Footer>

@@ -39,11 +39,7 @@ const EndreBehandlingstema: React.FC = () => {
                     portal
                 >
                     <Modal.Body>
-                        <Fieldset
-                            error={hentFrontendFeilmelding(ressurs)}
-                            legend="Endre behandlingstema"
-                            hideLegend
-                        >
+                        <Fieldset error={hentFrontendFeilmelding(ressurs)} legend="Endre behandlingstema" hideLegend>
                             <BehandlingstemaSelect
                                 behandlingstema={skjema.felter.behandlingstema}
                                 fagsakType={fagsak.fagsakType}

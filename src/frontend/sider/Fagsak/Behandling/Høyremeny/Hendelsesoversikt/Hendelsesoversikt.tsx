@@ -21,9 +21,7 @@ interface IHendelsesoversiktProps {
     bruker: IPersonInfo;
 }
 
-const tilHendelseItem = (hendelse: Hendelse) => (
-    <HendelseItem key={hendelse.id} hendelse={hendelse} />
-);
+const tilHendelseItem = (hendelse: Hendelse) => <HendelseItem key={hendelse.id} hendelse={hendelse} />;
 
 const høydePersonlinje = '8rem';
 const høydeBehandlingskort = '18rem';
@@ -57,17 +55,13 @@ const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesove
                 settAktivTab={settAktivTab}
                 skalViseTotrinnskontroll={skalViseTotrinnskontroll}
             />
-            {aktivTab === Tabs.Totrinnskontroll && (
-                <Totrinnskontroll åpenBehandling={åpenBehandling} />
-            )}
+            {aktivTab === Tabs.Totrinnskontroll && <Totrinnskontroll åpenBehandling={åpenBehandling} />}
             {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                 <HistorikkTab>
                     <HistorikkListe>{hendelser?.map(tilHendelseItem)}</HistorikkListe>
                 </HistorikkTab>
             )}
-            {aktivTab === Tabs.Meldinger && (
-                <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />
-            )}
+            {aktivTab === Tabs.Meldinger && <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />}
         </div>
     );
 };

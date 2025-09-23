@@ -5,10 +5,7 @@ import styled from 'styled-components';
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
-import {
-    behandlingUnderkategori,
-    BehandlingUnderkategori,
-} from '../../../../../typer/behandlingstema';
+import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const StyledRadioGroup = styled(RadioGroup)`

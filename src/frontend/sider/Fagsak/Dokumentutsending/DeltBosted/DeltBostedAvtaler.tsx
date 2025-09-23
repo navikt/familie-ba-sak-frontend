@@ -39,13 +39,8 @@ const LeggTilAvtaleKnapp = styled(Button)`
     margin-bottom: 1rem;
 `;
 
-const DeltBostedAvtaler: React.FC<IProps> = ({
-    barn,
-    avtalerOmDeltBostedPerBarnFelt,
-    visFeilmeldinger,
-}) => {
-    const avtalerOmDeltBosted: IsoDatoString[] =
-        avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
+const DeltBostedAvtaler: React.FC<IProps> = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }) => {
+    const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: IsoDatoString) => {
         if (!visFeilmeldinger) return undefined;
@@ -69,9 +64,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                         <DatovelgerOgSlettknapp feil={feilmelding !== undefined}>
                             <DatovelgerForGammelSkjemaløsning
                                 label={'Dato for avtale om delt bosted'}
-                                minDatoAvgrensning={
-                                    barn.fødselsdato ? new Date(barn.fødselsdato) : undefined
-                                }
+                                minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}
                                 value={avtaleDato}
                                 visFeilmeldinger={feilmelding !== undefined}
                                 feilmelding={feilmelding}
@@ -79,11 +72,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                     avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
                                         ...avtalerOmDeltBostedPerBarnFelt.verdi,
                                         [barn.ident]: avtalerOmDeltBosted.reduce(
-                                            (
-                                                acc: string[],
-                                                forrigeAvtaleDato: string,
-                                                reduceIndex: number
-                                            ) => {
+                                            (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
                                                 if (index === reduceIndex) {
                                                     return [...acc, dato ?? ''];
                                                 } else {
@@ -104,11 +93,7 @@ const DeltBostedAvtaler: React.FC<IProps> = ({
                                         avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
                                             ...avtalerOmDeltBostedPerBarnFelt.verdi,
                                             [barn.ident]: avtalerOmDeltBosted.reduce(
-                                                (
-                                                    acc: string[],
-                                                    forrigeAvtaleDato: string,
-                                                    reduceIndex: number
-                                                ) => {
+                                                (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
                                                     if (index === reduceIndex) {
                                                         return acc;
                                                     } else {

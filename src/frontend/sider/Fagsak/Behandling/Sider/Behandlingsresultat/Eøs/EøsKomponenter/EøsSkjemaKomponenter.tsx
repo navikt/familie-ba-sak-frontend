@@ -4,12 +4,7 @@ import styled from 'styled-components';
 
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
-import {
-    ABorderDanger,
-    ABorderDefault,
-    ABorderWarning,
-    ASurfaceAction,
-} from '@navikt/ds-tokens/dist/tokens';
+import { ABorderDanger, ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
 import { EøsPeriodeStatus, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
@@ -66,11 +61,7 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
             <Table.DataCell>
                 <HStack wrap={false} align="center" gap="4">
                     {props.vurderingsform === Vurderingsform.AUTOMATISK ? (
-                        <StyledCogRotationIcon
-                            title="Automatisk vurdert"
-                            fontSize="1.5rem"
-                            width="1.5rem"
-                        />
+                        <StyledCogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
                     ) : (
                         <StatusIkon status={mapEøsPeriodeStatusTilStatus[props.status]} />
                     )}

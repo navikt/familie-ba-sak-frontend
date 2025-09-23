@@ -18,10 +18,7 @@ interface IMockSøker {
     personIdent?: string;
 }
 
-export const mockSøker = ({
-    målform = Målform.NB,
-    personIdent = '12345678930',
-}: IMockSøker = {}): IGrunnlagPerson => ({
+export const mockSøker = ({ målform = Målform.NB, personIdent = '12345678930' }: IMockSøker = {}): IGrunnlagPerson => ({
     personIdent: personIdent,
     fødselsdato: '1979-01-14',
     type: PersonType.SØKER,

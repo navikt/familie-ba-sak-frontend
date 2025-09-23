@@ -55,9 +55,7 @@ export function SamhandlerTabell({ samhandler, slettSamhandler, readOnly }: Prop
                         <Table.Row key={index}>
                             <Table.DataCell>{adresseType}</Table.DataCell>
                             <Table.DataCell>
-                                {formaterTekstStorForbokstav(
-                                    `${adresselinjer}, ${postNr} ${postSted}`
-                                )}
+                                {formaterTekstStorForbokstav(`${adresselinjer}, ${postNr} ${postSted}`)}
                             </Table.DataCell>
                         </Table.Row>
                     );

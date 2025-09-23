@@ -38,13 +38,8 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
-    const {
-        hentForhåndsvisning,
-        nullstillDokument,
-        visDokumentModal,
-        hentetDokument,
-        settVisDokumentModal,
-    } = useDokument();
+    const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
+        useDokument();
     const {
         visRefusjonEøs,
         settVisRefusjonEøs,
@@ -57,8 +52,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const { oppdaterTilbakekrevingsvedtakMotregning } =
-        useTilbakekrevingsvedtakMotregning(åpenBehandling);
+    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
 
@@ -85,8 +79,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
             rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
-        const httpMethod =
-            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
+        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         hentForhåndsvisning({
             method: httpMethod,
@@ -107,8 +100,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
             rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
-        const httpMethod =
-            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
+        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         hentForhåndsvisning({
             method: httpMethod,
@@ -134,9 +126,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                     </BehandlingKorrigertAlert>
                 )}
                 {åpenBehandling.korrigertVedtak && (
-                    <BehandlingKorrigertAlert variant="info">
-                        Vedtaket er korrigert etter § 35
-                    </BehandlingKorrigertAlert>
+                    <BehandlingKorrigertAlert variant="info">Vedtaket er korrigert etter § 35</BehandlingKorrigertAlert>
                 )}
                 <BrevmottakereAlert
                     bruker={bruker}
@@ -159,9 +149,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                             <>
                                 <Vedtaksperioder
                                     åpenBehandling={åpenBehandling}
-                                    vedtaksperioderMedBegrunnelserRessurs={
-                                        vedtaksperioderMedBegrunnelserRessurs
-                                    }
+                                    vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
                                 />
                                 {visFeilutbetaltValuta && (
                                     <FeilutbetaltValuta
@@ -172,9 +160,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                             settErUlagretNyFeilutbetaltValutaPeriode
                                         }
                                         erLesevisning={erLesevisning}
-                                        skjulFeilutbetaltValuta={() =>
-                                            settVisFeilutbetaltValuta(false)
-                                        }
+                                        skjulFeilutbetaltValuta={() => settVisFeilutbetaltValuta(false)}
                                     />
                                 )}
                                 {visRefusjonEøs && (
@@ -182,9 +168,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                         refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
                                         behandlingId={åpenBehandling.behandlingId}
                                         fagsakId={fagsakId}
-                                        settErUlagretNyRefusjonEøsPeriode={
-                                            settErUlagretNyRefusjonEøsPeriode
-                                        }
+                                        settErUlagretNyRefusjonEøsPeriode={settErUlagretNyRefusjonEøsPeriode}
                                         skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}
@@ -208,16 +192,10 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
                 {åpenBehandling.tilbakekrevingsvedtakMotregning !== null && (
                     <TilbakekrevingsvedtakMotregning
-                        tilbakekrevingsvedtakMotregning={
-                            åpenBehandling.tilbakekrevingsvedtakMotregning
-                        }
-                        oppdaterTilbakekrevingsvedtakMotregning={
-                            oppdaterTilbakekrevingsvedtakMotregning
-                        }
+                        tilbakekrevingsvedtakMotregning={åpenBehandling.tilbakekrevingsvedtakMotregning}
+                        oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
                         settVisDokumentModal={settVisDokumentModal}
-                        hentBrevForTilbakekrevingsvedtakMotregning={
-                            hentBrevForTilbakekrevingsvedtakMotregning
-                        }
+                        hentBrevForTilbakekrevingsvedtakMotregning={hentBrevForTilbakekrevingsvedtakMotregning}
                         hentetDokument={hentetDokument}
                         erLesevisning={erLesevisning}
                     />

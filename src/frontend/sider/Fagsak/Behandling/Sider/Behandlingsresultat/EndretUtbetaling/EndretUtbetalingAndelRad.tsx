@@ -97,11 +97,7 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             <Table.DataCell>
                 <PersonCelle>
                     <StatusIkon
-                        status={
-                            lagretEndretUtbetalingAndel.erTilknyttetAndeler
-                                ? Status.OK
-                                : Status.ADVARSEL
-                        }
+                        status={lagretEndretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL}
                     />
                     <BodyShort size={'small'}>
                         {lagretEndretUtbetalingAndel.personIdenter.length > 0
@@ -129,19 +125,13 @@ const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRa
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {lagretEndretUtbetalingAndel.årsak
-                        ? årsakTekst[lagretEndretUtbetalingAndel.årsak]
-                        : ''}
+                    {lagretEndretUtbetalingAndel.årsak ? årsakTekst[lagretEndretUtbetalingAndel.årsak] : ''}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {typeof lagretEndretUtbetalingAndel.prosent === 'number' &&
-                    lagretEndretUtbetalingAndel.årsak
-                        ? fraProsentTilTekst(
-                              lagretEndretUtbetalingAndel.prosent,
-                              lagretEndretUtbetalingAndel.årsak
-                          )
+                    {typeof lagretEndretUtbetalingAndel.prosent === 'number' && lagretEndretUtbetalingAndel.årsak
+                        ? fraProsentTilTekst(lagretEndretUtbetalingAndel.prosent, lagretEndretUtbetalingAndel.årsak)
                         : ''}
                 </BodyShort>
             </Table.DataCell>

@@ -14,25 +14,18 @@ export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =
           ? 'Under behandling'
           : fagsakStatus[minimalFagsak.status].navn;
 
-export const hentAktivBehandlingPåMinimalFagsak = (
-    minimalFagsak: IMinimalFagsak
-): VisningBehandling | undefined => {
+export const hentAktivBehandlingPåMinimalFagsak = (minimalFagsak: IMinimalFagsak): VisningBehandling | undefined => {
     return minimalFagsak.behandlinger.find((behandling: VisningBehandling) => behandling.aktiv);
 };
 
-export const hentSisteIkkeHenlagteBehandling = (
-    fagsak?: IMinimalFagsak
-): VisningBehandling | undefined => {
+export const hentSisteIkkeHenlagteBehandling = (fagsak?: IMinimalFagsak): VisningBehandling | undefined => {
     const filtrerteBehandlinger =
         fagsak?.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)) || [];
     if (filtrerteBehandlinger.length === 0) {
         return undefined;
     } else {
         return filtrerteBehandlinger.sort((a, b) =>
-            differenceInMilliseconds(
-                isoStringTilDate(b.opprettetTidspunkt),
-                isoStringTilDate(a.opprettetTidspunkt)
-            )
+            differenceInMilliseconds(isoStringTilDate(b.opprettetTidspunkt), isoStringTilDate(a.opprettetTidspunkt))
         )[0];
     }
 };
@@ -52,12 +45,9 @@ export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak): Se
             utbetalingsperiode.utbetalingsperiodeDetaljer
                 .filter(
                     utbetalingsperiodeDetalj =>
-                        utbetalingsperiodeDetalj.endringsårsak !==
-                        IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
+                        utbetalingsperiodeDetalj.endringsårsak !== IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER
                 )
-                .map(utbetalingsperiodeDetalj =>
-                    acc.add(utbetalingsperiodeDetalj.person.personIdent)
-                );
+                .map(utbetalingsperiodeDetalj => acc.add(utbetalingsperiodeDetalj.person.personIdent));
 
             return acc;
         }, new Set<string>());

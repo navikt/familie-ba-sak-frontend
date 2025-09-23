@@ -67,20 +67,18 @@ const VilkårTabell: React.FC<IProps> = ({
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {vilkårResultater.map(
-                    (vilkårResultat: FeltState<IVilkårResultat>, index: number) => {
-                        return (
-                            <VilkårTabellRad
-                                key={`${index}_${person.fødselsdato}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
-                                vilkårFraConfig={vilkårFraConfig}
-                                person={person}
-                                vilkårResultat={vilkårResultat}
-                                visFeilmeldinger={visFeilmeldinger}
-                                settFokusPåKnapp={settFokusPåKnapp}
-                            />
-                        );
-                    }
-                )}
+                {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>, index: number) => {
+                    return (
+                        <VilkårTabellRad
+                            key={`${index}_${person.fødselsdato}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                            vilkårFraConfig={vilkårFraConfig}
+                            person={person}
+                            vilkårResultat={vilkårResultat}
+                            visFeilmeldinger={visFeilmeldinger}
+                            settFokusPåKnapp={settFokusPåKnapp}
+                        />
+                    );
+                })}
             </Table.Body>
         </Table>
     );

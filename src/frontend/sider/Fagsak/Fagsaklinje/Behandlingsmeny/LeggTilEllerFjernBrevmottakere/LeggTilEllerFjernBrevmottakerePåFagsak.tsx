@@ -24,9 +24,7 @@ export function LeggTilEllerFjernBrevmottakerePåFagsak() {
 
     return (
         <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                {menyinnslag}
-            </Dropdown.Menu.List.Item>
+            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>{menyinnslag}</Dropdown.Menu.List.Item>
             {visModal && <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisModal(false)} />}
         </>
     );

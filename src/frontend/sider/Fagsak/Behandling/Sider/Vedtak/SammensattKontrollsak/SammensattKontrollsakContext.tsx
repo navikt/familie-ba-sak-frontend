@@ -30,21 +30,15 @@ interface SammensattKontrollsakContextValue {
     skalViseSammensattKontrollsakMenyValg: () => boolean;
 }
 
-const SammensattKontrollsakContext = createContext<SammensattKontrollsakContextValue | undefined>(
-    undefined
-);
+const SammensattKontrollsakContext = createContext<SammensattKontrollsakContextValue | undefined>(undefined);
 
-export const SammensattKontrollsakProvider = ({
-    åpenBehandling,
-    children,
-}: ISammensattKontrollsakProps) => {
+export const SammensattKontrollsakProvider = ({ åpenBehandling, children }: ISammensattKontrollsakProps) => {
     const { behandlingId, resultat, type } = åpenBehandling;
     const { request } = useHttp();
     const { toggles } = useAppContext();
     const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
     const [erSammensattKontrollsak, settErSammensattKontrollsak] = useState<boolean>(false);
-    const [sammensattKontrollsak, settSammensattKontrollsak] =
-        useState<IRestSammensattKontrollsak>();
+    const [sammensattKontrollsak, settSammensattKontrollsak] = useState<IRestSammensattKontrollsak>();
 
     useEffect(() => {
         hentSammensattKontrollsak();
@@ -105,10 +99,7 @@ export const SammensattKontrollsakProvider = ({
         }).then(mottaRespons);
     };
 
-    const oppdaterSammensattKontrollsak = (
-        sammensattKontrollsak: IRestSammensattKontrollsak,
-        fritekst: string
-    ) => {
+    const oppdaterSammensattKontrollsak = (sammensattKontrollsak: IRestSammensattKontrollsak, fritekst: string) => {
         request<IRestSammensattKontrollsak, IRestSammensattKontrollsak>({
             method: 'PUT',
             data: { ...sammensattKontrollsak, fritekst: fritekst },
@@ -154,9 +145,7 @@ export const SammensattKontrollsakProvider = ({
 export const useSammensattKontrollsakContext = () => {
     const context = useContext(SammensattKontrollsakContext);
     if (context === undefined) {
-        throw new Error(
-            'useSammensattKontrollsakContext må brukes innenfor en SammensattKontrollsak'
-        );
+        throw new Error('useSammensattKontrollsakContext må brukes innenfor en SammensattKontrollsak');
     }
     return context;
 };

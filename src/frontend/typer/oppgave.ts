@@ -205,11 +205,7 @@ export interface IRestLukkOppgaveOgKnyttJournalpost {
 
 export function finnBehandlingstemaFraOppgave(oppgave: IOppgave): IBehandlingstema | undefined {
     const { behandlingstema: gjelder, behandlingstype } = oppgave;
-    return gjelder in kodeTilBehandlingUnderkategoriMap &&
-        behandlingstype in kodeTilBehandlingKategoriMap
-        ? tilBehandlingstema(
-              kodeTilBehandlingKategoriMap[behandlingstype],
-              kodeTilBehandlingUnderkategoriMap[gjelder]
-          )
+    return gjelder in kodeTilBehandlingUnderkategoriMap && behandlingstype in kodeTilBehandlingKategoriMap
+        ? tilBehandlingstema(kodeTilBehandlingKategoriMap[behandlingstype], kodeTilBehandlingUnderkategoriMap[gjelder])
         : undefined;
 }

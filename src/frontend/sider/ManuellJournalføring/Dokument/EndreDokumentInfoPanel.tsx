@@ -47,8 +47,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
     const settDokumentTittel = (nyVerdi: string) => {
         skjema.felter.dokumenter.validerOgSettFelt([
             ...skjema.felter.dokumenter.verdi.map((dokument: IDokumentInfo) => {
-                return dokumentFraSkjema &&
-                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                return dokumentFraSkjema && dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
                     ? {
                           ...dokumentFraSkjema,
                           tittel: nyVerdi,
@@ -62,8 +61,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
     const settLogiskeVedlegg = (logiskeVedleggNavn: string[]) => {
         skjema.felter.dokumenter.validerOgSettFelt([
             ...skjema.felter.dokumenter.verdi.map(dokument => {
-                return dokumentFraSkjema &&
-                    dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
+                return dokumentFraSkjema && dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
                     ? {
                           ...dokumentFraSkjema,
                           logiskeVedlegg: logiskeVedleggNavn.map(vedlegg => ({
@@ -94,11 +92,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                               label: dokumentFraSkjema.tittel,
                           }
                 }
-                feil={
-                    visFeilmeldinger && dokumentFraSkjema?.tittel === ''
-                        ? 'Tittel er ikke satt'
-                        : undefined
-                }
+                feil={visFeilmeldinger && dokumentFraSkjema?.tittel === '' ? 'Tittel er ikke satt' : undefined}
                 onChange={value => {
                     if (value && 'value' in value) {
                         settDokumentTittel(value.value);
@@ -125,9 +119,7 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
                 value={hentVedleggList()}
                 placeholder={'Velg innhold'}
                 onChange={options => {
-                    settLogiskeVedlegg(
-                        options instanceof Array ? options.map(({ value }) => value) : []
-                    );
+                    settLogiskeVedlegg(options instanceof Array ? options.map(({ value }) => value) : []);
                 }}
                 propSelectStyles={{
                     container: (base, props) => ({

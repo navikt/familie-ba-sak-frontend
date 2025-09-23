@@ -85,29 +85,19 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                         personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
                             lagInitiellFelt(
                                 {
-                                    begrunnelse: lagInitiellFelt(
-                                        vilkårResultat.begrunnelse,
-                                        erBegrunnelseGyldig
-                                    ),
+                                    begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erBegrunnelseGyldig),
                                     id: vilkårResultat.id,
                                     periode: lagInitiellFelt(
-                                        nyIsoDatoPeriode(
-                                            vilkårResultat.periodeFom,
-                                            vilkårResultat.periodeTom
-                                        ),
+                                        nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
                                         erPeriodeGyldig
                                     ),
-                                    resultat: lagInitiellFelt(
-                                        vilkårResultat.resultat,
-                                        erResultatGyldig
-                                    ),
+                                    resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
                                     resultatBegrunnelse: vilkårResultat.resultatBegrunnelse,
                                     vilkårType: vilkårResultat.vilkårType,
                                     endretAv: vilkårResultat.endretAv,
                                     erVurdert: vilkårResultat.erVurdert,
                                     erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
-                                    erEksplisittAvslagPåSøknad:
-                                        vilkårResultat.erEksplisittAvslagPåSøknad,
+                                    erEksplisittAvslagPåSøknad: vilkårResultat.erEksplisittAvslagPåSøknad,
                                     avslagBegrunnelser: lagInitiellFelt(
                                         vilkårResultat.avslagBegrunnelser,
                                         erAvslagBegrunnelserGyldig
@@ -119,8 +109,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         vilkårResultat.utdypendeVilkårsvurderinger,
                                         erUtdypendeVilkårsvurderingerGyldig
                                     ),
-                                    begrunnelseForManuellKontroll:
-                                        vilkårResultat.begrunnelseForManuellKontroll,
+                                    begrunnelseForManuellKontroll: vilkårResultat.begrunnelseForManuellKontroll,
                                 },
                                 validerVilkår
                             )
@@ -136,10 +125,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                     verdi: annenVurdering.begrunnelse,
                                 },
                                 id: annenVurdering.id,
-                                resultat: lagInitiellFelt(
-                                    annenVurdering.resultat,
-                                    erResultatGyldig
-                                ),
+                                resultat: lagInitiellFelt(annenVurdering.resultat, erResultatGyldig),
                                 endretAv: annenVurdering.endretAv,
                                 erVurdert: annenVurdering.resultat !== Resultat.IKKE_VURDERT,
                                 endretTidspunkt: annenVurdering.endretTidspunkt,
@@ -153,17 +139,11 @@ export const mapFraRestPersonResultatTilPersonResultat = (
             }
         })
         .sort((a: IPersonResultat, b: IPersonResultat) => {
-            if (
-                PersonTypeVisningsRangering[a.person.type] >
-                PersonTypeVisningsRangering[b.person.type]
-            ) {
+            if (PersonTypeVisningsRangering[a.person.type] > PersonTypeVisningsRangering[b.person.type]) {
                 return 1;
             }
 
-            if (
-                PersonTypeVisningsRangering[a.person.type] <
-                PersonTypeVisningsRangering[b.person.type]
-            ) {
+            if (PersonTypeVisningsRangering[a.person.type] < PersonTypeVisningsRangering[b.person.type]) {
                 return -1;
             }
 

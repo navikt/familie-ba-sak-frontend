@@ -50,9 +50,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        refusjonEøsListe.length === 0
-    );
+    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(refusjonEøsListe.length === 0);
 
     useEffect(() => {
         settErUlagretNyRefusjonEøsPeriode(ønskerÅLeggeTilNyPeriode);

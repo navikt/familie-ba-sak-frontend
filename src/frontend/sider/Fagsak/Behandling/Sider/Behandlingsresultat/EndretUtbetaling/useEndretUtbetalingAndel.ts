@@ -12,11 +12,7 @@ import type { OptionType } from '../../../../../../typer/common';
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import type { IsoDatoString } from '../../../../../../utils/dato';
-import {
-    dateTilIsoDatoStringEllerUndefined,
-    erIsoStringGyldig,
-    validerGyldigDato,
-} from '../../../../../../utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, erIsoStringGyldig, validerGyldigDato } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import type { Utbetaling } from '../Utbetaling';
@@ -55,10 +51,7 @@ export const useEndretUtbetalingAndel = (
         nullstillVedAvhengighetEndring: true,
     });
 
-    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
-        IEndretUtbetalingAndelSkjema,
-        IBehandling
-    >({
+    const { skjema, kanSendeSkjema, onSubmit } = useSkjema<IEndretUtbetalingAndelSkjema, IBehandling>({
         felter: {
             personer: useFelt<OptionType[]>({
                 verdi: [],
@@ -91,8 +84,7 @@ export const useEndretUtbetalingAndel = (
             }),
             begrunnelse: useFelt<string | undefined>({
                 verdi: undefined,
-                valideringsfunksjon: felt =>
-                    felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.'),
+                valideringsfunksjon: felt => (felt.verdi ? ok(felt) : feil(felt, 'Du må oppgi en begrunnelse.')),
             }),
         },
         skjemanavn: 'Endre utbetalingsperiode',
@@ -107,9 +99,7 @@ export const useEndretUtbetalingAndel = (
         skjema.felter.personer.validerOgSettFelt(personer);
         skjema.felter.fom.validerOgSettFelt(lagretEndretUtbetalingAndel.fom);
         skjema.felter.tom.validerOgSettFelt(lagretEndretUtbetalingAndel.tom);
-        skjema.felter.utbetaling.validerOgSettFelt(
-            prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent)
-        );
+        skjema.felter.utbetaling.validerOgSettFelt(prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent));
         skjema.felter.årsak.validerOgSettFelt(lagretEndretUtbetalingAndel.årsak);
 
         skjema.felter.begrunnelse.validerOgSettFelt(lagretEndretUtbetalingAndel.begrunnelse);
@@ -126,8 +116,7 @@ export const useEndretUtbetalingAndel = (
         );
     };
 
-    const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] =
-        useState<IRestEndretUtbetalingAndel>();
+    const [forrigeEndretUtbetalingAndel, settForrigeEndretUtbetalingAndel] = useState<IRestEndretUtbetalingAndel>();
 
     if (lagretEndretUtbetalingAndel !== forrigeEndretUtbetalingAndel) {
         settForrigeEndretUtbetalingAndel(lagretEndretUtbetalingAndel);
@@ -135,15 +124,7 @@ export const useEndretUtbetalingAndel = (
     }
 
     const hentSkjemaData = () => {
-        const {
-            personer,
-            fom,
-            tom,
-            årsak,
-            begrunnelse,
-            søknadstidspunkt,
-            avtaletidspunktDeltBosted,
-        } = skjema.felter;
+        const { personer, fom, tom, årsak, begrunnelse, søknadstidspunkt, avtaletidspunktDeltBosted } = skjema.felter;
         return {
             id: lagretEndretUtbetalingAndel.id,
             personIdenter: personer.verdi.map(person => person.value),
@@ -153,9 +134,7 @@ export const useEndretUtbetalingAndel = (
             årsak: årsak && årsak.verdi,
             begrunnelse: begrunnelse.verdi,
             søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(søknadstidspunkt.verdi),
-            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(
-                avtaletidspunktDeltBosted.verdi
-            ),
+            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(avtaletidspunktDeltBosted.verdi),
             erTilknyttetAndeler: lagretEndretUtbetalingAndel.erTilknyttetAndeler,
         };
     };
@@ -165,9 +144,7 @@ export const useEndretUtbetalingAndel = (
             {
                 ...lagretEndretUtbetalingAndel,
                 prosent:
-                    typeof lagretEndretUtbetalingAndel.prosent === 'number'
-                        ? lagretEndretUtbetalingAndel.prosent
-                        : 0,
+                    typeof lagretEndretUtbetalingAndel.prosent === 'number' ? lagretEndretUtbetalingAndel.prosent : 0,
             },
             hentSkjemaData()
         );

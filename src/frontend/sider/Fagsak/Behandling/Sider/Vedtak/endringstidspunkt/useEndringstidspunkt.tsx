@@ -29,9 +29,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
 
     const endringstidspunktFraRessurs = hentDataFraRessurs(endringstidspunktRessurs);
 
-    const endringstidspunkt = endringstidspunktFraRessurs
-        ? new Date(endringstidspunktFraRessurs)
-        : undefined;
+    const endringstidspunkt = endringstidspunktFraRessurs ? new Date(endringstidspunktFraRessurs) : undefined;
 
     const { skjema, kanSendeSkjema, onSubmit } = useSkjema<
         {
@@ -56,9 +54,7 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
                 {
                     method: 'PUT',
                     data: {
-                        overstyrtEndringstidspunkt: dateTilIsoDatoString(
-                            skjema.felter.endringstidspunkt.verdi
-                        ),
+                        overstyrtEndringstidspunkt: dateTilIsoDatoString(skjema.felter.endringstidspunkt.verdi),
                         behandlingId,
                     },
                     url: `/familie-ba-sak/api/vedtaksperioder/endringstidspunkt`,

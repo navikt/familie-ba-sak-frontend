@@ -6,11 +6,7 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
 } from './sider';
-import {
-    BehandlingÅrsak,
-    BehandlingSteg,
-    BehandlingStegStatus,
-} from '../../../../typer/behandling';
+import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../../typer/behandling';
 import { mockBehandling } from '../../../../utils/test/behandling/behandling.mock';
 
 describe('sider.ts', () => {
@@ -24,27 +20,19 @@ describe('sider.ts', () => {
                     },
                 ],
             });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
-                SideId.REGISTRER_INSTITUSJON
-            );
+            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRER_INSTITUSJON);
         });
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
             const behandling = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
-                SideId.REGISTRERE_SØKNAD
-            );
+            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRERE_SØKNAD);
         });
         test('FILTRERING_FØDSELSHENDELSER returneres ved årsak FØDSELSHENDELSE', () => {
             const behandling = mockBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(
-                SideId.FILTRERING_FØDSELSHENDELSER
-            );
+            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.FILTRERING_FØDSELSHENDELSER);
         });
         test('SIMULERING returneres ikke ved automatisk behandling', () => {
             const behandling = mockBehandling({ skalBehandlesAutomatisk: true });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(
-                SideId.SIMULERING
-            );
+            expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(SideId.SIMULERING);
         });
         test('VEDTAK returneres ikke ved årsak SATSENDRING', () => {
             const behandling = mockBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
@@ -83,9 +71,7 @@ describe('sider.ts', () => {
             const testUrl = 'test-url/';
             Object.values(sider)
                 .map(side => side.href)
-                .forEach(sideUrl =>
-                    expect(erViPåUdefinertFagsakSide(testUrl + sideUrl)).toBeFalsy()
-                );
+                .forEach(sideUrl => expect(erViPåUdefinertFagsakSide(testUrl + sideUrl)).toBeFalsy());
             expect(erViPåUdefinertFagsakSide(testUrl + 'saksoversikt')).toBeFalsy();
             expect(erViPåUdefinertFagsakSide(testUrl + 'ny-behandling')).toBeFalsy();
 
@@ -98,9 +84,7 @@ describe('sider.ts', () => {
             expect(erViPåUlovligSteg('vedtak', sider.REGISTRERE_SØKNAD)).toBeTruthy();
         });
         test('Skal returnere false dersom vi ikke er på ulovlig steg', () => {
-            expect(
-                erViPåUlovligSteg('registrer-soknad', sider.FILTRERING_FØDSELSHENDELSER)
-            ).toBeFalsy();
+            expect(erViPåUlovligSteg('registrer-soknad', sider.FILTRERING_FØDSELSHENDELSER)).toBeFalsy();
         });
     });
 

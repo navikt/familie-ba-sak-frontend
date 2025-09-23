@@ -62,9 +62,7 @@ export const BrevmottakereAlert: React.FC<
         <>
             {brevmottakere && brevmottakere.length !== 0 && (
                 <StyledAlert variant="info" className={className}>
-                    {`Brevmottaker(e) er endret, og ${hentBrevtypetekst(
-                        location.pathname
-                    )} sendes til:`}
+                    {`Brevmottaker(e) er endret, og ${hentBrevtypetekst(location.pathname)} sendes til:`}
                     <BrevmottakerListe brevmottakere={brevmottakere} bruker={bruker} />
                     <Button
                         variant={'tertiary'}
@@ -85,9 +83,7 @@ export const BrevmottakereAlert: React.FC<
                         erLesevisning={props.erLesevisning}
                     />
                 ) : (
-                    <LeggTilBrevmottakerModalFagsak
-                        lukkModal={() => settVisManuelleMottakereModal(false)}
-                    />
+                    <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisManuelleMottakereModal(false)} />
                 ))}
         </>
     );

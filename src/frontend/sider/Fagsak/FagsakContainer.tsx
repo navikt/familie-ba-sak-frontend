@@ -32,22 +32,11 @@ const HovedInnhold = styled.div`
 export function FagsakContainer() {
     const fagsakId = useFagsakId();
 
-    const {
-        data: fagsak,
-        isPending: isPendingFagsak,
-        error: fagsakError,
-    } = useHentFagsak(fagsakId);
+    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
 
-    const ident =
-        fagsak?.fagsakType === FagsakType.SKJERMET_BARN
-            ? fagsak?.fagsakeier
-            : fagsak?.søkerFødselsnummer;
+    const ident = fagsak?.fagsakType === FagsakType.SKJERMET_BARN ? fagsak?.fagsakeier : fagsak?.søkerFødselsnummer;
 
-    const {
-        data: bruker,
-        isPending: isPendingBruker,
-        error: brukerError,
-    } = useHentPerson({ ident });
+    const { data: bruker, isPending: isPendingBruker, error: brukerError } = useHentPerson({ ident });
 
     useScrollTilAnker();
     useSyncModiaContext(bruker);
@@ -65,12 +54,8 @@ export function FagsakContainer() {
         return (
             <Alert variant={'error'}>
                 <HStack gap={'4'}>
-                    {fagsakError && (
-                        <div>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</div>
-                    )}
-                    {brukerError && (
-                        <div>Feil oppstod ved innlasting av bruker: {brukerError.message}</div>
-                    )}
+                    {fagsakError && <div>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</div>}
+                    {brukerError && <div>Feil oppstod ved innlasting av bruker: {brukerError.message}</div>}
                 </HStack>
             </Alert>
         );

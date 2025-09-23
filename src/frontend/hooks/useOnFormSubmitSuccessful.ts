@@ -3,10 +3,7 @@ import { useEffect, useRef } from 'react';
 import type { Control, FieldValues } from 'react-hook-form';
 import { useFormState } from 'react-hook-form';
 
-export function useOnFormSubmitSuccessful<T extends FieldValues>(
-    control: Control<T>,
-    callback: () => void
-) {
+export function useOnFormSubmitSuccessful<T extends FieldValues>(control: Control<T>, callback: () => void) {
     const { isSubmitSuccessful } = useFormState<T>({ control });
 
     const callbackRef = useRef(callback);

@@ -25,8 +25,7 @@ interface Props {
 const Dokumentutsending: React.FC<Props> = ({ bruker }) => {
     const navigate = useNavigate();
 
-    const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } =
-        useDokumentutsendingContext();
+    const { fagsakId, hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
 
     return (
         <Container>

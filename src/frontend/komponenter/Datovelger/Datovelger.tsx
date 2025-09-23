@@ -101,18 +101,14 @@ const Datovelger = ({
         if (kanKunVelgeFremtid) {
             return 'Du kan ikke sette en dato som er tilbake i tid';
         }
-        const førsteUgyldigeDato = minDatoAvgrensning
-            ? format(subDays(minDatoAvgrensning, 1), Datoformat.DATO)
-            : '';
+        const førsteUgyldigeDato = minDatoAvgrensning ? format(subDays(minDatoAvgrensning, 1), Datoformat.DATO) : '';
         return `Du må velge en dato som er senere enn ${førsteUgyldigeDato}`;
     };
     const feilmeldingForDatoEtterMaksDato = () => {
         if (kanKunVelgeFortid) {
             return 'Du kan ikke sette en dato som er frem i tid';
         }
-        const førsteUgyldigeDato = maksDatoAvgrensning
-            ? format(addDays(maksDatoAvgrensning, 1), Datoformat.DATO)
-            : '';
+        const førsteUgyldigeDato = maksDatoAvgrensning ? format(addDays(maksDatoAvgrensning, 1), Datoformat.DATO) : '';
         return `Du må velge en dato som er tidligere enn ${førsteUgyldigeDato}`;
     };
 

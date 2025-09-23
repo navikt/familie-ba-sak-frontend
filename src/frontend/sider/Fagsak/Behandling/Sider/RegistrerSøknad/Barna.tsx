@@ -29,13 +29,8 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 `;
 
 const Barna: React.FunctionComponent = () => {
-    const {
-        vurderErLesevisning,
-        gjelderInstitusjon,
-        gjelderEnsligMindreårig,
-        gjelderSkjermetBarn,
-        behandling,
-    } = useBehandlingContext();
+    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn, behandling } =
+        useBehandlingContext();
     const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useBrukerContext();
@@ -53,10 +48,7 @@ const Barna: React.FunctionComponent = () => {
 
             return !a.ident
                 ? 1
-                : differenceInMilliseconds(
-                      isoStringTilDate(b.fødselsdato),
-                      isoStringTilDate(a.fødselsdato)
-                  );
+                : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
         }
     );
 
@@ -67,64 +59,45 @@ const Barna: React.FunctionComponent = () => {
 
     const oppdaterBarnMedMerketStatus = (barnaSomErSjekketAv: string[]) => {
         skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-            skjema.felter.barnaMedOpplysninger.verdi.map(
-                (barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                    ...barnMedOpplysninger,
-                    merket: barnaSomErSjekketAv.includes(barnMedOpplysninger.ident),
-                })
-            )
+            skjema.felter.barnaMedOpplysninger.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+                ...barnMedOpplysninger,
+                merket: barnaSomErSjekketAv.includes(barnMedOpplysninger.ident),
+            }))
         );
     };
 
     return (
         <BarnaWrapper className={'søknad__barna'}>
             <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
-            {maskerteRelasjoner.map(
-                (forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
-                    return (
-                        <HStack
-                            gap="2"
-                            margin="2"
-                            key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
-                        >
-                            <StatusIkon status={Status.FEIL} />
-                            <BodyShort>{`Bruker har barn med diskresjonskode ${
-                                adressebeskyttelsestyper[
-                                    forelderBarnRelasjonMaskert.adressebeskyttelseGradering
-                                ] ?? 'ukjent'
-                            }`}</BodyShort>
-                        </HStack>
-                    );
-                }
-            )}
+            {maskerteRelasjoner.map((forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
+                return (
+                    <HStack gap="2" margin="2" key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}>
+                        <StatusIkon status={Status.FEIL} />
+                        <BodyShort>{`Bruker har barn med diskresjonskode ${
+                            adressebeskyttelsestyper[forelderBarnRelasjonMaskert.adressebeskyttelseGradering] ??
+                            'ukjent'
+                        }`}</BodyShort>
+                    </HStack>
+                );
+            })}
 
             <br />
             <StyledCheckboxGroup
-                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(
-                    skjema.visFeilmeldinger
-                )}
+                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 legend={
-                    !lesevisning &&
-                    !gjelderInstitusjon &&
-                    !gjelderEnsligMindreårig &&
-                    !gjelderSkjermetBarn ? (
+                    !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>
                     )
                 }
                 value={skjema.felter.barnaMedOpplysninger.verdi
-                    .filter(
-                        (barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.merket
-                    )
+                    .filter((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.merket)
                     .map((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.ident)}
                 onChange={(merkedeBarn: string[]) => oppdaterBarnMedMerketStatus(merkedeBarn)}
             >
                 {sorterteBarnMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
-                    <BarnMedOpplysninger
-                        key={barnMedOpplysninger.ident}
-                        barn={barnMedOpplysninger}
-                    />
+                    <BarnMedOpplysninger key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} />
                 ))}
 
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
@@ -134,16 +107,13 @@ const Barna: React.FunctionComponent = () => {
                     />
                 )}
 
-                {!lesevisning &&
-                    !gjelderInstitusjon &&
-                    !gjelderEnsligMindreårig &&
-                    !gjelderSkjermetBarn && (
-                        <LeggTilBarn
-                            barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
-                            manuelleBrevmottakere={brevmottakere}
-                            vurderErLesevisning={vurderErLesevisning}
-                        />
-                    )}
+                {!lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn && (
+                    <LeggTilBarn
+                        barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
+                        manuelleBrevmottakere={brevmottakere}
+                        vurderErLesevisning={vurderErLesevisning}
+                    />
+                )}
             </StyledCheckboxGroup>
         </BarnaWrapper>
     );

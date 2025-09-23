@@ -2,23 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import {
-    CogRotationIcon,
-    PadlockLockedFillIcon,
-    PersonGavelIcon,
-    TrashIcon,
-} from '@navikt/aksel-icons';
-import {
-    Alert,
-    Button,
-    Fieldset,
-    Heading,
-    HStack,
-    Label,
-    Link,
-    TextField,
-    UNSAFE_Combobox,
-} from '@navikt/ds-react';
+import { CogRotationIcon, PadlockLockedFillIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -28,11 +13,7 @@ import type { Currency } from '@navikt/land-verktoy';
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
-import {
-    EøsPeriodeStatus,
-    type IValutakurs,
-    Vurderingsform,
-} from '../../../../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
@@ -93,12 +74,10 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     const { vurderErLesevisning } = useBehandlingContext();
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
-        åpenBehandling.vurderingsstrategiForValutakurser ===
-        VurderingsstrategiForValutakurser.MANUELL;
+        åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
     const erLesevisning =
-        vurderErLesevisning(true) ||
-        (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
+        vurderErLesevisning(true) || (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -127,18 +106,11 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     };
 
     return (
-        <Fieldset
-            error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
-            legend={'Valutakurs skjema'}
-            hideLegend
-        >
+        <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend={'Valutakurs skjema'} hideLegend>
             <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
                 {erValutakursVurdertAutomatisk && (
                     <HStack wrap={false} align={'center'} gap={'4'}>
-                        <CogRotationIcon
-                            title="Automatisk registrert valutakurs"
-                            fontSize="1.5rem"
-                        />
+                        <CogRotationIcon title="Automatisk registrert valutakurs" fontSize="1.5rem" />
                         <Label>Automatisk registrert valutakurs</Label>
                     </HStack>
                 )}
@@ -155,9 +127,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
                     readOnly={erLesevisning}
-                    error={
-                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
-                    }
+                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
                     periode={skjema.felter.periode}
@@ -217,11 +187,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     </ValutakursRad>
                     {erManuellInputAvKurs && (
                         <StyledISKAlert variant="warning" size="small" inline>
-                            <Heading size="xsmall">
-                                Manuell innhenting av valutakurs for Islandske kroner (ISK)
-                            </Heading>
-                            Systemet har ikke valutakurser for valutakursdatoer før 1. februar 2018.
-                            Disse må hentes fra{' '}
+                            <Heading size="xsmall">Manuell innhenting av valutakurs for Islandske kroner (ISK)</Heading>
+                            Systemet har ikke valutakurser for valutakursdatoer før 1. februar 2018. Disse må hentes fra{' '}
                             <Link
                                 href="https://navno.sharepoint.com/:x:/r/sites/fag-og-ytelser-familie-barnetrygd/Delte%20dokumenter/E%C3%98S/Valutakalkulator%202022.xlsm?d=w200955f53e1d4323ae72f9d1b15f617c&csf=1&web=1&e=w3OE5N"
                                 target="_blank"
@@ -255,22 +222,21 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             </Button>
                         </div>
 
-                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT &&
-                            !erLesevisning && (
-                                <Button
-                                    variant={'tertiary'}
-                                    onClick={() => slettValutakurs()}
-                                    id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                        barn => `${barn}-`
-                                    )}_${skjema.felter.initielFom.verdi}`}
-                                    loading={sletterValutakurs}
-                                    disabled={sletterValutakurs}
-                                    size={'small'}
-                                    icon={<TrashIcon />}
-                                >
-                                    Fjern
-                                </Button>
-                            )}
+                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !erLesevisning && (
+                            <Button
+                                variant={'tertiary'}
+                                onClick={() => slettValutakurs()}
+                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
+                                    barn => `${barn}-`
+                                )}_${skjema.felter.initielFom.verdi}`}
+                                loading={sletterValutakurs}
+                                disabled={sletterValutakurs}
+                                size={'small'}
+                                icon={<TrashIcon />}
+                            >
+                                Fjern
+                            </Button>
+                        )}
                     </Knapperad>
                 )}
             </EøsPeriodeSkjemaContainer>

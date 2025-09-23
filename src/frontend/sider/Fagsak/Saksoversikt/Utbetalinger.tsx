@@ -32,21 +32,17 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
     const utbetalingsperiodeDetaljerGruppertPåPerson =
         vedtaksperiode?.utbetalingsperiodeDetaljer
             .sort(sorterUtbetaling)
-            .reduce(
-                (acc: { [key: string]: IUtbetalingsperiodeDetalj[] }, utbetalingsperiodeDetalj) => {
-                    const utbetalingsperiodeDetaljerForPerson =
-                        acc[utbetalingsperiodeDetalj.person.personIdent] ?? [];
+            .reduce((acc: { [key: string]: IUtbetalingsperiodeDetalj[] }, utbetalingsperiodeDetalj) => {
+                const utbetalingsperiodeDetaljerForPerson = acc[utbetalingsperiodeDetalj.person.personIdent] ?? [];
 
-                    return {
-                        ...acc,
-                        [utbetalingsperiodeDetalj.person.personIdent]: [
-                            ...utbetalingsperiodeDetaljerForPerson,
-                            utbetalingsperiodeDetalj,
-                        ],
-                    };
-                },
-                {}
-            ) ?? {};
+                return {
+                    ...acc,
+                    [utbetalingsperiodeDetalj.person.personIdent]: [
+                        ...utbetalingsperiodeDetaljerForPerson,
+                        utbetalingsperiodeDetalj,
+                    ],
+                };
+            }, {}) ?? {};
 
     return (
         <LøpendeUtbetalinger gap="4">

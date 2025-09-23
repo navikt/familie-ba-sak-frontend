@@ -48,9 +48,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     behandlingId,
     fagsakId,
 }) => {
-    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(
-        feilutbetaltValutaListe.length === 0
-    );
+    const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(feilutbetaltValutaListe.length === 0);
 
     useEffect(() => {
         settErUlagretNyFeilutbetaltValutaPeriode(ønskerÅLeggeTilNyPeriode);

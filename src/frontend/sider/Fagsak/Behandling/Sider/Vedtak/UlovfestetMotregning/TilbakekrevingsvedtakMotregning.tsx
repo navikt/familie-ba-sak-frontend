@@ -52,17 +52,18 @@ export const TilbakekrevingsvedtakMotregning = ({
                 tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ??
                 PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
             vurderingAvSkyld:
-                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ??
-                PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
+                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
             varselDato: tilbakekrevingsvedtakMotregning.varselDato,
         },
     });
 
     const { handleSubmit } = form;
 
-    const lagreTilbakekrevingsvedtakOgLukkModal: SubmitHandler<
-        TilbakekrevingsvedtakMotregningSkjemaverdier
-    > = ({ varselDato, årsakTilFeilutbetaling, vurderingAvSkyld }) => {
+    const lagreTilbakekrevingsvedtakOgLukkModal: SubmitHandler<TilbakekrevingsvedtakMotregningSkjemaverdier> = ({
+        varselDato,
+        årsakTilFeilutbetaling,
+        vurderingAvSkyld,
+    }) => {
         settLagrer(true);
         oppdaterTilbakekrevingsvedtakMotregning({
             varselDato: varselDato,
@@ -88,9 +89,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                             aria-label="Tilbakekrevingsvedtak ved motregning"
                             open={expansionCardErÅpen}
                         >
-                            <ExpansionCard.Header
-                                onClick={() => settExpansionCardErÅpen(!expansionCardErÅpen)}
-                            >
+                            <ExpansionCard.Header onClick={() => settExpansionCardErÅpen(!expansionCardErÅpen)}>
                                 <ExpansionCard.Title as="h3" size="small">
                                     Årsak til feilutbetaling og vurdering av skyld
                                 </ExpansionCard.Title>

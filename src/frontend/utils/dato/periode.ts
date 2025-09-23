@@ -50,10 +50,7 @@ interface FormaterIsoMånedPeriodeProps {
     tilFormat: Datoformat;
 }
 
-export const isoMånedPeriodeTilFormatertString = ({
-    periode,
-    tilFormat,
-}: FormaterIsoMånedPeriodeProps) => {
+export const isoMånedPeriodeTilFormatertString = ({ periode, tilFormat }: FormaterIsoMånedPeriodeProps) => {
     return `${isoStringTilFormatertString({
         isoString: periode.fom,
         tilFormat: tilFormat,

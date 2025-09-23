@@ -39,10 +39,7 @@ const FlexBox = styled.div`
     gap: 0.25rem;
 `;
 
-const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
-    samhandler,
-    somOverskrift = false,
-}) => {
+const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({ samhandler, somOverskrift = false }) => {
     const navn = samhandler.navn;
     const formattertOrgNummer = formaterIdent(samhandler.orgNummer);
     return (
@@ -73,11 +70,7 @@ const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({
 
             {!somOverskrift && (
                 <>
-                    <KontorIkonGrønn
-                        className={'kontor-ikon--for-normaltekst'}
-                        height={'24'}
-                        width={'24'}
-                    />
+                    <KontorIkonGrønn className={'kontor-ikon--for-normaltekst'} height={'24'} width={'24'} />
                     <BodyShort className={'navn'} title={navn}>
                         {navn}
                     </BodyShort>

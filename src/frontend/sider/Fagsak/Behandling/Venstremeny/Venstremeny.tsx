@@ -76,13 +76,9 @@ const UndersideSirkel = styled.span`
 
 const Venstremeny: React.FunctionComponent = () => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } =
-        useBehandlingContext();
+    const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } = useBehandlingContext();
 
-    const stansNavigeringDersomSidenIkkeErAktiv = (
-        event: React.MouseEvent,
-        sidenErAktiv: boolean
-    ) => {
+    const stansNavigeringDersomSidenIkkeErAktiv = (event: React.MouseEvent, sidenErAktiv: boolean) => {
         if (!sidenErAktiv) {
             event.preventDefault();
         }
@@ -95,9 +91,7 @@ const Venstremeny: React.FunctionComponent = () => {
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
 
-                        const undersider: IUnderside[] = side.undersider
-                            ? side.undersider(behandling)
-                            : [];
+                        const undersider: IUnderside[] = side.undersider ? side.undersider(behandling) : [];
 
                         const sidenErAktiv = erSidenAktiv(side, behandling);
 
@@ -107,9 +101,7 @@ const Venstremeny: React.FunctionComponent = () => {
                                     id={sideId}
                                     to={tilPath}
                                     $erLenkenAktiv={sidenErAktiv}
-                                    onClick={event =>
-                                        stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
-                                    }
+                                    onClick={event => stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)}
                                 >
                                     {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
                                 </MenyLenke>
@@ -122,17 +114,12 @@ const Venstremeny: React.FunctionComponent = () => {
                                             to={`${tilPath}#${underside.hash}`}
                                             $erLenkenAktiv={sidenErAktiv}
                                             onClick={event =>
-                                                stansNavigeringDersomSidenIkkeErAktiv(
-                                                    event,
-                                                    sidenErAktiv
-                                                )
+                                                stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
                                             }
                                         >
                                             <HStack align="center" gap="1">
                                                 {antallAksjonspunkter > 0 ? (
-                                                    <UndersideSirkel>
-                                                        {antallAksjonspunkter}
-                                                    </UndersideSirkel>
+                                                    <UndersideSirkel>{antallAksjonspunkter}</UndersideSirkel>
                                                 ) : (
                                                     <Box padding="3" />
                                                 )}

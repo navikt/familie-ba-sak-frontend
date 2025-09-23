@@ -26,9 +26,7 @@ export function ForhåndsvisBrevLenke() {
     const { behandling } = useBehandlingContext();
     const { åpneModal } = useModal(ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF);
 
-    const brevmal = fagsak.institusjon
-        ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON
-        : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
+    const brevmal = fagsak.institusjon ? Brevmal.HENLEGGE_TRUKKET_SØKNAD_INSTITUSJON : Brevmal.HENLEGGE_TRUKKET_SØKNAD;
 
     const { mutate, isPending } = useOpprettForhåndsvisbarBehandlingBrevPdf({
         onMutate: () => åpneModal({ mutationKey }),

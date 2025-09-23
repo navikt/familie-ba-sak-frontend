@@ -1,10 +1,5 @@
 import type { OptionType } from './common';
-import type {
-    IIsoDatoPeriode,
-    IIsoMånedPeriode,
-    IsoDatoString,
-    IsoMånedString,
-} from '../utils/dato';
+import type { IIsoDatoPeriode, IIsoMånedPeriode, IsoDatoString, IsoMånedString } from '../utils/dato';
 
 export type KompetanseAktivitet = SøkersAktivitet | AnnenForelderAktivitet;
 
@@ -36,12 +31,9 @@ export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
     ARBEIDER_PÅ_NORSK_SOKKEL: 'Arbeider på norsk sokkel',
     ARBEIDER_FOR_ET_NORSK_FLYSELSKAP: 'Arbeider for et norsk flyselskap',
     ARBEIDER_VED_UTENLANDSK_UTENRIKSSTASJON: 'Arbeider ved utenlandsk utenriksstasjon',
-    MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar utbetaling fra Nav under opphold i utlandet',
-    MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar uføretrygd fra Norge under opphold i utlandet',
-    MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET:
-        'Mottar pensjon fra Norge under opphold i utlandet',
+    MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar utbetaling fra Nav under opphold i utlandet',
+    MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar uføretrygd fra Norge under opphold i utlandet',
+    MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar pensjon fra Norge under opphold i utlandet',
     INAKTIV: 'Inaktiv',
 
     I_ARBEID: 'I arbeid',

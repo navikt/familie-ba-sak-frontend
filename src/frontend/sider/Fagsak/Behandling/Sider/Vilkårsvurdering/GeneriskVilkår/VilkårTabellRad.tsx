@@ -84,19 +84,16 @@ const VilkårTabellRad: React.FC<IProps> = ({
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
     const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
 
-    const hentInitiellEkspandering = () =>
-        erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
+    const hentInitiellEkspandering = () => erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
-    const [redigerbartVilkår, settRedigerbartVilkår] =
-        useState<FeltState<IVilkårResultat>>(vilkårResultat);
+    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(vilkårResultat);
 
     useEffect(() => {
         settEkspandertVilkår(hentInitiellEkspandering());
     }, [aktivSettPåVent]);
 
-    const periodeErTom =
-        !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
+    const periodeErTom = !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
 
     const toggleForm = (visAlert: boolean) => {
         if (ekspandertVilkår && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
@@ -144,9 +141,7 @@ const VilkårTabellRad: React.FC<IProps> = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort>
-                    {periodeErTom
-                        ? '-'
-                        : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
+                    {periodeErTom ? '-' : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>

@@ -20,11 +20,7 @@ import { idnr } from '@navikt/fnrvalidator';
 import { useAppContext } from '../../context/AppContext';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
-import {
-    FagsakDeltagerRolle,
-    type IFagsakDeltager,
-    type ISøkParam,
-} from '../../typer/fagsakdeltager';
+import { FagsakDeltagerRolle, type IFagsakDeltager, type ISøkParam } from '../../typer/fagsakdeltager';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
 import { erAdresseBeskyttet } from '../../utils/validators';
 import { PersonIkon } from '../PersonIkon';
@@ -49,8 +45,7 @@ const FagsakDeltagerSøk: React.FC = () => {
     const navigate = useNavigate();
     const { skalObfuskereData } = useAppContext();
 
-    const [fagsakDeltagere, settFagsakDeltagere] =
-        React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
+    const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
 
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
@@ -91,9 +86,7 @@ const FagsakDeltagerSøk: React.FC = () => {
                     settFagsakDeltagere(byggFeiletRessurs('Søk feilet'));
                 });
         } else {
-            settFagsakDeltagere(
-                byggFunksjonellFeilRessurs('Ugyldig fødsels- eller d-nummer (11 siffer)')
-            );
+            settFagsakDeltagere(byggFunksjonellFeilRessurs('Ugyldig fødsels- eller d-nummer (11 siffer)'));
         }
     };
 

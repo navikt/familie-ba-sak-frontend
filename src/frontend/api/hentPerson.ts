@@ -8,11 +8,7 @@ interface RequestParams {
     ident: string;
 }
 
-export async function hentPerson(
-    request: FamilieRequest,
-    ident: string,
-    påvirkerSystemLaster: boolean = true
-) {
+export async function hentPerson(request: FamilieRequest, ident: string, påvirkerSystemLaster: boolean = true) {
     const ressurs = await request<RequestParams, IPersonInfo>({
         method: 'POST',
         url: '/familie-ba-sak/api/person',
