@@ -21,6 +21,7 @@ import type { IFritekstFelt } from '../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import type { ISelectOptionMedBrevtekst } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { Informasjonsbrev, opplysningsdokumenter } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { useBrukerContext } from '../BrukerContext';
 import { useFagsakContext } from '../FagsakContext';
 import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
@@ -108,7 +109,8 @@ interface DokumentutsendingContextValue {
 const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(undefined);
 
 export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
-    const { bruker, fagsak } = useFagsakContext();
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
@@ -257,7 +259,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     useEffect(() => {
         nullstillSkjemaUtenomÅrsak();
-    }, [årsak.verdi, bruker.status]);
+    }, [årsak.verdi, bruker]);
 
     const hentDeltBostedSkjemaData = (målform: Målform): IManueltBrevRequestPåFagsak => {
         const barnIBrev = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
@@ -327,7 +329,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
 
     const hentSkjemaData = (): IManueltBrevRequestPåFagsak => {
         const dokumentÅrsak = skjema.felter.årsak.verdi;
-        if (bruker.status === RessursStatus.SUKSESS && dokumentÅrsak) {
+        if (dokumentÅrsak) {
             switch (dokumentÅrsak) {
                 case DokumentÅrsakPerson.DELT_BOSTED:
                     return hentDeltBostedSkjemaData(målform.verdi ?? Målform.NB);

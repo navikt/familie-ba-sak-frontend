@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
-import { hentDataFraRessurs } from '@navikt/familie-typer';
 
 import type { IBehandling } from '../../../../../typer/behandling';
-import { useFagsakContext } from '../../../FagsakContext';
+import { useBrukerContext } from '../../../BrukerContext';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<ILeggTilFjernBrevmottakerSkjemaFelter, IBehandling>;
 
@@ -60,8 +59,7 @@ const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string)
 };
 
 export const useBrevmottakerSkjema = ({ eksisterendeMottakere }: Props) => {
-    const { bruker } = useFagsakContext();
-    const søker = hentDataFraRessurs(bruker);
+    const { bruker: søker } = useBrukerContext();
 
     const mottaker = useFelt<Mottaker | ''>({
         verdi: '',

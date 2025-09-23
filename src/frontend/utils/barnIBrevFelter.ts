@@ -1,8 +1,7 @@
 import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
+import { useBrukerContext } from '../sider/Fagsak/BrukerContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
@@ -13,7 +12,7 @@ interface IProps {
 }
 
 export const useBarnIBrevFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
-    const { bruker: brukerRessurs } = useFagsakContext();
+    const { bruker } = useBrukerContext();
 
     const barnIBrev = useFelt<IBarnMedOpplysninger[]>({
         verdi: [],
@@ -28,24 +27,18 @@ export const useBarnIBrevFelter = ({ avhengigheter, skalFeltetVises }: IProps) =
     });
 
     const hentBarnMedOpplysningerFraBruker = () => {
-        if (brukerRessurs.status === RessursStatus.SUKSESS)
-            return (
-                brukerRessurs.data.forelderBarnRelasjon
-                    .filter(
-                        (relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-                    )
-                    .map(
-                        (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                            merket: false,
-                            ident: relasjon.personIdent,
-                            navn: relasjon.navn,
-                            fødselsdato: relasjon.fødselsdato,
-                            manueltRegistrert: false,
-                            erFolkeregistrert: true,
-                        })
-                    ) ?? []
+        return bruker.forelderBarnRelasjon
+            .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
+            .map(
+                (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                    merket: false,
+                    ident: relasjon.personIdent,
+                    navn: relasjon.navn,
+                    fødselsdato: relasjon.fødselsdato,
+                    manueltRegistrert: false,
+                    erFolkeregistrert: true,
+                })
             );
-        else return [];
     };
 
     const nullstillBarnIBrev = () => {

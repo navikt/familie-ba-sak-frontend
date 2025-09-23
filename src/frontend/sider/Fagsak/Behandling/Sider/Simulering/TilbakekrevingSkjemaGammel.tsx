@@ -21,7 +21,7 @@ import {
     Textarea,
 } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
-import { hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
 import useDokument from '../../../../../hooks/useDokument';
@@ -33,7 +33,7 @@ import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';
 import { målform } from '../../../../../typer/søknad';
-import { useFagsakContext } from '../../../FagsakContext';
+import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const ForhåndsvisVarselKnappContainer = styled.div`
@@ -100,10 +100,9 @@ const TilbakekrevingSkjemaGammel: React.FC<{
     const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimuleringContext();
     const { hentForhåndsvisning, visDokumentModal, hentetDokument, settVisDokumentModal } = useDokument();
-    const { bruker: brukerRessurs } = useFagsakContext();
+    const { bruker } = useBrukerContext();
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
-    const bruker = hentDataFraRessurs(brukerRessurs);
     const brevmottakere = åpenBehandling.brevmottakere ?? [];
     const erLesevisning = vurderErLesevisning();
 
