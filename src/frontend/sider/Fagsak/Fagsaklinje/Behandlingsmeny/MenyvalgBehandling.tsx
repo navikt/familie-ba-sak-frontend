@@ -3,18 +3,15 @@ import React from 'react';
 import { AInntekt } from './AInntekt/AInntekt';
 import EndreBehandlendeEnhet from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import EndreBehandlingstema from './EndreBehandling/EndreBehandlingstema';
-import HenleggBehandling from './HenleggBehandling/HenleggBehandling';
-import { HenleggBehandlingNy } from './HenleggBehandling/HenleggBehandlingNy';
+import { HenleggBehandling } from './HenleggBehandling/HenleggBehandling';
 import SettEllerOppdaterVenting from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
 import TaBehandlingAvVent from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import LeggTilBarnPåBehandling from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import { LeggTilEllerFjernBrevmottakerePåBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåBehandling';
-import { useAppContext } from '../../../../context/AppContext';
 import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakType } from '../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { useBehandlingContext } from '../../Behandling/context/BehandlingContext';
 
 interface IProps {
@@ -23,14 +20,12 @@ interface IProps {
 }
 
 const MenyvalgBehandling = ({ minimalFagsak, åpenBehandling }: IProps) => {
-    const { toggles } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     return (
         <>
-            {toggles[ToggleNavn.brukNyHenleggModal] && <HenleggBehandlingNy />}
-            {!toggles[ToggleNavn.brukNyHenleggModal] && <HenleggBehandling fagsakId={minimalFagsak.id} />}
+            <HenleggBehandling />
             <EndreBehandlendeEnhet />
             {minimalFagsak.fagsakType !== FagsakType.INSTITUSJON && <EndreBehandlingstema />}
             {!vurderErLesevisning() &&
