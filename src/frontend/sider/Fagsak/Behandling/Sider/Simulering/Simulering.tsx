@@ -9,7 +9,6 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import TilbakekrevingSkjemaGammel from './TilbakekrevingSkjemaGammel';
 import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
@@ -171,20 +170,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                             />
                         )}
-                        {skalViseTilbakekrevingSkjema &&
-                            (toggles[ToggleNavn.brukNyPdfModal] ? (
-                                <TilbakekrevingSkjema
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                    åpenBehandling={åpenBehandling}
-                                />
-                            ) : (
-                                <TilbakekrevingSkjemaGammel
-                                    søkerMålform={hentSøkersMålform(åpenBehandling)}
-                                    harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                    åpenBehandling={åpenBehandling}
-                                />
-                            ))}
+                        {skalViseTilbakekrevingSkjema && (
+                            <TilbakekrevingSkjema
+                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
+                                åpenBehandling={åpenBehandling}
+                            />
+                        )}
                     </>
                 )
             ) : (
