@@ -21,6 +21,7 @@ export enum ToggleNavn {
     bosattFinnmarkNordtroms = 'familie-ba-sak.bosatt-finnmark-nord-troms',
     skalViseOppholdsadresse = 'familie-ba-sak.skal-vise-oppholdsadresse',
     visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
+    brukNyLeggTilBarnModal = 'familie-ba-sak.bruk-ny-legg-til-barn-modal',
 }
 
 export const alleTogglerAv = (): IToggles => {
