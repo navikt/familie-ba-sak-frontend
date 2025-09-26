@@ -9,6 +9,7 @@ import BarnCheckbox from './BarnCheckbox';
 import { useAppContext } from '../../../../context/AppContext';
 import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
+import { ToggleNavn } from '../../../../typer/toggles';
 import { isoStringTilDate } from '../../../../utils/dato';
 import { useManuelleBrevmottakerePåFagsakContext } from '../../ManuelleBrevmottakerePåFagsakContext';
 
@@ -22,7 +23,7 @@ interface IProps {
 const BarnIBrevSkjema = (props: IProps) => {
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
     const { barnIBrevFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+    const { toggles, harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
 
     const sorterteBarn = barnIBrevFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
         if (!a.fødselsdato) {
@@ -63,11 +64,13 @@ const BarnIBrevSkjema = (props: IProps) => {
                 <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} {...props} />
             ))}
 
-            <LeggTilBarn
-                barnaMedOpplysninger={barnIBrevFelt}
-                manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
-                vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
-            />
+            {!toggles[ToggleNavn.brukNyLeggTilBarnModal] && (
+                <LeggTilBarn
+                    barnaMedOpplysninger={barnIBrevFelt}
+                    manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
+                    vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
+                />
+            )}
         </CheckboxGroup>
     );
 };
