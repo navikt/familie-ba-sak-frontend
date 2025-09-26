@@ -48,6 +48,18 @@ export interface IMinimalFagsak extends IBaseFagsak {
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
+export function sjekkGjelderInstitusjon(fagsak: IMinimalFagsak) {
+    return fagsak.fagsakType === FagsakType.INSTITUSJON;
+}
+
+export function sjekkGjelderEnsligMindreårig(fagsak: IMinimalFagsak) {
+    return fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+}
+
+export function sjekkGjelderSkjermetBarn(fagsak: IMinimalFagsak) {
+    return fagsak.fagsakType === FagsakType.SKJERMET_BARN;
+}
+
 export const mapMinimalFagsakTilBaseFagsak = (it: IMinimalFagsak): IBaseFagsak => ({
     id: it.id,
     fagsakeier: it.fagsakeier,
