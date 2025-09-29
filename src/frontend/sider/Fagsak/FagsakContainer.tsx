@@ -41,24 +41,30 @@ export function FagsakContainer() {
     useScrollTilAnker();
     useSyncModiaContext(bruker);
 
-    if (isPendingFagsak || isPendingBruker) {
+    if (isPendingFagsak) {
         return (
             <HStack gap={'4'} margin={'space-16'}>
                 <Loader size={'small'} />
-                Laster innhold...
+                Laster fagsak...
             </HStack>
         );
     }
 
-    if (fagsakError || brukerError) {
+    if (fagsakError) {
+        return <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>;
+    }
+
+    if (isPendingBruker) {
         return (
-            <Alert variant={'error'}>
-                <HStack gap={'4'}>
-                    {fagsakError && <div>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</div>}
-                    {brukerError && <div>Feil oppstod ved innlasting av bruker: {brukerError.message}</div>}
-                </HStack>
-            </Alert>
+            <HStack gap={'4'} margin={'space-16'}>
+                <Loader size={'small'} />
+                Laster bruker...
+            </HStack>
         );
+    }
+
+    if (brukerError) {
+        return <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>;
     }
 
     return (
