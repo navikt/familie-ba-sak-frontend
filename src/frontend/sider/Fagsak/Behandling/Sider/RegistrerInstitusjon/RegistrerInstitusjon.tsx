@@ -22,7 +22,7 @@ interface IProps {
 
 const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(åpenBehandling);
-    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 

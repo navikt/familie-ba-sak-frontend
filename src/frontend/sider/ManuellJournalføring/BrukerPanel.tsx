@@ -72,7 +72,7 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { hentSamhandler } = useSamhandlerRequest();
+    const { hentSamhandler } = useSamhandlerRequest(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
     const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
     const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
