@@ -91,7 +91,7 @@ const StyledCombobox = styled(UNSAFE_Combobox)`
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandlingContext();
-    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     const {
         skjema,

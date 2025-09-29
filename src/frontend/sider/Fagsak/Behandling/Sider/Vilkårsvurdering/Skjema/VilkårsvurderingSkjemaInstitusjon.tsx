@@ -44,7 +44,7 @@ interface IProps {
 const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ visFeilmeldinger }) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
-    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     if (samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
         hentOgSettSamhandler(behandling.behandlingId);
