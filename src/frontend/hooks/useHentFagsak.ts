@@ -32,12 +32,11 @@ export function useHentFagsak(fagsakId: number | undefined) {
     const { skalObfuskereData } = useAppContext();
     return useQuery({
         queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId),
-        queryFn: async () => {
+        queryFn: () => {
             if (fagsakId === undefined) {
                 return Promise.reject(new Error('Kan ikke hente fagsak uten fagsakId.'));
             }
-            const fagsak = await hentFagsak(request, fagsakId);
-            return Promise.resolve(fagsak);
+            return hentFagsak(request, fagsakId);
         },
         select: fagsak => {
             if (skalObfuskereData) {
