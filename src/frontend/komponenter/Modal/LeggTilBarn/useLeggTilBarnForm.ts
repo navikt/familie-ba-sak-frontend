@@ -9,7 +9,6 @@ import { hentPersonEnkel } from '../../../api/hentPersonEnkel';
 import { HentPersonEnkelQueryKeyFactory } from '../../../hooks/useHentPersonEnkel';
 import { useOnFormSubmitSuccessful } from '../../../hooks/useOnFormSubmitSuccessful';
 import { adressebeskyttelsestyper } from '../../../typer/person';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { dateTilIsoDatoStringEllerUndefined } from '../../../utils/dato';
 
 const påvirkerSystemLaster = false;
@@ -51,15 +50,10 @@ export enum Fields {
     NAVN = 'navn',
 }
 
-interface Props {
-    onLeggTilBarn: (barn: IBarnMedOpplysninger) => void;
-    harBrevmottaker: boolean;
-}
-
-export function useLeggTilBarnForm({ onLeggTilBarn, harBrevmottaker }: Props) {
+export function useLeggTilBarnForm() {
     const queryClient = useQueryClient();
     const { request } = useHttp();
-    const { lukkModal } = useLeggTilBarnModalContext();
+    const { lukkModal, onLeggTilBarn, harBrevmottaker } = useLeggTilBarnModalContext();
 
     const form = useForm<FormValues, unknown, TransformedFormValues>({
         defaultValues: {

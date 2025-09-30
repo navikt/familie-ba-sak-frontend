@@ -1,16 +1,26 @@
 import React from 'react';
 import { createContext, type PropsWithChildren, useContext, useState } from 'react';
 
+import type { IBarnMedOpplysninger } from '../../../typer/søknad';
+
 interface Context {
     erModalÅpen: boolean;
     åpneModal: () => void;
     lukkModal: () => void;
-    toggleModal: () => void;
+    barn: IBarnMedOpplysninger[];
+    onLeggTilBarn: (barn: IBarnMedOpplysninger) => void;
+    harBrevmottaker: boolean;
+}
+
+interface Props extends PropsWithChildren {
+    barn: IBarnMedOpplysninger[];
+    onLeggTilBarn: (barn: IBarnMedOpplysninger) => void;
+    harBrevmottaker: boolean;
 }
 
 const Context = createContext<Context | undefined>(undefined);
 
-export function LeggTilBarnModalContextProvider({ children }: PropsWithChildren) {
+export function LeggTilBarnModalContextProvider({ barn, onLeggTilBarn, harBrevmottaker, children }: Props) {
     const [erModalÅpen, settErModalÅpen] = useState(false);
 
     function lukkModal() {
@@ -21,11 +31,20 @@ export function LeggTilBarnModalContextProvider({ children }: PropsWithChildren)
         settErModalÅpen(true);
     }
 
-    function toggleModal() {
-        settErModalÅpen(prev => !prev);
-    }
-
-    return <Context.Provider value={{ erModalÅpen, lukkModal, åpneModal, toggleModal }}>{children}</Context.Provider>;
+    return (
+        <Context.Provider
+            value={{
+                erModalÅpen,
+                lukkModal,
+                åpneModal,
+                barn,
+                onLeggTilBarn,
+                harBrevmottaker,
+            }}
+        >
+            {children}
+        </Context.Provider>
+    );
 }
 
 export function useLeggTilBarnModalContext() {

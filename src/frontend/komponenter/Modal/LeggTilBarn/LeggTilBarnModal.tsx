@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import { FormProvider } from 'react-hook-form';
 
@@ -10,21 +10,12 @@ import { FødselsnummerField } from './FødselsnummerField';
 import { useLeggTilBarnModalContext } from './LeggTilBarnModalContext';
 import { NavnField } from './NavnField';
 import { Fields, useLeggTilBarnForm } from './useLeggTilBarnForm';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { ExternalLink } from '../../ExternalLink';
 
-interface Props {
-    barn: IBarnMedOpplysninger[];
-    onLeggTilBarn: (barn: IBarnMedOpplysninger) => void;
-    harBrevmottaker: boolean;
-}
-
-export function LeggTilBarnModal({ barn, onLeggTilBarn, harBrevmottaker }: Props) {
-    const fødselsnummerRef = useRef<HTMLInputElement | null>(null);
-
+export function LeggTilBarnModal() {
     const { lukkModal, erModalÅpen } = useLeggTilBarnModalContext();
 
-    const { form, onSubmit } = useLeggTilBarnForm({ onLeggTilBarn, harBrevmottaker });
+    const { form, onSubmit } = useLeggTilBarnForm();
 
     function onClose() {
         lukkModal();
@@ -33,7 +24,6 @@ export function LeggTilBarnModal({ barn, onLeggTilBarn, harBrevmottaker }: Props
 
     function åpneDrek(event: React.UIEvent) {
         event.preventDefault();
-        fødselsnummerRef.current?.focus();
         window.open('/redirect/drek', '_new');
     }
 
@@ -78,7 +68,7 @@ export function LeggTilBarnModal({ barn, onLeggTilBarn, harBrevmottaker }: Props
                         >
                             <VStack gap={'space-16'}>
                                 <ErFolkeregistrertField />
-                                {erFolkeregistrert && <FødselsnummerField ref={fødselsnummerRef} barn={barn} />}
+                                {erFolkeregistrert && <FødselsnummerField />}
                                 {!erFolkeregistrert && (
                                     <VStack gap={'space-16'}>
                                         <FødselsdatoField />

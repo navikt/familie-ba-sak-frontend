@@ -5,9 +5,8 @@ import { useController, useFormContext } from 'react-hook-form';
 import { TextField } from '@navikt/ds-react';
 import { idnr } from '@navikt/fnrvalidator';
 
+import { useLeggTilBarnModalContext } from './LeggTilBarnModalContext';
 import { Fields, type FormValues } from './useLeggTilBarnForm';
-import { useMergedRef } from '../../../hooks/useMergedRef';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 
 function sjekkEr11Tall(verdi: string): boolean {
     return /^\d{11}$/.test(verdi.replace(' ', ''));
@@ -17,13 +16,9 @@ function sjekkErGyldigIdent(verdi: string): boolean {
     return idnr(verdi).status === 'valid';
 }
 
-interface Props {
-    ref: React.Ref<HTMLInputElement | null>;
-    barn: IBarnMedOpplysninger[];
-}
-
-export function FødselsnummerField({ ref, barn }: Props) {
+export function FødselsnummerField() {
     const { control } = useFormContext<FormValues>();
+    const { barn } = useLeggTilBarnModalContext();
 
     const alleredeLagtTilFødslesnummer = barn.map(b => b.ident);
 
@@ -48,13 +43,11 @@ export function FødselsnummerField({ ref, barn }: Props) {
         },
     });
 
-    const mergedRef = useMergedRef(ref, field.ref);
-
     return (
         <TextField
-            ref={mergedRef}
             label={'Fødselsnummer / D-nummer'}
             placeholder={'11 siffer'}
+            ref={field.ref}
             name={field.name}
             value={field.value}
             onBlur={field.onBlur}
