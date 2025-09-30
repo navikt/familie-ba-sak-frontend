@@ -376,7 +376,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             settVisFeilmeldinger={settVisfeilmeldinger}
                         />
                     )}
-                    {skjema.felter.brevmal.verdi !== Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
+                    {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14 && (
                         <>
                             <DeltBostedSkjema
                                 avtalerOmDeltBostedPerBarnFelt={skjema.felter.avtalerOmDeltBostedPerBarn}
