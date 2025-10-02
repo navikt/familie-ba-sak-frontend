@@ -180,7 +180,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
             onLeggTilBarn={onLeggTilBarn}
             harBrevmottaker={manuelleBrevmottakerePåFagsak.length > 0}
         >
-            {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnModal />}
+            {!erLesevisning && <LeggTilBarnModal />}
             <Container>
                 <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
                 {!brukerHarUtenlandskAdresse && distribusjonskanalInfo()}
@@ -243,7 +243,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                                     manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
                                     vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
                                 />
-                                {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnKnapp />}
+                                {!erLesevisning && <LeggTilBarnKnapp />}
                             </>
                         )}
 
@@ -255,7 +255,7 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
                                     settVisFeilmeldinger={settVisfeilmeldinger}
                                     tittel={barnIBrevÅrsakTilTittel[barnIBrevÅrsak]}
                                 />
-                                {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnKnapp />}
+                                {!erLesevisning && <LeggTilBarnKnapp />}
                             </>
                         )}
 
