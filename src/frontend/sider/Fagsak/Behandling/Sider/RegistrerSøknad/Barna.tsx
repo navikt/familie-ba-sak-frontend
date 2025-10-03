@@ -7,13 +7,10 @@ import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt
 
 import BarnMedOpplysninger from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
-import { useAppContext } from '../../../../../context/AppContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
-import LeggTilBarn from '../../../../../komponenter/LeggTilBarn/LeggTilBarn';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { isoStringTilDate } from '../../../../../utils/dato';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
@@ -31,11 +28,8 @@ const IngenBarnRegistrertInfo = styled(Alert)`
 `;
 
 const Barna: React.FunctionComponent = () => {
-    const { toggles } = useAppContext();
-
-    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn, behandling } =
+    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();
-    const brevmottakere = behandling?.brevmottakere ?? [];
     const lesevisning = vurderErLesevisning();
     const { bruker } = useBrukerContext();
     const { skjema } = useSøknadContext();
@@ -110,18 +104,6 @@ const Barna: React.FunctionComponent = () => {
                         children={'Folkeregisteret har ikke registrerte barn på denne søkeren'}
                     />
                 )}
-
-                {!lesevisning &&
-                    !gjelderInstitusjon &&
-                    !gjelderEnsligMindreårig &&
-                    !gjelderSkjermetBarn &&
-                    !toggles[ToggleNavn.brukNyLeggTilBarnModal] && (
-                        <LeggTilBarn
-                            barnaMedOpplysninger={skjema.felter.barnaMedOpplysninger}
-                            manuelleBrevmottakere={brevmottakere}
-                            vurderErLesevisning={vurderErLesevisning}
-                        />
-                    )}
             </StyledCheckboxGroup>
         </BarnaWrapper>
     );

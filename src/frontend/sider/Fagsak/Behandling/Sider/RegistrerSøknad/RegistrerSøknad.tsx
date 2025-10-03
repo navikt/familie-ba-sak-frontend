@@ -10,14 +10,12 @@ import Barna from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { useSøknadContext } from './SøknadContext';
 import SøknadType from './SøknadType';
-import { useAppContext } from '../../../../../context/AppContext';
 import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../../../komponenter/MålformVelger';
 import { BehandlingSteg } from '../../../../../typer/behandling';
 import { sjekkGjelderInstitusjon } from '../../../../../typer/fagsak';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
@@ -31,7 +29,6 @@ const StyledSkjemasteg = styled(Skjemasteg)`
 `;
 
 const RegistrerSøknad: React.FC = () => {
-    const { toggles } = useAppContext();
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
@@ -57,7 +54,7 @@ const RegistrerSøknad: React.FC = () => {
             onLeggTilBarn={onLeggTilBarn}
             harBrevmottaker={behandling.brevmottakere.length > 0}
         >
-            {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnModal />}
+            {!erLesevisning && <LeggTilBarnModal />}
             <StyledSkjemasteg
                 className={'søknad'}
                 tittel={'Registrer opplysninger fra søknaden'}
@@ -85,7 +82,7 @@ const RegistrerSøknad: React.FC = () => {
 
                 <Barna />
 
-                {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnKnapp />}
+                {!erLesevisning && <LeggTilBarnKnapp />}
 
                 <MålformVelger
                     målformFelt={skjema.felter.målform}

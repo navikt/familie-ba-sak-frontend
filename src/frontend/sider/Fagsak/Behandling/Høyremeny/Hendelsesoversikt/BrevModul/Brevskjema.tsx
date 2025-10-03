@@ -22,7 +22,6 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { useAppContext } from '../../../../../../context/AppContext';
 import { ModalType } from '../../../../../../context/ModalContext';
 import { useModal } from '../../../../../../hooks/useModal';
 import {
@@ -39,7 +38,6 @@ import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
 import type { IPersonInfo } from '../../../../../../typer/person';
 import { type IBarnMedOpplysninger, målform } from '../../../../../../typer/søknad';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { onOptionSelected } from '../../../../../../utils/skjema';
@@ -95,7 +93,6 @@ const StyledCombobox = styled(UNSAFE_Combobox)`
 `;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { toggles } = useAppContext();
     const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandlingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
@@ -186,7 +183,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 onLeggTilBarn={onLeggTilBarn}
                 harBrevmottaker={brevmottakere.length > 0}
             >
-                {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnModal />}
+                {!erLesevisning && <LeggTilBarnModal />}
                 <Fieldset
                     error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
                     legend="Send brev"
@@ -386,7 +383,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 manuelleBrevmottakere={brevmottakere}
                                 vurderErLesevisning={vurderErLesevisning}
                             />
-                            {!erLesevisning && toggles[ToggleNavn.brukNyLeggTilBarnModal] && <LeggTilBarnKnapp />}
+                            {!erLesevisning && <LeggTilBarnKnapp />}
                         </>
                     )}
                     {skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER && (

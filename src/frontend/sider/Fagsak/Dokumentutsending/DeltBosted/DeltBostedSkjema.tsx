@@ -6,11 +6,7 @@ import { CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import BarnCheckbox from './BarnCheckbox';
-import { useAppContext } from '../../../../context/AppContext';
-import LeggTilBarn from '../../../../komponenter/LeggTilBarn/LeggTilBarn';
-import type { IPersonInfo } from '../../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { isoStringTilDate } from '../../../../utils/dato';
 import type {
     IRestBrevmottaker,
@@ -27,15 +23,7 @@ interface IProps {
 }
 
 const DeltBostedSkjema = (props: IProps) => {
-    const { toggles } = useAppContext();
-    const {
-        barnMedDeltBostedFelt,
-        avtalerOmDeltBostedPerBarnFelt,
-        visFeilmeldinger,
-        settVisFeilmeldinger,
-        manuelleBrevmottakere,
-        vurderErLesevisning,
-    } = props;
+    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
 
     const sorterteBarn = barnMedDeltBostedFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
         if (!a.fødselsdato) {
@@ -99,20 +87,6 @@ const DeltBostedSkjema = (props: IProps) => {
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
                 <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} {...props} />
             ))}
-
-            {!toggles[ToggleNavn.brukNyLeggTilBarnModal] && (
-                <LeggTilBarn
-                    barnaMedOpplysninger={barnMedDeltBostedFelt}
-                    onSuccess={(barn: IPersonInfo) => {
-                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                            [barn.personIdent]: [''],
-                        });
-                    }}
-                    manuelleBrevmottakere={manuelleBrevmottakere}
-                    vurderErLesevisning={vurderErLesevisning}
-                />
-            )}
         </CheckboxGroup>
     );
 };
