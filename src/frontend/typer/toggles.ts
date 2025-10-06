@@ -20,6 +20,7 @@ export enum ToggleNavn {
     skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
     bosattFinnmarkNordtroms = 'familie-ba-sak.bosatt-finnmark-nord-troms',
     skalViseOppholdsadresse = 'familie-ba-sak.skal-vise-oppholdsadresse',
+    skalViseDeltBosted = 'familie-ba-sak.skal-vise-deltBosted',
     visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
 }
 
