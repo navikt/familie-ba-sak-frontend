@@ -95,14 +95,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                     ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                     historikk={registerHistorikk.bostedsadresse}
                 />
-                {toggles[ToggleNavn.skalViseOppholdsadresse] && (
+                {toggles[ToggleNavn.skalViseOppholdsadresse] && registerHistorikk.oppholdsadresse.length > 0 && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.OPPHOLDSADRESSE}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                         historikk={registerHistorikk.oppholdsadresse}
                     />
                 )}
-                {toggles[ToggleNavn.skalViseDeltBosted] && (
+                {toggles[ToggleNavn.skalViseDeltBosted] && registerHistorikk.deltBosted.length > 0 && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.DELTBOSTED}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
