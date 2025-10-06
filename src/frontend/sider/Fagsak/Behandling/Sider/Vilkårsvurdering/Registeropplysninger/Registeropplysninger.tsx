@@ -10,7 +10,7 @@ import {
     HouseIcon,
     PassportIcon,
 } from '@navikt/aksel-icons';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
 import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import { HentetLabel } from './HentetLabel';
@@ -36,7 +36,6 @@ interface IRegisteropplysningerProps {
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHistorikk, fødselsdato }) => {
     const { toggles } = useAppContext();
-    const manglerRegisteropplysninger = registerHistorikk.statsborgerskap.length === 0;
 
     const personErDød = registerHistorikk.dødsboadresse.length > 0;
 
@@ -45,71 +44,65 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
             <SemiBoldHeading level={'3'} size="medium">
                 Registeropplysninger
             </SemiBoldHeading>
-            {manglerRegisteropplysninger ? (
-                <Alert variant="info" style={{ marginTop: ASpacing4 }}>
-                    Det ble ikke hentet inn registeropplysninger på denne behandlingen.
-                </Alert>
-            ) : (
-                <Container>
-                    <HentetLabel
-                        size={'small'}
-                        style={{ marginBottom: ASpacing4 }}
-                        children={
-                            'Sist hentet fra Folkeregisteret ' +
-                            isoStringTilFormatertString({
-                                isoString: registerHistorikk.hentetTidspunkt,
-                                tilFormat: Datoformat.DATO_TID_SEKUNDER,
-                            })
-                        }
-                    />
+            <Container>
+                <HentetLabel
+                    size={'small'}
+                    style={{ marginBottom: ASpacing4 }}
+                    children={
+                        'Sist hentet fra Folkeregisteret ' +
+                        isoStringTilFormatertString({
+                            isoString: registerHistorikk.hentetTidspunkt,
+                            tilFormat: Datoformat.DATO_TID_SEKUNDER,
+                        })
+                    }
+                />
+                <RegisteropplysningerTabell
+                    opplysningstype={Registeropplysning.FØDSELSDATO}
+                    ikon={<CalendarIcon fontSize={'1.5rem'} title="Kalender-ikon" focusable="false" />}
+                    historikk={[
+                        {
+                            verdi: isoStringTilFormatertString({
+                                isoString: fødselsdato,
+                                tilFormat: Datoformat.DATO,
+                            }),
+                        },
+                    ]}
+                />
+                {personErDød && (
                     <RegisteropplysningerTabell
-                        opplysningstype={Registeropplysning.FØDSELSDATO}
-                        ikon={<CalendarIcon fontSize={'1.5rem'} title="Kalender-ikon" focusable="false" />}
-                        historikk={[
-                            {
-                                verdi: isoStringTilFormatertString({
-                                    isoString: fødselsdato,
-                                    tilFormat: Datoformat.DATO,
-                                }),
-                            },
-                        ]}
+                        opplysningstype={Registeropplysning.DØDSBOADRESSE}
+                        ikon={<FlowerPetalFallingIcon fontSize={'1.5rem'} title="Blomst-ikon" focusable="false" />}
+                        historikk={registerHistorikk.dødsboadresse}
                     />
-                    {personErDød && (
-                        <RegisteropplysningerTabell
-                            opplysningstype={Registeropplysning.DØDSBOADRESSE}
-                            ikon={<FlowerPetalFallingIcon fontSize={'1.5rem'} title="Blomst-ikon" focusable="false" />}
-                            historikk={registerHistorikk.dødsboadresse}
-                        />
-                    )}
+                )}
+                <RegisteropplysningerTabell
+                    opplysningstype={Registeropplysning.SIVILSTAND}
+                    ikon={<HeartIcon fontSize={'1.5rem'} title="Hjerte-ikon" focusable="false" />}
+                    historikk={registerHistorikk.sivilstand}
+                />
+                <RegisteropplysningerTabell
+                    opplysningstype={Registeropplysning.OPPHOLD}
+                    ikon={<PassportIcon fontSize={'1.5rem'} title="Pass-ikon" focusable="false" />}
+                    historikk={registerHistorikk.oppholdstillatelse}
+                />
+                <RegisteropplysningerTabell
+                    opplysningstype={Registeropplysning.STATSBORGERSKAP}
+                    ikon={<GlobeIcon fontSize={'1.5rem'} title="Globe-ikon" focusable="false" />}
+                    historikk={registerHistorikk.statsborgerskap}
+                />
+                <RegisteropplysningerTabell
+                    opplysningstype={Registeropplysning.BOSTEDSADRESSE}
+                    ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
+                    historikk={registerHistorikk.bostedsadresse}
+                />
+                {toggles[ToggleNavn.skalViseOppholdsadresse] && (
                     <RegisteropplysningerTabell
-                        opplysningstype={Registeropplysning.SIVILSTAND}
-                        ikon={<HeartIcon fontSize={'1.5rem'} title="Hjerte-ikon" focusable="false" />}
-                        historikk={registerHistorikk.sivilstand}
-                    />
-                    <RegisteropplysningerTabell
-                        opplysningstype={Registeropplysning.OPPHOLD}
-                        ikon={<PassportIcon fontSize={'1.5rem'} title="Pass-ikon" focusable="false" />}
-                        historikk={registerHistorikk.oppholdstillatelse}
-                    />
-                    <RegisteropplysningerTabell
-                        opplysningstype={Registeropplysning.STATSBORGERSKAP}
-                        ikon={<GlobeIcon fontSize={'1.5rem'} title="Globe-ikon" focusable="false" />}
-                        historikk={registerHistorikk.statsborgerskap}
-                    />
-                    <RegisteropplysningerTabell
-                        opplysningstype={Registeropplysning.BOSTEDSADRESSE}
+                        opplysningstype={Registeropplysning.OPPHOLDSADRESSE}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
-                        historikk={registerHistorikk.bostedsadresse}
+                        historikk={registerHistorikk.oppholdsadresse}
                     />
-                    {toggles[ToggleNavn.skalViseOppholdsadresse] && (
-                        <RegisteropplysningerTabell
-                            opplysningstype={Registeropplysning.OPPHOLDSADRESSE}
-                            ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
-                            historikk={registerHistorikk.oppholdsadresse}
-                        />
-                    )}
-                </Container>
-            )}
+                )}
+            </Container>
         </>
     );
 };
