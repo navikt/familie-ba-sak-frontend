@@ -102,6 +102,13 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         historikk={registerHistorikk.oppholdsadresse}
                     />
                 )}
+                {toggles[ToggleNavn.skalViseDeltBosted] && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.DELTBOSTED}
+                        ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
+                        historikk={registerHistorikk.deltBosted}
+                    />
+                )}
             </Container>
         </>
     );
