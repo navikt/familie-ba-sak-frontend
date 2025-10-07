@@ -76,7 +76,8 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   (årsak !== BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
                       kanOppretteRevurderingMedÅrsakIverksetteKAVedtak) &&
                   årsak !== BehandlingÅrsak.KLAGE &&
-                  årsak !== BehandlingÅrsak.FINNMARKSTILLEGG
+                  årsak !== BehandlingÅrsak.FINNMARKSTILLEGG &&
+                  årsak !== BehandlingÅrsak.SVALBARDTILLEGG
           );
 
 interface IProps {
