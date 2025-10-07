@@ -75,6 +75,7 @@ export enum BehandlingÅrsak {
     MÅNEDLIG_VALUTAJUSTERING = 'MÅNEDLIG_VALUTAJUSTERING',
     IVERKSETTE_KA_VEDTAK = 'IVERKSETTE_KA_VEDTAK',
     FINNMARKSTILLEGG = 'FINNMARKSTILLEGG',
+    SVALBARDTILLEGG = 'SVALBARDTILLEGG',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak, string> = {
@@ -105,6 +106,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
     IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
     FINNMARKSTILLEGG: 'Finnmarkstillegg',
+    SVALBARDTILLEGG: 'Svalbardtillegg',
 
     /** Klage: **/
     ANNET: 'Annet',
