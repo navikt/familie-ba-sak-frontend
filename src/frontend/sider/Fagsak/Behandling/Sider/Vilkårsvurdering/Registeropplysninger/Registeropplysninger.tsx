@@ -15,10 +15,8 @@ import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
 
 import { HentetLabel } from './HentetLabel';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
-import { useAppContext } from '../../../../../../context/AppContext';
 import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
 import { Registeropplysning } from '../../../../../../typer/registeropplysning';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 
 const Container = styled.div`
@@ -35,8 +33,6 @@ interface IRegisteropplysningerProps {
 }
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHistorikk, fødselsdato }) => {
-    const { toggles } = useAppContext();
-
     const personErDød = registerHistorikk.dødsboadresse.length > 0;
 
     return (
@@ -95,14 +91,14 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                     ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                     historikk={registerHistorikk.bostedsadresse}
                 />
-                {toggles[ToggleNavn.skalViseOppholdsadresse] && registerHistorikk.oppholdsadresse.length > 0 && (
+                {registerHistorikk.oppholdsadresse.length > 0 && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.OPPHOLDSADRESSE}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                         historikk={registerHistorikk.oppholdsadresse}
                     />
                 )}
-                {toggles[ToggleNavn.skalViseDeltBosted] && registerHistorikk.deltBosted.length > 0 && (
+                {registerHistorikk.deltBosted.length > 0 && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.DELTBOSTED}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
