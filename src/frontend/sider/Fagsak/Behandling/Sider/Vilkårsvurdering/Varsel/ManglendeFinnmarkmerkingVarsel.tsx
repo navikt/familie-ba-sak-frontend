@@ -5,7 +5,7 @@ import { Alert, BodyLong, Heading, Table, VStack } from '@navikt/ds-react';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
-export const ManglendeFinnmarkmerkingVarsel = () => {
+export function ManglendeFinnmarkmerkingVarsel() {
     const { behandling } = useBehandlingContext();
 
     const manglendeFinnmarkmerking = behandling.manglendeFinnmarkmerking;
@@ -14,9 +14,10 @@ export const ManglendeFinnmarkmerkingVarsel = () => {
     if (!skalViseVarsel) {
         return null;
     }
+
     return (
-        <Alert variant={'warning'}>
-            <Heading spacing size="small" level="3">
+        <Alert variant={'warning'} contentMaxWidth={false}>
+            <Heading spacing={true} size={'small'} level={'3'}>
                 Forretningsadresse i Finnmark eller Nord-Troms
             </Heading>
             <VStack gap={'space-8'}>
@@ -27,8 +28,8 @@ export const ManglendeFinnmarkmerkingVarsel = () => {
                 <Table size={'small'} style={{ width: '20rem' }}>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell scope="col">Person</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                            <Table.HeaderCell scope={'col'}>Person</Table.HeaderCell>
+                            <Table.HeaderCell scope={'col'}>Periode</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -52,4 +53,4 @@ export const ManglendeFinnmarkmerkingVarsel = () => {
             </VStack>
         </Alert>
     );
-};
+}
