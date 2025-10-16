@@ -1,9 +1,4 @@
-import type {
-    BehandlingResultat,
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingÅrsak,
-} from '../../../typer/behandling';
+import type { BehandlingResultat, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../typer/behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from '../../../typer/behandlingstema';
 
 export interface VisningBehandling {

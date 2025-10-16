@@ -3,11 +3,7 @@ import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/rea
 import { useHttp } from '@navikt/familie-http';
 
 import { hentFagsaker } from '../api/hentFagsaker';
-import {
-    type IBaseFagsak,
-    type IMinimalFagsak,
-    mapMinimalFagsakTilBaseFagsak,
-} from '../typer/fagsak';
+import { type IBaseFagsak, type IMinimalFagsak, mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
 
 export const HentFagsakerQueryKeyFactory = {
     fagsaker: (personIdent: string) => ['fagsaker', personIdent],
@@ -21,11 +17,7 @@ type Parameters = Omit<
     påvirkerSystemLaster?: boolean;
 };
 
-export function useHentFagsaker({
-    personIdent,
-    påvirkerSystemLaster = false,
-    ...rest
-}: Parameters) {
+export function useHentFagsaker({ personIdent, påvirkerSystemLaster = false, ...rest }: Parameters) {
     const { request } = useHttp();
     return useQuery({
         queryKey: HentFagsakerQueryKeyFactory.fagsaker(personIdent),

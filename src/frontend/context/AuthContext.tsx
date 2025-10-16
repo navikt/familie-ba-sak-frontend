@@ -17,8 +17,7 @@ const AuthContext = createContext<AuthProviderExports | undefined>(undefined);
 
 const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
     const [autentisert, settAutentisert] = React.useState(true);
-    const [innloggetSaksbehandler, settInnloggetSaksbehandler] =
-        React.useState(autentisertSaksbehandler);
+    const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(autentisertSaksbehandler);
 
     useEffect(() => {
         if (autentisertSaksbehandler) {
@@ -45,10 +44,7 @@ const HttpProviderWrapper = ({ children }: PropsWithChildren) => {
     const { innloggetSaksbehandler, settAutentisert } = useAuthContext();
 
     return (
-        <HttpProvider
-            innloggetSaksbehandler={innloggetSaksbehandler}
-            settAutentisert={settAutentisert}
-        >
+        <HttpProvider innloggetSaksbehandler={innloggetSaksbehandler} settAutentisert={settAutentisert}>
             {children}
         </HttpProvider>
     );

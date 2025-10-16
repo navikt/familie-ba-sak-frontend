@@ -36,8 +36,7 @@ const Main = styled.main<{ $systemetLaster: boolean }>`
 `;
 
 const Container: React.FC = () => {
-    const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal, erTogglesHentet } =
-        useAppContext();
+    const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal, erTogglesHentet } = useAppContext();
 
     return (
         <Router>
@@ -57,10 +56,7 @@ const Container: React.FC = () => {
                             />
                             <Routes>
                                 <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
-                                <Route
-                                    path="/oppgaver/journalfor/:oppgaveId"
-                                    element={<ManuellJournalføring />}
-                                />
+                                <Route path="/oppgaver/journalfor/:oppgaveId" element={<ManuellJournalføring />} />
                                 <Route
                                     path="/tidslinjer/:behandlingId"
                                     element={

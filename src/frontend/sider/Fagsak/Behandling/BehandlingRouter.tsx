@@ -36,18 +36,13 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
     const sidevisning = hentSideHref(location.pathname);
     useEffect(() => {
         if (sidevisning) {
-            leggTilBesøktSide(
-                Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId
-            );
+            leggTilBesøktSide(Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId);
         }
     }, [sidevisning]);
 
     return (
         <Routes>
-            <Route
-                path="/registrer-institusjon"
-                element={<RegistrerInstitusjon åpenBehandling={behandling} />}
-            />
+            <Route path="/registrer-institusjon" element={<RegistrerInstitusjon åpenBehandling={behandling} />} />
             <Route
                 path="/registrer-soknad"
                 element={
@@ -56,10 +51,7 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                     </SøknadProvider>
                 }
             />
-            <Route
-                path="/filtreringsregler"
-                element={<Filtreringsregler åpenBehandling={behandling} />}
-            />
+            <Route path="/filtreringsregler" element={<Filtreringsregler åpenBehandling={behandling} />} />
             <Route
                 path="/vilkaarsvurdering"
                 element={

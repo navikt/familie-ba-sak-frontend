@@ -3,18 +3,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-    Alert,
-    BodyLong,
-    Button,
-    Heading,
-    HStack,
-    Modal,
-    Spacer,
-    Switch,
-    Table,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HStack, Modal, Spacer, Switch, Table, VStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -25,11 +14,7 @@ import {
     type IBehandling,
     VurderingsstrategiForValutakurser,
 } from '../../../../../../../typer/behandling';
-import {
-    EøsPeriodeStatus,
-    type IRestValutakurs,
-    Vurderingsform,
-} from '../../../../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { ToggleNavn } from '../../../../../../../typer/toggles';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
@@ -74,22 +59,14 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const Valutakurser: React.FC<IProps> = ({
-    valutakurser,
-    erValutakurserGyldige,
-    åpenBehandling,
-    visFeilmeldinger,
-}) => {
+const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }) => {
     const { toggles } = useAppContext();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { request } = useHttp();
-    const [
-        erGjenopprettAutomatiskeValutakurserModalÅpen,
-        settErGjenopprettAutomatiskeValutakurserModalÅpen,
-    ] = useState(false);
+    const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
+        useState(false);
     const kanOverstyreAutomatiskeValutakurser =
-        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING &&
-        toggles[ToggleNavn.kanBehandleTekniskEndring];
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && toggles[ToggleNavn.kanBehandleTekniskEndring];
 
     const erLesevisning = vurderErLesevisning();
 
@@ -107,9 +84,7 @@ const Valutakurser: React.FC<IProps> = ({
     };
 
     const endreVurderingsstrategiForValutakurser = () => {
-        const nesteVurderingsstrategi = hentNesteVurderingsstrategi(
-            åpenBehandling.vurderingsstrategiForValutakurser
-        );
+        const nesteVurderingsstrategi = hentNesteVurderingsstrategi(åpenBehandling.vurderingsstrategiForValutakurser);
 
         request<undefined, IBehandling>({
             method: 'PUT',
@@ -129,8 +104,7 @@ const Valutakurser: React.FC<IProps> = ({
     );
 
     const erManuellVurderingsstrategiForValutakurser =
-        åpenBehandling.vurderingsstrategiForValutakurser ===
-        VurderingsstrategiForValutakurser.MANUELL;
+        åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
     return (
         <ValutakurserContainer>
@@ -147,9 +121,7 @@ const Valutakurser: React.FC<IProps> = ({
                             id={'vis-alle-valuta-perioder'}
                             checked={visAlleValutaperioder}
                             onChange={() => {
-                                setVisAlleValutaperioder(
-                                    forrigeVisAlleValutaperioder => !forrigeVisAlleValutaperioder
-                                );
+                                setVisAlleValutaperioder(forrigeVisAlleValutaperioder => !forrigeVisAlleValutaperioder);
                             }}
                         >
                             Vis alle valutaperioder
@@ -157,15 +129,10 @@ const Valutakurser: React.FC<IProps> = ({
                     )}
                     {!erLesevisning &&
                         kanOverstyreAutomatiskeValutakurser &&
-                        (erManuellVurderingsstrategiForValutakurser ||
-                            erValutakursSomErVurdertAutomatisk) && (
+                        (erManuellVurderingsstrategiForValutakurser || erValutakursSomErVurdertAutomatisk) && (
                             <Button
                                 size="xsmall"
-                                variant={
-                                    erManuellVurderingsstrategiForValutakurser
-                                        ? 'danger'
-                                        : 'primary'
-                                }
+                                variant={erManuellVurderingsstrategiForValutakurser ? 'danger' : 'primary'}
                                 onClick={() =>
                                     erManuellVurderingsstrategiForValutakurser
                                         ? settErGjenopprettAutomatiskeValutakurserModalÅpen(true)
@@ -184,9 +151,7 @@ const Valutakurser: React.FC<IProps> = ({
                 <StyledAlert
                     variant={'warning'}
                     fullWidth
-                    children={
-                        'For perioder som skal differanseberegnes, må valutakursdato registeres'
-                    }
+                    children={'For perioder som skal differanseberegnes, må valutakursdato registeres'}
                 />
             )}
             <StyledTable>
@@ -203,9 +168,7 @@ const Valutakurser: React.FC<IProps> = ({
                     {valutakurser
                         .filter(
                             (valutakurs, index) =>
-                                index === 0 ||
-                                valutakurs.status !== EøsPeriodeStatus.OK ||
-                                visAlleValutaperioder
+                                index === 0 || valutakurs.status !== EøsPeriodeStatus.OK || visAlleValutaperioder
                         )
                         .map(valutakurs => (
                             <ValutakursTabellRad
@@ -228,9 +191,8 @@ const Valutakurser: React.FC<IProps> = ({
                 >
                     <Modal.Body>
                         <BodyLong>
-                            Er du sikker på at du vil gjenopprette de automatiske valutakursene?
-                            Alle manuelle endringer du har gjort i valutakursene denne behandlingen
-                            vil bli slettet.
+                            Er du sikker på at du vil gjenopprette de automatiske valutakursene? Alle manuelle endringer
+                            du har gjort i valutakursene denne behandlingen vil bli slettet.
                         </BodyLong>
                     </Modal.Body>
                     <Modal.Footer>

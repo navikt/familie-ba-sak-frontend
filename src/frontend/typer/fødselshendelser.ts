@@ -32,11 +32,9 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     MOR_HAR_IKKE_VERGE: 'Mor har ikke verge',
     MOR_MOTTAR_IKKE_LØPENDE_UTVIDET: 'Mor mottar ikke utvidet barnetrygd',
     MOR_HAR_IKKE_LØPENDE_EØS_BARNETRYGD: 'Mor har ikke løpende EØS-barnetrygd',
-    LØPER_IKKE_BARNETRYGD_FOR_BARNET:
-        'Det er ikke utbetalt barnetrygd for barnet til annen mottaker',
+    LØPER_IKKE_BARNETRYGD_FOR_BARNET: 'Det er ikke utbetalt barnetrygd for barnet til annen mottaker',
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT:
         'Fagsaken har ikke blitt migrert fra infotrygd etter barn ble født',
-    MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO:
-        'Mor oppfyller ikke vilkår for utvidet barnetrygd',
+    MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO: 'Mor oppfyller ikke vilkår for utvidet barnetrygd',
     MOR_HAR_IKKE_OPPHØRT_BARNETRYGD: 'Mor har ikke opphørt barnetrgyd',
 };

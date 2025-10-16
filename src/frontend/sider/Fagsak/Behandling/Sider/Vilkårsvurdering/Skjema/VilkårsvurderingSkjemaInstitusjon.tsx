@@ -11,11 +11,7 @@ import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/Samh
 import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
-import {
-    annenVurderingConfig,
-    AnnenVurderingType,
-    vilkårConfigInstitusjon,
-} from '../../../../../../typer/vilkår';
+import { annenVurderingConfig, AnnenVurderingType, vilkårConfigInstitusjon } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -45,20 +41,16 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
-    visFeilmeldinger,
-}) => {
+const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ visFeilmeldinger }) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
-    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest();
+    const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     if (samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
         hentOgSettSamhandler(behandling.behandlingId);
     }
 
-    const personResultat = vilkårsvurdering.find(
-        (value: IPersonResultat) => value.person.type === PersonType.BARN
-    );
+    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
@@ -69,35 +61,23 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                 <>
                     <AktørLinje>
                         {samhandlerRessurs.status === RessursStatus.SUKSESS ? (
-                            <SamhandlerInformasjon
-                                samhandler={samhandlerRessurs.data}
-                                somOverskrift
-                            />
+                            <SamhandlerInformasjon samhandler={samhandlerRessurs.data} somOverskrift />
                         ) : (
-                            <Alert
-                                variant="warning"
-                                children={'Klarte ikke hente opplysninger om institusjon'}
-                            />
+                            <Alert variant="warning" children={'Klarte ikke hente opplysninger om institusjon'} />
                         )}
                     </AktørLinje>
                     <IndentertInnhold className={'samhandler-innhold'}>
                         <GeneriskAnnenVurdering
                             person={personResultat.person}
                             andreVurderinger={personResultat.andreVurderinger}
-                            annenVurderingConfig={
-                                annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]
-                            }
+                            annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
                             visFeilmeldinger={visFeilmeldinger}
                         />
                     </IndentertInnhold>
                 </>
             )}
             <AktørLinje>
-                <PersonInformasjon
-                    person={personResultat.person}
-                    somOverskrift
-                    erLesevisning={vurderErLesevisning()}
-                />
+                <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
             </AktørLinje>
 
             <IndentertInnhold>
@@ -116,8 +96,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({
                             generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
                             person={personResultat.person}
                             vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat =>
-                                    vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
                             visFeilmeldinger={visFeilmeldinger}

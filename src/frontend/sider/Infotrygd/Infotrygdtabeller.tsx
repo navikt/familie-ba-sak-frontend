@@ -33,11 +33,7 @@ const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
         return saksnrA - saksnrB;
     });
 
-export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({
-    ident,
-    saker,
-    minimalFagsak,
-}) => {
+export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({ ident, saker, minimalFagsak }) => {
     return (
         <>
             {minimalFagsak?.migreringsdato !== null && (

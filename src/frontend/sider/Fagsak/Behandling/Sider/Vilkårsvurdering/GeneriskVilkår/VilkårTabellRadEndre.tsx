@@ -4,16 +4,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    Button,
-    Fieldset,
-    Label,
-    Radio,
-    RadioGroup,
-    Select,
-    Textarea,
-    VStack,
-} from '@navikt/ds-react';
+import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
 import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -23,28 +14,15 @@ import { RessursStatus } from '@navikt/familie-typer';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
-import {
-    vilkårBegrunnelseFeilmeldingId,
-    vilkårFeilmeldingId,
-    vilkårResultatFeilmeldingId,
-} from './VilkårTabell';
+import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
 import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
 import { ToggleNavn } from '../../../../../../typer/toggles';
-import type {
-    IPersonResultat,
-    IVilkårConfig,
-    IVilkårResultat,
-} from '../../../../../../typer/vilkår';
-import {
-    Regelverk,
-    Resultat,
-    ResultatBegrunnelse,
-    VilkårType,
-} from '../../../../../../typer/vilkår';
+import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
+import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { validerVilkår } from '../validering';
@@ -100,11 +78,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     const { toggles } = useAppContext();
     const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
 
-    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } =
-        useVilkårsvurderingContext();
+    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
-    const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } =
-        useBehandlingContext();
+    const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
     const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -120,11 +96,9 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 ...redigerbartVilkår.verdi,
                 resultat: {
                     ...redigerbartVilkår.verdi.resultat,
-                    verdi:
-                        resultat === ResultatBegrunnelse.IKKE_AKTUELT ? Resultat.OPPFYLT : resultat,
+                    verdi: resultat === ResultatBegrunnelse.IKKE_AKTUELT ? Resultat.OPPFYLT : resultat,
                 },
-                resultatBegrunnelse:
-                    resultat === ResultatBegrunnelse.IKKE_AKTUELT ? resultat : null,
+                resultatBegrunnelse: resultat === ResultatBegrunnelse.IKKE_AKTUELT ? resultat : null,
                 erEksplisittAvslagPåSøknad: false,
                 avslagBegrunnelser: {
                     ...redigerbartVilkår.verdi.avslagBegrunnelser,
@@ -154,10 +128,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
         validertVilkår: FeltState<IVilkårResultat>,
         vilkårsvurderingForPerson: IPersonResultat | undefined
     ) => {
-        if (
-            vilkårsvurderingForPerson &&
-            validertVilkår.valideringsstatus === Valideringsstatus.OK
-        ) {
+        if (vilkårsvurderingForPerson && validertVilkår.valideringsstatus === Valideringsstatus.OK) {
             const promise = putVilkår(vilkårsvurderingForPerson, redigerbartVilkår);
             håndterEndringPåVilkårsvurdering(promise);
         } else {
@@ -190,8 +161,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     settRedigerbartVilkår({
                         ...redigerbartVilkår,
                         valideringsstatus: Valideringsstatus.FEIL,
-                        feilmelding:
-                            'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                        feilmelding: 'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                     });
                 }
             })
@@ -200,8 +170,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                 settRedigerbartVilkår({
                     ...redigerbartVilkår,
                     valideringsstatus: Valideringsstatus.FEIL,
-                    feilmelding:
-                        'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
+                    feilmelding: 'En ukjent feil har oppstått, vi har ikke klart å lagre endringen.',
                 });
                 settVisFeilmeldingerForEttVilkår(true);
             });
@@ -229,18 +198,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             error={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
             errorPropagation={false}
         >
-            <StyledVStack
-                $lesevisning={lesevisning}
-                $vilkårResultat={vilkårResultat.verdi.resultat.verdi}
-                gap="4"
-            >
+            <StyledVStack $lesevisning={lesevisning} $vilkårResultat={vilkårResultat.verdi.resultat.verdi} gap="4">
                 {visRegelverkValg() && (
                     <Select
                         readOnly={lesevisning}
                         value={
-                            redigerbartVilkår.verdi.vurderesEtter
-                                ? redigerbartVilkår.verdi.vurderesEtter
-                                : undefined
+                            redigerbartVilkår.verdi.vurderesEtter ? redigerbartVilkår.verdi.vurderesEtter : undefined
                         }
                         label={'Vurderes etter'}
                         onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -254,16 +217,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         }}
                     >
                         {Object.entries(alleRegelverk).map(
-                            ([regelverk, { tekst }]: [
-                                string,
-                                { tekst: string; symbol: ReactNode },
-                            ]) => {
+                            ([regelverk, { tekst }]: [string, { tekst: string; symbol: ReactNode }]) => {
                                 return (
                                     <option
                                         key={regelverk}
-                                        aria-selected={
-                                            vilkårResultat.verdi.vurderesEtter === regelverk
-                                        }
+                                        aria-selected={vilkårResultat.verdi.vurderesEtter === regelverk}
                                         value={regelverk}
                                     >
                                         {tekst}
@@ -282,14 +240,12 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     }
                     legend={
                         <Label>
-                            {vilkårFraConfig.spørsmål
-                                ? vilkårFraConfig.spørsmål(person.type.toLowerCase())
-                                : ''}
+                            {vilkårFraConfig.spørsmål ? vilkårFraConfig.spørsmål(person.type.toLowerCase()) : ''}
                         </Label>
                     }
                     error={
-                        redigerbartVilkår.verdi.resultat.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                        redigerbartVilkår.verdi.resultat.valideringsstatus === Valideringsstatus.FEIL &&
+                        skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.resultat.feilmelding
                             : ''
                     }
@@ -333,23 +289,21 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         erLesevisning={lesevisning}
                         personType={person.type}
                         feilhåndtering={
-                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger
-                                .valideringsstatus === Valideringsstatus.FEIL &&
-                            skalViseFeilmeldinger()
+                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
+                                Valideringsstatus.FEIL && skalViseFeilmeldinger()
                                 ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
                                 : ''
                         }
                     />
                 )}
-                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
-                    årsakErSøknad && (
-                        <AvslagSkjema
-                            redigerbartVilkår={redigerbartVilkår}
-                            settRedigerbartVilkår={settRedigerbartVilkår}
-                            visFeilmeldinger={skalViseFeilmeldinger()}
-                            settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
-                        />
-                    )}
+                {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && årsakErSøknad && (
+                    <AvslagSkjema
+                        redigerbartVilkår={redigerbartVilkår}
+                        settRedigerbartVilkår={settRedigerbartVilkår}
+                        visFeilmeldinger={skalViseFeilmeldinger()}
+                        settVisFeilmeldingerForEttVilkår={settVisFeilmeldingerForEttVilkår}
+                    />
+                )}
                 <VelgPeriode
                     redigerbartVilkår={redigerbartVilkår}
                     validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
@@ -363,8 +317,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                     className={'begrunnelse-textarea'}
                     placeholder={'Begrunn hvorfor det er gjort endringer på vilkåret.'}
                     error={
-                        redigerbartVilkår.verdi.begrunnelse.valideringsstatus ===
-                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                        redigerbartVilkår.verdi.begrunnelse.valideringsstatus === Valideringsstatus.FEIL &&
+                        skalViseFeilmeldinger()
                             ? redigerbartVilkår.verdi.begrunnelse.feilmelding
                             : ''
                     }
@@ -405,10 +359,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                         <Button
                             variant={'tertiary'}
                             onClick={() => {
-                                const promise = deleteVilkår(
-                                    person.personIdent,
-                                    redigerbartVilkår.verdi.id
-                                );
+                                const promise = deleteVilkår(person.personIdent, redigerbartVilkår.verdi.id);
                                 håndterEndringPåVilkårsvurdering(promise);
                             }}
                             id={vilkårFeilmeldingId(vilkårResultat.verdi)}

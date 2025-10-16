@@ -19,6 +19,7 @@ import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/Brev
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import {
     BehandlerRolle,
+    BehandlingResultat,
     BehandlingStatus,
     BehandlingSteg,
     BehandlingÅrsak,
@@ -38,13 +39,8 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     const { fagsakId } = useSakOgBehandlingParams();
     const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
-    const {
-        hentForhåndsvisning,
-        nullstillDokument,
-        visDokumentModal,
-        hentetDokument,
-        settVisDokumentModal,
-    } = useDokument();
+    const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
+        useDokument();
     const {
         visRefusjonEøs,
         settVisRefusjonEøs,
@@ -57,13 +53,21 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const { oppdaterTilbakekrevingsvedtakMotregning } =
-        useTilbakekrevingsvedtakMotregning(åpenBehandling);
+    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const erLesevisning = vurderErLesevisning();
 
-    const hentInfostripeTekst = (årsak: BehandlingÅrsak, status: BehandlingStatus): string => {
-        if (status === BehandlingStatus.AVSLUTTET) {
+    const automatiskBehandlingMedFortsattInnvilgetSomResultat =
+        åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && åpenBehandling.skalBehandlesAutomatisk;
+
+    const hentInfostripeTekst = (
+        årsak: BehandlingÅrsak,
+        status: BehandlingStatus,
+        automatiskBehandlingMedFortsattInnvilgetSomResultat: boolean
+    ): string => {
+        if (automatiskBehandlingMedFortsattInnvilgetSomResultat) {
+            return 'Automatisk behandling med resultat "Fortsatt innvilget" sender ikke vedtaksbrev.';
+        } else if (status === BehandlingStatus.AVSLUTTET) {
             return 'Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på "Vis vedtaksbrev".';
         } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
             return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
@@ -85,8 +89,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
             rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
-        const httpMethod =
-            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
+        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         hentForhåndsvisning({
             method: httpMethod,
@@ -107,8 +110,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
             rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
-        const httpMethod =
-            genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
+        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         hentForhåndsvisning({
             method: httpMethod,
@@ -134,9 +136,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                     </BehandlingKorrigertAlert>
                 )}
                 {åpenBehandling.korrigertVedtak && (
-                    <BehandlingKorrigertAlert variant="info">
-                        Vedtaket er korrigert etter § 35
-                    </BehandlingKorrigertAlert>
+                    <BehandlingKorrigertAlert variant="info">Vedtaket er korrigert etter § 35</BehandlingKorrigertAlert>
                 )}
                 <BrevmottakereAlert
                     bruker={bruker}
@@ -149,7 +149,11 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                 åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                 åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
                     <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
-                        {hentInfostripeTekst(åpenBehandling.årsak, åpenBehandling.status)}
+                        {hentInfostripeTekst(
+                            åpenBehandling.årsak,
+                            åpenBehandling.status,
+                            automatiskBehandlingMedFortsattInnvilgetSomResultat
+                        )}
                     </Alert>
                 ) : (
                     <>
@@ -159,9 +163,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                             <>
                                 <Vedtaksperioder
                                     åpenBehandling={åpenBehandling}
-                                    vedtaksperioderMedBegrunnelserRessurs={
-                                        vedtaksperioderMedBegrunnelserRessurs
-                                    }
+                                    vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
                                 />
                                 {visFeilutbetaltValuta && (
                                     <FeilutbetaltValuta
@@ -172,9 +174,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                             settErUlagretNyFeilutbetaltValutaPeriode
                                         }
                                         erLesevisning={erLesevisning}
-                                        skjulFeilutbetaltValuta={() =>
-                                            settVisFeilutbetaltValuta(false)
-                                        }
+                                        skjulFeilutbetaltValuta={() => settVisFeilutbetaltValuta(false)}
                                     />
                                 )}
                                 {visRefusjonEøs && (
@@ -182,9 +182,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                         refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
                                         behandlingId={åpenBehandling.behandlingId}
                                         fagsakId={fagsakId}
-                                        settErUlagretNyRefusjonEøsPeriode={
-                                            settErUlagretNyRefusjonEøsPeriode
-                                        }
+                                        settErUlagretNyRefusjonEøsPeriode={settErUlagretNyRefusjonEøsPeriode}
                                         skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}
@@ -192,32 +190,29 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                         )}
                     </>
                 )}
-                <Button
-                    id={'forhandsvis-vedtaksbrev'}
-                    variant={'secondary'}
-                    size={'medium'}
-                    onClick={() => {
-                        settVisDokumentModal(true);
-                        hentVedtaksbrev();
-                    }}
-                    loading={hentetDokument.status === RessursStatus.HENTER}
-                    icon={<FileTextIcon aria-hidden />}
-                >
-                    Vis vedtaksbrev
-                </Button>
+
+                {!automatiskBehandlingMedFortsattInnvilgetSomResultat && (
+                    <Button
+                        id={'forhandsvis-vedtaksbrev'}
+                        variant={'secondary'}
+                        size={'medium'}
+                        onClick={() => {
+                            settVisDokumentModal(true);
+                            hentVedtaksbrev();
+                        }}
+                        loading={hentetDokument.status === RessursStatus.HENTER}
+                        icon={<FileTextIcon aria-hidden />}
+                    >
+                        Vis vedtaksbrev
+                    </Button>
+                )}
 
                 {åpenBehandling.tilbakekrevingsvedtakMotregning !== null && (
                     <TilbakekrevingsvedtakMotregning
-                        tilbakekrevingsvedtakMotregning={
-                            åpenBehandling.tilbakekrevingsvedtakMotregning
-                        }
-                        oppdaterTilbakekrevingsvedtakMotregning={
-                            oppdaterTilbakekrevingsvedtakMotregning
-                        }
+                        tilbakekrevingsvedtakMotregning={åpenBehandling.tilbakekrevingsvedtakMotregning}
+                        oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
                         settVisDokumentModal={settVisDokumentModal}
-                        hentBrevForTilbakekrevingsvedtakMotregning={
-                            hentBrevForTilbakekrevingsvedtakMotregning
-                        }
+                        hentBrevForTilbakekrevingsvedtakMotregning={hentBrevForTilbakekrevingsvedtakMotregning}
                         hentetDokument={hentetDokument}
                         erLesevisning={erLesevisning}
                     />

@@ -9,9 +9,7 @@ import {
 import { lagBrevmottaker } from '../../testdata/brevmottakerTestdata';
 
 function Provider({ children }: PropsWithChildren) {
-    return (
-        <ManuelleBrevmottakerePåFagsakProvider>{children}</ManuelleBrevmottakerePåFagsakProvider>
-    );
+    return <ManuelleBrevmottakerePåFagsakProvider>{children}</ManuelleBrevmottakerePåFagsakProvider>;
 }
 
 describe('ManuelleBrevmottakerePåFagsakContext', () => {

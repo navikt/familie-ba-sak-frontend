@@ -2,10 +2,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './utils';
 import { kjørValidering } from './validering';
-import {
-    genererPerson,
-    genererPersonresultat,
-} from '../../../../../testdata/vilkårsvurderingTestdata';
+import { genererPerson, genererPersonresultat } from '../../../../../testdata/vilkårsvurderingTestdata';
 
 describe('vilkårsvurdering/validering', () => {
     describe('validering', () => {
@@ -19,9 +16,7 @@ describe('vilkårsvurdering/validering', () => {
 
             const anneVurderingMedOKValidering = validert
                 ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(
-                    annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL
-                );
+                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
 
             expect(anneVurderingMedOKValidering?.length).toBe(2);
         });
@@ -35,9 +30,7 @@ describe('vilkårsvurdering/validering', () => {
             expect(!!validert).toBe(true);
             const anneVurderingMedOKValidering = validert
                 ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(
-                    annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL
-                );
+                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
 
             expect(anneVurderingMedOKValidering?.length).toBe(0);
         });
@@ -52,9 +45,7 @@ describe('vilkårsvurdering/validering', () => {
 
             const anneVurderingMedOKValidering = validert
                 ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(
-                    annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL
-                );
+                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
 
             expect(anneVurderingMedOKValidering?.length).toBe(1);
         });

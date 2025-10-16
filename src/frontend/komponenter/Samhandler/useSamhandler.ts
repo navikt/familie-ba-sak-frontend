@@ -15,10 +15,7 @@ import { obfuskerSamhandler } from '../../utils/obfuskerData';
 import { orgnummerValidator } from '../../utils/validators';
 
 export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: string) => void) => {
-    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<
-        ISamhandlerInfoRequest,
-        ISamhandlerInfo
-    >({
+    const { onSubmit, settSubmitRessurs, skjema } = useSkjema<ISamhandlerInfoRequest, ISamhandlerInfo>({
         felter: {
             orgnr: useFelt({
                 verdi: '',
@@ -30,7 +27,7 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: st
 
     const onSubmitWrapper = () => {
         onSubmit(
-            hentSamhandlerdataForBehandlingConfig(skjema.felter.orgnr.verdi),
+            hentSamhandlerdataForOrgNrConfig(skjema.felter.orgnr.verdi),
             (ressurs: Ressurs<ISamhandlerInfo>) => {
                 settSubmitRessurs(ressurs);
                 if (onSuccess) {
@@ -51,16 +48,15 @@ export const useSamhandlerSkjema = (onSuccess?: () => void, onError?: (error: st
     };
 };
 
-export const useSamhandlerRequest = () => {
+export const useSamhandlerRequest = (erIEnBehandling: boolean) => {
     const { request } = useHttp();
-    const [samhandlerRessurs, settSamhandlerRessurs] =
-        useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
+    const [samhandlerRessurs, settSamhandlerRessurs] = useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
     const { skalObfuskereData } = useAppContext();
 
-    const hentOgSettSamhandler = (behandlingId: number) => {
+    const hentOgSettSamhandler = (behandlingIdEllerOrgnr: string | number) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());
-        hentSamhandler(behandlingId.toString()).then((ressurs: Ressurs<ISamhandlerInfo>) => {
+        hentSamhandler(String(behandlingIdEllerOrgnr)).then((ressurs: Ressurs<ISamhandlerInfo>) => {
             if (skalObfuskereData) {
                 obfuskerSamhandler(ressurs);
             }
@@ -68,10 +64,11 @@ export const useSamhandlerRequest = () => {
         });
     };
 
-    const hentSamhandler = async (behandlingId: string): Promise<Ressurs<ISamhandlerInfo>> => {
-        return request<ISamhandlerInfoRequest, ISamhandlerInfo>(
-            hentSamhandlerdataForBehandlingConfig(behandlingId)
-        )
+    const hentSamhandler = async (behandlingIdEllerOrgnr: string): Promise<Ressurs<ISamhandlerInfo>> => {
+        const config = erIEnBehandling
+            ? hentSamhandlerdataForBehandlingConfig(behandlingIdEllerOrgnr)
+            : hentSamhandlerdataForOrgNrConfig(behandlingIdEllerOrgnr);
+        return request<ISamhandlerInfoRequest, ISamhandlerInfo>(config)
             .then((ressurs: Ressurs<ISamhandlerInfo>) => {
                 return ressurs;
             })
@@ -87,11 +84,16 @@ export const useSamhandlerRequest = () => {
     };
 };
 
-const hentSamhandlerdataForBehandlingConfig = (
-    behandlingId: string
-): FamilieRequestConfig<ISamhandlerInfoRequest> => {
+const hentSamhandlerdataForBehandlingConfig = (behandlingId: string): FamilieRequestConfig<ISamhandlerInfoRequest> => {
     return {
         method: 'GET',
         url: '/familie-ba-sak/api/samhandler/behandling/' + behandlingId,
+    };
+};
+
+const hentSamhandlerdataForOrgNrConfig = (orgNr: string): FamilieRequestConfig<ISamhandlerInfoRequest> => {
+    return {
+        method: 'GET',
+        url: '/familie-ba-sak/api/samhandler/orgnr/' + orgNr,
     };
 };

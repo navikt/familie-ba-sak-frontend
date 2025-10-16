@@ -10,8 +10,7 @@ const KanSøkeSkjema = () => {
     const maksAntallKulepunkter = 20;
     const makslengdeFritekst = 220;
 
-    const antallKulepunkter =
-        skjema.felter.fritekster.verdi.length + skjema.felter.dokumenter.verdi.length;
+    const antallKulepunkter = skjema.felter.fritekster.verdi.length + skjema.felter.dokumenter.verdi.length;
     const erMaksAntallKulepunkter = antallKulepunkter >= maksAntallKulepunkter;
 
     return (

@@ -14,11 +14,7 @@ import type { VisningBehandling } from './visningBehandling';
 import { useAppContext } from '../../../context/AppContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
-import {
-    behandlingKategori,
-    BehandlingKategori,
-    behandlingUnderkategori,
-} from '../../../typer/behandlingstema';
+import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
@@ -41,8 +37,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
-            behandling.status === BehandlingStatus.AVSLUTTET &&
-            !erBehandlingHenlagt(behandling.resultat)
+            behandling.status === BehandlingStatus.AVSLUTTET && !erBehandlingHenlagt(behandling.resultat)
     );
 
     let gjeldendeBehandling =
@@ -101,10 +96,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
                             <StyledAlert variant="info">
                                 <VStack>
-                                    {`Utbetalingen endres fra og med ${format(
-                                        nesteMåned,
-                                        Datoformat.MÅNED_ÅR_NAVN
-                                    )}.`}
+                                    {`Utbetalingen endres fra og med ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
                                     {lenkeTilBehandlingsresultat()}
                                 </VStack>
                             </StyledAlert>
@@ -124,8 +116,8 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         } else {
             return (
                 <StyledAlert variant="error">
-                    Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte
-                    hvis problemet vedvarer.
+                    Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte hvis problemet
+                    vedvarer.
                 </StyledAlert>
             );
         }
@@ -161,12 +153,8 @@ export const sakstype = (behandling?: IBehandling) => {
         return 'Ikke satt';
     }
 
-    return `${
-        behandling?.kategori ? behandlingKategori[behandling?.kategori] : behandling?.kategori
-    }, ${
-        behandling?.underkategori
-            ? behandlingUnderkategori[behandling?.underkategori]
-            : behandling?.underkategori
+    return `${behandling?.kategori ? behandlingKategori[behandling?.kategori] : behandling?.kategori}, ${
+        behandling?.underkategori ? behandlingUnderkategori[behandling?.underkategori] : behandling?.underkategori
     }`;
 };
 

@@ -3,12 +3,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {
-    ABorderFocus,
-    ATextAction,
-    ATextDefault,
-    ATextSubtle,
-} from '@navikt/ds-tokens/dist/tokens';
+import { ABorderFocus, ATextAction, ATextDefault, ATextSubtle } from '@navikt/ds-tokens/dist/tokens';
 
 import FamilieBaseKnapp from '../../../../../../komponenter/FamilieBaseKnapp';
 import { randomUUID } from '../../../../../../utils/commons';
@@ -67,12 +62,7 @@ const StyledButton = styled(FamilieBaseKnapp)<IStyledButtonProps>`
 
 const Filterknapp = ({ children, disabled = false, onClick, aktiv }: IFilterknappProps) => {
     return (
-        <StyledButton
-            id={`filter_${randomUUID()}`}
-            onClick={onClick}
-            disabled={disabled}
-            $aktiv={aktiv}
-        >
+        <StyledButton id={`filter_${randomUUID()}`} onClick={onClick} disabled={disabled} $aktiv={aktiv}>
             {children}
         </StyledButton>
     );

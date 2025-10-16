@@ -21,8 +21,7 @@ const StyledExpansionCard = styled(ExpansionCard)`
 `;
 
 export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
-    const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } =
-        useManuellJournalføringContext();
+    const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } = useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
@@ -51,11 +50,7 @@ export const DokumentVelger: React.FC<IDokumentVelgerProps> = ({ dokument, visFe
         >
             <ExpansionCard.Header>
                 <ExpansionCard.Title>
-                    <DokumentInfoStripe
-                        valgt={valgt}
-                        journalpostId={journalpostId}
-                        dokument={dokument}
-                    />
+                    <DokumentInfoStripe valgt={valgt} journalpostId={journalpostId} dokument={dokument} />
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
             <ExpansionCard.Content>

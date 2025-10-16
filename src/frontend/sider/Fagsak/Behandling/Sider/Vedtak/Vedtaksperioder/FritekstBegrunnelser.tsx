@@ -3,17 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import {
-    BodyLong,
-    Button,
-    Fieldset,
-    Heading,
-    HelpText,
-    Label,
-    Link,
-    Tag,
-    Textarea,
-} from '@navikt/ds-react';
+import { BodyLong, Button, Fieldset, Heading, HelpText, Label, Link, Tag, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -108,10 +98,7 @@ const FritekstBegrunnelser: React.FC = () => {
             }),
         ]);
 
-    if (
-        !vedtaksperiodeMedBegrunnelser.fritekster.length &&
-        !skjema.felter.fritekster.verdi.length
-    ) {
+    if (!vedtaksperiodeMedBegrunnelser.fritekster.length && !skjema.felter.fritekster.verdi.length) {
         return (
             <>
                 {!erLesevisning && (
@@ -166,11 +153,9 @@ const FritekstBegrunnelser: React.FC = () => {
             >
                 {erLesevisning ? (
                     <StyledList>
-                        {skjema.felter.fritekster.verdi.map(
-                            (fritekst: FeltState<IFritekstFelt>) => (
-                                <li>{fritekst.verdi.tekst}</li>
-                            )
-                        )}
+                        {skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => (
+                            <li>{fritekst.verdi.tekst}</li>
+                        ))}
                     </StyledList>
                 ) : (
                     skjema.felter.fritekster.verdi.map((fritekst: FeltState<IFritekstFelt>) => {
@@ -199,8 +184,7 @@ const FritekstBegrunnelser: React.FC = () => {
                                     onClick={() => {
                                         skjema.felter.fritekster.validerOgSettFelt([
                                             ...skjema.felter.fritekster.verdi.filter(
-                                                mapFritekst =>
-                                                    mapFritekst.verdi.id !== fritekst.verdi.id
+                                                mapFritekst => mapFritekst.verdi.id !== fritekst.verdi.id
                                             ),
                                         ]);
                                     }}

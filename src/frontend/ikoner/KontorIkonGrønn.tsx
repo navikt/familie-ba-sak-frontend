@@ -35,11 +35,7 @@ const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
 }) => {
     return (
         <IkonSirkel $height={height} $width={width} $color={color}>
-            <Buildings3Icon
-                height={height === '24' ? 20 : 28}
-                width={width === '24' ? 20 : 28}
-                className={className}
-            />
+            <Buildings3Icon height={height === '24' ? 20 : 28} width={width === '24' ? 20 : 28} className={className} />
         </IkonSirkel>
     );
 };

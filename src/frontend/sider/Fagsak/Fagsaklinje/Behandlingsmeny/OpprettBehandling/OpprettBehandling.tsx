@@ -30,24 +30,17 @@ const StyledFieldset = styled(Fieldset)`
 
 const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
     const [visOpprettNyBehandlingModal, settVisOpprettNyBehandlingModal] = useState(false);
-    const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] =
-        useState(false);
+    const [visBekreftelseTilbakekrevingModal, settVisBekreftelseTilbakekrevingModal] = useState(false);
 
-    const {
-        onBekreft,
-        opprettBehandlingSkjema,
-        nullstillSkjemaStatus,
-        bruker,
-        maksdatoForMigrering,
-        valideringErOk,
-    } = useOpprettBehandling(
-        minimalFagsak.id,
-        () => settVisOpprettNyBehandlingModal(false),
-        () => {
-            settVisOpprettNyBehandlingModal(false);
-            settVisBekreftelseTilbakekrevingModal(true);
-        }
-    );
+    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering, valideringErOk } =
+        useOpprettBehandling(
+            minimalFagsak.id,
+            () => settVisOpprettNyBehandlingModal(false),
+            () => {
+                settVisOpprettNyBehandlingModal(false);
+                settVisBekreftelseTilbakekrevingModal(true);
+            }
+        );
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
@@ -123,21 +116,10 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                         <Button
                             key={'bekreft'}
                             variant={valideringErOk() ? 'primary' : 'secondary'}
-                            onClick={() =>
-                                onBekreft(
-                                    minimalFagsak.søkerFødselsnummer,
-                                    minimalFagsak.fagsakType
-                                )
-                            }
+                            onClick={() => onBekreft(minimalFagsak.søkerFødselsnummer, minimalFagsak.fagsakType)}
                             children={'Bekreft'}
-                            loading={
-                                opprettBehandlingSkjema.submitRessurs.status ===
-                                RessursStatus.HENTER
-                            }
-                            disabled={
-                                opprettBehandlingSkjema.submitRessurs.status ===
-                                RessursStatus.HENTER
-                            }
+                            loading={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
                         />
                         <Button
                             key={'avbryt'}
@@ -160,8 +142,8 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                     }}
                 >
                     <Modal.Body>
-                        Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30
-                        sekunder) før den blir tilgjengelig i saksoversikten og oppgavebenken.
+                        Tilbakekrevingsbehandling opprettes, men det kan ta litt tid (ca 30 sekunder) før den blir
+                        tilgjengelig i saksoversikten og oppgavebenken.
                     </Modal.Body>
                     <Modal.Footer>
                         <Button

@@ -31,9 +31,7 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
 
     const form = useForm<OpprettFagsakFormValues>({
         values: {
-            [OpprettFagsakFeltnavn.FAGSAKTYPE]: harNormalFagsak
-                ? FagsakType.INSTITUSJON
-                : FagsakType.NORMAL,
+            [OpprettFagsakFeltnavn.FAGSAKTYPE]: harNormalFagsak ? FagsakType.INSTITUSJON : FagsakType.NORMAL,
             [OpprettFagsakFeltnavn.SAMHANDLER]: null,
             [OpprettFagsakFeltnavn.SKJERMET_BARN_SØKER]: '',
         },

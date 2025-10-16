@@ -6,10 +6,7 @@ import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
-import {
-    type IBehandling,
-    VurderingsstrategiForValutakurser,
-} from '../../../../../../../typer/behandling';
+import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import { type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { mapEøsPeriodeStatusTilStatus } from '../../../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
@@ -38,18 +35,12 @@ interface StatusProps {
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
 }
 
-const PeriodeStatus: React.FC<StatusProps> = ({
-    valutakurs,
-    vurderingsstrategiForValutakurser,
-}) => {
+const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValutakurser }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
-        if (
-            !erLesevisning &&
-            vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL
-        ) {
+        if (!erLesevisning && vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
             return (
                 <BlåPencilIcon
                     title="Automatisk vurdert valutakurs åpen for redigering"
@@ -58,13 +49,7 @@ const PeriodeStatus: React.FC<StatusProps> = ({
                 />
             );
         } else {
-            return (
-                <StyledCogRotationIcon
-                    title="Automatisk vurdert"
-                    fontSize="1.5rem"
-                    width="1.5rem"
-                />
-            );
+            return <StyledCogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />;
         }
     } else {
         return <StatusIkon status={mapEøsPeriodeStatusTilStatus[valutakurs.status]} />;

@@ -33,9 +33,7 @@ const StyledTextField = styled(TextField)`
     }
 `;
 
-const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({
-    skjema,
-}) => {
+const FeilutbetaltValutaSkjema: React.FunctionComponent<IFeilutbetaltValutaSkjemaProps> = ({ skjema }) => {
     return (
         <>
             <FlexDatoInputWrapper>

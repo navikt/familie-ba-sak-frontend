@@ -13,14 +13,8 @@ import type { IsoDatoString } from '../../utils/dato';
 
 const FilterSkjema: React.FunctionComponent = () => {
     const { innloggetSaksbehandler } = useAppContext();
-    const {
-        hentOppgaver,
-        oppgaver,
-        oppgaveFelter,
-        settVerdiPåOppgaveFelt,
-        tilbakestillOppgaveFelter,
-        validerSkjema,
-    } = useOppgavebenkContext();
+    const { hentOppgaver, oppgaver, oppgaveFelter, settVerdiPåOppgaveFelt, tilbakestillOppgaveFelter, validerSkjema } =
+        useOppgavebenkContext();
 
     function tilOppgaveFeltKomponent(oppgaveFelt: IOppgaveFelt) {
         switch (oppgaveFelt.filter?.type) {
@@ -42,9 +36,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                     <div>
                         <Select
                             label={oppgaveFelt.label}
-                            onChange={event =>
-                                settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)
-                            }
+                            onChange={event => settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)}
                             key={oppgaveFelt.nøkkel}
                             value={oppgaveFelt.filter.selectedValue}
                             error={
@@ -57,16 +49,13 @@ const FilterSkjema: React.FunctionComponent = () => {
                             {oppgaveFelt.filter.nøkkelPar &&
                                 Object.values(oppgaveFelt.filter.nøkkelPar)
                                     .filter((par: IPar) =>
-                                        oppgaveFelt.erSynlig
-                                            ? oppgaveFelt.erSynlig(par, innloggetSaksbehandler)
-                                            : true
+                                        oppgaveFelt.erSynlig ? oppgaveFelt.erSynlig(par, innloggetSaksbehandler) : true
                                     )
                                     .map((par: IPar) => {
                                         return (
                                             <option
                                                 aria-selected={
-                                                    oppgaveFelt.filter &&
-                                                    oppgaveFelt.filter.selectedValue === par.id
+                                                    oppgaveFelt.filter && oppgaveFelt.filter.selectedValue === par.id
                                                 }
                                                 key={par.id}
                                                 value={par.id}

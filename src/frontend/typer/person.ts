@@ -98,6 +98,7 @@ export interface IRestRegisterhistorikk {
     bostedsadresse: IRestRegisteropplysning[];
     oppholdsadresse: IRestRegisteropplysning[];
     dødsboadresse: IRestRegisteropplysning[];
+    deltBosted: IRestRegisteropplysning[];
 }
 
 export interface IRestRegisteropplysning {

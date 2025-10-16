@@ -7,11 +7,8 @@ import { Button, Modal } from '@navikt/ds-react';
 import { ASpacing4, ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 
 import Brevskjema from './Brevskjema';
-import BrevskjemaGammel from './BrevskjemaGammel';
-import { useAppContext } from '../../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
 import type { IPersonInfo } from '../../../../../../typer/person';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 
 interface IProps {
     onIModalClick: () => void;
@@ -25,27 +22,12 @@ const Container = styled.div`
 const Brev = ({ onIModalClick, bruker }: IProps) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
-    const { toggles } = useAppContext();
 
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
 
     return (
         <Container>
-            {toggles[ToggleNavn.brukNyPdfModal] ? (
-                <Brevskjema
-                    onSubmitSuccess={() => {
-                        settVisInnsendtBrevModal(true);
-                    }}
-                    bruker={bruker}
-                />
-            ) : (
-                <BrevskjemaGammel
-                    onSubmitSuccess={() => {
-                        settVisInnsendtBrevModal(true);
-                    }}
-                    bruker={bruker}
-                />
-            )}
+            <Brevskjema onSubmitSuccess={() => settVisInnsendtBrevModal(true)} bruker={bruker} />
             {visInnsendtBrevModal && (
                 <Modal
                     open

@@ -8,22 +8,17 @@ export const useEøs = (åpenBehandling: IBehandling) => {
         åpenBehandling,
     });
 
-    const {
-        utbetaltAnnetLandBeløp,
-        erUtbetaltAnnetLandBeløpGyldige,
-        hentUtbetaltAnnetLandBeløpMedFeil,
-    } = useUtenlandskPeriodeBeløp({
-        åpenBehandling,
-    });
+    const { utbetaltAnnetLandBeløp, erUtbetaltAnnetLandBeløpGyldige, hentUtbetaltAnnetLandBeløpMedFeil } =
+        useUtenlandskPeriodeBeløp({
+            åpenBehandling,
+        });
 
     const { valutakurser, erValutakurserGyldige, hentValutakurserMedFeil } = useValutakurs({
         åpenBehandling,
     });
 
     const erEøsInformasjonGyldig = () => {
-        return (
-            erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige() && erValutakurserGyldige()
-        );
+        return erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige() && erValutakurserGyldige();
     };
 
     return {

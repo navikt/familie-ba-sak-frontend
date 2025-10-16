@@ -11,12 +11,7 @@ interface Options {
     onError?: (error: Error) => void;
 }
 
-export function useHentAInntektUrl({
-    søkerFødselsnummer,
-    enabled = false,
-    onSuccess,
-    onError,
-}: Options) {
+export function useHentAInntektUrl({ søkerFødselsnummer, enabled = false, onSuccess, onError }: Options) {
     const { request } = useHttp();
     return useQuery({
         queryKey: ['aInntektUrl', søkerFødselsnummer],

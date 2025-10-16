@@ -48,10 +48,7 @@ export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) 
 
     const hentBarnMedOpplysningerFraBruker = () => {
         return bruker.forelderBarnRelasjon
-            .filter(
-                (relasjon: IForelderBarnRelasjon) =>
-                    relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN
-            )
+            .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
             .map(
                 (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
                     merket: false,

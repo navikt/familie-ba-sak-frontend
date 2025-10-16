@@ -3,13 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
-import {
-    AIconInfo,
-    AIconSuccess,
-    ASpacing4,
-    ATextDanger,
-    ATextDefault,
-} from '@navikt/ds-tokens/dist/tokens';
+import { AIconInfo, AIconSuccess, ASpacing4, ATextDanger, ATextDefault } from '@navikt/ds-tokens/dist/tokens';
 
 import Informasjonsbolk from './Informasjonsbolk';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -81,9 +75,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
 
     const antallBehandlinger = behandlinger.length;
     const åpenBehandlingIndex =
-        behandlinger.findIndex(
-            behandling => behandling.behandlingId === åpenBehandling.behandlingId
-        ) + 1;
+        behandlinger.findIndex(behandling => behandling.behandlingId === åpenBehandling.behandlingId) + 1;
 
     const tittel = `${
         åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
@@ -106,10 +98,7 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                 </VStack>
             </Box>
             <VStack gap="4" marginBlock="4">
-                <Informasjonsbolk
-                    label="Behandlingsstatus"
-                    tekst={behandlingsstatuser[åpenBehandling.status]}
-                />
+                <Informasjonsbolk label="Behandlingsstatus" tekst={behandlingsstatuser[åpenBehandling.status]} />
                 <Informasjonsbolk
                     label="Resultat"
                     tekst={behandlingsresultater[åpenBehandling.resultat]}

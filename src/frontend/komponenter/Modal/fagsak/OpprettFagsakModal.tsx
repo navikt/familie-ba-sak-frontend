@@ -22,9 +22,7 @@ export function OpprettFagsakModal() {
                     {args === undefined && (
                         <>
                             <Modal.Body>
-                                <Alert variant={'error'}>
-                                    Feil oppstod ved innhenting av argumenter for modal.
-                                </Alert>
+                                <Alert variant={'error'}>Feil oppstod ved innhenting av argumenter for modal.</Alert>
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button key={'Bekreft'} variant={'primary'} disabled={true}>

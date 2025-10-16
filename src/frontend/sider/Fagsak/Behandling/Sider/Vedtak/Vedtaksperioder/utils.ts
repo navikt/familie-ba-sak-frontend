@@ -16,11 +16,7 @@ import {
     type IVedtaksperiodeMedBegrunnelser,
 } from '../../../../../../typer/vedtaksperiode';
 import type { AlleBegrunnelser } from '../../../../../../typer/vilkår';
-import {
-    dagensDato,
-    isoStringTilDateMedFallback,
-    tidenesMorgen,
-} from '../../../../../../utils/dato';
+import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../../utils/dato';
 
 const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
@@ -69,10 +65,7 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
                 VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
             ];
         case Vedtaksperiodetype.ENDRET_UTBETALING:
-            return [
-                VedtakBegrunnelseType.ENDRET_UTBETALING,
-                VedtakBegrunnelseType.EØS_ENDRET_UTBETALING,
-            ];
+            return [VedtakBegrunnelseType.ENDRET_UTBETALING, VedtakBegrunnelseType.EØS_ENDRET_UTBETALING];
         default:
             return [];
     }
@@ -82,9 +75,8 @@ export const grupperBegrunnelser = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>
 ): GroupBase<OptionType>[] => {
-    const begrunnelseTyperKnyttetTilVedtaksperioden = vedtaksperiodeTilMuligeVedtakBegrunnelseTyper(
-        vedtaksperiodeMedBegrunnelser
-    );
+    const begrunnelseTyperKnyttetTilVedtaksperioden =
+        vedtaksperiodeTilMuligeVedtakBegrunnelseTyper(vedtaksperiodeMedBegrunnelser);
 
     if (alleBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
         return [];
@@ -94,9 +86,7 @@ export const grupperBegrunnelser = (
 
     const grupperteBegrunnelser = Object.keys(alleBegrunnelser)
         .filter((vedtakBegrunnelseType: string) =>
-            begrunnelseTyperKnyttetTilVedtaksperioden.includes(
-                vedtakBegrunnelseType as VedtakBegrunnelseType
-            )
+            begrunnelseTyperKnyttetTilVedtaksperioden.includes(vedtakBegrunnelseType as VedtakBegrunnelseType)
         )
         .reduce((acc: GroupBase<OptionType>[], vedtakBegrunnelseType: string) => {
             return [
@@ -106,19 +96,15 @@ export const grupperBegrunnelser = (
                     options: vedtaksperiodeMedBegrunnelser.gyldigeBegrunnelser
                         .filter((vedtakBegrunnelse: VedtakBegrunnelse) => {
                             return (
-                                alleBegrunnelser[
-                                    vedtakBegrunnelseType as VedtakBegrunnelseType
-                                ].find(begrunnelse => begrunnelse.id === vedtakBegrunnelse) !==
-                                undefined
+                                alleBegrunnelser[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
+                                    begrunnelse => begrunnelse.id === vedtakBegrunnelse
+                                ) !== undefined
                             );
                         })
                         .map((vedtakBegrunnelse: VedtakBegrunnelse) => ({
                             label:
-                                alleBegrunnelser[
-                                    vedtakBegrunnelseType as VedtakBegrunnelseType
-                                ].find(
-                                    vedtaksbegrunnelsestekst =>
-                                        vedtaksbegrunnelsestekst.id === vedtakBegrunnelse
+                                alleBegrunnelser[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
+                                    vedtaksbegrunnelsestekst => vedtaksbegrunnelsestekst.id === vedtakBegrunnelse
                                 )?.navn ?? vedtakBegrunnelse,
                             value: vedtakBegrunnelse,
                         })),
@@ -133,16 +119,10 @@ export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     alleBegrunnelser: AlleBegrunnelser
 ): OptionType[] => {
-    return vedtaksperiodeMedBegrunnelser.begrunnelser.map(
-        (begrunnelse: IRestVedtaksbegrunnelse) => ({
-            value: begrunnelse.standardbegrunnelse.toString(),
-            label: hentLabelForOption(
-                begrunnelse.vedtakBegrunnelseType,
-                begrunnelse.standardbegrunnelse,
-                alleBegrunnelser
-            ),
-        })
-    );
+    return vedtaksperiodeMedBegrunnelser.begrunnelser.map((begrunnelse: IRestVedtaksbegrunnelse) => ({
+        value: begrunnelse.standardbegrunnelse.toString(),
+        label: hentLabelForOption(begrunnelse.vedtakBegrunnelseType, begrunnelse.standardbegrunnelse, alleBegrunnelser),
+    }));
 };
 
 const hentLabelForOption = (

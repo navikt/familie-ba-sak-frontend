@@ -14,11 +14,10 @@ interface IProps {
 }
 
 const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProps) => {
-    const { skjema, valideringErOk, registrerManuellDødsfall, restFeil } =
-        useRegistrerDødsfallDatoSkjema({
-            lukkModal,
-            person,
-        });
+    const { skjema, valideringErOk, registrerManuellDødsfall, restFeil } = useRegistrerDødsfallDatoSkjema({
+        lukkModal,
+        person,
+    });
 
     return (
         <Modal
@@ -46,16 +45,12 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                         kanKunVelgeFortid
                     />
                     <Textarea
-                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(
-                            skjema.visFeilmeldinger
-                        )}
+                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         id={'manuell-dødsdato-begrunnelse'}
                         label={'Begrunnelse'}
                         readOnly={erLesevisning}
                         value={skjema.felter.begrunnelse.verdi}
-                        onChange={changeEvent =>
-                            skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)
-                        }
+                        onChange={changeEvent => skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)}
                     />
                 </Fieldset>
             </Modal.Body>

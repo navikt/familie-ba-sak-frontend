@@ -31,13 +31,8 @@ const HeadingUtenOverflow = styled(Heading)`
     text-overflow: ellipsis;
 `;
 
-const hentAdresseBeskyttelseGradering = (
-    bruker: IPersonInfo,
-    personIdent: string
-): boolean | undefined => {
-    const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(
-        rel => rel.personIdent === personIdent
-    );
+const hentAdresseBeskyttelseGradering = (bruker: IPersonInfo, personIdent: string): boolean | undefined => {
+    const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(rel => rel.personIdent === personIdent);
     if (bruker.personIdent === personIdent) {
         return erAdresseBeskyttet(bruker.adressebeskyttelseGradering);
     } else if (forelderBarnRelasjon?.personIdent === personIdent) {
@@ -56,11 +51,7 @@ const Skillelinje: React.FC<{ erHeading?: boolean }> = ({ erHeading = false }) =
     return <BodyShort>|</BodyShort>;
 };
 
-const PersonInformasjon: React.FunctionComponent<IProps> = ({
-    person,
-    somOverskrift = false,
-    erLesevisning,
-}) => {
+const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskrift = false, erLesevisning }) => {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
@@ -93,12 +84,8 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                         <CopyButton size="small" copyText={person.personIdent} />
                     </HStack>
                     <Skillelinje erHeading />
-                    <Heading level="2" size="medium" as="span">{`${
-                        personTypeMap[person.type]
-                    } `}</Heading>
-                    {person.dødsfallDato?.length && (
-                        <DødsfallTag dødsfallDato={person.dødsfallDato} />
-                    )}
+                    <Heading level="2" size="medium" as="span">{`${personTypeMap[person.type]} `}</Heading>
+                    {person.dødsfallDato?.length && <DødsfallTag dødsfallDato={person.dødsfallDato} />}
                     {!person.dødsfallDato?.length && !erLesevisning && (
                         <Dropdown>
                             <Button
@@ -109,10 +96,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({
                             />
                             <StyledDropdownMeny placement={'right'}>
                                 <Dropdown.Menu.List>
-                                    <RegistrerDødsfallDato
-                                        erLesevisning={erLesevisning}
-                                        person={person}
-                                    />
+                                    <RegistrerDødsfallDato erLesevisning={erLesevisning} person={person} />
                                 </Dropdown.Menu.List>
                             </StyledDropdownMeny>
                         </Dropdown>

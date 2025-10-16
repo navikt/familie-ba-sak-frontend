@@ -78,9 +78,7 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
         <EtikettKnapp
             aria-label={etikett.label}
             disabled={aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR}
-            $valgt={
-                !!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString()
-            }
+            $valgt={!!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString()}
             onClick={onEtikettClick}
         >
             <span>{etikett.label}</span>

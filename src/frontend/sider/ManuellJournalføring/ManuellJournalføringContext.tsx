@@ -1,36 +1,14 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    type PropsWithChildren,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 
 import type { AxiosError } from 'axios';
 import { differenceInMilliseconds } from 'date-fns';
 import { useNavigate, useParams } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
-import type {
-    Avhengigheter,
-    FeiloppsummeringFeil,
-    Felt,
-    FeltState,
-    ISkjema,
-} from '@navikt/familie-skjema';
+import type { Avhengigheter, FeiloppsummeringFeil, Felt, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import {
-    hentDataFraRessurs,
-    type IDokumentInfo,
-    Journalstatus,
-    type Ressurs,
-} from '@navikt/familie-typer';
-import {
-    byggFeiletRessurs,
-    byggHenterRessurs,
-    byggTomRessurs,
-    RessursStatus,
-} from '@navikt/familie-typer';
+import { hentDataFraRessurs, type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useKlageApi } from '../../api/useKlageApi';
 import { useAppContext } from '../../context/AppContext';
@@ -53,10 +31,7 @@ import type {
     TilknyttetBehandling,
 } from '../../typer/manuell-journalføring';
 import { JournalpostKanal } from '../../typer/manuell-journalføring';
-import {
-    type IRestLukkOppgaveOgKnyttJournalpost,
-    finnBehandlingstemaFraOppgave,
-} from '../../typer/oppgave';
+import { type IRestLukkOppgaveOgKnyttJournalpost, finnBehandlingstemaFraOppgave } from '../../typer/oppgave';
 import { OppgavetypeFilter } from '../../typer/oppgave';
 import type { IPersonInfo } from '../../typer/person';
 import { Adressebeskyttelsegradering } from '../../typer/person';
@@ -107,9 +82,7 @@ interface ManuellJournalføringContextValue {
     klageStatus: RessursStatus;
 }
 
-const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(
-    undefined
-);
+const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(undefined);
 
 export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     const { innloggetSaksbehandler } = useAppContext();
@@ -122,13 +95,10 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     const { hentKlagebehandlingerPåFagsak } = useKlageApi();
 
     const [minimalFagsak, settMinimalFagsak] = useState<IMinimalFagsak | undefined>(undefined);
-    const [klagebehandlinger, settKlagebehandlinger] =
-        useState<Ressurs<IKlagebehandling[]>>(byggTomRessurs());
+    const [klagebehandlinger, settKlagebehandlinger] = useState<Ressurs<IKlagebehandling[]>>(byggTomRessurs());
     const [dataForManuellJournalføring, settDataForManuellJournalføring] =
         useState(byggTomRessurs<IDataForManuellJournalføring>());
-    const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<
-        boolean | undefined
-    >(undefined);
+    const [erDigitaltInnsendtDokument, settErDigialtInnsendtDokument] = useState<boolean | undefined>(undefined);
     const [institusjonsfagsaker, settInstitusjonsfagsaker] =
         useState<Ressurs<IMinimalFagsak[]>>(byggTomRessurs<IMinimalFagsak[]>());
 
@@ -143,9 +113,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
         verdi: false,
     });
 
-    const behandlingstype = useFelt<
-        Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''
-    >({
+    const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''>({
         verdi: '',
         valideringsfunksjon: felt => {
             return felt.verdi !== ''
@@ -183,9 +151,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
             journalpostTittel: useFelt<string>({
                 verdi: '',
                 valideringsfunksjon: (felt: FeltState<string>) => {
-                    return felt.verdi !== ''
-                        ? ok(felt)
-                        : feil(felt, 'Journalposttittel kan ikke være tom');
+                    return felt.verdi !== '' ? ok(felt) : feil(felt, 'Journalposttittel kan ikke være tom');
                 },
             }),
             behandlingstema: useFelt<IBehandlingstema | undefined>({
@@ -208,8 +174,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                 verdi: [],
                 valideringsfunksjon: (felt: FeltState<IDokumentInfo[]>) => {
                     return !felt.verdi.some(
-                        (dokument: IDokumentInfo) =>
-                            dokument.tittel === undefined || dokument.tittel === ''
+                        (dokument: IDokumentInfo) => dokument.tittel === undefined || dokument.tittel === ''
                     )
                         ? ok(felt)
                         : feil(felt, 'Tittel på minst ett dokument er ikke satt');
@@ -248,9 +213,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     useEffect(() => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            skjema.felter.dokumenter.validerOgSettFelt(
-                dataForManuellJournalføring.data.journalpost.dokumenter ?? []
-            );
+            skjema.felter.dokumenter.validerOgSettFelt(dataForManuellJournalføring.data.journalpost.dokumenter ?? []);
 
             skjema.felter.journalpostTittel.validerOgSettFelt(
                 dataForManuellJournalføring.data.journalpost.tittel ?? ''
@@ -278,11 +241,9 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     useEffect(() => {
         if (skjema.felter.bruker.verdi) {
-            hentInstitusjonsfagsakerForPerson(skjema.felter.bruker.verdi.personIdent).then(
-                fagsaker => {
-                    settInstitusjonsfagsaker(fagsaker);
-                }
-            );
+            hentInstitusjonsfagsakerForPerson(skjema.felter.bruker.verdi.personIdent).then(fagsaker => {
+                settInstitusjonsfagsaker(fagsaker);
+            });
         }
     }, [skjema.felter.bruker.verdi]);
 
@@ -330,16 +291,11 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
         if (hentetPerson.status !== RessursStatus.SUKSESS) {
             return 'Ukjent feil ved henting av person';
         } else if (!hentetPerson.data.harTilgang) {
-            if (
-                hentetPerson.data.adressebeskyttelseGradering ===
-                Adressebeskyttelsegradering.FORTROLIG
-            ) {
+            if (hentetPerson.data.adressebeskyttelseGradering === Adressebeskyttelsegradering.FORTROLIG) {
                 return 'Brukeren har diskresjonskode fortrolig adresse. Avbryt journalføringen og endre enhet.';
             } else if (
-                hentetPerson.data.adressebeskyttelseGradering ===
-                    Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
-                hentetPerson.data.adressebeskyttelseGradering ===
-                    Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND
+                hentetPerson.data.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG ||
+                hentetPerson.data.adressebeskyttelseGradering === Adressebeskyttelsegradering.STRENGT_FORTROLIG_UTLAND
             ) {
                 return 'Brukeren har diskresjonskode strengt fortrolig adresse. Avbryt journalføringen og tildel ny saksbehandler.';
             } else {
@@ -363,13 +319,11 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
                 if (hentetDataForManuellJournalføring.status === RessursStatus.SUKSESS) {
                     settErDigialtInnsendtDokument(
-                        hentetDataForManuellJournalføring.data.journalpost.kanal ===
-                            JournalpostKanal.NAV_NO
+                        hentetDataForManuellJournalføring.data.journalpost.kanal === JournalpostKanal.NAV_NO
                     );
-                    const førsteDokument =
-                        hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
-                            () => true
-                        );
+                    const førsteDokument = hentetDataForManuellJournalføring.data.journalpost.dokumenter?.find(
+                        () => true
+                    );
                     settValgtDokumentId(førsteDokument?.dokumentInfoId);
                     hentOgVisDokument(
                         hentetDataForManuellJournalføring.data.journalpost.journalpostId,
@@ -380,17 +334,12 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                 }
             })
             .catch((_error: AxiosError) => {
-                settDataForManuellJournalføring(
-                    byggFeiletRessurs('Ukjent feil ved henting av oppgave')
-                );
+                settDataForManuellJournalføring(byggFeiletRessurs('Ukjent feil ved henting av oppgave'));
                 settErDigialtInnsendtDokument(undefined);
             });
     };
 
-    const hentOgVisDokument = async (
-        journalpostId: string | undefined,
-        dokumentInfoId: string | undefined
-    ) => {
+    const hentOgVisDokument = async (journalpostId: string | undefined, dokumentInfoId: string | undefined) => {
         if (!journalpostId || !dokumentInfoId) {
             return;
         }
@@ -404,10 +353,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     const velgOgHentDokumentData = (dokumentInfoId: string) => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            hentOgVisDokument(
-                dataForManuellJournalføring.data.journalpost.journalpostId,
-                dokumentInfoId
-            );
+            hentOgVisDokument(dataForManuellJournalføring.data.journalpost.journalpostId, dokumentInfoId);
             settValgtDokumentId(dokumentInfoId);
         }
     };
@@ -418,21 +364,18 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.data.minimalFagsak
         ) {
-            aktivBehandling = hentAktivBehandlingPåMinimalFagsak(
-                dataForManuellJournalføring.data.minimalFagsak
-            );
+            aktivBehandling = hentAktivBehandlingPåMinimalFagsak(dataForManuellJournalføring.data.minimalFagsak);
         }
         return aktivBehandling;
     };
 
     const hentSorterteJournalføringsbehandlinger = (): Journalføringsbehandling[] => {
-        const journalføringsbehandlingerKlage = (hentDataFraRessurs(klagebehandlinger) ?? []).map(
-            klagebehandling => opprettJournalføringsbehandlingFraKlagebehandling(klagebehandling)
+        const journalføringsbehandlingerKlage = (hentDataFraRessurs(klagebehandlinger) ?? []).map(klagebehandling =>
+            opprettJournalføringsbehandlingFraKlagebehandling(klagebehandling)
         );
 
-        const journalføringsbehandlingerBarnetrygd = (minimalFagsak?.behandlinger ?? []).map(
-            barnetrygdbehandling =>
-                opprettJournalføringsbehandlingFraBarnetrygdbehandling(barnetrygdbehandling)
+        const journalføringsbehandlingerBarnetrygd = (minimalFagsak?.behandlinger ?? []).map(barnetrygdbehandling =>
+            opprettJournalføringsbehandlingFraBarnetrygdbehandling(barnetrygdbehandling)
         );
 
         const journalføringsbehandlinger = [
@@ -450,8 +393,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     const journalfør = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            const erDigitalKanal =
-                dataForManuellJournalføring.data.journalpost.kanal === JournalpostKanal.NAV_NO;
+            const erDigitalKanal = dataForManuellJournalføring.data.journalpost.kanal === JournalpostKanal.NAV_NO;
 
             const nyBehandlingstype = skjema.felter.behandlingstype.verdi;
             const nyBehandlingsårsak = skjema.felter.behandlingsårsak.verdi;
@@ -463,9 +405,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                     method: 'POST',
                     url: `/familie-ba-sak/api/journalpost/${
                         dataForManuellJournalføring.data.journalpost.journalpostId
-                    }/journalfør/${oppgaveId}?journalfoerendeEnhet=${
-                        innloggetSaksbehandler?.enhet ?? '9999'
-                    }`,
+                    }/journalfør/${oppgaveId}?journalfoerendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
                         kategori: behandlingstema?.kategori ?? null,
@@ -487,29 +427,20 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
                             const tittelsammenkobling = dokument.logiskeVedlegg
                                 .map(current => current.tittel)
-                                .reduce(
-                                    (previous, current) => `${previous}, ${current}`,
-                                    dokument.tittel ?? ''
-                                );
+                                .reduce((previous, current) => `${previous}, ${current}`, dokument.tittel ?? '');
 
                             return {
-                                dokumentTittel: erDigitalKanal
-                                    ? tittelsammenkobling
-                                    : dokument.tittel,
+                                dokumentTittel: erDigitalKanal ? tittelsammenkobling : dokument.tittel,
                                 dokumentInfoId: dokument.dokumentInfoId || '0',
                                 eksisterendeLogiskeVedlegg: exsisterendeLogiskeVedlegg,
-                                logiskeVedlegg: erDigitalKanal
-                                    ? exsisterendeLogiskeVedlegg
-                                    : dokument.logiskeVedlegg,
+                                logiskeVedlegg: erDigitalKanal ? exsisterendeLogiskeVedlegg : dokument.logiskeVedlegg,
                             };
                         }),
                         tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
                         // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
                         nyBehandlingstype:
-                            nyBehandlingstype === ''
-                                ? Behandlingstype.FØRSTEGANGSBEHANDLING
-                                : nyBehandlingstype,
+                            nyBehandlingstype === '' ? Behandlingstype.FØRSTEGANGSBEHANDLING : nyBehandlingstype,
                         nyBehandlingsårsak:
                             nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                                 ? BehandlingÅrsak.SØKNAD
@@ -546,8 +477,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
             const { verdi: behandlingstema } = skjema.felter.behandlingstema;
 
             const knyttJournalpostTilFagsak =
-                skjema.felter.tilknyttedeBehandlinger.verdi.length > 0 ||
-                skjema.felter.knyttTilNyBehandling.verdi;
+                skjema.felter.tilknyttedeBehandlinger.verdi.length > 0 || skjema.felter.knyttTilNyBehandling.verdi;
 
             if (!knyttJournalpostTilFagsak) {
                 onSubmit<void>(
@@ -567,8 +497,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                         method: 'POST',
                         url: `/familie-ba-sak/api/oppgave/${oppgaveId}/ferdigstillOgKnyttjournalpost`,
                         data: {
-                            journalpostId:
-                                dataForManuellJournalføring.data.journalpost.journalpostId,
+                            journalpostId: dataForManuellJournalføring.data.journalpost.journalpostId,
                             opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
                             tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                             kategori: behandlingstema?.kategori ?? null,
@@ -579,9 +508,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                             },
                             datoMottatt: dataForManuellJournalføring.data.journalpost.datoMottatt,
                             nyBehandlingstype:
-                                nyBehandlingstype === ''
-                                    ? Behandlingstype.FØRSTEGANGSBEHANDLING
-                                    : nyBehandlingstype,
+                                nyBehandlingstype === '' ? Behandlingstype.FØRSTEGANGSBEHANDLING : nyBehandlingstype,
                             nyBehandlingsårsak:
                                 nyBehandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
                                     ? BehandlingÅrsak.SØKNAD
@@ -606,8 +533,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     const erTilordnetInnloggetSaksbehandler = () =>
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
         innloggetSaksbehandler !== undefined &&
-        dataForManuellJournalføring.data.oppgave.tilordnetRessurs ===
-            innloggetSaksbehandler.navIdent;
+        dataForManuellJournalføring.data.oppgave.tilordnetRessurs === innloggetSaksbehandler.navIdent;
 
     const erLesevisning = () => {
         return (
@@ -639,12 +565,8 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     const settAvsenderLikBruker = () => {
         if (dataForManuellJournalføring.status === RessursStatus.SUKSESS) {
-            skjema.felter.avsenderNavn.validerOgSettFelt(
-                dataForManuellJournalføring.data.person?.navn ?? ''
-            );
-            skjema.felter.avsenderIdent.validerOgSettFelt(
-                dataForManuellJournalføring.data.person?.personIdent ?? ''
-            );
+            skjema.felter.avsenderNavn.validerOgSettFelt(dataForManuellJournalføring.data.person?.navn ?? '');
+            skjema.felter.avsenderIdent.validerOgSettFelt(dataForManuellJournalføring.data.person?.personIdent ?? '');
         }
     };
 
@@ -724,9 +646,7 @@ export const useManuellJournalføringContext = () => {
     const context = useContext(ManuellJournalføringContext);
 
     if (context === undefined) {
-        throw new Error(
-            'useManuellJournalførContext må brukes innenfor en ManuellJournalførProvider'
-        );
+        throw new Error('useManuellJournalførContext må brukes innenfor en ManuellJournalførProvider');
     }
 
     return context;

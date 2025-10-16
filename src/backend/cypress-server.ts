@@ -7,13 +7,7 @@ import expressStaticGzip from 'express-static-gzip';
 import { logInfo } from '@navikt/familie-logging';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
-import {
-    fagsakMock,
-    klagebehandlingFixture,
-    oppgaveMock,
-    personMock,
-    profileMock,
-} from './mock-data';
+import { fagsakMock, klagebehandlingFixture, oppgaveMock, personMock, profileMock } from './mock-data';
 import type { IKlagebehandling } from '../frontend/typer/klage';
 
 const port = 8000;

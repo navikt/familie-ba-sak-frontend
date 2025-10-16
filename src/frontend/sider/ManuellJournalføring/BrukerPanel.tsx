@@ -3,15 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
-import {
-    Alert,
-    Button,
-    ExpansionCard,
-    Heading,
-    ReadMore,
-    Select,
-    TextField,
-} from '@navikt/ds-react';
+import { Alert, Button, ExpansionCard, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -80,7 +72,7 @@ export const BrukerPanel: React.FC = () => {
         verdi: '',
         valideringsfunksjon: identValidator,
     });
-    const { hentSamhandler } = useSamhandlerRequest();
+    const { hentSamhandler } = useSamhandlerRequest(false);
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
     const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
     const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
@@ -90,10 +82,7 @@ export const BrukerPanel: React.FC = () => {
     }, [nyIdent.verdi]);
 
     useEffect(() => {
-        if (
-            skjema.visFeilmeldinger &&
-            skjema.felter.bruker.valideringsstatus === Valideringsstatus.FEIL
-        ) {
+        if (skjema.visFeilmeldinger && skjema.felter.bruker.valideringsstatus === Valideringsstatus.FEIL) {
             settÅpen(true);
         }
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
@@ -150,11 +139,7 @@ export const BrukerPanel: React.FC = () => {
                             )
                         }
                         navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
-                        undertittel={
-                            erBrukerPåInstitusjon
-                                ? 'Søker/Bruker er på institusjon'
-                                : 'Søker/Bruker'
-                        }
+                        undertittel={erBrukerPåInstitusjon ? 'Søker/Bruker er på institusjon' : 'Søker/Bruker'}
                         ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
                     />
                 </ExpansionCard.Title>
@@ -167,9 +152,7 @@ export const BrukerPanel: React.FC = () => {
                                 {...nyIdent.hentNavInputProps(!!feilMelding)}
                                 error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
                                 label={'Endre bruker'}
-                                description={
-                                    'Skriv inn brukers/søkers fødselsnummer eller D-nummer'
-                                }
+                                description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
                                 size="small"
                             />
                             <StyledButton
@@ -207,11 +190,7 @@ export const BrukerPanel: React.FC = () => {
                                 >
                                     <option value={FagsakType.NORMAL}>Velg</option>
                                     <option value={FagsakType.INSTITUSJON}>Institusjon</option>
-                                    {
-                                        <option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>
-                                            Enslig mindreårig
-                                        </option>
-                                    }
+                                    {<option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>Enslig mindreårig</option>}
                                 </StyledSelect>
                                 {erBrukerPåInstitusjon && (
                                     <StyledSelect
@@ -224,23 +203,19 @@ export const BrukerPanel: React.FC = () => {
                                     >
                                         <option value="">Velg</option>
                                         {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
-                                            institusjonsfagsaker.data.map(
-                                                ({ institusjon, status }) => {
-                                                    return (
-                                                        institusjon && (
-                                                            <option
-                                                                value={institusjon.orgNummer}
-                                                                key={institusjon.orgNummer}
-                                                            >
-                                                                {formaterIdent(
-                                                                    institusjon.orgNummer
-                                                                )}{' '}
-                                                                | {fagsakStatus[status].navn}
-                                                            </option>
-                                                        )
-                                                    );
-                                                }
-                                            )}
+                                            institusjonsfagsaker.data.map(({ institusjon, status }) => {
+                                                return (
+                                                    institusjon && (
+                                                        <option
+                                                            value={institusjon.orgNummer}
+                                                            key={institusjon.orgNummer}
+                                                        >
+                                                            {formaterIdent(institusjon.orgNummer)} |{' '}
+                                                            {fagsakStatus[status].navn}
+                                                        </option>
+                                                    )
+                                                );
+                                            })}
                                         <option value="ny-institusjon">Ny institusjon</option>
                                     </StyledSelect>
                                 )}
@@ -261,9 +236,9 @@ export const BrukerPanel: React.FC = () => {
                                 <Heading size="xsmall" level="3">
                                     Institusjonssak på bruker må opprettes
                                 </Heading>
-                                For å journalføre dokumentet, må ny fagsak av typen institusjon
-                                opprettes via saksbehandlerløsningen. Når fagsaken er tilknyttet
-                                godkjent institusjon, kan dokumentet journalføres.
+                                For å journalføre dokumentet, må ny fagsak av typen institusjon opprettes via
+                                saksbehandlerløsningen. Når fagsaken er tilknyttet godkjent institusjon, kan dokumentet
+                                journalføres.
                             </StyledAlert>
                         )}
                     </>

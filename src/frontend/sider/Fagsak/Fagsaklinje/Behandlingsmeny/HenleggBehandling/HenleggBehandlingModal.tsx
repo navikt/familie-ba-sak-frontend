@@ -52,18 +52,14 @@ function Innhold() {
                 <VStack gap={'4'}>
                     <Alert variant={'info'}>
                         <BodyLong>
-                            Skriv en begrunnelse som forklarer hvorfor behandlingen henlegges. Dette
-                            kan gi andre saksbehandlere bedre grunnlag hvis de gjenopptar saken, og
-                            kan gjøre det lettere for teamet å feilsøke.
+                            Skriv en begrunnelse som forklarer hvorfor behandlingen henlegges. Dette kan gi andre
+                            saksbehandlere bedre grunnlag hvis de gjenopptar saken, og kan gjøre det lettere for teamet
+                            å feilsøke.
                         </BodyLong>
                     </Alert>
                     <FormProvider {...form}>
                         <form id={HENLEGG_BEHANDLING_FORM_ID} onSubmit={handleSubmit(onSubmit)}>
-                            <Fieldset
-                                legend={'Henlegg behandling'}
-                                hideLegend={true}
-                                error={submitError}
-                            >
+                            <Fieldset legend={'Henlegg behandling'} hideLegend={true} error={submitError}>
                                 <VStack gap={'4'}>
                                     <ÅrsakFelt />
                                     <BegrunnelseFelt />
@@ -82,9 +78,7 @@ function Innhold() {
                     loading={form.formState.isSubmitting}
                     disabled={form.formState.isSubmitting}
                 >
-                    {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET
-                        ? 'Bekreft og send brev'
-                        : 'Bekreft'}
+                    {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET ? 'Bekreft og send brev' : 'Bekreft'}
                 </Button>
                 <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
                     Avbryt

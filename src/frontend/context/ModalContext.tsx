@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    type PropsWithChildren,
-    useCallback,
-    useContext,
-    useReducer,
-} from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useReducer } from 'react';
 
 import type { MutationKey } from '@tanstack/react-query';
 
@@ -13,15 +7,10 @@ import type { HenleggÅrsak } from '../typer/behandling';
 interface ModalContext {
     hentTittel: (type: ModalType) => string;
     settTittel: (type: ModalType, tittel: string) => void;
-    åpneModal: <T extends keyof typeof ModalType>(
-        type: T,
-        args: T extends keyof Args ? Args[T] : void
-    ) => void;
+    åpneModal: <T extends keyof typeof ModalType>(type: T, args: T extends keyof Args ? Args[T] : void) => void;
     lukkModal: (type: ModalType) => void;
     erModalÅpen: (type: ModalType) => boolean;
-    hentArgs: <T extends keyof typeof ModalType>(
-        type: T
-    ) => T extends keyof Args ? Args[T] : undefined;
+    hentArgs: <T extends keyof typeof ModalType>(type: T) => T extends keyof Args ? Args[T] : undefined;
     hentBredde: (type: ModalType) => `${number}${string}`;
     settBredde: (type: ModalType, bredde: `${number}${string}`) => void;
 }
@@ -49,9 +38,7 @@ interface BaseState {
 }
 
 type State = {
-    [key in ModalType]: key extends keyof Args
-        ? BaseState & { args: Args[key] | undefined }
-        : BaseState;
+    [key in ModalType]: key extends keyof Args ? BaseState & { args: Args[key] | undefined } : BaseState;
 };
 
 const initialState: State = {
@@ -188,10 +175,7 @@ export function ModalProvider({ children }: PropsWithChildren) {
     );
 
     const åpneModal = useCallback(
-        <T extends keyof typeof ModalType>(
-            type: T,
-            args: T extends keyof Args ? Args[T] : void
-        ) => {
+        <T extends keyof typeof ModalType>(type: T, args: T extends keyof Args ? Args[T] : void) => {
             dispatch({ type: ActionType.ÅPNE_MODAL, payload: { type, args } });
         },
         [dispatch]

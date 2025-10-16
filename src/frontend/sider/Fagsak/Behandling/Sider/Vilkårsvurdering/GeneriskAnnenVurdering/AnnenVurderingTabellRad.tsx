@@ -65,11 +65,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
         useState<FeltState<IAnnenVurdering>>(annenVurdering);
 
     const toggleForm = (visAlert: boolean) => {
-        if (
-            ekspandertAnnenVurdering &&
-            visAlert &&
-            !deepEqual(annenVurdering, redigerbartAnnenVurdering)
-        ) {
+        if (ekspandertAnnenVurdering && visAlert && !deepEqual(annenVurdering, redigerbartAnnenVurdering)) {
             alert('Vurderingen har endringer som ikke er lagret!');
         } else {
             settEkspandertAnnenVurdering(!ekspandertAnnenVurdering);
@@ -99,9 +95,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <VurderingCelle>
                     <VilkårResultatIkon resultat={annenVurdering.verdi.resultat.verdi} />
-                    <BodyShort
-                        children={resultatVisningsnavn[annenVurdering.verdi.resultat.verdi]}
-                    />
+                    <BodyShort children={resultatVisningsnavn[annenVurdering.verdi.resultat.verdi]} />
                 </VurderingCelle>
             </Table.DataCell>
             <Table.DataCell>
@@ -110,9 +104,7 @@ const AnnenVurderingTabellRad: React.FC<IProps> = ({
             <Table.DataCell>
                 <FlexDiv>
                     <StyledPersonIcon title={'Manuell vurdering'} />
-                    <div>
-                        {annenVurdering.verdi.erVurdert ? 'Vurdert i denne behandlingen' : ''}
-                    </div>
+                    <div>{annenVurdering.verdi.erVurdert ? 'Vurdert i denne behandlingen' : ''}</div>
                 </FlexDiv>
             </Table.DataCell>
         </Table.ExpandableRow>

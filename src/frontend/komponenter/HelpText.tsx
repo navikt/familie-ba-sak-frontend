@@ -10,9 +10,7 @@ import { Popover } from '@navikt/ds-react';
 
 // https://github.com/gregberge/react-merge-refs
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mergeRefs<T = any>(
-    refs: Array<React.MutableRefObject<T> | React.Ref<T>>
-): React.RefCallback<T> {
+function mergeRefs<T = any>(refs: Array<React.MutableRefObject<T> | React.Ref<T>>): React.RefCallback<T> {
     return value => {
         refs.forEach(ref => {
             if (typeof ref === 'function') {
@@ -56,18 +54,7 @@ interface HelpTextProps
 }
 
 const HelpText = forwardRef<HTMLButtonElement, HelpTextProps>(
-    (
-        {
-            className,
-            children,
-            placement = 'top',
-            strategy = 'absolute',
-            title = 'hjelp',
-            onClick,
-            ...rest
-        },
-        ref
-    ) => {
+    ({ className, children, placement = 'top', strategy = 'absolute', title = 'hjelp', onClick, ...rest }, ref) => {
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const mergedRef = useMemo(() => mergeRefs([buttonRef, ref]), [ref]);
         const [open, setOpen] = useState(false);

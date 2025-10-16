@@ -35,14 +35,8 @@ const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) =>
                     onClick={() => settAktivTab(Tabs.Totrinnskontroll)}
                 />
             )}
-            <Historikkknapp
-                aktiv={aktivTab === Tabs.Historikk}
-                onClick={() => settAktivTab(Tabs.Historikk)}
-            />
-            <Dokumenterknapp
-                aktiv={aktivTab === Tabs.Dokumenter}
-                onClick={() => settAktivTab(Tabs.Dokumenter)}
-            />
+            <Historikkknapp aktiv={aktivTab === Tabs.Historikk} onClick={() => settAktivTab(Tabs.Historikk)} />
+            <Dokumenterknapp aktiv={aktivTab === Tabs.Dokumenter} onClick={() => settAktivTab(Tabs.Dokumenter)} />
             <Meldingerknapp
                 aktiv={aktivTab === Tabs.Meldinger}
                 disabled={vurderErLesevisning() || erMigreringFraInfotrygd}

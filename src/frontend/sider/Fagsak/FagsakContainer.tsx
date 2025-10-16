@@ -32,48 +32,39 @@ const HovedInnhold = styled.div`
 export function FagsakContainer() {
     const fagsakId = useFagsakId();
 
-    const {
-        data: fagsak,
-        isPending: isPendingFagsak,
-        error: fagsakError,
-    } = useHentFagsak(fagsakId);
+    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
 
-    const ident =
-        fagsak?.fagsakType === FagsakType.SKJERMET_BARN
-            ? fagsak?.fagsakeier
-            : fagsak?.søkerFødselsnummer;
+    const ident = fagsak?.fagsakType === FagsakType.SKJERMET_BARN ? fagsak?.fagsakeier : fagsak?.søkerFødselsnummer;
 
-    const {
-        data: bruker,
-        isPending: isPendingBruker,
-        error: brukerError,
-    } = useHentPerson({ ident });
+    const { data: bruker, isPending: isPendingBruker, error: brukerError } = useHentPerson({ ident });
 
     useScrollTilAnker();
     useSyncModiaContext(bruker);
 
-    if (isPendingFagsak || isPendingBruker) {
+    if (isPendingFagsak) {
         return (
             <HStack gap={'4'} margin={'space-16'}>
                 <Loader size={'small'} />
-                Laster innhold...
+                Laster fagsak...
             </HStack>
         );
     }
 
-    if (fagsakError || brukerError) {
+    if (fagsakError) {
+        return <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>;
+    }
+
+    if (isPendingBruker) {
         return (
-            <Alert variant={'error'}>
-                <HStack gap={'4'}>
-                    {fagsakError && (
-                        <div>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</div>
-                    )}
-                    {brukerError && (
-                        <div>Feil oppstod ved innlasting av bruker: {brukerError.message}</div>
-                    )}
-                </HStack>
-            </Alert>
+            <HStack gap={'4'} margin={'space-16'}>
+                <Loader size={'small'} />
+                Laster bruker...
+            </HStack>
         );
+    }
+
+    if (brukerError) {
+        return <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>;
     }
 
     return (

@@ -3,15 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    Alert,
-    BodyShort,
-    Button,
-    Fieldset,
-    Select,
-    TextField,
-    UNSAFE_Combobox,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Fieldset, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -117,8 +109,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
             <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
                 <Alert variant="info" inline>
                     <UtbetaltBeløpText size="small">
-                        Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna
-                        registreres separat
+                        Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
                     </UtbetaltBeløpText>
                 </Alert>
                 <UNSAFE_Combobox
@@ -128,9 +119,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
                     readOnly={lesevisning}
-                    error={
-                        skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error
-                    }
+                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
                     periode={skjema.felter.periode}

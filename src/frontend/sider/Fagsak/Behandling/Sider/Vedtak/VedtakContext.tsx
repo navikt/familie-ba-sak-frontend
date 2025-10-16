@@ -40,13 +40,10 @@ export const VedtakProvider = ({ åpenBehandling, children }: Props) => {
     const [alleBegrunnelserRessurs, settAlleBegrunnelserRessurs] =
         useState<Ressurs<AlleBegrunnelser>>(byggTomRessurs());
 
-    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = useState(
-        åpenBehandling.feilutbetaltValuta.length > 0
-    );
+    const [visFeilutbetaltValuta, settVisFeilutbetaltValuta] = useState(åpenBehandling.feilutbetaltValuta.length > 0);
     const [visRefusjonEøs, settVisRefusjonEøs] = useState(åpenBehandling.refusjonEøs.length > 0);
 
-    const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] =
-        useState(false);
+    const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] = useState(false);
 
     const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] = useState(false);
 

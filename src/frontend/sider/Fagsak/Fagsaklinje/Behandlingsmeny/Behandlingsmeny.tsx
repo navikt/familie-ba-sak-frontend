@@ -17,8 +17,7 @@ interface IProps {
 }
 
 const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }) => {
-    const skalViseMenyvalgForBehandling =
-        behandling && behandling.status !== BehandlingStatus.AVSLUTTET;
+    const skalViseMenyvalgForBehandling = behandling && behandling.status !== BehandlingStatus.AVSLUTTET;
 
     return (
         <Dropdown>
@@ -36,10 +35,7 @@ const Behandlingsmeny: React.FC<IProps> = ({ bruker, minimalFagsak, behandling }
                     <MenyvalgFagsak minimalFagsak={minimalFagsak} bruker={bruker} />
                     {skalViseMenyvalgForBehandling && <Dropdown.Menu.Divider />}
                     {skalViseMenyvalgForBehandling && (
-                        <MenyvalgBehandling
-                            minimalFagsak={minimalFagsak}
-                            åpenBehandling={behandling}
-                        />
+                        <MenyvalgBehandling minimalFagsak={minimalFagsak} åpenBehandling={behandling} />
                     )}
                 </Dropdown.Menu.List>
             </Dropdown.Menu>

@@ -5,10 +5,7 @@ import { BehandlingStatus } from '../../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { dagensDato, dateTilIsoDatoString } from '../../../../../../utils/dato';
-import {
-    mockOpphørsperiode,
-    mockUtbetalingsperiode,
-} from '../../../../../../utils/test/vedtak/vedtaksperiode.mock';
+import { mockOpphørsperiode, mockUtbetalingsperiode } from '../../../../../../utils/test/vedtak/vedtaksperiode.mock';
 
 describe('Vedtak utils', () => {
     describe('Test filtrerOgSorterPerioderMedBegrunnelseBehov', () => {
