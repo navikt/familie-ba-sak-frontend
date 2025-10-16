@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   pull-request:
-    name: Build, test, validate
+    name: Pull request
     permissions:
       contents: read
     uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-yarn.yaml@main # ratchet:exclude
