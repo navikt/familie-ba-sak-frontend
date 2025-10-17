@@ -1,5 +1,5 @@
 import type { BehandlingUnderkategori } from './behandlingstema';
-import type { IsoDatoString } from '../utils/dato';
+import { type IsoDatoString, isoStringTilDate } from '../utils/dato';
 
 export interface IRestRegistrerSøknad {
     søknad: ISøknadDTO;
@@ -26,6 +26,12 @@ export interface IBarnMedOpplysningerBackend {
     manueltRegistrert: boolean;
     navn?: string;
     erFolkeregistrert: boolean;
+}
+
+export function sorterBarnMedOpplysninger(b1: IBarnMedOpplysningerBackend, b2: IBarnMedOpplysningerBackend) {
+    const fødselsdato1 = b1.fødselsdato ? isoStringTilDate(b1.fødselsdato) : new Date();
+    const fødselsdato2 = b2.fødselsdato ? isoStringTilDate(b2.fødselsdato) : new Date();
+    return fødselsdato2.getTime() - fødselsdato1.getTime();
 }
 
 export interface IBarnMedOpplysninger {

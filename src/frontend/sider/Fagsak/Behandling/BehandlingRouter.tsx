@@ -6,7 +6,7 @@ import { useBehandlingContext } from './context/BehandlingContext';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
-import RegistrerSøknad from './Sider/RegistrerSøknad/RegistrerSøknad';
+import { RegistrerSøknad } from './Sider/RegistrerSøknad/RegistrerSøknad';
 import { SøknadProvider } from './Sider/RegistrerSøknad/SøknadContext';
 import { sider } from './Sider/sider';
 import type { SideId } from './Sider/sider';
