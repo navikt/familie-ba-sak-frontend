@@ -2,37 +2,62 @@ import * as React from 'react';
 import type { PropsWithChildren } from 'react';
 
 import * as Sentry from '@sentry/browser';
+import styled from 'styled-components';
 
+import { XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-interface IProps extends PropsWithChildren {
+// TODO : Bytt ut med css modules når man har byttet over til vite fra webpack
+const Container = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+`;
+
+interface Props extends PropsWithChildren {
     autentisertSaksbehandler?: ISaksbehandler;
 }
 
-class ErrorBoundary extends React.Component<IProps> {
-    public constructor(props: IProps) {
+interface State {
+    hasError: boolean;
+    error?: Error;
+}
+
+export class ErrorBoundary extends React.Component<Props, State> {
+    public constructor(props: Props) {
         super(props);
+        this.state = { hasError: false };
+        this.visSentryDialog = this.visSentryDialog.bind(this);
+    }
+
+    static getDerivedStateFromError(error: Error) {
+        return { hasError: true, error };
     }
 
     // eslint-disable-next-line
     public componentDidCatch(error: any, info: any): void {
-        // eslint-disable-next-line: no-console
-        console.log(error, info);
-        if (process.env.NODE_ENV !== 'development') {
+        console.error(error, info);
+        if (Sentry.isEnabled()) {
             Sentry.setUser({
                 username: this.props.autentisertSaksbehandler
                     ? this.props.autentisertSaksbehandler.displayName
                     : 'Ukjent bruker',
                 email: this.props.autentisertSaksbehandler ? this.props.autentisertSaksbehandler.email : 'Ukjent email',
             });
-
             Sentry.withScope(scope => {
                 Object.keys(info).forEach(key => {
                     scope.setExtra(key, info[key]);
                     Sentry.captureException(error);
                 });
             });
+            this.visSentryDialog();
+        }
+    }
 
+    private visSentryDialog() {
+        if (Sentry.isEnabled()) {
             Sentry.showReportDialog({
                 title: 'En feil har oppstått i vedtaksløsningen',
                 subtitle: '',
@@ -51,8 +76,38 @@ class ErrorBoundary extends React.Component<IProps> {
     }
 
     render(): React.ReactNode {
+        if (this.state.hasError) {
+            return (
+                <Container>
+                    <VStack gap={'space-32'}>
+                        <VStack gap={'space-8'}>
+                            <Heading size={'medium'} level={'1'}>
+                                <HStack gap={'space-8'} align={'center'} justify={'start'}>
+                                    <XMarkOctagonIcon fontSize={'1.5rem'} />
+                                    En feil har oppstått i vedtaksløsningen
+                                </HStack>
+                            </Heading>
+                            <BodyShort>Teamet har fått beskjed.</BodyShort>
+                        </VStack>
+                        {this.state.error?.message && (
+                            <VStack gap={'space-8'}>
+                                <BodyShort>Feilmelding:</BodyShort>
+                                <ErrorMessage>{this.state.error?.message}</ErrorMessage>
+                            </VStack>
+                        )}
+                        {Sentry.isEnabled() && (
+                            <HStack justify={'end'}>
+                                <div>
+                                    <Button variant={'tertiary'} onClick={this.visSentryDialog}>
+                                        Gi en mer utfyllende beskjed
+                                    </Button>
+                                </div>
+                            </HStack>
+                        )}
+                    </VStack>
+                </Container>
+            );
+        }
         return this.props.children;
     }
 }
-
-export default ErrorBoundary;
