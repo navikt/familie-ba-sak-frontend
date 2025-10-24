@@ -1,18 +1,11 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { erProd } from '../../../../../utils/miljø';
-
-const StyledButton = styled(Button)`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-`;
 
 interface IProps {
     behandlingId: number;
@@ -21,7 +14,7 @@ interface IProps {
 export const FyllUtVilkårsvurderingITestmiljøKnapp: React.FunctionComponent<IProps> = ({ behandlingId }) => {
     const { request } = useHttp();
 
-    const fyllUtSatsendring = () => {
+    const fyllUtVilkårsvurdering = () => {
         if (erProd()) {
             return;
         }
@@ -30,12 +23,12 @@ export const FyllUtVilkårsvurderingITestmiljøKnapp: React.FunctionComponent<IP
             method: 'PUT',
             url: `/familie-ba-sak/api/preprod/${behandlingId}/fyll-ut-vilkarsvurdering`,
             påvirkerSystemLaster: true,
-        }).then((kjørSatsendringRessurs: Ressurs<string>) => {
-            if (kjørSatsendringRessurs.status === RessursStatus.SUKSESS) {
+        }).then((fyllUtVilkårsvurderingRessurs: Ressurs<string>) => {
+            if (fyllUtVilkårsvurderingRessurs.status === RessursStatus.SUKSESS) {
                 window.location.reload();
             }
         });
     };
 
-    return <StyledButton onClick={fyllUtSatsendring}>Fyll ut vilkårsvurdering</StyledButton>;
+    return <Button onClick={fyllUtVilkårsvurdering}>Fyll ut vilkårsvurdering</Button>;
 };
