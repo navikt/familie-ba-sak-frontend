@@ -20,6 +20,9 @@ const StyledHeader = styled.header`
     height: 4rem;
     margin-bottom: 1rem;
     display: flex;
+    justify-content: space-between;
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
 `;
 
 const Header = ({ aktivTab, settAktivTab, skalViseTotrinnskontroll }: IProps) => {
