@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Activity } from 'react';
 
 import { NavLink } from 'react-router';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Stack, VStack } from '@navikt/ds-react';
 import {
     ABorderFocus,
     ABorderSelected,
@@ -20,22 +21,23 @@ import {
     ATextDefault,
 } from '@navikt/ds-tokens/dist/tokens';
 
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import { useVenstremeny } from './useVenstremeny';
+import { useFagsakId } from '../../../../hooks/useFagsakId';
 import { useBehandlingContext } from '../context/BehandlingContext';
 import type { IUnderside } from '../Sider/sider';
 import { erSidenAktiv } from '../Sider/sider';
 
-const ToggleVisningVenstremeny = styled(Button)<{ $åpenvenstremeny: boolean }>`
-    position: fixed;
-    margin-left: ${props => (props.$åpenvenstremeny ? '-17px' : '0px')};
+const ToggleVisningVenstremeny = styled(Button)`
+    position: absolute;
+    margin-right: -20px;
     top: 370px;
     width: 34px;
     min-width: 34px;
     height: 34px;
-    padding: 0;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
+    z-index: 10;
 `;
 
 const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
@@ -74,9 +76,11 @@ const UndersideSirkel = styled.span`
     width: ${ASpacing6};
 `;
 
-const Venstremeny: React.FunctionComponent = () => {
-    const { fagsakId } = useSakOgBehandlingParams();
-    const { behandling, trinnPåBehandling, åpenVenstremeny, settÅpenVenstremeny } = useBehandlingContext();
+export function Venstremeny() {
+    const { behandling, trinnPåBehandling } = useBehandlingContext();
+
+    const fagsakId = useFagsakId();
+    const [erÅpen, settErÅpen] = useVenstremeny();
 
     const stansNavigeringDersomSidenIkkeErAktiv = (event: React.MouseEvent, sidenErAktiv: boolean) => {
         if (!sidenErAktiv) {
@@ -84,17 +88,29 @@ const Venstremeny: React.FunctionComponent = () => {
         }
     };
 
+    const icon = erÅpen ? (
+        <ChevronLeftIcon aria-label={'Vis venstremeny'} />
+    ) : (
+        <ChevronRightIcon aria-label={'Skjul venstremeny'} />
+    );
+
     return (
-        <HStack justify="start">
-            {åpenVenstremeny && (
-                <Box as="nav" paddingBlock="space-8">
-                    {Object.entries(trinnPåBehandling).map(([sideId, side], index: number) => {
+        <Stack direction={'row-reverse'}>
+            <ToggleVisningVenstremeny
+                title={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
+                aria-label={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
+                variant={'secondary'}
+                size={'small'}
+                icon={icon}
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => settErÅpen(prev => !prev)}
+            />
+            <Activity mode={erÅpen ? 'visible' : 'hidden'}>
+                <Box as={'nav'} paddingBlock={'space-8'}>
+                    {Object.entries(trinnPåBehandling).map(([sideId, side], index) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
-
-                        const undersider: IUnderside[] = side.undersider ? side.undersider(behandling) : [];
-
+                        const undersider = side.undersider ? side.undersider(behandling) : [];
                         const sidenErAktiv = erSidenAktiv(side, behandling);
-
                         return (
                             <VStack key={sideId}>
                                 <MenyLenke
@@ -117,13 +133,13 @@ const Venstremeny: React.FunctionComponent = () => {
                                                 stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
                                             }
                                         >
-                                            <HStack align="center" gap="1">
+                                            <HStack align={'center'} gap={'1'}>
                                                 {antallAksjonspunkter > 0 ? (
                                                     <UndersideSirkel>{antallAksjonspunkter}</UndersideSirkel>
                                                 ) : (
-                                                    <Box padding="3" />
+                                                    <Box padding={'3'} />
                                                 )}
-                                                <BodyShort size="small">{underside.navn}</BodyShort>
+                                                <BodyShort size={'small'}>{underside.navn}</BodyShort>
                                             </HStack>
                                         </MenyLenke>
                                     );
@@ -132,30 +148,7 @@ const Venstremeny: React.FunctionComponent = () => {
                         );
                     })}
                 </Box>
-            )}
-            <div>
-                <ToggleVisningVenstremeny
-                    forwardedAs={Button}
-                    variant="secondary"
-                    onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                    onClick={() => {
-                        settÅpenVenstremeny(!åpenVenstremeny);
-                    }}
-                    size="small"
-                    aria-label="Skjul venstremeny"
-                    $åpenvenstremeny={åpenVenstremeny ? 1 : 0}
-                    title={åpenVenstremeny ? 'Skjul venstremeny' : 'Vis venstremeny'}
-                    icon={
-                        åpenVenstremeny ? (
-                            <ChevronLeftIcon aria-label="Vis venstremeny" />
-                        ) : (
-                            <ChevronRightIcon aria-label="Skjul venstremeny" />
-                        )
-                    }
-                />
-            </div>
-        </HStack>
+            </Activity>
+        </Stack>
     );
-};
-
-export default Venstremeny;
+}
