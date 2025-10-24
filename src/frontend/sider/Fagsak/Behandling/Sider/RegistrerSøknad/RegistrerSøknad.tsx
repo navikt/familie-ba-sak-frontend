@@ -1,51 +1,46 @@
 import * as React from 'react';
 
+import { FormProvider, get } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, ErrorSummary, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorSummary, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Annet from './Annet';
-import Barna from './Barna';
+import { AnnetField } from './AnnetField';
+import { BarnField } from './BarnField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
+import { MålformField } from './MålformField';
 import { useSøknadContext } from './SøknadContext';
-import SøknadType from './SøknadType';
+import { UnderkategoriField } from './UnderkategoriField';
 import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import MålformVelger from '../../../../../komponenter/MålformVelger';
-import { BehandlingSteg } from '../../../../../typer/behandling';
 import { sjekkGjelderInstitusjon } from '../../../../../typer/fagsak';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
-import Skjemasteg from '../Skjemasteg';
+import { Steg } from '../Steg';
+import { PreutfyltAlert } from './PreutfyltAlert';
+import { useRegistrerSøknadForm } from './useRegistrerSøknadForm';
+import { FormDebugger } from '../../../../../komponenter/FormDebugger';
 
 const FjernVilkårAdvarsel = styled(BodyShort)`
     white-space: pre-wrap;
 `;
 
-const StyledSkjemasteg = styled(Skjemasteg)`
-    max-width: 40rem;
-`;
-
-const RegistrerSøknad: React.FC = () => {
+export function RegistrerSøknad() {
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
-    const {
-        hentFeilTilOppsummering,
-        nesteAction,
-        settVisBekreftModal,
-        skjema,
-        søknadErLastetFraBackend,
-        visBekreftModal,
-    } = useSøknadContext();
+    const { nesteAction, settVisBekreftModal, skjema, visBekreftModal } = useSøknadContext();
 
     const erLesevisning = vurderErLesevisning();
     const gjelderInstitusjon = sjekkGjelderInstitusjon(fagsak);
 
+    const { form, onSubmit } = useRegistrerSøknadForm();
+    const errors = form.formState.errors;
+
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([...skjema.felter.barnaMedOpplysninger.verdi, barn]);
+        console.log(barn);
     }
 
     return (
@@ -55,99 +50,92 @@ const RegistrerSøknad: React.FC = () => {
             harBrevmottaker={behandling.brevmottakere.length > 0}
         >
             {!erLesevisning && <LeggTilBarnModal />}
-            <StyledSkjemasteg
-                className={'søknad'}
-                tittel={'Registrer opplysninger fra søknaden'}
-                nesteOnClick={() => {
-                    nesteAction(false);
-                }}
-                nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-                senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
-                steg={BehandlingSteg.REGISTRERE_SØKNAD}
-            >
-                {søknadErLastetFraBackend && !erLesevisning && (
-                    <>
-                        <br />
-                        <Alert
-                            variant="warning"
-                            children={
-                                'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
-                            }
+            <Steg tittel={'Registrer opplysninger fra søknaden'}>
+                <VStack gap={'space-16'}>
+                    <PreutfyltAlert />
+                    <FormProvider {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <Fieldset legend={''} hideLegend={true}>
+                                <VStack gap={'space-24'}>
+                                    {!gjelderInstitusjon && <UnderkategoriField />}
+                                    <BarnField />
+                                    {!erLesevisning && (
+                                        <div>
+                                            <LeggTilBarnKnapp />
+                                        </div>
+                                    )}
+                                    <MålformField />
+                                    <AnnetField />
+                                    {Object.keys(errors).length > 0 && (
+                                        <ErrorSummary
+                                            heading={'For å gå videre må du rette opp følgende:'}
+                                            size={'small'}
+                                        >
+                                            {Object.keys(errors).map(fieldname => (
+                                                <ErrorSummary.Item key={fieldname} href={`#${fieldname}`}>
+                                                    {get(errors, fieldname)?.message}
+                                                </ErrorSummary.Item>
+                                            ))}
+                                        </ErrorSummary>
+                                    )}
+                                    <div>
+                                        <Button
+                                            variant={'primary'}
+                                            type={'submit'}
+                                            loading={form.formState.isSubmitting}
+                                            disabled={form.formState.isSubmitting}
+                                        >
+                                            {erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
+                                        </Button>
+                                    </div>
+                                    <FormDebugger />
+                                </VStack>
+                            </Fieldset>
+                        </form>
+                    </FormProvider>
+                </VStack>
+            </Steg>
+            {visBekreftModal && (
+                <Modal
+                    open
+                    onClose={() => settVisBekreftModal(false)}
+                    header={{
+                        heading: 'Er du sikker på at du vil gå videre?',
+                        size: 'small',
+                        closeButton: false,
+                    }}
+                    width={'35rem'}
+                >
+                    <Modal.Body>
+                        <FjernVilkårAdvarsel>
+                            {skjema.submitRessurs.status === RessursStatus.FEILET ||
+                                (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
+                                    skjema.submitRessurs.frontendFeilmelding)}
+                        </FjernVilkårAdvarsel>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            key={'ja'}
+                            variant={'primary'}
+                            onClick={() => {
+                                settVisBekreftModal(false);
+                                nesteAction(true);
+                            }}
+                            children={'Ja'}
+                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         />
-                        <br />
-                    </>
-                )}
-
-                {!gjelderInstitusjon && <SøknadType />}
-
-                <Barna />
-
-                {!erLesevisning && <LeggTilBarnKnapp />}
-
-                <MålformVelger
-                    målformFelt={skjema.felter.målform}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
-                    erLesevisning={erLesevisning}
-                />
-
-                <Annet />
-
-                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
-                )}
-                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
-                        {hentFeilTilOppsummering().map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
-                        ))}
-                    </ErrorSummary>
-                )}
-
-                {visBekreftModal && (
-                    <Modal
-                        open
-                        onClose={() => settVisBekreftModal(false)}
-                        header={{
-                            heading: 'Er du sikker på at du vil gå videre?',
-                            size: 'small',
-                            closeButton: false,
-                        }}
-                        width={'35rem'}
-                    >
-                        <Modal.Body>
-                            <FjernVilkårAdvarsel>
-                                {skjema.submitRessurs.status === RessursStatus.FEILET ||
-                                    (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
-                                        skjema.submitRessurs.frontendFeilmelding)}
-                            </FjernVilkårAdvarsel>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                key={'ja'}
-                                variant={'primary'}
-                                onClick={() => {
-                                    settVisBekreftModal(false);
-                                    nesteAction(true);
-                                }}
-                                children={'Ja'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            />
-                            <Button
-                                variant={'secondary'}
-                                key={'nei'}
-                                onClick={() => {
-                                    settVisBekreftModal(false);
-                                }}
-                                children={'Nei'}
-                            />
-                        </Modal.Footer>
-                    </Modal>
-                )}
-            </StyledSkjemasteg>
+                        <Button
+                            variant={'secondary'}
+                            key={'nei'}
+                            onClick={() => {
+                                settVisBekreftModal(false);
+                            }}
+                            children={'Nei'}
+                        />
+                    </Modal.Footer>
+                </Modal>
+            )}
         </LeggTilBarnModalContextProvider>
     );
-};
-
-export default RegistrerSøknad;
+}
