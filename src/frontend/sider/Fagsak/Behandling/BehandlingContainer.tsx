@@ -9,8 +9,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 import BehandlingRouter from './BehandlingRouter';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
-import Høyremeny from './Høyremeny/Høyremeny';
-import Venstremeny from './Venstremeny/Venstremeny';
+import { Høyremeny } from './Høyremeny/Høyremeny';
+import { Venstremeny } from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { HenleggBehandlingModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingModal';
@@ -30,7 +30,9 @@ const FlexContainer = styled.div`
 const VenstremenyContainer = styled.div`
     min-width: 1rem;
     border-right: 1px solid ${ABorderDivider};
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: calc(100vh - 146px);
 `;
 
 const HovedinnholdContainer = styled.div`
@@ -40,6 +42,7 @@ const HovedinnholdContainer = styled.div`
 `;
 
 const HøyremenyContainer = styled.div`
+    min-width: 1rem;
     border-left: 1px solid ${ABorderDivider};
     overflow-x: hidden;
     overflow-y: scroll;
@@ -65,7 +68,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                             <BehandlingRouter bruker={bruker} fagsak={fagsak} />
                         </HovedinnholdContainer>
                         <HøyremenyContainer>
-                            <Høyremeny bruker={bruker} />
+                            <Høyremeny />
                         </HøyremenyContainer>
                     </FlexContainer>
                 </BehandlingProvider>
