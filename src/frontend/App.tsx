@@ -13,7 +13,7 @@ import { AppProvider } from './context/AppContext';
 import { AuthOgHttpProvider } from './context/AuthContext';
 import { ModalProvider } from './context/ModalContext';
 import { useStartUmami } from './hooks/useStartUmami';
-import ErrorBoundary from './komponenter/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from './komponenter/ErrorBoundary/ErrorBoundary';
 import { initGrafanaFaro } from './utils/grafanaFaro';
 import { erProd } from './utils/miljø';
 
