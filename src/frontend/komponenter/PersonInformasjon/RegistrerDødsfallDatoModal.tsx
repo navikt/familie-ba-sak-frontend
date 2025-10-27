@@ -1,11 +1,12 @@
 import * as React from 'react';
 
-import { Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { startOfDay } from 'date-fns';
+import { useController } from 'react-hook-form';
+
+import { Button, DatePicker, Fieldset, Modal, Textarea, useDatepicker } from '@navikt/ds-react';
 
 import { useRegistrerDødsfallDatoSkjema } from './useRegistrerDødsfallDatoSkjema';
 import type { IGrunnlagPerson } from '../../typer/person';
-import Datovelger from '../Datovelger/Datovelger';
 
 interface IProps {
     lukkModal: () => void;
@@ -14,9 +15,25 @@ interface IProps {
 }
 
 const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProps) => {
-    const { skjema, valideringErOk, registrerManuellDødsfall, restFeil } = useRegistrerDødsfallDatoSkjema({
+    const { form, registrerDødsfall, erSkjemaGyldig, registrerDødsfallDatoPending } = useRegistrerDødsfallDatoSkjema({
         lukkModal,
         person,
+    });
+
+    const { control, register } = form;
+
+    const { field, fieldState, formState } = useController({
+        name: 'dødsfallDato',
+        control,
+        rules: {
+            required: 'Du må velge en gyldig dato.',
+        },
+    });
+
+    const { datepickerProps, inputProps } = useDatepicker({
+        onDateChange: field.onChange,
+        toDate: startOfDay(new Date()),
+        required: true,
     });
 
     return (
@@ -34,33 +51,40 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                 <Fieldset
                     legend="Registrer dødsfall"
                     hideLegend
-                    error={skjema.visFeilmeldinger && restFeil}
+                    error={form.formState.errors.root?.message}
                     errorPropagation={false}
                 >
-                    <Datovelger
-                        felt={skjema.felter.dødsfallDato}
-                        label={'Dødsdato'}
-                        visFeilmeldinger={skjema.visFeilmeldinger}
-                        readOnly={erLesevisning}
-                        kanKunVelgeFortid
-                    />
+                    <DatePicker {...datepickerProps}>
+                        <DatePicker.Input
+                            {...inputProps}
+                            label={'Dødsdato'}
+                            placeholder={'DD.MM.ÅÅÅÅ'}
+                            ref={field.ref}
+                            name={field.name}
+                            onBlur={field.onBlur}
+                            disabled={formState.isSubmitting}
+                            readOnly={formState.isSubmitting && erLesevisning}
+                            error={fieldState.error?.message}
+                        />
+                    </DatePicker>
                     <Textarea
-                        {...skjema.felter.begrunnelse?.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                        {...register('begrunnelse', {
+                            required: 'Begrunnelse for manuell registrering av dødsfall er påkrevd.',
+                        })}
+                        error={form.formState.errors.begrunnelse?.message}
                         id={'manuell-dødsdato-begrunnelse'}
                         label={'Begrunnelse'}
                         readOnly={erLesevisning}
-                        value={skjema.felter.begrunnelse.verdi}
-                        onChange={changeEvent => skjema.felter.begrunnelse.validerOgSettFelt(changeEvent.target.value)}
                     />
                 </Fieldset>
             </Modal.Body>
             {!erLesevisning && (
                 <Modal.Footer>
                     <Button
-                        onClick={registrerManuellDødsfall}
-                        variant={valideringErOk() ? 'primary' : 'secondary'}
-                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                        onClick={form.handleSubmit(registrerDødsfall)}
+                        variant={erSkjemaGyldig(form.getValues()) ? 'primary' : 'secondary'}
+                        loading={registrerDødsfallDatoPending}
+                        disabled={registrerDødsfallDatoPending}
                     >
                         Bekreft
                     </Button>
