@@ -10,6 +10,7 @@ export enum ToggleNavn {
     kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak = 'familie-ba-sak.kan-kjore-autmatisk-valutajustering-behandling-for-enkelt-sak',
     kanOppretteOgEndreSammensatteKontrollsaker = 'familie-ba-sak.kan-opprette-og-endre-sammensatte-kontrollsaker',
     skalObfuskereData = 'familie-ba-sak.anonymiser-persondata',
+    skalSkjuleTestmiljøknapper = 'familie-ba-sak.skal-skjule-testmiljoknapper',
 
     // Release
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
