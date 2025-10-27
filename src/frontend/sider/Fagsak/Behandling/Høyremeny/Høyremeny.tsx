@@ -1,71 +1,64 @@
 import * as React from 'react';
+import { Activity } from 'react';
 
 import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, Stack, VStack } from '@navikt/ds-react';
 import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import Behandlingskort from './Behandlingskort';
 import Hendelsesoversikt from './Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from './Hendelsesoversikt/typer';
+import { useHøyremeny } from './useHøyremeny';
 import type { ILogg } from '../../../../typer/logg';
-import type { IPersonInfo } from '../../../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { useBrukerContext } from '../../BrukerContext';
 import { useBehandlingContext } from '../context/BehandlingContext';
 
-interface Props {
-    bruker: IPersonInfo;
-}
-
-const ToggleVisningHøyremeny = styled(Button)<{ $åpenhøyremeny: boolean }>`
+const ToggleVisningHøyremeny = styled(Button)`
     position: absolute;
-    margin-left: ${props => (!props.$åpenhøyremeny ? '-20px' : '-17px')};
+    margin-left: -21px;
     top: 370px;
     width: 34px;
     min-width: 34px;
     height: 34px;
-    padding: 0;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     background-color: ${ASurfaceDefault};
+    z-index: 10;
 `;
 
-const Container = styled.div<{ $erÅpen: boolean }>`
-    width: ${props => props.$erÅpen && '25rem'};
-`;
+export function Høyremeny() {
+    const { behandling, logg, hentLogg } = useBehandlingContext();
+    const { bruker } = useBrukerContext();
 
-const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
-    const { behandling, logg, hentLogg, åpenHøyremeny, settÅpenHøyremeny } = useBehandlingContext();
+    const [erÅpen, settErÅpen] = useHøyremeny();
 
     React.useEffect(() => {
         hentLogg();
     }, [behandling]);
 
+    const icon = erÅpen ? (
+        <ChevronRightIcon aria-label={'Skjul høyremeny'} />
+    ) : (
+        <ChevronLeftIcon aria-label={'Vis høyremeny'} />
+    );
+
     return (
-        <Container $erÅpen={åpenHøyremeny}>
+        <Stack direction={'row'}>
             <ToggleVisningHøyremeny
-                forwardedAs={Button}
-                $åpenhøyremeny={true}
-                variant="secondary"
-                size="small"
-                aria-label="Skjul høyremeny"
-                title={åpenHøyremeny ? 'Skjul høyremeny' : 'Vis høyremeny'}
-                icon={
-                    åpenHøyremeny ? (
-                        <ChevronRightIcon aria-label="Skjul høyremeny" />
-                    ) : (
-                        <ChevronLeftIcon aria-label="Vis høyremeny" />
-                    )
-                }
-                onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-                onClick={() => {
-                    settÅpenHøyremeny(!åpenHøyremeny);
-                }}
+                title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                variant={'secondary'}
+                size={'small'}
+                icon={icon}
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => settErÅpen(prev => !prev)}
             />
-            {åpenHøyremeny && (
-                <>
+            <Activity mode={erÅpen ? 'visible' : 'hidden'}>
+                <VStack width={'25rem'}>
                     <Behandlingskort åpenBehandling={behandling} />
                     <Hendelsesoversikt
                         hendelser={hentDataFraRessursMedFallback(logg, []).map((loggElement: ILogg): Hendelse => {
@@ -84,10 +77,8 @@ const Høyremeny: React.FunctionComponent<Props> = ({ bruker }) => {
                         åpenBehandling={behandling}
                         bruker={bruker}
                     />
-                </>
-            )}
-        </Container>
+                </VStack>
+            </Activity>
+        </Stack>
     );
-};
-
-export default Høyremeny;
+}

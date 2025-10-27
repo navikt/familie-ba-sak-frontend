@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 import { useLocation, useNavigate } from 'react-router';
 
@@ -61,10 +61,6 @@ interface BehandlingContextValue {
     erMigreringsbehandling: boolean;
     aktivSettPåVent?: ISettPåVent | undefined;
     erBehandleneEnhetMidlertidig?: boolean;
-    åpenHøyremeny: boolean;
-    settÅpenHøyremeny: (åpenHøyremeny: boolean) => void;
-    åpenVenstremeny: boolean;
-    settÅpenVenstremeny: (åpenVenstremeny: boolean) => void;
     erBehandlingAvsluttet: boolean;
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
@@ -79,8 +75,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { fagsak } = useFagsakContext();
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
-    const [åpenHøyremeny, settÅpenHøyremeny] = useState(true);
-    const [åpenVenstremeny, settÅpenVenstremeny] = useState(true);
 
     const {
         submitRessurs: behandlingsstegSubmitressurs,
@@ -254,10 +248,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 erMigreringsbehandling,
                 aktivSettPåVent: behandling?.aktivSettPåVent,
                 erBehandleneEnhetMidlertidig,
-                åpenHøyremeny,
-                settÅpenHøyremeny,
-                åpenVenstremeny,
-                settÅpenVenstremeny,
                 erBehandlingAvsluttet,
                 gjelderInstitusjon,
                 samhandlerOrgnr,
