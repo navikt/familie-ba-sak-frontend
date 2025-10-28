@@ -15,7 +15,6 @@ import {
     VurderingsstrategiForValutakurser,
 } from '../../../../../../../typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
-import { ToggleNavn } from '../../../../../../../typer/toggles';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const ValutakurserContainer = styled.div`

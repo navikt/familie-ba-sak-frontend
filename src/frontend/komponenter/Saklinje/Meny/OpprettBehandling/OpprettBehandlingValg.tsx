@@ -6,6 +6,7 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 import { useAppContext } from '../../../../context/AppContext';
+import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
 import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -17,12 +18,13 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
-import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
+import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
+import { FagsakStatus } from '../../../../typer/fagsak';
+import { FeatureToggle } from '../../../../typer/featureToggles';
 import { Klagebehandlingstype } from '../../../../typer/klage';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../utils/fagsak';
 import { hentAlder } from '../../../../utils/formatter';
 import { onOptionSelected } from '../../../../utils/skjema';
@@ -99,7 +101,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { toggles, harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+    const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -130,7 +133,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const kanOppretteKlagebehandling =
         minimalFagsak !== undefined &&
         (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
-            toggles[ToggleNavn.skalKunneBehandleBaInstitusjonFagsaker]);
+            toggles[FeatureToggle.skalKunneBehandleBaInstitusjonFagsaker]);
 
     const barn =
         bruker?.forelderBarnRelasjon
