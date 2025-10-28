@@ -9,11 +9,11 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useToggles } from '../../../../../hooks/useToggles';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
-import { ToggleNavn } from '../../../../../typer/toggles';
+import { Toggle } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
@@ -31,7 +31,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
+    const toggles = useToggles();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {
@@ -53,10 +53,10 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erLesevisning = vurderErLesevisning();
 
     const erAvregningOgToggleErPå =
-        avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+        avregningsperioder.length > 0 && toggles[Toggle.brukFunksjonalitetForUlovfestetMotregning];
 
     const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.length > 0 && toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+        overlappendePerioderMedAndreFagsaker.length > 0 && toggles[Toggle.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
         if (erLesevisning) {
