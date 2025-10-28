@@ -18,25 +18,29 @@ export enum RegistrerDødsfallDatoFelt {
 }
 
 export interface RegistrerDødsfallDatoFormValues {
-    [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: Date | undefined;
+    [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: Date | null;
     [RegistrerDødsfallDatoFelt.BEGRUNNELSE]: string;
 }
 
+type TransformedRegistrerDødsfallDatoFormValues = {
+    [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: Date;
+    [RegistrerDødsfallDatoFelt.BEGRUNNELSE]: string;
+};
 export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { mutateAsync: registrerDødsfallDato } = useRegistrerDødsfallDato();
 
-    const form = useForm<RegistrerDødsfallDatoFormValues>({
+    const form = useForm<RegistrerDødsfallDatoFormValues, unknown, TransformedRegistrerDødsfallDatoFormValues>({
         values: {
-            [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: undefined,
+            [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: null,
             [RegistrerDødsfallDatoFelt.BEGRUNNELSE]: '',
         },
     });
 
     const { setError } = form;
 
-    async function onSubmit(values: RegistrerDødsfallDatoFormValues) {
+    async function onSubmit(values: TransformedRegistrerDødsfallDatoFormValues) {
         const { dødsfallDato, begrunnelse } = values;
 
         const registrerDødsfallParameters = {
