@@ -13,6 +13,7 @@ import { AppProvider } from './context/AppContext';
 import { AuthContextProvider } from './context/AuthContext';
 import { HttpContextProvider } from './context/HttpContext';
 import { ModalProvider } from './context/ModalContext';
+import { FeatureTogglesProvider } from './context/TogglesContext';
 import { useStartUmami } from './hooks/useStartUmami';
 import { ErrorBoundary } from './komponenter/ErrorBoundary/ErrorBoundary';
 import { initGrafanaFaro } from './utils/grafanaFaro';
@@ -45,11 +46,13 @@ const App: React.FC = () => {
                 <HttpContextProvider>
                     <QueryClientProvider client={queryClient}>
                         {!erProd() && <ReactQueryDevtools position={'right'} initialIsOpen={false} />}
-                        <AppProvider>
-                            <ModalProvider>
-                                <Container />
-                            </ModalProvider>
-                        </AppProvider>
+                        <FeatureTogglesProvider>
+                            <AppProvider>
+                                <ModalProvider>
+                                    <Container />
+                                </ModalProvider>
+                            </AppProvider>
+                        </FeatureTogglesProvider>
                     </QueryClientProvider>
                 </HttpContextProvider>
             </AuthContextProvider>

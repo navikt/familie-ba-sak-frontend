@@ -2,6 +2,21 @@ import React, { type PropsWithChildren } from 'react';
 
 import { describe, expect, vi, afterEach } from 'vitest';
 
+import { ActionMenu } from '@navikt/ds-react';
+
+import { HenleggBehandling } from './HenleggBehandling';
+import { HenleggBehandlingModal } from './HenleggBehandlingModal';
+import { ModalType } from '../../../../context/ModalContext';
+import { useModal } from '../../../../hooks/useModal';
+import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
+import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
+import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
+import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
+import { render, TestProviders } from '../../../../testutils/testrender';
+import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../typer/behandling';
+import type { IMinimalFagsak } from '../../../../typer/fagsak';
+
 const { mockState } = vi.hoisted(() => ({
     mockState: {
         superbruker: false,
@@ -24,21 +39,6 @@ vi.mock('../../../../context/AppContext', async () => {
 afterEach(() => {
     mockState.superbruker = false;
 });
-
-import { ActionMenu } from '@navikt/ds-react';
-
-import { HenleggBehandling } from './HenleggBehandling';
-import { HenleggBehandlingModal } from './HenleggBehandlingModal';
-import { ModalType } from '../../../../context/ModalContext';
-import { useModal } from '../../../../hooks/useModal';
-import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
-import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
-import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
-import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
-import { render, TestProviders } from '../../../../testutils/testrender';
-import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../typer/fagsak';
 
 function ModalWrapper() {
     const { erModalÅpen } = useModal(ModalType.HENLEGG_BEHANDLING);

@@ -18,13 +18,14 @@ import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { useAppContext } from '../../../context/AppContext';
+import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
+import { FeatureToggle } from '../../../typer/featureToggles';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
-import { ToggleNavn } from '../../../typer/toggles';
 import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 
@@ -85,7 +86,8 @@ export function DokumentutsendingSkjema() {
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
     } = useDokumentutsendingContext();
-    const { harInnloggetSaksbehandlerSkrivetilgang, toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+    const toggles = useFeatureToggles();
 
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
 
@@ -212,7 +214,7 @@ export function DokumentutsendingSkjema() {
                                 switch (årsak) {
                                     // TODO: Fjern dette når toggle selvstendigRettInfobrev skrus på.
                                     case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-                                        return toggles[ToggleNavn.selvstendigRettInfobrev];
+                                        return toggles[FeatureToggle.selvstendigRettInfobrev];
                                     default:
                                         return true;
                                 }
