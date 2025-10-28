@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../../../context/AppContext';
+import { useToggles } from '../../../../../../hooks/useToggles';
 import {
     Behandlingstype,
     erBehandlingAvslått,
@@ -14,7 +14,7 @@ import type {
     IRestOpprettSammensattKontrollsak,
     IRestSammensattKontrollsak,
 } from '../../../../../../typer/sammensatt-kontrollsak';
-import { ToggleNavn } from '../../../../../../typer/toggles';
+import { Toggle } from '../../../../../../typer/toggles';
 
 interface ISammensattKontrollsakProps extends React.PropsWithChildren {
     åpenBehandling: IBehandling;
@@ -35,7 +35,7 @@ const SammensattKontrollsakContext = createContext<SammensattKontrollsakContextV
 export const SammensattKontrollsakProvider = ({ åpenBehandling, children }: ISammensattKontrollsakProps) => {
     const { behandlingId, resultat, type } = åpenBehandling;
     const { request } = useHttp();
-    const { toggles } = useAppContext();
+    const toggles = useToggles();
     const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
     const [erSammensattKontrollsak, settErSammensattKontrollsak] = useState<boolean>(false);
     const [sammensattKontrollsak, settSammensattKontrollsak] = useState<IRestSammensattKontrollsak>();
@@ -45,7 +45,7 @@ export const SammensattKontrollsakProvider = ({ åpenBehandling, children }: ISa
     }, [åpenBehandling.behandlingId]);
 
     const skalViseSammensattKontrollsakMenyValg = (): boolean => {
-        if (!toggles[ToggleNavn.kanOppretteOgEndreSammensatteKontrollsaker]) {
+        if (!toggles[Toggle.kanOppretteOgEndreSammensatteKontrollsaker]) {
             return false;
         }
         return (

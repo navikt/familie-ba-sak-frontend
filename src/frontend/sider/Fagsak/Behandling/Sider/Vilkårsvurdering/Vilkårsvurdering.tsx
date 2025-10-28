@@ -19,6 +19,7 @@ import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysn
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useToggles } from '../../../../../hooks/useToggles';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
 import {
@@ -33,8 +34,7 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
-import { useAppContext } from '../../../../../context/AppContext';
-import { ToggleNavn } from '../../../../../typer/toggles';
+import { Toggle } from '../../../../../typer/toggles';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -52,7 +52,7 @@ interface IProps {
 }
 
 const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
+    const toggles = useToggles();
     const { fagsakId } = useSakOgBehandlingParams();
 
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
@@ -155,7 +155,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
             </>
 
-            {!erProd() && !toggles[ToggleNavn.skalSkjuleTestmiljøknapper] && (
+            {!erProd() && !toggles[Toggle.skalSkjuleTestmiljøknapper] && (
                 <HStack gap="4" marginBlock={'8 8'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />

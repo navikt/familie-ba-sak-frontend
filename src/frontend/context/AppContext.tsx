@@ -8,13 +8,13 @@ import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAuthContext } from './AuthContext';
+import { useToggles } from '../hooks/useToggles';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
-import type { IToggles } from '../typer/toggles';
-import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
+import { Toggle } from '../typer/toggles';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
 import { tilFeilside } from '../utils/commons';
 
@@ -67,10 +67,8 @@ interface AppContextValue {
     sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
     systemetLaster: () => boolean;
     toasts: { [toastId: string]: IToast };
-    toggles: IToggles;
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
     skalObfuskereData: boolean;
-    erTogglesHentet: boolean;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
@@ -78,13 +76,12 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 const AppProvider = (props: PropsWithChildren) => {
     const { autentisert, innloggetSaksbehandler } = useAuthContext();
     const { request, systemetLaster } = useHttp();
+    const toggles = useToggles();
 
-    const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
     const [appVersjon, settAppVersjon] = useState('');
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
-    const [erTogglesHentet, settErTogglesHentet] = useState(false);
 
     const verifiserVersjon = () => {
         request<void, string>({
@@ -136,21 +133,6 @@ const AppProvider = (props: PropsWithChildren) => {
     };
 
     useEffect(() => verifiserVersjon(), []);
-
-    useEffect(() => {
-        request<string[], IToggles>({
-            method: 'POST',
-            url: '/familie-ba-sak/api/feature/er-toggler-enabled',
-            data: Object.values(ToggleNavn),
-        }).then((response: Ressurs<IToggles>) => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settToggles(response.data);
-            } else {
-                settToggles(alleTogglerAv);
-            }
-            settErTogglesHentet(true);
-        });
-    }, []);
 
     const lukkModal = () => {
         settAppInfoModal(initalState);
@@ -224,7 +206,7 @@ const AppProvider = (props: PropsWithChildren) => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
-    const skalObfuskereData = toggles[ToggleNavn.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
+    const skalObfuskereData = toggles[Toggle.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
     return (
         <AppContext.Provider
@@ -244,10 +226,8 @@ const AppProvider = (props: PropsWithChildren) => {
                 sjekkTilgang,
                 systemetLaster,
                 toasts,
-                toggles,
                 hentPerson,
                 skalObfuskereData,
-                erTogglesHentet,
             }}
         >
             {props.children}

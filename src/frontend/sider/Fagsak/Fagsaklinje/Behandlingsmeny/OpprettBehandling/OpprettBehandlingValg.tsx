@@ -5,7 +5,7 @@ import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useAppContext } from '../../../../../context/AppContext';
+import { useToggles } from '../../../../../hooks/useToggles';
 import { BehandlingstemaSelect } from '../../../../../komponenter/BehandlingstemaSelect';
 import type { IBehandling } from '../../../../../typer/behandling';
 import {
@@ -22,7 +22,7 @@ import { Klagebehandlingstype } from '../../../../../typer/klage';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
 import { Tilbakekrevingsbehandlingstype } from '../../../../../typer/tilbakekrevingsbehandling';
-import { ToggleNavn } from '../../../../../typer/toggles';
+import { Toggle } from '../../../../../typer/toggles';
 import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../../utils/fagsak';
 import { hentAlder } from '../../../../../utils/formatter';
 import { onOptionSelected } from '../../../../../utils/skjema';
@@ -103,7 +103,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { toggles } = useAppContext();
+    const toggles = useToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -116,7 +116,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
+    const kanOppretteTekniskEndring = kanOppretteRevurdering && toggles[Toggle.kanBehandleTekniskEndring];
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -221,8 +221,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
                         kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev],
-                        toggles[ToggleNavn.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
+                        toggles[Toggle.kanManueltKorrigereMedVedtaksbrev],
+                        toggles[Toggle.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
                     ).map(årsak => {
                         return (
                             <option key={årsak} aria-selected={behandlingsårsak.verdi === årsak} value={årsak}>
