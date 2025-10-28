@@ -13,6 +13,9 @@ import { AuthContextProvider } from '../context/AuthContext';
 import { ModalProvider } from '../context/ModalContext';
 import { SaksbehandlerTestdata } from './testdata/saksbehandlerTestdata';
 import { HttpContextProvider } from '../context/HttpContext';
+import { FeatureTogglesProvider } from '../context/TogglesContext';
+import type { FeatureToggles } from '../typer/featureToggles';
+import { skruPåAlleToggles } from './mocks/handlers/featureToggleHandlers';
 
 function lagQueryClient() {
     return new QueryClient({
@@ -29,6 +32,7 @@ interface Props extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];
     saksbehandler?: ISaksbehandler;
     fjernRessursSomLasterTimeout?: number;
+    featureToggles?: FeatureToggles;
 }
 
 export function TestProviders({
@@ -36,17 +40,20 @@ export function TestProviders({
     initialEntries = [{ pathname: '/' }],
     saksbehandler = SaksbehandlerTestdata.lagSaksbehandler(),
     fjernRessursSomLasterTimeout = 0,
+    featureToggles = skruPåAlleToggles(),
     children,
 }: Props) {
     return (
         <AuthContextProvider autentisertSaksbehandler={saksbehandler}>
             <HttpContextProvider fjernRessursSomLasterTimeout={fjernRessursSomLasterTimeout}>
                 <QueryClientProvider client={queryClient}>
-                    <AppProvider>
-                        <ModalProvider>
-                            <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-                        </ModalProvider>
-                    </AppProvider>
+                    <FeatureTogglesProvider featureToggles={featureToggles}>
+                        <AppProvider>
+                            <ModalProvider>
+                                <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+                            </ModalProvider>
+                        </AppProvider>
+                    </FeatureTogglesProvider>
                 </QueryClientProvider>
             </HttpContextProvider>
         </AuthContextProvider>
