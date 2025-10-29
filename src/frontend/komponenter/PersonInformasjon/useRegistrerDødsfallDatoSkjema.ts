@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
+import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
 import { useRegistrerDødsfallDato } from '../../hooks/useRegistrerDødsfallDato';
 import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IGrunnlagPerson } from '../../typer/person';
@@ -39,7 +40,8 @@ export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: Props) =>
         },
     });
 
-    const { setError } = form;
+    const { control, reset, setError } = form;
+    useOnFormSubmitSuccessful(control, () => reset());
 
     async function onSubmit(values: TransformedRegistrerDødsfallDatoFormValues) {
         const { dødsfallDato, begrunnelse } = values;

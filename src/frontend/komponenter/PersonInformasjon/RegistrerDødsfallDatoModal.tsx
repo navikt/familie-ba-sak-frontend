@@ -22,13 +22,19 @@ export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
 
     const {
         handleSubmit,
-        formState: { isSubmitting, errors, isValid },
+        formState: { isSubmitting, errors },
+        reset,
     } = form;
+
+    const onClose = () => {
+        lukkModal();
+        reset();
+    };
 
     return (
         <Modal
             open
-            onClose={lukkModal}
+            onClose={onClose}
             header={{
                 heading: 'Registrere dødsdato',
                 size: 'medium',
@@ -50,15 +56,10 @@ export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            type={'submit'}
-                            variant={isValid ? 'primary' : 'secondary'}
-                            loading={isSubmitting}
-                            disabled={isSubmitting}
-                        >
+                        <Button type={'submit'} variant={'primary'} loading={isSubmitting} disabled={isSubmitting}>
                             Bekreft
                         </Button>
-                        <Button onClick={lukkModal} variant={'tertiary'}>
+                        <Button onClick={onClose} variant={'tertiary'}>
                             Avbryt
                         </Button>
                     </Modal.Footer>
