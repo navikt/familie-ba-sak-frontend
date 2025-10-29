@@ -1,6 +1,6 @@
-import { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandlingstema';
-import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../typer/fagsak';
-import { mockVisningBehandling } from '../utils/test/behandling/behandling.mock';
+import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
+import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
+import { mockVisningBehandling } from '../../utils/test/behandling/behandling.mock';
 
 export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
     return {

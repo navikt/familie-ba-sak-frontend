@@ -6,7 +6,7 @@ import {
     opprettJournalføringsbehandlingFraKlagebehandling,
 } from './journalføringsbehandling';
 import { Klagebehandlingstype, KlageStatus, KlageÅrsak } from './klage';
-import { KlageTestdata } from '../testdata/klageTestdata';
+import { KlageTestdata } from '../testutils/testdata/klageTestdata';
 
 describe('Journalføringsbehandling', () => {
     describe('FinnVisningstekstForJournalføringsbehandlingsårsak', () => {
