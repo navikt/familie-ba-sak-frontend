@@ -96,7 +96,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                             />
                             <StyledDropdownMeny placement={'right'}>
                                 <Dropdown.Menu.List>
-                                    <RegistrerDødsfallDato erLesevisning={erLesevisning} person={person} />
+                                    <RegistrerDødsfallDato person={person} />
                                 </Dropdown.Menu.List>
                             </StyledDropdownMeny>
                         </Dropdown>

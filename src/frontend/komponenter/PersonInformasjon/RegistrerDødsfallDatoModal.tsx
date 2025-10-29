@@ -9,13 +9,12 @@ import { DødsfallDatoFelt } from './DødsfallDatoFelt';
 import { useRegistrerDødsfallDatoSkjema } from './useRegistrerDødsfallDatoSkjema';
 import type { IGrunnlagPerson } from '../../typer/person';
 
-interface IProps {
+interface Props {
     lukkModal: () => void;
     person: IGrunnlagPerson;
-    erLesevisning: boolean;
 }
 
-const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProps) => {
+export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
     const { form, onSubmit } = useRegistrerDødsfallDatoSkjema({
         lukkModal,
         person,
@@ -23,7 +22,7 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
 
     const {
         handleSubmit,
-        formState: { isSubmitting, errors },
+        formState: { isSubmitting, errors, isValid },
     } = form;
 
     return (
@@ -46,24 +45,25 @@ const RegistrerDødsfallDatoModal = ({ lukkModal, person, erLesevisning }: IProp
                             error={errors.root?.message}
                             errorPropagation={false}
                         >
-                            <DødsfallDatoFelt erLesevisning={erLesevisning} />
-                            <BegrunnelseFelt erLesevisning={erLesevisning} />
+                            <DødsfallDatoFelt />
+                            <BegrunnelseFelt />
                         </Fieldset>
                     </Modal.Body>
-                    {!erLesevisning && (
-                        <Modal.Footer>
-                            <Button type={'submit'} variant={'primary'} loading={isSubmitting} disabled={isSubmitting}>
-                                Bekreft
-                            </Button>
-                            <Button onClick={lukkModal} variant={'tertiary'}>
-                                Avbryt
-                            </Button>
-                        </Modal.Footer>
-                    )}
+                    <Modal.Footer>
+                        <Button
+                            type={'submit'}
+                            variant={isValid ? 'primary' : 'secondary'}
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
+                            Bekreft
+                        </Button>
+                        <Button onClick={lukkModal} variant={'tertiary'}>
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
                 </form>
             </FormProvider>
         </Modal>
     );
 };
-
-export default RegistrerDødsfallDatoModal;

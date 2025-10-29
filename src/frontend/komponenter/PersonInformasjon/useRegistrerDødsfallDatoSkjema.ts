@@ -7,7 +7,7 @@ import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/Beha
 import type { IGrunnlagPerson } from '../../typer/person';
 import { dateTilIsoDatoString } from '../../utils/dato';
 
-interface IProps {
+interface Props {
     lukkModal: () => void;
     person: IGrunnlagPerson;
 }
@@ -26,7 +26,8 @@ type TransformedRegistrerDødsfallDatoFormValues = {
     [RegistrerDødsfallDatoFelt.DØDSFALL_DATO]: Date;
     [RegistrerDødsfallDatoFelt.BEGRUNNELSE]: string;
 };
-export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: IProps) => {
+
+export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { mutateAsync: registrerDødsfallDato } = useRegistrerDødsfallDato();

@@ -6,11 +6,7 @@ import { Textarea } from '@navikt/ds-react';
 
 import { RegistrerDødsfallDatoFelt, type RegistrerDødsfallDatoFormValues } from './useRegistrerDødsfallDatoSkjema';
 
-interface Props {
-    erLesevisning: boolean;
-}
-
-export function BegrunnelseFelt({ erLesevisning }: Props) {
+export function BegrunnelseFelt() {
     const {
         register,
         formState: { isSubmitting, errors },
@@ -22,10 +18,9 @@ export function BegrunnelseFelt({ erLesevisning }: Props) {
                 required: 'Begrunnelse for manuell registrering av dødsfall er påkrevd.',
             })}
             error={errors.begrunnelse?.message}
-            id={'manuell-dødsdato-begrunnelse'}
             label={'Begrunnelse'}
             disabled={isSubmitting}
-            readOnly={isSubmitting || erLesevisning}
+            readOnly={isSubmitting}
         />
     );
 }

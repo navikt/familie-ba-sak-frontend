@@ -7,11 +7,7 @@ import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import { RegistrerDødsfallDatoFelt, type RegistrerDødsfallDatoFormValues } from './useRegistrerDødsfallDatoSkjema';
 
-interface Props {
-    erLesevisning: boolean;
-}
-
-export function DødsfallDatoFelt({ erLesevisning }: Props) {
+export function DødsfallDatoFelt() {
     const { control } = useFormContext<RegistrerDødsfallDatoFormValues>();
 
     const {
@@ -40,7 +36,7 @@ export function DødsfallDatoFelt({ erLesevisning }: Props) {
                 name={field.name}
                 onBlur={field.onBlur}
                 disabled={isSubmitting}
-                readOnly={isSubmitting || erLesevisning}
+                readOnly={isSubmitting}
                 error={error?.message}
             />
         </DatePicker>
