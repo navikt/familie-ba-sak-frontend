@@ -13,7 +13,7 @@ const publicUrl = '/assets';
 
 const baseConfig = {
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
         fallback: { crypto: false },
     },
     entry: ['./src/frontend/index.tsx'],
@@ -56,21 +56,6 @@ const baseConfig = {
                 resolve: {
                     fullySpecified: false,
                 },
-            },
-            {
-                test: /\.(css)$/,
-                use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                mode: 'icss',
-                            },
-                            importLoaders: 2,
-                        },
-                    },
-                ],
             },
         ],
     },

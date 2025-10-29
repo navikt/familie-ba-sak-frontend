@@ -26,9 +26,11 @@
     "validate": "yarn typecheck && yarn lint && yarn prettier"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,css}": [
-      "prettier --check",
+    "src/**/*.{js,jsx,ts,tsx}": [
       "eslint --max-warnings=0"
+    ],
+    "src/**/*.{js,jsx,ts,tsx,css}": [
+      "prettier --check"
     ]
   },
   "dependencies": {
@@ -64,6 +66,7 @@
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "http-proxy-middleware": "3.0.5",
+    "mini-css-extract-plugin": "^2.9.4",
     "quill-delta": "^5.1.0",
     "react": "^19.2.0",
     "react-collapse": "^5.0.1",
