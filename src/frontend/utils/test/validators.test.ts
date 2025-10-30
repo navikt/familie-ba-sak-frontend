@@ -4,7 +4,7 @@ import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
 import { kjønnType } from '@navikt/familie-typer';
 
-import generator from '../../testverktøy/fnr/fnr-generator';
+import generator from '../../testutils/testverktøy/fnr/fnr-generator';
 import type { IGrunnlagPerson } from '../../typer/person';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';

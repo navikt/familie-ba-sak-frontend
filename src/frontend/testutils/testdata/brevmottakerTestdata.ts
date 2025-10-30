@@ -1,7 +1,7 @@
 import {
     Mottaker,
     type SkjemaBrevmottaker,
-} from '../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+} from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 export function lagBrevmottaker(brevmottaker?: Partial<SkjemaBrevmottaker>): SkjemaBrevmottaker {
     return {

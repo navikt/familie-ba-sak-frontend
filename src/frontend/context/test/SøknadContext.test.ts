@@ -2,7 +2,7 @@ import { addYears } from 'date-fns';
 
 import { kjønnType } from '@navikt/familie-typer';
 
-import { FagsakTestdata } from '../../testdata/fagsakTestdata';
+import { FagsakTestdata } from '../../testutils/testdata/fagsakTestdata';
 import { YtelseType } from '../../typer/beregning';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
