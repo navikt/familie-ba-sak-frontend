@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, CopyButton, Dropdown, Heading, HStack } from '@navikt/ds-react';
 
@@ -13,6 +11,7 @@ import { formaterIdent, hentAlder } from '../../utils/formatter';
 import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { PersonIkon } from '../PersonIkon';
+import styles from './PersonInformasjon.module.css';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -20,16 +19,6 @@ interface IProps {
     width?: string;
     erLesevisning: boolean;
 }
-
-const StyledDropdownMeny = styled(Dropdown.Menu)`
-    width: 20ch;
-`;
-
-const HeadingUtenOverflow = styled(Heading)`
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
 
 const hentAdresseBeskyttelseGradering = (bruker: IPersonInfo, personIdent: string): boolean | undefined => {
     const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(rel => rel.personIdent === personIdent);
@@ -73,9 +62,9 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     erEgenAnsatt={erEgenAnsatt}
                 />
                 <HStack gap="4" align="center" wrap={false}>
-                    <HeadingUtenOverflow level="2" size="medium" title={navnOgAlder}>
+                    <Heading className={styles.headingUtenOverflow} level="2" size="medium" title={navnOgAlder}>
                         {navnOgAlder}
-                    </HeadingUtenOverflow>
+                    </Heading>
                     <Skillelinje erHeading />
                     <HStack gap="1" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
@@ -94,11 +83,11 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                                 icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
                                 variant="tertiary"
                             />
-                            <StyledDropdownMeny placement={'right'}>
+                            <Dropdown.Menu className={styles.dropdownMeny} placement={'right'}>
                                 <Dropdown.Menu.List>
                                     <RegistrerDødsfallDato person={person} />
                                 </Dropdown.Menu.List>
-                            </StyledDropdownMeny>
+                            </Dropdown.Menu>
                         </Dropdown>
                     )}
                 </HStack>
