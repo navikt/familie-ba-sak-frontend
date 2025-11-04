@@ -1,6 +1,6 @@
+import { BehandlingTestdata } from './behandlingTestdata';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
 import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
-import { mockVisningBehandling } from '../../utils/test/behandling/behandling.mock';
 
 export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
     return {
@@ -16,7 +16,7 @@ export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
         fagsakType: FagsakType.NORMAL,
         institusjon: undefined,
         migreringsdato: '',
-        behandlinger: [mockVisningBehandling()],
+        behandlinger: [BehandlingTestdata.lagVisningBehandling()],
         gjeldendeUtbetalingsperioder: [],
         ...(fagsak ?? {}),
     };
