@@ -6,7 +6,7 @@ import {
     ManuelleBrevmottakerePåFagsakProvider,
     useManuelleBrevmottakerePåFagsakContext,
 } from './ManuelleBrevmottakerePåFagsakContext';
-import { lagBrevmottaker } from '../../testdata/brevmottakerTestdata';
+import { lagBrevmottaker } from '../../testutils/testdata/brevmottakerTestdata';
 
 function Provider({ children }: PropsWithChildren) {
     return <ManuelleBrevmottakerePåFagsakProvider>{children}</ManuelleBrevmottakerePåFagsakProvider>;

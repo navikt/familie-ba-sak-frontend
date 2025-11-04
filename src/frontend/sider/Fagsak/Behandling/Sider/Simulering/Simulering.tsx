@@ -93,7 +93,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
 
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
-    const skalDisableNesteKnapp = erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake;
+    const skalDisableNesteKnapp =
+        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
 
     const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
 

@@ -6,7 +6,7 @@ import {
     KlageResultat,
     KlageStatus,
     KlageÅrsak,
-} from '../typer/klage';
+} from '../../typer/klage';
 
 export function lagAnkeKlageinstansEventTyper(): KlageinstansEventType[] {
     return Object.keys(KlageinstansEventType)

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, ErrorMessage, ErrorSummary, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, ErrorMessage, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
 import { ASpacing2 } from '@navikt/ds-tokens/dist/tokens';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -15,6 +15,7 @@ import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurde
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
+import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
@@ -32,6 +33,8 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
+import { useAppContext } from '../../../../../context/AppContext';
+import { ToggleNavn } from '../../../../../typer/toggles';
 
 const UregistrerteBarnListe = styled.ol`
     margin: ${ASpacing2} 0;
@@ -49,6 +52,7 @@ interface IProps {
 }
 
 const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
+    const { toggles } = useAppContext();
     const { fagsakId } = useSakOgBehandlingParams();
 
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
@@ -151,7 +155,12 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
             </>
 
-            {!erProd() && <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />}
+            {!erProd() && !toggles[ToggleNavn.skalSkjuleTestmiljøknapper] && (
+                <HStack gap="4" marginBlock={'8 8'}>
+                    <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
+                    <TømPersonopplysningerCacheITestmiljøKnapp />
+                </HStack>
+            )}
 
             <VStack gap="space-8">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />

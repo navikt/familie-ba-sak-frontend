@@ -2,7 +2,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './utils';
 import { kjørValidering } from './validering';
-import { genererPerson, genererPersonresultat } from '../../../../../testdata/vilkårsvurderingTestdata';
+import { genererPerson, genererPersonresultat } from '../../../../../testutils/testdata/vilkårsvurderingTestdata';
 
 describe('vilkårsvurdering/validering', () => {
     describe('validering', () => {
