@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 import { differenceInMilliseconds } from 'date-fns';
-import styled from 'styled-components';
 
-import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label, VStack } from '@navikt/ds-react';
 
-import BarnMedOpplysninger from './BarnMedOpplysninger';
+import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
@@ -15,19 +14,7 @@ import { isoStringTilDate } from '../../../../../utils/dato';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-const BarnaWrapper = styled.div`
-    margin: 1rem 0;
-`;
-
-const StyledCheckboxGroup = styled(CheckboxGroup)`
-    min-width: 0;
-`;
-
-const IngenBarnRegistrertInfo = styled(Alert)`
-    margin-bottom: 1.25rem;
-`;
-
-const Barna: React.FunctionComponent = () => {
+export const Barna: React.FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();
     const lesevisning = vurderErLesevisning();
@@ -65,7 +52,7 @@ const Barna: React.FunctionComponent = () => {
     };
 
     return (
-        <BarnaWrapper className={'søknad__barna'}>
+        <VStack marginBlock={'space-16'}>
             <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
             {maskerteRelasjoner.map((forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                 return (
@@ -78,9 +65,8 @@ const Barna: React.FunctionComponent = () => {
                     </HStack>
                 );
             })}
-
             <br />
-            <StyledCheckboxGroup
+            <CheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 legend={
                     !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
@@ -99,14 +85,11 @@ const Barna: React.FunctionComponent = () => {
                 ))}
 
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
-                    <IngenBarnRegistrertInfo
-                        variant="info"
-                        children={'Folkeregisteret har ikke registrerte barn på denne søkeren'}
-                    />
+                    <VStack marginBlock={'space-0 space-20'}>
+                        <Alert variant="info" children={'Folkeregisteret har ikke registrerte barn på denne søkeren'} />
+                    </VStack>
                 )}
-            </StyledCheckboxGroup>
-        </BarnaWrapper>
+            </CheckboxGroup>
+        </VStack>
     );
 };
-
-export default Barna;

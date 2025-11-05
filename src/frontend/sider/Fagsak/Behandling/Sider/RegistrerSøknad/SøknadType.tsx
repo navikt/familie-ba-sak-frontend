@@ -1,22 +1,13 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
+import styles from './SøknadType.module.css';
 import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-const StyledRadioGroup = styled(RadioGroup)`
-    margin: 2rem 0;
-`;
-
-const StyledRadio = styled(Radio)`
-    padding-left: 1rem;
-`;
-
-const SøknadType: React.FunctionComponent = () => {
+export const SøknadType: React.FunctionComponent = () => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { skjema } = useSøknadContext();
@@ -26,30 +17,31 @@ const SøknadType: React.FunctionComponent = () => {
     };
 
     return (
-        <StyledRadioGroup
+        <RadioGroup
+            className={styles.radioGroup}
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             readOnly={erLesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
             legend={<Heading size={'medium'} level={'2'} children={'Hva har bruker søkt om?'} />}
         >
-            <StyledRadio
+            <Radio
+                className={styles.radio}
                 value={behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR]}
                 name={'registrer-søknad-søknadtype'}
                 checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.ORDINÆR}
                 onChange={() => radioOnChange(BehandlingUnderkategori.ORDINÆR)}
             >
                 {behandlingUnderkategori[BehandlingUnderkategori.ORDINÆR]}
-            </StyledRadio>
-            <StyledRadio
+            </Radio>
+            <Radio
+                className={styles.radio}
                 value={behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
                 name={'registrer-søknad-søknadtype'}
                 checked={skjema.felter.underkategori.verdi === BehandlingUnderkategori.UTVIDET}
                 onChange={() => radioOnChange(BehandlingUnderkategori.UTVIDET)}
             >
                 {behandlingUnderkategori[BehandlingUnderkategori.UTVIDET]}
-            </StyledRadio>
-        </StyledRadioGroup>
+            </Radio>
+        </RadioGroup>
     );
 };
-
-export default SøknadType;
