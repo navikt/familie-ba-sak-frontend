@@ -36,23 +36,16 @@ enum Saksoversiktbehandlingstype {
     KLAGE = 'KLAGE',
 }
 
-export function filtrertOgSorterSaksoversiktbehandlinger(
+export function filtrerSaksoversiktbehandlinger(
     saksoversiktbehandling: Saksoversiktsbehandling[],
     visHenlagteBehandlinger: boolean,
     visMånedligeValutajusteringer: boolean
 ): Saksoversiktsbehandling[] {
-    return saksoversiktbehandling
-        .filter(
-            behandling =>
-                skalVisesNårHenlagtBehandlingerSkjules(behandling, visHenlagteBehandlinger) &&
-                skalVisesNårMånedligeValutajusteringerSkjules(behandling, visMånedligeValutajusteringer)
-        )
-        .sort((saksoversiktbehandling1, saksoversiktbehandling2) =>
-            differenceInMilliseconds(
-                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandling2)),
-                isoStringTilDate(hentTidspunktforSortering(saksoversiktbehandling1))
-            )
-        );
+    return saksoversiktbehandling.filter(
+        behandling =>
+            skalVisesNårHenlagtBehandlingerSkjules(behandling, visHenlagteBehandlinger) &&
+            skalVisesNårMånedligeValutajusteringerSkjules(behandling, visMånedligeValutajusteringer)
+    );
 }
 
 export type Saksoversiktsbehandling =
@@ -97,7 +90,7 @@ export const hentOpprettetTidspunkt = (saksoversiktsbehandling: Saksoversiktsbeh
     }
 };
 
-export const hentTidspunktforSortering = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
+export const hentTidspunktForSortering = (saksoversiktsbehandling: Saksoversiktsbehandling) => {
     switch (saksoversiktsbehandling.saksoversiktbehandlingstype) {
         case Saksoversiktbehandlingstype.BARNETRYGD:
             return saksoversiktsbehandling.aktivertTidspunkt;
@@ -144,7 +137,12 @@ export const hentBehandlingerTilSaksoversikten = (
         ...saksoversiktBarnetrygdbehandlinger,
         ...saksoversiktTilbakekrevingsbehandlinger,
         ...saksoversiktKlagebehandlinger,
-    ];
+    ].sort((behandling1, behandling2) =>
+        differenceInMilliseconds(
+            isoStringTilDate(hentTidspunktForSortering(behandling2)),
+            isoStringTilDate(hentTidspunktForSortering(behandling1))
+        )
+    );
 };
 
 export const lagLenkePåType = (fagsakId: number, behandling: Saksoversiktsbehandling): ReactNode => {
