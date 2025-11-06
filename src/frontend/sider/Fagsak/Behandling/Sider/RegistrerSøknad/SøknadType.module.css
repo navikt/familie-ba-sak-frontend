@@ -1,0 +1,7 @@
+.radioGroup {
+    margin: var(--a-spacing-8) var(--a-spacing-0);
+}
+
+.radio {
+    padding-left: var(--a-spacing-4);
+}

@@ -1,15 +1,13 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
 import { Alert, BodyShort, Button, ErrorSummary, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Annet from './Annet';
-import Barna from './Barna';
+import { Annet } from './Annet';
+import { Barna } from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { useSøknadContext } from './SøknadContext';
-import SøknadType from './SøknadType';
+import { SøknadType } from './SøknadType';
 import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../../../komponenter/MålformVelger';
@@ -19,16 +17,9 @@ import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
+import styles from './RegistrerSøknad.module.css';
 
-const FjernVilkårAdvarsel = styled(BodyShort)`
-    white-space: pre-wrap;
-`;
-
-const StyledSkjemasteg = styled(Skjemasteg)`
-    max-width: 40rem;
-`;
-
-const RegistrerSøknad: React.FC = () => {
+export const RegistrerSøknad: React.FC = () => {
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
@@ -55,7 +46,7 @@ const RegistrerSøknad: React.FC = () => {
             harBrevmottaker={behandling.brevmottakere.length > 0}
         >
             {!erLesevisning && <LeggTilBarnModal />}
-            <StyledSkjemasteg
+            <Skjemasteg
                 className={'søknad'}
                 tittel={'Registrer opplysninger fra søknaden'}
                 nesteOnClick={() => {
@@ -77,21 +68,15 @@ const RegistrerSøknad: React.FC = () => {
                         <br />
                     </>
                 )}
-
                 {!gjelderInstitusjon && <SøknadType />}
-
                 <Barna />
-
                 {!erLesevisning && <LeggTilBarnKnapp />}
-
                 <MålformVelger
                     målformFelt={skjema.felter.målform}
                     visFeilmeldinger={skjema.visFeilmeldinger}
                     erLesevisning={erLesevisning}
                 />
-
                 <Annet />
-
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
                     <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
@@ -103,7 +88,6 @@ const RegistrerSøknad: React.FC = () => {
                         ))}
                     </ErrorSummary>
                 )}
-
                 {visBekreftModal && (
                     <Modal
                         open
@@ -116,11 +100,11 @@ const RegistrerSøknad: React.FC = () => {
                         width={'35rem'}
                     >
                         <Modal.Body>
-                            <FjernVilkårAdvarsel>
+                            <BodyShort className={styles.fjernVilkårAdvarsel}>
                                 {skjema.submitRessurs.status === RessursStatus.FEILET ||
                                     (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
                                         skjema.submitRessurs.frontendFeilmelding)}
-                            </FjernVilkårAdvarsel>
+                            </BodyShort>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button
@@ -145,9 +129,7 @@ const RegistrerSøknad: React.FC = () => {
                         </Modal.Footer>
                     </Modal>
                 )}
-            </StyledSkjemasteg>
+            </Skjemasteg>
         </LeggTilBarnModalContextProvider>
     );
 };
-
-export default RegistrerSøknad;
