@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Heading, Table } from '@navikt/ds-react';
 
+import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 import EndretUtbetalingAndelRadRHF from './EndretUtbetalingAndelRadRHF';
 import { useAppContext } from '../../../../../../context/AppContext';
@@ -43,11 +44,12 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                 <Table.Body>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel =>
                         toggles[ToggleNavn.skalBrukeNyttSkjemaForEndretUtbetalingAndel] ? (
-                            <EndretUtbetalingAndelRadRHF
-                                lagretEndretUtbetalingAndel={endretUtbetalingAndel}
-                                åpenBehandling={åpenBehandling}
-                                key={endretUtbetalingAndel.id}
-                            />
+                            <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
+                                <EndretUtbetalingAndelRadRHF
+                                    key={endretUtbetalingAndel.id}
+                                    åpenBehandling={åpenBehandling}
+                                />
+                            </EndretUtbetalingAndelProvider>
                         ) : (
                             <EndretUtbetalingAndelRad
                                 lagretEndretUtbetalingAndel={endretUtbetalingAndel}

@@ -5,17 +5,16 @@ import styled from 'styled-components';
 
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 
+import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
 import EndretUtbetalingAndelSkjemaRHF from './EndretUtbetalingAndelSkjemaRHF';
 import { useEndretUtbetalingAndelRHF } from './useEndretUtbetalingAndelRHF';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 
 interface EndretUtbetalingAndelRadProps {
-    lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel;
     åpenBehandling: IBehandling;
 }
 
@@ -39,18 +38,16 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
     }
 };
 
-const EndretUtbetalingAndelRadRHF = ({
-    lagretEndretUtbetalingAndel,
-    åpenBehandling,
-}: EndretUtbetalingAndelRadProps) => {
+const EndretUtbetalingAndelRadRHF = ({ åpenBehandling }: EndretUtbetalingAndelRadProps) => {
+    const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
-        lagretEndretUtbetalingAndel.personIdenter.length === 0
+        endretUtbetalingAndel.personIdenter.length === 0
     );
 
     const lukkSkjema = () => settErSkjemaEkspandert(false);
 
     const { form, onSubmit, slettEndretUtbetalingAndel, skjemaHarEndringerSomIkkeErLagret } =
-        useEndretUtbetalingAndelRHF(lagretEndretUtbetalingAndel, åpenBehandling, lukkSkjema);
+        useEndretUtbetalingAndelRHF(endretUtbetalingAndel, åpenBehandling, lukkSkjema);
 
     const { reset } = form;
 
@@ -80,12 +77,10 @@ const EndretUtbetalingAndelRadRHF = ({
         >
             <Table.DataCell>
                 <PersonCelle>
-                    <StatusIkon
-                        status={lagretEndretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL}
-                    />
-                    {lagretEndretUtbetalingAndel.personIdenter.length > 0 ? (
+                    <StatusIkon status={endretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL} />
+                    {endretUtbetalingAndel.personIdenter.length > 0 ? (
                         <VStack>
-                            {lagretEndretUtbetalingAndel.personIdenter.map(person => (
+                            {endretUtbetalingAndel.personIdenter.map(person => (
                                 <BodyShort size="small" key={person}>
                                     {lagPersonLabel(person, åpenBehandling.personer)}
                                 </BodyShort>
@@ -98,11 +93,11 @@ const EndretUtbetalingAndelRadRHF = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {lagretEndretUtbetalingAndel.fom
+                    {endretUtbetalingAndel.fom
                         ? isoMånedPeriodeTilFormatertString({
                               periode: {
-                                  fom: lagretEndretUtbetalingAndel.fom,
-                                  tom: lagretEndretUtbetalingAndel.tom,
+                                  fom: endretUtbetalingAndel.fom,
+                                  tom: endretUtbetalingAndel.tom,
                               },
                               tilFormat: Datoformat.MÅNED_ÅR,
                           })
@@ -111,13 +106,13 @@ const EndretUtbetalingAndelRadRHF = ({
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {lagretEndretUtbetalingAndel.årsak ? årsakTekst[lagretEndretUtbetalingAndel.årsak] : ''}
+                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {typeof lagretEndretUtbetalingAndel.prosent === 'number'
-                        ? utbetalingsprosentTilTekst(lagretEndretUtbetalingAndel.prosent)
+                    {typeof endretUtbetalingAndel.prosent === 'number'
+                        ? utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)
                         : ''}
                 </BodyShort>
             </Table.DataCell>
