@@ -48,12 +48,12 @@ export interface EndretUtbetalingAndelFormValues {
 }
 
 export const useEndretUtbetalingAndelRHF = (
-    lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel,
+    endretUtbetalingAndel: IRestEndretUtbetalingAndel,
     lukkSkjema: () => void
 ) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const personer = lagretEndretUtbetalingAndel.personIdenter.map(ident => ({
+    const personer = endretUtbetalingAndel.personIdenter.map(ident => ({
         value: ident,
         label: lagPersonLabel(ident, behandling.personer),
     }));
@@ -61,17 +61,17 @@ export const useEndretUtbetalingAndelRHF = (
     const form = useForm<EndretUtbetalingAndelFormValues>({
         values: {
             [EndretUtbetalingAndelFeltnavn.PERSONER]: personer,
-            [EndretUtbetalingAndelFeltnavn.FOM]: isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.fom),
-            [EndretUtbetalingAndelFeltnavn.TOM]: isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.tom),
-            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent) || '',
-            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: lagretEndretUtbetalingAndel.årsak || '',
+            [EndretUtbetalingAndelFeltnavn.FOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.fom),
+            [EndretUtbetalingAndelFeltnavn.TOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.tom),
+            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(endretUtbetalingAndel.prosent) || '',
+            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: endretUtbetalingAndel.årsak || '',
             [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: isoStringTilDateEllerUndefined(
-                lagretEndretUtbetalingAndel.søknadstidspunkt
+                endretUtbetalingAndel.søknadstidspunkt
             ),
             [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: isoStringTilDateEllerUndefined(
-                lagretEndretUtbetalingAndel.avtaletidspunktDeltBosted
+                endretUtbetalingAndel.avtaletidspunktDeltBosted
             ),
-            [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: lagretEndretUtbetalingAndel.begrunnelse || '',
+            [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: endretUtbetalingAndel.begrunnelse || '',
         },
     });
 
@@ -79,33 +79,41 @@ export const useEndretUtbetalingAndelRHF = (
 
     useOnFormSubmitSuccessful(control, () => reset());
 
-    const onSuccess = (behandling: IBehandling) => {
-        lukkSkjema();
-        settÅpenBehandling(byggDataRessurs(behandling));
-    };
-
-    const onError = (error: Error) => {
-        setError('root', {
-            message: error.message ?? 'Ukjent feil oppstod.',
-        });
-    };
-
     const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
-        mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(lagretEndretUtbetalingAndel),
-        onSuccess,
-        onError,
+        mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+        onSuccess: (behandling: IBehandling) => {
+            lukkSkjema();
+            settÅpenBehandling(byggDataRessurs(behandling));
+        },
+        onError: (error: Error) => {
+            setError('root', {
+                message: error.message ?? 'Ukjent feil oppstod.',
+            });
+        },
     });
+
+    const onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues> = (values: EndretUtbetalingAndelFormValues) =>
+        oppdaterEndretUtbetalingAndel({
+            id: endretUtbetalingAndel.id,
+            personIdenter: values.personer.map(person => person.value),
+            prosent: utbetalingTilProsent(values.utbetaling || undefined),
+            fom: dateTilIsoMånedStringEllerUndefined(values.fom),
+            tom: dateTilIsoMånedStringEllerUndefined(values.tom),
+            årsak: values.årsak || undefined,
+            begrunnelse: values.begrunnelse,
+            søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(values.søknadstidspunkt),
+            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(values.avtaletidspunktDeltBosted),
+            erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
+        });
 
     const skjemaHarEndringerSomIkkeErLagret = (): boolean => {
         const formValues = watch();
 
-        const originalFom = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.fom);
-        const originalTom = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.tom);
-        const originalSøknadstidspunkt = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.søknadstidspunkt);
-        const originalAvtaletidspunkt = isoStringTilDateEllerUndefined(
-            lagretEndretUtbetalingAndel.avtaletidspunktDeltBosted
-        );
-        const originalUtbetaling = prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent) || '';
+        const originalFom = isoStringTilDateEllerUndefined(endretUtbetalingAndel.fom);
+        const originalTom = isoStringTilDateEllerUndefined(endretUtbetalingAndel.tom);
+        const originalSøknadstidspunkt = isoStringTilDateEllerUndefined(endretUtbetalingAndel.søknadstidspunkt);
+        const originalAvtaletidspunkt = isoStringTilDateEllerUndefined(endretUtbetalingAndel.avtaletidspunktDeltBosted);
+        const originalUtbetaling = prosentTilUtbetaling(endretUtbetalingAndel.prosent) || '';
 
         const datesEqual = (date1: Date | undefined, date2: Date | undefined): boolean => {
             if (!date1 && !date2) return true;
@@ -118,26 +126,12 @@ export const useEndretUtbetalingAndelRHF = (
             !datesEqual(formValues.fom, originalFom) ||
             !datesEqual(formValues.tom, originalTom) ||
             formValues.utbetaling !== originalUtbetaling ||
-            formValues.årsak !== (lagretEndretUtbetalingAndel.årsak || '') ||
+            formValues.årsak !== (endretUtbetalingAndel.årsak || '') ||
             !datesEqual(formValues.søknadstidspunkt, originalSøknadstidspunkt) ||
             !datesEqual(formValues.avtaletidspunktDeltBosted, originalAvtaletidspunkt) ||
-            formValues.begrunnelse !== (lagretEndretUtbetalingAndel.begrunnelse || '')
+            formValues.begrunnelse !== (endretUtbetalingAndel.begrunnelse || '')
         );
     };
-
-    const onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues> = (values: EndretUtbetalingAndelFormValues) =>
-        oppdaterEndretUtbetalingAndel({
-            id: lagretEndretUtbetalingAndel.id,
-            personIdenter: values.personer.map(person => person.value),
-            prosent: utbetalingTilProsent(values.utbetaling || undefined),
-            fom: dateTilIsoMånedStringEllerUndefined(values.fom),
-            tom: dateTilIsoMånedStringEllerUndefined(values.tom),
-            årsak: values.årsak || undefined,
-            begrunnelse: values.begrunnelse,
-            søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(values.søknadstidspunkt),
-            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(values.avtaletidspunktDeltBosted),
-            erTilknyttetAndeler: lagretEndretUtbetalingAndel.erTilknyttetAndeler,
-        });
 
     return {
         form,
