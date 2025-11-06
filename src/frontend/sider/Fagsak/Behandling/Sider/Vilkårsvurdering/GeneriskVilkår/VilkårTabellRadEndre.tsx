@@ -15,12 +15,12 @@ import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
-import { useToggles } from '../../../../../../hooks/useToggles';
+import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
-import { Toggle } from '../../../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
@@ -75,8 +75,8 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settFokusPåKnapp,
     lesevisning,
 }) => {
-    const toggles = useToggles();
-    const bosattFinnmarkNordtromsToggleErPå = toggles[Toggle.bosattFinnmarkNordtroms];
+    const toggles = useFeatureToggles();
+    const bosattFinnmarkNordtromsToggleErPå = toggles[FeatureToggle.bosattFinnmarkNordtroms];
 
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 

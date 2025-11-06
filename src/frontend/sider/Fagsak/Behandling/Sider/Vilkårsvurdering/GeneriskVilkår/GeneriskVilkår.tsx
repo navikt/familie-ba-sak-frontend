@@ -11,11 +11,11 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
-import { useToggles } from '../../../../../../hooks/useToggles';
+import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import { BehandlingSteg, type IBehandling } from '../../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
-import { Toggle } from '../../../../../../typer/toggles';
 import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Resultat, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -48,7 +48,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     visFeilmeldinger,
     generiskVilkårKey,
 }) => {
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
     const { behandling, vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
@@ -113,7 +113,7 @@ const GeneriskVilkår: React.FC<IProps> = ({
     };
 
     const skalViseLyspære =
-        toggles[Toggle.skalViseVarsellampeForManueltLagtTilBarn] &&
+        toggles[FeatureToggle.skalViseVarsellampeForManueltLagtTilBarn] &&
         behandling.steg == BehandlingSteg.VILKÅRSVURDERING &&
         vilkårResultater.some(vilkår => !!vilkår.verdi.begrunnelseForManuellKontroll);
 

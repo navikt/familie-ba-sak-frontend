@@ -2,18 +2,18 @@ import React, { createContext, type PropsWithChildren, useContext } from 'react'
 
 import { Alert, BodyShort, ErrorMessage } from '@navikt/ds-react';
 
-import { useHentToggles } from '../hooks/useHentToggles';
+import { useHentFeatureToggles } from '../hooks/useHentFeatureToggles';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
-import type { Toggles } from '../typer/toggles';
+import type { FeatureToggles } from '../typer/featureToggles';
 
-interface TogglesContext {
-    toggles: Toggles;
+interface FeatureTogglesContext {
+    featureToggles: FeatureToggles;
 }
 
-const TogglesContext = createContext<TogglesContext | undefined>(undefined);
+const FeatureTogglesContext = createContext<FeatureTogglesContext | undefined>(undefined);
 
-export function TogglesProvider({ children }: PropsWithChildren) {
-    const { data, isPending, error } = useHentToggles();
+export function FeatureTogglesProvider({ children }: PropsWithChildren) {
+    const { data, isPending, error } = useHentFeatureToggles();
 
     if (isPending) {
         return <SystemetLaster />;
@@ -28,13 +28,13 @@ export function TogglesProvider({ children }: PropsWithChildren) {
         );
     }
 
-    return <TogglesContext.Provider value={{ toggles: data }}>{children}</TogglesContext.Provider>;
+    return <FeatureTogglesContext.Provider value={{ featureToggles: data }}>{children}</FeatureTogglesContext.Provider>;
 }
 
-export function useTogglesContext() {
-    const context = useContext(TogglesContext);
+export function useFeatureTogglesContext() {
+    const context = useContext(FeatureTogglesContext);
     if (context === undefined) {
-        throw new Error('useTogglesContext må brukes innenfor en TogglesProvider');
+        throw new Error('useFeatureTogglesContext må brukes innenfor en FeatureTogglesProvider');
     }
     return context;
 }

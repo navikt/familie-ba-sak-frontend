@@ -5,15 +5,15 @@ import { useController, useFormContext } from 'react-hook-form';
 import { Select } from '@navikt/ds-react';
 
 import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from './useHenleggBehandlingForm';
-import { useToggles } from '../../../../../hooks/useToggles';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
 import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '../../../../../typer/behandling';
-import { Toggle } from '../../../../../typer/toggles';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 export function ÅrsakFelt() {
     const { behandling } = useBehandlingContext();
 
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
 
     const { control } = useFormContext<HenleggBehandlingFormValues>();
 
@@ -23,7 +23,7 @@ export function ÅrsakFelt() {
         rules: { required: 'Årsak er påkrevd.' },
     });
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[Toggle.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[FeatureToggle.tekniskVedlikeholdHenleggelse];
 
     const valgmuligheter = Object.values(HenleggÅrsak)
         .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)

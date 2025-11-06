@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
+import { useFeatureToggles } from './useFeatureToggles';
 import { useSettAktivBrukerIModiaContext } from './useSettAktivBrukerIModiaContext';
-import { useToggles } from './useToggles';
+import { FeatureToggle } from '../typer/featureToggles';
 import type { IPersonInfo } from '../typer/person';
-import { Toggle } from '../typer/toggles';
 
 export function useSyncModiaContext(bruker: IPersonInfo | undefined) {
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
     const { mutate } = useSettAktivBrukerIModiaContext();
 
     const personIdent = bruker?.personIdent;
@@ -15,7 +15,7 @@ export function useSyncModiaContext(bruker: IPersonInfo | undefined) {
         if (personIdent === undefined) {
             return;
         }
-        if (toggles[Toggle.oppdaterModiaKontekst]) {
+        if (toggles[FeatureToggle.oppdaterModiaKontekst]) {
             mutate(personIdent);
         }
     }, [personIdent]);

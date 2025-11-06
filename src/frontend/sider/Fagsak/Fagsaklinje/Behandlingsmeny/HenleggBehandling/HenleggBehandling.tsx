@@ -3,18 +3,18 @@ import React from 'react';
 import { Dropdown } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../context/ModalContext';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
 import { useModal } from '../../../../../hooks/useModal';
-import { useToggles } from '../../../../../hooks/useToggles';
 import { erPåHenleggbartSteg } from '../../../../../typer/behandling';
-import { Toggle } from '../../../../../typer/toggles';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 export function HenleggBehandling() {
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { åpneModal } = useModal(ModalType.HENLEGG_BEHANDLING);
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[Toggle.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[FeatureToggle.tekniskVedlikeholdHenleggelse];
 
     const kanHenlegge =
         harTilgangTilTekniskVedlikeholdHenleggelse || (!vurderErLesevisning() && erPåHenleggbartSteg(behandling.steg));

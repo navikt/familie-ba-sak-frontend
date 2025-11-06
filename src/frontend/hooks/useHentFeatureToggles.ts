@@ -2,12 +2,12 @@ import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/rea
 
 import { useHttp } from '@navikt/familie-http';
 
-import { hentToggles } from '../api/hentToggles';
-import { Toggle, type Toggles } from '../typer/toggles';
+import { hentFeatureToggles } from '../api/hentFeatureToggles';
+import { FeatureToggle, type FeatureToggles } from '../typer/featureToggles';
 
-function skruAvAlleToggles(): Toggles {
-    const toggles = Object.values(Toggle);
-    return toggles.reduce((toggles: Toggles, toggle: Toggle) => {
+function skruAvAlleToggles(): FeatureToggles {
+    const toggles = Object.values(FeatureToggle);
+    return toggles.reduce((toggles: FeatureToggles, toggle: FeatureToggle) => {
         toggles[toggle] = false;
         return toggles;
     }, {});
@@ -18,20 +18,20 @@ export const HentTogglesQueryKeyFactory = {
 };
 
 type Options = Omit<
-    UseQueryOptions<Toggles, DefaultError, Toggles>,
+    UseQueryOptions<FeatureToggles, DefaultError, FeatureToggles>,
     'queryKey' | 'queryFn' | 'gcTime' | 'staleTime'
 > & {
     påvirkerSystemLaster?: boolean;
 };
 
-export function useHentToggles(options?: Options) {
+export function useHentFeatureToggles(options?: Options) {
     const { påvirkerSystemLaster = true, ...rest } = options ?? {};
     const { request } = useHttp();
     return useQuery({
         queryKey: HentTogglesQueryKeyFactory.toggles(),
         queryFn: async () => {
             try {
-                return await hentToggles(request, påvirkerSystemLaster);
+                return await hentFeatureToggles(request, påvirkerSystemLaster);
             } catch (e: unknown) {
                 const errorMessage = e instanceof Error ? e.message : 'En feil oppstod under innlasting av toggles.';
                 console.error(errorMessage, e);

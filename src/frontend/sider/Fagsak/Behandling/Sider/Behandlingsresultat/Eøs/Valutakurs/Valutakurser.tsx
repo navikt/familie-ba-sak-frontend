@@ -8,14 +8,14 @@ import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
-import { useToggles } from '../../../../../../../hooks/useToggles';
+import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
 import {
     Behandlingstype,
     type IBehandling,
     VurderingsstrategiForValutakurser,
 } from '../../../../../../../typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
-import { Toggle } from '../../../../../../../typer/toggles';
+import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const ValutakurserContainer = styled.div`
@@ -60,13 +60,13 @@ interface IProps {
 }
 
 const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }) => {
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { request } = useHttp();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
         useState(false);
     const kanOverstyreAutomatiskeValutakurser =
-        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && toggles[Toggle.kanBehandleTekniskEndring];
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && toggles[FeatureToggle.kanBehandleTekniskEndring];
 
     const erLesevisning = vurderErLesevisning();
 

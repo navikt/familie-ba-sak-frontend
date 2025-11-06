@@ -8,13 +8,13 @@ import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAuthContext } from './AuthContext';
-import { useToggles } from '../hooks/useToggles';
+import { useFeatureToggles } from '../hooks/useFeatureToggles';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
 import { BehandlerRolle } from '../typer/behandling';
+import { FeatureToggle } from '../typer/featureToggles';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
-import { Toggle } from '../typer/toggles';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
 import { tilFeilside } from '../utils/commons';
 
@@ -76,7 +76,7 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 const AppProvider = (props: PropsWithChildren) => {
     const { autentisert, innloggetSaksbehandler } = useAuthContext();
     const { request, systemetLaster } = useHttp();
-    const toggles = useToggles();
+    const toggles = useFeatureToggles();
 
     const [appVersjon, settAppVersjon] = useState('');
 
@@ -206,7 +206,7 @@ const AppProvider = (props: PropsWithChildren) => {
     const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
         innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
 
-    const skalObfuskereData = toggles[Toggle.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
+    const skalObfuskereData = toggles[FeatureToggle.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
 
     return (
         <AppContext.Provider
