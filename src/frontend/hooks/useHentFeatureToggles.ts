@@ -13,7 +13,7 @@ function skruAvAlleToggles(): FeatureToggles {
     }, {});
 }
 
-export const HentTogglesQueryKeyFactory = {
+export const HentFeatureTogglesQueryKeyFactory = {
     toggles: () => ['toggles'],
 };
 
@@ -28,7 +28,7 @@ export function useHentFeatureToggles(options?: Options) {
     const { påvirkerSystemLaster = true, ...rest } = options ?? {};
     const { request } = useHttp();
     return useQuery({
-        queryKey: HentTogglesQueryKeyFactory.toggles(),
+        queryKey: HentFeatureTogglesQueryKeyFactory.toggles(),
         queryFn: async () => {
             try {
                 return await hentFeatureToggles(request, påvirkerSystemLaster);
