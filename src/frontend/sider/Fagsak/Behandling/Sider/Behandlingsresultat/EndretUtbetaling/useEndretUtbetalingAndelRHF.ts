@@ -5,7 +5,6 @@ import { byggDataRessurs } from '@navikt/familie-typer';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
 import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
-import { useSlettEndretUtbetalingAndel } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
@@ -93,13 +92,6 @@ export const useEndretUtbetalingAndelRHF = (
         onError,
     });
 
-    const { mutate: slettLagretEndretUtbetalingAndel } = useSlettEndretUtbetalingAndel({
-        onSuccess,
-        onError,
-    });
-
-    const slettEndretUtbetalingAndel = () => slettLagretEndretUtbetalingAndel(lagretEndretUtbetalingAndel);
-
     const skjemaHarEndringerSomIkkeErLagret = (): boolean => {
         const formValues = watch();
 
@@ -147,6 +139,5 @@ export const useEndretUtbetalingAndelRHF = (
         form,
         onSubmit,
         skjemaHarEndringerSomIkkeErLagret,
-        slettEndretUtbetalingAndel,
     };
 };
