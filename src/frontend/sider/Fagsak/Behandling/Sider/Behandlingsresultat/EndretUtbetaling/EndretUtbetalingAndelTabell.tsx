@@ -45,10 +45,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel =>
                         toggles[ToggleNavn.skalBrukeNyttSkjemaForEndretUtbetalingAndel] ? (
                             <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
-                                <EndretUtbetalingAndelRadRHF
-                                    key={endretUtbetalingAndel.id}
-                                    åpenBehandling={åpenBehandling}
-                                />
+                                <EndretUtbetalingAndelRadRHF key={endretUtbetalingAndel.id} />
                             </EndretUtbetalingAndelProvider>
                         ) : (
                             <EndretUtbetalingAndelRad

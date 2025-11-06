@@ -13,11 +13,9 @@ import SøknadstidspunktDatovelger from './komponenter/SøknadstidspunktDatovelg
 import Utbetalingvelger from './komponenter/Utbetalingvelger';
 import Årsakvelger from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
-import type { IBehandling } from '../../../../../../typer/behandling';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface EndretUtbetalingAndelSkjemaProps {
-    åpenBehandling: IBehandling;
     form: UseFormReturn<EndretUtbetalingAndelFormValues>;
     onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues>;
     slettEndretUtbetalingAndel: () => void;
@@ -25,7 +23,6 @@ interface EndretUtbetalingAndelSkjemaProps {
 }
 
 const EndretUtbetalingAndelSkjemaRHF = ({
-    åpenBehandling,
     form,
     onSubmit,
     slettEndretUtbetalingAndel,
@@ -53,11 +50,11 @@ const EndretUtbetalingAndelSkjemaRHF = ({
         <FormProvider {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack gap="4" maxWidth="30rem">
-                    <Personvelger åpenBehandling={åpenBehandling} erLesevisning={erLesevisning} />
+                    <Personvelger erLesevisning={erLesevisning} />
 
                     <Årsakvelger erLesevisning={erLesevisning} />
 
-                    <Månedperiodevelger åpenBehandling={åpenBehandling} erLesevisning={erLesevisning} />
+                    <Månedperiodevelger erLesevisning={erLesevisning} />
 
                     <Utbetalingvelger erLesevisning={erLesevisning} />
 

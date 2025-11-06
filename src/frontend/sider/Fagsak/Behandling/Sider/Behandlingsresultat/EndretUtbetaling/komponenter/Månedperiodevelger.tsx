@@ -13,10 +13,7 @@ import {
 } from '../useEndretUtbetalingAndelRHF';
 import Månedvelger from './Månedvelger';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
-
-interface MånedperiodevelgerProps extends StandardFeltProps {
-    åpenBehandling: IBehandling;
-}
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 export function utledTidligsteOgSenesteDato(
     åpenBehandling: IBehandling,
@@ -43,7 +40,8 @@ export function utledTidligsteOgSenesteDato(
     return { tidligsteDato, senesteDato };
 }
 
-const Månedperiodevelger = ({ åpenBehandling, erLesevisning }: MånedperiodevelgerProps) => {
+const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
+    const { behandling } = useBehandlingContext();
     const { watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const valgtePersoner = watch(EndretUtbetalingAndelFeltnavn.PERSONER).map(p => p.value);
@@ -51,8 +49,8 @@ const Månedperiodevelger = ({ åpenBehandling, erLesevisning }: Månedperiodeve
     const valgfriTomDato = årsak === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER;
 
     const { tidligsteDato, senesteDato } = useMemo(
-        () => utledTidligsteOgSenesteDato(åpenBehandling, valgtePersoner, årsak),
-        [åpenBehandling, valgtePersoner, årsak]
+        () => utledTidligsteOgSenesteDato(behandling, valgtePersoner, årsak),
+        [behandling, valgtePersoner, årsak]
     );
 
     return (

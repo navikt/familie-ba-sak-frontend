@@ -9,14 +9,10 @@ import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext'
 import EndretUtbetalingAndelSkjemaRHF from './EndretUtbetalingAndelSkjemaRHF';
 import { useEndretUtbetalingAndelRHF } from './useEndretUtbetalingAndelRHF';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
-import type { IBehandling } from '../../../../../../typer/behandling';
 import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
-
-interface EndretUtbetalingAndelRadProps {
-    åpenBehandling: IBehandling;
-}
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const PersonCelle = styled.div`
     display: flex;
@@ -38,7 +34,8 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
     }
 };
 
-const EndretUtbetalingAndelRadRHF = ({ åpenBehandling }: EndretUtbetalingAndelRadProps) => {
+const EndretUtbetalingAndelRadRHF = () => {
+    const { behandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
         endretUtbetalingAndel.personIdenter.length === 0
@@ -47,7 +44,7 @@ const EndretUtbetalingAndelRadRHF = ({ åpenBehandling }: EndretUtbetalingAndelR
     const lukkSkjema = () => settErSkjemaEkspandert(false);
 
     const { form, onSubmit, slettEndretUtbetalingAndel, skjemaHarEndringerSomIkkeErLagret } =
-        useEndretUtbetalingAndelRHF(endretUtbetalingAndel, åpenBehandling, lukkSkjema);
+        useEndretUtbetalingAndelRHF(endretUtbetalingAndel, lukkSkjema);
 
     const { reset } = form;
 
@@ -68,7 +65,6 @@ const EndretUtbetalingAndelRadRHF = ({ åpenBehandling }: EndretUtbetalingAndelR
             content={
                 <EndretUtbetalingAndelSkjemaRHF
                     form={form}
-                    åpenBehandling={åpenBehandling}
                     onSubmit={onSubmit}
                     lukkSkjema={lukkSkjema}
                     slettEndretUtbetalingAndel={slettEndretUtbetalingAndel}
@@ -82,7 +78,7 @@ const EndretUtbetalingAndelRadRHF = ({ åpenBehandling }: EndretUtbetalingAndelR
                         <VStack>
                             {endretUtbetalingAndel.personIdenter.map(person => (
                                 <BodyShort size="small" key={person}>
-                                    {lagPersonLabel(person, åpenBehandling.personer)}
+                                    {lagPersonLabel(person, behandling.personer)}
                                 </BodyShort>
                             ))}
                         </VStack>

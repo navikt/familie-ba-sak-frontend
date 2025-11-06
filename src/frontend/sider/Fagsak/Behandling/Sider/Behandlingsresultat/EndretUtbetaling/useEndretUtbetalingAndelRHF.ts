@@ -50,14 +50,13 @@ export interface EndretUtbetalingAndelFormValues {
 
 export const useEndretUtbetalingAndelRHF = (
     lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel,
-    åpenBehandling: IBehandling,
     lukkSkjema: () => void
 ) => {
-    const { settÅpenBehandling } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const personer = lagretEndretUtbetalingAndel.personIdenter.map(ident => ({
         value: ident,
-        label: lagPersonLabel(ident, åpenBehandling.personer),
+        label: lagPersonLabel(ident, behandling.personer),
     }));
 
     const form = useForm<EndretUtbetalingAndelFormValues>({
