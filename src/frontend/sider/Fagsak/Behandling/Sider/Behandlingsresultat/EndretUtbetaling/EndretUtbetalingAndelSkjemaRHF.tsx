@@ -18,33 +18,21 @@ import { useBehandlingContext } from '../../../context/BehandlingContext';
 interface EndretUtbetalingAndelSkjemaProps {
     form: UseFormReturn<EndretUtbetalingAndelFormValues>;
     onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues>;
-    slettEndretUtbetalingAndel: () => void;
     lukkSkjema: () => void;
 }
 
-const EndretUtbetalingAndelSkjemaRHF = ({
-    form,
-    onSubmit,
-    slettEndretUtbetalingAndel,
-    lukkSkjema,
-}: EndretUtbetalingAndelSkjemaProps) => {
+const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     const {
         watch,
-        reset,
         handleSubmit,
         clearErrors,
         formState: { errors },
     } = form;
 
     const årsak = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK);
-
-    const avbryt = () => {
-        lukkSkjema();
-        reset();
-    };
 
     return (
         <FormProvider {...form}>
@@ -64,9 +52,8 @@ const EndretUtbetalingAndelSkjemaRHF = ({
 
                     <Begrunnelse erLesevisning={erLesevisning} />
 
-                    {!erLesevisning && (
-                        <SkjemaKnapper avbryt={avbryt} slettEndretUtbetalingAndel={slettEndretUtbetalingAndel} />
-                    )}
+                    {!erLesevisning && <SkjemaKnapper lukkSkjema={lukkSkjema} />}
+
                     {errors.root?.message && (
                         <Alert variant={'error'} closeButton={true} onClose={() => clearErrors('root')}>
                             {errors.root?.message}

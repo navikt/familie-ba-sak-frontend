@@ -43,8 +43,10 @@ const EndretUtbetalingAndelRadRHF = () => {
 
     const lukkSkjema = () => settErSkjemaEkspandert(false);
 
-    const { form, onSubmit, slettEndretUtbetalingAndel, skjemaHarEndringerSomIkkeErLagret } =
-        useEndretUtbetalingAndelRHF(endretUtbetalingAndel, lukkSkjema);
+    const { form, onSubmit, skjemaHarEndringerSomIkkeErLagret } = useEndretUtbetalingAndelRHF(
+        endretUtbetalingAndel,
+        lukkSkjema
+    );
 
     const { reset } = form;
 
@@ -62,14 +64,7 @@ const EndretUtbetalingAndelRadRHF = () => {
             togglePlacement="right"
             open={erSkjemaEkspandert}
             onOpenChange={toggleForm}
-            content={
-                <EndretUtbetalingAndelSkjemaRHF
-                    form={form}
-                    onSubmit={onSubmit}
-                    lukkSkjema={lukkSkjema}
-                    slettEndretUtbetalingAndel={slettEndretUtbetalingAndel}
-                />
-            }
+            content={<EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmit} lukkSkjema={lukkSkjema} />}
         >
             <Table.DataCell>
                 <PersonCelle>

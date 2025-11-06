@@ -8,7 +8,6 @@ import {
     OppdaterEndretUtbetalingAndelMutationKeyFactory,
     useOppdaterEndretUtbetalingAndel,
 } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
-import { useSlettEndretUtbetalingAndel } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
@@ -80,29 +79,18 @@ export const useEndretUtbetalingAndelRHF = (
 
     useOnFormSubmitSuccessful(control, () => reset());
 
-    const onSuccess = (behandling: IBehandling) => {
-        lukkSkjema();
-        settÅpenBehandling(byggDataRessurs(behandling));
-    };
-
-    const onError = (error: Error) => {
-        setError('root', {
-            message: error.message ?? 'Ukjent feil oppstod.',
-        });
-    };
-
     const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
         mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(lagretEndretUtbetalingAndel),
-        onSuccess,
-        onError,
+        onSuccess: (behandling: IBehandling) => {
+            lukkSkjema();
+            settÅpenBehandling(byggDataRessurs(behandling));
+        },
+        onError: (error: Error) => {
+            setError('root', {
+                message: error.message ?? 'Ukjent feil oppstod.',
+            });
+        },
     });
-
-    const { mutate: slettLagretEndretUtbetalingAndel } = useSlettEndretUtbetalingAndel({
-        onSuccess,
-        onError,
-    });
-
-    const slettEndretUtbetalingAndel = () => slettLagretEndretUtbetalingAndel(lagretEndretUtbetalingAndel);
 
     const onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues> = (values: EndretUtbetalingAndelFormValues) =>
         oppdaterEndretUtbetalingAndel({
@@ -151,6 +139,5 @@ export const useEndretUtbetalingAndelRHF = (
         form,
         onSubmit,
         skjemaHarEndringerSomIkkeErLagret,
-        slettEndretUtbetalingAndel,
     };
 };
