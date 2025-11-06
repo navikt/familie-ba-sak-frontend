@@ -12,8 +12,12 @@ interface FeatureTogglesContext {
 
 const FeatureTogglesContext = createContext<FeatureTogglesContext | undefined>(undefined);
 
-export function FeatureTogglesProvider({ children }: PropsWithChildren) {
-    const { data, isPending, error } = useHentFeatureToggles();
+interface Props extends PropsWithChildren {
+    featureToggles?: FeatureToggles;
+}
+
+export function FeatureTogglesProvider({ featureToggles, children }: Props) {
+    const { data, isPending, error } = useHentFeatureToggles({ initialData: featureToggles });
 
     if (isPending) {
         return <SystemetLaster />;
