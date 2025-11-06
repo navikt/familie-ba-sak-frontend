@@ -5,30 +5,27 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 
-import type { IBehandling } from '../../../../../../../typer/behandling';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-interface PersonvelgerProps extends StandardFeltProps {
-    åpenBehandling: IBehandling;
-}
-
-const Personvelger = ({ åpenBehandling, erLesevisning }: PersonvelgerProps) => {
+const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
+    const { behandling } = useBehandlingContext();
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
-    const tilgjengeligePersoner: ComboboxOption[] = åpenBehandling.personer
+    const tilgjengeligePersoner: ComboboxOption[] = behandling.personer
         .filter(person =>
-            åpenBehandling.personerMedAndelerTilkjentYtelse
+            behandling.personerMedAndelerTilkjentYtelse
                 .map(personMedAndeler => personMedAndeler.personIdent)
                 .includes(person.personIdent)
         )
         .map(person => ({
             value: person.personIdent,
-            label: lagPersonLabel(person.personIdent, åpenBehandling.personer),
+            label: lagPersonLabel(person.personIdent, behandling.personer),
         }));
 
     return (
