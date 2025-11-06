@@ -4,7 +4,10 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
-import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
+import {
+    OppdaterEndretUtbetalingAndelMutationKeyFactory,
+    useOppdaterEndretUtbetalingAndel,
+} from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
@@ -88,6 +91,7 @@ export const useEndretUtbetalingAndelRHF = (
     };
 
     const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
+        mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(lagretEndretUtbetalingAndel),
         onSuccess,
         onError,
     });

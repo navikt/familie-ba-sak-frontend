@@ -9,6 +9,13 @@ import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, IRestEndretUtbetalingAndel>, 'mutationFn'>;
 
+export const SlettEndretUtbetalingAndelMutationKeyFactory = {
+    endretUtbetalingAndel: (endretUtbetalingAndel: IRestEndretUtbetalingAndel) => [
+        'slettEndretUtbetalingAndel',
+        endretUtbetalingAndel.id,
+    ],
+};
+
 export function useSlettEndretUtbetalingAndel(options?: Options) {
     const { request } = useHttp();
     const { behandling } = useBehandlingContext();

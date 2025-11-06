@@ -6,7 +6,10 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
-import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
+import {
+    SlettEndretUtbetalingAndelMutationKeyFactory,
+    useSlettEndretUtbetalingAndel,
+} from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useEndretUtbetalingAndelContext } from '../EndretUtbetalingAndelContext';
 import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
@@ -26,7 +29,7 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
     };
 
     const { mutateAsync } = useSlettEndretUtbetalingAndel({
-        mutationKey: ['slettEndretUtbetalingAndel', endretUtbetalingAndel.id],
+        mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
     });
 
     const slettEndretUtbetalingAndel = () =>

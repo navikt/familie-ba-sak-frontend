@@ -6,12 +6,17 @@ import { opprettEndretUtbetalingAndel } from '../api/opprettEndretUtbetalingAnde
 import { useBehandlingContext } from '../sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IBehandling } from '../typer/behandling';
 
-type Options = Omit<UseMutationOptions<IBehandling>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IBehandling>, 'mutationKey' | 'mutationFn'>;
+
+export const OpprettEndretUtbetalingAndelMutationKeyFactory = {
+    behandling: (behandling: IBehandling) => ['opprettEndretUtbetalingAndel', behandling.behandlingId],
+};
 
 export function useOpprettEndretUtbetalingAndel(options?: Options) {
     const { request } = useHttp();
     const { behandling } = useBehandlingContext();
     return useMutation({
+        mutationKey: OpprettEndretUtbetalingAndelMutationKeyFactory.behandling(behandling),
         mutationFn: () => opprettEndretUtbetalingAndel(request, behandling.behandlingId),
         ...options,
     });
