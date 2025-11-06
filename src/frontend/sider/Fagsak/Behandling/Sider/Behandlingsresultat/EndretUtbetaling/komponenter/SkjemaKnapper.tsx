@@ -1,11 +1,13 @@
 import * as React from 'react';
 
+import { useMutationState } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
+import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import {
     SlettEndretUtbetalingAndelMutationKeyFactory,
     useSlettEndretUtbetalingAndel,
@@ -28,7 +30,7 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
         reset();
     };
 
-    const { mutateAsync } = useSlettEndretUtbetalingAndel({
+    const { mutateAsync, isPending: sletterEndretUtbetalingAndel } = useSlettEndretUtbetalingAndel({
         mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
     });
 
@@ -44,13 +46,30 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
                 });
             });
 
+    const oppdatererEndretUtbetalingAndel =
+        useMutationState({
+            filters: {
+                mutationKey:
+                    OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+                status: 'pending',
+            },
+        }).length > 0;
+
+    const skalDisableKnapper = oppdatererEndretUtbetalingAndel || sletterEndretUtbetalingAndel;
+
     return (
         <HStack justify="space-between">
             <HStack gap="2">
-                <Button size="small" variant="secondary" type="submit">
+                <Button
+                    size="small"
+                    variant="secondary"
+                    type="submit"
+                    loading={oppdatererEndretUtbetalingAndel}
+                    disabled={skalDisableKnapper}
+                >
                     Bekreft
                 </Button>
-                <Button variant="tertiary" size="small" type="button" onClick={avbryt}>
+                <Button variant="tertiary" size="small" type="button" onClick={avbryt} disabled={skalDisableKnapper}>
                     Avbryt
                 </Button>
             </HStack>
@@ -60,6 +79,8 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
                 type="button"
                 onClick={slettEndretUtbetalingAndel}
                 icon={<TrashIcon />}
+                loading={sletterEndretUtbetalingAndel}
+                disabled={skalDisableKnapper}
             >
                 {'Fjern periode'}
             </Button>

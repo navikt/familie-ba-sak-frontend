@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import { useMutationState } from '@tanstack/react-query';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { Alert, VStack } from '@navikt/ds-react';
 
+import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
 import AvtaletidspunktDeltBostedDatovelger from './komponenter/AvtaletidspunktDeltBostedDatovelger';
 import Begrunnelse from './komponenter/Begrunnelse';
 import Månedperiodevelger from './komponenter/Månedperiodevelger';
@@ -13,6 +15,8 @@ import SøknadstidspunktDatovelger from './komponenter/SøknadstidspunktDatovelg
 import Utbetalingvelger from './komponenter/Utbetalingvelger';
 import Årsakvelger from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
+import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
+import { SlettEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface EndretUtbetalingAndelSkjemaProps {
@@ -23,7 +27,27 @@ interface EndretUtbetalingAndelSkjemaProps {
 
 const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
+
+    const sletterEndretUtbetalingAndel =
+        useMutationState({
+            filters: {
+                mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+                status: 'pending',
+            },
+        }).length > 0;
+
+    const oppdatererEndretUtbetalingAndel =
+        useMutationState({
+            filters: {
+                mutationKey:
+                    OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+                status: 'pending',
+            },
+        }).length > 0;
+
     const erLesevisning = vurderErLesevisning();
+    const låsFelter = erLesevisning || sletterEndretUtbetalingAndel || oppdatererEndretUtbetalingAndel;
 
     const {
         watch,
@@ -38,19 +62,19 @@ const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUt
         <FormProvider {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack gap="4" maxWidth="30rem">
-                    <Personvelger erLesevisning={erLesevisning} />
+                    <Personvelger erLesevisning={låsFelter} />
 
-                    <Årsakvelger erLesevisning={erLesevisning} />
+                    <Årsakvelger erLesevisning={låsFelter} />
 
-                    <Månedperiodevelger erLesevisning={erLesevisning} />
+                    <Månedperiodevelger erLesevisning={låsFelter} />
 
-                    <Utbetalingvelger erLesevisning={erLesevisning} />
+                    <Utbetalingvelger erLesevisning={låsFelter} />
 
-                    <SøknadstidspunktDatovelger erLesevisning={erLesevisning} />
+                    <SøknadstidspunktDatovelger erLesevisning={låsFelter} />
 
-                    {årsak === 'DELT_BOSTED' && <AvtaletidspunktDeltBostedDatovelger erLesevisning={erLesevisning} />}
+                    {årsak === 'DELT_BOSTED' && <AvtaletidspunktDeltBostedDatovelger erLesevisning={låsFelter} />}
 
-                    <Begrunnelse erLesevisning={erLesevisning} />
+                    <Begrunnelse erLesevisning={låsFelter} />
 
                     {!erLesevisning && <SkjemaKnapper lukkSkjema={lukkSkjema} />}
 
