@@ -1,5 +1,5 @@
 import { isEqual } from 'date-fns';
-import { type FieldErrors, type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { byggDataRessurs } from '@navikt/familie-typer';
 
@@ -22,19 +22,6 @@ import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
 export interface StandardFeltProps {
     erLesevisning?: boolean;
 }
-
-export const EndretUtbetalingAndelServerErrors: Record<
-    'onSubmitError',
-    {
-        id: `root.${string}`;
-        lookup: (errors: FieldErrors<EndretUtbetalingAndelFormValues>) => string | undefined;
-    }
-> = {
-    onSubmitError: {
-        id: 'root.onSubmitError',
-        lookup: errors => errors?.root?.onSubmitError?.message,
-    },
-};
 
 export enum EndretUtbetalingAndelFeltnavn {
     PERSONER = 'personer',
@@ -96,7 +83,7 @@ export const useEndretUtbetalingAndelRHF = (
     };
 
     const onError = (error: Error) => {
-        setError(EndretUtbetalingAndelServerErrors.onSubmitError.id, {
+        setError('root', {
             message: error.message ?? 'Ukjent feil oppstod.',
         });
     };

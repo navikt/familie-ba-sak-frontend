@@ -12,11 +12,7 @@ import SkjemaKnapper from './komponenter/SkjemaKnapper';
 import SøknadstidspunktDatovelger from './komponenter/SøknadstidspunktDatovelger';
 import Utbetalingvelger from './komponenter/Utbetalingvelger';
 import Årsakvelger from './komponenter/Årsakvelger';
-import {
-    EndretUtbetalingAndelFeltnavn,
-    type EndretUtbetalingAndelFormValues,
-    EndretUtbetalingAndelServerErrors,
-} from './useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface EndretUtbetalingAndelSkjemaProps {
@@ -35,9 +31,13 @@ const EndretUtbetalingAndelSkjemaRHF = ({
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const { watch, reset, handleSubmit } = form;
-
-    const onSubmitFeilmelding = EndretUtbetalingAndelServerErrors.onSubmitError.lookup(form.formState.errors);
+    const {
+        watch,
+        reset,
+        handleSubmit,
+        clearErrors,
+        formState: { errors },
+    } = form;
 
     const årsak = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK);
 
@@ -67,13 +67,9 @@ const EndretUtbetalingAndelSkjemaRHF = ({
                     {!erLesevisning && (
                         <SkjemaKnapper avbryt={avbryt} slettEndretUtbetalingAndel={slettEndretUtbetalingAndel} />
                     )}
-                    {onSubmitFeilmelding && (
-                        <Alert
-                            variant={'error'}
-                            closeButton={true}
-                            onClose={() => form.clearErrors(EndretUtbetalingAndelServerErrors.onSubmitError.id)}
-                        >
-                            {onSubmitFeilmelding}
+                    {errors.root?.message && (
+                        <Alert variant={'error'} closeButton={true} onClose={() => clearErrors('root')}>
+                            {errors.root?.message}
                         </Alert>
                     )}
                 </VStack>
