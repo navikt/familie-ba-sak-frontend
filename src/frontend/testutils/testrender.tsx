@@ -9,6 +9,8 @@ import { BrowserRouter } from 'react-router';
 import { AppProvider } from '../context/AppContext';
 import { AuthOgHttpProvider } from '../context/AuthContext';
 import { ModalProvider } from '../context/ModalContext';
+import { FeatureTogglesProvider } from '../context/TogglesContext';
+import { skruPåAlleToggles } from './mocks/handlers/featureToggleHandlers';
 
 function lagQueryClient() {
     return new QueryClient({
@@ -25,11 +27,13 @@ export function TestProviders({ children }: PropsWithChildren) {
     return (
         <AuthOgHttpProvider autentisertSaksbehandler={undefined}>
             <QueryClientProvider client={queryClient}>
-                <AppProvider>
-                    <ModalProvider>
-                        <BrowserRouter>{children}</BrowserRouter>
-                    </ModalProvider>
-                </AppProvider>
+                <FeatureTogglesProvider featureToggles={skruPåAlleToggles()}>
+                    <AppProvider>
+                        <ModalProvider>
+                            <BrowserRouter>{children}</BrowserRouter>
+                        </ModalProvider>
+                    </AppProvider>
+                </FeatureTogglesProvider>
             </QueryClientProvider>
         </AuthOgHttpProvider>
     );

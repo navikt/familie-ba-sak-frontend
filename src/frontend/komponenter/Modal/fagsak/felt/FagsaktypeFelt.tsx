@@ -4,10 +4,10 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { useAppContext } from '../../../../context/AppContext';
 import { useAuthContext } from '../../../../context/AuthContext';
+import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
 import { FagsakType } from '../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../typer/toggles';
+import { FeatureToggle } from '../../../../typer/featureToggles';
 import { erProd } from '../../../../utils/miljø';
 import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
@@ -42,7 +42,7 @@ interface Props {
 
 export function FagsaktypeFelt({ readOnly }: Props) {
     const { innloggetSaksbehandler } = useAuthContext();
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
     const { harNormalFagsak, harBarnEnsligMindreårigFagsak } = useFagsakerContext();
 
     const { control, setValue, resetField } = useFormContext<OpprettFagsakFormValues>();
@@ -59,7 +59,7 @@ export function FagsaktypeFelt({ readOnly }: Props) {
                 const groups = innloggetSaksbehandler?.groups ?? [];
                 const aktuellGruppe = erProd() ? SKJERMET_BARN_GRUPPE.PROD : SKJERMET_BARN_GRUPPE.DEV;
                 const harTilgang = groups.some(group => group === aktuellGruppe);
-                return harTilgang && toggles[ToggleNavn.tillattBehandlingAvSkjermetBarn];
+                return harTilgang && toggles[FeatureToggle.tillattBehandlingAvSkjermetBarn];
             }
             return true;
         })

@@ -8,19 +8,19 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
-import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useAppContext } from '../../../../../context/AppContext';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
-import type { ITilbakekreving } from '../../../../../typer/simulering';
-import { ToggleNavn } from '../../../../../typer/toggles';
-import { hentSøkersMålform } from '../../../../../utils/behandling';
-import { useBehandlingContext } from '../../context/BehandlingContext';
-import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
-import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
+import TilbakekrevingSkjema from './TilbakekrevingSkjema';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
+import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
+import type { ITilbakekreving } from '../../../../../typer/simulering';
+import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import Skjemasteg from '../Skjemasteg';
+import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -31,7 +31,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {
@@ -53,10 +53,11 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erLesevisning = vurderErLesevisning();
 
     const erAvregningOgToggleErPå =
-        avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
+        avregningsperioder.length > 0 && toggles[FeatureToggle.brukFunksjonalitetForUlovfestetMotregning];
 
     const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.length > 0 && toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+        overlappendePerioderMedAndreFagsaker.length > 0 &&
+        toggles[FeatureToggle.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
         if (erLesevisning) {
