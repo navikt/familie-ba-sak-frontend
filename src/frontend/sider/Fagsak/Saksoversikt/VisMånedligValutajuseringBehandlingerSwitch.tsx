@@ -7,16 +7,16 @@ import { type Saksoversiktsbehandling, skalVisesNårMånedligeValutajusteringerS
 type Props = {
     saksoversiktbehandlinger: Saksoversiktsbehandling[];
     visMånedligeValutajusteringer: boolean;
-    setVisMånedligeValutajusteringer: (visHenlagteBehandlinger: boolean) => void;
+    toggleVisMånedligeValutajusteringer: () => void;
 };
 
 export function VisMånedligValutajuseringBehandlingerSwitch({
     saksoversiktbehandlinger,
     visMånedligeValutajusteringer,
-    setVisMånedligeValutajusteringer,
+    toggleVisMånedligeValutajusteringer,
 }: Props) {
     const finnesMånedligValutajusteringerSomKanFiltreresBort = saksoversiktbehandlinger.some(
-        (behandling: Saksoversiktsbehandling) => !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
+        behandling => !skalVisesNårMånedligeValutajusteringerSkjules(behandling, false)
     );
 
     if (!finnesMånedligValutajusteringerSomKanFiltreresBort) {
@@ -27,9 +27,8 @@ export function VisMånedligValutajuseringBehandlingerSwitch({
         <Switch
             size={'small'}
             position={'left'}
-            id={'vis-månedlig-valutajustering-behandlinger'}
             checked={visMånedligeValutajusteringer}
-            onChange={() => setVisMånedligeValutajusteringer(!visMånedligeValutajusteringer)}
+            onChange={toggleVisMånedligeValutajusteringer}
         >
             Vis månedlige valutajusteringer
         </Switch>

@@ -1,15 +1,18 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "rootDir": ".",
-        "module": "esnext",
-        "skipLibCheck": true,
-        "resolveJsonModule": true,
-        "allowJs": true,
-        "allowSyntheticDefaultImports": true,
-    },
-    "lib": [
-        "es2015",
-        "esnext"
-      ]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "esnext",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "lib": [
+    "es2015",
+    "esnext"
+  ],
+  "include": [
+    "."
+  ]
 }

@@ -142,7 +142,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
                         {løpendeMånedligUtbetaling()}
                     </>
                 )}
-                <Behandlinger fagsakId={minimalFagsak.id} />
+                <Behandlinger />
             </VStack>
         </Box>
     );

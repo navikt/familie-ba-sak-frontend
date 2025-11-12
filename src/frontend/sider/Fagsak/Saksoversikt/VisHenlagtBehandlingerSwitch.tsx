@@ -7,16 +7,16 @@ import { type Saksoversiktsbehandling, skalVisesNårHenlagtBehandlingerSkjules }
 type Props = {
     saksoversiktbehandlinger: Saksoversiktsbehandling[];
     visHenlagteBehandlinger: boolean;
-    setVisHenlagteBehandlinger: (visHenlagteBehandlinger: boolean) => void;
+    toggleVisHenlagteBehandlinger: () => void;
 };
 
 export function VisHenlagtBehandlingerSwitch({
     saksoversiktbehandlinger,
     visHenlagteBehandlinger,
-    setVisHenlagteBehandlinger,
+    toggleVisHenlagteBehandlinger,
 }: Props) {
     const finnesHenlagteBehandlingerSomKanFiltreresBort = saksoversiktbehandlinger.some(
-        (behandling: Saksoversiktsbehandling) => !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
+        behandling => !skalVisesNårHenlagtBehandlingerSkjules(behandling, false)
     );
 
     if (!finnesHenlagteBehandlingerSomKanFiltreresBort) {
@@ -27,9 +27,8 @@ export function VisHenlagtBehandlingerSwitch({
         <Switch
             size={'small'}
             position={'left'}
-            id={'vis-henlagte-behandlinger'}
             checked={visHenlagteBehandlinger}
-            onChange={() => setVisHenlagteBehandlinger(!visHenlagteBehandlinger)}
+            onChange={toggleVisHenlagteBehandlinger}
         >
             Vis henlagte behandlinger
         </Switch>

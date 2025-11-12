@@ -11,8 +11,7 @@ import useDeepEffect from '../../../../../hooks/useDeepEffect';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
-import { type IForelderBarnRelasjon } from '../../../../../typer/person';
-import { ForelderBarnRelasjonRolle } from '../../../../../typer/person';
+import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '../../../../../typer/person';
 import type {
     IBarnMedOpplysninger,
     IBarnMedOpplysningerBackend,

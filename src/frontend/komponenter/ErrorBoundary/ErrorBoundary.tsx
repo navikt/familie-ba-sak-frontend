@@ -1,20 +1,11 @@
-import * as React from 'react';
 import type { PropsWithChildren } from 'react';
+import * as React from 'react';
 
 import * as Sentry from '@sentry/browser';
-import styled from 'styled-components';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 import type { ISaksbehandler } from '@navikt/familie-typer';
-
-// TODO : Bytt ut med css modules når man har byttet over til vite fra webpack
-const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-`;
 
 interface Props extends PropsWithChildren {
     autentisertSaksbehandler?: ISaksbehandler;
@@ -56,29 +47,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
         }
     }
 
-    private visSentryDialog() {
-        if (Sentry.isEnabled()) {
-            Sentry.showReportDialog({
-                title: 'En feil har oppstått i vedtaksløsningen',
-                subtitle: '',
-                subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
-                user: {
-                    name: this.props.autentisertSaksbehandler?.displayName,
-                    email: this.props.autentisertSaksbehandler?.email,
-                },
-                labelName: 'NAVN',
-                labelComments: 'HVA SKJEDDE?',
-                labelClose: 'Lukk',
-                labelSubmit: 'Send inn rapport',
-                successMessage: 'Rapport er innsendt',
-            });
-        }
-    }
-
     render(): React.ReactNode {
         if (this.state.hasError) {
             return (
-                <Container>
+                <VStack height={'100vh'} align={'center'} justify={'center'}>
                     <VStack gap={'space-32'}>
                         <VStack gap={'space-8'}>
                             <Heading size={'medium'} level={'1'}>
@@ -105,9 +77,28 @@ export class ErrorBoundary extends React.Component<Props, State> {
                             </HStack>
                         )}
                     </VStack>
-                </Container>
+                </VStack>
             );
         }
         return this.props.children;
+    }
+
+    private visSentryDialog() {
+        if (Sentry.isEnabled()) {
+            Sentry.showReportDialog({
+                title: 'En feil har oppstått i vedtaksløsningen',
+                subtitle: '',
+                subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
+                user: {
+                    name: this.props.autentisertSaksbehandler?.displayName,
+                    email: this.props.autentisertSaksbehandler?.email,
+                },
+                labelName: 'NAVN',
+                labelComments: 'HVA SKJEDDE?',
+                labelClose: 'Lukk',
+                labelSubmit: 'Send inn rapport',
+                successMessage: 'Rapport er innsendt',
+            });
+        }
     }
 }

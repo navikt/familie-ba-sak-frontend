@@ -1,0 +1,17 @@
+.labelContent {
+    white-space: nowrap;
+
+    p {
+        margin: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
+.checkbox {
+    margin-left: var(--a-spacing-4);
+
+    > label {
+        width: 100%;
+    }
+}
