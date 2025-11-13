@@ -47,6 +47,9 @@ export const dateTilIsoDatoString = (dato?: Date): IsoDatoString =>
 export const dateTilIsoDatoStringEllerUndefined = (dato?: Date | null): IsoDatoString | undefined =>
     dato && isValid(dato) ? format(dato, Datoformat.ISO_DAG) : undefined;
 
+export const dateTilIsoMånedStringEllerUndefined = (dato?: Date): IsoDatoString | undefined =>
+    dato && isValid(dato) ? format(dato, Datoformat.ISO_MÅNED) : undefined;
+
 interface IsoStringTilFormatertStringProps {
     isoString: IsoDatoString | IsoMånedString | undefined;
     tilFormat: Datoformat;
@@ -75,6 +78,10 @@ export const isoStringTilDate = (isoDatoString: IsoDatoString | IsoMånedString)
 
     return dato;
 };
+
+export const isoStringTilDateEllerUndefined = (
+    isoDatoString: IsoDatoString | IsoMånedString | undefined
+): Date | undefined => (isoDatoString ? isoStringTilDate(isoDatoString) : undefined);
 
 interface IsoStringTilDateProps {
     isoString: IsoDatoString | IsoMånedString | undefined;
