@@ -11,7 +11,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
-import BarnBrevetGjelder from './BarnBrevetGjelder';
+import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import type { BrevtypeSelect } from './typer';
 import {
