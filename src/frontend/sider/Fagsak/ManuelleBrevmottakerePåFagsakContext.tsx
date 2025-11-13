@@ -9,8 +9,12 @@ interface ManuelleBrevmottakerePåFagsakContext {
 
 const ManuelleBrevmottakerePåFagsakContext = createContext<ManuelleBrevmottakerePåFagsakContext | undefined>(undefined);
 
-export function ManuelleBrevmottakerePåFagsakProvider({ children }: PropsWithChildren) {
-    const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState<SkjemaBrevmottaker[]>([]);
+interface Props extends PropsWithChildren {
+    brevmottakere?: SkjemaBrevmottaker[];
+}
+
+export function ManuelleBrevmottakerePåFagsakProvider({ brevmottakere = [], children }: Props) {
+    const [manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak] = useState(brevmottakere);
 
     const value = useMemo(
         () => ({
