@@ -31,13 +31,7 @@ export function LeggTilEllerFjernBrevmottakerePåBehandling({ behandling, erLese
     return (
         <>
             <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>{menyinnslag}</Dropdown.Menu.List.Item>
-            {visModal && (
-                <LeggTilBrevmottakerModalBehandling
-                    lukkModal={() => settVisModal(false)}
-                    behandling={behandling}
-                    erLesevisning={erLesevisning}
-                />
-            )}
+            {visModal && <LeggTilBrevmottakerModalBehandling lukkModal={() => settVisModal(false)} />}
         </>
     );
 }

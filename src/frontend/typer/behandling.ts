@@ -22,6 +22,7 @@ import type { IRestKorrigertEtterbetaling, IRestKorrigertVedtak, IVedtakForBehan
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 import type { IRestBrevmottaker } from '../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
 import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestNyBehandling {
@@ -452,3 +453,7 @@ export const settPåVentÅrsaker: Record<SettPåVentÅrsak, string> = {
     AVVENTER_DOKUMENTASJON: 'Avventer dokumentasjon',
     AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING: 'Avventer samtykke om ulovfestet motregning etter unntaksregel',
 };
+
+export function sjekkErBehandleneEnhetMidlertidig(behandling: IBehandling) {
+    return behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
+}
