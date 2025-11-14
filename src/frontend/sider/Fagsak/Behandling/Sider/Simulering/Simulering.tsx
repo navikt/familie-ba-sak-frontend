@@ -55,8 +55,13 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
 
-    const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.length > 0 && toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+    const harOverlappendeFeilutbetalinger =
+        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsakerMedFeilutbetaling).length > 0 &&
+        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+
+    const harOverlappendeEtterbetalinger =
+        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsakerMedEtterbetaling).length > 0 &&
+        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -94,7 +99,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp =
-        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
+        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) ||
+        harOverlappendeFeilutbetalinger ||
+        harOverlappendeEtterbetalinger;
 
     const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
 
@@ -133,7 +140,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             }
                         />
 
-                        {harOverlappendePerioderMedAndreFagsaker && (
+                        {harOverlappendeFeilutbetalinger && (
                             <Box marginBlock="10 0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
@@ -143,7 +150,43 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         for å hindre at beløpene motregnes.
                                     </BodyShort>
                                     <BodyShort spacing>
-                                        Fagsak med feilutbetaling: {overlappendePerioderMedAndreFagsaker[0].fagsaker[0]}
+                                        Fagsak med feilutbetaling:{' '}
+                                        {overlappendePerioderMedAndreFagsaker.map(
+                                            overlappendePeriode => overlappendePeriode.fagsakerMedFeilutbetaling
+                                        )}
+                                    </BodyShort>
+                                    <BodyShort>Perioder med overlapp:</BodyShort>
+                                    <List as="ul">
+                                        {overlappendePerioderMedAndreFagsaker.map(periode => (
+                                            <List.Item>
+                                                {`${isoStringTilFormatertString({
+                                                    isoString: periode.fom,
+                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                })} - ${isoStringTilFormatertString({
+                                                    isoString: periode.tom,
+                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                })}`}
+                                            </List.Item>
+                                        ))}
+                                    </List>
+                                </Alert>
+                            </Box>
+                        )}
+
+                        {harOverlappendeEtterbetalinger && (
+                            <Box marginBlock="10 0" maxWidth="40rem">
+                                <Alert variant="warning">
+                                    <BodyShort spacing>
+                                        En annen fagsak tilknyttet personen, inneholder en etterbetaling. Du må vente
+                                        til etterbetalingen i den andre fagsaken er utbetalt før du fullfører denne
+                                        behandlingen. Det er for å hindre at etterbetalingen hentes inn i denne
+                                        fagsaken. Fagsak med etterbetaling:
+                                    </BodyShort>
+                                    <BodyShort spacing>
+                                        Fagsak med feilutbetaling:{' '}
+                                        {overlappendePerioderMedAndreFagsaker.map(
+                                            overlappendePeriode => overlappendePeriode.fagsakerMedEtterbetaling
+                                        )}
                                     </BodyShort>
                                     <BodyShort>Perioder med overlapp:</BodyShort>
                                     <List as="ul">
