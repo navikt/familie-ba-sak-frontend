@@ -1,3 +1,4 @@
+import { ainntektHandlers } from './ainntektHandlers';
 import { behandlingHandlers } from './behandlingHandlers';
 import { fagsakHandlers } from './fagsakHandlers';
 import { featureToggleHandlers } from './featureToggleHandlers';
@@ -14,4 +15,5 @@ export const handlers = [
     ...versionHandlers,
     ...personHandlers,
     ...fagsakHandlers,
+    ...ainntektHandlers,
 ];
