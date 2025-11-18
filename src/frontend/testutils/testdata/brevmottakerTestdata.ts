@@ -3,16 +3,16 @@ import {
     type SkjemaBrevmottaker,
 } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
-export function lagBrevmottaker(brevmottaker?: Partial<SkjemaBrevmottaker>): SkjemaBrevmottaker {
+export function lagBrevmottaker(brevmottaker: Partial<SkjemaBrevmottaker> = {}): SkjemaBrevmottaker {
     return {
         type: Mottaker.FULLMEKTIG,
-        navn: 'Navn Navnesen',
-        adresselinje1: 'Adresselinje 1',
+        navn: 'Brev Brevmottaker',
+        adresselinje1: 'Brevveien 1',
         adresselinje2: undefined,
         postnummer: '0001',
         poststed: 'Oslo',
         landkode: 'NO',
-        ...(brevmottaker ?? {}),
+        ...brevmottaker,
     };
 }
 
