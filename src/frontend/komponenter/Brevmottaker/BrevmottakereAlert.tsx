@@ -73,11 +73,7 @@ export const BrevmottakereAlert: React.FC<
             )}
             {visManuelleMottakereModal &&
                 (props.erPåBehandling ? (
-                    <LeggTilBrevmottakerModalBehandling
-                        lukkModal={() => settVisManuelleMottakereModal(false)}
-                        behandling={props.åpenBehandling}
-                        erLesevisning={props.erLesevisning}
-                    />
+                    <LeggTilBrevmottakerModalBehandling lukkModal={() => settVisManuelleMottakereModal(false)} />
                 ) : (
                     <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisManuelleMottakereModal(false)} />
                 ))}

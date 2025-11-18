@@ -25,13 +25,12 @@ const StyledBodyShort = styled(BodyShort)`
 
 interface IProps {
     lukkModal: () => void;
-    behandling: IBehandling;
 }
 
-export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal, behandling }) => {
+export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal }) => {
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const årsaker = hentVelgbareÅrsaker();
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(behandling.aktivSettPåVent);
-    const { settÅpenBehandling } = useBehandlingContext();
 
     const { årsak, frist } = skjema.felter;
 
