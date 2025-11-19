@@ -1,5 +1,12 @@
 import type { VisningBehandling } from '../../sider/Fagsak/Saksoversikt/visningBehandling';
-import { BehandlingResultat, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
+import {
+    BehandlingResultat,
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingÅrsak,
+    type IBehandling,
+} from '../../typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
 
 export function lagVisningBehandling(visningBehandling?: Partial<VisningBehandling>): VisningBehandling {
@@ -15,6 +22,54 @@ export function lagVisningBehandling(visningBehandling?: Partial<VisningBehandli
         status: BehandlingStatus.AVSLUTTET,
         resultat: BehandlingResultat.INNVILGET,
         ...visningBehandling,
+    };
+}
+
+export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
+    return {
+        arbeidsfordelingPåBehandling: {
+            behandlendeEnhetId: '4833',
+            behandlendeEnhetNavn: 'Oslo',
+            manueltOverstyrt: false,
+        },
+        behandlingId: 1,
+        endretAv: 'Sak Saksbehanlder',
+        kategori: BehandlingKategori.NASJONAL,
+        underkategori: BehandlingUnderkategori.ORDINÆR,
+        opprettetTidspunkt: '2025-01-01T13:00:00.000',
+        personResultater: [],
+        personer: [],
+        resultat: BehandlingResultat.IKKE_VURDERT,
+        status: BehandlingStatus.UTREDES,
+        steg: BehandlingSteg.REGISTRERE_SØKNAD,
+        stegTilstand: [],
+        søknadsgrunnlag: undefined,
+        totrinnskontroll: undefined,
+        type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+        fødselshendelsefiltreringResultater: [],
+        vedtak: undefined,
+        utbetalingsperioder: [],
+        endretUtbetalingAndeler: [],
+        personerMedAndelerTilkjentYtelse: [],
+        årsak: BehandlingÅrsak.SØKNAD,
+        skalBehandlesAutomatisk: false,
+        tilbakekreving: undefined,
+        aktivSettPåVent: undefined,
+        migreringsdato: undefined,
+        søknadMottattDato: undefined,
+        kompetanser: [],
+        utenlandskePeriodebeløp: [],
+        valutakurser: [],
+        korrigertEtterbetaling: undefined,
+        korrigertVedtak: undefined,
+        feilutbetaltValuta: [],
+        refusjonEøs: [],
+        brevmottakere: [],
+        vurderingsstrategiForValutakurser: null,
+        tilbakekrevingsvedtakMotregning: null,
+        manglendeSvalbardmerking: [],
+        manglendeFinnmarkmerking: undefined,
+        ...behandling,
     };
 }
 

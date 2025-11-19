@@ -65,7 +65,7 @@ describe('Fagsakmeny', () => {
         expect(screen.queryByRole('menuitem', { name: 'Send informasjonsbrev' })).not.toBeInTheDocument();
     });
 
-    test('skal vise alle knappene når man trykker på menyen når man ikke er på dokumentsiden', async () => {
+    test('skal vise de korrekte knappene når man trykker på menyen når man ikke er på dokumentsiden', async () => {
         const { screen, user } = render(<Fagsakmeny />, {
             wrapper: props => <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1' }]} />,
         });
@@ -79,7 +79,7 @@ describe('Fagsakmeny', () => {
         expect(screen.queryByRole('menuitem', { name: 'Legg til brevmottaker' })).not.toBeInTheDocument();
     });
 
-    test('skal vise alle knappene når man trykker på menyen når man er på dokumentsiden', async () => {
+    test('skal vise de korrekte knappene når man trykker på menyen når man er på dokumentsiden', async () => {
         const { screen, user } = render(<Fagsakmeny />, {
             wrapper: props => <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]} />,
         });
