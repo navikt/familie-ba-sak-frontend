@@ -1,0 +1,3 @@
+.group > * {
+    color: var(--a-text-action);
+}
