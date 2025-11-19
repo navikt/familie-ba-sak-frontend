@@ -8,7 +8,7 @@ import { SettEllerOppdaterVentingNy } from './SettEllerOppdaterVentingNy';
 import { lagBehandling } from '../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../testutils/testrender';
-import { type IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
+import { BehandlingStatus, type IBehandling, SettPåVentÅrsak } from '../../../../../typer/behandling';
 import { type IMinimalFagsak } from '../../../../../typer/fagsak';
 import { BehandlingProvider } from '../../../Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../Behandling/context/HentOgSettBehandlingContext';
@@ -67,5 +67,21 @@ describe('SettEllerOppdaterVentingNy', () => {
             ),
         });
         expect(screen.getByRole('menuitem', { name: 'Endre ventende behandling' })).toBeInTheDocument();
+    });
+
+    test('skal ikke rendre komponent når behandlingenstatus er noe annet enn UTREDES', () => {
+        const åpneModal = vi.fn();
+        const { screen } = render(<SettEllerOppdaterVentingNy åpneModal={åpneModal} />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    behandling={lagBehandling({
+                        status: BehandlingStatus.AVSLUTTET,
+                        aktivSettPåVent: undefined,
+                    })}
+                />
+            ),
+        });
+        expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
     });
 });
