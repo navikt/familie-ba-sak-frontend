@@ -20,6 +20,7 @@ import { LeggTilBrevmottakerModalBehandling } from './LeggTilEllerFjernBrevmotta
 import { LeggTilEllerFjernBrevmottakerePåBehandlingNy } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåBehandlingNy';
 import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingModal';
 import { OpprettBehandlingNy } from './OpprettBehandling/OpprettBehandlingNy';
+import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
 import { OpprettFagsakNy } from './OpprettFagsak/OpprettFagsakNy';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
 import { sjekkErBehandleneEnhetMidlertidig } from '../../../../typer/behandling';
@@ -32,6 +33,8 @@ export function BehandlingsmenyNy() {
     const erBehandlingPåVent = !!behandling.aktivSettPåVent;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
+    const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
+        useState(false);
     const [visEndreBehandlendeEnhetModal, settVisEndreBehandlendeEnhetModal] = useState(erBehandleneEnhetMidlertidig);
     const [visEndreBehandlingstemaModal, settVisEndreBehandlingstemaModal] = useState(false);
     const [visLeggTilBarnPåBehandlingaModal, settVisLeggTilBarnPåBehandlingaModal] = useState(false);
@@ -42,7 +45,15 @@ export function BehandlingsmenyNy() {
     return (
         <>
             {visOpprettBehandlingModal && (
-                <OpprettBehandlingModal lukkModal={() => settVisOpprettBehandlingModal(false)} />
+                <OpprettBehandlingModal
+                    lukkModal={() => settVisOpprettBehandlingModal(false)}
+                    onTilbakekrevingsbehandlingOpprettet={() => settVisTilbakekrevingsbehandlingOpprettetModal(true)}
+                />
+            )}
+            {visTilbakekrevingsbehandlingOpprettetModal && (
+                <TilbakekrevingsbehandlingOpprettetModal
+                    lukkModal={() => settVisTilbakekrevingsbehandlingOpprettetModal(false)}
+                />
             )}
             {visEndreBehandlendeEnhetModal && (
                 <EndreBehandlendeEnhetModal lukkModal={() => settVisEndreBehandlendeEnhetModal(false)} />
