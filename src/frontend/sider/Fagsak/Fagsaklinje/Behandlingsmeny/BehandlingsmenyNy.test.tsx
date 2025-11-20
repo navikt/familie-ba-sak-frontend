@@ -269,7 +269,7 @@ describe('BehandlingsmenyNy', () => {
         windowOpenSpy.mockRestore();
     });
 
-    test('skal vise endre behandlede enhet modal med en gang hvis behandlingen er på midlertidig enhet', () => {
+    test('skal vise endre behandlende enhet modal med en gang hvis behandlingen er på midlertidig enhet', () => {
         const { screen } = render(<BehandlingsmenyNy />, {
             wrapper: props => (
                 <Wrapper
