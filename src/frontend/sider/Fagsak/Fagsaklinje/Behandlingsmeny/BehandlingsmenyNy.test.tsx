@@ -19,7 +19,12 @@ import { BrukerProvider } from '../../BrukerContext';
 import { FagsakProvider } from '../../FagsakContext';
 import { ManuelleBrevmottakerePåFagsakProvider } from '../../ManuelleBrevmottakerePåFagsakContext';
 import { HenleggBehandlingModal } from './HenleggBehandling/HenleggBehandlingModal';
-import { BehandlingÅrsak, type IBehandling, SettPåVentÅrsak } from '../../../../typer/behandling';
+import {
+    BehandlingÅrsak,
+    type IBehandling,
+    MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
+    SettPåVentÅrsak,
+} from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 
 function OpprettFagsakModalWrapper() {
@@ -80,7 +85,7 @@ function Wrapper({
 }
 
 describe('BehandlingsmenyNy', () => {
-    test('skal vise en uåpnet behandlingsmeny ', () => {
+    test('skal vise en uåpnet behandlingsmeny', () => {
         const { screen } = render(<BehandlingsmenyNy />, { wrapper: Wrapper });
         expect(screen.getByRole('button', { name: 'Meny' })).toBeInTheDocument();
         expect(screen.queryByRole('menuitem', { name: 'Opprett behandling' })).not.toBeInTheDocument();
@@ -262,5 +267,40 @@ describe('BehandlingsmenyNy', () => {
         expect(windowOpenSpy).toHaveBeenCalledOnce();
 
         windowOpenSpy.mockRestore();
+    });
+
+    test('skal vise endre behandlende enhet modal med en gang hvis behandlingen er på midlertidig enhet', () => {
+        const { screen } = render(<BehandlingsmenyNy />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    behandling={lagBehandling({
+                        arbeidsfordelingPåBehandling: {
+                            behandlendeEnhetId: MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
+                            behandlendeEnhetNavn: 'midlertidig enhet',
+                            manueltOverstyrt: false,
+                        },
+                    })}
+                />
+            ),
+        });
+        expect(screen.getByRole('dialog', { name: 'Endre enhet for denne behandlingen' })).toBeInTheDocument();
+    });
+
+    test('skal vise behandling på vent modal med en gang hvis behandlingen er på vent', () => {
+        const { screen } = render(<BehandlingsmenyNy />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    behandling={lagBehandling({
+                        aktivSettPåVent: {
+                            frist: '2025-10-10',
+                            årsak: SettPåVentÅrsak.AVVENTER_DOKUMENTASJON,
+                        },
+                    })}
+                />
+            ),
+        });
+        expect(screen.getByRole('dialog', { name: 'Endre ventende behandling' })).toBeInTheDocument();
     });
 });
