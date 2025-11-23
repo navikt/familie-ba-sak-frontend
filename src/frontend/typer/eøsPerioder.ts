@@ -34,6 +34,7 @@ export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
     MOTTAR_UTBETALING_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar utbetaling fra Nav under opphold i utlandet',
     MOTTAR_UFØRETRYGD_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar uføretrygd fra Norge under opphold i utlandet',
     MOTTAR_PENSJON_FRA_NAV_UNDER_OPPHOLD_I_UTLANDET: 'Mottar pensjon fra Norge under opphold i utlandet',
+    NASJONAL_RETT_DIFFERANSEBEREGNING: 'Nasjonal rett-differanseberegning',
     INAKTIV: 'Inaktiv',
 
     I_ARBEID: 'I arbeid',
@@ -45,6 +46,7 @@ export const kompetanseAktiviteter: Record<KompetanseAktivitet, string> = {
 export enum AnnenForelderAktivitet {
     I_ARBEID = 'I_ARBEID',
     MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN = 'MOTTAR_UTBETALING_SOM_ERSTATTER_LØNN',
+    NASJONAL_RETT_DIFFERANSEBEREGNING = 'NASJONAL_RETT_DIFFERANSEBEREGNING',
     FORSIKRET_I_BOSTEDSLAND = 'FORSIKRET_I_BOSTEDSLAND',
     MOTTAR_PENSJON = 'MOTTAR_PENSJON',
     INAKTIV = 'INAKTIV',

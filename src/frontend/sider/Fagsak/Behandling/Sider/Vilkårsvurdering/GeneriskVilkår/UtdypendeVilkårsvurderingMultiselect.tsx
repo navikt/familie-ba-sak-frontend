@@ -45,6 +45,8 @@ const utdypendeVilkårsvurderingTekst: Record<UtdypendeVilkårsvurdering, string
         'Søker omfattet av norsk lovgivning Utland',
     [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.ANNEN_FORELDER_OMFATTET_AV_NORSK_LOVGIVNING]:
         'Annen forelder omfattet av norsk lovgivning',
+    [UtdypendeVilkårsvurderingEøsSøkerBosattIRiket.SØKER_OMFATTET_AV_UTENLANDSK_LOVGIVNING_BOSATT_I_NORGE]:
+        'Søker omfattet av utenlandsk lovgivning – bosatt i Norge',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_NORGE]: 'Barn bor i Norge',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_EØS]: 'Barn bor i EØS-land',
     [UtdypendeVilkårsvurderingEøsBarnBosattIRiket.BARN_BOR_I_STORBRITANNIA]: 'Barn bor i Storbritannia',
