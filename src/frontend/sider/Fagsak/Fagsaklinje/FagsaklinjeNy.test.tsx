@@ -55,6 +55,7 @@ describe('FagsaklinjeNy', () => {
         const { screen } = render(<FagsaklinjeNy />, { wrapper: Wrapper });
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Infotrygd' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Dokumenter' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Meny' })).toBeInTheDocument();
     });
@@ -82,6 +83,7 @@ describe('FagsaklinjeNy', () => {
         await user.click(meny);
 
         expect(screen.getByRole('menuitem', { name: 'Opprett behandling' })).toBeInTheDocument();
+        expect(screen.getByRole('menuitem', { name: 'Opprett ny fagsak' })).toBeInTheDocument();
         expect(screen.getByRole('menuitem', { name: 'Send informasjonsbrev' })).toBeInTheDocument();
         expect(screen.queryByRole('menuitem', { name: 'Legg til brevmottaker' })).not.toBeInTheDocument();
     });
