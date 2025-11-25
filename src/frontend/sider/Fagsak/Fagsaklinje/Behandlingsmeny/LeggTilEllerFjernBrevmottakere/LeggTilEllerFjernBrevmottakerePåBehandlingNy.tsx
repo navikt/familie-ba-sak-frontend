@@ -8,7 +8,7 @@ import { FagsakType } from '../../../../../typer/fagsak';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 import { useFagsakContext } from '../../../FagsakContext';
 
-const utledLabel = (brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) => {
+function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) {
     if (erLesevisning) {
         return brevmottakere.length === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
     }
@@ -19,7 +19,7 @@ const utledLabel = (brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean)
         return 'Legg til eller fjern brevmottaker';
     }
     return 'Se eller fjern brevmottakere';
-};
+}
 
 const relevanteBehandlingstype = [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING];
 
@@ -31,15 +31,21 @@ export function LeggTilEllerFjernBrevmottakerePåBehandlingNy({ åpneModal }: Pr
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
-    const erLesevisning = vurderErLesevisning();
-    const label = utledLabel(behandling.brevmottakere, erLesevisning);
     const erInstitusjonssak = fagsak.fagsakType === FagsakType.INSTITUSJON;
-    const harTilgangTilBrevmottakere = !erLesevisning || behandling.brevmottakere.length > 0;
     const erRelevantBehandlingstype = relevanteBehandlingstype.includes(behandling.type);
 
-    if (erInstitusjonssak || !harTilgangTilBrevmottakere || !erRelevantBehandlingstype) {
+    if (!erRelevantBehandlingstype || erInstitusjonssak) {
         return null;
     }
+
+    const erLesevisning = vurderErLesevisning();
+    const harBrevmottaker = behandling.brevmottakere.length > 0;
+
+    if (erLesevisning && !harBrevmottaker) {
+        return null;
+    }
+
+    const label = utledLabel(behandling.brevmottakere, erLesevisning);
 
     return <ActionMenu.Item onSelect={åpneModal}>{label}</ActionMenu.Item>;
 }
