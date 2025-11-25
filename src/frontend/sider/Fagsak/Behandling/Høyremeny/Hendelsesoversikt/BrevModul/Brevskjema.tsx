@@ -1,10 +1,18 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Select, Tag, Textarea, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
-import { ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
+import {
+    Button,
+    Fieldset,
+    HStack,
+    Label,
+    Select,
+    Tag,
+    Textarea,
+    TextField,
+    UNSAFE_Combobox,
+    VStack,
+} from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -12,6 +20,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
+import styles from './Brevskjema.module.css';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import type { BrevtypeSelect } from './typer';
 import {
@@ -49,48 +58,6 @@ interface IProps {
     onSubmitSuccess: () => void;
     bruker: IPersonInfo;
 }
-
-const StyledSelect = styled(Select)`
-    margin-bottom: 1rem;
-
-    .navds-label {
-        width: 100%;
-    }
-`;
-
-const StyledFamilieFritekstFelt = styled.div`
-    display: flex;
-
-    .navds-form-field {
-        width: 100% !important;
-    }
-`;
-
-const StyledButton = styled(Button)`
-    height: fit-content;
-    align-self: center;
-`;
-
-const LabelOgEtikett = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const FritekstWrapper = styled.div`
-    margin: 1rem 0;
-`;
-
-const StyledTextField = styled(TextField)`
-    width: fit-content;
-`;
-
-const StyledLandvelger = styled(FamilieMultiLandvelger)`
-    margin-top: 1.5rem;
-`;
-
-const StyledCombobox = styled(UNSAFE_Combobox)`
-    margin-bottom: ${ASpacing4};
-`;
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandlingContext();
@@ -177,31 +144,32 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     }
 
     return (
-        <div>
-            <LeggTilBarnModalContextProvider
-                barn={skjema.felter.barnMedDeltBosted.verdi}
-                onLeggTilBarn={onLeggTilBarn}
-                harBrevmottaker={brevmottakere.length > 0}
+        <LeggTilBarnModalContextProvider
+            barn={skjema.felter.barnMedDeltBosted.verdi}
+            onLeggTilBarn={onLeggTilBarn}
+            harBrevmottaker={brevmottakere.length > 0}
+        >
+            {!erLesevisning && <LeggTilBarnModal />}
+            <Fieldset
+                error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
+                legend="Send brev"
+                hideLegend
             >
-                {!erLesevisning && <LeggTilBarnModal />}
-                <Fieldset
-                    error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
-                    legend="Send brev"
-                    hideLegend
-                >
-                    <Label>Brev sendes til</Label>
-                    <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
-                    <StyledSelect
+                <Label>Brev sendes til</Label>
+                <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
+                <VStack gap={'space-16'}>
+                    <Select
                         {...skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger)}
+                        className={styles.select}
                         label={
-                            <LabelOgEtikett>
+                            <HStack marginBlock={'space-16 space-8'} justify={'space-between'}>
                                 <Label htmlFor={skjema.felter.brevmal.hentNavInputProps(skjema.visFeilmeldinger).id}>
                                     Velg brevmal
                                 </Label>
                                 <Tag variant="neutral" size="small">
                                     {målform[mottakersMålform()]}
                                 </Tag>
-                            </LabelOgEtikett>
+                            </HStack>
                         }
                         onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
                             skjema.felter.brevmal.onChange(event.target.value);
@@ -216,10 +184,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 </option>
                             );
                         })}
-                    </StyledSelect>
-
+                    </Select>
                     {skjema.felter.dokumenter.erSynlig && (
-                        <StyledCombobox
+                        <UNSAFE_Combobox
                             label={'Velg dokumenter'}
                             readOnly={erLesevisning}
                             isMultiSelect
@@ -237,7 +204,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         />
                     )}
                     {skjema.felter.fritekstKulepunkter.erSynlig && (
-                        <FritekstWrapper>
+                        <div>
                             <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
                             <>
                                 <Fieldset legend="Legg til kulepunkt" hideLegend id={fritekstSkjemaGruppeId}>
@@ -253,10 +220,11 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                     : '';
 
                                             return (
-                                                <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
+                                                <HStack key={`fritekst-${fritekstId}`}>
                                                     <Textarea
                                                         key={`fritekst-${fritekstId}`}
                                                         id={`${fritekstId}`}
+                                                        className={styles.textarea}
                                                         label="Skriv inn kulepunkt"
                                                         hideLabel
                                                         size={'small'}
@@ -274,7 +242,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) &&
                                                         index === 0
                                                     ) && (
-                                                        <StyledButton
+                                                        <Button
                                                             variant={'tertiary'}
                                                             onClick={() => {
                                                                 skjema.felter.fritekstKulepunkter.validerOgSettFelt([
@@ -288,11 +256,12 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                             size={'small'}
                                                             aria-label={'Fjern fritekst'}
                                                             icon={<TrashIcon />}
+                                                            className={styles.removeButton}
                                                         >
                                                             {'Fjern'}
-                                                        </StyledButton>
+                                                        </Button>
                                                     )}
-                                                </StyledFamilieFritekstFelt>
+                                                </HStack>
                                             );
                                         }
                                     )}
@@ -305,23 +274,25 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                         id={`legg-til-fritekst`}
                                         size={'small'}
                                         icon={<PlusCircleIcon />}
+                                        className={styles.addButton}
                                     >
                                         {'Legg til kulepunkt'}
                                     </Button>
                                 )}
                             </>
-                        </FritekstWrapper>
+                        </div>
                     )}
                     {skjema.felter.fritekstAvsnitt.erSynlig && (
-                        <FritekstWrapper>
+                        <div>
                             <Label htmlFor={fritekstSkjemaGruppeId}>Legg til fritekst avsnitt</Label>
                             {visFritekstAvsnittTekstboks ? (
                                 <Fieldset legend="Legg til fritekst avsnitt" hideLegend id={fritekstSkjemaGruppeId}>
-                                    <StyledFamilieFritekstFelt>
+                                    <HStack>
                                         <Textarea
                                             label="Skriv inn fritekstavsnitt"
                                             hideLabel
                                             size={'small'}
+                                            className={styles.textarea}
                                             value={skjema.felter.fritekstAvsnitt.verdi}
                                             maxLength={maksLengdeFritekstAvsnitt}
                                             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -334,7 +305,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                             autoFocus
                                         />
 
-                                        <StyledButton
+                                        <Button
                                             variant={'tertiary'}
                                             onClick={() => {
                                                 skjema.felter.fritekstAvsnitt.nullstill();
@@ -344,10 +315,11 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                             size={'small'}
                                             aria-label={'Fjern fritekst'}
                                             icon={<TrashIcon />}
+                                            className={styles.removeButton}
                                         >
                                             {'Fjern'}
-                                        </StyledButton>
-                                    </StyledFamilieFritekstFelt>
+                                        </Button>
+                                    </HStack>
                                 </Fieldset>
                             ) : (
                                 skjema.felter.fritekstAvsnitt &&
@@ -358,12 +330,13 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                         id={`legg-til-fritekst-avsnitt`}
                                         size={'small'}
                                         icon={<PlusCircleIcon />}
+                                        className={styles.addButton}
                                     >
                                         {'Legg til fritekst avsnitt'}
                                     </Button>
                                 )
                             )}
-                        </FritekstWrapper>
+                        </div>
                     )}
                     {skjema.felter.barnBrevetGjelder.erSynlig && (
                         <BarnBrevetGjelder
@@ -397,10 +370,11 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         [Brevmal.FORLENGET_SVARTIDSBREV, Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON].includes(
                             skjema.felter.brevmal.verdi
                         ) && (
-                            <StyledTextField
+                            <TextField
                                 {...skjema.felter.antallUkerSvarfrist.hentNavInputProps(skjema.visFeilmeldinger)}
                                 label={'Antall uker svarfrist'}
                                 size={'small'}
+                                className={styles.textField}
                             />
                         )}
                     {skjema.felter.brevmal.verdi &&
@@ -408,7 +382,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                         ].includes(skjema.felter.brevmal.verdi) && (
-                            <StyledLandvelger
+                            <FamilieMultiLandvelger
                                 erLesevisning={false}
                                 id={'mottakerlandSED'}
                                 label={'SED er sendt til'}
@@ -429,52 +403,52 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 }
                             />
                         )}
-                </Fieldset>
-                <Knapperekke>
-                    {!erLesevisning && (
-                        <Button
-                            variant={'tertiary'}
-                            id={'forhandsvis-vedtaksbrev'}
-                            size={'medium'}
-                            disabled={skjemaErLåst}
-                            onClick={() => {
-                                if (kanSendeSkjema()) {
-                                    opprettForhåndsvisbarBrevPdf({
-                                        behandlingId: behandling.behandlingId,
-                                        payload: hentSkjemaData(),
-                                    });
-                                }
-                            }}
-                            icon={<FileTextIcon />}
-                        >
-                            Forhåndsvis
-                        </Button>
-                    )}
+                </VStack>
+            </Fieldset>
+            <Knapperekke>
+                {!erLesevisning && (
                     <Button
-                        variant={'secondary'}
+                        variant={'tertiary'}
+                        id={'forhandsvis-vedtaksbrev'}
                         size={'medium'}
-                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                         disabled={skjemaErLåst}
                         onClick={() => {
-                            onSubmit<IManueltBrevRequestPåBehandling>(
-                                {
-                                    method: 'POST',
-                                    data: hentSkjemaData(),
-                                    url: `/familie-ba-sak/api/dokument/send-brev/${behandling.behandlingId}`,
-                                },
-                                (ressurs: Ressurs<IBehandling>) => {
-                                    onSubmitSuccess();
-                                    settÅpenBehandling(ressurs);
-                                    hentLogg();
-                                }
-                            );
+                            if (kanSendeSkjema()) {
+                                opprettForhåndsvisbarBrevPdf({
+                                    behandlingId: behandling.behandlingId,
+                                    payload: hentSkjemaData(),
+                                });
+                            }
                         }}
+                        icon={<FileTextIcon />}
                     >
-                        Send brev
+                        Forhåndsvis
                     </Button>
-                </Knapperekke>
-            </LeggTilBarnModalContextProvider>
-        </div>
+                )}
+                <Button
+                    variant={'secondary'}
+                    size={'medium'}
+                    loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                    disabled={skjemaErLåst}
+                    onClick={() => {
+                        onSubmit<IManueltBrevRequestPåBehandling>(
+                            {
+                                method: 'POST',
+                                data: hentSkjemaData(),
+                                url: `/familie-ba-sak/api/dokument/send-brev/${behandling.behandlingId}`,
+                            },
+                            (ressurs: Ressurs<IBehandling>) => {
+                                onSubmitSuccess();
+                                settÅpenBehandling(ressurs);
+                                hentLogg();
+                            }
+                        );
+                    }}
+                >
+                    Send brev
+                </Button>
+            </Knapperekke>
+        </LeggTilBarnModalContextProvider>
     );
 };
 
