@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ActionMenu } from '@navikt/ds-react';
 
+import { BehandlingStatus } from '../../../../../typer/behandling';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
 interface Props {
@@ -10,6 +11,10 @@ interface Props {
 
 export function SettEllerOppdaterVentingNy({ åpneModal }: Props) {
     const { behandling } = useBehandlingContext();
+
+    if (behandling.status !== BehandlingStatus.UTREDES) {
+        return null;
+    }
 
     const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
 

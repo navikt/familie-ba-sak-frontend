@@ -12,17 +12,20 @@ import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider } from './FagsakContext';
 import { Fagsaklinje } from './Fagsaklinje/Fagsaklinje';
+import { FagsaklinjeNy } from './Fagsaklinje/FagsaklinjeNy';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
 import { Personlinje } from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { useAppContext } from '../../context/AppContext';
 import { useFagsakId } from '../../hooks/useFagsakId';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '../../hooks/useSyncModiaContext';
 import { FagsakType } from '../../typer/fagsak';
+import { ToggleNavn } from '../../typer/toggles';
 
 const HovedInnhold = styled.div`
     height: calc(100vh - 3rem);
@@ -30,6 +33,8 @@ const HovedInnhold = styled.div`
 `;
 
 export function FagsakContainer() {
+    const { toggles } = useAppContext();
+
     const fagsakId = useFagsakId();
 
     const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
@@ -78,7 +83,11 @@ export function FagsakContainer() {
                                 path="/saksoversikt"
                                 element={
                                     <>
-                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        {toggles[ToggleNavn.brukNyActionMenu] ? (
+                                            <FagsaklinjeNy />
+                                        ) : (
+                                            <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        )}
                                         <Saksoversikt bruker={bruker} minimalFagsak={fagsak} />
                                     </>
                                 }
@@ -87,7 +96,11 @@ export function FagsakContainer() {
                                 path="/dokumentutsending"
                                 element={
                                     <>
-                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        {toggles[ToggleNavn.brukNyActionMenu] ? (
+                                            <FagsaklinjeNy />
+                                        ) : (
+                                            <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        )}
                                         <DokumentutsendingProvider fagsakId={fagsak.id}>
                                             <Dokumentutsending bruker={bruker} />
                                         </DokumentutsendingProvider>
@@ -98,7 +111,11 @@ export function FagsakContainer() {
                                 path="/dokumenter"
                                 element={
                                     <>
-                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        {toggles[ToggleNavn.brukNyActionMenu] ? (
+                                            <FagsaklinjeNy />
+                                        ) : (
+                                            <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        )}
                                         <JournalpostListe bruker={bruker} />
                                     </>
                                 }
@@ -107,7 +124,11 @@ export function FagsakContainer() {
                                 path="/infotrygd"
                                 element={
                                     <>
-                                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        {toggles[ToggleNavn.brukNyActionMenu] ? (
+                                            <FagsaklinjeNy />
+                                        ) : (
+                                            <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} />
+                                        )}
                                         <InfotrygdFagsak minimalFagsak={fagsak} />
                                     </>
                                 }
