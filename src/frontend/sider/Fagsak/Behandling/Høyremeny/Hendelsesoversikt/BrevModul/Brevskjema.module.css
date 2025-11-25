@@ -1,0 +1,22 @@
+.select {
+    label:has(+ div) {
+        width: 100% !important;
+    }
+}
+
+.textarea {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex: auto;
+}
+.removeButton {
+    align-self: center;
+    height: fit-content;
+}
+.addButton {
+    justify-content: flex-start;
+}
+
+.textField {
+    width: fit-content;
+}
