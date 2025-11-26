@@ -64,7 +64,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     tilgjengeligeBarn,
     status,
     sendInnSkjema,
-    valideringErOk,
     toggleForm,
     slettValutakurs,
     sletterValutakurs,
@@ -206,7 +205,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             <Button
                                 onClick={() => sendInnSkjema()}
                                 size="small"
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >

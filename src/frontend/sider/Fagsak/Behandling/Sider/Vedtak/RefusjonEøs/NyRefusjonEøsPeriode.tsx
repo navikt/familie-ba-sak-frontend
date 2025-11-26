@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Table, Button, Alert } from '@navikt/ds-react';
+import { Alert, Button, Table } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
 import { useRefusjonEøs } from './useRefusjonEøs';
@@ -26,7 +26,7 @@ const FlexRowDiv = styled.div`
 const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({ lukkNyPeriode, behandlingId }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, lagreNyPeriode, valideringErOk } = useRefusjonEøs({
+    const { skjema, lagreNyPeriode } = useRefusjonEøs({
         behandlingId,
         settFeilmelding: settFeilmelding,
     });
@@ -46,7 +46,7 @@ const NyRefusjonEøsPeriode: React.FC<INyRefusjonEøsPeriodeProps> = ({ lukkNyPe
                 <FlexColumnDiv>
                     <RefusjonEøsSkjema skjema={skjema} />
                     <FlexRowDiv style={{ gap: '1rem' }}>
-                        <Button size="small" onClick={lagre} variant={valideringErOk() ? 'primary' : 'secondary'}>
+                        <Button size="small" onClick={lagre} variant={'primary'}>
                             Lagre periode
                         </Button>
                         <Button size="small" variant="tertiary" onClick={avbrytLeggTilNy}>

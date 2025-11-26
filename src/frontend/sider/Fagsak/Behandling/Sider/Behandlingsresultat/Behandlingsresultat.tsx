@@ -25,7 +25,11 @@ import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingPar
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
-import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '../../../../../typer/eøsPerioder';
+import {
+    type IRestKompetanse,
+    type IRestUtenlandskPeriodeBeløp,
+    type IRestValutakurs,
+} from '../../../../../typer/eøsPerioder';
 import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';

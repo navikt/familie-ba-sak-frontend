@@ -163,7 +163,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 {!erLesevisning && (
                     <>
                         <Button
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            variant={'primary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             onClick={() => lagreMottaker(verdierFraBrevmottakerUseSkjema)}

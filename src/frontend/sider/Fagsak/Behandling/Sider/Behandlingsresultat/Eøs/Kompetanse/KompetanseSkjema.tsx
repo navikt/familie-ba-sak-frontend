@@ -7,8 +7,7 @@ import { Alert, Heading, Table } from '@navikt/ds-react';
 import KompetanseTabellRad from './KompetanseTabellRad';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../../typer/behandling';
-import type { IRestKompetanse } from '../../../../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus, type IRestKompetanse } from '../../../../../../../typer/eøsPerioder';
 
 const KompetanseContainer = styled.div`
     margin-top: 5rem;
@@ -22,9 +21,11 @@ const StyledHeaderCell = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
+
     &:nth-of-type(3) {
         width: 14rem;
     }
+
     &:nth-of-type(4) {
         width: 2.25rem;
     }
