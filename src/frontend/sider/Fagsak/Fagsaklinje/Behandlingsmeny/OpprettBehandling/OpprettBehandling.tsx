@@ -115,7 +115,7 @@ const OpprettBehandling: React.FC<IProps> = ({ minimalFagsak }) => {
                     <Modal.Footer>
                         <Button
                             key={'bekreft'}
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            variant={'primary'}
                             onClick={() => onBekreft(minimalFagsak.søkerFødselsnummer, minimalFagsak.fagsakType)}
                             children={'Bekreft'}
                             loading={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}

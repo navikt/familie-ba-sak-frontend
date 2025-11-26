@@ -29,7 +29,6 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({ utenlandskPeriodeBeløp,
         erUtenlandskPeriodeBeløpEkspandert,
         settErUtenlandskPeriodeBeløpEkspandert,
         skjema,
-        valideringErOk,
         sendInnSkjema,
         slettUtenlandskPeriodeBeløp,
         nullstillSkjema,
@@ -81,7 +80,6 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({ utenlandskPeriodeBeløp,
                     <UtenlandskPeriodeBeløpTabellRadEndre
                         skjema={skjema}
                         tilgjengeligeBarn={barn}
-                        valideringErOk={valideringErOk}
                         sendInnSkjema={sendInnSkjema}
                         toggleForm={toggleForm}
                         slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}

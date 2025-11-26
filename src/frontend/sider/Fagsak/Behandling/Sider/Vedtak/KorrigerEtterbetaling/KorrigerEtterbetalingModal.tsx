@@ -92,7 +92,6 @@ export function KorrigerEtterbetalingModal() {
                                         onClick={angreKorrigertEtterbetaling}
                                         variant={'tertiary'}
                                         loading={angreKorrigertEtterbetalingPending}
-                                        disabled={korrigerEtterbetalingPending}
                                         icon={<ArrowUndoIcon />}
                                     >
                                         Angre korrigering
@@ -104,12 +103,7 @@ export function KorrigerEtterbetalingModal() {
                                 <Button onClick={handleLukkModal} variant={'tertiary'}>
                                     Avbryt
                                 </Button>
-                                <Button
-                                    type={'submit'}
-                                    variant={form.formState.errors ? 'primary' : 'secondary'}
-                                    loading={korrigerEtterbetalingPending}
-                                    disabled={angreKorrigertEtterbetalingPending}
-                                >
+                                <Button type={'submit'} variant={'primary'} loading={korrigerEtterbetalingPending}>
                                     {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
                                 </Button>
                             </HStack>

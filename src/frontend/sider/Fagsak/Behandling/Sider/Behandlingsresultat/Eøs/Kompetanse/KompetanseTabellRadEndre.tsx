@@ -33,7 +33,6 @@ interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
-    valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
@@ -44,7 +43,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
     status,
-    valideringErOk,
     sendInnSkjema,
     toggleForm,
     slettKompetanse,
@@ -245,7 +243,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                             <Button
                                 onClick={() => sendInnSkjema()}
                                 size="small"
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >

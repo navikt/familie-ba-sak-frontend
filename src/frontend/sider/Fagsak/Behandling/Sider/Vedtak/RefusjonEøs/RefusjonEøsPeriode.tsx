@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Table, Button, Tooltip, Alert } from '@navikt/ds-react';
+import { Alert, Button, Table, Tooltip } from '@navikt/ds-react';
 
 import RefusjonEøsSkjema from './RefusjonEøsSkjema';
 import { useRefusjonEøs } from './useRefusjonEøs';
@@ -77,7 +77,7 @@ const RefusjonEøsPeriode: React.FC<IRefusjonEøsPeriode> = ({ refusjonEøs, beh
                             <Button
                                 size="small"
                                 onClick={() => oppdaterEksisterendePeriode(() => settErRadEkspandert(false))}
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                variant={'primary'}
                             >
                                 Lagre periode
                             </Button>
