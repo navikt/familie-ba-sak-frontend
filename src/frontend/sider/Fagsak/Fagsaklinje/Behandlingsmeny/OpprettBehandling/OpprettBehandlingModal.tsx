@@ -26,16 +26,20 @@ const StyledFieldset = styled(Fieldset)`
 
 interface Props {
     lukkModal: () => void;
+    onTilbakekrevingsbehandlingOpprettet: () => void;
 }
 
-export function OpprettBehandlingModal({ lukkModal }: Props) {
+export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingOpprettet }: Props) {
     const { fagsak } = useFagsakContext();
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering, valideringErOk } =
         useOpprettBehandling(
             fagsak.id,
             () => lukkModal(),
-            () => lukkModal()
+            () => {
+                lukkModal();
+                onTilbakekrevingsbehandlingOpprettet();
+            }
         );
 
     const lukkOpprettBehandlingModal = () => {

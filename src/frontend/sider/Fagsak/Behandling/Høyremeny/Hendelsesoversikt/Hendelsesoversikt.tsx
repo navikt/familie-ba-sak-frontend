@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 
-import Brev from './BrevModul/Brev';
+import { Brev } from './BrevModul/Brev';
 import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
 import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
