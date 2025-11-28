@@ -36,7 +36,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, oppdaterEksisterendePeriode, fjernPeriode, valideringErOk, tilbakestillSkjemafelterTilDefault } =
+    const { skjema, oppdaterEksisterendePeriode, fjernPeriode, tilbakestillSkjemafelterTilDefault } =
         useFeilutbetaltValuta({
             behandlingId,
             feilutbetaltValuta,
@@ -72,7 +72,7 @@ const FeilutbetaltValutaPeriode: React.FC<IFeilutbetaltValutaPeriode> = ({
                         <Button
                             size="small"
                             onClick={() => oppdaterEksisterendePeriode(() => settErRadEkspandert(false))}
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            variant={'primary'}
                         >
                             Lagre periode
                         </Button>

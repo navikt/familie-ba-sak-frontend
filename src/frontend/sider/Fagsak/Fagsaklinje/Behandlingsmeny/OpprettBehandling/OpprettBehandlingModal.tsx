@@ -105,11 +105,15 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
             <Modal.Footer>
                 <Button
                     key={'bekreft'}
-                    variant={valideringErOk() ? 'primary' : 'secondary'}
-                    onClick={() => onBekreft(fagsak.søkerFødselsnummer, fagsak.fagsakType)}
+                    variant={'primary'}
+                    onClick={() => {
+                        if (opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER) {
+                            return;
+                        }
+                        onBekreft(fagsak.søkerFødselsnummer, fagsak.fagsakType);
+                    }}
                     children={'Bekreft'}
                     loading={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
                 />
                 <Button key={'avbryt'} variant="tertiary" onClick={lukkOpprettBehandlingModal} children={'Avbryt'} />
             </Modal.Footer>

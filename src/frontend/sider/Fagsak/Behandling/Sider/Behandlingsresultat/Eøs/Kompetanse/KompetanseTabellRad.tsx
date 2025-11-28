@@ -27,7 +27,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, vi
         erKompetanseEkspandert,
         settErKompetanseEkspandert,
         skjema,
-        valideringErOk,
         sendInnSkjema,
         slettKompetanse,
         nullstillSkjema,
@@ -69,7 +68,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, vi
                 return '-';
         }
     };
-
     return (
         <Table.ExpandableRow
             togglePlacement="right"
@@ -81,7 +79,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, vi
                     <KompetanseTabellRadEndre
                         skjema={skjema}
                         tilgjengeligeBarn={barn}
-                        valideringErOk={valideringErOk}
                         sendInnSkjema={sendInnSkjema}
                         toggleForm={toggleForm}
                         slettKompetanse={slettKompetanse}

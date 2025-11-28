@@ -5,18 +5,18 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Fieldset, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import type { IBehandling } from '../../../../../../../typer/behandling';
+import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import {
-    utenlandskPeriodeBeløpIntervaller,
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
+    utenlandskPeriodeBeløpIntervaller,
 } from '../../../../../../../typer/eøsPerioder';
-import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
@@ -56,7 +56,6 @@ interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
     tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
-    valideringErOk: () => boolean;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettUtenlandskPeriodeBeløp: () => void;
@@ -66,7 +65,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
     status,
-    valideringErOk,
     sendInnSkjema,
     toggleForm,
     slettUtenlandskPeriodeBeløp,
@@ -192,7 +190,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             <Button
                                 onClick={() => sendInnSkjema()}
                                 size="small"
-                                variant={valideringErOk() ? 'primary' : 'secondary'}
+                                variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
