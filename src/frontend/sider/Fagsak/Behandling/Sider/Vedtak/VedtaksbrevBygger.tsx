@@ -6,6 +6,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
+import { RefusjonEøsTabell } from './RefusjonEøsNy/RefusjonEøsTabell';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
@@ -27,6 +28,7 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
+import { ToggleNavn } from '../../../../../typer/toggles';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
@@ -37,7 +39,7 @@ interface Props {
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentSaksbehandlerRolle } = useAppContext();
+    const { hentSaksbehandlerRolle, toggles } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
@@ -177,7 +179,14 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                         skjulFeilutbetaltValuta={() => settVisFeilutbetaltValuta(false)}
                                     />
                                 )}
-                                {visRefusjonEøs && (
+                                {(visRefusjonEøs || åpenBehandling.refusjonEøs.length > 0) &&
+                                    toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
+                                        <RefusjonEøsTabell
+                                            settErUlagretNyRefusjonEøsPeriode={settErUlagretNyRefusjonEøsPeriode}
+                                            skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
+                                        />
+                                    )}
+                                {visRefusjonEøs && !toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
                                     <RefusjonEøs
                                         refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
                                         behandlingId={åpenBehandling.behandlingId}
