@@ -11,14 +11,13 @@ import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import type { IRestFeilutbetaltValuta } from '../../../../../../typer/eøs-feilutbetalt-valuta';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { summerBeløpForPerioder } from '../utils';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
     fagsakId: string | undefined;
     feilutbetaltValutaListe: IRestFeilutbetaltValuta[];
-    settErUlagretNyFeilutbetaltValutaPeriode: (erUlagretNyFeilutbetaltValuta: boolean) => void;
     erLesevisning: boolean;
-    skjulFeilutbetaltValuta: () => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -42,12 +41,13 @@ const KopierTilNøsKnapp = styled(CopyButton)`
 
 const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     feilutbetaltValutaListe,
-    settErUlagretNyFeilutbetaltValutaPeriode,
     erLesevisning,
-    skjulFeilutbetaltValuta,
     behandlingId,
     fagsakId,
 }) => {
+    const { skjulFeilutbetaltValutaTabell, settErUlagretNyFeilutbetaltValutaPeriode } =
+        useFeilutbetaltValutaTabellContext();
+
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(feilutbetaltValutaListe.length === 0);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const FeilutbetaltValuta: React.FC<IFeilutbetaltValuta> = ({
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (feilutbetaltValutaListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
-        skjulFeilutbetaltValuta();
+        skjulFeilutbetaltValutaTabell();
     }
 
     const totaltFeilutbetaltBeløp = summerBeløpForPerioder(

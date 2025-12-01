@@ -7,11 +7,12 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
-import Vedtaksmeny from './Vedtaksmeny';
+import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
@@ -21,6 +22,7 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
+import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -40,15 +42,11 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
-    const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const {
-        vedtaksperioderMedBegrunnelserRessurs,
-        settVisRefusjonEøs,
-        settVisFeilutbetaltValuta,
-        erUlagretNyFeilutbetaltValutaPeriode,
-        erUlagretNyRefusjonEøsPeriode,
-    } = useVedtakContext();
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+    const { erUlagretNyRefusjonEøsPeriode } = useRefusjonEøsTabellContext();
+    const { erUlagretNyFeilutbetaltValutaPeriode } = useFeilutbetaltValutaTabellContext();
+    const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 
@@ -92,11 +90,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
         >
             {erVedtaksbrevutsending ? (
                 <>
-                    <Vedtaksmeny
-                        åpenBehandling={åpenBehandling}
-                        visFeilutbetaltValuta={() => settVisFeilutbetaltValuta(true)}
-                        visRefusjonEøs={() => settVisRefusjonEøs(true)}
-                    />
+                    <Vedtaksmeny />
                     <VedtaksbrevBygger åpenBehandling={åpenBehandling} bruker={bruker} />
                 </>
             ) : (

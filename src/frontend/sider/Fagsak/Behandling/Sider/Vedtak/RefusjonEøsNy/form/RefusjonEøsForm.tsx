@@ -14,6 +14,8 @@ import { TomDatoField } from './TomDatoField';
 import type { Type } from './useRefusjonEøsForm';
 import { useRefusjonEøsForm } from './useRefusjonEøsForm';
 import type { IRestRefusjonEøs } from '../../../../../../../typer/refusjon-eøs';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useRefusjonEøsTabellContext } from '../RefusjonEøsTabellContext';
 
 interface Props {
     type: Type;
@@ -23,6 +25,9 @@ interface Props {
 }
 
 export function RefusjonEøsForm({ type, refusjonEøs, skjulForm, readOnly }: Props) {
+    const { behandling } = useBehandlingContext();
+    const { skjulRefusjonEøsTabell } = useRefusjonEøsTabellContext();
+
     const { form, onSubmit } = useRefusjonEøsForm({ type, refusjonEøs, skjulForm });
 
     const {
@@ -32,6 +37,9 @@ export function RefusjonEøsForm({ type, refusjonEøs, skjulForm, readOnly }: Pr
     } = form;
 
     function onAvbyrt() {
+        if (behandling.refusjonEøs.length === 0) {
+            skjulRefusjonEøsTabell();
+        }
         skjulForm();
         reset();
     }

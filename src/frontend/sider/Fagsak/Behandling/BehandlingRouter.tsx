@@ -12,6 +12,7 @@ import type { SideId } from './Sider/sider';
 import { sider } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
+import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import Vedtak from './Sider/Vedtak/Vedtak';
 import { VedtakProvider } from './Sider/Vedtak/VedtakContext';
@@ -22,6 +23,7 @@ import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeConte
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
+import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøsNy/RefusjonEøsTabellContext';
 
 interface Props {
     bruker: IPersonInfo;
@@ -80,10 +82,14 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
                 path="/vedtak"
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
-                        <VedtakProvider åpenBehandling={behandling}>
-                            <SammensattKontrollsakProvider åpenBehandling={behandling}>
-                                <Vedtak åpenBehandling={behandling} bruker={bruker} />
-                            </SammensattKontrollsakProvider>
+                        <VedtakProvider>
+                            <FeilutbetaltValutaTabellProvider>
+                                <RefusjonEøsTabellProvider>
+                                    <SammensattKontrollsakProvider åpenBehandling={behandling}>
+                                        <Vedtak åpenBehandling={behandling} bruker={bruker} />
+                                    </SammensattKontrollsakProvider>
+                                </RefusjonEøsTabellProvider>
+                            </FeilutbetaltValutaTabellProvider>
                         </VedtakProvider>
                     </SimuleringProvider>
                 }
