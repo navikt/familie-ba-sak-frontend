@@ -22,7 +22,7 @@
     "install:cypress": "cypress verify || (cypress install && cypress verify)",
     "start:cypress": "tsc -p tsconfig.backend.json && yarn set-node-options NODE_ENV=production node backend/backend/cypress-server.js",
     "run:cypress": "cypress run",
-    "cypress": "yarn install:cypress && yarn start:cypress && yarn run:cypress",
+    "cypress": "yarn install:cypress && (yarn start:cypress & yarn run:cypress)",
     "typecheck": "tsc --noEmit -p src/frontend/tsconfig.json  --skipLibCheck && tsc --noEmit -p src/backend/tsconfig.json  --skipLibCheck",
     "validate": "yarn typecheck && yarn lint && yarn prettier"
   },
