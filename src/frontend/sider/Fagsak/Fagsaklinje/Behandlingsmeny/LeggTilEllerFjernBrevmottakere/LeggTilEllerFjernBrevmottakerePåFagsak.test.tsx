@@ -5,7 +5,7 @@ import { describe, expect } from 'vitest';
 
 import { ActionMenu, Heading } from '@navikt/ds-react';
 
-import { LeggTilEllerFjernBrevmottakerePåFagsakNy } from './LeggTilEllerFjernBrevmottakerePåFagsakNy';
+import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakerePåFagsak';
 import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { BrevmottakerTestdata } from '../../../../../testutils/testdata/brevmottakerTestdata';
 import { render, TestProviders } from '../../../../../testutils/testrender';
@@ -48,11 +48,11 @@ function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], brevmottakere =
     );
 }
 
-describe('LeggTilEllerFjernBrevmottakerePåFagsakNy', () => {
+describe('LeggTilEllerFjernBrevmottakerePåFagsak', () => {
     test('skal ikke rendre komponenten hvis man ikke befinner seg på dokumentutsending', () => {
         const åpneModal = vi.fn();
 
-        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsakNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsak åpneModal={åpneModal} />, {
             wrapper: props => <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1' }]} />,
         });
 
@@ -62,7 +62,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsakNy', () => {
     test('skal rendre komponenten uten brevmottakere hvis man befinner seg på dokumentutsending', () => {
         const åpneModal = vi.fn();
 
-        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsakNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsak åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]} brevmottakere={[]} />
             ),
@@ -74,7 +74,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsakNy', () => {
     test('skal rendre komponenten med en brevmottaker hvis man befinner seg på dokumentutsending', () => {
         const åpneModal = vi.fn();
 
-        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsakNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsak åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper
                     {...props}
@@ -90,7 +90,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsakNy', () => {
     test('skal rendre komponenten med mer enn en brevmottaker hvis man befinner seg på dokumentutsending', () => {
         const åpneModal = vi.fn();
 
-        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsakNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilEllerFjernBrevmottakerePåFagsak åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper
                     {...props}
@@ -106,7 +106,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsakNy', () => {
     test('skal kunne åpne legg til brevmottaker modal', async () => {
         const åpneModal = vi.fn();
 
-        const { screen, user } = render(<LeggTilEllerFjernBrevmottakerePåFagsakNy åpneModal={åpneModal} />, {
+        const { screen, user } = render(<LeggTilEllerFjernBrevmottakerePåFagsak åpneModal={åpneModal} />, {
             wrapper: props => <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]} />,
         });
 

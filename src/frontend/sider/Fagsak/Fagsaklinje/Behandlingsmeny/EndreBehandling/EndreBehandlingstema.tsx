@@ -9,7 +9,7 @@ interface Props {
     åpneModal: () => void;
 }
 
-export function EndreBehandlingstemaNy({ åpneModal }: Props) {
+export function EndreBehandlingstema({ åpneModal }: Props) {
     const { fagsak } = useFagsakContext();
 
     if (fagsak.fagsakType === FagsakType.INSTITUSJON) {

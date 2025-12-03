@@ -9,7 +9,7 @@ interface Props {
     åpneModal: () => void;
 }
 
-export function SettEllerOppdaterVentingNy({ åpneModal }: Props) {
+export function SettEllerOppdaterVenting({ åpneModal }: Props) {
     const { behandling } = useBehandlingContext();
 
     if (behandling.status !== BehandlingStatus.UTREDES) {

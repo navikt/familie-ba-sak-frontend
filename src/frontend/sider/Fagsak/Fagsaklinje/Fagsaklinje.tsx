@@ -15,7 +15,7 @@ function lagAktivFaneStyle(fanenavn: string, pathname: string) {
     return sluttenPåUrl === fanenavn ? { textDecoration: 'underline' } : {};
 }
 
-export function FagsaklinjeNy() {
+export function Fagsaklinje() {
     const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
     const { fagsak } = useFagsakContext();
     const { pathname } = useLocation();

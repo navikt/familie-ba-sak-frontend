@@ -16,7 +16,7 @@ function finnIdentForOpprettingAvFagsak(fagsak: IMinimalFagsak, bruker: IPersonI
     return bruker.personIdent;
 }
 
-export function OpprettFagsakNy() {
+export function OpprettFagsak() {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
 

@@ -3,30 +3,30 @@ import React, { useState } from 'react';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 
-import { AInntektNy } from './AInntekt/AInntektNy';
-import Styles from './BehandlingsmenyNy.module.css';
+import { AInntekt } from './AInntekt/AInntekt';
+import Styles from './Behandlingsmeny.module.css';
+import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import { EndreBehandlendeEnhetModal } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetModal';
-import { EndreBehandlendeEnhetNy } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetNy';
+import { EndreBehandlingstema } from './EndreBehandling/EndreBehandlingstema';
 import { EndreBehandlingstemaModal } from './EndreBehandling/EndreBehandlingstemaModal';
-import { EndreBehandlingstemaNy } from './EndreBehandling/EndreBehandlingstemaNy';
-import { HenleggBehandlingNy } from './HenleggBehandling/HenleggBehandlingNy';
+import { HenleggBehandling } from './HenleggBehandling/HenleggBehandling';
 import { SettBehandlingPåVentModal } from './LeggBehandlingPåVent/SettBehandlingPåVentModal';
-import { SettEllerOppdaterVentingNy } from './LeggBehandlingPåVent/SettEllerOppdaterVentingNy';
+import { SettEllerOppdaterVenting } from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
+import { TaBehandlingAvVent } from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import { TaBehandlingAvVentModal } from './LeggBehandlingPåVent/TaBehandlingAvVentModal';
-import { TaBehandlingAvVentNy } from './LeggBehandlingPåVent/TaBehandlingAvVentNy';
+import { LeggTilBarnPBehandling } from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import { LeggTilBarnPåBehandlingModal } from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandlingModal';
-import { LeggTilBarnPåBehandlingNy } from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandlingNy';
 import { LeggTilBrevmottakerModalBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-import { LeggTilEllerFjernBrevmottakerePåBehandlingNy } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåBehandlingNy';
+import { LeggTilEllerFjernBrevmottakerePåBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåBehandling';
+import { OpprettBehandling } from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingModal';
-import { OpprettBehandlingNy } from './OpprettBehandling/OpprettBehandlingNy';
 import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
-import { OpprettFagsakNy } from './OpprettFagsak/OpprettFagsakNy';
+import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
 import { sjekkErBehandleneEnhetMidlertidig } from '../../../../typer/behandling';
 import { useBehandlingContext } from '../../Behandling/context/BehandlingContext';
 
-export function BehandlingsmenyNy() {
+export function Behandlingsmeny() {
     const { behandling } = useBehandlingContext();
 
     const erBehandleneEnhetMidlertidig = sjekkErBehandleneEnhetMidlertidig(behandling);
@@ -83,22 +83,22 @@ export function BehandlingsmenyNy() {
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     <ActionMenu.Group className={Styles.group} aria-label={'Fagsak'}>
-                        <OpprettBehandlingNy åpneModal={() => settVisOpprettBehandlingModal(true)} />
-                        <OpprettFagsakNy />
+                        <OpprettBehandling åpneModal={() => settVisOpprettBehandlingModal(true)} />
+                        <OpprettFagsak />
                         <SendInformasjonsbrev />
                     </ActionMenu.Group>
                     <ActionMenu.Divider />
                     <ActionMenu.Group className={Styles.group} aria-label={'Behandling'}>
-                        <HenleggBehandlingNy />
-                        <EndreBehandlendeEnhetNy åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
-                        <EndreBehandlingstemaNy åpneModal={() => settVisEndreBehandlingstemaModal(true)} />
-                        <LeggTilBarnPåBehandlingNy åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
-                        <SettEllerOppdaterVentingNy åpneModal={() => settVisBehandlingPåVentModal(true)} />
-                        <TaBehandlingAvVentNy åpneModal={() => settVisTaBehandlingAvVentModal(true)} />
-                        <LeggTilEllerFjernBrevmottakerePåBehandlingNy
+                        <HenleggBehandling />
+                        <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
+                        <EndreBehandlingstema åpneModal={() => settVisEndreBehandlingstemaModal(true)} />
+                        <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
+                        <SettEllerOppdaterVenting åpneModal={() => settVisBehandlingPåVentModal(true)} />
+                        <TaBehandlingAvVent åpneModal={() => settVisTaBehandlingAvVentModal(true)} />
+                        <LeggTilEllerFjernBrevmottakerePåBehandling
                             åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}
                         />
-                        <AInntektNy />
+                        <AInntekt />
                     </ActionMenu.Group>
                 </ActionMenu.Content>
             </ActionMenu>

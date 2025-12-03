@@ -4,7 +4,7 @@ import { describe, expect } from 'vitest';
 
 import { ActionMenu } from '@navikt/ds-react';
 
-import { LeggTilBarnPåBehandlingNy } from './LeggTilBarnPåBehandlingNy';
+import { LeggTilBarnPBehandling } from './LeggTilBarnPåBehandling';
 import { lagBehandling } from '../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../testutils/testrender';
@@ -43,16 +43,16 @@ function Wrapper({
     );
 }
 
-describe('LeggTilBarnPåBehandlingNy', () => {
+describe('LeggTilBarnPåBehandling', () => {
     test('skal rendre komponenten', () => {
         const åpneModal = vi.fn();
-        const { screen } = render(<LeggTilBarnPåBehandlingNy åpneModal={åpneModal} />, { wrapper: Wrapper });
+        const { screen } = render(<LeggTilBarnPBehandling åpneModal={åpneModal} />, { wrapper: Wrapper });
         expect(screen.getByRole('menuitem', { name: 'Legg til barn' })).toBeInTheDocument();
     });
 
     test('skal ikke rendre komponenten i lesevisning', () => {
         const åpneModal = vi.fn();
-        const { screen } = render(<LeggTilBarnPåBehandlingNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilBarnPBehandling åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper
                     {...props}
@@ -69,7 +69,7 @@ describe('LeggTilBarnPåBehandlingNy', () => {
 
     test('skal ikke rendre komponenten hvis behandlingsårsaken er urelevant', () => {
         const åpneModal = vi.fn();
-        const { screen } = render(<LeggTilBarnPåBehandlingNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilBarnPBehandling åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper
                     {...props}
@@ -86,7 +86,7 @@ describe('LeggTilBarnPåBehandlingNy', () => {
 
     test('skal rendre komponenten hvis behandlingsårsaken er urelevant men behandling er en migrering fra infotrygd', () => {
         const åpneModal = vi.fn();
-        const { screen } = render(<LeggTilBarnPåBehandlingNy åpneModal={åpneModal} />, {
+        const { screen } = render(<LeggTilBarnPBehandling åpneModal={åpneModal} />, {
             wrapper: props => (
                 <Wrapper
                     {...props}
@@ -103,7 +103,7 @@ describe('LeggTilBarnPåBehandlingNy', () => {
 
     test('skal kunne åpne modal', async () => {
         const åpneModal = vi.fn();
-        const { screen, user } = render(<LeggTilBarnPåBehandlingNy åpneModal={åpneModal} />, { wrapper: Wrapper });
+        const { screen, user } = render(<LeggTilBarnPBehandling åpneModal={åpneModal} />, { wrapper: Wrapper });
         const knapp = screen.getByRole('menuitem', { name: 'Legg til barn' });
         await user.click(knapp);
         expect(åpneModal).toHaveBeenCalledOnce();

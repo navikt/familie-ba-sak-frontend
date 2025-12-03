@@ -9,7 +9,7 @@ import { erPåHenleggbartSteg } from '../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../typer/toggles';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
-export function HenleggBehandlingNy() {
+export function HenleggBehandling() {
     const { toggles } = useAppContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { åpneModal } = useModal(ModalType.HENLEGG_BEHANDLING);

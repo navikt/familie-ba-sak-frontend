@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import { FagsaklinjeNy } from './FagsaklinjeNy';
+import { Fagsaklinje } from './Fagsaklinje';
 import { lagFagsak } from '../../../testutils/testdata/fagsakTestdata';
 import { lagPerson } from '../../../testutils/testdata/personTestdata';
 import { lagSaksbehandler } from '../../../testutils/testdata/saksbehandlerTestdata';
@@ -50,9 +50,9 @@ function Wrapper({
     );
 }
 
-describe('FagsaklinjeNy', () => {
+describe('Fagsaklinje', () => {
     test('skal rendre komponenten som forventet', () => {
-        const { screen } = render(<FagsaklinjeNy />, { wrapper: Wrapper });
+        const { screen } = render(<Fagsaklinje />, { wrapper: Wrapper });
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Infotrygd' })).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('FagsaklinjeNy', () => {
     });
 
     test('skal kunne navigere til saksoversikt', async () => {
-        const { screen, user } = render(<FagsaklinjeNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<Fagsaklinje />, { wrapper: Wrapper });
 
         await user.click(screen.getByRole('button', { name: 'Saksoversikt' }));
 
@@ -69,7 +69,7 @@ describe('FagsaklinjeNy', () => {
     });
 
     test('skal kunne navigere til dokumenter', async () => {
-        const { screen, user } = render(<FagsaklinjeNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<Fagsaklinje />, { wrapper: Wrapper });
 
         await user.click(screen.getByRole('button', { name: 'Dokumenter' }));
 
@@ -77,7 +77,7 @@ describe('FagsaklinjeNy', () => {
     });
 
     test('skal kunne åpne fagsakmeny', async () => {
-        const { screen, user } = render(<FagsaklinjeNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<Fagsaklinje />, { wrapper: Wrapper });
 
         const meny = screen.getByRole('button', { name: 'Meny' });
         await user.click(meny);
@@ -89,7 +89,7 @@ describe('FagsaklinjeNy', () => {
     });
 
     test('skal ikke vise fagsakmeny hvis saksbehandler ikke har tilgang', async () => {
-        const { screen } = render(<FagsaklinjeNy />, {
+        const { screen } = render(<Fagsaklinje />, {
             wrapper: props => (
                 <Wrapper
                     {...props}

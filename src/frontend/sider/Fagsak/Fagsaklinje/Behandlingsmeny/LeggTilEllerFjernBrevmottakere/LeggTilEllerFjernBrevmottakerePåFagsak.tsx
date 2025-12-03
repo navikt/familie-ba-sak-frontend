@@ -21,7 +21,7 @@ interface Props {
     åpneModal: () => void;
 }
 
-export function LeggTilEllerFjernBrevmottakerePåFagsakNy({ åpneModal }: Props) {
+export function LeggTilEllerFjernBrevmottakerePåFagsak({ åpneModal }: Props) {
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
     const location = useLocation();
 

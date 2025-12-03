@@ -6,7 +6,7 @@ import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icon
 import { Box, Button, HStack } from '@navikt/ds-react';
 
 import { useFagsakContext } from '../FagsakContext';
-import { BehandlingsmenyNy } from './Behandlingsmeny/BehandlingsmenyNy';
+import { Behandlingsmeny } from './Behandlingsmeny/Behandlingsmeny';
 import { useAppContext } from '../../../context/AppContext';
 
 function lagAktivFaneStyle(fanenavn: string, pathname: string) {
@@ -55,7 +55,7 @@ export function Behandlingslinje() {
                         Dokumenter
                     </Button>
                 </HStack>
-                {harInnloggetSaksbehandlerSkrivetilgang() && <BehandlingsmenyNy />}
+                {harInnloggetSaksbehandlerSkrivetilgang() && <Behandlingsmeny />}
             </HStack>
         </Box>
     );
