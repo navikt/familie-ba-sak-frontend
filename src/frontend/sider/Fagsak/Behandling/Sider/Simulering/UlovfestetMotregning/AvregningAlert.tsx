@@ -61,7 +61,7 @@ const AvregningAlert = ({ avregningsperioder, harÅpenTilbakekrevingRessurs }: A
             {!erLesevisning && (
                 <StyledLink href={modiaPersonoversiktUrl} target={'_blank'} style={{ textDecoration: 'none' }}>
                     <Button
-                        variant={'secondary-neutral'}
+                        variant={'primary'}
                         onClick={() => settVisModal(true)}
                         icon={<ExternalLinkIcon />}
                         iconPosition="right"
