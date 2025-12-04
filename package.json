@@ -124,7 +124,7 @@
     "jsdom": "^27.2.0",
     "lint-staged": "^16.2.3",
     "msw": "^2.12.1",
-    "prettier": "^3.6.1",
+    "prettier": "^3.7.3",
     "react-refresh": "^0.18.0",
     "style-loader": "^4.0.0",
     "typescript": "^5.9.2",
