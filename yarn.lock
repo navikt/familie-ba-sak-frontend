@@ -9005,10 +9005,10 @@ react-dom@^19.2.1:
   dependencies:
     scheduler "^0.27.0"
 
-react-hook-form@^7.66.0:
-  version "7.66.0"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.66.0.tgz#1a09ea9d0ebb3bdda5073b08a486538d37d9c0d4"
-  integrity sha512-xXBqsWGKrY46ZqaHDo+ZUYiMUgi8suYu5kdrS20EG8KiL7VRQitEbNjm+UcrDYrNi1YLyfpmAeGjCZYXLT9YBw==
+react-hook-form@^7.67.0:
+  version "7.67.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.67.0.tgz#fd942240fa2b774034f63b22d6f85649cf4de664"
+  integrity sha512-E55EOwKJHHIT/I6J9DmQbCWToAYSw9nN5R57MZw9rMtjh+YQreMDxRLfdjfxQbiJ3/qbg3Z02wGzBX4M+5fMtQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
