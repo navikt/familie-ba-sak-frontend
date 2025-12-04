@@ -5,8 +5,10 @@ import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import { RefusjonEøsTabell } from './RefusjonEøsNy/RefusjonEøsTabell';
+import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
@@ -43,15 +45,10 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
-    const {
-        visRefusjonEøs,
-        settVisRefusjonEøs,
-        visFeilutbetaltValuta,
-        settVisFeilutbetaltValuta,
-        settErUlagretNyRefusjonEøsPeriode,
-        settErUlagretNyFeilutbetaltValutaPeriode,
-        vedtaksperioderMedBegrunnelserRessurs,
-    } = useVedtakContext();
+
+    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+    const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
+    const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
 
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
@@ -167,32 +164,22 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                     åpenBehandling={åpenBehandling}
                                     vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
                                 />
-                                {visFeilutbetaltValuta && (
+                                {erFeilutbetaltValutaTabellSynlig && (
                                     <FeilutbetaltValuta
                                         feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
                                         behandlingId={åpenBehandling.behandlingId}
                                         fagsakId={fagsakId}
-                                        settErUlagretNyFeilutbetaltValutaPeriode={
-                                            settErUlagretNyFeilutbetaltValutaPeriode
-                                        }
                                         erLesevisning={erLesevisning}
-                                        skjulFeilutbetaltValuta={() => settVisFeilutbetaltValuta(false)}
                                     />
                                 )}
-                                {(visRefusjonEøs || åpenBehandling.refusjonEøs.length > 0) &&
-                                    toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
-                                        <RefusjonEøsTabell
-                                            settErUlagretNyRefusjonEøsPeriode={settErUlagretNyRefusjonEøsPeriode}
-                                            skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
-                                        />
-                                    )}
-                                {visRefusjonEøs && !toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
+                                {erRefusjonEøsTabellSynlig && toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
+                                    <RefusjonEøsTabell />
+                                )}
+                                {erRefusjonEøsTabellSynlig && !toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
                                     <RefusjonEøs
                                         refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
                                         behandlingId={åpenBehandling.behandlingId}
                                         fagsakId={fagsakId}
-                                        settErUlagretNyRefusjonEøsPeriode={settErUlagretNyRefusjonEøsPeriode}
-                                        skjulRefusjonEøs={() => settVisRefusjonEøs(false)}
                                     />
                                 )}
                             </>

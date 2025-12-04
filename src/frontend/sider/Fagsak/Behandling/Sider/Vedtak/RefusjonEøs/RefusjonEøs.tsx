@@ -11,14 +11,13 @@ import RefusjonEøsPeriode from './RefusjonEøsPeriode';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useRefusjonEøsTabellContext } from '../RefusjonEøsNy/RefusjonEøsTabellContext';
 import { summerTotalBeløpForPerioder } from '../utils';
 
 interface IRefusjonEøs {
     behandlingId: number;
     fagsakId: string | undefined;
     refusjonEøsListe: IRestRefusjonEøs[];
-    settErUlagretNyRefusjonEøsPeriode: (erUlagretNyRefusjonEøs: boolean) => void;
-    skjulRefusjonEøs: () => void;
 }
 
 const FlexColumnDiv = styled.div`
@@ -40,14 +39,10 @@ const KopierTilNøsKnapp = styled(CopyButton)`
     }
 `;
 
-const RefusjonEøs: React.FC<IRefusjonEøs> = ({
-    refusjonEøsListe,
-    settErUlagretNyRefusjonEøsPeriode,
-    skjulRefusjonEøs,
-    behandlingId,
-    fagsakId,
-}) => {
+const RefusjonEøs: React.FC<IRefusjonEøs> = ({ refusjonEøsListe, behandlingId, fagsakId }) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const { skjulRefusjonEøsTabell, settErUlagretNyRefusjonEøsPeriode } = useRefusjonEøsTabellContext();
+
     const erLesevisning = vurderErLesevisning();
 
     const [ønskerÅLeggeTilNyPeriode, settØnskerÅLeggeTilNyPeriode] = useState(refusjonEøsListe.length === 0);
@@ -57,7 +52,7 @@ const RefusjonEøs: React.FC<IRefusjonEøs> = ({
     }, [ønskerÅLeggeTilNyPeriode]);
 
     if (refusjonEøsListe.length === 0 && !ønskerÅLeggeTilNyPeriode) {
-        skjulRefusjonEøs();
+        skjulRefusjonEøsTabell();
     }
 
     const totaltRefusjonsbeløp = summerTotalBeløpForPerioder(

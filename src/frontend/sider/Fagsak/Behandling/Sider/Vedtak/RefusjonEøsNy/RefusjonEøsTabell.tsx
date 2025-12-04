@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
 
-import { LeggTilRefusjonEøs } from './LeggTilRefusjonEøs';
+import { RefusjonEøsForm } from './form/RefusjonEøsForm';
+import { Type } from './form/useRefusjonEøsForm';
 import { RefusjonEøsRad } from './RefusjonEøsRad';
+import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../../../typer/fagsak';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
@@ -36,31 +38,13 @@ function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandli
     \n${formatertRefusjon}`;
 }
 
-interface Props {
-    skjulRefusjonEøs: () => void;
-    settErUlagretNyRefusjonEøsPeriode: (erUlagretNyRefusjonEøs: boolean) => void;
-}
-
-export function RefusjonEøsTabell({ skjulRefusjonEøs, settErUlagretNyRefusjonEøsPeriode }: Props) {
+export function RefusjonEøsTabell() {
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
-
-    const [visLeggTilRefusjonEøs, settVisLeggTilRefusjonEøs] = useState(behandling.refusjonEøs.length === 0);
+    const { erLeggTilRefusjonEøsFormÅpen, visLeggTilRefusjonEøsForm, skjulLeggTilRefusjonEøsForm } =
+        useRefusjonEøsTabellContext();
 
     const erLesevisning = vurderErLesevisning();
-
-    function visLeggTilRefusjonEøsForm() {
-        settVisLeggTilRefusjonEøs(true);
-        settErUlagretNyRefusjonEøsPeriode(true);
-    }
-
-    function skjulLeggTilRefusjonEøsForm() {
-        settVisLeggTilRefusjonEøs(false);
-        settErUlagretNyRefusjonEøsPeriode(false);
-        if (behandling.refusjonEøs.length === 0) {
-            skjulRefusjonEøs();
-        }
-    }
 
     return (
         <Stack direction={'column'} gap={'space-20'} marginBlock={'space-48 space-48'}>
@@ -85,11 +69,22 @@ export function RefusjonEøsTabell({ skjulRefusjonEøs, settErUlagretNyRefusjonE
                     {behandling.refusjonEøs.map(refusjonEøs => (
                         <RefusjonEøsRad key={refusjonEøs.id} refusjonEøs={refusjonEøs} />
                     ))}
-                    {visLeggTilRefusjonEøs && <LeggTilRefusjonEøs skjulForm={skjulLeggTilRefusjonEøsForm} />}
+                    {erLeggTilRefusjonEøsFormÅpen && (
+                        <Table.ExpandableRow
+                            open={true}
+                            content={
+                                <RefusjonEøsForm
+                                    type={Type.OPPRETT}
+                                    skjulForm={skjulLeggTilRefusjonEøsForm}
+                                    readOnly={erLesevisning}
+                                />
+                            }
+                        />
+                    )}
                 </Table.Body>
             </Table>
             <Stack width={'100%'} justify={'space-between'}>
-                {!visLeggTilRefusjonEøs && !erLesevisning && (
+                {!erLeggTilRefusjonEøsFormÅpen && !erLesevisning && (
                     <Button
                         variant={'tertiary'}
                         size={'small'}
