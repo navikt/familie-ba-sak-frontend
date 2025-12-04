@@ -23,8 +23,7 @@ function mergeRefs<T = any>(refs: Array<React.MutableRefObject<T> | React.Ref<T>
 }
 
 interface HelpTextProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-        Pick<PopoverProps, 'strategy' | 'placement'> {
+    extends React.ButtonHTMLAttributes<HTMLButtonElement>, Pick<PopoverProps, 'strategy' | 'placement'> {
     /**
      * Helptext-dialog content
      */
