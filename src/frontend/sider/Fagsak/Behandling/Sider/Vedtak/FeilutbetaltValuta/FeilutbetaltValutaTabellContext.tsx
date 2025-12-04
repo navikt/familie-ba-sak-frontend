@@ -33,7 +33,7 @@ export function FeilutbetaltValutaTabellProvider({ children }: PropsWithChildren
     }, [settErFeilutbetaltValutaTabellSynlig]);
 
     const skjulFeilutbetaltValutaTabell = useCallback(() => {
-        settErFeilutbetaltValutaTabellSynlig(true);
+        settErFeilutbetaltValutaTabellSynlig(false);
     }, [settErFeilutbetaltValutaTabellSynlig]);
 
     return (
