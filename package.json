@@ -40,7 +40,7 @@
     "@navikt/ds-css": "7.35.0",
     "@navikt/ds-react": "7.35.0",
     "@navikt/ds-tokens": "7.35.0",
-    "@navikt/familie-backend": "^10.1.10",
+    "@navikt/familie-backend": "^10.1.16",
     "@navikt/familie-endringslogg": "14.0.2",
     "@navikt/familie-form-elements": "21.0.7",
     "@navikt/familie-header": "16.1.2",
