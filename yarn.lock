@@ -1924,10 +1924,10 @@
     svg-country-flags "^1.2.10"
     uuid "^9.0.0"
 
-"@navikt/fnrvalidator@^2.1.0", "@navikt/fnrvalidator@^2.1.5":
-  version "2.1.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.1.5/e33cbc5693b14419bbcf4d5daee2ac9eeec532e5#e33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
-  integrity sha512-uHzoL3ZTYwrF7OTKaihNf9xHH6S9WnGqz420HX4lEX+yu5367l+dYxI5OIRVT5MKWEDQ4DCVSAuJhoWValv6Fw==
+"@navikt/fnrvalidator@^2.1.5", "@navikt/fnrvalidator@^2.2.0":
+  version "2.2.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.0/4886b1ab78dabbca087adf379b81ba0ef27ebbd9#4886b1ab78dabbca087adf379b81ba0ef27ebbd9"
+  integrity sha512-yz+7YYpTeP1tjdsj/RRZskzf7DMinTT8cUzPSMXGmCdY+rtFHNkJsp9ccfHLAgd9rk2k+ZXc9OEcySVwfq0e9Q==
 
 "@navikt/land-verktoy@^9.1.8":
   version "9.1.8"
