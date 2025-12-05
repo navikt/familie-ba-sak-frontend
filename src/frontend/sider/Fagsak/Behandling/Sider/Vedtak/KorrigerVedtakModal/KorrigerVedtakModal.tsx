@@ -22,7 +22,7 @@ interface IProps {
 }
 
 const KorrigerVedtakModal = ({ lukkModal, korrigertVedtak, behandlingId, erLesevisning }: IProps) => {
-    const { skjema, valideringErOk, lagreKorrigertVedtak, angreKorrigering, restFeil } = useKorrigerVedtakSkjema({
+    const { skjema, lagreKorrigertVedtak, angreKorrigering, restFeil } = useKorrigerVedtakSkjema({
         lukkModal,
         korrigertVedtak,
         behandlingId,
@@ -70,7 +70,7 @@ const KorrigerVedtakModal = ({ lukkModal, korrigertVedtak, behandlingId, erLesev
                     <>
                         <Button
                             onClick={lagreKorrigertVedtak}
-                            variant={valideringErOk() ? 'primary' : 'secondary'}
+                            variant={'primary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                             disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                         >

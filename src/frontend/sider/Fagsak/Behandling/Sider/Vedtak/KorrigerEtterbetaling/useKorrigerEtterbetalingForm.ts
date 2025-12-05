@@ -72,6 +72,9 @@ export function useKorrigerEtterbetalingForm() {
     } = form;
 
     async function korrigerEtterbetaling(values: KorrigerEtterbetalingFormValues) {
+        if (angreKorrigertEtterbetalingPending) {
+            return;
+        }
         const { årsak, beløp, begrunnelse } = values;
 
         const korrigerEtterbetalingParameters = {
@@ -98,6 +101,9 @@ export function useKorrigerEtterbetalingForm() {
     }
 
     async function angreKorrigertEtterbetaling() {
+        if (korrigerEtterbetalingPending) {
+            return;
+        }
         return angreKorrigertEtterbetalingAsync(behandling.behandlingId)
             .then(behandling => {
                 settToast(ToastTyper.ETTERBETALING_KORRIGERT, {

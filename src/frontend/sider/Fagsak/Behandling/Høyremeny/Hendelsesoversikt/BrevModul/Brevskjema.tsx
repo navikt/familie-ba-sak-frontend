@@ -408,7 +408,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
             <Knapperekke>
                 {!erLesevisning && (
                     <Button
-                        variant={'tertiary'}
+                        variant={'secondary'}
                         id={'forhandsvis-vedtaksbrev'}
                         size={'medium'}
                         disabled={skjemaErLåst}
@@ -426,7 +426,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     </Button>
                 )}
                 <Button
-                    variant={'secondary'}
+                    variant={'primary'}
                     size={'medium'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}

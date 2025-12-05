@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Table, Button, Alert } from '@navikt/ds-react';
+import { Alert, Button, Table } from '@navikt/ds-react';
 
 import FeilutbetaltValutaSkjema from './FeilutbetaltValutaSkjema';
 import { useFeilutbetaltValuta } from './useFeilutbetaltValuta';
@@ -26,7 +26,7 @@ const FlexRowDiv = styled.div`
 const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> = ({ lukkNyPeriode, behandlingId }) => {
     const [feilmelding, settFeilmelding] = useState<string>();
 
-    const { skjema, lagreNyPeriode, nullstillSkjema, valideringErOk } = useFeilutbetaltValuta({
+    const { skjema, lagreNyPeriode, nullstillSkjema } = useFeilutbetaltValuta({
         behandlingId: behandlingId,
         settFeilmelding: settFeilmelding,
     });
@@ -47,7 +47,7 @@ const NyFeilutbetaltValutaPeriode: React.FC<INyFeilutbetaltValutaPeriodeProps> =
                 <FlexColumnDiv>
                     <FeilutbetaltValutaSkjema skjema={skjema} />
                     <FlexRowDiv style={{ gap: '1rem' }}>
-                        <Button size="small" onClick={lagre} variant={valideringErOk() ? 'primary' : 'secondary'}>
+                        <Button size="small" onClick={lagre} variant={'primary'}>
                             Lagre periode
                         </Button>
                         <Button size="small" variant="tertiary" onClick={avbrytLeggTilNy}>
