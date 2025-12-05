@@ -2,7 +2,7 @@ import React, { createContext, type PropsWithChildren, useEffect, useState, type
 
 import type { AxiosRequestConfig } from 'axios';
 
-import { Alert, BodyShort, Button, HStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack } from '@navikt/ds-react';
 import { loggFeil, useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -17,8 +17,6 @@ import type { IToggles } from '../typer/toggles';
 import { alleTogglerAv, ToggleNavn } from '../typer/toggles';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
 import { tilFeilside } from '../utils/commons';
-
-const FEM_MINUTTER = 300000;
 
 export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;
@@ -80,62 +78,10 @@ const AppProvider = (props: PropsWithChildren) => {
     const { request, systemetLaster } = useHttp();
 
     const [toggles, settToggles] = useState<IToggles>(alleTogglerAv());
-    const [appVersjon, settAppVersjon] = useState('');
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
     const [erTogglesHentet, settErTogglesHentet] = useState(false);
-
-    const verifiserVersjon = () => {
-        request<void, string>({
-            url: '/version',
-            method: 'GET',
-        }).then((versjon: Ressurs<string>) => {
-            if (versjon.status === RessursStatus.SUKSESS) {
-                if (appVersjon !== '' && appVersjon !== versjon.data) {
-                    settAppInfoModal({
-                        tittel: 'Løsningen er utdatert',
-                        innhold: () => {
-                            return (
-                                <Alert variant={'info'} inline>
-                                    Det finnes en oppdatert versjon av løsningen. Det anbefales at du oppdaterer med en
-                                    gang.
-                                </Alert>
-                            );
-                        },
-                        visModal: true,
-                        onClose: () => lukkModal(),
-                        actions: [
-                            <Button
-                                key={'oppdater'}
-                                variant="primary"
-                                size="small"
-                                onClick={() => {
-                                    window.location.reload();
-                                }}
-                                children={'Ok, oppdater'}
-                            />,
-                            <Button
-                                key={'avbryt'}
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => lukkModal()}
-                                children={'Avbryt'}
-                            />,
-                        ],
-                    });
-                }
-
-                settAppVersjon(versjon.data);
-            }
-        });
-
-        setTimeout(() => {
-            verifiserVersjon();
-        }, FEM_MINUTTER);
-    };
-
-    useEffect(() => verifiserVersjon(), []);
 
     useEffect(() => {
         request<string[], IToggles>({
