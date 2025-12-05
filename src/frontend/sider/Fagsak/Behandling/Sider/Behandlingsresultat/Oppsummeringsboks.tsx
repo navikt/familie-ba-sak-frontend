@@ -73,7 +73,9 @@ const finnUtbetalingsBeløpStatusMap = (
         const barnIdent = upd.person.personIdent;
         const kompetanserForBarn = finnKompetanserForBarn(kompetanser, barnIdent);
         const norgeErSekundærland = kompetanserForBarn.some(
-            kompetanseForBarn => kompetanseForBarn.resultat === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND
+            kompetanseForBarn =>
+                kompetanseForBarn.resultat === KompetanseResultat.NORGE_ER_SEKUNDÆRLAND ||
+                kompetanseForBarn.resultat === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING
         );
         let skalViseUtbetalingsBeløp = !norgeErSekundærland;
 
