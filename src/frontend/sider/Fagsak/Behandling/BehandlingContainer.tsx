@@ -13,13 +13,10 @@ import { Høyremeny } from './Høyremeny/Høyremeny';
 import { Venstremeny } from './Venstremeny/Venstremeny';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
+import { Behandlingslinje } from '../Fagsaklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-import { Fagsaklinje } from '../Fagsaklinje/Fagsaklinje';
 import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
-import { useAppContext } from '../../../context/AppContext';
-import { ToggleNavn } from '../../../typer/toggles';
-import { Behandlingslinje } from '../Fagsaklinje/Behandlingslinje';
 
 interface Props {
     bruker: IPersonInfo;
@@ -53,7 +50,6 @@ const HøyremenyContainer = styled.div`
 `;
 
 const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
-    const { toggles } = useAppContext();
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     switch (behandlingRessurs.status) {
@@ -63,11 +59,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                     <HenleggBehandlingModal />
                     <HenleggBehandlingVeivalgModal />
                     <KorrigerEtterbetalingModal />
-                    {toggles[ToggleNavn.brukNyActionMenu] ? (
-                        <Behandlingslinje />
-                    ) : (
-                        <Fagsaklinje bruker={bruker} minimalFagsak={fagsak} behandling={behandlingRessurs.data} />
-                    )}
+                    <Behandlingslinje />
                     <FlexContainer>
                         <VenstremenyContainer>
                             <Venstremeny />

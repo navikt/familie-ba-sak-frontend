@@ -4,7 +4,7 @@ import { expect } from 'vitest';
 
 import { ActionMenu } from '@navikt/ds-react';
 
-import { OpprettBehandlingNy } from './OpprettBehandlingNy';
+import { OpprettBehandling } from './OpprettBehandling';
 import { render } from '../../../../../testutils/testrender';
 
 function Wrapper({ children }: PropsWithChildren) {
@@ -15,11 +15,11 @@ function Wrapper({ children }: PropsWithChildren) {
     );
 }
 
-describe('OpprettBehandlingNy', () => {
+describe('OpprettBehandling', () => {
     test('skal rendre komponent som forventet', () => {
         const åpneModal = vi.fn();
 
-        const { screen } = render(<OpprettBehandlingNy åpneModal={åpneModal} />, { wrapper: Wrapper });
+        const { screen } = render(<OpprettBehandling åpneModal={åpneModal} />, { wrapper: Wrapper });
 
         expect(screen.getByRole('menuitem', { name: 'Opprett behandling' })).toBeInTheDocument();
     });
@@ -27,7 +27,7 @@ describe('OpprettBehandlingNy', () => {
     test('skal kunne klikke på opprett behandling', async () => {
         const åpneModal = vi.fn();
 
-        const { screen, user } = render(<OpprettBehandlingNy åpneModal={åpneModal} />, { wrapper: Wrapper });
+        const { screen, user } = render(<OpprettBehandling åpneModal={åpneModal} />, { wrapper: Wrapper });
 
         const knapp = screen.getByRole('menuitem', { name: 'Opprett behandling' });
         await user.click(knapp);

@@ -1,37 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react';
 
-import { LeggTilBrevmottakerModalBehandling } from './LeggTilBrevmottakerModalBehandling';
-import type { IBehandling } from '../../../../../typer/behandling';
+import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
+import { Behandlingstype } from '../../../../../typer/behandling';
+import { FagsakType } from '../../../../../typer/fagsak';
+import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
+import { useFagsakContext } from '../../../FagsakContext';
 
-interface Props {
-    behandling: IBehandling;
-    erLesevisning: boolean;
-}
-
-const utledMenyinnslag = (antallMottakere: number, erLesevisning: boolean) => {
+function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) {
     if (erLesevisning) {
-        return antallMottakere === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
+        return brevmottakere.length === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
     }
-    if (antallMottakere === 0) {
+    if (brevmottakere.length === 0) {
         return 'Legg til brevmottaker';
     }
-    if (antallMottakere === 1) {
+    if (brevmottakere.length === 1) {
         return 'Legg til eller fjern brevmottaker';
     }
     return 'Se eller fjern brevmottakere';
-};
+}
 
-export function LeggTilEllerFjernBrevmottakerePåBehandling({ behandling, erLesevisning }: Props) {
-    const [visModal, settVisModal] = useState(false);
+const relevanteBehandlingstype = [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING];
 
-    const menyinnslag = utledMenyinnslag(behandling.brevmottakere.length, erLesevisning);
+interface Props {
+    åpneModal: () => void;
+}
 
-    return (
-        <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>{menyinnslag}</Dropdown.Menu.List.Item>
-            {visModal && <LeggTilBrevmottakerModalBehandling lukkModal={() => settVisModal(false)} />}
-        </>
-    );
+export function LeggTilEllerFjernBrevmottakerePåBehandling({ åpneModal }: Props) {
+    const { fagsak } = useFagsakContext();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
+
+    const erInstitusjonssak = fagsak.fagsakType === FagsakType.INSTITUSJON;
+    const erRelevantBehandlingstype = relevanteBehandlingstype.includes(behandling.type);
+
+    if (!erRelevantBehandlingstype || erInstitusjonssak) {
+        return null;
+    }
+
+    const erLesevisning = vurderErLesevisning();
+    const harBrevmottaker = behandling.brevmottakere.length > 0;
+
+    if (erLesevisning && !harBrevmottaker) {
+        return null;
+    }
+
+    const label = utledLabel(behandling.brevmottakere, erLesevisning);
+
+    return <ActionMenu.Item onSelect={åpneModal}>{label}</ActionMenu.Item>;
 }

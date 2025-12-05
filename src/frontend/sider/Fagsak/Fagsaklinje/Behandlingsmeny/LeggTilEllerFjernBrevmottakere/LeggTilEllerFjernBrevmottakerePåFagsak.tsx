@@ -1,31 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react';
+import { useLocation } from 'react-router';
 
-import { LeggTilBrevmottakerModalFagsak } from './LeggTilBrevmottakerModalFagsak';
+import { ActionMenu } from '@navikt/ds-react';
+
+import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../../../ManuelleBrevmottakerePåFagsakContext';
 
-const utledMenyinnslag = (antallMottakere: number) => {
-    if (antallMottakere === 0) {
+const utledLabel = (brevmottakere: SkjemaBrevmottaker[]) => {
+    if (brevmottakere.length === 0) {
         return 'Legg til brevmottaker';
     }
-    if (antallMottakere === 1) {
+    if (brevmottakere.length === 1) {
         return 'Legg til eller fjern brevmottaker';
     }
     return 'Se eller fjern brevmottakere';
 };
 
-export function LeggTilEllerFjernBrevmottakerePåFagsak() {
-    const [visModal, settVisModal] = useState(false);
+interface Props {
+    åpneModal: () => void;
+}
 
+export function LeggTilEllerFjernBrevmottakerePåFagsak({ åpneModal }: Props) {
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
+    const location = useLocation();
 
-    const menyinnslag = utledMenyinnslag(manuelleBrevmottakerePåFagsak.length);
+    const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
 
-    return (
-        <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>{menyinnslag}</Dropdown.Menu.List.Item>
-            {visModal && <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisModal(false)} />}
-        </>
-    );
+    if (!erPåDokumentutsending) {
+        return null;
+    }
+
+    const label = utledLabel(manuelleBrevmottakerePåFagsak);
+
+    return <ActionMenu.Item onClick={åpneModal}>{label}</ActionMenu.Item>;
 }

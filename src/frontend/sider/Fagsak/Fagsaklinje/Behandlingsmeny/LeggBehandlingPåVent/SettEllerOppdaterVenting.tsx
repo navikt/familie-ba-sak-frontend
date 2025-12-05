@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react';
 
-import { SettBehandlingPåVentModal } from './SettBehandlingPåVentModal';
+import { BehandlingStatus } from '../../../../../typer/behandling';
 import { useBehandlingContext } from '../../../Behandling/context/BehandlingContext';
 
-const SettEllerOppdaterVenting: React.FC = () => {
+interface Props {
+    åpneModal: () => void;
+}
+
+export function SettEllerOppdaterVenting({ åpneModal }: Props) {
     const { behandling } = useBehandlingContext();
-    const [visModal, settVisModal] = useState<boolean>(!!behandling.aktivSettPåVent);
+
+    if (behandling.status !== BehandlingStatus.UTREDES) {
+        return null;
+    }
 
     const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
 
     return (
-        <>
-            <Dropdown.Menu.List.Item onClick={() => settVisModal(true)}>
-                {erBehandlingAlleredePåVent ? 'Endre ventende behandling' : 'Sett behandling på vent'}
-            </Dropdown.Menu.List.Item>
-
-            {visModal && <SettBehandlingPåVentModal lukkModal={() => settVisModal(false)} />}
-        </>
+        <ActionMenu.Item onSelect={åpneModal}>
+            {erBehandlingAlleredePåVent ? 'Endre ventende behandling' : 'Sett behandling på vent'}
+        </ActionMenu.Item>
     );
-};
-
-export default SettEllerOppdaterVenting;
+}

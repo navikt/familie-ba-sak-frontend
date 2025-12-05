@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, type MockInstance, vi } from '
 import { ActionMenu } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-import { AInntektNy } from './AInntektNy';
+import { AInntekt } from './AInntekt';
 import { FeilmeldingModal } from '../../../../../komponenter/Modal/fagsak/FeilmeldingModal';
 import { server } from '../../../../../testutils/mocks/node';
 import { lagFagsak } from '../../../../../testutils/testdata/fagsakTestdata';
@@ -31,7 +31,7 @@ function Wrapper({ fagsak = lagFagsak(), children }: WrapperProps) {
     );
 }
 
-describe('AInntektNy', () => {
+describe('AInntekt', () => {
     let windowOpenSpy: MockInstance;
 
     beforeEach(() => {
@@ -43,7 +43,7 @@ describe('AInntektNy', () => {
     });
 
     test('skal rendre komponent', () => {
-        const { screen } = render(<AInntektNy />, { wrapper: Wrapper });
+        const { screen } = render(<AInntekt />, { wrapper: Wrapper });
 
         expect(screen.getByRole('menuitem', { name: 'A-Inntekt' })).toBeInTheDocument();
     });
@@ -56,7 +56,7 @@ describe('AInntektNy', () => {
             })
         );
 
-        const { screen, user } = render(<AInntektNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<AInntekt />, { wrapper: Wrapper });
 
         const knapp = screen.getByRole('menuitem', { name: 'A-Inntekt' });
         await user.click(knapp);
@@ -68,7 +68,7 @@ describe('AInntektNy', () => {
     });
 
     test('skal kunne åpne a-inntekt', async () => {
-        const { screen, user } = render(<AInntektNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<AInntekt />, { wrapper: Wrapper });
 
         const knapp = screen.getByRole('menuitem', { name: 'A-Inntekt' });
         await user.click(knapp);
@@ -83,7 +83,7 @@ describe('AInntektNy', () => {
             })
         );
 
-        const { screen, user } = render(<AInntektNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<AInntekt />, { wrapper: Wrapper });
 
         const knapp = screen.getByRole('menuitem', { name: 'A-Inntekt' });
         await user.click(knapp);

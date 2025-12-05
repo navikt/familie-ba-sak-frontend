@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { BodyShort, Dropdown, Loader } from '@navikt/ds-react';
+import { ActionMenu, BodyShort, Loader } from '@navikt/ds-react';
 
 import { useHentAInntektUrl } from './useHentAInntektUrl';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
-import type { IMinimalFagsak } from '../../../../../typer/fagsak';
+import { useFagsakContext } from '../../../FagsakContext';
 
 function Feilmelding({ error }: { error: Error }) {
     return (
@@ -16,23 +16,20 @@ function Feilmelding({ error }: { error: Error }) {
     );
 }
 
-interface Props {
-    minimalFagsak: IMinimalFagsak;
-}
-
-export function AInntekt({ minimalFagsak }: Props) {
+export function AInntekt() {
+    const { fagsak } = useFagsakContext();
     const { åpneModal } = useModal(ModalType.FEILMELDING);
 
     const { isFetching, refetch } = useHentAInntektUrl({
-        søkerFødselsnummer: minimalFagsak.søkerFødselsnummer,
+        søkerFødselsnummer: fagsak.søkerFødselsnummer,
         onSuccess: url => window.open(url, '_blank'),
         onError: error => åpneModal({ feilmelding: <Feilmelding error={error} /> }),
         enabled: false,
     });
 
     return (
-        <Dropdown.Menu.List.Item onClick={() => refetch()} disabled={isFetching}>
-            A-Inntekt {isFetching && <Loader size="small" />}
-        </Dropdown.Menu.List.Item>
+        <ActionMenu.Item onSelect={() => refetch()} disabled={isFetching}>
+            A-Inntekt {isFetching && <Loader data-testid={'loader'} size="small" />}
+        </ActionMenu.Item>
     );
 }

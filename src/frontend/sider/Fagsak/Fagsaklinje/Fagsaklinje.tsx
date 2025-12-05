@@ -5,63 +5,58 @@ import { useLocation, Link as ReactRouterLink } from 'react-router';
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 
-import Behandlingsmeny from './Behandlingsmeny/Behandlingsmeny';
-import type { IBehandling } from '../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
+import { useFagsakContext } from '../FagsakContext';
+import { Fagsakmeny } from './Behandlingsmeny/Fagsakmeny';
+import { useAppContext } from '../../../context/AppContext';
 
-interface FagsaklinjeProps {
-    bruker: IPersonInfo;
-    minimalFagsak: IMinimalFagsak;
-    behandling?: IBehandling;
-}
-
-const aktivFaneStyle = (fanenavn: string, pathname: string) => {
+function lagAktivFaneStyle(fanenavn: string, pathname: string) {
     const urlSplit = pathname.split('/');
     const sluttenPåUrl = urlSplit[urlSplit.length - 1];
     return sluttenPåUrl === fanenavn ? { textDecoration: 'underline' } : {};
-};
+}
 
-export const Fagsaklinje = ({ minimalFagsak, bruker, behandling }: FagsaklinjeProps) => {
+export function Fagsaklinje() {
+    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+    const { fagsak } = useFagsakContext();
     const { pathname } = useLocation();
 
     return (
-        <Box borderWidth="0 0 1 0" borderColor="border-subtle">
-            <HStack paddingInline="2 4" paddingBlock="2" justify="space-between">
+        <Box borderWidth={'0 0 1 0'} borderColor={'border-subtle'}>
+            <HStack paddingInline={'2 4'} paddingBlock={'2'} justify={'space-between'}>
                 <HStack>
                     <Button
                         as={ReactRouterLink}
-                        size="small"
-                        variant="tertiary"
+                        size={'small'}
+                        variant={'tertiary'}
                         icon={<HouseIcon />}
-                        to={`/fagsak/${minimalFagsak.id}/saksoversikt`}
-                        style={aktivFaneStyle('saksoversikt', pathname)}
+                        to={`/fagsak/${fagsak.id}/saksoversikt`}
+                        style={lagAktivFaneStyle('saksoversikt', pathname)}
                     >
                         Saksoversikt
                     </Button>
                     <Button
                         as={ReactRouterLink}
-                        size="small"
-                        variant="tertiary"
+                        size={'small'}
+                        variant={'tertiary'}
                         icon={<MagnifyingGlassIcon />}
-                        to={`/fagsak/${minimalFagsak.id}/infotrygd`}
-                        style={aktivFaneStyle('infotrygd', pathname)}
+                        to={`/fagsak/${fagsak.id}/infotrygd`}
+                        style={lagAktivFaneStyle('infotrygd', pathname)}
                     >
                         Infotrygd
                     </Button>
                     <Button
                         as={ReactRouterLink}
-                        size="small"
-                        variant="tertiary"
+                        size={'small'}
+                        variant={'tertiary'}
                         icon={<FileTextIcon />}
-                        to={`/fagsak/${minimalFagsak.id}/dokumenter`}
-                        style={aktivFaneStyle('dokumenter', pathname)}
+                        to={`/fagsak/${fagsak.id}/dokumenter`}
+                        style={lagAktivFaneStyle('dokumenter', pathname)}
                     >
                         Dokumenter
                     </Button>
                 </HStack>
-                <Behandlingsmeny minimalFagsak={minimalFagsak} bruker={bruker} behandling={behandling} />
+                {harInnloggetSaksbehandlerSkrivetilgang() && <Fagsakmeny />}
             </HStack>
         </Box>
     );
-};
+}

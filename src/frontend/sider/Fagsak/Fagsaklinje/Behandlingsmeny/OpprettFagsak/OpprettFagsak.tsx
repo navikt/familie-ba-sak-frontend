@@ -1,16 +1,13 @@
 import React from 'react';
 
-import { Dropdown } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
 import { FagsakType, type IMinimalFagsak } from '../../../../../typer/fagsak';
 import type { IPersonInfo } from '../../../../../typer/person';
-
-interface Props {
-    fagsak: IMinimalFagsak;
-    bruker: IPersonInfo;
-}
+import { useBrukerContext } from '../../../BrukerContext';
+import { useFagsakContext } from '../../../FagsakContext';
 
 function finnIdentForOpprettingAvFagsak(fagsak: IMinimalFagsak, bruker: IPersonInfo) {
     if (fagsak.fagsakType === FagsakType.SKJERMET_BARN) {
@@ -19,16 +16,15 @@ function finnIdentForOpprettingAvFagsak(fagsak: IMinimalFagsak, bruker: IPersonI
     return bruker.personIdent;
 }
 
-export function OpprettFagsak({ fagsak, bruker }: Props) {
+export function OpprettFagsak() {
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
+
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
     return (
-        <>
-            <Dropdown.Menu.List.Item
-                onClick={() => åpneModal({ ident: finnIdentForOpprettingAvFagsak(fagsak, bruker) })}
-            >
-                Opprett ny fagsak
-            </Dropdown.Menu.List.Item>
-        </>
+        <ActionMenu.Item onClick={() => åpneModal({ ident: finnIdentForOpprettingAvFagsak(fagsak, bruker) })}>
+            Opprett ny fagsak
+        </ActionMenu.Item>
     );
 }

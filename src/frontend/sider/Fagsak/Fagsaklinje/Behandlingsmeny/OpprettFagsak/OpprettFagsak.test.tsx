@@ -4,7 +4,7 @@ import { describe, expect } from 'vitest';
 
 import { ActionMenu } from '@navikt/ds-react';
 
-import { OpprettFagsakNy } from './OpprettFagsakNy';
+import { OpprettFagsak } from './OpprettFagsak';
 import { ModalType } from '../../../../../context/ModalContext';
 import { useModal } from '../../../../../hooks/useModal';
 import { OpprettFagsakModal } from '../../../../../komponenter/Modal/fagsak/OpprettFagsakModal';
@@ -37,15 +37,15 @@ function Wrapper({ children }: PropsWithChildren) {
     );
 }
 
-describe('OpprettFagsakNy', () => {
+describe('OpprettFagsak', () => {
     test('skal rendre komponenten som forventet', () => {
-        const { screen } = render(<OpprettFagsakNy />, { wrapper: Wrapper });
+        const { screen } = render(<OpprettFagsak />, { wrapper: Wrapper });
 
         expect(screen.getByRole('menuitem', { name: 'Opprett ny fagsak' })).toBeInTheDocument();
     });
 
     test('skal kunne åpne opprett fagsak modal', async () => {
-        const { screen, user } = render(<OpprettFagsakNy />, { wrapper: Wrapper });
+        const { screen, user } = render(<OpprettFagsak />, { wrapper: Wrapper });
 
         const knapp = screen.getByRole('menuitem', { name: 'Opprett ny fagsak' });
         await user.click(knapp);
