@@ -1,7 +1,7 @@
 // Konfigurer appen før backend prøver å sette opp konfigurasjon
 
 import type { IApi, ISessionKonfigurasjon } from '@navikt/familie-backend';
-import { appConfig } from '@navikt/familie-backend';
+import { appConfigFraEnv } from '@navikt/familie-backend';
 
 const Environment = () => {
     if (process.env.ENV === 'local') {
@@ -81,7 +81,7 @@ if (!process.env.DREK_URL) {
 }
 
 export const oboConfig: IApi = {
-    clientId: appConfig.clientId,
+    clientId: appConfigFraEnv().clientId,
     scopes: [process.env.BA_SAK_SCOPE],
 };
 
