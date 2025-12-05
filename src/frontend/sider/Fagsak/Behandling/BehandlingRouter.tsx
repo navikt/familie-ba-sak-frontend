@@ -23,7 +23,7 @@ import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeConte
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
-import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøsNy/RefusjonEøsTabellContext';
+import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 
 interface Props {
     bruker: IPersonInfo;

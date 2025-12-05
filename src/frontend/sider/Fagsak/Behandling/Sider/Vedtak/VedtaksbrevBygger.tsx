@@ -6,8 +6,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import { RefusjonEøsTabell } from './RefusjonEøsNy/RefusjonEøsTabell';
-import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
+import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
+import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
