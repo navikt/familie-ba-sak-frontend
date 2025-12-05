@@ -6,7 +6,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
 import { RefusjonEøsTabell } from './RefusjonEøsNy/RefusjonEøsTabell';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
@@ -30,7 +29,6 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
@@ -41,7 +39,7 @@ interface Props {
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { fagsakId } = useSakOgBehandlingParams();
-    const { hentSaksbehandlerRolle, toggles } = useAppContext();
+    const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
@@ -172,16 +170,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                         erLesevisning={erLesevisning}
                                     />
                                 )}
-                                {erRefusjonEøsTabellSynlig && toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
-                                    <RefusjonEøsTabell />
-                                )}
-                                {erRefusjonEøsTabellSynlig && !toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
-                                    <RefusjonEøs
-                                        refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
-                                        behandlingId={åpenBehandling.behandlingId}
-                                        fagsakId={fagsakId}
-                                    />
-                                )}
+                                {erRefusjonEøsTabellSynlig && <RefusjonEøsTabell />}
                             </>
                         )}
                     </>
