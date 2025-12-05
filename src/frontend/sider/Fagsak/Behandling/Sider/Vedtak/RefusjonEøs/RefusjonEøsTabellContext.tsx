@@ -1,12 +1,4 @@
-import React, {
-    createContext,
-    type Dispatch,
-    type PropsWithChildren,
-    type SetStateAction,
-    useCallback,
-    useContext,
-    useState,
-} from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
@@ -14,8 +6,6 @@ interface RefusjonEøsTabellContext {
     erRefusjonEøsTabellSynlig: boolean;
     visRefusjonEøsTabell: () => void;
     skjulRefusjonEøsTabell: () => void;
-    erUlagretNyRefusjonEøsPeriode: boolean; // TODO: Erstatt med erLeggTilRefusjonEøsFormÅpen når toggelen "brukNyRefusjonEøsForm" er slettet
-    settErUlagretNyRefusjonEøsPeriode: Dispatch<SetStateAction<boolean>>; // TODO: Slett når toggelen "brukNyRefusjonEøsForm" er slettet
     erLeggTilRefusjonEøsFormÅpen: boolean;
     visLeggTilRefusjonEøsForm: () => void;
     skjulLeggTilRefusjonEøsForm: () => void;
@@ -29,17 +19,14 @@ export function RefusjonEøsTabellProvider({ children }: PropsWithChildren) {
     const harRefusjonEøs = behandling.refusjonEøs.length !== 0;
 
     const [erRefusjonEøsTabellSynlig, settErRefusjonEøsTabellSynlig] = useState(harRefusjonEøs);
-    const [erUlagretNyRefusjonEøsPeriode, settErUlagretNyRefusjonEøsPeriode] = useState(false);
     const [erLeggTilRefusjonEøsFormÅpen, settErLeggTilRefusjonEøsFormÅpen] = useState(false);
 
     const visLeggTilRefusjonEøsForm = useCallback(() => {
         settErLeggTilRefusjonEøsFormÅpen(true);
-        settErUlagretNyRefusjonEøsPeriode(true);
     }, []);
 
     const skjulLeggTilRefusjonEøsForm = useCallback(() => {
         settErLeggTilRefusjonEøsFormÅpen(false);
-        settErUlagretNyRefusjonEøsPeriode(false);
     }, []);
 
     const visRefusjonEøsTabell = useCallback(() => {
@@ -60,8 +47,6 @@ export function RefusjonEøsTabellProvider({ children }: PropsWithChildren) {
                 erRefusjonEøsTabellSynlig,
                 visRefusjonEøsTabell,
                 skjulRefusjonEøsTabell,
-                erUlagretNyRefusjonEøsPeriode,
-                settErUlagretNyRefusjonEøsPeriode,
                 erLeggTilRefusjonEøsFormÅpen,
                 visLeggTilRefusjonEøsForm,
                 skjulLeggTilRefusjonEøsForm,

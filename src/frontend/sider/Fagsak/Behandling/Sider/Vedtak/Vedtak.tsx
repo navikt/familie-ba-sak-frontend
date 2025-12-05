@@ -22,7 +22,7 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
-import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
+import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -44,7 +44,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
-    const { erUlagretNyRefusjonEøsPeriode } = useRefusjonEøsTabellContext();
+    const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
     const { erUlagretNyFeilutbetaltValutaPeriode } = useFeilutbetaltValutaTabellContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
@@ -62,7 +62,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
             erUlagretNyFeilutbetaltValutaPeriode,
-            erUlagretNyRefusjonEøsPeriode,
+            erLeggTilRefusjonEøsFormÅpen,
             vedtaksperioderMedBegrunnelserRessurs,
             erSammensattKontrollsak
         );

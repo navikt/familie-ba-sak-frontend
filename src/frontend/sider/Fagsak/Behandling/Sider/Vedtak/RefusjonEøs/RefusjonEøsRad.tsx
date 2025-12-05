@@ -4,8 +4,8 @@ import { Table } from '@navikt/ds-react';
 
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';
-import { useSlettRefusjonEøsIsPending } from './form/useSlettRefusjonEøsIsPending';
 import { SlettRefusjonEøs } from './SlettRefusjonEøs';
+import { useSlettRefusjonEøsIsPending } from './useSlettRefusjonEøsIsPending';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
