@@ -8,8 +8,8 @@ import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
 import { ManuellJournalføringProvider, useManuellJournalføringContext } from './ManuellJournalføringContext';
+import { Personlinje } from '../../komponenter/Personlinje/Personlinje';
 import { fagsakHeaderHøydeRem } from '../../typer/styling';
-import { Personlinje } from '../Fagsak/Personlinje/Personlinje';
 
 const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
     display: grid;
@@ -26,7 +26,7 @@ const ManuellJournalføringContent: React.FC = () => {
             const viserAlert = dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT;
             return (
                 <>
-                    <Personlinje bruker={skjema.felter.bruker.verdi} minimalFagsak={minimalFagsak} />
+                    <Personlinje bruker={skjema.felter.bruker.verdi} fagsak={minimalFagsak} />
 
                     {dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT && (
                         <>
