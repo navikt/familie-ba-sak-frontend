@@ -1,6 +1,6 @@
 import React, { createContext, type PropsWithChildren, useContext, useMemo, useState } from 'react';
 
-import type { SkjemaBrevmottaker } from './Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { SkjemaBrevmottaker } from '../../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface ManuelleBrevmottakerePåFagsakContext {
     manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];

@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
-import type { SkjemaBrevmottaker } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import { Mottaker } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { FagsakType } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import { formaterIdent, lagBrukerLabel } from '../../utils/formatter';
+import { Mottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { SkjemaBrevmottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     bruker: IPersonInfo;

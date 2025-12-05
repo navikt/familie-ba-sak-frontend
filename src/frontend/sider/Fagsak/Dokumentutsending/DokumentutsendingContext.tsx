@@ -8,6 +8,7 @@ import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { hentEnkeltInformasjonsbrevRequest } from './Informasjonsbrev/enkeltInformasjonsbrevUtils';
 import useDokument from '../../../hooks/useDokument';
+import { Mottaker } from '../../../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IManueltBrevRequestPåFagsak } from '../../../typer/dokument';
 import { Distribusjonskanal } from '../../../typer/dokument';
 import { FagsakType } from '../../../typer/fagsak';
@@ -23,7 +24,6 @@ import type { ISelectOptionMedBrevtekst } from '../Behandling/Høyremeny/Hendels
 import { Informasjonsbrev, opplysningsdokumenter } from '../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
 import { useBrukerContext } from '../BrukerContext';
 import { useFagsakContext } from '../FagsakContext';
-import { Mottaker } from '../Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 
 export enum DokumentÅrsakPerson {
