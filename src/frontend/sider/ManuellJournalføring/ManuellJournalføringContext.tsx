@@ -13,6 +13,7 @@ import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } f
 import { useKlageApi } from '../../api/useKlageApi';
 import { useAppContext } from '../../context/AppContext';
 import useDokument from '../../hooks/useDokument';
+import type { IOpprettBehandlingSkjemaBase } from '../../komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import type { IBehandlingstema } from '../../typer/behandlingstema';
 import { behandlingstemaer } from '../../typer/behandlingstema';
@@ -39,7 +40,6 @@ import type { ISamhandlerInfo } from '../../typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
 import { isoStringTilDate } from '../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
-import type { IOpprettBehandlingSkjemaBase } from '../Fagsak/Fagsaklinje/Behandlingsmeny/OpprettBehandling/useOpprettBehandling';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {

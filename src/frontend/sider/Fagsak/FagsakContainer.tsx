@@ -11,7 +11,6 @@ import { BrukerProvider } from './BrukerContext';
 import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider } from './FagsakContext';
-import { Fagsaklinje } from './Fagsaklinje/Fagsaklinje';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
@@ -22,6 +21,7 @@ import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '../../hooks/useSyncModiaContext';
+import { Fagsaklinje } from '../../komponenter/Saklinje/Fagsaklinje';
 import { FagsakType } from '../../typer/fagsak';
 
 const HovedInnhold = styled.div`

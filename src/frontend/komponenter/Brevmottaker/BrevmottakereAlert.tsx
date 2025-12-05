@@ -8,15 +8,15 @@ import { Alert, Button, VStack } from '@navikt/ds-react';
 
 import BrevmottakerListe from './BrevmottakerListe';
 import { sider } from '../../sider/Fagsak/Behandling/Sider/sider';
-import { LeggTilBrevmottakerModalBehandling } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-import { LeggTilBrevmottakerModalFagsak } from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
-import type {
-    IRestBrevmottaker,
-    SkjemaBrevmottaker,
-} from '../../sider/Fagsak/Fagsaklinje/Behandlingsmeny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IBehandling } from '../../typer/behandling';
 import type { IPersonInfo } from '../../typer/person';
 import { hentSideHref } from '../../utils/miljø';
+import { LeggTilBrevmottakerModalBehandling } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { LeggTilBrevmottakerModalFagsak } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
+import type {
+    IRestBrevmottaker,
+    SkjemaBrevmottaker,
+} from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface Props {
     bruker: IPersonInfo;
