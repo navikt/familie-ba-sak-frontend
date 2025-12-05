@@ -15,13 +15,13 @@ import { Fagsaklinje } from './Fagsaklinje/Fagsaklinje';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
-import { Personlinje } from './Personlinje/Personlinje';
 import Saksoversikt from './Saksoversikt/Saksoversikt';
 import { useFagsakId } from '../../hooks/useFagsakId';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '../../hooks/useSyncModiaContext';
+import { Personlinje } from '../../komponenter/Personlinje/Personlinje';
 import { FagsakType } from '../../typer/fagsak';
 
 const HovedInnhold = styled.div`
@@ -72,7 +72,7 @@ export function FagsakContainer() {
             <BrukerProvider bruker={bruker}>
                 <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
                     <HovedInnhold>
-                        <Personlinje bruker={bruker} minimalFagsak={fagsak} />
+                        <Personlinje bruker={bruker} fagsak={fagsak} />
                         <Routes>
                             <Route
                                 path="/saksoversikt"
