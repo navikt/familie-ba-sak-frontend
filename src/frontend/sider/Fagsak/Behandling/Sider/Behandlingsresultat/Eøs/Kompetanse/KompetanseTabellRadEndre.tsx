@@ -223,6 +223,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     >
                         {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
                     </option>
+                    <option
+                        key={KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING}
+                        value={KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING}
+                    >
+                        {kompetanseResultater[KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING]}
+                    </option>
                     <option key={KompetanseResultat.TO_PRIMÆRLAND} value={KompetanseResultat.TO_PRIMÆRLAND}>
                         {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
                     </option>
