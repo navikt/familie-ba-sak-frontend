@@ -10,13 +10,13 @@ import BehandlingRouter from './BehandlingRouter';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
+import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 import { Venstremeny } from './Venstremeny/Venstremeny';
+import { Behandlingslinje } from '../../../komponenter/Saklinje/Behandlingslinje';
+import { HenleggBehandlingModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
+import { HenleggBehandlingVeivalgModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
-import { Behandlingslinje } from '../Fagsaklinje/Behandlingslinje';
-import { HenleggBehandlingModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingModal';
-import { HenleggBehandlingVeivalgModal } from '../Fagsaklinje/Behandlingsmeny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 
 interface Props {
     bruker: IPersonInfo;
