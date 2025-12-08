@@ -15,8 +15,8 @@ import {
     Textarea,
     VStack,
 } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../../../context/AppContext';
 import ØyeGrå from '../../../../../../ikoner/ØyeGrå';
@@ -139,7 +139,6 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({ innsendtVedta
             <Button
                 variant={'primary'}
                 loading={senderInn}
-                disabled={senderInn}
                 size={'small'}
                 onClick={() => {
                     if (!senderInn) {

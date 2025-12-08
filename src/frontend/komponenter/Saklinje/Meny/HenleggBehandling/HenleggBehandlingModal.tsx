@@ -76,7 +76,6 @@ function Innhold() {
                     size={'small'}
                     type={'submit'}
                     loading={form.formState.isSubmitting}
-                    disabled={form.formState.isSubmitting}
                 >
                     {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET ? 'Bekreft og send brev' : 'Bekreft'}
                 </Button>

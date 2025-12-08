@@ -56,7 +56,7 @@ export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button type={'submit'} variant={'primary'} loading={isSubmitting} disabled={isSubmitting}>
+                        <Button type={'submit'} variant={'primary'} loading={isSubmitting}>
                             Bekreft
                         </Button>
                         <Button onClick={onClose} variant={'tertiary'}>
