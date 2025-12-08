@@ -105,7 +105,6 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
                     key={'bekreft'}
                     variant="primary"
                     size="small"
-                    disabled={submitRessurs.status === RessursStatus.HENTER}
                     onClick={() => {
                         endreEnhet(behandling.behandlingId);
                     }}

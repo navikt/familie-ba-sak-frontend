@@ -85,7 +85,6 @@ export function LeggTilBarnModal() {
                             type={'submit'}
                             size={'medium'}
                             loading={form.formState.isSubmitting}
-                            disabled={form.formState.isSubmitting}
                         >
                             Legg til
                         </Button>
@@ -94,7 +93,6 @@ export function LeggTilBarnModal() {
                             size={'medium'}
                             onClick={() => onClose()}
                             loading={form.formState.isSubmitting}
-                            disabled={form.formState.isSubmitting}
                         >
                             Avbryt
                         </Button>

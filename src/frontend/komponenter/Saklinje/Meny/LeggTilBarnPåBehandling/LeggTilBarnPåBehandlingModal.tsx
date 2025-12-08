@@ -135,7 +135,6 @@ export function LeggTilBarnPåBehandlingModal({ lukkModal }: Props) {
                     onClick={leggTilOnClick}
                     children={'Legg til'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 />
                 <Button key={'Avbryt'} variant="tertiary" size="small" onClick={onAvbryt} children={'Avbryt'} />
             </Modal.Footer>

@@ -165,7 +165,6 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         <Button
                             variant={'primary'}
                             loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             onClick={() => lagreMottaker(verdierFraBrevmottakerUseSkjema)}
                         >
                             Legg til mottaker

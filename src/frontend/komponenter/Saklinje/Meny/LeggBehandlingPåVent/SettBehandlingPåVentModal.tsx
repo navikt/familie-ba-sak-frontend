@@ -101,7 +101,6 @@ export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal }) => {
                     onClick={settBehandlingPåVent}
                     children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                 />
                 <Button variant={'tertiary'} key={'Avbryt'} size="medium" onClick={lukkModal} children={'Avbryt'} />
             </Modal.Footer>

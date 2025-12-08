@@ -47,13 +47,7 @@ export function SamhandlerForm({ form, onSubmit }: Props) {
                 <HGrid columns={2} gap={'4'} align={'start'}>
                     <OrganisasjonsnummerFelt />
                     <Box as={'div'} marginBlock={'space-28'}>
-                        <Button
-                            type={'submit'}
-                            variant={'secondary'}
-                            size={'small'}
-                            loading={isSubmitting}
-                            disabled={isSubmitting}
-                        >
+                        <Button type={'submit'} variant={'secondary'} size={'small'} loading={isSubmitting}>
                             Hent institusjon
                         </Button>
                     </Box>
