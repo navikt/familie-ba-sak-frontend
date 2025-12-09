@@ -255,7 +255,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                         <KnapperekkeVenstre>
                             <StyledFerdigKnapp
                                 size="small"
-                                variant="secondary"
+                                variant="primary"
                                 onClick={() => oppdaterEndretUtbetaling(lukkSkjema)}
                             >
                                 Bekreft
