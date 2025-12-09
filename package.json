@@ -73,7 +73,7 @@
     "react-collapse": "^5.0.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.67.0",
-    "react-router": "^7.9.0",
+    "react-router": "^7.10.1",
     "rxjs": "^7.8.1",
     "styled-components": "^6.1.17",
     "ts-node": "^10.9.2",
