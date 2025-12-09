@@ -64,6 +64,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     };
 
     const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
+    const nasjonalRettDifferanseberegningMedUlikeAktivitetsland =
+        skjema.felter.resultat?.verdi === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING &&
+        skjema.felter.søkersAktivitetsland.verdi &&
+        skjema.felter.annenForeldersAktivitetsland.verdi &&
+        skjema.felter.søkersAktivitetsland.verdi !== skjema.felter.annenForeldersAktivitetsland.verdi;
 
     const onBarnSelected = (optionValue: string, isSelected: boolean) => {
         onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
@@ -240,6 +245,16 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         size={'small'}
                         children={
                             'Norge og annen forelders aktivitetsland er primærland. Saksbehandler må manuelt vurdere om Norge skal utbetale barnetrygden.'
+                        }
+                    />
+                )}
+                {nasjonalRettDifferanseberegningMedUlikeAktivitetsland && (
+                    <Alert
+                        variant={'warning'}
+                        inline
+                        size={'small'}
+                        children={
+                            'To andre EØS-land er primærland. Saksbehandler må manuelt vurdere hvilket av EØS-landene som utbetaler den høyeste barnetrygden og som Norge skal differanseberegne mot.'
                         }
                     />
                 )}
