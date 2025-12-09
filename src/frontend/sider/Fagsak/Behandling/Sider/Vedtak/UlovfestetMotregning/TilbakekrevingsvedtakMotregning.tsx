@@ -120,8 +120,8 @@ export const TilbakekrevingsvedtakMotregning = ({
                                             <Button
                                                 size="medium"
                                                 type="submit"
-                                                variant="secondary"
-                                                disabled={lagrer || erLesevisning}
+                                                variant="primary"
+                                                disabled={erLesevisning}
                                                 loading={lagrer}
                                                 icon={<FloppydiskIcon aria-hidden />}
                                             >

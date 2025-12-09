@@ -55,7 +55,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     });
     const erPåDokumentutsending = useLocation().pathname.includes('dokumentutsending');
 
-    const { skjema, valideringErOk } = verdierFraBrevmottakerUseSkjema;
+    const { skjema } = verdierFraBrevmottakerUseSkjema;
 
     const gyldigeMottakerTyper = erPåDokumentutsending
         ? Object.values(Mottaker).filter(mottakerType => mottakerType !== Mottaker.DØDSBO)
