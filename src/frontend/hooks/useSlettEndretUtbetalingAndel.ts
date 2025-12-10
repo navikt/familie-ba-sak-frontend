@@ -7,7 +7,10 @@ import { useBehandlingContext } from '../sider/Fagsak/Behandling/context/Behandl
 import type { IBehandling } from '../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, IRestEndretUtbetalingAndel>, 'mutationFn'>;
+type Options = Omit<
+    UseMutationOptions<IBehandling, DefaultError, IRestEndretUtbetalingAndel>,
+    'mutationKey' | 'mutationFn'
+>;
 
 export const SlettEndretUtbetalingAndelMutationKeyFactory = {
     endretUtbetalingAndel: (endretUtbetalingAndel: IRestEndretUtbetalingAndel) => [
@@ -16,10 +19,11 @@ export const SlettEndretUtbetalingAndelMutationKeyFactory = {
     ],
 };
 
-export function useSlettEndretUtbetalingAndel(options?: Options) {
+export function useSlettEndretUtbetalingAndel(endretUtbetalingAndel: IRestEndretUtbetalingAndel, options?: Options) {
     const { request } = useHttp();
     const { behandling } = useBehandlingContext();
     return useMutation({
+        mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
         mutationFn: (endretUtbetalingAndel: IRestEndretUtbetalingAndel) =>
             slettEndretUtbetalingAndel(request, behandling.behandlingId, endretUtbetalingAndel),
         ...options,

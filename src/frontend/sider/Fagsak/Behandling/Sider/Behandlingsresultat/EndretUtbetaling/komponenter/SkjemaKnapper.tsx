@@ -8,10 +8,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
 import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
-import {
-    SlettEndretUtbetalingAndelMutationKeyFactory,
-    useSlettEndretUtbetalingAndel,
-} from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
+import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useEndretUtbetalingAndelContext } from '../EndretUtbetalingAndelContext';
 import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
@@ -30,9 +27,8 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
         reset();
     };
 
-    const { mutateAsync, isPending: sletterEndretUtbetalingAndel } = useSlettEndretUtbetalingAndel({
-        mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
-    });
+    const { mutateAsync, isPending: sletterEndretUtbetalingAndel } =
+        useSlettEndretUtbetalingAndel(endretUtbetalingAndel);
 
     const slettEndretUtbetalingAndel = () =>
         mutateAsync(endretUtbetalingAndel)

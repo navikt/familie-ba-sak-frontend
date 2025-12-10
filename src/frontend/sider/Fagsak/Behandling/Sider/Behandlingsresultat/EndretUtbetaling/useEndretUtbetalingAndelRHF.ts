@@ -4,10 +4,7 @@ import { byggDataRessurs } from '@navikt/familie-typer';
 
 import { useConfirmBrowserRefresh } from '../../../../../../hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
-import {
-    OppdaterEndretUtbetalingAndelMutationKeyFactory,
-    useOppdaterEndretUtbetalingAndel,
-} from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
+import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak, IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
@@ -88,8 +85,7 @@ export const useEndretUtbetalingAndelRHF = (
         message: 'En periode med endret utbetaling har endringer som ikke er lagret!',
     });
 
-    const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
-        mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+    const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
         onSuccess: (behandling: IBehandling) => {
             lukkSkjema();
             settÅpenBehandling(byggDataRessurs(behandling));
