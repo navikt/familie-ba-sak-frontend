@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { useRef } from 'react';
 
-import { Controller, useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
+import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import {
     EndretUtbetalingAndelFeltnavn,
@@ -13,30 +14,49 @@ import {
 const SøknadstidspunktDatovelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control } = useFormContext<EndretUtbetalingAndelFormValues>();
 
-    return (
-        <Controller
-            name={EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT}
-            control={control}
-            rules={{ required: 'Søknadstidspunkt er påkrevd' }}
-            render={({ field, fieldState, formState }) => {
-                const { datepickerProps, inputProps } = useDatepicker({
-                    defaultSelected: field.value,
-                    onDateChange: field.onChange,
-                });
+    const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
 
-                return (
-                    <DatePicker {...datepickerProps} dropdownCaption>
-                        <DatePicker.Input
-                            {...inputProps}
-                            label="Søknadstidspunkt"
-                            ref={field.ref}
-                            error={fieldState.error?.message}
-                            readOnly={erLesevisning || formState.isSubmitting}
-                        />
-                    </DatePicker>
-                );
-            }}
-        />
+    const {
+        field: { value, onChange, ref },
+        fieldState: { error },
+        formState: { isSubmitting },
+    } = useController({
+        name: EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT,
+        control,
+        rules: {
+            validate: value => {
+                const dateValidation = dateValidationRef.current;
+                if (dateValidation) {
+                    if (dateValidation.isEmpty) {
+                        return `Søknadstidspunkt er påkrevd`;
+                    }
+                    if (!dateValidation.isValidDate || dateValidation.isInvalid) {
+                        return `Du må velge en gyldig dato`;
+                    }
+                }
+                if (!value) {
+                    return `Søknadstidspunkt er påkrevd`;
+                }
+            },
+        },
+    });
+
+    const { datepickerProps, inputProps } = useDatepicker({
+        defaultSelected: value,
+        onDateChange: onChange,
+        onValidate: validation => (dateValidationRef.current = validation),
+    });
+
+    return (
+        <DatePicker {...datepickerProps} dropdownCaption>
+            <DatePicker.Input
+                {...inputProps}
+                label="Søknadstidspunkt"
+                ref={ref}
+                error={error?.message}
+                readOnly={erLesevisning || isSubmitting}
+            />
+        </DatePicker>
     );
 };
 
