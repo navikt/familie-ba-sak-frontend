@@ -13,7 +13,6 @@ import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } f
 
 const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
     [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',
-    [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: undefined,
 };
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
@@ -181,7 +180,6 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
         function FormWrapper({ children }: PropsWithChildren) {
             const defaultValues = {
                 [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: undefined,
             };
             return DefaultFormWrapper({ children, defaultValues });
         }
@@ -199,7 +197,6 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
         function FormWrapper({ children }: PropsWithChildren) {
             const defaultValues = {
                 [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: undefined,
             };
             return DefaultFormWrapper({ children, defaultValues });
         }

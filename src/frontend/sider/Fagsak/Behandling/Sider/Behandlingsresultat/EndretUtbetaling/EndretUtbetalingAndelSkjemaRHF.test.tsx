@@ -224,11 +224,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
                 defaultValues: {
                     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],
                     [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',
-                    [EndretUtbetalingAndelFeltnavn.FOM]: undefined,
-                    [EndretUtbetalingAndelFeltnavn.TOM]: undefined,
                     [EndretUtbetalingAndelFeltnavn.UTBETALING]: '',
-                    [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: undefined,
-                    [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: undefined,
                     [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: '',
                 },
             });

@@ -10,16 +10,11 @@ import Månedvelger from './Månedvelger';
 import { render } from '../../../../../../../testutils/testrender';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 
-const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
-    [EndretUtbetalingAndelFeltnavn.FOM]: undefined,
-    [EndretUtbetalingAndelFeltnavn.TOM]: undefined,
-};
-
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
 function DefaultFormWrapper({
     children,
-    defaultValues = DEFAULT_VALUES,
+    defaultValues = {},
     onSubmitDelay = 0,
 }: {
     children: ReactNode;

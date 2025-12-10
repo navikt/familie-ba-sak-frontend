@@ -17,8 +17,6 @@ import { HentOgSettBehandlingProvider } from '../../../../context/HentOgSettBeha
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 
 const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
-    [EndretUtbetalingAndelFeltnavn.FOM]: undefined,
-    [EndretUtbetalingAndelFeltnavn.TOM]: undefined,
     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],
 };
 
