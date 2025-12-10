@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { Activity, useEffect, useState } from 'react';
 
-import { Collapse } from 'react-collapse';
 import styled from 'styled-components';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -195,7 +194,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                             </Button>
                         </PersonHeader>
 
-                        <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
+                        <Activity mode={personErEkspandert[personResultat.personIdent] ? 'visible' : 'hidden'}>
                             <IndentertInnhold>
                                 <>
                                     {personResultat.person.registerhistorikk ? (
@@ -253,7 +252,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                             />
                                         ))}
                             </IndentertInnhold>
-                        </Collapse>
+                        </Activity>
                     </div>
                 );
             })}
