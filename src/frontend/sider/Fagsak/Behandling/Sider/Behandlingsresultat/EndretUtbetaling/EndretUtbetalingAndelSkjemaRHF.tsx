@@ -17,6 +17,7 @@ import Årsakvelger from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
 import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import { SlettEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface EndretUtbetalingAndelSkjemaProps {
@@ -72,7 +73,9 @@ const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUt
 
                     <SøknadstidspunktDatovelger erLesevisning={låsFelter} />
 
-                    {årsak === 'DELT_BOSTED' && <AvtaletidspunktDeltBostedDatovelger erLesevisning={låsFelter} />}
+                    {årsak === IEndretUtbetalingAndelÅrsak.DELT_BOSTED && (
+                        <AvtaletidspunktDeltBostedDatovelger erLesevisning={låsFelter} />
+                    )}
 
                     <Begrunnelse erLesevisning={låsFelter} />
 

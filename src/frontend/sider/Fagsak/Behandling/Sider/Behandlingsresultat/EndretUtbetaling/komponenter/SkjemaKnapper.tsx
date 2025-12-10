@@ -82,7 +82,7 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
                 loading={sletterEndretUtbetalingAndel}
                 disabled={skalDisableKnapper}
             >
-                {'Fjern periode'}
+                Fjern periode
             </Button>
         </HStack>
     );

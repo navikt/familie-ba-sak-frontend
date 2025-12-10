@@ -30,7 +30,7 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
         case 0:
             return 'Nei';
         default:
-            throw new Error(`Ikke støttet prosent ${prosent} for delt bosted.`);
+            throw new Error(`Ukjent utbetalingsprosent: ${prosent}`);
     }
 };
 
