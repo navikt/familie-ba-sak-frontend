@@ -296,7 +296,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
             const visMindreKnapp = screen.getByRole('button', { name: /Vis mindre/ });
             await user.click(visMindreKnapp);
 
-            expect(alertSpy).toHaveBeenCalledWith('Endret utbetalingsandelen har endringer som ikke er lagret!');
+            expect(alertSpy).toHaveBeenCalledWith('Perioden med endret utbetaling har endringer som ikke er lagret!');
 
             expect(screen.getByRole('button', { name: /Vis mindre/ })).toBeInTheDocument();
         });
