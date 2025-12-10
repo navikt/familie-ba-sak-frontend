@@ -43,16 +43,16 @@ const EndretUtbetalingAndelRadRHF = () => {
 
     const lukkSkjema = () => settErSkjemaEkspandert(false);
 
-    const { form, onSubmit, skjemaHarEndringerSomIkkeErLagret } = useEndretUtbetalingAndelRHF(
-        endretUtbetalingAndel,
-        lukkSkjema
-    );
+    const { form, onSubmit } = useEndretUtbetalingAndelRHF(endretUtbetalingAndel, lukkSkjema);
 
-    const { reset } = form;
+    const {
+        reset,
+        formState: { isDirty },
+    } = form;
 
     const toggleForm = () => {
-        if (erSkjemaEkspandert && skjemaHarEndringerSomIkkeErLagret()) {
-            alert('Endret utbetalingsandelen har endringer som ikke er lagret!');
+        if (erSkjemaEkspandert && isDirty) {
+            alert('Perioden med endret utbetaling har endringer som ikke er lagret!');
             return;
         }
         if (erSkjemaEkspandert) reset();

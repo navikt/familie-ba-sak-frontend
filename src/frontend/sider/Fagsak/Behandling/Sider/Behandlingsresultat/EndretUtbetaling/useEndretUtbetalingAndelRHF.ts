@@ -1,8 +1,8 @@
-import { isEqual } from 'date-fns';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { byggDataRessurs } from '@navikt/familie-typer';
 
+import { useConfirmBrowserRefresh } from '../../../../../../hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
 import {
     OppdaterEndretUtbetalingAndelMutationKeyFactory,
@@ -75,9 +75,18 @@ export const useEndretUtbetalingAndelRHF = (
         },
     });
 
-    const { control, reset, watch, setError } = form;
+    const {
+        control,
+        reset,
+        setError,
+        formState: { isDirty },
+    } = form;
 
-    useOnFormSubmitSuccessful(control, () => reset());
+    useOnFormSubmitSuccessful(control, reset);
+    useConfirmBrowserRefresh({
+        enabled: isDirty,
+        message: 'En periode med endret utbetaling har endringer som ikke er lagret!',
+    });
 
     const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel({
         mutationKey: OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(lagretEndretUtbetalingAndel),
@@ -106,38 +115,8 @@ export const useEndretUtbetalingAndelRHF = (
             erTilknyttetAndeler: lagretEndretUtbetalingAndel.erTilknyttetAndeler,
         });
 
-    const skjemaHarEndringerSomIkkeErLagret = (): boolean => {
-        const formValues = watch();
-
-        const originalFom = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.fom);
-        const originalTom = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.tom);
-        const originalSøknadstidspunkt = isoStringTilDateEllerUndefined(lagretEndretUtbetalingAndel.søknadstidspunkt);
-        const originalAvtaletidspunkt = isoStringTilDateEllerUndefined(
-            lagretEndretUtbetalingAndel.avtaletidspunktDeltBosted
-        );
-        const originalUtbetaling = prosentTilUtbetaling(lagretEndretUtbetalingAndel.prosent) || '';
-
-        const datesEqual = (date1: Date | undefined, date2: Date | undefined): boolean => {
-            if (!date1 && !date2) return true;
-            if (!date1 || !date2) return false;
-            return isEqual(date1, date2);
-        };
-
-        return (
-            JSON.stringify(formValues.personer) !== JSON.stringify(personer) ||
-            !datesEqual(formValues.fom, originalFom) ||
-            !datesEqual(formValues.tom, originalTom) ||
-            formValues.utbetaling !== originalUtbetaling ||
-            formValues.årsak !== (lagretEndretUtbetalingAndel.årsak || '') ||
-            !datesEqual(formValues.søknadstidspunkt, originalSøknadstidspunkt) ||
-            !datesEqual(formValues.avtaletidspunktDeltBosted, originalAvtaletidspunkt) ||
-            formValues.begrunnelse !== (lagretEndretUtbetalingAndel.begrunnelse || '')
-        );
-    };
-
     return {
         form,
         onSubmit,
-        skjemaHarEndringerSomIkkeErLagret,
     };
 };
