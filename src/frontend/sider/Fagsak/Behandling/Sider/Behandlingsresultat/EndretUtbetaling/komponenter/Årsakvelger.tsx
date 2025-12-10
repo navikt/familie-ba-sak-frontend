@@ -20,7 +20,7 @@ const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.ÅRSAK}
             control={control}
             rules={{ required: 'Du må velge en årsak' }}
-            render={({ field, fieldState, formState }) => {
+            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => {
                 const håndterEndring = (event: React.ChangeEvent<HTMLSelectElement>) => {
                     field.onChange(event);
                     if (
@@ -40,8 +40,8 @@ const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
                         onChange={håndterEndring}
                         onBlur={field.onBlur}
                         ref={field.ref}
-                        readOnly={erLesevisning || formState.isSubmitting}
-                        error={fieldState.error?.message}
+                        readOnly={erLesevisning || isSubmitting}
+                        error={error?.message}
                     >
                         <option value="">Velg årsak</option>
                         {årsaker.map(årsak => (

@@ -33,7 +33,7 @@ const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.PERSONER}
             control={control}
             rules={{ required: 'Du må velge minst én person' }}
-            render={({ field, fieldState, formState }) => {
+            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => {
                 const onToggleSelected = (optionValue: string, isSelected: boolean) => {
                     const valgtePersoner = watch(EndretUtbetalingAndelFeltnavn.PERSONER);
                     const oppdatertePersoner = isSelected
@@ -51,8 +51,8 @@ const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
                         onToggleSelected={onToggleSelected}
                         onBlur={field.onBlur}
                         ref={field.ref}
-                        readOnly={erLesevisning || formState.isSubmitting}
-                        error={fieldState.error?.message}
+                        readOnly={erLesevisning || isSubmitting}
+                        error={error?.message}
                     />
                 );
             }}
