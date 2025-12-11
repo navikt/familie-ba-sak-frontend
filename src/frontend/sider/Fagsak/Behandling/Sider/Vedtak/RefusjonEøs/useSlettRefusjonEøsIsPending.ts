@@ -1,6 +1,6 @@
 import { useMutationState } from '@tanstack/react-query';
 
-import { lagMutationKey } from '../../../../../../../hooks/useSlettRefusjonEøs';
+import { lagMutationKey } from '../../../../../../hooks/useSlettRefusjonEøs';
 
 interface Props {
     refusjonEøsId: number;
