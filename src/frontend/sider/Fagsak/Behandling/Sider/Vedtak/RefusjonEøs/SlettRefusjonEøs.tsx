@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Loader, Tooltip } from '@navikt/ds-react';
+import { Button, Tooltip } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
@@ -35,11 +35,11 @@ export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
     return (
         <Tooltip content={'Fjern periode'}>
             <Button
-                icon={isPending ? <Loader size={'small'} /> : <TrashIcon />}
                 variant={'tertiary'}
                 size={'small'}
                 onClick={() => mutate({ behandlingId: behandling.behandlingId, refusjonEøsId })}
-                disabled={erLesevisning || isPending}
+                icon={<TrashIcon />}
+                loading={isPending}
             />
         </Tooltip>
     );

@@ -29,6 +29,7 @@ export function RefusjonEøsRad({ refusjonEøs }: Props) {
             onOpenChange={() => settErRadEkspandert(prev => !prev)}
             content={
                 <RefusjonEøsForm
+                    key={`${refusjonEøs.id}-$${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. rhf reset ikke funker for MonthPicker
                     type={Type.OPPDATER}
                     refusjonEøs={refusjonEøs}
                     skjulForm={() => settErRadEkspandert(false)}
