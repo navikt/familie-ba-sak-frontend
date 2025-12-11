@@ -238,8 +238,8 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
         expect(await screen.findByText(/Du må velge minst én person/)).toBeInTheDocument();
         expect(await screen.findByText(/Du må velge en årsak/)).toBeInTheDocument();
-        expect(await screen.findByText(/F.o.m er påkrevd/)).toBeInTheDocument();
-        expect(await screen.findByText(/T.o.m er påkrevd/)).toBeInTheDocument();
+        expect(await screen.findByText(/F.o.m. er påkrevd/)).toBeInTheDocument();
+        expect(await screen.findByText(/T.o.m. er påkrevd/)).toBeInTheDocument();
         expect(await screen.findByText(/Du må velge om beløpet skal utbetales/)).toBeInTheDocument();
         expect(await screen.findByText(/Søknadstidspunkt er påkrevd/)).toBeInTheDocument();
         expect(await screen.findByText(/Du må begrunne den endrede utbetalingsperioden/)).toBeInTheDocument();

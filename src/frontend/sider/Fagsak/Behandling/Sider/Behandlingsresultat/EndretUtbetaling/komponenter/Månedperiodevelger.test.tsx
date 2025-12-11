@@ -172,7 +172,7 @@ describe('Månedperiodevelger', () => {
 
         const { screen } = render(<Månedperiodevelger />, { wrapper: FormWrapper });
 
-        expect(screen.getByLabelText('T.o.m (valgfri)')).toBeInTheDocument();
+        expect(screen.getByLabelText('T.o.m. (valgfri)')).toBeInTheDocument();
     });
 
     test('viser ikke "valgfri" i TOM label når årsak ikke er ENDRE_MOTTAKER', () => {
@@ -186,21 +186,21 @@ describe('Månedperiodevelger', () => {
 
         const { screen } = render(<Månedperiodevelger />, { wrapper: FormWrapper });
 
-        expect(screen.getByLabelText('T.o.m')).toBeInTheDocument();
-        expect(screen.queryByLabelText('T.o.m (valgfri)')).not.toBeInTheDocument();
+        expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();
+        expect(screen.queryByLabelText('T.o.m. (valgfri)')).not.toBeInTheDocument();
     });
 
     test('viser ikke "valgfri" i TOM label når årsak ikke er valgt', () => {
         const { screen } = render(<Månedperiodevelger />, { wrapper: DefaultFormWrapper });
 
-        expect(screen.getByLabelText('T.o.m')).toBeInTheDocument();
-        expect(screen.queryByLabelText('T.o.m (valgfri)')).not.toBeInTheDocument();
+        expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();
+        expect(screen.queryByLabelText('T.o.m. (valgfri)')).not.toBeInTheDocument();
     });
 
     test('viser både FOM og TOM månedvelgere', () => {
         const { screen } = render(<Månedperiodevelger />, { wrapper: DefaultFormWrapper });
 
-        expect(screen.getByLabelText('F.o.m')).toBeInTheDocument();
-        expect(screen.getByLabelText('T.o.m')).toBeInTheDocument();
+        expect(screen.getByLabelText('F.o.m.')).toBeInTheDocument();
+        expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();
     });
 });

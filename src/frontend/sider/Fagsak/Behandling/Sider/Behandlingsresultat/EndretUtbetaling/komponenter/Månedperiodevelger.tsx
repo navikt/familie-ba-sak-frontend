@@ -5,15 +5,16 @@ import { useFormContext } from 'react-hook-form';
 
 import { Label, VStack } from '@navikt/ds-react';
 
+import FomDato from './FomDato';
+import TomDato from './TomDato';
 import type { IBehandling } from '../../../../../../../typer/behandling';
+import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
+import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
-import Månedvelger from './Månedvelger';
-import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 export function utledTidligsteOgSenesteDato(
     åpenBehandling: IBehandling,
@@ -56,17 +57,9 @@ const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
     return (
         <VStack gap="2">
             <Label>Fastsett periode</Label>
-            <Månedvelger
-                name={EndretUtbetalingAndelFeltnavn.FOM}
-                label="F.o.m"
-                erLesevisning={erLesevisning}
-                tidligsteDato={tidligsteDato}
-                senesteDato={senesteDato}
-            />
+            <FomDato erLesevisning={erLesevisning} tidligsteDato={tidligsteDato} senesteDato={senesteDato} />
 
-            <Månedvelger
-                name={EndretUtbetalingAndelFeltnavn.TOM}
-                label={'T.o.m' + (valgfriTomDato ? ' (valgfri)' : '')}
+            <TomDato
                 erLesevisning={erLesevisning}
                 tidligsteDato={tidligsteDato}
                 senesteDato={senesteDato}

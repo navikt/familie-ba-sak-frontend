@@ -8,17 +8,12 @@ import { dateTilFormatertString, Datoformat } from '../../../../../../../utils/d
 import type { EndretUtbetalingAndelFormValues, StandardFeltProps } from '../useEndretUtbetalingAndelRHF';
 import { EndretUtbetalingAndelFeltnavn } from '../useEndretUtbetalingAndelRHF';
 
-type MånedfelterNavn = EndretUtbetalingAndelFeltnavn.FOM | EndretUtbetalingAndelFeltnavn.TOM;
-
-interface MånedvelgerProps extends StandardFeltProps {
-    name: MånedfelterNavn;
-    label: string;
+interface TomDatoProps extends StandardFeltProps {
     tidligsteDato: Date;
     senesteDato: Date;
-    valgfri?: boolean;
 }
 
-const Månedvelger = ({ name, label, erLesevisning, tidligsteDato, senesteDato, valgfri }: MånedvelgerProps) => {
+const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoProps) => {
     const { control, trigger } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const monthValidationRef = useRef<MonthValidationT | undefined>(undefined);
@@ -28,27 +23,27 @@ const Månedvelger = ({ name, label, erLesevisning, tidligsteDato, senesteDato, 
         fieldState: { error },
         formState: { isSubmitting, isSubmitted },
     } = useController({
-        name,
+        name: EndretUtbetalingAndelFeltnavn.FOM,
         control,
         rules: {
             validate: value => {
                 const monthValidation = monthValidationRef.current;
                 if (monthValidation) {
-                    if (!valgfri && monthValidation.isEmpty) {
-                        return `${label} er påkrevd`;
-                    }
-                    if (!valgfri && (!monthValidation.isValidMonth || monthValidation.isInvalid)) {
-                        return `Du må velge en gyldig måned`;
-                    }
                     if (monthValidation.isBefore) {
-                        return `Dato kan ikke være før ${dateTilFormatertString({ date: tidligsteDato, tilFormat: Datoformat.MÅNED_ÅR_NAVN })}`;
+                        return `Valgt måned kan ikke være før ${dateTilFormatertString({ date: tidligsteDato, tilFormat: Datoformat.MÅNED_ÅR_NAVN })}`;
                     }
                     if (monthValidation.isAfter) {
-                        return `Dato kan ikke være etter ${dateTilFormatertString({ date: senesteDato, tilFormat: Datoformat.MÅNED_ÅR_NAVN })}`;
+                        return `Valgt måned kan ikke være etter ${dateTilFormatertString({ date: senesteDato, tilFormat: Datoformat.MÅNED_ÅR_NAVN })}`;
+                    }
+                    if (monthValidation.isEmpty) {
+                        return `F.o.m. er påkrevd`;
+                    }
+                    if (!monthValidation.isValidMonth || monthValidation.isInvalid) {
+                        return `Du må velge en gyldig måned`;
                     }
                 }
-                if (!valgfri && !value) {
-                    return `${label} er påkrevd`;
+                if (!value) {
+                    return `F.o.m. er påkrevd`;
                 }
             },
         },
@@ -61,16 +56,12 @@ const Månedvelger = ({ name, label, erLesevisning, tidligsteDato, senesteDato, 
         onMonthChange: dato => {
             onChange(dato);
             if (isSubmitted) {
-                trigger(
-                    name === EndretUtbetalingAndelFeltnavn.FOM
-                        ? EndretUtbetalingAndelFeltnavn.TOM
-                        : EndretUtbetalingAndelFeltnavn.FOM
-                );
+                trigger(EndretUtbetalingAndelFeltnavn.TOM);
             }
         },
         onValidate: validation => {
             monthValidationRef.current = validation;
-            trigger(name);
+            trigger(EndretUtbetalingAndelFeltnavn.FOM);
         },
     });
 
@@ -78,7 +69,7 @@ const Månedvelger = ({ name, label, erLesevisning, tidligsteDato, senesteDato, 
         <MonthPicker {...monthpickerProps} dropdownCaption>
             <MonthPicker.Input
                 {...inputProps}
-                label={label}
+                label={'F.o.m.'}
                 ref={ref}
                 readOnly={erLesevisning || isSubmitting}
                 error={isSubmitted && error?.message}
@@ -87,4 +78,4 @@ const Månedvelger = ({ name, label, erLesevisning, tidligsteDato, senesteDato, 
     );
 };
 
-export default Månedvelger;
+export default FomDato;
