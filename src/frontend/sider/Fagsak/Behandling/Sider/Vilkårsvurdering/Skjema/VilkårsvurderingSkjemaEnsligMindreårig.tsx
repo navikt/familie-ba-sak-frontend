@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Box, HStack } from '@navikt/ds-react';
 
-import { IndentertInnhold, PersonHeader } from './VilkårsvurderingSkjemaNormal';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
@@ -17,6 +16,7 @@ import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurde
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
+import styles from './VilkårsvurderingSkjema.module.css';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -33,11 +33,16 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
     );
     return personResultat ? (
         <>
-            <PersonHeader>
+            <HStack
+                wrap={false}
+                justify={'space-between'}
+                paddingBlock={'space-32 space-0'}
+                className={styles.personLinje}
+            >
                 <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
-            </PersonHeader>
+            </HStack>
 
-            <IndentertInnhold>
+            <Box paddingInline={'space-56 space-0'}>
                 {personResultat.person.registerhistorikk ? (
                     <Registeropplysninger
                         registerHistorikk={personResultat.person.registerhistorikk}
@@ -77,7 +82,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                         />
                     );
                 })}
-            </IndentertInnhold>
+            </Box>
         </>
     ) : (
         <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
