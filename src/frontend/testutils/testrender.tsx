@@ -12,6 +12,9 @@ import { AppProvider } from '../context/AppContext';
 import { AuthOgHttpProvider } from '../context/AuthContext';
 import { ModalProvider } from '../context/ModalContext';
 import { SaksbehandlerTestdata } from './testdata/saksbehandlerTestdata';
+import { FeatureTogglesProvider } from '../context/TogglesContext';
+import type { FeatureToggles } from '../typer/featureToggles';
+import { skruPåAlleToggles } from './mocks/handlers/featureToggleHandlers';
 
 function lagQueryClient() {
     return new QueryClient({
@@ -27,22 +30,26 @@ interface Props extends PropsWithChildren {
     queryClient?: QueryClient;
     initialEntries?: [{ pathname: string }];
     saksbehandler?: ISaksbehandler;
+    featureToggles?: FeatureToggles;
 }
 
 export function TestProviders({
     queryClient = lagQueryClient(), // Ny instans for hver test
     initialEntries = [{ pathname: '/' }],
     saksbehandler = SaksbehandlerTestdata.lagSaksbehandler(),
+    featureToggles = skruPåAlleToggles(),
     children,
 }: Props) {
     return (
         <AuthOgHttpProvider autentisertSaksbehandler={saksbehandler}>
             <QueryClientProvider client={queryClient}>
-                <AppProvider>
-                    <ModalProvider>
-                        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-                    </ModalProvider>
-                </AppProvider>
+                <FeatureTogglesProvider featureToggles={featureToggles}>
+                    <AppProvider>
+                        <ModalProvider>
+                            <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+                        </ModalProvider>
+                    </AppProvider>
+                </FeatureTogglesProvider>
             </QueryClientProvider>
         </AuthOgHttpProvider>
     );

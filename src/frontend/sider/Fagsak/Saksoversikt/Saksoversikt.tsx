@@ -11,14 +11,14 @@ import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useAppContext } from '../../../context/AppContext';
+import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
+import { FeatureToggle } from '../../../typer/featureToggles';
 import type { IPersonInfo } from '../../../typer/person';
-import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
@@ -33,7 +33,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -127,7 +127,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         <Box maxWidth="70rem" marginBlock="10" marginInline="16">
             <Heading size="large" level="1" children="Saksoversikt" />
 
-            {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
+            {toggles[FeatureToggle.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
                 minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
                     <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
                 )}
