@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
-import { Collapse } from 'react-collapse';
-import styled from 'styled-components';
+import React, { Activity, useEffect, useState } from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, List } from '@navikt/ds-react';
-import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, BodyShort, Box, Button, HStack, List } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -23,34 +19,11 @@ import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import styles from './VilkårsvurderingSkjema.module.css';
 
 interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
 }
-
-export const PersonHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    position: -webkit-sticky;
-    position: sticky;
-    top: -1px;
-    z-index: 3;
-    background-color: white;
-    padding: ${ASpacing8} 0;
-`;
-
-export const IndentertInnhold = styled.div`
-    padding-left: ${ASpacing14};
-`;
-
-const VilkårDiv = styled.div`
-    display: flex;
-    align-items: center;
-
-    a.lenke span {
-        margin-left: 10px;
-    }
-`;
 
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({ visFeilmeldinger }) => {
     const { toggles } = useAppContext();
@@ -144,33 +117,32 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <PersonHeader>
+                        <HStack
+                            wrap={false}
+                            justify={'space-between'}
+                            paddingBlock={'space-32 space-0'}
+                            className={styles.personLinje}
+                        >
                             <PersonInformasjon
                                 person={personResultat.person}
                                 somOverskrift
                                 erLesevisning={erLesevisning}
                             />
-
                             {!erLesevisning &&
                                 personErEkspandert[personResultat.personIdent] &&
                                 personResultat.person.type === PersonType.SØKER &&
                                 !harUtvidet &&
                                 kanLeggeTilUtvidetVilkår && (
-                                    <VilkårDiv>
-                                        {!erLesevisning ? (
-                                            <Button
-                                                variant={'tertiary'}
-                                                id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
-                                                onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
-                                                size={'small'}
-                                                icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
-                                            >
-                                                {`Legg til vilkår utvidet barnetrygd`}
-                                            </Button>
-                                        ) : null}
-                                    </VilkårDiv>
+                                    <Button
+                                        variant={'tertiary'}
+                                        id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
+                                        onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
+                                        size={'small'}
+                                        icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
+                                    >
+                                        {`Legg til vilkår utvidet barnetrygd`}
+                                    </Button>
                                 )}
-
                             <Button
                                 id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
                                 variant="tertiary"
@@ -193,10 +165,9 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                     ? 'Skjul vilkårsvurdering'
                                     : 'Vis vilkårsvurdering'}
                             </Button>
-                        </PersonHeader>
-
-                        <Collapse isOpened={personErEkspandert[personResultat.personIdent]}>
-                            <IndentertInnhold>
+                        </HStack>
+                        <Activity mode={personErEkspandert[personResultat.personIdent] ? 'visible' : 'hidden'}>
+                            <Box paddingInline={'space-56 space-0'}>
                                 <>
                                     {personResultat.person.registerhistorikk ? (
                                         <Registeropplysninger
@@ -252,8 +223,8 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                                                 visFeilmeldinger={visFeilmeldinger}
                                             />
                                         ))}
-                            </IndentertInnhold>
-                        </Collapse>
+                            </Box>
+                        </Activity>
                     </div>
                 );
             })}

@@ -1,9 +1,6 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { Alert } from '@navikt/ds-react';
-import { ASpacing14, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, Bleed, Box, HStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
@@ -17,25 +14,7 @@ import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurde
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
-
-const AktørLinje = styled.div`
-    display: flex;
-    justify-content: space-between;
-    position: -webkit-sticky;
-    position: sticky;
-    z-index: 3;
-    background-color: white;
-    padding-top: ${ASpacing14};
-    padding-bottom: ${ASpacing8};
-`;
-
-const IndentertInnhold = styled.div`
-    padding-left: ${ASpacing14};
-
-    &.samhandler-innhold {
-        margin-bottom: -1.5rem;
-    }
-`;
+import styles from './VilkårsvurderingSkjema.module.css';
 
 interface IProps {
     visFeilmeldinger: boolean;
@@ -59,28 +38,29 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
         <>
             {opplysningsplikt && (
                 <>
-                    <AktørLinje>
+                    <HStack paddingBlock={'space-56 space-32'} justify={'space-between'} className={styles.personLinje}>
                         {samhandlerRessurs.status === RessursStatus.SUKSESS ? (
                             <SamhandlerInformasjon samhandler={samhandlerRessurs.data} somOverskrift />
                         ) : (
                             <Alert variant="warning" children={'Klarte ikke hente opplysninger om institusjon'} />
                         )}
-                    </AktørLinje>
-                    <IndentertInnhold className={'samhandler-innhold'}>
-                        <GeneriskAnnenVurdering
-                            person={personResultat.person}
-                            andreVurderinger={personResultat.andreVurderinger}
-                            annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                            visFeilmeldinger={visFeilmeldinger}
-                        />
-                    </IndentertInnhold>
+                    </HStack>
+                    <Bleed marginBlock={'space-0 space-24'}>
+                        <Box paddingInline={'space-56 space-0'}>
+                            <GeneriskAnnenVurdering
+                                person={personResultat.person}
+                                andreVurderinger={personResultat.andreVurderinger}
+                                annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        </Box>
+                    </Bleed>
                 </>
             )}
-            <AktørLinje>
+            <HStack paddingBlock={'space-56 space-32'} justify={'space-between'} className={styles.personLinje}>
                 <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
-            </AktørLinje>
-
-            <IndentertInnhold>
+            </HStack>
+            <Box paddingInline={'space-56 space-0'}>
                 {personResultat.person.registerhistorikk ? (
                     <Registeropplysninger
                         registerHistorikk={personResultat.person.registerhistorikk}
@@ -103,7 +83,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
                         />
                     );
                 })}
-            </IndentertInnhold>
+            </Box>
         </>
     ) : (
         <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
