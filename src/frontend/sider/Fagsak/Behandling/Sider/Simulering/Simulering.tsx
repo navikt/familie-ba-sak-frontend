@@ -55,12 +55,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erAvregningOgToggleErPå =
         avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
 
-    const harOverlappendeFeilutbetalinger =
-        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsakerMedFeilutbetaling).length > 0 &&
-        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
-
-    const harOverlappendeEtterbetalinger =
-        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsakerMedEtterbetaling).length > 0 &&
+    const harOverlappendePerioderMedAndreFagsaker =
+        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0 &&
         toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
 
     const nesteOnClick = () => {
@@ -99,9 +95,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp =
-        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) ||
-        harOverlappendeFeilutbetalinger ||
-        harOverlappendeEtterbetalinger;
+        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
 
     const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
 
@@ -140,19 +134,26 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             }
                         />
 
-                        {harOverlappendeFeilutbetalinger && (
+                        {harOverlappendePerioderMedAndreFagsaker && (
                             <Box marginBlock="10 0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
-                                        En annen fagsak tilknyttet personen, inneholder en feilutbetaling for samme
-                                        periode som det skal etterbetales i denne behandlingen. Feilutbetalingen i den
-                                        andre fagsaken må behandles ferdig før du fullfører denne behandlingen. Det er
-                                        for å hindre at beløpene motregnes.
+                                        En annen fagsak tilknyttet personen inneholder en feilutbetaling eller
+                                        etterbetaling.
+                                        <br />
+                                        <br />
+                                        Dersom det er en feilutbetaling må fagsaken beahndles ferdig før du fullfører
+                                        denne behandlingen. Det er for å hindre at beløpene motregnes.
+                                        <br />
+                                        <br />
+                                        Dersom det er en etterbetaling må du vente til den er utbetalt før du fullfører
+                                        denne behandlingen. Det er for å hindre at etterbetalingen hentes inn i denne
+                                        fagsaken.
                                     </BodyShort>
                                     <BodyShort spacing>
-                                        Fagsak med feilutbetaling:{' '}
+                                        Fagsak med feilutbetaling eller etterbetaling:{' '}
                                         {overlappendePerioderMedAndreFagsaker.map(
-                                            overlappendePeriode => overlappendePeriode.fagsakerMedFeilutbetaling
+                                            overlappendePeriode => overlappendePeriode.fagsaker
                                         )}
                                     </BodyShort>
                                     <BodyShort>Perioder med overlapp:</BodyShort>
@@ -172,40 +173,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 </Alert>
                             </Box>
                         )}
-
-                        {harOverlappendeEtterbetalinger && (
-                            <Box marginBlock="10 0" maxWidth="40rem">
-                                <Alert variant="warning">
-                                    <BodyShort spacing>
-                                        En annen fagsak tilknyttet personen, inneholder en etterbetaling. Du må vente
-                                        til etterbetalingen i den andre fagsaken er utbetalt før du fullfører denne
-                                        behandlingen. Det er for å hindre at etterbetalingen hentes inn i denne
-                                        fagsaken. Fagsak med etterbetaling:
-                                    </BodyShort>
-                                    <BodyShort spacing>
-                                        Fagsak med feilutbetaling:{' '}
-                                        {overlappendePerioderMedAndreFagsaker.map(
-                                            overlappendePeriode => overlappendePeriode.fagsakerMedEtterbetaling
-                                        )}
-                                    </BodyShort>
-                                    <BodyShort>Perioder med overlapp:</BodyShort>
-                                    <List as="ul">
-                                        {overlappendePerioderMedAndreFagsaker.map(periode => (
-                                            <List.Item>
-                                                {`${isoStringTilFormatertString({
-                                                    isoString: periode.fom,
-                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
-                                                })} - ${isoStringTilFormatertString({
-                                                    isoString: periode.tom,
-                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
-                                                })}`}
-                                            </List.Item>
-                                        ))}
-                                    </List>
-                                </Alert>
-                            </Box>
-                        )}
-
                         {erAvregningOgToggleErPå && (
                             <TilbakekrevingsvedtakMotregning
                                 åpenBehandling={åpenBehandling}
