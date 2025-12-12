@@ -10,8 +10,8 @@ import FeilutbetaltValutaPeriode from './FeilutbetaltValutaPeriode';
 import NyFeilutbetaltValutaPeriode from './NyFeilutbetaltValutaPeriode';
 import type { IRestFeilutbetaltValuta } from '../../../../../../typer/eøs-feilutbetalt-valuta';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
+import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
 import { summerBeløpForPerioder } from '../utils';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 
 interface IFeilutbetaltValuta {
     behandlingId: number;
