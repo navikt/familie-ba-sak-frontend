@@ -12,13 +12,13 @@ import type { IMinimalFagsak } from '../../../../../../typer/fagsak';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { summerBeløpForPerioder } from '../utils';
+import { summerTotalBeløpForPerioder } from '../utils';
 import { SlettRefusjonEøsError } from './SlettRefusjonEøsError';
 
 function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandling) {
-    const url = `https://kontantstotte.intern.nav.no/fagsak/${fagsak.id}/${behandling.behandlingId}/vedtak`;
+    const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsak.id}/${behandling.behandlingId}/vedtak`;
 
-    const totaltRefusjonsbeløp = summerBeløpForPerioder(
+    const totaltRefusjonsbeløp = summerTotalBeløpForPerioder(
         behandling.refusjonEøs.map(it => ({ fom: it.fom, tom: it.tom, beløp: it.refusjonsbeløp }))
     );
 
