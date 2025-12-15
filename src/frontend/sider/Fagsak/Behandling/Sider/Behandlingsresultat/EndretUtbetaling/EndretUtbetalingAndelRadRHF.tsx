@@ -56,7 +56,7 @@ export const EndretUtbetalingAndelRadRHF = () => {
             return;
         }
         if (erSkjemaEkspandert) reset();
-        settErSkjemaEkspandert(!erSkjemaEkspandert);
+        settErSkjemaEkspandert(prev => !prev);
     };
 
     return (
