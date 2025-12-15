@@ -8,8 +8,8 @@ import { Button } from '@navikt/ds-react';
 import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 import { lagBehandling } from '../../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../../testutils/testdata/fagsakTestdata';
+import { lagPersonMedAndelerTilkjentYtelse } from '../../../../../../../testutils/testdata/personTestdata';
 import { render, TestProviders } from '../../../../../../../testutils/testrender';
-import type { IPersonMedAndelerTilkjentYtelse } from '../../../../../../../typer/beregning';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../../FagsakContext';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
@@ -50,23 +50,13 @@ function Wrapper({
     );
 }
 
-const lagMockPerson = (personIdent: string, stønadFom: string, stønadTom: string): IPersonMedAndelerTilkjentYtelse => {
-    return {
-        personIdent,
-        stønadFom,
-        stønadTom,
-        ytelsePerioder: [],
-        beløp: 0,
-    } as IPersonMedAndelerTilkjentYtelse;
-};
-
 describe('utledTidligsteOgSenesteDato', () => {
     test('returnerer tidligste fom og seneste tom når ingen personer er valgt', () => {
         const behandling = {
             ...lagBehandling(),
             personerMedAndelerTilkjentYtelse: [
-                lagMockPerson('1', '2023-01', '2023-12'),
-                lagMockPerson('2', '2023-03', '2024-02'),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-12' }),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
             ],
         };
 
@@ -80,8 +70,8 @@ describe('utledTidligsteOgSenesteDato', () => {
         const behandling = {
             ...lagBehandling(),
             personerMedAndelerTilkjentYtelse: [
-                lagMockPerson('1', '2023-01', '2023-12'),
-                lagMockPerson('2', '2023-03', '2024-02'),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-12' }),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
             ],
         };
 
@@ -95,9 +85,9 @@ describe('utledTidligsteOgSenesteDato', () => {
         const behandling = {
             ...lagBehandling(),
             personerMedAndelerTilkjentYtelse: [
-                lagMockPerson('1', '2023-01', '2023-06'),
-                lagMockPerson('2', '2023-03', '2024-02'),
-                lagMockPerson('3', '2023-05', '2023-09'),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-06' }),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
+                lagPersonMedAndelerTilkjentYtelse({ personIdent: '3', stønadFom: '2023-05', stønadTom: '2023-09' }),
             ],
         };
 
@@ -112,7 +102,9 @@ describe('utledTidligsteOgSenesteDato', () => {
 
         const behandling = {
             ...lagBehandling(),
-            personerMedAndelerTilkjentYtelse: [lagMockPerson('1', '2023-01', omFemÅr)],
+            personerMedAndelerTilkjentYtelse: [
+                lagPersonMedAndelerTilkjentYtelse({ stønadFom: '2023-01', stønadTom: omFemÅr }),
+            ],
         };
 
         const { senesteDato } = utledTidligsteOgSenesteDato(
@@ -129,7 +121,9 @@ describe('utledTidligsteOgSenesteDato', () => {
 
         const behandling = {
             ...lagBehandling(),
-            personerMedAndelerTilkjentYtelse: [lagMockPerson('1', omFemÅr, omFemÅr)],
+            personerMedAndelerTilkjentYtelse: [
+                lagPersonMedAndelerTilkjentYtelse({ stønadFom: omFemÅr, stønadTom: omFemÅr }),
+            ],
         };
 
         const { tidligsteDato } = utledTidligsteOgSenesteDato(
@@ -146,7 +140,9 @@ describe('utledTidligsteOgSenesteDato', () => {
 
         const behandling = {
             ...lagBehandling(),
-            personerMedAndelerTilkjentYtelse: [lagMockPerson('1', '2023-01', omFemÅr)],
+            personerMedAndelerTilkjentYtelse: [
+                lagPersonMedAndelerTilkjentYtelse({ stønadFom: '2023-01', stønadTom: omFemÅr }),
+            ],
         };
 
         const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(
