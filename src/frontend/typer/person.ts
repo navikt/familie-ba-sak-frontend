@@ -65,6 +65,7 @@ export interface IPersonInfo {
     dødsfallDato?: string;
     bostedsadresse?: IBostedsadresse;
     erEgenAnsatt: boolean;
+    erFalskIdentitet: boolean;
 }
 
 export interface IForelderBarnRelasjon {
