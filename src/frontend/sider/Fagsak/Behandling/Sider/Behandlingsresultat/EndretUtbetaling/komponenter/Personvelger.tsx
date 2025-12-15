@@ -15,7 +15,7 @@ import {
 
 export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { behandling } = useBehandlingContext();
-    const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
+    const { control, getValues } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const tilgjengeligePersoner: ComboboxOption[] = behandling.personer
         .filter(person =>
@@ -35,7 +35,7 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
             rules={{ required: 'Du må velge minst én person' }}
             render={({ field, fieldState: { error }, formState: { isSubmitting } }) => {
                 const onToggleSelected = (optionValue: string, isSelected: boolean) => {
-                    const valgtePersoner = watch(EndretUtbetalingAndelFeltnavn.PERSONER);
+                    const valgtePersoner = getValues(EndretUtbetalingAndelFeltnavn.PERSONER);
                     const oppdatertePersoner = isSelected
                         ? [...valgtePersoner, tilgjengeligePersoner.find(p => p.value === optionValue)]
                         : valgtePersoner.filter(p => p.value !== optionValue);
