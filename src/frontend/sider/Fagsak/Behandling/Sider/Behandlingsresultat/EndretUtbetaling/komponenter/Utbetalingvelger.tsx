@@ -21,25 +21,23 @@ export const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.UTBETALING}
             control={control}
             rules={{ required: 'Du må velge om beløpet skal utbetales' }}
-            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => (
+            render={({
+                field: { value, onChange, onBlur, ref },
+                fieldState: { error },
+                formState: { isSubmitting },
+            }) => (
                 <RadioGroup
                     legend={<Label>Utbetaling</Label>}
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
                     readOnly={erLesevisning || isSubmitting}
                     error={error?.message}
                 >
                     {Object.values(Utbetaling)
                         .filter(utbetaling => erUtbetalingTillattForÅrsakRHF(årsak, utbetaling))
                         .map(utbetaling => (
-                            <Radio
-                                name={'utbetaling'}
-                                value={utbetaling}
-                                id={utbetaling}
-                                key={utbetaling}
-                                ref={field.ref}
-                            >
+                            <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling} ref={ref}>
                                 {utbetalingTilLabel(utbetaling)}
                             </Radio>
                         ))}

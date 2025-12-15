@@ -18,13 +18,17 @@ export const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.BEGRUNNELSE}
             control={control}
             rules={{ required: 'Du må begrunne den endrede utbetalingsperioden' }}
-            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => (
+            render={({
+                field: { value, onChange, onBlur, ref },
+                fieldState: { error },
+                formState: { isSubmitting },
+            }) => (
                 <Textarea
                     label={'Begrunnelse'}
-                    value={field.value || ''}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
+                    value={value || ''}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    ref={ref}
                     error={error?.message}
                     readOnly={erLesevisning || isSubmitting}
                 />

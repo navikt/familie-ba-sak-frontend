@@ -33,13 +33,17 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.PERSONER}
             control={control}
             rules={{ required: 'Du må velge minst én person' }}
-            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => {
+            render={({
+                field: { value, onChange, onBlur, ref },
+                fieldState: { error },
+                formState: { isSubmitting },
+            }) => {
                 const onToggleSelected = (optionValue: string, isSelected: boolean) => {
                     const valgtePersoner = getValues(EndretUtbetalingAndelFeltnavn.PERSONER);
                     const oppdatertePersoner = isSelected
                         ? [...valgtePersoner, tilgjengeligePersoner.find(p => p.value === optionValue)]
                         : valgtePersoner.filter(p => p.value !== optionValue);
-                    field.onChange(oppdatertePersoner);
+                    onChange(oppdatertePersoner);
                 };
 
                 return (
@@ -47,10 +51,10 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
                         isMultiSelect
                         label={'Velg hvem det gjelder'}
                         options={tilgjengeligePersoner}
-                        selectedOptions={field.value}
+                        selectedOptions={value}
                         onToggleSelected={onToggleSelected}
-                        onBlur={field.onBlur}
-                        ref={field.ref}
+                        onBlur={onBlur}
+                        ref={ref}
                         readOnly={erLesevisning || isSubmitting}
                         error={error?.message}
                     />

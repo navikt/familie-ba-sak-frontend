@@ -20,9 +20,13 @@ export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
             name={EndretUtbetalingAndelFeltnavn.ÅRSAK}
             control={control}
             rules={{ required: 'Du må velge en årsak' }}
-            render={({ field, fieldState: { error }, formState: { isSubmitting } }) => {
+            render={({
+                field: { value, onChange, onBlur, ref },
+                fieldState: { error },
+                formState: { isSubmitting },
+            }) => {
                 const håndterEndring = (event: React.ChangeEvent<HTMLSelectElement>) => {
-                    field.onChange(event);
+                    onChange(event);
                     if (
                         event.target.value === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER ||
                         event.target.value === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT
@@ -35,11 +39,11 @@ export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
 
                 return (
                     <Select
-                        value={field.value || ''}
+                        value={value || ''}
                         label={'Årsak'}
                         onChange={håndterEndring}
-                        onBlur={field.onBlur}
-                        ref={field.ref}
+                        onBlur={onBlur}
+                        ref={ref}
                         readOnly={erLesevisning || isSubmitting}
                         error={error?.message}
                     >
