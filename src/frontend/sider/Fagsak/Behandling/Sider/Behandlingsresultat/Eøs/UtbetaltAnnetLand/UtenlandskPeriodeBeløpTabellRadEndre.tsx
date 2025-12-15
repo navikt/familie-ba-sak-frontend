@@ -192,7 +192,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 size="small"
                                 variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
                                 Ferdig
                             </Button>
@@ -214,7 +213,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                     barn => `${barn}-`
                                 )}_${skjema.felter.initielFom.verdi}`}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >

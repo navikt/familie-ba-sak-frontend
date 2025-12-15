@@ -207,7 +207,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 size="small"
                                 variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
                                 Ferdig
                             </Button>
@@ -229,7 +228,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                     barn => `${barn}-`
                                 )}_${skjema.felter.initielFom.verdi}`}
                                 loading={sletterValutakurs}
-                                disabled={sletterValutakurs}
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >
