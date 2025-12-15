@@ -80,7 +80,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -108,14 +108,14 @@ function DefaultFormWrapper({
 
 describe('Personvelger', () => {
     test('skal vise personvelger', () => {
-        const { screen } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Personvelger />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         expect(personvelger).toBeInTheDocument();
     });
 
     test('skal vise dropdown med personer fra behandlingen', async () => {
-        const { screen, user } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         await user.click(personvelger);
@@ -131,7 +131,7 @@ describe('Personvelger', () => {
     });
 
     test('skal kunne velge en person', async () => {
-        const { screen, user } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         await user.click(personvelger);
@@ -144,7 +144,7 @@ describe('Personvelger', () => {
     });
 
     test('skal kunne velge flere personer', async () => {
-        const { screen, user } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         await user.click(personvelger);
@@ -162,14 +162,18 @@ describe('Personvelger', () => {
     });
 
     test('skal kunne fjerne valgt person', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.PERSONER]: [{ value: '10987654321', label: 'Barn 1 (01.01.2020)' }],
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<Personvelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Personvelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.PERSONER]: [
+                            { value: '10987654321', label: 'Barn 1 (01.01.2020)' },
+                        ],
+                    }}
+                />
+            ),
+        });
 
         const slettKnapp = screen.getByRole('button', { name: /Barn 1.*slett/ });
         await user.click(slettKnapp);
@@ -187,7 +191,7 @@ describe('Personvelger', () => {
         };
 
         const { screen, user } = render(<Personvelger />, {
-            wrapper: props => DefaultFormWrapper({ ...props, behandling: behandlingUtenBarn2 }),
+            wrapper: props => <Wrapper {...props} behandling={behandlingUtenBarn2} />,
         });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
@@ -198,7 +202,7 @@ describe('Personvelger', () => {
     });
 
     test('skal ikke kunne endre personer når erLesevisning er true', async () => {
-        const { screen, user } = render(<Personvelger erLesevisning={true} />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger erLesevisning={true} />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         await user.click(personvelger);
@@ -211,14 +215,19 @@ describe('Personvelger', () => {
     });
 
     test('skal ikke kunne endre personer når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.PERSONER]: [{ value: '10987654321', label: 'Barn 1 (01.01.2020)' }],
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<Personvelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Personvelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.PERSONER]: [
+                            { value: '10987654321', label: 'Barn 1 (01.01.2020)' },
+                        ],
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -231,7 +240,7 @@ describe('Personvelger', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger />, { wrapper: Wrapper });
 
         const personvelger = screen.getByLabelText(/Velg hvem det gjelder/);
         expect(personvelger).not.toHaveFocus();
@@ -246,7 +255,7 @@ describe('Personvelger', () => {
     });
 
     test('skal vise valideringsfeil når ingen personer er valgt og skjemaet submittes', async () => {
-        const { screen, user } = render(<Personvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Personvelger />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);

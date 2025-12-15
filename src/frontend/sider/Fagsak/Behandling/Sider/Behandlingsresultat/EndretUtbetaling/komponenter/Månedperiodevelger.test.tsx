@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
@@ -22,7 +22,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -162,43 +162,47 @@ describe('utledTidligsteOgSenesteDato', () => {
 
 describe('Månedperiodevelger', () => {
     test('viser "valgfri" i TOM label når årsak er ENDRE_MOTTAKER', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                ...DEFAULT_VALUES,
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER,
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<Månedperiodevelger />, { wrapper: FormWrapper });
+        const { screen } = render(<Månedperiodevelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        ...DEFAULT_VALUES,
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER,
+                    }}
+                />
+            ),
+        });
 
         expect(screen.getByLabelText('T.o.m. (valgfri)')).toBeInTheDocument();
     });
 
     test('viser ikke "valgfri" i TOM label når årsak ikke er ENDRE_MOTTAKER', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                ...DEFAULT_VALUES,
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT,
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<Månedperiodevelger />, { wrapper: FormWrapper });
+        const { screen } = render(<Månedperiodevelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        ...DEFAULT_VALUES,
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT,
+                    }}
+                />
+            ),
+        });
 
         expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();
         expect(screen.queryByLabelText('T.o.m. (valgfri)')).not.toBeInTheDocument();
     });
 
     test('viser ikke "valgfri" i TOM label når årsak ikke er valgt', () => {
-        const { screen } = render(<Månedperiodevelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Månedperiodevelger />, { wrapper: Wrapper });
 
         expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();
         expect(screen.queryByLabelText('T.o.m. (valgfri)')).not.toBeInTheDocument();
     });
 
     test('viser både FOM og TOM månedvelgere', () => {
-        const { screen } = render(<Månedperiodevelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Månedperiodevelger />, { wrapper: Wrapper });
 
         expect(screen.getByLabelText('F.o.m.')).toBeInTheDocument();
         expect(screen.getByLabelText('T.o.m.')).toBeInTheDocument();

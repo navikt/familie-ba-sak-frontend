@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { within } from '@testing-library/dom';
@@ -21,7 +21,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -44,7 +44,7 @@ function DefaultFormWrapper({
 
 describe('Årsakvelger', () => {
     test('skal vise årsakvelger med alle årsaker', () => {
-        const { screen } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Årsakvelger />, { wrapper: Wrapper });
 
         const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
         expect(årsakvelger).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('Årsakvelger', () => {
     });
 
     test('skal kunne velge en årsak', async () => {
-        const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
         const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
         expect(årsakvelger).toHaveValue('');
@@ -67,7 +67,7 @@ describe('Årsakvelger', () => {
     });
 
     test('skal ikke kunne endre årsak når erLesevisning er true', async () => {
-        const { screen, user } = render(<Årsakvelger erLesevisning={true} />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Årsakvelger erLesevisning={true} />, { wrapper: Wrapper });
 
         // Aksel setter ikke readonly på combobox, men setter label til 'Skrivebeskyttet[label]'
         const årsakvelger = screen.queryByRole('combobox', { name: 'Årsak' });
@@ -88,15 +88,18 @@ describe('Årsakvelger', () => {
     });
 
     test('skal ikke kunne endre årsak når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues: DefaultValues<EndretUtbetalingAndelFormValues> = {
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.INGEN_UTBETALING,
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<Årsakvelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Årsakvelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
+                        [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.INGEN_UTBETALING,
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -120,7 +123,7 @@ describe('Årsakvelger', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
         const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
         expect(årsakvelger).not.toHaveFocus();
@@ -135,7 +138,7 @@ describe('Årsakvelger', () => {
     });
 
     test('skal vise valideringsfeil når årsak mangler og skjemaet submittes', async () => {
-        const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -145,7 +148,7 @@ describe('Årsakvelger', () => {
 
     describe('Utbetalingvelger', () => {
         test('skal sette utbetaling til INGEN_UTBETALING når ENDRE_MOTTAKER velges', async () => {
-            const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+            const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
             const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
             await user.selectOptions(årsakvelger, IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER);
@@ -158,7 +161,7 @@ describe('Årsakvelger', () => {
         });
 
         test('skal sette utbetaling til INGEN_UTBETALING når ALLEREDE_UTBETALT velges', async () => {
-            const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+            const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
             const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
             await user.selectOptions(årsakvelger, IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT);
@@ -171,7 +174,7 @@ describe('Årsakvelger', () => {
         });
 
         test('skal tømme utbetaling når andre årsaker enn ENDRE_MOTTAKER eller ALLEREDE_UTBETALT velges', async () => {
-            const { screen, user } = render(<Årsakvelger />, { wrapper: DefaultFormWrapper });
+            const { screen, user } = render(<Årsakvelger />, { wrapper: Wrapper });
 
             const årsakvelger = screen.getByRole('combobox', { name: 'Årsak' });
 

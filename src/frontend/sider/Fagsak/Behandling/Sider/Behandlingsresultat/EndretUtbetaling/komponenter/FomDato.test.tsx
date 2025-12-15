@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
@@ -12,7 +12,7 @@ import FomDato from './FomDato';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = {},
     onSubmitDelay = 0,
@@ -44,14 +44,14 @@ function UtfyltFomDato({ erLesevisning = false }: { erLesevisning?: boolean }) {
 
 describe('FomDato', () => {
     test('skal vise felt for f.o.m.', () => {
-        const { screen } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).toBeInTheDocument();
     });
 
     test('skal kunne skrive inn en måned', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).toHaveValue('');
@@ -62,28 +62,32 @@ describe('FomDato', () => {
     });
 
     test('skal vise forhåndsvalgt måned', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<UtfyltFomDato />, { wrapper: FormWrapper });
+        const { screen } = render(<UtfyltFomDato />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).toHaveValue('januar 2025');
     });
 
     test('skal kunne endre en valgt måned', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: FormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).toHaveValue('januar 2025');
@@ -95,7 +99,7 @@ describe('FomDato', () => {
     });
 
     test('skal formatere måned når bruker tabber ut', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
 
@@ -110,7 +114,7 @@ describe('FomDato', () => {
     });
 
     test('skal vise kalenderikon for å åpne monthpicker', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne månedsvelger' });
         expect(kalenderknapp).toBeInTheDocument();
@@ -122,7 +126,7 @@ describe('FomDato', () => {
     });
 
     test('skal kunne velge måned fra kalenderen', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne månedsvelger' });
         await user.click(kalenderknapp);
@@ -135,14 +139,16 @@ describe('FomDato', () => {
     });
 
     test('skal kunne slette måned ved å tømme feltet', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: FormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).toHaveValue('januar 2025');
@@ -153,15 +159,15 @@ describe('FomDato', () => {
     });
 
     test('skal ikke kunne endre måned når erLesevisning er true', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
         const { screen, user } = render(<UtfyltFomDato erLesevisning={true} />, {
-            wrapper: FormWrapper,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
         });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
@@ -174,14 +180,17 @@ describe('FomDato', () => {
     });
 
     test('skal ikke kunne endre måned når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: FormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.FOM]: new Date(2025, 0, 1),
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -196,7 +205,7 @@ describe('FomDato', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         expect(fomVelger).not.toHaveFocus();
@@ -211,7 +220,7 @@ describe('FomDato', () => {
     });
 
     test('skal vise valideringsfeil når måned mangler og skjemaet submittes', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -221,7 +230,7 @@ describe('FomDato', () => {
     });
 
     test('skal vise valideringsfeil når måned er før tidligste dato og skjemaet submittes', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         await user.clear(fomVelger);
@@ -235,7 +244,7 @@ describe('FomDato', () => {
     });
 
     test('skal vise valideringsfeil når måned er etter seneste dato og skjemaet submittes', async () => {
-        const { screen, user } = render(<UtfyltFomDato />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<UtfyltFomDato />, { wrapper: Wrapper });
 
         const fomVelger = screen.getByLabelText('F.o.m.');
         await user.clear(fomVelger);

@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -38,14 +38,14 @@ function DefaultFormWrapper({
 
 describe('Begrunnelse', () => {
     test('skal vise begrunnelse', () => {
-        const { screen } = render(<Begrunnelse />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Begrunnelse />, { wrapper: Wrapper });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         expect(begrunnelse).toBeInTheDocument();
     });
 
     test('skal kunne skrive inn en begrunnelse', async () => {
-        const { screen, user } = render(<Begrunnelse />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Begrunnelse />, { wrapper: Wrapper });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
 
@@ -57,28 +57,32 @@ describe('Begrunnelse', () => {
     });
 
     test('skal vise forhåndsutfylt begrunnelse', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Eksisterende begrunnelse',
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<Begrunnelse />, { wrapper: FormWrapper });
+        const { screen } = render(<Begrunnelse />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Eksisterende begrunnelse',
+                    }}
+                />
+            ),
+        });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         expect(begrunnelse).toHaveValue('Eksisterende begrunnelse');
     });
 
     test('skal kunne endre en eksisterende begrunnelse', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Gammel begrunnelse',
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<Begrunnelse />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Begrunnelse />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Gammel begrunnelse',
+                    }}
+                />
+            ),
+        });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         expect(begrunnelse).toHaveValue('Gammel begrunnelse');
@@ -90,14 +94,16 @@ describe('Begrunnelse', () => {
     });
 
     test('skal kunne slette begrunnelse ved å tømme feltet', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Begrunnelse som skal slettes',
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<Begrunnelse />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Begrunnelse />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Begrunnelse som skal slettes',
+                    }}
+                />
+            ),
+        });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         expect(begrunnelse).toHaveValue('Begrunnelse som skal slettes');
@@ -108,7 +114,7 @@ describe('Begrunnelse', () => {
     });
 
     test('skal støtte lengre tekster', async () => {
-        const { screen, user } = render(<Begrunnelse />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Begrunnelse />, { wrapper: Wrapper });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         const langTekst =
@@ -121,15 +127,15 @@ describe('Begrunnelse', () => {
     });
 
     test('skal ikke kunne endre begrunnelse når erLesevisning er true', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Låst begrunnelse',
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
         const { screen, user } = render(<Begrunnelse erLesevisning={true} />, {
-            wrapper: FormWrapper,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Låst begrunnelse',
+                    }}
+                />
+            ),
         });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
@@ -142,14 +148,17 @@ describe('Begrunnelse', () => {
     });
 
     test('skal ikke kunne endre begrunnelse når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Begrunnelse under innsending',
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<Begrunnelse />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Begrunnelse />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: 'Begrunnelse under innsending',
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -164,7 +173,7 @@ describe('Begrunnelse', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<Begrunnelse />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Begrunnelse />, { wrapper: Wrapper });
 
         const begrunnelse = screen.getByLabelText('Begrunnelse');
         expect(begrunnelse).not.toHaveFocus();
@@ -179,7 +188,7 @@ describe('Begrunnelse', () => {
     });
 
     test('skal vise valideringsfeil når begrunnelse mangler og skjemaet submittes', async () => {
-        const { screen, user } = render(<Begrunnelse />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Begrunnelse />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);

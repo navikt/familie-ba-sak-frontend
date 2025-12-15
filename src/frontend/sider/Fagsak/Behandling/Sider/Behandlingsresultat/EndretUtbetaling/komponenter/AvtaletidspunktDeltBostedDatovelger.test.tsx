@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
@@ -17,7 +17,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -39,14 +39,14 @@ function DefaultFormWrapper({
 
 describe('AvtaletidspunktDeltBostedDatovelger', () => {
     test('skal vise avtaletidspunkt delt bosted datovelger', () => {
-        const { screen } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: Wrapper });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
         expect(datovelger).toBeInTheDocument();
     });
 
     test('skal kunne skrive inn en dato', async () => {
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: Wrapper });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
 
@@ -58,28 +58,32 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal vise forhåndsvalgt dato', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
         expect(datovelger).toHaveValue('01.01.2025');
     });
 
     test('skal kunne endre en valgt dato', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
         expect(datovelger).toHaveValue('01.01.2025');
@@ -91,7 +95,7 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal vise kalenderikon for å åpne datepicker', async () => {
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne datovelger' });
         expect(kalenderknapp).toBeInTheDocument();
@@ -103,7 +107,7 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal kunne velge dato fra kalenderen', async () => {
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne datovelger' });
         await user.click(kalenderknapp);
@@ -116,14 +120,16 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal kunne slette dato ved å tømme feltet', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
         expect(datovelger).toHaveValue('01.01.2025');
@@ -134,15 +140,15 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal ikke kunne endre dato når erLesevisning er true', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
         const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger erLesevisning={true} />, {
-            wrapper: FormWrapper,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
         });
 
         const datovelger = screen.getByLabelText('Avtaletidspunkt delt bosted');
@@ -155,14 +161,17 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal ikke kunne endre dato når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -177,14 +186,16 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal vise valideringsfeil når avtaletidspunkt mangler og årsak er DELT_BOSTED', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
+                    }}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -194,14 +205,16 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal ikke vise valideringsfeil når avtaletidspunkt mangler og årsak ikke er DELT_BOSTED', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+                    }}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -211,15 +224,17 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
     });
 
     test('skal ikke vise valideringsfeil når avtaletidspunkt er utfylt og årsak er DELT_BOSTED', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<AvtaletidspunktDeltBostedDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
+                        [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);

@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
@@ -19,7 +19,7 @@ const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = DEFAULT_VALUES,
     onSubmitDelay = 0,
@@ -53,7 +53,7 @@ const utbetalingVelgerRadioKnapper = (screen: ReturnType<typeof render>['screen'
 
 describe('Utbetalingvelger', () => {
     test('skal vise utbetalingvelger med alle utbetalingsalternativer når ingen årsak er valgt', () => {
-        const { screen } = render(<Utbetalingvelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<Utbetalingvelger />, { wrapper: Wrapper });
 
         const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -63,7 +63,7 @@ describe('Utbetalingvelger', () => {
     });
 
     test('skal kunne velge en utbetaling', async () => {
-        const { screen, user } = render(<Utbetalingvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Utbetalingvelger />, { wrapper: Wrapper });
 
         const { fullUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -75,14 +75,16 @@ describe('Utbetalingvelger', () => {
     });
 
     test('skal ikke kunne endre utbetaling når erLesevisning er true', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.FULL_UTBETALING,
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<Utbetalingvelger erLesevisning={true} />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Utbetalingvelger erLesevisning={true} />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.FULL_UTBETALING,
+                    }}
+                />
+            ),
+        });
 
         const { fullUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -95,14 +97,17 @@ describe('Utbetalingvelger', () => {
     });
 
     test('skal ikke kunne endre utbetaling når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.FULL_UTBETALING,
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<Utbetalingvelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling.FULL_UTBETALING,
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const { fullUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -119,7 +124,7 @@ describe('Utbetalingvelger', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<Utbetalingvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Utbetalingvelger />, { wrapper: Wrapper });
         const { fullUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
         expect(fullUtbetaling).not.toHaveFocus();
@@ -134,7 +139,7 @@ describe('Utbetalingvelger', () => {
     });
 
     test('skal vise valideringsfeil når utbetaling mangler og skjemaet submittes', async () => {
-        const { screen, user } = render(<Utbetalingvelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<Utbetalingvelger />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -144,14 +149,16 @@ describe('Utbetalingvelger', () => {
 
     describe('Årsakvelger', () => {
         test('skal kun vise FULL_UTBETALING og INGEN_UTBETALING når årsak DELT_BOSTED er valgt', () => {
-            function FormWrapper({ children }: PropsWithChildren) {
-                const defaultValues = {
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                };
-                return DefaultFormWrapper({ children, defaultValues });
-            }
-
-            const { screen } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+            const { screen } = render(<Utbetalingvelger />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        defaultValues={{
+                            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
+                        }}
+                    />
+                ),
+            });
 
             const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -161,14 +168,16 @@ describe('Utbetalingvelger', () => {
         });
 
         test('skal kun vise DELT_UTBETALING og INGEN_UTBETALING når årsak ETTERBETALING_3ÅR er valgt', () => {
-            function FormWrapper({ children }: PropsWithChildren) {
-                const defaultValues = {
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR,
-                };
-                return DefaultFormWrapper({ children, defaultValues });
-            }
-
-            const { screen } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+            const { screen } = render(<Utbetalingvelger />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        defaultValues={{
+                            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR,
+                        }}
+                    />
+                ),
+            });
 
             const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -178,14 +187,16 @@ describe('Utbetalingvelger', () => {
         });
 
         test('skal kun vise DELT_UTBETALING og INGEN_UTBETALING når årsak ETTERBETALING_3MND er valgt', () => {
-            function FormWrapper({ children }: PropsWithChildren) {
-                const defaultValues = {
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
-                };
-                return DefaultFormWrapper({ children, defaultValues });
-            }
-
-            const { screen } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+            const { screen } = render(<Utbetalingvelger />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        defaultValues={{
+                            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+                        }}
+                    />
+                ),
+            });
 
             const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -195,14 +206,16 @@ describe('Utbetalingvelger', () => {
         });
 
         test('skal kun vise INGEN_UTBETALING når årsak ENDRE_MOTTAKER er valgt', () => {
-            function FormWrapper({ children }: PropsWithChildren) {
-                const defaultValues = {
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER,
-                };
-                return DefaultFormWrapper({ children, defaultValues });
-            }
-
-            const { screen } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+            const { screen } = render(<Utbetalingvelger />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        defaultValues={{
+                            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER,
+                        }}
+                    />
+                ),
+            });
 
             const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 
@@ -212,14 +225,16 @@ describe('Utbetalingvelger', () => {
         });
 
         test('skal kun vise INGEN_UTBETALING når årsak ALLEREDE_UTBETALT er valgt', () => {
-            function FormWrapper({ children }: PropsWithChildren) {
-                const defaultValues = {
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT,
-                };
-                return DefaultFormWrapper({ children, defaultValues });
-            }
-
-            const { screen } = render(<Utbetalingvelger />, { wrapper: FormWrapper });
+            const { screen } = render(<Utbetalingvelger />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        defaultValues={{
+                            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT,
+                        }}
+                    />
+                ),
+            });
 
             const { fullUtbetaling, deltUtbetaling, ingenUtbetaling } = utbetalingVelgerRadioKnapper(screen);
 

@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
@@ -12,7 +12,7 @@ import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } f
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
-function DefaultFormWrapper({
+function Wrapper({
     children,
     defaultValues = {},
     onSubmitDelay = 0,
@@ -34,14 +34,14 @@ function DefaultFormWrapper({
 
 describe('SøknadstidspunktDatovelger', () => {
     test('skal vise søknadstidspunkt datovelger', () => {
-        const { screen } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
         expect(datovelger).toBeInTheDocument();
     });
 
     test('skal kunne skrive inn en dato', async () => {
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
 
@@ -53,28 +53,32 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal vise forhåndsvalgt dato', () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen } = render(<SøknadstidspunktDatovelger />, { wrapper: FormWrapper });
+        const { screen } = render(<SøknadstidspunktDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
         expect(datovelger).toHaveValue('01.01.2025');
     });
 
     test('skal kunne endre en valgt dato', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
         expect(datovelger).toHaveValue('01.01.2025');
@@ -86,7 +90,7 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal vise kalenderikon for å åpne datepicker', async () => {
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne datovelger' });
         expect(kalenderknapp).toBeInTheDocument();
@@ -98,7 +102,7 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal kunne velge dato fra kalenderen', async () => {
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const kalenderknapp = screen.getByRole('button', { name: 'Åpne datovelger' });
         await user.click(kalenderknapp);
@@ -111,14 +115,16 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal kunne slette dato ved å tømme feltet', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
+        });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
         expect(datovelger).toHaveValue('01.01.2025');
@@ -129,15 +135,15 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal ikke kunne endre dato når erLesevisning er true', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues });
-        }
-
         const { screen, user } = render(<SøknadstidspunktDatovelger erLesevisning={true} />, {
-            wrapper: FormWrapper,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
+                    }}
+                />
+            ),
         });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
@@ -150,14 +156,17 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal ikke kunne endre dato når skjema submitter', async () => {
-        function FormWrapper({ children }: PropsWithChildren) {
-            const defaultValues = {
-                [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
-            };
-            return DefaultFormWrapper({ children, defaultValues, onSubmitDelay: 3_000 });
-        }
-
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: FormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    defaultValues={{
+                        [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: new Date(2025, 0, 1),
+                    }}
+                    onSubmitDelay={3_000}
+                />
+            ),
+        });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);
@@ -172,7 +181,7 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal fokusere som forventet på komponenten når brukeren klikker på komponenten for å så tabbe ut', async () => {
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const datovelger = screen.getByLabelText('Søknadstidspunkt');
         expect(datovelger).not.toHaveFocus();
@@ -187,7 +196,7 @@ describe('SøknadstidspunktDatovelger', () => {
     });
 
     test('skal vise valideringsfeil når søknadstidspunkt mangler og skjemaet submittes', async () => {
-        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: DefaultFormWrapper });
+        const { screen, user } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Submit' });
         await user.click(submitButton);

@@ -66,14 +66,14 @@ function Wrapper({
     );
 }
 
-function DefaultFormWrapper() {
+function FormWrapper() {
     const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
     return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
 }
 
 describe('EndretUtbetalingAndelSkjemaRHF', () => {
     test('skal vise alle skjemafelter', () => {
-        const { screen } = render(<DefaultFormWrapper />, { wrapper: Wrapper });
+        const { screen } = render(<FormWrapper />, { wrapper: Wrapper });
 
         expect(screen.getByLabelText(/Velg hvem det gjelder/)).toBeInTheDocument();
         expect(screen.getByLabelText(/F.o.m/)).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
     });
 
     test('skal vise SkjemaKnapper når erLesevisning er false', () => {
-        const { screen } = render(<DefaultFormWrapper />, { wrapper: Wrapper });
+        const { screen } = render(<FormWrapper />, { wrapper: Wrapper });
 
         expect(screen.getByRole('button', { name: 'Bekreft' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
             return <Wrapper behandling={behandlingILesevisning}>{children}</Wrapper>;
         }
 
-        const { screen } = render(<DefaultFormWrapper />, { wrapper: CustomWrapper });
+        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
 
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
