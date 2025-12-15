@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form';
 
 import { Label, VStack } from '@navikt/ds-react';
 
-import FomDato from './FomDato';
-import TomDato from './TomDato';
+import { FomDato } from './FomDato';
+import { TomDato } from './TomDato';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
@@ -41,7 +41,7 @@ export function utledTidligsteOgSenesteDato(
     return { tidligsteDato, senesteDato };
 }
 
-const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
+export const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
     const { behandling } = useBehandlingContext();
     const { watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
@@ -68,5 +68,3 @@ const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
         </VStack>
     );
 };
-
-export default Månedperiodevelger;

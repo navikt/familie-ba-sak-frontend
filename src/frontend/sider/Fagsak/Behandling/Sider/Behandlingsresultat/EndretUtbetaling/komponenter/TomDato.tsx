@@ -16,7 +16,7 @@ interface TomDatoProps extends StandardFeltProps {
     valgfri?: boolean;
 }
 
-const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: TomDatoProps) => {
+export const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: TomDatoProps) => {
     const { control, trigger, getValues, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const monthValidationRef = useRef<MonthValidationT | undefined>(undefined);
@@ -80,5 +80,3 @@ const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: TomDato
         </MonthPicker>
     );
 };
-
-export default TomDato;

@@ -12,7 +12,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const AvtaletidspunktDeltBostedDatovelger = ({ erLesevisning }: StandardFeltProps) => {
+export const AvtaletidspunktDeltBostedDatovelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const årsakErDeltBosted = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK) === IEndretUtbetalingAndelÅrsak.DELT_BOSTED;
@@ -64,5 +64,3 @@ const AvtaletidspunktDeltBostedDatovelger = ({ erLesevisning }: StandardFeltProp
         </DatePicker>
     );
 };
-
-export default AvtaletidspunktDeltBostedDatovelger;

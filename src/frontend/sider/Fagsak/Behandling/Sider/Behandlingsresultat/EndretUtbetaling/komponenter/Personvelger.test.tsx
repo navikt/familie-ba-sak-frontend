@@ -6,7 +6,7 @@ import { afterEach, describe, expect, test } from 'vitest';
 import { Button } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 
-import Personvelger from './Personvelger';
+import { Personvelger } from './Personvelger';
 import { lagBehandling } from '../../../../../../../testutils/testdata/behandlingTestdata';
 import { render } from '../../../../../../../testutils/testrender';
 import type { IBehandling } from '../../../../../../../typer/behandling';

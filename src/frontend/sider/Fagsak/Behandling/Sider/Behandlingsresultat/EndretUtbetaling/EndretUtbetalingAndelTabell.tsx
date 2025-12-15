@@ -6,7 +6,7 @@ import { Heading, Table } from '@navikt/ds-react';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
-import EndretUtbetalingAndelRadRHF from './EndretUtbetalingAndelRadRHF';
+import { EndretUtbetalingAndelRadRHF } from './EndretUtbetalingAndelRadRHF';
 import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { ToggleNavn } from '../../../../../../typer/toggles';

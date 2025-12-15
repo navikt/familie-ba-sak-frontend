@@ -8,7 +8,7 @@ import { Button } from '@navikt/ds-react';
 
 import { render } from '../../../../../../../testutils/testrender';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
-import TomDato from './TomDato';
+import { TomDato } from './TomDato';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 

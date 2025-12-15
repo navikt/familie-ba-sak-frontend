@@ -7,7 +7,7 @@ import { Table } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import EndretUtbetalingAndelRadRHF from './EndretUtbetalingAndelRadRHF';
+import { EndretUtbetalingAndelRadRHF } from './EndretUtbetalingAndelRadRHF';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';

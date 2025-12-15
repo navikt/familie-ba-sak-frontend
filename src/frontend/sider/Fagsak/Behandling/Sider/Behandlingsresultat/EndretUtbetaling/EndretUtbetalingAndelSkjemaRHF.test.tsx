@@ -5,7 +5,7 @@ import { type DefaultValues, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import EndretUtbetalingAndelSkjemaRHF from './EndretUtbetalingAndelSkjemaRHF';
+import { EndretUtbetalingAndelSkjemaRHF } from './EndretUtbetalingAndelSkjemaRHF';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';

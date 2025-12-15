@@ -10,7 +10,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
+export const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
     const { control } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     return (
@@ -32,5 +32,3 @@ const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
         />
     );
 };
-
-export default Begrunnelse;

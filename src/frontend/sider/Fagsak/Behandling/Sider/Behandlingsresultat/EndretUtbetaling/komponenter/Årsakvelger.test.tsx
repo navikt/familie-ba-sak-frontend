@@ -7,12 +7,12 @@ import { describe, expect, test } from 'vitest';
 
 import { Button } from '@navikt/ds-react';
 
-import Årsakvelger from './Årsakvelger';
+import { Årsakvelger } from './Årsakvelger';
 import { render } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../../../../../typer/utbetalingAndel';
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
-import Utbetalingvelger from './Utbetalingvelger';
+import { Utbetalingvelger } from './Utbetalingvelger';
 
 const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
     [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',

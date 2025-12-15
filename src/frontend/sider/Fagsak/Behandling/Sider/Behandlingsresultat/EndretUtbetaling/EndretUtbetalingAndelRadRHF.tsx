@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
-import EndretUtbetalingAndelSkjemaRHF from './EndretUtbetalingAndelSkjemaRHF';
+import { EndretUtbetalingAndelSkjemaRHF } from './EndretUtbetalingAndelSkjemaRHF';
 import { useEndretUtbetalingAndelRHF } from './useEndretUtbetalingAndelRHF';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
@@ -34,7 +34,7 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
     }
 };
 
-const EndretUtbetalingAndelRadRHF = () => {
+export const EndretUtbetalingAndelRadRHF = () => {
     const { behandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
@@ -110,5 +110,3 @@ const EndretUtbetalingAndelRadRHF = () => {
         </Table.ExpandableRow>
     );
 };
-
-export default EndretUtbetalingAndelRadRHF;

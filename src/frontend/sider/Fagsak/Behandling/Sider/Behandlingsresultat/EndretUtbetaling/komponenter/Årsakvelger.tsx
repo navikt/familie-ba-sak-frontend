@@ -12,7 +12,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
+export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, setValue } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     return (
@@ -55,5 +55,3 @@ const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
         />
     );
 };
-
-export default Årsakvelger;

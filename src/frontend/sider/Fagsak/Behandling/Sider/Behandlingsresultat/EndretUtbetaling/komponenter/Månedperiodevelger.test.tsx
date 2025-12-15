@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 
 import { Button } from '@navikt/ds-react';
 
-import Månedperiodevelger, { utledTidligsteOgSenesteDato } from './Månedperiodevelger';
+import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 import { lagBehandling } from '../../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../../testutils/testrender';

@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 
 import { Button } from '@navikt/ds-react';
 
-import Begrunnelse from './Begrunnelse';
+import { Begrunnelse } from './Begrunnelse';
 import { render } from '../../../../../../../testutils/testrender';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 

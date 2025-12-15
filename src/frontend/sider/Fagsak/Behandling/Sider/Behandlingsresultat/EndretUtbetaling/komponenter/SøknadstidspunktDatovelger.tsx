@@ -11,7 +11,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const SøknadstidspunktDatovelger = ({ erLesevisning }: StandardFeltProps) => {
+export const SøknadstidspunktDatovelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
@@ -59,5 +59,3 @@ const SøknadstidspunktDatovelger = ({ erLesevisning }: StandardFeltProps) => {
         </DatePicker>
     );
 };
-
-export default SøknadstidspunktDatovelger;

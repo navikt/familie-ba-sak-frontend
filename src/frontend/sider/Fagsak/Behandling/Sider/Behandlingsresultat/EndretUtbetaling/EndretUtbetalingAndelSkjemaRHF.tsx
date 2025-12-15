@@ -6,14 +6,14 @@ import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook
 import { Alert, VStack } from '@navikt/ds-react';
 
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
-import AvtaletidspunktDeltBostedDatovelger from './komponenter/AvtaletidspunktDeltBostedDatovelger';
-import Begrunnelse from './komponenter/Begrunnelse';
-import Månedperiodevelger from './komponenter/Månedperiodevelger';
-import Personvelger from './komponenter/Personvelger';
-import SkjemaKnapper from './komponenter/SkjemaKnapper';
-import SøknadstidspunktDatovelger from './komponenter/SøknadstidspunktDatovelger';
-import Utbetalingvelger from './komponenter/Utbetalingvelger';
-import Årsakvelger from './komponenter/Årsakvelger';
+import { AvtaletidspunktDeltBostedDatovelger } from './komponenter/AvtaletidspunktDeltBostedDatovelger';
+import { Begrunnelse } from './komponenter/Begrunnelse';
+import { Månedperiodevelger } from './komponenter/Månedperiodevelger';
+import { Personvelger } from './komponenter/Personvelger';
+import { SkjemaKnapper } from './komponenter/SkjemaKnapper';
+import { SøknadstidspunktDatovelger } from './komponenter/SøknadstidspunktDatovelger';
+import { Utbetalingvelger } from './komponenter/Utbetalingvelger';
+import { Årsakvelger } from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
 import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import { SlettEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
@@ -26,7 +26,7 @@ interface EndretUtbetalingAndelSkjemaProps {
     lukkSkjema: () => void;
 }
 
-const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
+export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
 
@@ -91,5 +91,3 @@ const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUt
         </FormProvider>
     );
 };
-
-export default EndretUtbetalingAndelSkjemaRHF;

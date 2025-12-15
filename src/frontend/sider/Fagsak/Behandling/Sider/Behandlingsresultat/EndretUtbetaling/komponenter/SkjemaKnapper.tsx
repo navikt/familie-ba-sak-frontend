@@ -17,7 +17,7 @@ interface SkjemaKnapperProps {
     lukkSkjema: () => void;
 }
 
-const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
+export const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
     const { settÅpenBehandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const { reset, setError } = useFormContext<EndretUtbetalingAndelFormValues>();
@@ -83,5 +83,3 @@ const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
         </HStack>
     );
 };
-
-export default SkjemaKnapper;

@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 
 import { Button } from '@navikt/ds-react';
 
-import Utbetalingvelger from './Utbetalingvelger';
+import { Utbetalingvelger } from './Utbetalingvelger';
 import { render } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';

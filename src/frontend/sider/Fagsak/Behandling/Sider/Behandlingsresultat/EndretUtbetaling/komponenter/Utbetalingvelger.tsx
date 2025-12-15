@@ -11,7 +11,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
+export const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const årsak = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK);
@@ -48,5 +48,3 @@ const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
         />
     );
 };
-
-export default Utbetalingvelger;

@@ -13,7 +13,7 @@ import {
     type StandardFeltProps,
 } from '../useEndretUtbetalingAndelRHF';
 
-const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
+export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { behandling } = useBehandlingContext();
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
@@ -59,5 +59,3 @@ const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
         />
     );
 };
-
-export default Personvelger;

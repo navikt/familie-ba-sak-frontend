@@ -13,7 +13,7 @@ interface TomDatoProps extends StandardFeltProps {
     senesteDato: Date;
 }
 
-const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoProps) => {
+export const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoProps) => {
     const { control, trigger } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const monthValidationRef = useRef<MonthValidationT | undefined>(undefined);
@@ -77,5 +77,3 @@ const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoProps) =>
         </MonthPicker>
     );
 };
-
-export default FomDato;
