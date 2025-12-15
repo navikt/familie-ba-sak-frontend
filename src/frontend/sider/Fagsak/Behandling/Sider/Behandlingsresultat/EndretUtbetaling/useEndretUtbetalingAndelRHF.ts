@@ -2,7 +2,6 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { byggDataRessurs } from '@navikt/familie-typer';
 
-import { useConfirmBrowserRefresh } from '../../../../../../hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
 import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -72,18 +71,9 @@ export const useEndretUtbetalingAndelRHF = (
         },
     });
 
-    const {
-        control,
-        reset,
-        setError,
-        formState: { isDirty },
-    } = form;
+    const { control, reset, setError } = form;
 
     useOnFormSubmitSuccessful(control, reset);
-    useConfirmBrowserRefresh({
-        enabled: isDirty,
-        message: 'En periode med endret utbetaling har endringer som ikke er lagret!',
-    });
 
     const { mutateAsync: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
         onSuccess: (behandling: IBehandling) => {
