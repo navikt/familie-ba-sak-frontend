@@ -102,9 +102,9 @@ export const EndretUtbetalingAndelRadRHF = () => {
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {typeof endretUtbetalingAndel.prosent === 'number'
-                        ? utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)
-                        : ''}
+                    {endretUtbetalingAndel.prosent === undefined
+                        ? ''
+                        : utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)}
                 </BodyShort>
             </Table.DataCell>
         </Table.ExpandableRow>
