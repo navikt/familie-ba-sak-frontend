@@ -85,7 +85,7 @@ export const useEndretUtbetalingAndelRHF = (
         message: 'En periode med endret utbetaling har endringer som ikke er lagret!',
     });
 
-    const { mutate: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
+    const { mutateAsync: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
         onSuccess: (behandling: IBehandling) => {
             lukkSkjema();
             settÅpenBehandling(byggDataRessurs(behandling));
