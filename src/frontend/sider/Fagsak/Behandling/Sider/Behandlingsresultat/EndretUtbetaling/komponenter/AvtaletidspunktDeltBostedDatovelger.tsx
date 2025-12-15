@@ -47,7 +47,7 @@ export const AvtaletidspunktDeltBostedDatovelger = ({ erLesevisning }: StandardF
     });
 
     const { datepickerProps, inputProps } = useDatepicker({
-        defaultSelected: value,
+        defaultSelected: value ?? undefined,
         onDateChange: onChange,
         onValidate: validation => (dateValidationRef.current = validation),
     });

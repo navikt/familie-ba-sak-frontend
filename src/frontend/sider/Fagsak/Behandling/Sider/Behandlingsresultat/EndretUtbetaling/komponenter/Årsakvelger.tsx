@@ -33,7 +33,7 @@ export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
                     ) {
                         setValue(EndretUtbetalingAndelFeltnavn.UTBETALING, Utbetaling.INGEN_UTBETALING);
                     } else {
-                        setValue(EndretUtbetalingAndelFeltnavn.UTBETALING, '');
+                        setValue(EndretUtbetalingAndelFeltnavn.UTBETALING, null);
                     }
                 };
 

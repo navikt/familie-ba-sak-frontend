@@ -60,7 +60,7 @@ describe('utledTidligsteOgSenesteDato', () => {
             ],
         };
 
-        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, [], '');
+        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, [], null);
 
         expect(tidligsteDato).toEqual(new Date('2023-01-01'));
         expect(senesteDato).toEqual(new Date('2024-02-01'));
@@ -75,7 +75,7 @@ describe('utledTidligsteOgSenesteDato', () => {
             ],
         };
 
-        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1'], '');
+        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1'], null);
 
         expect(tidligsteDato).toEqual(new Date('2023-01-01'));
         expect(senesteDato).toEqual(new Date('2023-12-01'));
@@ -91,7 +91,7 @@ describe('utledTidligsteOgSenesteDato', () => {
             ],
         };
 
-        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1', '3'], '');
+        const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1', '3'], null);
 
         expect(tidligsteDato).toEqual(new Date('2023-01-01'));
         expect(senesteDato).toEqual(new Date('2023-09-01'));

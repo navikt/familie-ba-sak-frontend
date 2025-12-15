@@ -58,7 +58,7 @@ export const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: 
 
     const fomDato = watch(EndretUtbetalingAndelFeltnavn.FOM) ?? tidligsteRelevanteDato;
     const { monthpickerProps, inputProps } = useMonthpicker({
-        defaultSelected: value,
+        defaultSelected: value ?? undefined,
         fromDate: max([tidligsteDato, fomDato]),
         toDate: senesteDato,
         onMonthChange: onChange,

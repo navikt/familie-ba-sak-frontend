@@ -50,7 +50,7 @@ export const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoPr
     });
 
     const { monthpickerProps, inputProps } = useMonthpicker({
-        defaultSelected: value,
+        defaultSelected: value ?? undefined,
         fromDate: tidligsteDato,
         toDate: senesteDato,
         onMonthChange: dato => {

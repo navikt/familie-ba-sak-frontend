@@ -11,15 +11,11 @@ import { render } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 
-const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
-    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',
-};
-
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
 function Wrapper({
     children,
-    defaultValues = DEFAULT_VALUES,
+    defaultValues,
     onSubmitDelay = 0,
 }: {
     children: ReactNode;

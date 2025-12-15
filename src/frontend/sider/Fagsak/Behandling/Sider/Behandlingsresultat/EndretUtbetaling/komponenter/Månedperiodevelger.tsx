@@ -19,7 +19,7 @@ import {
 export function utledTidligsteOgSenesteDato(
     åpenBehandling: IBehandling,
     valgtePersoner: string[],
-    årsak: IEndretUtbetalingAndelÅrsak | ''
+    årsak: IEndretUtbetalingAndelÅrsak | null
 ) {
     const ikkeSenereEnnInneværendeMåned = årsak === IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT;
 

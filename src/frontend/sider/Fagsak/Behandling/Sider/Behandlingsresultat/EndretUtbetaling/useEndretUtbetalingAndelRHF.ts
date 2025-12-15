@@ -14,8 +14,7 @@ import {
 } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import type { Utbetaling } from '../Utbetaling';
-import { prosentTilUtbetaling, utbetalingTilProsent } from '../Utbetaling';
+import { prosentTilUtbetaling, type Utbetaling, utbetalingTilProsentRHF } from '../Utbetaling';
 
 export interface StandardFeltProps {
     erLesevisning?: boolean;
@@ -34,12 +33,12 @@ export enum EndretUtbetalingAndelFeltnavn {
 
 export interface EndretUtbetalingAndelFormValues {
     [EndretUtbetalingAndelFeltnavn.PERSONER]: OptionType[];
-    [EndretUtbetalingAndelFeltnavn.FOM]: Date | undefined;
-    [EndretUtbetalingAndelFeltnavn.TOM]: Date | undefined;
-    [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling | '';
-    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak | '';
-    [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: Date | undefined;
-    [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: Date | undefined;
+    [EndretUtbetalingAndelFeltnavn.FOM]: Date | null;
+    [EndretUtbetalingAndelFeltnavn.TOM]: Date | null;
+    [EndretUtbetalingAndelFeltnavn.UTBETALING]: Utbetaling | null;
+    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak | null;
+    [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: Date | null;
+    [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: Date | null;
     [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: string;
 }
 
@@ -57,16 +56,14 @@ export const useEndretUtbetalingAndelRHF = (
     const form = useForm<EndretUtbetalingAndelFormValues>({
         values: {
             [EndretUtbetalingAndelFeltnavn.PERSONER]: personer,
-            [EndretUtbetalingAndelFeltnavn.FOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.fom),
-            [EndretUtbetalingAndelFeltnavn.TOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.tom),
-            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(endretUtbetalingAndel.prosent) || '',
-            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: endretUtbetalingAndel.årsak || '',
-            [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]: isoStringTilDateEllerUndefined(
-                endretUtbetalingAndel.søknadstidspunkt
-            ),
-            [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]: isoStringTilDateEllerUndefined(
-                endretUtbetalingAndel.avtaletidspunktDeltBosted
-            ),
+            [EndretUtbetalingAndelFeltnavn.FOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.fom) ?? null,
+            [EndretUtbetalingAndelFeltnavn.TOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.tom) ?? null,
+            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(endretUtbetalingAndel.prosent) || null,
+            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: endretUtbetalingAndel.årsak || null,
+            [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]:
+                isoStringTilDateEllerUndefined(endretUtbetalingAndel.søknadstidspunkt) ?? null,
+            [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]:
+                isoStringTilDateEllerUndefined(endretUtbetalingAndel.avtaletidspunktDeltBosted) ?? null,
             [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: endretUtbetalingAndel.begrunnelse || '',
         },
     });
@@ -91,9 +88,9 @@ export const useEndretUtbetalingAndelRHF = (
         oppdaterEndretUtbetalingAndel({
             id: endretUtbetalingAndel.id,
             personIdenter: values.personer.map(person => person.value),
-            prosent: utbetalingTilProsent(values.utbetaling || undefined),
-            fom: dateTilIsoMånedStringEllerUndefined(values.fom),
-            tom: dateTilIsoMånedStringEllerUndefined(values.tom),
+            prosent: utbetalingTilProsentRHF(values.utbetaling) || undefined,
+            fom: values.fom ? dateTilIsoMånedStringEllerUndefined(values.fom) : undefined,
+            tom: values.tom ? dateTilIsoMånedStringEllerUndefined(values.tom) : undefined,
             årsak: values.årsak || undefined,
             begrunnelse: values.begrunnelse,
             søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(values.søknadstidspunkt),

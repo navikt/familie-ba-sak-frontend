@@ -223,9 +223,6 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
             const form = useForm<EndretUtbetalingAndelFormValues>({
                 defaultValues: {
                     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],
-                    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',
-                    [EndretUtbetalingAndelFeltnavn.UTBETALING]: '',
-                    [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: '',
                 },
             });
             return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;

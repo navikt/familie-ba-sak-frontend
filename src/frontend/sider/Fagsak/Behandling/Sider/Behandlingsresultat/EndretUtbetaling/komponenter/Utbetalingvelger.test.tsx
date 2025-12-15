@@ -12,16 +12,11 @@ import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetal
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 
-const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
-    [EndretUtbetalingAndelFeltnavn.ÅRSAK]: '',
-    [EndretUtbetalingAndelFeltnavn.UTBETALING]: '',
-};
-
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
 function Wrapper({
     children,
-    defaultValues = DEFAULT_VALUES,
+    defaultValues,
     onSubmitDelay = 0,
 }: {
     children: ReactNode;
