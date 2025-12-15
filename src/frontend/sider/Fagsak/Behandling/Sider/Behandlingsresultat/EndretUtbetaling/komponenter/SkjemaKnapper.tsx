@@ -1,13 +1,12 @@
 import * as React from 'react';
 
-import { useMutationState } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { byggDataRessurs } from '@navikt/familie-typer';
 
-import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
+import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useEndretUtbetalingAndelContext } from '../EndretUtbetalingAndelContext';
@@ -42,15 +41,7 @@ export const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
                 });
             });
 
-    const oppdatererEndretUtbetalingAndel =
-        useMutationState({
-            filters: {
-                mutationKey:
-                    OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
-                status: 'pending',
-            },
-        }).length > 0;
-
+    const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const skalDisableKnapper = oppdatererEndretUtbetalingAndel || sletterEndretUtbetalingAndel;
 
     return (

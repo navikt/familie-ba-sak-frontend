@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { useMutationState } from '@tanstack/react-query';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { Alert, VStack } from '@navikt/ds-react';
@@ -15,8 +14,8 @@ import { SøknadstidspunktDatovelger } from './komponenter/SøknadstidspunktDato
 import { Utbetalingvelger } from './komponenter/Utbetalingvelger';
 import { Årsakvelger } from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
-import { OppdaterEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';
-import { SlettEndretUtbetalingAndelMutationKeyFactory } from '../../../../../../hooks/useSlettEndretUtbetalingAndel';
+import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
+import { useSletterEndretUtbetalingAndelIsPending } from '../../../../../../hooks/useSletterEndretUtbetalingAndelIsPending';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
@@ -30,23 +29,8 @@ export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: E
     const { vurderErLesevisning } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
 
-    const sletterEndretUtbetalingAndel =
-        useMutationState({
-            filters: {
-                mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
-                status: 'pending',
-            },
-        }).length > 0;
-
-    const oppdatererEndretUtbetalingAndel =
-        useMutationState({
-            filters: {
-                mutationKey:
-                    OppdaterEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
-                status: 'pending',
-            },
-        }).length > 0;
-
+    const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
+    const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const erLesevisning = vurderErLesevisning();
     const låsFelter = erLesevisning || sletterEndretUtbetalingAndel || oppdatererEndretUtbetalingAndel;
 
