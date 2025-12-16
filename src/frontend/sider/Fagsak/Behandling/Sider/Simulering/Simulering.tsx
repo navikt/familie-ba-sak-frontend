@@ -142,7 +142,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                         etterbetaling.
                                         <br />
                                         <br />
-                                        Dersom det er en feilutbetaling må fagsaken beahndles ferdig før du fullfører
+                                        Dersom det er en feilutbetaling må fagsaken behandles ferdig før du fullfører
                                         denne behandlingen. Det er for å hindre at beløpene motregnes.
                                         <br />
                                         <br />
