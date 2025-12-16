@@ -5,10 +5,10 @@ import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import RefusjonEøs from './RefusjonEøs/RefusjonEøs';
-import { RefusjonEøsTabell } from './RefusjonEøsNy/RefusjonEøsTabell';
-import { useRefusjonEøsTabellContext } from './RefusjonEøsNy/RefusjonEøsTabellContext';
+import { FeilutbetaltValutaTabell } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabell';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
+import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
+import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
@@ -164,24 +164,18 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                     åpenBehandling={åpenBehandling}
                                     vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
                                 />
-                                {erFeilutbetaltValutaTabellSynlig && (
-                                    <FeilutbetaltValuta
-                                        feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
-                                        behandlingId={åpenBehandling.behandlingId}
-                                        fagsakId={fagsakId}
-                                        erLesevisning={erLesevisning}
-                                    />
-                                )}
-                                {erRefusjonEøsTabellSynlig && toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
-                                    <RefusjonEøsTabell />
-                                )}
-                                {erRefusjonEøsTabellSynlig && !toggles[ToggleNavn.brukNyRefusjonEøsForm] && (
-                                    <RefusjonEøs
-                                        refusjonEøsListe={åpenBehandling.refusjonEøs ?? []}
-                                        behandlingId={åpenBehandling.behandlingId}
-                                        fagsakId={fagsakId}
-                                    />
-                                )}
+                                {erFeilutbetaltValutaTabellSynlig &&
+                                    !toggles[ToggleNavn.brukNyFeilutbetaltValutaSkjema] && (
+                                        <FeilutbetaltValuta
+                                            feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
+                                            behandlingId={åpenBehandling.behandlingId}
+                                            fagsakId={fagsakId}
+                                            erLesevisning={erLesevisning}
+                                        />
+                                    )}
+                                {erFeilutbetaltValutaTabellSynlig &&
+                                    toggles[ToggleNavn.brukNyFeilutbetaltValutaSkjema] && <FeilutbetaltValutaTabell />}
+                                {erRefusjonEøsTabellSynlig && <RefusjonEøsTabell />}
                             </>
                         )}
                     </>

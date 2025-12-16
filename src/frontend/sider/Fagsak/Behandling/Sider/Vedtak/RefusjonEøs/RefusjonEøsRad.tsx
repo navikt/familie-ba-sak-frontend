@@ -4,8 +4,8 @@ import { Table } from '@navikt/ds-react';
 
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';
-import { useSlettRefusjonEøsIsPending } from './form/useSlettRefusjonEøsIsPending';
 import { SlettRefusjonEøs } from './SlettRefusjonEøs';
+import { useSlettRefusjonEøsIsPending } from './useSlettRefusjonEøsIsPending';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -29,6 +29,7 @@ export function RefusjonEøsRad({ refusjonEøs }: Props) {
             onOpenChange={() => settErRadEkspandert(prev => !prev)}
             content={
                 <RefusjonEøsForm
+                    key={`${refusjonEøs.id}-$${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. rhf reset ikke funker for MonthPicker
                     type={Type.OPPDATER}
                     refusjonEøs={refusjonEøs}
                     skjulForm={() => settErRadEkspandert(false)}

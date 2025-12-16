@@ -1,0 +1,6 @@
+.personLinje {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 3;
+    background-color: white;
+}

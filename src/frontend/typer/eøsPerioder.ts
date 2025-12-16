@@ -63,7 +63,7 @@ export const kompetanseResultater: Record<KompetanseResultat, string> = {
     NORGE_ER_PRIMÆRLAND: 'Norge er Primærland',
     NORGE_ER_SEKUNDÆRLAND: 'Norge er Sekundærland',
     TO_PRIMÆRLAND: 'To primærland',
-    NASJONAL_RETT_DIFFERANSEBEREGNING: 'Nasjonal rett-differanseberegning',
+    NASJONAL_RETT_DIFFERANSEBEREGNING: 'Nasjonal rett - differanseberegning',
 };
 
 export enum EøsPeriodeStatus {

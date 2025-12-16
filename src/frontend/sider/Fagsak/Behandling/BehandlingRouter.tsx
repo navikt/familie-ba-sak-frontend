@@ -12,7 +12,7 @@ import type { SideId } from './Sider/sider';
 import { sider } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
-import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
+import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import Vedtak from './Sider/Vedtak/Vedtak';
 import { VedtakProvider } from './Sider/Vedtak/VedtakContext';
@@ -23,7 +23,7 @@ import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeConte
 import type { IMinimalFagsak } from '../../../typer/fagsak';
 import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
-import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøsNy/RefusjonEøsTabellContext';
+import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 
 interface Props {
     bruker: IPersonInfo;

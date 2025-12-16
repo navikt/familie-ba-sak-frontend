@@ -33,8 +33,7 @@ export interface IAvregningsperiode {
 export interface IOverlappendePeriodeMedAndreFagsaker {
     fom: string;
     tom: string;
-    fagsakerMedFeilutbetaling: string[];
-    fagsakerMedEtterbetaling: string[];
+    fagsaker: string[];
 }
 
 export enum Tilbakekrevingsvalg {

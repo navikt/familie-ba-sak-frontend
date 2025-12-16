@@ -64,6 +64,11 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     };
 
     const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
+    const nasjonalRettDifferanseberegningMedUlikeAktivitetsland =
+        skjema.felter.resultat?.verdi === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING &&
+        skjema.felter.søkersAktivitetsland.verdi &&
+        skjema.felter.annenForeldersAktivitetsland.verdi &&
+        skjema.felter.søkersAktivitetsland.verdi !== skjema.felter.annenForeldersAktivitetsland.verdi;
 
     const onBarnSelected = (optionValue: string, isSelected: boolean) => {
         onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
@@ -243,6 +248,16 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                         }
                     />
                 )}
+                {nasjonalRettDifferanseberegningMedUlikeAktivitetsland && (
+                    <Alert
+                        variant={'warning'}
+                        inline
+                        size={'small'}
+                        children={
+                            'To andre EØS-land er primærland. Saksbehandler må manuelt beregne hvilket av EØS-landene som utbetaler den høyeste barnetrygden og som Norge skal differanseberegne mot.'
+                        }
+                    />
+                )}
                 {!lesevisning && (
                     <Knapperad>
                         <div>
@@ -251,7 +266,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 size="small"
                                 variant={'primary'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                             >
                                 Ferdig
                             </Button>
@@ -273,7 +287,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                     barn => `${barn}-`
                                 )}_${skjema.felter.initielFom.verdi}`}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >
