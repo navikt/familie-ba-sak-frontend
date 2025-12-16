@@ -64,7 +64,14 @@ export const EndretUtbetalingAndelRadRHF = () => {
             togglePlacement="right"
             open={erSkjemaEkspandert}
             onOpenChange={toggleForm}
-            content={<EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmit} lukkSkjema={lukkSkjema} />}
+            content={
+                <EndretUtbetalingAndelSkjemaRHF
+                    key={`${endretUtbetalingAndel}-${erSkjemaEkspandert ? 'ekspandert' : 'lukket'}`}
+                    form={form}
+                    onSubmit={onSubmit}
+                    lukkSkjema={lukkSkjema}
+                />
+            }
         >
             <Table.DataCell>
                 <PersonCelle>
