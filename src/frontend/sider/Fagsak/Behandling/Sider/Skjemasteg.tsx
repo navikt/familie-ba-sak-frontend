@@ -83,34 +83,36 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     }
 
     return (
-        <VStack id={'skjemasteg'} paddingInline={'space-32'} paddingBlock={'space-24'} gap={'space-16'}>
-            <BehandlingPåVentAlert />
-            <MidlertidigEnhetAlert />
-            <Box position={'relative'} marginBlock={'space-8'} className={className} maxWidth={maxWidthStyle}>
-                <Heading size={'large'} level={'1'} spacing={true}>
-                    {tittel}
-                </Heading>
-                {children}
-                {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
-                <Navigering>
-                    {nesteOnClick && skalViseNesteKnapp && (!vurderErLesevisning() || kanGåVidereILesevisning) && (
-                        <Button
-                            variant={'primary'}
-                            onClick={onNesteClicked}
-                            loading={senderInn}
-                            disabled={senderInn || skalDisableNesteKnapp}
-                        >
-                            {nesteKnappTittel}
-                        </Button>
-                    )}
-                    {forrigeOnClick && skalViseForrigeKnapp && (
-                        <Button variant={'secondary'} onClick={onForrigeClicked}>
-                            {forrigeKnappTittel}
-                        </Button>
-                    )}
-                </Navigering>
-            </Box>
-        </VStack>
+        <Box marginBlock={'space-0 space-128'}>
+            <VStack id={'skjemasteg'} paddingInline={'space-32'} paddingBlock={'space-24'} gap={'space-16'}>
+                <BehandlingPåVentAlert />
+                <MidlertidigEnhetAlert />
+                <Box position={'relative'} marginBlock={'space-8'} className={className} maxWidth={maxWidthStyle}>
+                    <Heading size={'large'} level={'1'} spacing={true}>
+                        {tittel}
+                    </Heading>
+                    {children}
+                    {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
+                    <Navigering>
+                        {nesteOnClick && skalViseNesteKnapp && (!vurderErLesevisning() || kanGåVidereILesevisning) && (
+                            <Button
+                                variant={'primary'}
+                                onClick={onNesteClicked}
+                                loading={senderInn}
+                                disabled={senderInn || skalDisableNesteKnapp}
+                            >
+                                {nesteKnappTittel}
+                            </Button>
+                        )}
+                        {forrigeOnClick && skalViseForrigeKnapp && (
+                            <Button variant={'secondary'} onClick={onForrigeClicked}>
+                                {forrigeKnappTittel}
+                            </Button>
+                        )}
+                    </Navigering>
+                </Box>
+            </VStack>
+        </Box>
     );
 };
 
