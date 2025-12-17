@@ -72,7 +72,7 @@ export const FomDato = ({ erLesevisning, tidligsteDato, senesteDato }: TomDatoPr
                 label={'F.o.m.'}
                 ref={ref}
                 readOnly={erLesevisning || isSubmitting}
-                error={isSubmitted && error?.message}
+                error={error?.message}
             />
         </MonthPicker>
     );

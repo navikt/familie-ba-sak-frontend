@@ -75,7 +75,7 @@ export const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: 
                 label={'T.o.m.' + (valgfri ? ' (valgfri)' : '')}
                 ref={ref}
                 readOnly={erLesevisning || isSubmitting}
-                error={isSubmitted && error?.message}
+                error={error?.message}
             />
         </MonthPicker>
     );
