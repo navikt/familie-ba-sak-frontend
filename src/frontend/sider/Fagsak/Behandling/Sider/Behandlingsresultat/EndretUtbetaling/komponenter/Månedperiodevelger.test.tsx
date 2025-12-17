@@ -32,10 +32,11 @@ function Wrapper({
     defaultValues?: DefaultValues<EndretUtbetalingAndelFormValues>;
 }) {
     const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
+    const fagsak = lagFagsak();
     return (
         <TestProviders>
-            <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider fagsak={lagFagsak()}>
+            <FagsakProvider fagsak={fagsak}>
+                <HentOgSettBehandlingProvider fagsak={fagsak}>
                     <BehandlingProvider behandling={lagBehandling()}>
                         <FormProvider {...form}>
                             <form onSubmit={form.handleSubmit(() => onSubmit(onSubmitDelay))}>
@@ -52,13 +53,12 @@ function Wrapper({
 
 describe('utledTidligsteOgSenesteDato', () => {
     test('returnerer tidligste fom og seneste tom når ingen personer er valgt', () => {
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-12' }),
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
             ],
-        };
+        });
 
         const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, [], null);
 
@@ -67,13 +67,12 @@ describe('utledTidligsteOgSenesteDato', () => {
     });
 
     test('filtrerer på valgt person', () => {
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-12' }),
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
             ],
-        };
+        });
 
         const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1'], null);
 
@@ -82,14 +81,13 @@ describe('utledTidligsteOgSenesteDato', () => {
     });
 
     test('filtrerer på flere valgte personer', () => {
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '1', stønadFom: '2023-01', stønadTom: '2023-06' }),
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '2', stønadFom: '2023-03', stønadTom: '2024-02' }),
                 lagPersonMedAndelerTilkjentYtelse({ personIdent: '3', stønadFom: '2023-05', stønadTom: '2023-09' }),
             ],
-        };
+        });
 
         const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(behandling, ['1', '3'], null);
 
@@ -100,12 +98,11 @@ describe('utledTidligsteOgSenesteDato', () => {
     test('begrenser seneste dato til inneværende måned når årsak er ALLEREDE_UTBETALT og tom er i fremtiden', () => {
         const omFemÅr = new Date(new Date().getFullYear() + 5, 0, 1).toISOString();
 
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ stønadFom: '2023-01', stønadTom: omFemÅr }),
             ],
-        };
+        });
 
         const { senesteDato } = utledTidligsteOgSenesteDato(
             behandling,
@@ -118,13 +115,11 @@ describe('utledTidligsteOgSenesteDato', () => {
 
     test('begrenser tidligste dato til inneværende måned når årsak er ALLEREDE_UTBETALT og fom er i fremtiden', () => {
         const omFemÅr = new Date(new Date().getFullYear() + 5, 0, 1).toISOString();
-
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ stønadFom: omFemÅr, stønadTom: omFemÅr }),
             ],
-        };
+        });
 
         const { tidligsteDato } = utledTidligsteOgSenesteDato(
             behandling,
@@ -137,13 +132,11 @@ describe('utledTidligsteOgSenesteDato', () => {
 
     test('begrenser ikke datoer når årsak ikke er ALLEREDE_UTBETALT', () => {
         const omFemÅr = new Date(new Date().getFullYear() + 5, 0, 1).toISOString();
-
-        const behandling = {
-            ...lagBehandling(),
+        const behandling = lagBehandling({
             personerMedAndelerTilkjentYtelse: [
                 lagPersonMedAndelerTilkjentYtelse({ stønadFom: '2023-01', stønadTom: omFemÅr }),
             ],
-        };
+        });
 
         const { tidligsteDato, senesteDato } = utledTidligsteOgSenesteDato(
             behandling,
