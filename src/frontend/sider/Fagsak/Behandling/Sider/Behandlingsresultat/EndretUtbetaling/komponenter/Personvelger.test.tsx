@@ -15,8 +15,7 @@ import { Målform } from '../../../../../../../typer/søknad';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
 
-const defaultBehandling: IBehandling = {
-    ...lagBehandling(),
+const defaultBehandling: IBehandling = lagBehandling({
     personer: [
         {
             type: PersonType.SØKER,
@@ -59,7 +58,7 @@ const defaultBehandling: IBehandling = {
             stønadTom: '2043-12-31',
         },
     ],
-};
+});
 
 const TestBehandlingContext = createContext<IBehandling>(defaultBehandling);
 
