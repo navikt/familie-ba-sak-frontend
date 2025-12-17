@@ -38,6 +38,21 @@ export function utbetalingTilProsent(utbetaling?: Utbetaling) {
     }
 }
 
+export function utbetalingTilProsentRHF(utbetaling: Utbetaling | null) {
+    switch (utbetaling) {
+        case Utbetaling.FULL_UTBETALING:
+            return 100;
+        case Utbetaling.DELT_UTBETALING:
+            return 50;
+        case Utbetaling.INGEN_UTBETALING:
+            return 0;
+        case null:
+            return null;
+        default:
+            throw new Error(`Klarer ikke å konvertere fra ${utbetaling} til prosent`);
+    }
+}
+
 export function utbetalingTilLabel(utbetaling?: Utbetaling) {
     switch (utbetaling) {
         case Utbetaling.FULL_UTBETALING:
@@ -77,6 +92,24 @@ export function erUtbetalingTillattForÅrsak({
             return true;
         case undefined:
             return false;
+        default:
+            throw new Error(`Ukjent utbetalingstype`);
+    }
+}
+
+export function erUtbetalingTillattForÅrsakRHF(årsak: IEndretUtbetalingAndelÅrsak | null, utbetaling: Utbetaling) {
+    if (!årsak) return true;
+
+    switch (utbetaling) {
+        case Utbetaling.FULL_UTBETALING:
+            return årsak === IEndretUtbetalingAndelÅrsak.DELT_BOSTED;
+        case Utbetaling.DELT_UTBETALING:
+            return (
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR ||
+                årsak === IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND
+            );
+        case Utbetaling.INGEN_UTBETALING:
+            return true;
         default:
             throw new Error(`Ukjent utbetalingstype`);
     }
