@@ -4,8 +4,8 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { FeilutbetaltValutaTabell } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabell';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
+import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
 import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';

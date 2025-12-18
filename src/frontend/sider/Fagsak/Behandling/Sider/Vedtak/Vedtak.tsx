@@ -7,7 +7,7 @@ import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
