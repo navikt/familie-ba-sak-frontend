@@ -1,22 +1,21 @@
-import React, { createContext, useEffect, type PropsWithChildren } from 'react';
+import React, { createContext, useEffect, type PropsWithChildren, useState } from 'react';
 
-import { HttpProvider } from '@navikt/familie-http';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-interface IProps extends PropsWithChildren {
-    autentisertSaksbehandler: ISaksbehandler | undefined;
-}
-
-interface AuthProviderExports {
+interface Context {
     autentisert: boolean;
     settAutentisert: (autentisert: boolean) => void;
     innloggetSaksbehandler: ISaksbehandler | undefined;
 }
 
-const AuthContext = createContext<AuthProviderExports | undefined>(undefined);
+const AuthContext = createContext<Context | undefined>(undefined);
 
-const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
-    const [autentisert, settAutentisert] = React.useState(true);
+interface Props extends PropsWithChildren {
+    autentisertSaksbehandler: ISaksbehandler | undefined;
+}
+
+export function AuthContextProvider({ autentisertSaksbehandler, children }: Props) {
+    const [autentisert, settAutentisert] = useState(true);
     const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(autentisertSaksbehandler);
 
     useEffect(() => {
@@ -30,30 +29,12 @@ const AuthProvider = ({ autentisertSaksbehandler, children }: IProps) => {
             {children}
         </AuthContext.Provider>
     );
-};
+}
 
-export const useAuthContext = () => {
+export function useAuthContext() {
     const context = React.useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth må brukes innenfor AuthProvider');
+        throw new Error('useAuthContext må brukes innenfor AuthContextProvider');
     }
     return context;
-};
-
-const HttpProviderWrapper = ({ children }: PropsWithChildren) => {
-    const { innloggetSaksbehandler, settAutentisert } = useAuthContext();
-
-    return (
-        <HttpProvider innloggetSaksbehandler={innloggetSaksbehandler} settAutentisert={settAutentisert}>
-            {children}
-        </HttpProvider>
-    );
-};
-
-export const AuthOgHttpProvider: React.FC<IProps> = ({ children, autentisertSaksbehandler }) => {
-    return (
-        <AuthProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-            <HttpProviderWrapper>{children}</HttpProviderWrapper>
-        </AuthProvider>
-    );
-};
+}
