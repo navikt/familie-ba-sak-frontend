@@ -44,8 +44,8 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+    const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
     const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
-    const { erUlagretNyFeilutbetaltValutaPeriode } = useFeilutbetaltValutaTabellContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
@@ -61,7 +61,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const sendTilBeslutter = () => {
         sendTilBeslutterNesteOnClick(
             (visModal: boolean) => settVisModal(visModal),
-            erUlagretNyFeilutbetaltValutaPeriode,
+            erLeggTilFeilutbetaltValutaFormÅpen,
             erLeggTilRefusjonEøsFormÅpen,
             vedtaksperioderMedBegrunnelserRessurs,
             erSammensattKontrollsak
