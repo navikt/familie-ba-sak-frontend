@@ -4,7 +4,6 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import FeilutbetaltValuta from './FeilutbetaltValuta/FeilutbetaltValuta';
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabell';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
 import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
@@ -17,7 +16,6 @@ import { useVedtakContext } from './VedtakContext';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
 import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import {
@@ -30,7 +28,6 @@ import {
     type IBehandling,
 } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
@@ -40,8 +37,7 @@ interface Props {
 }
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
-    const { hentSaksbehandlerRolle, toggles } = useAppContext();
+    const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
@@ -164,17 +160,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                                     åpenBehandling={åpenBehandling}
                                     vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
                                 />
-                                {erFeilutbetaltValutaTabellSynlig &&
-                                    !toggles[ToggleNavn.brukNyFeilutbetaltValutaSkjema] && (
-                                        <FeilutbetaltValuta
-                                            feilutbetaltValutaListe={åpenBehandling.feilutbetaltValuta}
-                                            behandlingId={åpenBehandling.behandlingId}
-                                            fagsakId={fagsakId}
-                                            erLesevisning={erLesevisning}
-                                        />
-                                    )}
-                                {erFeilutbetaltValutaTabellSynlig &&
-                                    toggles[ToggleNavn.brukNyFeilutbetaltValutaSkjema] && <FeilutbetaltValutaTabell />}
+                                {erFeilutbetaltValutaTabellSynlig && <FeilutbetaltValutaTabell />}
                                 {erRefusjonEøsTabellSynlig && <RefusjonEøsTabell />}
                             </>
                         )}
