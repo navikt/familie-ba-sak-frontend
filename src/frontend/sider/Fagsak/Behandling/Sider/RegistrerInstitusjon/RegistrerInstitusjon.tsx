@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -11,10 +9,6 @@ import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useS
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
-
-const StyledSkjemasteg = styled(Skjemasteg)`
-    max-width: 40rem;
-`;
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -31,7 +25,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
     }
 
     return (
-        <StyledSkjemasteg
+        <Skjemasteg
             className={'mottaker'}
             tittel={'Info om institusjon'}
             nesteOnClick={onSubmitMottaker}
@@ -47,7 +41,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
                 <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
             )}
             {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
-        </StyledSkjemasteg>
+        </Skjemasteg>
     );
 };
 

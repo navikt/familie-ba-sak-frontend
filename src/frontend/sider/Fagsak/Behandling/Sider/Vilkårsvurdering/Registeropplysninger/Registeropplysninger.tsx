@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import {
     CalendarIcon,
     FlowerPetalFallingIcon,
@@ -10,22 +8,13 @@ import {
     HouseIcon,
     PassportIcon,
 } from '@navikt/aksel-icons';
-import { Heading } from '@navikt/ds-react';
-import { AFontWeightRegular, ASpacing4 } from '@navikt/ds-tokens/dist/tokens';
+import { Box, Detail, Heading } from '@navikt/ds-react';
 
-import { HentetLabel } from './HentetLabel';
+import styles from './Registeropplysninger.module.css';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
 import { Registeropplysning } from '../../../../../../typer/registeropplysning';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
-
-const Container = styled.div`
-    width: 32rem;
-`;
-
-const SemiBoldHeading = styled(Heading)`
-    font-weight: ${AFontWeightRegular};
-`;
 
 interface IRegisteropplysningerProps {
     registerHistorikk: IRestRegisterhistorikk;
@@ -37,13 +26,12 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
 
     return (
         <>
-            <SemiBoldHeading level={'3'} size="medium">
+            <Heading className={styles.regularHeading} level={'3'} size="medium">
                 Registeropplysninger
-            </SemiBoldHeading>
-            <Container>
-                <HentetLabel
-                    size={'small'}
-                    style={{ marginBottom: ASpacing4 }}
+            </Heading>
+            <Box width={'32rem'}>
+                <Detail
+                    className={styles.detail}
                     children={
                         'Sist hentet fra Folkeregisteret ' +
                         isoStringTilFormatertString({
@@ -105,7 +93,7 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         historikk={registerHistorikk.deltBosted}
                     />
                 )}
-            </Container>
+            </Box>
         </>
     );
 };

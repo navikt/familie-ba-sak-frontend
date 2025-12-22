@@ -1,0 +1,17 @@
+.table {
+    margin-left: var(--a-spacing-4);
+}
+
+.opplysningsIkon {
+    padding-top: var(--a-spacing-2);
+}
+
+.headerCell {
+    &:nth-of-type(1) {
+        width: 15rem;
+    }
+
+    &:nth-of-type(2) {
+        width: 12rem;
+    }
+}

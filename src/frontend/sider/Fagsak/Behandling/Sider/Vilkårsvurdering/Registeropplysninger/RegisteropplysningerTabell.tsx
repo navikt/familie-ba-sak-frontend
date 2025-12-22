@@ -2,11 +2,11 @@ import type { ReactNode } from 'react';
 import React, { useState } from 'react';
 
 import { differenceInMilliseconds } from 'date-fns';
-import styled from 'styled-components';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, Table } from '@navikt/ds-react';
+import { Button, HStack, Table } from '@navikt/ds-react';
 
+import styles from './RegisteropplysningerTabell.module.css';
 import type { IRestRegisteropplysning } from '../../../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../../../typer/registeropplysning';
 import {
@@ -16,35 +16,6 @@ import {
     isoStringTilFormatertString,
     tidenesMorgen,
 } from '../../../../../../utils/dato';
-
-const Container = styled.div`
-    display: flex;
-    margin-top: 1rem;
-    justify-content: space-between;
-    width: 100%;
-`;
-
-const StyledHeaderCell = styled(Table.HeaderCell)`
-    &:nth-of-type(1) {
-        width: 15rem;
-    }
-    &:nth-of-type(2) {
-        width: 12rem;
-    }
-`;
-
-const StyledTable = styled(Table)`
-    margin-left: 1rem;
-`;
-
-const OpplysningsIkon = styled.div`
-    padding-top: 0.5rem;
-`;
-
-const HøyrejustertKnapperad = styled.div`
-    display: flex;
-    flex-direction: row-reverse;
-`;
 
 interface IRegisteropplysningerTabellProps {
     opplysningstype: Registeropplysning;
@@ -110,16 +81,23 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
 
     return (
         <>
-            <Container>
-                <OpplysningsIkon children={ikon} />
-                <StyledTable
+            <HStack wrap={false} marginBlock={'space-16 space-0'} justify={'space-between'} width={'100%'}>
+                <div className={styles.opplysningsIkon} children={ikon} />
+                <Table
+                    className={styles.table}
                     size={'small'}
                     aria-label={`Registeropplysninger for ${registeropplysning[opplysningstype]}`}
                 >
                     <Table.Header>
                         <Table.Row>
-                            <StyledHeaderCell children={registeropplysning[opplysningstype]} />
-                            <StyledHeaderCell children={hentDatoHeader(opplysningstype)} />
+                            <Table.HeaderCell
+                                className={styles.headerCell}
+                                children={registeropplysning[opplysningstype]}
+                            />
+                            <Table.HeaderCell
+                                className={styles.headerCell}
+                                children={hentDatoHeader(opplysningstype)}
+                            />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -137,10 +115,10 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                                 </Table.Row>
                             ))}
                     </Table.Body>
-                </StyledTable>
-            </Container>
+                </Table>
+            </HStack>
             {skalVæreEkspanderbar && (
-                <HøyrejustertKnapperad>
+                <HStack justify={'end'}>
                     <Button
                         variant="tertiary"
                         size="small"
@@ -150,7 +128,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                     >
                         {erEkspandert ? 'Skjul' : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
                     </Button>
-                </HøyrejustertKnapperad>
+                </HStack>
             )}
         </>
     );
