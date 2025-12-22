@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, List } from '@navikt/ds-react';
 
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
@@ -15,20 +14,6 @@ import Skjemasteg from '../Skjemasteg';
 interface IProps {
     åpenBehandling: IBehandling;
 }
-
-const StyledUl = styled.ul`
-    list-style: none;
-    padding-left: 0;
-`;
-
-const StyledLi = styled.li`
-    display: flex;
-    padding-bottom: 1rem;
-`;
-
-const StyledBodyShort = styled(BodyShort)`
-    margin-left: 0.5rem;
-`;
 
 const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
     const { fagsakId } = useSakOgBehandlingParams();
@@ -45,7 +30,7 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
             senderInn={false}
             steg={BehandlingSteg.FILTRERING_FØDSELSHENDELSER}
         >
-            <StyledUl>
+            <List>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {
                     const fødselshendelsefiltreringResultat = åpenBehandling.fødselshendelsefiltreringResultater.find(
                         it => it.filtreringsregel === filtreringsregel
@@ -54,15 +39,18 @@ const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
                     if (!fødselshendelsefiltreringResultat) return null;
 
                     return (
-                        <StyledLi key={filtreringsregel}>
-                            <VilkårResultatIkon resultat={fødselshendelsefiltreringResultat.resultat} />
-                            <StyledBodyShort>
+                        <List.Item
+                            aria-hidden
+                            icon={<VilkårResultatIkon resultat={fødselshendelsefiltreringResultat.resultat} />}
+                            key={filtreringsregel}
+                        >
+                            <BodyShort>
                                 {filtreringsregler[fødselshendelsefiltreringResultat.filtreringsregel]}
-                            </StyledBodyShort>
-                        </StyledLi>
+                            </BodyShort>
+                        </List.Item>
                     );
                 })}
-            </StyledUl>
+            </List>
         </Skjemasteg>
     );
 };
