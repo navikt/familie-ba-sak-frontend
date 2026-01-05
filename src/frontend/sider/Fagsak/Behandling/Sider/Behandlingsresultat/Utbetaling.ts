@@ -6,7 +6,7 @@ export enum Utbetaling {
     INGEN_UTBETALING = 'INGEN_UTBETALING',
 }
 
-export function prosentTilUtbetaling(prosent?: number) {
+export function prosentTilUtbetaling(prosent?: number | null) {
     switch (prosent) {
         case 100:
             return Utbetaling.FULL_UTBETALING;
