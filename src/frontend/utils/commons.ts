@@ -19,3 +19,7 @@ export function partition<T>(predicate: (val: T) => boolean, arr: Array<T>): [Ar
     });
     return partitioned;
 }
+
+export function erDefinert<T>(value: T | undefined | null): value is T {
+    return value !== undefined && value !== null;
+}
