@@ -58,13 +58,13 @@ export const useEndretUtbetalingAndelRHF = (
             [EndretUtbetalingAndelFeltnavn.PERSONER]: personer,
             [EndretUtbetalingAndelFeltnavn.FOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.fom) ?? null,
             [EndretUtbetalingAndelFeltnavn.TOM]: isoStringTilDateEllerUndefined(endretUtbetalingAndel.tom) ?? null,
-            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(endretUtbetalingAndel.prosent) || null,
-            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: endretUtbetalingAndel.årsak || null,
+            [EndretUtbetalingAndelFeltnavn.UTBETALING]: prosentTilUtbetaling(endretUtbetalingAndel.prosent) ?? null,
+            [EndretUtbetalingAndelFeltnavn.ÅRSAK]: endretUtbetalingAndel.årsak ?? null,
             [EndretUtbetalingAndelFeltnavn.SØKNADSTIDSPUNKT]:
                 isoStringTilDateEllerUndefined(endretUtbetalingAndel.søknadstidspunkt) ?? null,
             [EndretUtbetalingAndelFeltnavn.AVTALETIDSPUNKT_DELT_BOSTED]:
                 isoStringTilDateEllerUndefined(endretUtbetalingAndel.avtaletidspunktDeltBosted) ?? null,
-            [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: endretUtbetalingAndel.begrunnelse || '',
+            [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: endretUtbetalingAndel.begrunnelse ?? '',
         },
     });
 

@@ -10,6 +10,7 @@ import { EndretUtbetalingAndelSkjemaRHF } from './EndretUtbetalingAndelSkjemaRHF
 import { useEndretUtbetalingAndelRHF } from './useEndretUtbetalingAndelRHF';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
+import { erDefinert } from '../../../../../../utils/commons';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -109,9 +110,9 @@ export const EndretUtbetalingAndelRadRHF = () => {
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {endretUtbetalingAndel.prosent === undefined
-                        ? ''
-                        : utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)}
+                    {erDefinert(endretUtbetalingAndel.prosent)
+                        ? utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)
+                        : ''}
                 </BodyShort>
             </Table.DataCell>
         </Table.ExpandableRow>
