@@ -33,6 +33,15 @@ function Wrapper({
     );
 }
 
+beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2025-12-31T12:00:00Z'));
+});
+
+afterEach(() => {
+    vi.useRealTimers();
+});
+
 describe('AvtaletidspunktDeltBostedDatovelger', () => {
     test('skal vise avtaletidspunkt delt bosted datovelger', () => {
         const { screen } = render(<AvtaletidspunktDeltBostedDatovelger />, { wrapper: Wrapper });

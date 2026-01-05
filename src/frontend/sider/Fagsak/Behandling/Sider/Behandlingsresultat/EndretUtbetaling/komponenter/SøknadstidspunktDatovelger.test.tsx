@@ -32,6 +32,15 @@ function Wrapper({
     );
 }
 
+beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2025-12-30T12:00:00Z'));
+});
+
+afterEach(() => {
+    vi.useRealTimers();
+});
+
 describe('SøknadstidspunktDatovelger', () => {
     test('skal vise søknadstidspunkt datovelger', () => {
         const { screen } = render(<SøknadstidspunktDatovelger />, { wrapper: Wrapper });
