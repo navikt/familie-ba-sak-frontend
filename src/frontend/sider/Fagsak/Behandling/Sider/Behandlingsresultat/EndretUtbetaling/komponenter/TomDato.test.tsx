@@ -43,6 +43,15 @@ function UtfyltTomDato({ erLesevisning = false, valgfri = false }: { erLesevisni
     );
 }
 
+beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2025-12-30T12:00:00Z'));
+});
+
+afterEach(() => {
+    vi.useRealTimers();
+});
+
 describe('TomDato', () => {
     test('skal vise felt for t.o.m.', () => {
         const { screen } = render(<UtfyltTomDato />, { wrapper: Wrapper });
