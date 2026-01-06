@@ -83,7 +83,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     }
 
     return (
-        <Box marginBlock={'space-0 space-128'} maxWidth={'40rem'}>
+        <Box marginBlock={'space-0 space-128'}>
             <VStack id={'skjemasteg'} paddingInline={'space-32'} paddingBlock={'space-24'} gap={'space-16'}>
                 <BehandlingPåVentAlert />
                 <MidlertidigEnhetAlert />
