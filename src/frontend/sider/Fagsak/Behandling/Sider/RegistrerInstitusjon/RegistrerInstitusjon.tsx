@@ -32,6 +32,7 @@ const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
             nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
+            maxWidthStyle="40rem"
         >
             {samhandlerRessurs.status === RessursStatus.SUKSESS && (
                 <SamhandlerTabell samhandler={samhandlerRessurs.data} />
