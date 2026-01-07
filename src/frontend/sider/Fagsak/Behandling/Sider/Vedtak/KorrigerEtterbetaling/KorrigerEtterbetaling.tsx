@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { DocPencilIcon } from '@navikt/aksel-icons';
-import { Dropdown } from '@navikt/ds-react';
+import { ActionMenu } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../../../context/ModalContext';
 import { useModal } from '../../../../../../hooks/useModal';
@@ -17,14 +17,14 @@ const KorrigerEtterbetaling: React.FC<IKorrigerEtterbetaling> = ({ korrigertEtte
     const { åpneModal } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
     return (
-        <Dropdown.Menu.List.Item
-            onClick={() => {
+        <ActionMenu.Item
+            onSelect={() => {
                 åpneModal();
             }}
         >
             <DocPencilIcon fontSize={'1.4rem'} />
             {korrigertEtterbetaling ? <>Vis korrigert etterbetaling</> : <>Korriger etterbetaling</>}
-        </Dropdown.Menu.List.Item>
+        </ActionMenu.Item>
     );
 };
 
