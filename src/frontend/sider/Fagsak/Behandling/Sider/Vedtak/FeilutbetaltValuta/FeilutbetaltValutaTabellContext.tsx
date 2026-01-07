@@ -1,12 +1,4 @@
-import React, {
-    createContext,
-    type Dispatch,
-    type PropsWithChildren,
-    type SetStateAction,
-    useCallback,
-    useContext,
-    useState,
-} from 'react';
+import React, { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
@@ -14,8 +6,6 @@ interface FeilutbetaltValutaTabellContext {
     erFeilutbetaltValutaTabellSynlig: boolean;
     visFeilutbetaltValutaTabell: () => void;
     skjulFeilutbetaltValutaTabell: () => void;
-    erUlagretNyFeilutbetaltValutaPeriode: boolean; // TODO: Erstatt med erLeggTilFeilutbetaltValutaFormÅpen når toggelen "brukNyFeilutbetaltValutaSkjema" er slettet
-    settErUlagretNyFeilutbetaltValutaPeriode: Dispatch<SetStateAction<boolean>>; // TODO: Slett når toggelen "brukNyFeilutbetaltValutaSkjema" er slettet
     erLeggTilFeilutbetaltValutaFormÅpen: boolean;
     visLeggTilFeilutbetaltValutaForm: () => void;
     skjulLeggTilFeilutbetaltValutaForm: () => void;
@@ -31,17 +21,14 @@ export function FeilutbetaltValutaTabellProvider({ children }: PropsWithChildren
     const [erFeilutbetaltValutaTabellSynlig, settErFeilutbetaltValutaTabellSynlig] = useState(
         behandling.feilutbetaltValuta.length > 0
     );
-    const [erUlagretNyFeilutbetaltValutaPeriode, settErUlagretNyFeilutbetaltValutaPeriode] = useState(false);
     const [erLeggTilFeilutbetaltValutaFormÅpen, settErLeggTilFeilutbetaltValutaFormÅpen] = useState(false);
 
     const visLeggTilFeilutbetaltValutaForm = useCallback(() => {
         settErLeggTilFeilutbetaltValutaFormÅpen(true);
-        settErUlagretNyFeilutbetaltValutaPeriode(true);
     }, []);
 
     const skjulLeggTilFeilutbetaltValutaForm = useCallback(() => {
         settErLeggTilFeilutbetaltValutaFormÅpen(false);
-        settErUlagretNyFeilutbetaltValutaPeriode(false);
     }, []);
 
     const visFeilutbetaltValutaTabell = useCallback(() => {
@@ -62,8 +49,6 @@ export function FeilutbetaltValutaTabellProvider({ children }: PropsWithChildren
                 erFeilutbetaltValutaTabellSynlig,
                 visFeilutbetaltValutaTabell,
                 skjulFeilutbetaltValutaTabell,
-                erUlagretNyFeilutbetaltValutaPeriode,
-                settErUlagretNyFeilutbetaltValutaPeriode,
                 erLeggTilFeilutbetaltValutaFormÅpen,
                 visLeggTilFeilutbetaltValutaForm,
                 skjulLeggTilFeilutbetaltValutaForm,

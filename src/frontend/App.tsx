@@ -10,7 +10,8 @@ import type { ISaksbehandler } from '@navikt/familie-typer';
 import { hentInnloggetBruker } from './api/saksbehandler';
 import Container from './Container';
 import { AppProvider } from './context/AppContext';
-import { AuthOgHttpProvider } from './context/AuthContext';
+import { AuthContextProvider } from './context/AuthContext';
+import { HttpContextProvider } from './context/HttpContext';
 import { ModalProvider } from './context/ModalContext';
 import { useStartUmami } from './hooks/useStartUmami';
 import { ErrorBoundary } from './komponenter/ErrorBoundary/ErrorBoundary';
@@ -40,16 +41,18 @@ const App: React.FC = () => {
 
     return (
         <ErrorBoundary autentisertSaksbehandler={autentisertSaksbehandler}>
-            <AuthOgHttpProvider autentisertSaksbehandler={autentisertSaksbehandler}>
-                <QueryClientProvider client={queryClient}>
-                    {!erProd() && <ReactQueryDevtools position={'right'} initialIsOpen={false} />}
-                    <AppProvider>
-                        <ModalProvider>
-                            <Container />
-                        </ModalProvider>
-                    </AppProvider>
-                </QueryClientProvider>
-            </AuthOgHttpProvider>
+            <AuthContextProvider autentisertSaksbehandler={autentisertSaksbehandler}>
+                <HttpContextProvider>
+                    <QueryClientProvider client={queryClient}>
+                        {!erProd() && <ReactQueryDevtools position={'right'} initialIsOpen={false} />}
+                        <AppProvider>
+                            <ModalProvider>
+                                <Container />
+                            </ModalProvider>
+                        </AppProvider>
+                    </QueryClientProvider>
+                </HttpContextProvider>
+            </AuthContextProvider>
         </ErrorBoundary>
     );
 };

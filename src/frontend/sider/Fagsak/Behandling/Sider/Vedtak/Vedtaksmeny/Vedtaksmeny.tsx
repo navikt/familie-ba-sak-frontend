@@ -11,7 +11,7 @@ import { vedtakHarFortsattUtbetaling } from '../../../../../../utils/vedtakUtils
 import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import EndreEndringstidspunkt from '../endringstidspunkt/EndreEndringstidspunkt';
-import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaNy/FeilutbetaltValutaTabellContext';
+import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import KorrigerEtterbetaling from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from '../KorrigerVedtakModal/KorrigerVedtak';
 import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabellContext';

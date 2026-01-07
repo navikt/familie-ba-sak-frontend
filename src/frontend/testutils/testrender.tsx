@@ -9,9 +9,10 @@ import { MemoryRouter } from 'react-router';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { AppProvider } from '../context/AppContext';
-import { AuthOgHttpProvider } from '../context/AuthContext';
+import { AuthContextProvider } from '../context/AuthContext';
 import { ModalProvider } from '../context/ModalContext';
 import { SaksbehandlerTestdata } from './testdata/saksbehandlerTestdata';
+import { HttpContextProvider } from '../context/HttpContext';
 
 function lagQueryClient() {
     return new QueryClient({
@@ -27,24 +28,28 @@ interface Props extends PropsWithChildren {
     queryClient?: QueryClient;
     initialEntries?: [{ pathname: string }];
     saksbehandler?: ISaksbehandler;
+    fjernRessursSomLasterTimeout?: number;
 }
 
 export function TestProviders({
     queryClient = lagQueryClient(), // Ny instans for hver test
     initialEntries = [{ pathname: '/' }],
     saksbehandler = SaksbehandlerTestdata.lagSaksbehandler(),
+    fjernRessursSomLasterTimeout = 0,
     children,
 }: Props) {
     return (
-        <AuthOgHttpProvider autentisertSaksbehandler={saksbehandler}>
-            <QueryClientProvider client={queryClient}>
-                <AppProvider>
-                    <ModalProvider>
-                        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-                    </ModalProvider>
-                </AppProvider>
-            </QueryClientProvider>
-        </AuthOgHttpProvider>
+        <AuthContextProvider autentisertSaksbehandler={saksbehandler}>
+            <HttpContextProvider fjernRessursSomLasterTimeout={fjernRessursSomLasterTimeout}>
+                <QueryClientProvider client={queryClient}>
+                    <AppProvider>
+                        <ModalProvider>
+                            <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+                        </ModalProvider>
+                    </AppProvider>
+                </QueryClientProvider>
+            </HttpContextProvider>
+        </AuthContextProvider>
     );
 }
 

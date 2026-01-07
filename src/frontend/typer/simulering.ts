@@ -33,7 +33,7 @@ export interface IAvregningsperiode {
 export interface IOverlappendePeriodeMedAndreFagsaker {
     fom: string;
     tom: string;
-    fagsaker: string[];
+    fagsaker: number[];
 }
 
 export enum Tilbakekrevingsvalg {

@@ -2,21 +2,19 @@ import * as React from 'react';
 
 import classNames from 'classnames';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, ErrorMessage, ErrorSummary, HStack, VStack } from '@navikt/ds-react';
-import { ASpacing2 } from '@navikt/ds-tokens/dist/tokens';
+import { Alert, BodyShort, Button, Detail, ErrorMessage, ErrorSummary, HStack, List, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
-import { HentetLabel } from './Registeropplysninger/HentetLabel';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
+import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -35,17 +33,6 @@ import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 import { useAppContext } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
-
-const UregistrerteBarnListe = styled.ol`
-    margin: ${ASpacing2} 0;
-`;
-
-const HentetLabelOgKnappDiv = styled.div`
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    margin-bottom: ${ASpacing2};
-`;
 
 interface IProps {
     åpenBehandling: IBehandling;
@@ -111,17 +98,17 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
         >
             <>
                 {åpenBehandling?.migreringsdato !== null && (
-                    <HentetLabel
-                        size={'small'}
+                    <Detail
+                        className={styles.hentetLabel}
                         children={`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
                             isoString: åpenBehandling?.migreringsdato,
                             tilFormat: Datoformat.DATO,
                         })}`}
                     />
                 )}
-                <HentetLabelOgKnappDiv>
-                    <HentetLabel
-                        size={'small'}
+                <HStack wrap={false} align={'center'} marginBlock={'space-0 space-8'}>
+                    <Detail
+                        className={styles.hentetLabel}
                         children={
                             registeropplysningerHentetTidpsunkt
                                 ? `Registeropplysninger hentet ${isoStringTilFormatertString({
@@ -149,7 +136,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                             icon={<ArrowsSquarepathIcon fontSize={'1.5rem'} focusable="false" />}
                         />
                     )}
-                </HentetLabelOgKnappDiv>
+                </HStack>
                 {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
                     <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>
                 )}
@@ -167,19 +154,18 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 {uregistrerteBarn.length > 0 && (
                     <Alert variant="info">
                         <BodyShort>Du har registrert følgende barn som ikke er registrert i Folkeregisteret:</BodyShort>
-                        <UregistrerteBarnListe>
+                        <List as={'ol'}>
                             {uregistrerteBarn.map(uregistrertBarn => (
-                                <li key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
+                                <List.Item key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
                                     <BodyShort>
                                         {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
                                             isoString: uregistrertBarn.fødselsdato,
                                             tilFormat: Datoformat.DATO,
                                         })}`}
                                     </BodyShort>
-                                </li>
+                                </List.Item>
                             ))}
-                        </UregistrerteBarnListe>
-
+                        </List>
                         <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
                     </Alert>
                 )}

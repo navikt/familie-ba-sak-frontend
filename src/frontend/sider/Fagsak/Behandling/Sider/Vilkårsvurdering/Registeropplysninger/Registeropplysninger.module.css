@@ -1,0 +1,8 @@
+.regularHeading {
+    font-weight: var(--a-font-weight-regular);
+}
+
+.detail {
+    color: var(--a-text-subtle);
+    margin-bottom: var(--a-spacing-4);
+}
