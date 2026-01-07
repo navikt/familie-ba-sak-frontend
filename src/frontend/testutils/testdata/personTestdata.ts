@@ -18,6 +18,7 @@ export function lagPerson(person: Partial<IPersonInfo> = {}): IPersonInfo {
         dødsfallDato: undefined,
         bostedsadresse: undefined,
         erEgenAnsatt: false,
+        harFalskIdentitet: false,
         ...person,
     };
 }

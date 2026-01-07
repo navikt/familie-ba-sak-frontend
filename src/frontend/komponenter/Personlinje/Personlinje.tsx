@@ -13,6 +13,7 @@ import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../utils/form
 import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { PersonIkon } from '../PersonIkon';
+import styles from './Personlinje.module.css';
 
 function InnholdContainer({ children }: PropsWithChildren) {
     return (
@@ -41,6 +42,7 @@ function utledFagsakeier(bruker?: IPersonInfo, søkerData?: IPersonInfo) {
         kjønn: bruker?.kjønn ?? kjønnType.UKJENT,
         kommunenummer: bruker?.kommunenummer ?? 'ukjent',
         erEgenAnsatt: søkerData?.erEgenAnsatt || bruker?.erEgenAnsatt || false,
+        harFalskIdentitet: bruker?.harFalskIdentitet || false,
     };
 }
 
@@ -90,6 +92,11 @@ export function Personlinje({ bruker, fagsak }: Props) {
                     <HStack align={'center'} gap={'3 4'}>
                         <BodyShort as={'span'} weight={'semibold'}>
                             {fagsakeier.navn} ({fagsakeier.alder} år)
+                            {fagsakeier.harFalskIdentitet && (
+                                <BodyShort as={'span'} weight={'semibold'}>
+                                    - <mark className={styles.falskIdentitet}>Falsk identitet</mark>
+                                </BodyShort>
+                            )}
                         </BodyShort>
                         <Divider />
                         <HStack align={'center'} gap={'1'}>
