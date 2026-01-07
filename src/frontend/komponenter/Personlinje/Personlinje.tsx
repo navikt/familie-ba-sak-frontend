@@ -91,7 +91,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
                     />
                     <HStack align={'center'} gap={'3 4'}>
                         <BodyShort as={'span'} weight={'semibold'}>
-                            {fagsakeier.navn} ({fagsakeier.alder} år){' '}
+                            {fagsakeier.navn} ({fagsakeier.alder} år)
                             {fagsakeier.harFalskIdentitet && (
                                 <BodyShort as={'span'} weight={'semibold'}>
                                     - <mark className={styles.falskIdentitet}>Falsk identitet</mark>
