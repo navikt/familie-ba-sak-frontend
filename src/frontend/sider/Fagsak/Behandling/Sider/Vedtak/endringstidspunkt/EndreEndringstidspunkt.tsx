@@ -1,35 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { CalendarIcon } from '@navikt/aksel-icons';
-import { Dropdown } from '@navikt/ds-react';
-
-import { OppdaterEndringstidspunktModal } from './OppdaterEndringstidspunktModal';
-import type { IBehandling } from '../../../../../../typer/behandling';
+import { ActionMenu } from '@navikt/ds-react';
 
 interface Props {
-    åpenBehandling: IBehandling;
+    åpneModal: () => void;
 }
 
-const EndreEndringstidspunkt: React.FC<Props> = ({ åpenBehandling }) => {
-    const [visModal, settVisModal] = useState(false);
+const EndreEndringstidspunkt: React.FC<Props> = ({ åpneModal }) => {
     return (
-        <>
-            <Dropdown.Menu.List.Item
-                onClick={() => {
-                    settVisModal(true);
-                }}
-            >
-                <CalendarIcon fontSize={'1.4rem'} />
-                Oppdater endringstidspunkt
-            </Dropdown.Menu.List.Item>
-
-            {visModal && (
-                <OppdaterEndringstidspunktModal
-                    lukkModal={() => settVisModal(false)}
-                    behandlingId={åpenBehandling.behandlingId}
-                />
-            )}
-        </>
+        <ActionMenu.Item onSelect={åpneModal}>
+            <CalendarIcon fontSize={'1.4rem'} />
+            Oppdater endringstidspunkt
+        </ActionMenu.Item>
     );
 };
 
