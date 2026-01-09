@@ -83,84 +83,86 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         }
         skalAutomatiskUtfylle.current = false;
     }, [genererteBrevbegrunnelser, grupperteBegrunnelser, alleBegrunnelserRessurs]);
-
+    console.log({ grupperteBegrunnelser, standardbegrunnelser });
     return (
-        <FamilieReactSelect
-            id={`${id}`}
-            value={standardbegrunnelser}
-            propSelectStyles={{
-                container: (provided, props) => ({
-                    ...provided,
-                    maxWidth: '50rem',
-                    zIndex: props.isFocused ? AZIndexPopover : 1,
-                }),
-                groupHeading: provided => ({
-                    ...provided,
-                    textTransform: 'none',
-                }),
-                multiValue: (provided, props) => {
-                    const currentOption = props.data as OptionType;
-                    const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
-                        alleBegrunnelserRessurs,
-                        currentOption.value as VedtakBegrunnelse
-                    );
-
-                    return {
+        <>
+            <FamilieReactSelect
+                id={`${id}`}
+                value={standardbegrunnelser}
+                propSelectStyles={{
+                    container: (provided, props) => ({
                         ...provided,
-                        backgroundColor: hentBakgrunnsfarge(vedtakBegrunnelseType),
-                        border: `1px solid ${hentBorderfarge(vedtakBegrunnelseType)}`,
-                        borderRadius: '0.5rem',
-                    };
-                },
-                multiValueLabel: provided => ({
-                    ...provided,
-                    whiteSpace: 'pre-wrap',
-                    textOverflow: 'hidden',
-                    overflow: 'hidden',
-                }),
-            }}
-            placeholder={'Velg begrunnelse(r)'}
-            isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
-            feil={
-                standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
-                standardBegrunnelserPut.status === RessursStatus.FEILET
-                    ? standardBegrunnelserPut.frontendFeilmelding
-                    : undefined
-            }
-            label="Velg standardtekst i brev"
-            creatable={false}
-            erLesevisning={skalIkkeEditeres}
-            isMulti={true}
-            onChange={(_, action: ActionMeta<OptionType>) => {
-                onChangeBegrunnelse(action);
-            }}
-            formatOptionLabel={(option: OptionType, formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>) => {
-                const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    alleBegrunnelserRessurs,
-                    option.value as VedtakBegrunnelse
-                );
+                        maxWidth: '50rem',
+                        zIndex: props.isFocused ? AZIndexPopover : 1,
+                    }),
+                    groupHeading: provided => ({
+                        ...provided,
+                        textTransform: 'none',
+                    }),
+                    multiValue: (provided, props) => {
+                        const currentOption = props.data as OptionType;
+                        const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
+                            alleBegrunnelserRessurs,
+                            currentOption.value as VedtakBegrunnelse
+                        );
 
-                if (formatOptionLabelMeta.context === 'value') {
-                    const type = vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType];
-                    return (
-                        <BodyShort>
-                            <b>{type}</b>: {option.label}
-                        </BodyShort>
-                    );
-                } else {
-                    return <BodyShort>{option.label}</BodyShort>;
+                        return {
+                            ...provided,
+                            backgroundColor: hentBakgrunnsfarge(vedtakBegrunnelseType),
+                            border: `1px solid ${hentBorderfarge(vedtakBegrunnelseType)}`,
+                            borderRadius: '0.5rem',
+                        };
+                    },
+                    multiValueLabel: provided => ({
+                        ...provided,
+                        whiteSpace: 'pre-wrap',
+                        textOverflow: 'hidden',
+                        overflow: 'hidden',
+                    }),
+                }}
+                placeholder={'Velg begrunnelse(r)'}
+                isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
+                feil={
+                    standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    standardBegrunnelserPut.status === RessursStatus.FEILET
+                        ? standardBegrunnelserPut.frontendFeilmelding
+                        : undefined
                 }
-            }}
-            formatGroupLabel={(group: GroupBase<OptionType>) => {
-                return (
-                    <GroupLabel>
-                        <Label>{group.label}</Label>
-                        <hr />
-                    </GroupLabel>
-                );
-            }}
-            options={grupperteBegrunnelser}
-        />
+                label="Velg standardtekst i brev"
+                creatable={false}
+                erLesevisning={skalIkkeEditeres}
+                isMulti={true}
+                onChange={(_, action: ActionMeta<OptionType>) => {
+                    onChangeBegrunnelse(action);
+                }}
+                formatOptionLabel={(option: OptionType, formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>) => {
+                    const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
+                        alleBegrunnelserRessurs,
+                        option.value as VedtakBegrunnelse
+                    );
+
+                    if (formatOptionLabelMeta.context === 'value') {
+                        const type = vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType];
+                        return (
+                            <BodyShort>
+                                <b>{type}</b>: {option.label}
+                            </BodyShort>
+                        );
+                    } else {
+                        return <BodyShort>{option.label}</BodyShort>;
+                    }
+                }}
+                formatGroupLabel={(group: GroupBase<OptionType>) => {
+                    return (
+                        <GroupLabel>
+                            <Label>{group.label}</Label>
+                            <hr />
+                        </GroupLabel>
+                    );
+                }}
+                options={grupperteBegrunnelser}
+            />
+        </>
     );
 };
 
