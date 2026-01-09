@@ -134,6 +134,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
     }, [vedtaksperiodeMedBegrunnelser]);
 
     const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
+        console.log(action);
         switch (action.action) {
             case 'select-option':
                 if (action.option) {
