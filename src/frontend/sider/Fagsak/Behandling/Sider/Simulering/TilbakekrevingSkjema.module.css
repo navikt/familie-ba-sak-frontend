@@ -1,0 +1,15 @@
+.fieldset {
+    margin-top: 4rem;
+    width: 90%;
+    max-width: 40rem;
+}
+
+.fritekstVarsel {
+    & > label {
+        width: 100%;
+    }
+}
+
+.brevmottakereAlert {
+    margin: var(--a-spacing-4) var(--a-spacing-0) var(--a-spacing-12) var(--a-spacing-8);
+}
