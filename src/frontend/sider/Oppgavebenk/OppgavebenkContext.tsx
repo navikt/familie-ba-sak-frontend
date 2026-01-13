@@ -203,7 +203,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                 } else {
                     settToast(ToastTyper.FANT_IKKE_FAGSAK, {
                         alertType: AlertType.WARNING,
-                        tekst: 'Det finnes flere relevante fagsak på bruker, du må søke opp fagsak manuelt.',
+                        tekst: 'Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.',
                     });
                 }
             }
