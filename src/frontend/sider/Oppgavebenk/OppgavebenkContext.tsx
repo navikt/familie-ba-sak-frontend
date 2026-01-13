@@ -194,17 +194,16 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                 navigate(`/fagsak/${fagsaker.data[0].id}/saksoversikt`);
             } else {
                 const løpendeFagsaker = fagsaker.data.filter(fagsak => fagsak.status === FagsakStatus.LØPENDE);
-                if (løpendeFagsaker.length > 1) {
-                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                        alertType: AlertType.WARNING,
-                        tekst: 'Fant flere enn 1 løpende fagsak på bruker',
-                    });
-                } else if (løpendeFagsaker.length === 1) {
+                const fagsakerUnderBehandling = fagsaker.data.filter(fagsak => fagsak.underBehandling);
+
+                if (løpendeFagsaker.length === 1) {
                     navigate(`/fagsak/${løpendeFagsaker[0].id}/saksoversikt`);
+                } else if (fagsakerUnderBehandling.length === 1) {
+                    navigate(`/fagsak/${fagsakerUnderBehandling[0].id}/saksoversikt`);
                 } else {
                     settToast(ToastTyper.FANT_IKKE_FAGSAK, {
                         alertType: AlertType.WARNING,
-                        tekst: 'Fant ikke fagsak',
+                        tekst: 'Det finnes flere relevante fagsak på bruker, du må søke opp fagsak manuelt.',
                     });
                 }
             }
