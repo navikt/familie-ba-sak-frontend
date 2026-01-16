@@ -10,8 +10,6 @@ import {
     ASurfaceSuccessSubtle,
     ASurfaceWarningSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { BehandlingResultat } from '../typer/behandling';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '../typer/vedtak';
@@ -19,19 +17,17 @@ import { VedtakBegrunnelseType } from '../typer/vedtak';
 import type { AlleBegrunnelser } from '../typer/vilkår';
 
 export const finnVedtakBegrunnelseType = (
-    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>,
+    alleBegrunnelser: AlleBegrunnelser,
     vedtakBegrunnelse: VedtakBegrunnelse
 ): VedtakBegrunnelseType | undefined => {
-    return alleBegrunnelserRessurs.status === RessursStatus.SUKSESS
-        ? (Object.keys(alleBegrunnelserRessurs.data).find(vedtakBegrunnelseType => {
-              return (
-                  alleBegrunnelserRessurs.data[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
-                      (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
-                          vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
-                  ) !== undefined
-              );
-          }) as VedtakBegrunnelseType)
-        : undefined;
+    return Object.keys(alleBegrunnelser).find(vedtakBegrunnelseType => {
+        return (
+            alleBegrunnelser[vedtakBegrunnelseType as VedtakBegrunnelseType].find(
+                (vedtakBegrunnelseTilknyttetVilkår: IRestVedtakBegrunnelseTilknyttetVilkår) =>
+                    vedtakBegrunnelseTilknyttetVilkår.id === vedtakBegrunnelse
+            ) !== undefined
+        );
+    }) as VedtakBegrunnelseType;
 };
 
 export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) => {

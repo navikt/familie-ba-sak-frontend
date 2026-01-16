@@ -7,13 +7,12 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
 import Vedtaksperiode from './Vedtaksperiode';
+import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
+import { useVedtaksperioderContext } from './VedtaksperioderContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../../utils/commons';
-import { useVedtakContext } from '../VedtakContext';
-import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
-import { useVedtaksperioderContext } from './VedtaksperioderContext';
 
 const StyledHeading = styled(Heading)`
     display: flex;
@@ -29,15 +28,7 @@ interface VedtaksperioderProps {
 }
 
 const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling }) => {
-    const { alleBegrunnelserRessurs } = useVedtakContext();
     const { vedtaksperioder } = useVedtaksperioderContext();
-
-    if (
-        alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
-        alleBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-    ) {
-        return <StyledAlert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</StyledAlert>;
-    }
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
         vedtaksperioder,
