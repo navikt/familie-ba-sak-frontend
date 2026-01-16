@@ -1,19 +1,18 @@
 import { addMonths, isBefore, startOfMonth } from 'date-fns';
 
 import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
-import { RessursStatus, type Ressurs } from '@navikt/familie-typer';
 
 import { BehandlingStatus } from '../../../../../../typer/behandling';
 import {
-    VedtakBegrunnelseType,
-    vedtakBegrunnelseTyper,
     type IRestVedtakBegrunnelseTilknyttetVilkår,
     type VedtakBegrunnelse,
+    VedtakBegrunnelseType,
+    vedtakBegrunnelseTyper,
 } from '../../../../../../typer/vedtak';
 import {
-    Vedtaksperiodetype,
     type IRestVedtaksbegrunnelse,
     type IVedtaksperiodeMedBegrunnelser,
+    Vedtaksperiodetype,
 } from '../../../../../../typer/vedtaksperiode';
 import type { AlleBegrunnelser } from '../../../../../../typer/vilkår';
 import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../../utils/dato';
@@ -73,18 +72,12 @@ const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
 
 export const grupperBegrunnelser = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
-    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>
+    alleBegrunnelser: AlleBegrunnelser
 ): GroupBase<OptionType>[] => {
     const begrunnelseTyperKnyttetTilVedtaksperioden =
         vedtaksperiodeTilMuligeVedtakBegrunnelseTyper(vedtaksperiodeMedBegrunnelser);
 
-    if (alleBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
-        return [];
-    }
-
-    const alleBegrunnelser = alleBegrunnelserRessurs.data;
-
-    const grupperteBegrunnelser = Object.keys(alleBegrunnelser)
+    return Object.keys(alleBegrunnelser)
         .filter((vedtakBegrunnelseType: string) =>
             begrunnelseTyperKnyttetTilVedtaksperioden.includes(vedtakBegrunnelseType as VedtakBegrunnelseType)
         )
@@ -111,8 +104,6 @@ export const grupperBegrunnelser = (
                 },
             ];
         }, []);
-
-    return grupperteBegrunnelser;
 };
 
 export const mapBegrunnelserTilSelectOptions = (
