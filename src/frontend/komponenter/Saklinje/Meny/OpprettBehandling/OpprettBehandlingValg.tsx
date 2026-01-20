@@ -103,7 +103,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { toggles } = useAppContext();
+    const { toggles, harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -116,7 +116,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
+    const kanOppretteTekniskEndring = kanOppretteRevurdering && harInnloggetSaksbehandlerSuperbrukerTilgang();
+    const kanManueltKorrigereMedVedtaksbrev = harInnloggetSaksbehandlerSuperbrukerTilgang() ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -221,7 +222,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
                         kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev],
+                        kanManueltKorrigereMedVedtaksbrev,
                         toggles[ToggleNavn.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
                     ).map(årsak => {
                         return (

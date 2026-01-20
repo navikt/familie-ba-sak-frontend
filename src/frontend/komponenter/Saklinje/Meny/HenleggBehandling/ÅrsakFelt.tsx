@@ -8,12 +8,11 @@ import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from '.
 import { useAppContext } from '../../../../context/AppContext';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '../../../../typer/behandling';
-import { ToggleNavn } from '../../../../typer/toggles';
 
 export function ÅrsakFelt() {
     const { behandling } = useBehandlingContext();
 
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
 
     const { control } = useFormContext<HenleggBehandlingFormValues>();
 
@@ -23,7 +22,7 @@ export function ÅrsakFelt() {
         rules: { required: 'Årsak er påkrevd.' },
     });
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = harInnloggetSaksbehandlerSuperbrukerTilgang();
 
     const valgmuligheter = Object.values(HenleggÅrsak)
         .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)

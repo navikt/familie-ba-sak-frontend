@@ -33,7 +33,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
 
     const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -127,7 +127,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
         <Box maxWidth="70rem" marginBlock="10" marginInline="16">
             <Heading size="large" level="1" children="Saksoversikt" />
 
-            {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
+            {harInnloggetSaksbehandlerSuperbrukerTilgang() &&
                 minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
                     <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
                 )}
