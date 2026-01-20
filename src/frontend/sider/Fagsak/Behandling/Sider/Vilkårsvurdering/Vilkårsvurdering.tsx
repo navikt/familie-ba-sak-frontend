@@ -14,11 +14,14 @@ import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
+import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
 import {
     annenVurderingConfig,
     type IAnnenVurdering,
@@ -30,16 +33,13 @@ import { erProd } from '../../../../../utils/miljø';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
-import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
-import { useAppContext } from '../../../../../context/AppContext';
-import { ToggleNavn } from '../../../../../typer/toggles';
 
 interface IProps {
     åpenBehandling: IBehandling;
 }
 
 const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
     const { fagsakId } = useSakOgBehandlingParams();
 
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
@@ -142,7 +142,7 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
                 )}
             </>
 
-            {!erProd() && !toggles[ToggleNavn.skalSkjuleTestmiljøknapper] && (
+            {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (
                 <HStack gap="4" marginBlock={'8 8'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />

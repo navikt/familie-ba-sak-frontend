@@ -1,8 +1,8 @@
-export interface IToggles {
+export interface FeatureToggles {
     [name: string]: boolean;
 }
 
-export enum ToggleNavn {
+export enum FeatureToggle {
     // Operasjonelle
     kanBehandleTekniskEndring = 'familie-ba-sak.behandling.teknisk-endring',
     kanManueltKorrigereMedVedtaksbrev = 'familie-ba-sak.behandling.korreksjon-vedtaksbrev',
@@ -23,10 +23,3 @@ export enum ToggleNavn {
     visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
     skalBrukeNyttSkjemaForEndretUtbetalingAndel = 'familie-ba-sak.endret-utbetaling-andel-skjema-rhf',
 }
-
-export const alleTogglerAv = (): IToggles => {
-    return Object.values(ToggleNavn).reduce((previousValue: IToggles, currentValue: ToggleNavn) => {
-        previousValue[currentValue] = false;
-        return previousValue;
-    }, {});
-};
