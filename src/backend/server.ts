@@ -16,21 +16,14 @@ import { logInfo } from '@navikt/familie-logging';
 
 import { sessionConfig } from './config';
 import { prometheusTellere } from './metrikker';
+import overstyrEmitWarning from './overstyrEmitWarning';
 import { attachToken, doEndringsloggProxy, doProxy, doRedirectProxy } from './proxy';
 import setupRouter from './router';
 import webpackDevConfig from '../webpack/webpack.dev';
 
 const port = 8000;
 
-// Logger ut warnings fra eksterne avhengigheter for å feilsøke problemer raskere.
-process.on('warning', warning => {
-    logInfo(`${'Feil oppstått i ekstern avhengighet. ' + warning.message}`, {
-        name: warning.name,
-        message: warning.name,
-        stack: warning.stack,
-        cause: warning.cause,
-    });
-});
+overstyrEmitWarning();
 
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     if (process.env.NODE_ENV === 'development') {
