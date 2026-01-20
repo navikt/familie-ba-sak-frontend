@@ -10,20 +10,12 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: "18:00"
+    time: "09:00"
   cooldown:
     default-days: 4
-  open-pull-requests-limit: 10
+  open-pull-requests-limit: 20
   registries: "*"
-  ignore:
-    - dependency-name: "*"
-      update-types: ["version-update:semver-patch"]
   groups:
-    patch:
-      patterns:
-        - '*'
-      update-types:
-        - 'patch'
     react:
       patterns:
         - "react"
@@ -37,10 +29,12 @@ updates:
       patterns:
         - "@navikt/aksel-icons"
         - "@navikt/ds-*"
+    patch-updates:
+      update-types:
+        - patch
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: daily
   cooldown:
     default-days: 4
-  open-pull-requests-limit: 10
