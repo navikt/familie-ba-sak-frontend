@@ -8,7 +8,7 @@ import { Alert, HStack, Loader } from '@navikt/ds-react';
 import BehandlingContainer from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from './BrukerContext';
-import Dokumentutsending from './Dokumentutsending/Dokumentutsending';
+import { Dokumentutsending } from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
 import { FagsakProvider } from './FagsakContext';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
@@ -88,8 +88,8 @@ export function FagsakContainer() {
                                 element={
                                     <>
                                         <Fagsaklinje />
-                                        <DokumentutsendingProvider fagsakId={fagsak.id}>
-                                            <Dokumentutsending bruker={bruker} />
+                                        <DokumentutsendingProvider>
+                                            <Dokumentutsending />
                                         </DokumentutsendingProvider>
                                     </>
                                 }
