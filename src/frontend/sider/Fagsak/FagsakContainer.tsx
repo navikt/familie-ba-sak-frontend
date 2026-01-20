@@ -14,7 +14,7 @@ import { FagsakProvider } from './FagsakContext';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import JournalpostListe from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
-import Saksoversikt from './Saksoversikt/Saksoversikt';
+import { Saksoversikt } from './Saksoversikt/Saksoversikt';
 import { useFagsakId } from '../../hooks/useFagsakId';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
@@ -79,7 +79,7 @@ export function FagsakContainer() {
                                 element={
                                     <>
                                         <Fagsaklinje />
-                                        <Saksoversikt bruker={bruker} minimalFagsak={fagsak} />
+                                        <Saksoversikt />
                                     </>
                                 }
                             />
