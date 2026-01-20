@@ -10,21 +10,9 @@ import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import { FagsakType, type IMinimalFagsak } from '../../../typer/fagsak';
+import { FagsakType } from '../../../typer/fagsak';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
-
-interface IFagsakTypeLabel {
-    fagsakType: FagsakType;
-}
-
-interface IBehandlingLenkepanel {
-    minimalFagsak: IMinimalFagsak;
-}
-
-interface IInnholdstabell {
-    minimalFagsak: IMinimalFagsak;
-    behandling?: VisningBehandling;
-}
+import { useFagsakContext } from '../FagsakContext';
 
 export const SaksoversiktPanelBredde = `calc(10 * ${ASpacing16})`;
 
@@ -46,11 +34,13 @@ const StyledAlert = styled(Alert)`
     margin-top: ${ASpacing8};
 `;
 
-const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
+function Innholdstabell() {
+    const { fagsak } = useFagsakContext();
+
     const behandlingstema: IBehandlingstema | undefined =
-        minimalFagsak.løpendeKategori &&
-        minimalFagsak.løpendeUnderkategori &&
-        tilBehandlingstema(minimalFagsak.løpendeKategori, minimalFagsak.løpendeUnderkategori);
+        fagsak.løpendeKategori &&
+        fagsak.løpendeUnderkategori &&
+        tilBehandlingstema(fagsak.løpendeKategori, fagsak.løpendeUnderkategori);
     return (
         <HStack gap="20">
             <div>
@@ -59,14 +49,15 @@ const Innholdstabell: React.FC<IInnholdstabell> = ({ minimalFagsak }) => {
             </div>
             <div>
                 <HeaderTekst spacing>Status</HeaderTekst>
-                <BodyTekst weight="semibold">{hentFagsakStatusVisning(minimalFagsak)}</BodyTekst>
+                <BodyTekst weight="semibold">{hentFagsakStatusVisning(fagsak)}</BodyTekst>
             </div>
         </HStack>
     );
-};
+}
 
-const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
-    switch (fagsakType) {
+function FagsakTypeLabel() {
+    const { fagsak } = useFagsakContext();
+    switch (fagsak.fagsakType) {
         case FagsakType.INSTITUSJON:
             return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
@@ -76,14 +67,15 @@ const FagsakTypeLabel: React.FC<IFagsakTypeLabel> = ({ fagsakType }) => {
         default:
             return null;
     }
-};
+}
 
 const genererHoverTekst = (behandling: VisningBehandling) => {
     return behandling.status === BehandlingStatus.AVSLUTTET ? 'Gå til gjeldende vedtak' : 'Gå til åpen behandling';
 };
 
-const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) => {
-    const aktivBehandling: VisningBehandling | undefined = hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
+export function FagsakLenkepanel() {
+    const { fagsak } = useFagsakContext();
+    const aktivBehandling: VisningBehandling | undefined = hentAktivBehandlingPåMinimalFagsak(fagsak);
 
     return (
         <>
@@ -92,29 +84,24 @@ const FagsakLenkepanel: React.FC<IBehandlingLenkepanel> = ({ minimalFagsak }) =>
                     <LinkCard>
                         <LinkCard.Title>
                             <LinkCard.Anchor asChild={true}>
-                                <Link
-                                    as={ReactRouterLink}
-                                    to={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}`}
-                                >
+                                <Link as={ReactRouterLink} to={`/fagsak/${fagsak.id}/${aktivBehandling.behandlingId}`}>
                                     {genererHoverTekst(aktivBehandling)}
                                 </Link>
                             </LinkCard.Anchor>
                         </LinkCard.Title>
                         <LinkCard.Description>
                             <VStack paddingBlock={'4 0'}>
-                                <Innholdstabell minimalFagsak={minimalFagsak} />
+                                <Innholdstabell />
                             </VStack>
                         </LinkCard.Description>
                     </LinkCard>
                 </Box>
             ) : (
                 <FagsakPanel borderColor="border-strong" borderWidth="1" borderRadius="small" padding="8">
-                    <Innholdstabell minimalFagsak={minimalFagsak} />
+                    <Innholdstabell />
                 </FagsakPanel>
             )}
-            <FagsakTypeLabel fagsakType={minimalFagsak.fagsakType}></FagsakTypeLabel>
+            <FagsakTypeLabel />
         </>
     );
-};
-
-export default FagsakLenkepanel;
+}

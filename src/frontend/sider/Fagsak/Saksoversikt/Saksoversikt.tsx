@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
 
 import { Behandlinger } from './Behandlinger';
-import FagsakLenkepanel, { SaksoversiktPanelBredde } from './FagsakLenkepanel';
+import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
@@ -15,27 +15,22 @@ import { useAppContext } from '../../../context/AppContext';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { FagsakStatus } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
 import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-
-interface IProps {
-    bruker: IPersonInfo;
-    minimalFagsak: IMinimalFagsak;
-}
+import { useFagsakContext } from '../FagsakContext';
 
 const StyledAlert = styled(Alert)`
     width: ${SaksoversiktPanelBredde};
 `;
 
-const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
+export function Saksoversikt() {
+    const { fagsak } = useFagsakContext();
     const { toggles } = useAppContext();
 
-    const iverksatteBehandlinger = minimalFagsak.behandlinger.filter(
+    const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
             behandling.status === BehandlingStatus.AVSLUTTET && !erBehandlingHenlagt(behandling.resultat)
     );
@@ -50,13 +45,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
               )[0]
             : undefined;
 
-    const aktivBehandling = hentAktivBehandlingPåMinimalFagsak(minimalFagsak);
+    const aktivBehandling = hentAktivBehandlingPåMinimalFagsak(fagsak);
 
     if (!gjeldendeBehandling) {
         gjeldendeBehandling = aktivBehandling;
     }
 
-    const gjeldendeUtbetalingsperioder = minimalFagsak.gjeldendeUtbetalingsperioder;
+    const gjeldendeUtbetalingsperioder = fagsak.gjeldendeUtbetalingsperioder;
     const utbetalingsperiodeInneværendeMåned = gjeldendeUtbetalingsperioder.find(periode =>
         periodeOverlapperMedValgtDato(periode.periodeFom, periode.periodeTom, new Date())
     );
@@ -70,10 +65,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
     const lenkeTilBehandlingsresultat = () => {
         return (
             aktivBehandling && (
-                <Link
-                    as={ReactRouterLink}
-                    to={`/fagsak/${minimalFagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}
-                >
+                <Link as={ReactRouterLink} to={`/fagsak/${fagsak.id}/${aktivBehandling.behandlingId}/tilkjent-ytelse`}>
                     Se detaljer
                 </Link>
             )
@@ -128,13 +120,13 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             <Heading size="large" level="1" children="Saksoversikt" />
 
             {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
-                minimalFagsak.løpendeKategori === BehandlingKategori.EØS && (
-                    <GjennomførValutajusteringKnapp fagsakId={minimalFagsak.id} />
+                fagsak.løpendeKategori === BehandlingKategori.EØS && (
+                    <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
                 )}
 
             <VStack gap="14">
-                <FagsakLenkepanel minimalFagsak={minimalFagsak} />
-                {minimalFagsak.status === FagsakStatus.LØPENDE && (
+                <FagsakLenkepanel />
+                {fagsak.status === FagsakStatus.LØPENDE && (
                     <>
                         <Heading size="medium" level="2" spacing>
                             Løpende månedlig utbetaling
@@ -146,7 +138,7 @@ const Saksoversikt: React.FunctionComponent<IProps> = ({ minimalFagsak }) => {
             </VStack>
         </Box>
     );
-};
+}
 
 export const sakstype = (behandling?: IBehandling) => {
     if (!behandling) {
@@ -157,5 +149,3 @@ export const sakstype = (behandling?: IBehandling) => {
         behandling?.underkategori ? behandlingUnderkategori[behandling?.underkategori] : behandling?.underkategori
     }`;
 };
-
-export default Saksoversikt;
