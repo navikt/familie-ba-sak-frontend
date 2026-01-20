@@ -22,6 +22,16 @@ import webpackDevConfig from '../webpack/webpack.dev';
 
 const port = 8000;
 
+// Logger ut warnings fra eksterne avhengigheter for å feilsøke problemer raskere.
+process.on('warning', warning => {
+    logInfo(`${'Feil oppstått i ekstern avhengighet. ' + warning.message}`, {
+        name: warning.name,
+        message: warning.name,
+        stack: warning.stack,
+        cause: warning.cause,
+    });
+});
+
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     if (process.env.NODE_ENV === 'development') {
         const compiler = webpack(webpackDevConfig);
