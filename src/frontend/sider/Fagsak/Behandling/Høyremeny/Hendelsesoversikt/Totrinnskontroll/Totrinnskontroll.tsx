@@ -16,19 +16,15 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
-import Totrinnskontrollskjema from './Totrinnskontrollskjema';
-import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
+import { Totrinnskontrollskjema } from './Totrinnskontrollskjema';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingStatus } from '../../../../../../typer/behandling';
 import type { ITotrinnskontrollData } from '../../../../../../typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
+import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import type { ITrinn } from '../../../Sider/sider';
 import { KontrollertStatus } from '../../../Sider/sider';
-
-interface IProps {
-    åpenBehandling: IBehandling;
-}
 
 const Container = styled.div`
     padding: 0.5rem 1.5rem;
@@ -45,9 +41,9 @@ const initiellModalVerdi = {
     beslutning: TotrinnskontrollBeslutning.IKKE_VURDERT,
 };
 
-const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
-    const { trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
+export function Totrinnskontroll() {
+    const { fagsak } = useFagsakContext();
+    const { behandling, trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
         useBehandlingContext();
     const { request } = useHttp();
     const navigate = useNavigate();
@@ -110,7 +106,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                         return side.navn;
                     }),
                 },
-                url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/iverksett-vedtak`,
+                url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/iverksett-vedtak`,
             })
                 .then((response: Ressurs<IBehandling>) => {
                     settInnsendtVedtak(response);
@@ -126,13 +122,9 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
 
     return (
         <>
-            {åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK && (
+            {behandling.status === BehandlingStatus.FATTER_VEDTAK && (
                 <Container className="totrinnskontroll">
-                    <Totrinnskontrollskjema
-                        åpenBehandling={åpenBehandling}
-                        sendInnVedtak={sendInnVedtak}
-                        innsendtVedtak={innsendtVedtak}
-                    />
+                    <Totrinnskontrollskjema sendInnVedtak={sendInnVedtak} innsendtVedtak={innsendtVedtak} />
                 </Container>
             )}
 
@@ -152,7 +144,7 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
                             size={'medium'}
                             onClick={() => {
                                 settModalVerdi(initiellModalVerdi);
-                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
                             }}
                             children={'Se saksoversikt'}
                         />
@@ -171,6 +163,4 @@ const Totrinnskontroll: React.FunctionComponent<IProps> = ({ åpenBehandling }) 
             )}
         </>
     );
-};
-
-export default Totrinnskontroll;
+}

@@ -6,7 +6,6 @@ import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
 import { AIconInfo, AIconSuccess, ASpacing4, ATextDanger, ATextDefault } from '@navikt/ds-tokens/dist/tokens';
 
 import Informasjonsbolk from './Informasjonsbolk';
-import type { IBehandling } from '../../../../typer/behandling';
 import {
     BehandlingResultat,
     behandlingsresultater,
@@ -18,10 +17,7 @@ import {
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { useFagsakContext } from '../../FagsakContext';
 import { sakstype } from '../../Saksoversikt/Saksoversikt';
-
-interface IBehandlingskortProps {
-    åpenBehandling: IBehandling;
-}
+import { useBehandlingContext } from '../context/BehandlingContext';
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
@@ -69,22 +65,21 @@ const StyledHeading = styled(Heading)`
     font-size: ${ASpacing4};
 `;
 
-const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) => {
+export function Behandlingskort() {
     const { fagsak } = useFagsakContext();
+    const { behandling } = useBehandlingContext();
+
     const behandlinger = fagsak.behandlinger;
 
     const antallBehandlinger = behandlinger.length;
-    const åpenBehandlingIndex =
-        behandlinger.findIndex(behandling => behandling.behandlingId === åpenBehandling.behandlingId) + 1;
+    const behandlingIndex = behandlinger.findIndex(b => b.behandlingId === behandling.behandlingId) + 1;
 
-    const tittel = `${
-        åpenBehandling ? behandlingstyper[åpenBehandling.type].navn : 'ukjent'
-    } (${åpenBehandlingIndex}/${antallBehandlinger}) - ${sakstype(åpenBehandling).toLowerCase()}`;
+    const tittel = `${behandlingstyper[behandling.type].navn} (${behandlingIndex}/${antallBehandlinger}) - ${sakstype(behandling).toLowerCase()}`;
 
     return (
         <Box
             padding="2"
-            borderColor={hentResultatfarge(åpenBehandling.resultat)}
+            borderColor={hentResultatfarge(behandling.resultat)}
             borderWidth="1 1 1 5"
             borderRadius="medium"
             margin="2"
@@ -94,22 +89,22 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                     <StyledHeading size={'xsmall'} level={'2'}>
                         {tittel}
                     </StyledHeading>
-                    <BodyShort>{behandlingÅrsak[åpenBehandling.årsak]}</BodyShort>
+                    <BodyShort>{behandlingÅrsak[behandling.årsak]}</BodyShort>
                 </VStack>
             </Box>
             <VStack gap="4" marginBlock="4">
-                <Informasjonsbolk label="Behandlingsstatus" tekst={behandlingsstatuser[åpenBehandling.status]} />
+                <Informasjonsbolk label="Behandlingsstatus" tekst={behandlingsstatuser[behandling.status]} />
                 <Informasjonsbolk
                     label="Resultat"
-                    tekst={behandlingsresultater[åpenBehandling.resultat]}
-                    tekstFarge={hentResultatfargeTekst(åpenBehandling.resultat)}
+                    tekst={behandlingsresultater[behandling.resultat]}
+                    tekstFarge={hentResultatfargeTekst(behandling.resultat)}
                 />
                 <div>
-                    {åpenBehandling.søknadMottattDato && (
+                    {behandling.søknadMottattDato && (
                         <Informasjonsbolk
                             label="Søknad mottatt"
                             tekst={isoStringTilFormatertString({
-                                isoString: åpenBehandling.søknadMottattDato,
+                                isoString: behandling.søknadMottattDato,
                                 tilFormat: Datoformat.DATO,
                             })}
                         />
@@ -117,14 +112,14 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                     <Informasjonsbolk
                         label="Opprettet"
                         tekst={isoStringTilFormatertString({
-                            isoString: åpenBehandling.opprettetTidspunkt,
+                            isoString: behandling.opprettetTidspunkt,
                             tilFormat: Datoformat.DATO,
                         })}
                     />
                     <Informasjonsbolk
                         label="Vedtaksdato"
                         tekst={isoStringTilFormatertString({
-                            isoString: åpenBehandling.vedtak?.vedtaksdato,
+                            isoString: behandling.vedtak?.vedtaksdato,
                             tilFormat: Datoformat.DATO,
                             defaultString: 'Ikke satt',
                         })}
@@ -132,12 +127,10 @@ const Behandlingskort: React.FC<IBehandlingskortProps> = ({ åpenBehandling }) =
                 </div>
                 <Informasjonsbolk
                     label="Enhet"
-                    tekst={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetId}
-                    tekstHover={åpenBehandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn}
+                    tekst={behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId}
+                    tekstHover={behandling.arbeidsfordelingPåBehandling.behandlendeEnhetNavn}
                 />
             </VStack>
         </Box>
     );
-};
-
-export default Behandlingskort;
+}

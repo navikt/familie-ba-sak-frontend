@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
+import { useBrukerContext } from '../BrukerContext';
+import { useFagsakContext } from '../FagsakContext';
 import { useBehandlingContext } from './context/BehandlingContext';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
@@ -20,22 +22,20 @@ import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
 import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeContext';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
 import { hentSideHref } from '../../../utils/miljø';
 import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 
-interface Props {
-    bruker: IPersonInfo;
-    fagsak: IMinimalFagsak;
-}
-
-const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
-    const location = useLocation();
+export function BehandlingRouter() {
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
     const { behandling, leggTilBesøktSide } = useBehandlingContext();
+
+    const location = useLocation();
+
     useTrackTidsbrukPåSide(fagsak, behandling);
 
     const sidevisning = hentSideHref(location.pathname);
+
     useEffect(() => {
         if (sidevisning) {
             leggTilBesøktSide(Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId);
@@ -96,6 +96,4 @@ const BehandlingRouter: React.FC<Props> = ({ bruker, fagsak }) => {
             />
         </Routes>
     );
-};
-
-export default BehandlingRouter;
+}

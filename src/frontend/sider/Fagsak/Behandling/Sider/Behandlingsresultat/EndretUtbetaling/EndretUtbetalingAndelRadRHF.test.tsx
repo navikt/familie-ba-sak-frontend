@@ -69,7 +69,7 @@ function Wrapper({
     return (
         <TestProviders>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider fagsak={lagFagsak()}>
+                <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={behandling}>
                         <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
                             <Table>
