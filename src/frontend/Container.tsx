@@ -12,14 +12,12 @@ import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import { UtdatertAppVersjonModal } from './komponenter/Modal/UtdatertAppVersjonModal/UtdatertAppVersjonModal';
 import { ForhåndsvisOpprettingAvPdfModal } from './komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
-import { TidslinjeProvider } from './komponenter/Tidslinje/TidslinjeContext';
 import Toasts from './komponenter/Toast/Toasts';
 import { FagsakContainer } from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
 import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
-import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;
