@@ -10,7 +10,7 @@ import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type { BehandlingSteg, IBehandling, IOpprettBehandlingData, ISettPåVent } from '../../../../typer/behandling';
+import type { BehandlingSteg, IBehandling, ISettPåVent } from '../../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
 import { FagsakType } from '../../../../typer/fagsak';
@@ -27,7 +27,6 @@ import {
     finnSideForBehandlingssteg,
     hentTrinnForBehandling,
     KontrollertStatus,
-    sider,
 } from '../Sider/sider';
 import type { ISide, ITrinn, SideId } from '../Sider/sider';
 
@@ -37,14 +36,11 @@ interface Props extends React.PropsWithChildren {
 
 interface BehandlingContextValue {
     vurderErLesevisning: (sjekkTilgangTilEnhet?: boolean, skalIgnorereOmEnhetErMidlertidig?: boolean) => boolean;
-    forrigeÅpneSide: ISide | undefined;
-    hentStegPåÅpenBehandling: () => BehandlingSteg | undefined;
     leggTilBesøktSide: (besøktSide: SideId) => void;
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
     søkersMålform: Målform;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
-    opprettBehandling: (data: IOpprettBehandlingData) => Promise<void | Ressurs<IBehandling>>;
     logg: Ressurs<ILogg[]>;
     hentLogg: () => void;
     behandlingsstegSubmitressurs: Ressurs<IBehandling>;
@@ -60,8 +56,6 @@ interface BehandlingContextValue {
     ) => void;
     erMigreringsbehandling: boolean;
     aktivSettPåVent?: ISettPåVent | undefined;
-    erBehandleneEnhetMidlertidig?: boolean;
-    erBehandlingAvsluttet: boolean;
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
     gjelderEnsligMindreårig: boolean;
@@ -83,7 +77,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
-    const { opprettBehandling, logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(settBehandlingRessurs);
+    const { logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(settBehandlingRessurs);
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -94,10 +88,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [forrigeÅpneSide, settForrigeÅpneSide] = React.useState<ISide | undefined>(undefined);
-    const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{
-        [sideId: string]: ITrinn;
-    }>({});
+    const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{ [sideId: string]: ITrinn }>({});
 
     useEffect(() => {
         const siderPåBehandling = hentTrinnForBehandling(behandling);
@@ -118,10 +109,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
         automatiskNavigeringTilSideForSteg();
     }, [behandling.behandlingId]);
-
-    useEffect(() => {
-        settForrigeÅpneSide(Object.values(sider).find((side: ISide) => location.pathname.includes(side.href)));
-    }, [location.pathname]);
 
     const leggTilBesøktSide = (besøktSide: SideId) => {
         if (kanBeslutteVedtak) {
@@ -218,8 +205,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const erBehandleneEnhetMidlertidig =
         behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
 
-    const erBehandlingAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;
-
     const gjelderInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
     const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
@@ -230,14 +215,11 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         <BehandlingContext.Provider
             value={{
                 vurderErLesevisning,
-                forrigeÅpneSide,
-                hentStegPåÅpenBehandling,
                 leggTilBesøktSide,
                 settIkkeKontrollerteSiderTilManglerKontroll,
                 søkersMålform,
                 trinnPåBehandling,
                 behandling: behandling,
-                opprettBehandling,
                 logg,
                 hentLogg,
                 behandlingsstegSubmitressurs,
@@ -247,8 +229,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
                 aktivSettPåVent: behandling?.aktivSettPåVent,
-                erBehandleneEnhetMidlertidig,
-                erBehandlingAvsluttet,
                 gjelderInstitusjon,
                 samhandlerOrgnr,
                 gjelderEnsligMindreårig,
