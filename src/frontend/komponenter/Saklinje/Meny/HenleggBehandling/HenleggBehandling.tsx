@@ -7,15 +7,14 @@ import { ModalType } from '../../../../context/ModalContext';
 import { useModal } from '../../../../hooks/useModal';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { erPåHenleggbartSteg } from '../../../../typer/behandling';
-import { ToggleNavn } from '../../../../typer/toggles';
 
 export function HenleggBehandling() {
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { åpneModal } = useModal(ModalType.HENLEGG_BEHANDLING);
 
     const erLesevisning = vurderErLesevisning();
-    const harTilgangTilTekniskVedlikeholdHenleggelse = toggles[ToggleNavn.tekniskVedlikeholdHenleggelse];
+    const harTilgangTilTekniskVedlikeholdHenleggelse = harInnloggetSaksbehandlerSuperbrukerTilgang();
 
     const kanHenlegge =
         harTilgangTilTekniskVedlikeholdHenleggelse || (!erLesevisning && erPåHenleggbartSteg(behandling.steg));

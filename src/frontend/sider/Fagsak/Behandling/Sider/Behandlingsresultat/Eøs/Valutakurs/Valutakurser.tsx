@@ -60,13 +60,13 @@ interface IProps {
 }
 
 const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }) => {
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
     const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { request } = useHttp();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
         useState(false);
     const kanOverstyreAutomatiskeValutakurser =
-        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && toggles[ToggleNavn.kanBehandleTekniskEndring];
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && harInnloggetSaksbehandlerSuperbrukerTilgang();
 
     const erLesevisning = vurderErLesevisning();
 

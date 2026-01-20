@@ -48,8 +48,7 @@ const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
     kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
     kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean,
-    kanManueltKorrigereMedVedtaksbrev: boolean,
-    kanOppretteRevurderingMedÅrsakIverksetteKAVedtak: boolean
+    kanManueltKorrigereMedVedtaksbrev: boolean
 ): BehandlingÅrsak[] =>
     erMigreringFraInfotrygd
         ? Object.values(BehandlingÅrsak).filter(
@@ -73,8 +72,6 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
-                  (årsak !== BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
-                      kanOppretteRevurderingMedÅrsakIverksetteKAVedtak) &&
                   årsak !== BehandlingÅrsak.KLAGE &&
                   årsak !== BehandlingÅrsak.FINNMARKSTILLEGG &&
                   årsak !== BehandlingÅrsak.SVALBARDTILLEGG
@@ -103,7 +100,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -116,7 +113,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteRevurdering && toggles[ToggleNavn.kanBehandleTekniskEndring];
+    const kanOppretteTekniskEndring = kanOppretteRevurdering && harInnloggetSaksbehandlerSuperbrukerTilgang();
+    const kanManueltKorrigereMedVedtaksbrev = harInnloggetSaksbehandlerSuperbrukerTilgang() ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -221,8 +219,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
                         kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        toggles[ToggleNavn.kanManueltKorrigereMedVedtaksbrev],
-                        toggles[ToggleNavn.kanOppretteRevurderingMedAarsakIverksetteKaVedtak]
+                        kanManueltKorrigereMedVedtaksbrev
                     ).map(årsak => {
                         return (
                             <option key={årsak} aria-selected={behandlingsårsak.verdi === årsak} value={årsak}>

@@ -16,7 +16,6 @@ import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
 import { FagsakStatus } from '../../../typer/fagsak';
-import { ToggleNavn } from '../../../typer/toggles';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
@@ -28,7 +27,7 @@ const StyledAlert = styled(Alert)`
 
 export function Saksoversikt() {
     const { fagsak } = useFagsakContext();
-    const { toggles } = useAppContext();
+    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
 
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -119,10 +118,9 @@ export function Saksoversikt() {
         <Box maxWidth="70rem" marginBlock="10" marginInline="16">
             <Heading size="large" level="1" children="Saksoversikt" />
 
-            {toggles[ToggleNavn.kanKjøreAutomatiskValutajusteringBehandlingForEnkeltSak] &&
-                fagsak.løpendeKategori === BehandlingKategori.EØS && (
-                    <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
-                )}
+            {harInnloggetSaksbehandlerSuperbrukerTilgang() && fagsak.løpendeKategori === BehandlingKategori.EØS && (
+                <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
+            )}
 
             <VStack gap="14">
                 <FagsakLenkepanel />

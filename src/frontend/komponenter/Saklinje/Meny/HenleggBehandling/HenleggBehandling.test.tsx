@@ -1,10 +1,31 @@
 import React, { type PropsWithChildren } from 'react';
 
-import { http, HttpResponse } from 'msw';
-import { describe, expect } from 'vitest';
+import { describe, expect, vi, afterEach } from 'vitest';
+
+const { mockState } = vi.hoisted(() => ({
+    mockState: {
+        superbruker: false,
+    },
+}));
+
+vi.mock('../../../../context/AppContext', async () => {
+    const actual = await vi.importActual('../../../../context/AppContext');
+    const originalUseAppContext = (actual as { useAppContext: () => object }).useAppContext;
+
+    return {
+        ...actual,
+        useAppContext: () => ({
+            ...originalUseAppContext(),
+            harInnloggetSaksbehandlerSuperbrukerTilgang: () => mockState.superbruker,
+        }),
+    };
+});
+
+afterEach(() => {
+    mockState.superbruker = false;
+});
 
 import { ActionMenu } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { HenleggBehandling } from './HenleggBehandling';
 import { HenleggBehandlingModal } from './HenleggBehandlingModal';
@@ -13,13 +34,11 @@ import { useModal } from '../../../../hooks/useModal';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
-import { server } from '../../../../testutils/mocks/node';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
-import { ToggleNavn } from '../../../../typer/toggles';
 
 function ModalWrapper() {
     const { erModalÅpen } = useModal(ModalType.HENLEGG_BEHANDLING);
@@ -87,12 +106,8 @@ describe('HenleggBehandling', () => {
         expect(screen.queryByRole('menuitem', { name: 'Henlegg behandling' })).not.toBeInTheDocument();
     });
 
-    test('skal vise knapp selv om det er lesevisning og på et steg som ikke er henlegtbart', async () => {
-        server.use(
-            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () => {
-                return HttpResponse.json(byggSuksessRessurs({ [ToggleNavn.tekniskVedlikeholdHenleggelse]: true }));
-            })
-        );
+    test('skal vise knapp selv om det er lesevisning og på et steg som ikke er henlegtbart hvis man er superbruker', async () => {
+        mockState.superbruker = true;
 
         const { screen } = render(<HenleggBehandling />, {
             wrapper: props => (
