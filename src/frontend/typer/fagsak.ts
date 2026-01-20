@@ -88,10 +88,3 @@ export const fagsakStatus: INøkkelPar = {
         navn: 'Avsluttet',
     },
 };
-
-export interface IInternstatistikk {
-    antallFagsakerTotalt: number;
-    antallFagsakerLøpende: number;
-    antallBehandlingerIkkeFerdigstilt: number;
-    antallBehandlingerPerÅrsak: Record<BehandlingÅrsak, number>;
-}
