@@ -23,7 +23,7 @@ function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children 
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider fagsak={fagsak}>
+                <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={behandling}>
                         <ActionMenu open={true}>
                             <ActionMenu.Content>{children}</ActionMenu.Content>

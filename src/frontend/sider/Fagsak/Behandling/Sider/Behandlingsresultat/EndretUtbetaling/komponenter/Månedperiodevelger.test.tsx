@@ -36,7 +36,7 @@ function Wrapper({
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider fagsak={fagsak}>
+                <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={lagBehandling()}>
                         <FormProvider {...form}>
                             <form onSubmit={form.handleSubmit(() => onSubmit(onSubmitDelay))}>

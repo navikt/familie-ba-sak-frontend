@@ -7,18 +7,16 @@ import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { Brev } from './BrevModul/Brev';
 import Header from './Header/Header';
 import HendelseItem from './komponenter/HendelseItem';
-import Totrinnskontroll from './Totrinnskontroll/Totrinnskontroll';
+import { Totrinnskontroll } from './Totrinnskontroll/Totrinnskontroll';
 import type { Hendelse } from './typer';
 import { Tabs } from './typer';
 import { useAppContext } from '../../../../../context/AppContext';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus } from '../../../../../typer/behandling';
-import type { IPersonInfo } from '../../../../../typer/person';
+import { useBrukerContext } from '../../../BrukerContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
-interface IHendelsesoversiktProps {
+interface Props {
     hendelser: Hendelse[];
-    åpenBehandling: IBehandling;
-    bruker: IPersonInfo;
 }
 
 const tilHendelseItem = (hendelse: Hendelse) => <HendelseItem key={hendelse.id} hendelse={hendelse} />;
@@ -37,12 +35,13 @@ const HistorikkListe = styled.ul`
     list-style: none;
 `;
 
-const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesoversiktProps) => {
+export function Hendelsesoversikt({ hendelser }: Props) {
+    const { bruker } = useBrukerContext();
+    const { behandling } = useBehandlingContext();
     const { hentSaksbehandlerRolle } = useAppContext();
 
     const skalViseTotrinnskontroll =
-        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        åpenBehandling?.status === BehandlingStatus.FATTER_VEDTAK;
+        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() && behandling.status === BehandlingStatus.FATTER_VEDTAK;
 
     const [aktivTab, settAktivTab] = React.useState<Tabs>(
         skalViseTotrinnskontroll ? Tabs.Totrinnskontroll : Tabs.Historikk
@@ -55,7 +54,7 @@ const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesove
                 settAktivTab={settAktivTab}
                 skalViseTotrinnskontroll={skalViseTotrinnskontroll}
             />
-            {aktivTab === Tabs.Totrinnskontroll && <Totrinnskontroll åpenBehandling={åpenBehandling} />}
+            {aktivTab === Tabs.Totrinnskontroll && <Totrinnskontroll />}
             {aktivTab === Tabs.Historikk && hendelser.length > 0 && (
                 <HistorikkTab>
                     <HistorikkListe>{hendelser?.map(tilHendelseItem)}</HistorikkListe>
@@ -64,6 +63,4 @@ const Hendelsesoversikt = ({ hendelser, åpenBehandling, bruker }: IHendelsesove
             {aktivTab === Tabs.Meldinger && <Brev onIModalClick={() => settAktivTab(Tabs.Historikk)} bruker={bruker} />}
         </div>
     );
-};
-
-export default Hendelsesoversikt;
+}

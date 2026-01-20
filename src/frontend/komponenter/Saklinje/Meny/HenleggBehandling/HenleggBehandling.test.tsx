@@ -57,7 +57,7 @@ function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children 
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider fagsak={fagsak}>
+                <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={behandling}>
                         <ModalWrapper />
                         <ActionMenu open={true}>

@@ -6,7 +6,7 @@ import { Alert } from '@navikt/ds-react';
 import { ABorderDivider } from '@navikt/ds-tokens/dist/tokens';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import BehandlingRouter from './BehandlingRouter';
+import { BehandlingRouter } from './BehandlingRouter';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
@@ -15,13 +15,6 @@ import { Venstremeny } from './Venstremeny/Venstremeny';
 import { Behandlingslinje } from '../../../komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
-import type { IPersonInfo } from '../../../typer/person';
-
-interface Props {
-    bruker: IPersonInfo;
-    fagsak: IMinimalFagsak;
-}
 
 const FlexContainer = styled.div`
     display: flex;
@@ -49,7 +42,7 @@ const HøyremenyContainer = styled.div`
     height: calc(100vh - 146px);
 `;
 
-const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
+export function BehandlingContainer() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     switch (behandlingRessurs.status) {
@@ -65,7 +58,7 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
                             <Venstremeny />
                         </VenstremenyContainer>
                         <HovedinnholdContainer>
-                            <BehandlingRouter bruker={bruker} fagsak={fagsak} />
+                            <BehandlingRouter />
                         </HovedinnholdContainer>
                         <HøyremenyContainer>
                             <Høyremeny />
@@ -81,6 +74,4 @@ const BehandlingContainer: React.FC<Props> = ({ bruker, fagsak }) => {
         default:
             return <div />;
     }
-};
-
-export default BehandlingContainer;
+}
