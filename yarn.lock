@@ -1947,14 +1947,14 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.0/4886b1ab78dabbca087adf379b81ba0ef27ebbd9#4886b1ab78dabbca087adf379b81ba0ef27ebbd9"
   integrity sha512-yz+7YYpTeP1tjdsj/RRZskzf7DMinTT8cUzPSMXGmCdY+rtFHNkJsp9ccfHLAgd9rk2k+ZXc9OEcySVwfq0e9Q==
 
-"@navikt/land-verktoy@9.1.8":
-  version "9.1.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/9.1.8/932ec398628725c391f19df559e3c2a0e130b72e#932ec398628725c391f19df559e3c2a0e130b72e"
-  integrity sha512-vKcSx3GlbX7tHH25aZnTRJjpWO582W0vGxzVpfOYL+0YxfgKQdJ7+PzLEIGz3drAhAcCFGJCNhq6F44SkIddyg==
+"@navikt/land-verktoy@11.0.0":
+  version "11.0.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/11.0.0/fde43524024d880a0e3cd156880ff6172212e412#fde43524024d880a0e3cd156880ff6172212e412"
+  integrity sha512-YBKJNiPNAqCUgahhOyu9A2C9LmxA6Kr2iG7jdCImW99sueL8fHGy3cBjbiK7TYV3d9fZ6oCfDlN2CNaPlN6FKw==
   dependencies:
-    "@piotrgorecki/i18n-currency-name" "^1.3.0"
-    country-data-list "^1.2.2"
-    i18n-iso-countries "^7.5.0"
+    "@piotrgorecki/i18n-currency-name" "1.3.0"
+    country-data-list "1.5.5"
+    i18n-iso-countries "7.14.0"
 
 "@navikt/landvelger@10.0.0":
   version "10.0.0"
@@ -2050,7 +2050,7 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.32.0.tgz#a15e8f78f32388a7e4655e7f539570e40958ca3f"
   integrity sha512-s0OpmpQFSfMrmedAn9Lhg4KWJELHCU6uU9dtIJ28N8UGhf9Y55im5X8fEzwhwDwiSqN+ZPSNrDJF7ivf/AuRPQ==
 
-"@piotrgorecki/i18n-currency-name@^1.3.0":
+"@piotrgorecki/i18n-currency-name@1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@piotrgorecki/i18n-currency-name/-/i18n-currency-name-1.3.0.tgz#c7d6b9f6df705bf4f2516f1d25c455af14d7c167"
   integrity sha512-Txbw0UmGgyvkZEFzjycmh7hEwYeRftILvx4G72PrMBHoS18PGnPODWbZvw7bi+KoV+buMezEHy8ezojc0f7YvQ==
@@ -4352,12 +4352,10 @@ cosmiconfig@^8.2.0:
     parse-json "^5.2.0"
     path-type "^4.0.0"
 
-country-data-list@^1.2.2:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/country-data-list/-/country-data-list-1.2.3.tgz#3b3094b96260dad1be50e25ed0fe6dca1e54fcd5"
-  integrity sha512-suiYKZupOpEc/Ly/fuy/EScHGnUcgnXmlimO6Tk+W5w9nXeY6TQmplQ66Pn3qNwp9jvCGAAc7XsctLuFXpp/iw==
-  dependencies:
-    currency-symbol-map "~5"
+country-data-list@1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/country-data-list/-/country-data-list-1.5.5.tgz#395b6f1dfe5f856404fcfad82744f65ee641e069"
+  integrity sha512-igoAbJvlD/foOq4+aB3t24Hndvb5y/DasXcrVOtJMZ0UFLgfYq/mPMcCcSjJAIykLcTWOHZehZgNUJyaKMz1iA==
 
 create-require@^1.1.0:
   version "1.1.1"
@@ -4558,11 +4556,6 @@ csstype@^3.0.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
-
-currency-symbol-map@~5:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/currency-symbol-map/-/currency-symbol-map-5.0.1.tgz#447629c7e26730299aa6174c55bde281f682b2e5"
-  integrity sha512-2yHvoVBPIS9Dx7fjritu9l7UHWo4Z3D2oQnQj8AYwUee2j/PAcoHB4issCqwabfbipISZ/iG6vVYsfrAoks2eA==
 
 cypress@15.9.0:
   version "15.9.0"
@@ -6712,10 +6705,10 @@ hyperdyperid@^1.2.0:
   resolved "https://registry.yarnpkg.com/hyperdyperid/-/hyperdyperid-1.2.0.tgz#59668d323ada92228d2a869d3e474d5a33b69e6b"
   integrity sha512-Y93lCzHYgGWdrJ66yIktxiaGULYc6oGiABxhcO5AufBeOyoIdZF7bIfLaOrbM0iGIOXQQgxxRrFEnb+Y6w1n4A==
 
-i18n-iso-countries@^7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/i18n-iso-countries/-/i18n-iso-countries-7.5.0.tgz#74fedd72619526a195cfb2e768fe1d82eed2123f"
-  integrity sha512-PtfKJNWLVhhU0KBX/8asmywjAcuyQk07mmmMwxFJcddTNBJJ1yvpY2qxVmyxbtVF+9+6eg9phgpv83XPUKU5CA==
+i18n-iso-countries@7.14.0:
+  version "7.14.0"
+  resolved "https://registry.yarnpkg.com/i18n-iso-countries/-/i18n-iso-countries-7.14.0.tgz#cd5ae098198bce1cc40cadbf0a37ce6c8e9d0edf"
+  integrity sha512-nXHJZYtNrfsi1UQbyRqm3Gou431elgLjKl//CYlnBGt5aTWdRPH1PiS2T/p/n8Q8LnqYqzQJik3Q7mkwvLokeg==
   dependencies:
     diacritics "1.3.0"
 

@@ -52,7 +52,7 @@
     "@navikt/familie-typer": "8.0.4",
     "@navikt/flagg-ikoner": "10.0.0",
     "@navikt/fnrvalidator": "2.2.0",
-    "@navikt/land-verktoy": "9.1.8",
+    "@navikt/land-verktoy": "11.0.0",
     "@navikt/landvelger": "10.0.0",
     "@sentry/browser": "10.34.0",
     "@sentry/webpack-plugin": "4.6.0",
