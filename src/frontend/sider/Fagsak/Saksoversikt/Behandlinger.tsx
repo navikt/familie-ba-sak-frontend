@@ -147,11 +147,7 @@ export function Behandlinger() {
                                 visHenlagteBehandlinger,
                                 visMånedligeValutajusteringer
                             ).map(behandling => (
-                                <Behandling
-                                    key={hentBehandlingId(behandling)}
-                                    saksoversiktsbehandling={behandling}
-                                    fagsakId={fagsak.id}
-                                />
+                                <Behandling key={hentBehandlingId(behandling)} saksoversiktsbehandling={behandling} />
                             ))}
                         </Table.Body>
                     </Table>
