@@ -23,14 +23,10 @@ import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTil
 import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../komponenter/MålformVelger';
 import { Distribusjonskanal } from '../../../typer/dokument';
-import type { IPersonInfo } from '../../../typer/person';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { ToggleNavn } from '../../../typer/toggles';
+import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
-
-interface Props {
-    bruker: IPersonInfo;
-}
 
 const Container = styled.div`
     padding: 2rem;
@@ -69,7 +65,9 @@ enum BarnIBrevÅrsak {
     BARN_BOSATT_MED_SØKER,
 }
 
-const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
+export function DokumentutsendingSkjema() {
+    const { bruker } = useBrukerContext();
+
     const {
         hentForhåndsvisningPåFagsak,
         hentetDokument,
@@ -314,6 +312,4 @@ const DokumentutsendingSkjema: React.FC<Props> = ({ bruker }) => {
             </Container>
         </LeggTilBarnModalContextProvider>
     );
-};
-
-export default DokumentutsendingSkjema;
+}

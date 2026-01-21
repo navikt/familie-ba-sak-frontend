@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 
 import deepEqual from 'deep-equal';
 
@@ -70,10 +70,6 @@ export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON: 'Innhente opplysninger klage',
 };
 
-interface Props extends React.PropsWithChildren {
-    fagsakId: number;
-}
-
 interface DokumentutsendingSkjema {
     årsak: DokumentÅrsak | undefined;
     målform: Målform | undefined;
@@ -86,7 +82,6 @@ interface DokumentutsendingSkjema {
 }
 
 interface DokumentutsendingContextValue {
-    fagsakId: number;
     hentForhåndsvisningPåFagsak: () => void;
     hentSkjemaFeilmelding: () => string | undefined;
     hentetDokument: Ressurs<string>;
@@ -108,7 +103,7 @@ interface DokumentutsendingContextValue {
 
 const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(undefined);
 
-export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
+export function DokumentutsendingProvider({ children }: PropsWithChildren) {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
@@ -428,7 +423,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
         hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
             method: 'POST',
             data: skjemaData,
-            url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/forhaandsvis-brev`,
+            url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/forhaandsvis-brev`,
         });
     };
 
@@ -438,7 +433,7 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
                 {
                     method: 'POST',
                     data: hentSkjemaData(),
-                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/send-brev`,
+                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/send-brev`,
                 },
                 () => {
                     settVisInnsendtBrevModal(true);
@@ -455,7 +450,6 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
     return (
         <DokumentutsendingContext.Provider
             value={{
-                fagsakId,
                 hentForhåndsvisningPåFagsak,
                 hentSkjemaFeilmelding,
                 hentetDokument,
@@ -478,12 +472,12 @@ export const DokumentutsendingProvider = ({ fagsakId, children }: Props) => {
             {children}
         </DokumentutsendingContext.Provider>
     );
-};
+}
 
-export const useDokumentutsendingContext = () => {
+export function useDokumentutsendingContext() {
     const context = useContext(DokumentutsendingContext);
     if (context === undefined) {
         throw new Error('useDokumentutsendingContext må brukes innenfor en DokumentutsendingProvider');
     }
     return context;
-};
+}
