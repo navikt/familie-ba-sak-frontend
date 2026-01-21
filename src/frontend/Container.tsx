@@ -12,15 +12,12 @@ import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
 import { UtdatertAppVersjonModal } from './komponenter/Modal/UtdatertAppVersjonModal/UtdatertAppVersjonModal';
 import { ForhåndsvisOpprettingAvPdfModal } from './komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
-import { TidslinjeProvider } from './komponenter/Tidslinje/TidslinjeContext';
 import Toasts from './komponenter/Toast/Toasts';
 import { FagsakContainer } from './sider/Fagsak/FagsakContainer';
 import { Infotrygd } from './sider/Infotrygd/Infotrygd';
-import Internstatistikk from './sider/internstatistikk/Internstatistikk';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
 import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
-import TidslinjeVisualisering from './sider/tidslinjer/TidslinjeVisualisering';
 
 const Main = styled.main<{ $systemetLaster: boolean }>`
     position: fixed;
@@ -59,15 +56,6 @@ const Container: React.FC = () => {
                             <Routes>
                                 <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
                                 <Route path="/oppgaver/journalfor/:oppgaveId" element={<ManuellJournalføring />} />
-                                <Route
-                                    path="/tidslinjer/:behandlingId"
-                                    element={
-                                        <TidslinjeProvider>
-                                            <TidslinjeVisualisering />
-                                        </TidslinjeProvider>
-                                    }
-                                />
-                                <Route path="/internstatistikk" element={<Internstatistikk />} />
                                 <Route path="/infotrygd" element={<Infotrygd />} />
                                 <Route path="/samhandler" element={<Samhandler />} />
                                 <Route path="/oppgaver" element={<Oppgavebenk />} />
