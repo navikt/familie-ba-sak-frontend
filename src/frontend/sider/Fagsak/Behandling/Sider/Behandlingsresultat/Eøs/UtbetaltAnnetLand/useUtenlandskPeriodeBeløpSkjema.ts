@@ -43,6 +43,8 @@ const erIntervallGyldig = (
     felt: FeltState<UtenlandskPeriodeBeløpIntervall | undefined>
 ): FeltState<UtenlandskPeriodeBeløpIntervall | undefined> =>
     !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Intervall er påkrevd, men mangler input');
+const erUtbetalingslandGyldig = (felt: FeltState<string | undefined>): FeltState<string | undefined> =>
+    !isEmpty(felt.verdi) ? ok(felt) : feil(felt, 'Utbetalingsland er påkrevd, men mangler input');
 
 export const utenlandskPeriodeBeløpFeilmeldingId = (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp): string =>
     `utd_beløp_${utenlandskPeriodeBeløp.barnIdenter.map(barn => `${barn}-`)}_${utenlandskPeriodeBeløp.fom}`;
@@ -95,6 +97,10 @@ const useUtenlandskPeriodeBeløpSkjema = ({ barnIUtenlandskPeriodeBeløp, utenla
                 verdi: utenlandskPeriodeBeløp.intervall,
                 valideringsfunksjon: erIntervallGyldig,
             }),
+            utbetalingsland: useFelt<string | undefined>({
+                verdi: utenlandskPeriodeBeløp.utbetalingsland,
+                valideringsfunksjon: erUtbetalingslandGyldig,
+            }),
         },
         skjemanavn: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
     });
@@ -118,6 +124,7 @@ const useUtenlandskPeriodeBeløpSkjema = ({ barnIUtenlandskPeriodeBeløp, utenla
                         beløp: nyttBeløp,
                         valutakode: skjema.felter.valutakode?.verdi,
                         intervall: skjema.felter.intervall?.verdi,
+                        utbetalingsland: skjema.felter.utbetalingsland?.verdi,
                     },
                     url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandling.behandlingId}`,
                 },
@@ -163,7 +170,8 @@ const useUtenlandskPeriodeBeløpSkjema = ({ barnIUtenlandskPeriodeBeløp, utenla
             erTomEndret ||
             skjema.felter.beløp?.verdi !== konverterDesimalverdiTilSkjemaVisning(utenlandskPeriodeBeløp.beløp) ||
             skjema.felter.valutakode?.verdi !== utenlandskPeriodeBeløp.valutakode ||
-            skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall
+            skjema.felter.intervall?.verdi !== utenlandskPeriodeBeløp.intervall ||
+            skjema.felter.utbetalingsland?.verdi !== utenlandskPeriodeBeløp.utbetalingsland
         );
     };
 
