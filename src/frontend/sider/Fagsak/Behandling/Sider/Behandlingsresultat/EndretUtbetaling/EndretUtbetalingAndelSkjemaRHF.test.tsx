@@ -54,7 +54,7 @@ function Wrapper({
     return (
         <TestProviders>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider fagsak={lagFagsak()}>
+                <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={behandling}>
                         <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
                             {children}
@@ -188,6 +188,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
     test('skal kalle onSubmit når skjemaet submittes', async () => {
         const onSubmitMock = vi.fn();
+
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
             return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
@@ -204,6 +205,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
     test('skal kalle lukkSkjema når endringen avbrytes', async () => {
         const lukkSkjema = vi.fn();
+
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
             return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={lukkSkjema} />;
@@ -219,6 +221,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
     test('skal vise valideringsfeil når påkrevde felter er tomme', async () => {
         const onSubmitMock = vi.fn();
+
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({
                 defaultValues: {

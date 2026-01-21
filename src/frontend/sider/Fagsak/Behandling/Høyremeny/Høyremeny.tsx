@@ -8,13 +8,12 @@ import { Button, Stack, VStack } from '@navikt/ds-react';
 import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
-import Behandlingskort from './Behandlingskort';
-import Hendelsesoversikt from './Hendelsesoversikt/Hendelsesoversikt';
+import { Behandlingskort } from './Behandlingskort';
+import { Hendelsesoversikt } from './Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from './Hendelsesoversikt/typer';
 import { useHøyremeny } from './useHøyremeny';
 import type { ILogg } from '../../../../typer/logg';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import { useBrukerContext } from '../../BrukerContext';
 import { useBehandlingContext } from '../context/BehandlingContext';
 
 const ToggleVisningHøyremeny = styled(Button)`
@@ -32,7 +31,6 @@ const ToggleVisningHøyremeny = styled(Button)`
 
 export function Høyremeny() {
     const { behandling, logg, hentLogg } = useBehandlingContext();
-    const { bruker } = useBrukerContext();
 
     const [erÅpen, settErÅpen] = useHøyremeny();
 
@@ -59,7 +57,7 @@ export function Høyremeny() {
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                 <VStack width={'25rem'}>
-                    <Behandlingskort åpenBehandling={behandling} />
+                    <Behandlingskort />
                     <Hendelsesoversikt
                         hendelser={hentDataFraRessursMedFallback(logg, []).map((loggElement: ILogg): Hendelse => {
                             return {
@@ -74,8 +72,6 @@ export function Høyremeny() {
                                 beskrivelse: loggElement.tekst,
                             };
                         })}
-                        åpenBehandling={behandling}
-                        bruker={bruker}
                     />
                 </VStack>
             </Activity>

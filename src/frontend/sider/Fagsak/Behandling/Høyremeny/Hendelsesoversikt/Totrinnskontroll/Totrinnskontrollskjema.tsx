@@ -29,14 +29,13 @@ import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { KontrollertStatus } from '../../../Sider/sider';
 
-interface IProps {
+interface Props {
     innsendtVedtak: Ressurs<IBehandling>;
     sendInnVedtak: (beslutning: TotrinnskontrollBeslutning, begrunnelse: string, egetVedtak: boolean) => void;
-    åpenBehandling: IBehandling;
 }
 
-const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({ innsendtVedtak, sendInnVedtak, åpenBehandling }) => {
-    const { trinnPåBehandling } = useBehandlingContext();
+export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props) {
+    const { behandling, trinnPåBehandling } = useBehandlingContext();
     const { innloggetSaksbehandler } = useAppContext();
 
     const [beslutning, settBeslutning] = React.useState<TotrinnskontrollBeslutning>(
@@ -46,7 +45,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({ innsendtVedta
 
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
-    const totrinnskontroll = åpenBehandling.totrinnskontroll;
+    const totrinnskontroll = behandling.totrinnskontroll;
 
     const saksbehandler = totrinnskontroll?.saksbehandler ?? 'UKJENT SAKSBEHANDLER';
     const opprettetTidspunkt = totrinnskontroll?.opprettetTidspunkt ?? undefined;
@@ -159,7 +158,7 @@ const Totrinnskontrollskjema: React.FunctionComponent<IProps> = ({ innsendtVedta
             />
         </Fieldset>
     );
-};
+}
 
 const Trinn = styled.div`
     display: flex;
@@ -184,5 +183,3 @@ const TrinnStatus: React.FC<{
         </Trinn>
     );
 };
-
-export default Totrinnskontrollskjema;

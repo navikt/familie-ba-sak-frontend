@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -11,12 +11,8 @@ import { useAppContext } from '../../../../context/AppContext';
 import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import type { IBehandling } from '../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { obfuskerBehandling } from '../../../../utils/obfuskerData';
-
-interface Props extends React.PropsWithChildren {
-    fagsak: IMinimalFagsak;
-}
+import { useFagsakContext } from '../../FagsakContext';
 
 interface HentOgSettBehandlingContextValue {
     behandlingRessurs: Ressurs<IBehandling>;
@@ -25,7 +21,8 @@ interface HentOgSettBehandlingContextValue {
 
 const HentOgSettBehandlingContext = createContext<HentOgSettBehandlingContextValue | undefined>(undefined);
 
-export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
+export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
+    const { fagsak } = useFagsakContext();
     const { request } = useHttp();
     const { behandlingId } = useSakOgBehandlingParams();
     const queryClient = useQueryClient();
@@ -78,13 +75,12 @@ export const HentOgSettBehandlingProvider = ({ fagsak, children }: Props) => {
             {children}
         </HentOgSettBehandlingContext.Provider>
     );
-};
+}
 
-export const useHentOgSettBehandlingContext = () => {
+export function useHentOgSettBehandlingContext() {
     const context = useContext(HentOgSettBehandlingContext);
-
     if (context === undefined) {
         throw new Error('useHentOgSettBehandlingContext må brukes innenfor HentOgSettBehandlingProvider');
     }
     return context;
-};
+}
