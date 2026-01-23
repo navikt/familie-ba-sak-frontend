@@ -6,35 +6,114 @@ registries:
     url: https://npm.pkg.github.com
     token: ${{ secrets.READER_TOKEN }}
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "09:00"
-  cooldown:
-    default-days: 4
-  open-pull-requests-limit: 20
-  registries: "*"
-  groups:
-    react:
-      patterns:
-        - "react"
-        - "@types/react"
-        - "react-dom"
-        - "@types/react-dom"
-    babel:
-      patterns:
-        - "@babel/*"
-    aksel:
-      patterns:
-        - "@navikt/aksel-icons"
-        - "@navikt/ds-*"
-    patch-updates:
-      update-types:
-        - patch
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-  cooldown:
-    default-days: 4
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "09:00"
+    ignore:
+      - dependency-name: "@types/node"
+        versions:
+          - "25"
+    cooldown:
+      default-days: 4
+    open-pull-requests-limit: 20
+    registries: "*"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "@types/react"
+          - "react-dom"
+          - "@types/react-dom"
+      babel:
+        patterns:
+          - "@babel/*"
+      aksel:
+        patterns:
+          - "@navikt/aksel-icons"
+          - "@navikt/ds-css"
+          - "@navikt/ds-react"
+      familie:
+        patterns:
+          - "@navikt/familie-*"
+      tanstack:
+        patterns:
+          - "@tanstack/*"
+      sentry:
+        patterns:
+          - "@sentry/*"
+      testing-library:
+        patterns:
+          - "@testing-library/*"
+      landvelger:
+        patterns:
+          - "@navikt/landvelger"
+          - "@navikt/land-verktoy"
+          - "@navikt/flagg-ikoner"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-*"
+          - "@types/eslint*"
+          - "typescript-eslint"
+          - "@typescript-eslint/*"
+          - "globals"
+      vitest:
+        patterns:
+          - "vitest"
+          - "jsdom"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/plugin-react"
+      express:
+        patterns:
+          - "express"
+          - "@types/express"
+      classnames:
+        patterns:
+          - "classnames"
+          - "@types/classnames"
+      deep_equal:
+        patterns:
+          - "deep-equal"
+          - "@types/deep-equal"
+      react_router:
+        patterns:
+          - "react-router"
+          - "@types/react-router"
+      uuid:
+        patterns:
+          - "uuid"
+          - "@types/uuid"
+      webpack:
+        patterns:
+          - "webpack"
+          - "webpack-cli"
+          - "webpack-dev-middleware"
+          - "webpack-dev-server"
+          - "webpack-hot-middleware"
+          - "@types/webpack-hot-middleware"
+          - "html-webpack-plugin"
+          - "fork-ts-checker-webpack-plugin"
+          - "css-minimizer-webpack-plugin"
+          - "copy-webpack-plugin"
+          - "copy-webpack-plugin"
+          - "compression-webpack-plugin"
+          - "case-sensitive-paths-webpack-plugin"
+          - "case-sensitive-paths-webpack-plugin"
+          - "@pmmmwh/react-refresh-webpack-plugin"
+      types:
+        patterns:
+          - "@types/*"
+      patch-updates:
+        update-types:
+          - patch
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 4
