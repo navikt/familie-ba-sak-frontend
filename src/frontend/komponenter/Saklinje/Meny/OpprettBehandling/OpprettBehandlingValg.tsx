@@ -17,8 +17,7 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../typer/fagsak';
-import { FagsakStatus } from '../../../../typer/fagsak';
+import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../typer/klage';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../typer/person';
@@ -100,7 +99,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+    const { toggles, harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -127,6 +126,11 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
+
+    const kanOppretteKlagebehandling =
+        minimalFagsak !== undefined &&
+        (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
+            toggles[ToggleNavn.skalKunneBehandleBaInstitusjonFagsaker]);
 
     const barn =
         bruker?.forelderBarnRelasjon
@@ -186,12 +190,14 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                         Tilbakekreving
                     </option>
                 )}
-                <option
-                    aria-selected={behandlingstype.verdi === Klagebehandlingstype.KLAGE}
-                    value={Klagebehandlingstype.KLAGE}
-                >
-                    Klage
-                </option>
+                {kanOppretteKlagebehandling && (
+                    <option
+                        aria-selected={behandlingstype.verdi === Klagebehandlingstype.KLAGE}
+                        value={Klagebehandlingstype.KLAGE}
+                    >
+                        Klage
+                    </option>
+                )}
                 {kanOppretteMigreringFraInfotrygd && (
                     <option
                         aria-selected={behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD}

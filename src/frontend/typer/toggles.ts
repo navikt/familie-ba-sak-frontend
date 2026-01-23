@@ -18,6 +18,7 @@ export enum ToggleNavn {
     visOverlappendePerioderMedAndreFagsaker = 'familie-ba-sak.vis-overlappende-perioder-med-andre-fagsaker',
     skalBrukeNyttSkjemaForEndretUtbetalingAndel = 'familie-ba-sak.endret-utbetaling-andel-skjema-rhf',
     skalHenteUtbetalingslandFraUtenlandskperiodebelop = 'familie-ba-sak.skal-hente-utbetalingsland-fra-utenlandskperiodebelop',
+    skalKunneBehandleBaInstitusjonFagsaker = 'familie-klage.skal-kunne-behandle-ba-institusjon-fagsaker',
 }
 
 export const alleTogglerAv = (): IToggles => {
