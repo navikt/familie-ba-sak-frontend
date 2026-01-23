@@ -9,11 +9,9 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
@@ -31,7 +29,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {
@@ -53,8 +50,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const erLesevisning = vurderErLesevisning();
 
     const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0 &&
-        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
