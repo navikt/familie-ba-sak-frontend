@@ -52,9 +52,6 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const erAvregningOgToggleErPå =
-        avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
-
     const harOverlappendePerioderMedAndreFagsaker =
         overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0 &&
         toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
@@ -90,14 +87,16 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         return <div />;
     }
 
+    const erAvregning = avregningsperioder.length > 0;
+
     const tilbakekrevingsvedtakMotregning = åpenBehandling.tilbakekrevingsvedtakMotregning;
 
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp =
-        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
+        (erAvregning && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
 
-    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
+    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregning || heleBeløpetSkalKrevesTilbake);
 
     return (
         <Skjemasteg
@@ -173,7 +172,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 </Alert>
                             </Box>
                         )}
-                        {erAvregningOgToggleErPå && (
+                        {erAvregning && (
                             <TilbakekrevingsvedtakMotregning
                                 åpenBehandling={åpenBehandling}
                                 tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning}

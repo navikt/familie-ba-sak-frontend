@@ -10,7 +10,6 @@ export enum ToggleNavn {
 
     // Release
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
-    brukFunksjonalitetForUlovfestetMotregning = 'familie-ba-sak.ulovfestet-motregning',
     oppdaterModiaKontekst = 'familie-ba-sak.oppdater-modia-kontekst',
     tillattBehandlingAvSkjermetBarn = 'familie-ba-sak.tillatt-behandling-av-kode6-kode19',
     skalViseVarsellampeForManueltLagtTilBarn = 'familie-ba-sak.skal-vise-varsellampe-for-manuelt-lagt-til-barn',
