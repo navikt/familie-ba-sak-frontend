@@ -49,7 +49,8 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const harOverlappendePerioderMedAndreFagsaker =
+    const harOverlappendePerioderMedAndreFagsakerOgSkalStanses =
+        !behandlingErEndreMigreringsdato &&
         overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0;
 
     const nesteOnClick = () => {
@@ -90,7 +91,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp =
-        (erAvregning && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
+        (erAvregning && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsakerOgSkalStanses;
 
     const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregning || heleBeløpetSkalKrevesTilbake);
 
@@ -129,7 +130,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             }
                         />
 
-                        {harOverlappendePerioderMedAndreFagsaker && (
+                        {harOverlappendePerioderMedAndreFagsakerOgSkalStanses && (
                             <Box marginBlock="10 0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
