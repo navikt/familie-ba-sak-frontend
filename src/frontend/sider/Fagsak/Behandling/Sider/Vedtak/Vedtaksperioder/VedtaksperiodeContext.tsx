@@ -1,5 +1,6 @@
 import React, { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import deepEqual from 'deep-equal';
 
 import type { ActionMeta, GroupBase } from '@navikt/familie-form-elements';
@@ -9,12 +10,12 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import {
     byggFeiletRessurs,
     byggHenterRessurs,
-    byggSuksessRessurs,
     byggTomRessurs,
     type Ressurs,
     RessursStatus,
 } from '@navikt/familie-typer';
 
+import { useOppdaterStandardbegrunnelser } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
@@ -28,7 +29,8 @@ import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
 import { useVedtakContext } from '../VedtakContext';
 import { grupperBegrunnelser } from './utils';
-import { useOppdaterStandardbegrunnelser } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
+import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -62,8 +64,10 @@ const VedtaksperiodeContext = createContext<VedtaksperiodeContextValue | undefin
 
 export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegrunnelser, children }: IProps) => {
     const { request } = useHttp();
+    const queryClient = useQueryClient();
     const { alleBegrunnelserRessurs } = useVedtakContext();
-    const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+    const { behandling } = useBehandlingContext();
+    const behandlingId = behandling.behandlingId;
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -75,7 +79,10 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
 
     const { mutate: oppdaterStandardbegrunnelser } = useOppdaterStandardbegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
         onSuccess: vedtaksperioderMedBegrunnelser => {
-            settVedtaksperioderMedBegrunnelserRessurs(byggSuksessRessurs(vedtaksperioderMedBegrunnelser));
+            queryClient.setQueryData(
+                HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                vedtaksperioderMedBegrunnelser
+            );
         },
     });
 
@@ -229,7 +236,10 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
                 },
             }).then(vedtaksperioderMedBegrunnelserRessurs => {
                 if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                    settVedtaksperioderMedBegrunnelserRessurs(vedtaksperioderMedBegrunnelserRessurs);
+                    queryClient.setQueryData(
+                        HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                        vedtaksperioderMedBegrunnelserRessurs.data
+                    );
                     onPanelClose(false);
                 } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settStandardBegrunnelserPut(

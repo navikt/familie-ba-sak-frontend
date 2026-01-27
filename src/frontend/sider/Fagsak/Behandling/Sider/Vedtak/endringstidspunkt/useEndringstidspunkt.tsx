@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IRestOverstyrtEndringstidspunkt } from '../../../../../../typer/vedtaksperiode';
 import type { IsoDatoString } from '../../../../../../utils/dato';
 import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../utils/dato';
-import { useVedtakContext } from '../VedtakContext';
 
 interface IProps {
     lukkModal: () => void;
@@ -18,6 +20,7 @@ interface IProps {
 
 export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
     const { request } = useHttp();
+    const queryClient = useQueryClient();
     const [endringstidspunktRessurs, settEndringstidspunktRessurs] =
         useState(byggHenterRessurs<IsoDatoString | undefined>());
 
@@ -46,8 +49,6 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
         skjemanavn: 'Oppdater første endringstidspunkt',
     });
 
-    const { hentVedtaksperioder } = useVedtakContext();
-
     const oppdaterEndringstidspunkt = () => {
         if (kanSendeSkjema()) {
             onSubmit<IRestOverstyrtEndringstidspunkt>(
@@ -63,7 +64,9 @@ export function useEndringstidspunkt({ behandlingId, lukkModal }: IProps) {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         lukkModal();
-                        hentVedtaksperioder();
+                        queryClient.invalidateQueries({
+                            queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                        });
                     }
                 }
             );

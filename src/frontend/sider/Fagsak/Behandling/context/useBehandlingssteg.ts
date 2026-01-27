@@ -94,7 +94,7 @@ const useBehandlingssteg = (
         settVisModal: (visModal: boolean) => void,
         erUlagretNyFeilutbetaltValuta: boolean,
         erUlagretNyRefusjonEøs: boolean,
-        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>,
+        vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] | undefined,
         erSammensattKontrollsak: boolean
     ) => {
         if (erUlagretNyFeilutbetaltValuta) {
@@ -109,14 +109,14 @@ const useBehandlingssteg = (
                     'Det er lagt til en ny periode med refusjon EØS. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
                 )
             );
-        } else if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
+        } else if (vedtaksperioderMedBegrunnelser === undefined) {
             settSubmitRessurs(
                 byggFeiletRessurs(
                     'Det har skjedd en feil, og behandlingen ble ikke sendt til beslutter. ' +
                         'Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
                 )
             );
-        } else if (!kanSendeInnVedtak(vedtaksperioderMedBegrunnelserRessurs.data) && !erSammensattKontrollsak) {
+        } else if (!kanSendeInnVedtak(vedtaksperioderMedBegrunnelser) && !erSammensattKontrollsak) {
             settSubmitRessurs(
                 byggFeiletRessurs('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.')
             );
