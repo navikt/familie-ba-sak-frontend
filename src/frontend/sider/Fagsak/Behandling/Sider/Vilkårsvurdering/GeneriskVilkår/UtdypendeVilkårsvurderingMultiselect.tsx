@@ -4,10 +4,8 @@ import React, { useEffect } from 'react';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
-import { useAppContext } from '../../../../../../context/AppContext';
 import type { OptionType } from '../../../../../../typer/common';
 import type { PersonType } from '../../../../../../typer/person';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import {
     type IVilkårResultat,
     Regelverk,
@@ -87,8 +85,6 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
     personType,
     feilhåndtering,
 }) => {
-    const { toggles } = useAppContext();
-
     const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,
@@ -96,14 +92,8 @@ export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
     };
 
-    const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
-
     const muligeUtdypendeVilkårsvurderinger = bestemMuligeUtdypendeVilkårsvurderinger(
         utdypendeVilkårsvurderingAvhengigheter
-    ).filter(
-        utdypendeVilkårsvurdering =>
-            bosattFinnmarkNordtromsToggleErPå ||
-            utdypendeVilkårsvurdering !== UtdypendeVilkårsvurderingGenerell.BOSATT_I_FINNMARK_NORD_TROMS
     );
 
     const muligeComboboxValg = muligeUtdypendeVilkårsvurderinger.map(mapUtdypendeVilkårsvurderingTilOption);
