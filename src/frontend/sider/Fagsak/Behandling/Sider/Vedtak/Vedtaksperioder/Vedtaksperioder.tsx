@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
 import { Alert, Heading } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
@@ -14,6 +13,7 @@ import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../../utils/commons';
 import { useVedtakContext } from '../VedtakContext';
 import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
+import { useVedtaksperioderContext } from './VedtaksperioderContext';
 
 const StyledHeading = styled(Heading)`
     display: flex;
@@ -26,11 +26,11 @@ const StyledAlert = styled(Alert)`
 
 interface VedtaksperioderProps {
     åpenBehandling: IBehandling;
-    vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
-const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling, vedtaksperioderMedBegrunnelserRessurs }) => {
+const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling }) => {
     const { alleBegrunnelserRessurs } = useVedtakContext();
+    const { vedtaksperioder } = useVedtaksperioderContext();
 
     if (
         alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
@@ -39,19 +39,8 @@ const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling, vedt
         return <StyledAlert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</StyledAlert>;
     }
 
-    if (
-        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FEILET ||
-        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-    ) {
-        return <StyledAlert variant="error">Klarte ikke å hente inn vedtaksperiodene.</StyledAlert>;
-    }
-
-    if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
-        return null;
-    }
-
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
-        vedtaksperioderMedBegrunnelserRessurs.data ?? [],
+        vedtaksperioder,
         åpenBehandling.status
     );
 

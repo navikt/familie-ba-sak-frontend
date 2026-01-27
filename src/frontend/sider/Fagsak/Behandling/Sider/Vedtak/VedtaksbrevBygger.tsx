@@ -12,7 +12,6 @@ import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { BehandlingKorrigertAlert } from './Vedtak';
-import { useVedtakContext } from './VedtakContext';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
 import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
@@ -42,7 +41,6 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
 
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
     const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
 
@@ -156,10 +154,7 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
                             <SammensattKontrollsak />
                         ) : (
                             <>
-                                <Vedtaksperioder
-                                    åpenBehandling={åpenBehandling}
-                                    vedtaksperioderMedBegrunnelserRessurs={vedtaksperioderMedBegrunnelserRessurs}
-                                />
+                                <Vedtaksperioder åpenBehandling={åpenBehandling} />
                                 {erFeilutbetaltValutaTabellSynlig && <FeilutbetaltValutaTabell />}
                                 {erRefusjonEøsTabellSynlig && <RefusjonEøsTabell />}
                             </>

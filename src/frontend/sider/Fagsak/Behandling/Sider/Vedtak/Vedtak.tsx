@@ -9,7 +9,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
-import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
@@ -23,6 +22,7 @@ import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
 import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
+import { useHentVedtaksperioder } from '../../../../../hooks/useHentVedtaksperioder';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -43,12 +43,14 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
     const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
-
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
+
+    const { behandling } = useBehandlingContext();
+    const behandlingId = behandling.behandlingId;
+    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(behandlingId);
 
     const erLesevisning = vurderErLesevisning();
 
@@ -63,7 +65,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
             (visModal: boolean) => settVisModal(visModal),
             erLeggTilFeilutbetaltValutaFormÅpen,
             erLeggTilRefusjonEøsFormÅpen,
-            vedtaksperioderMedBegrunnelserRessurs,
+            vedtaksperioderMedBegrunnelser,
             erSammensattKontrollsak
         );
     };
