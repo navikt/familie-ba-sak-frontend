@@ -1,4 +1,5 @@
 .personLinje {
+    top: 0;
     position: -webkit-sticky;
     position: sticky;
     z-index: 3;
