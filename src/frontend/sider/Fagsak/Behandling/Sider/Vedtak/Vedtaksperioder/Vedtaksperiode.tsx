@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import BegrunnelserMultiselect from './BegrunnelserMultiselect';
 import EkspanderbarVedtaksperiode from './EkspanderbarVedtaksperiode';
 import FritekstBegrunnelser from './FritekstBegrunnelser';
 import Utbetalingsresultat from './Utbetalingsresultat';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
@@ -17,7 +17,11 @@ interface IProps {
 }
 
 const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
-    const { erPanelEkspandert, onPanelClose, genererteBrevbegrunnelser } = useVedtaksperiodeContext();
+    const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeContext();
+
+    const { data: genererteBrevbegrunnelser, error: genererteBrevbegrunnelserError } = useHentGenererteBrevbegrunnelser(
+        { vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id }
+    );
 
     const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
         Standardbegrunnelse.REDUKSJON_SATSENDRING,
@@ -62,22 +66,24 @@ const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => 
             {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
                 <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
             )}
-            {genererteBrevbegrunnelser.status === RessursStatus.SUKSESS &&
-                genererteBrevbegrunnelser.data.length > 0 && (
-                    <>
-                        <Label>Begrunnelse(r)</Label>
-                        <ul>
-                            {genererteBrevbegrunnelser.data.map((begrunnelse: string, index: number) => (
-                                <li key={`begrunnelse-${index}`}>
-                                    <BodyShort children={begrunnelse} />
-                                </li>
-                            ))}
-                        </ul>
-                    </>
-                )}
-            {genererteBrevbegrunnelser.status === RessursStatus.FEILET && (
+            {genererteBrevbegrunnelser !== undefined && genererteBrevbegrunnelser.length > 0 && (
                 <>
-                    <ErrorMessage>{genererteBrevbegrunnelser.frontendFeilmelding}</ErrorMessage>
+                    <Label>Begrunnelse(r)</Label>
+                    <ul>
+                        {genererteBrevbegrunnelser.map((begrunnelse: string, index: number) => (
+                            <li key={`begrunnelse-${index}`}>
+                                <BodyShort children={begrunnelse} />
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
+            {genererteBrevbegrunnelserError && (
+                <>
+                    <ErrorMessage>
+                        Noe gikk galt og vi klarte ikke generere forhåndsvisning av brevbegrunnelser. Ta kontakt med
+                        brukerstøtte hvis problemet vedvarer.
+                    </ErrorMessage>
                 </>
             )}
             {visFritekster() && <FritekstBegrunnelser />}

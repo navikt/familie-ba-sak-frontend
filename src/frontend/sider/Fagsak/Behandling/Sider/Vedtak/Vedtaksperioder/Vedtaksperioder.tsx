@@ -2,56 +2,31 @@ import React, { Fragment } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Heading } from '@navikt/ds-react';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
 import Vedtaksperiode from './Vedtaksperiode';
+import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
+import { useVedtaksperioderContext } from './VedtaksperioderContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { partition } from '../../../../../../utils/commons';
-import { useVedtakContext } from '../VedtakContext';
-import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
 
 const StyledHeading = styled(Heading)`
     display: flex;
     margin-top: 1rem;
 `;
 
-const StyledAlert = styled(Alert)`
-    margin-bottom: 1rem;
-`;
-
 interface VedtaksperioderProps {
     åpenBehandling: IBehandling;
-    vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>;
 }
 
-const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling, vedtaksperioderMedBegrunnelserRessurs }) => {
-    const { alleBegrunnelserRessurs } = useVedtakContext();
-
-    if (
-        alleBegrunnelserRessurs.status === RessursStatus.FEILET ||
-        alleBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-    ) {
-        return <StyledAlert variant="error">Klarte ikke å hente inn begrunnelser for vedtak.</StyledAlert>;
-    }
-
-    if (
-        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FEILET ||
-        vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL
-    ) {
-        return <StyledAlert variant="error">Klarte ikke å hente inn vedtaksperiodene.</StyledAlert>;
-    }
-
-    if (vedtaksperioderMedBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
-        return null;
-    }
+const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling }) => {
+    const { vedtaksperioder } = useVedtaksperioderContext();
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
-        vedtaksperioderMedBegrunnelserRessurs.data ?? [],
+        vedtaksperioder,
         åpenBehandling.status
     );
 

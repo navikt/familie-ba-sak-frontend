@@ -3,7 +3,6 @@ import React from 'react';
 import { Alert } from '@navikt/ds-react';
 import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import type { OptionType } from '../../../../../../typer/common';
@@ -86,7 +85,7 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
         })
     );
 
-    if (begrunnelserStatus === RessursStatus.FEILET) {
+    if (begrunnelserStatus === 'error') {
         return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vilkår.</Alert>;
     }
 
