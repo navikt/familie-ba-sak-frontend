@@ -17,7 +17,6 @@ import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import Vedtak from './Sider/Vedtak/Vedtak';
-import { VedtakProvider } from './Sider/Vedtak/VedtakContext';
 import Vilkårsvurdering from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
@@ -83,17 +82,15 @@ export function BehandlingRouter() {
                 path="/vedtak"
                 element={
                     <SimuleringProvider åpenBehandling={behandling}>
-                        <VedtakProvider>
-                            <FeilutbetaltValutaTabellProvider>
-                                <RefusjonEøsTabellProvider>
-                                    <SammensattKontrollsakProvider åpenBehandling={behandling}>
-                                        <VedtaksperioderProvider>
-                                            <Vedtak åpenBehandling={behandling} bruker={bruker} />
-                                        </VedtaksperioderProvider>
-                                    </SammensattKontrollsakProvider>
-                                </RefusjonEøsTabellProvider>
-                            </FeilutbetaltValutaTabellProvider>
-                        </VedtakProvider>
+                        <FeilutbetaltValutaTabellProvider>
+                            <RefusjonEøsTabellProvider>
+                                <SammensattKontrollsakProvider åpenBehandling={behandling}>
+                                    <VedtaksperioderProvider>
+                                        <Vedtak åpenBehandling={behandling} bruker={bruker} />
+                                    </VedtaksperioderProvider>
+                                </SammensattKontrollsakProvider>
+                            </RefusjonEøsTabellProvider>
+                        </FeilutbetaltValutaTabellProvider>
                     </SimuleringProvider>
                 }
             />

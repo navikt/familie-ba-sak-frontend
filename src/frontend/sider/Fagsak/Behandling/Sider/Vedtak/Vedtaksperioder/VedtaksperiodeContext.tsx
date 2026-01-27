@@ -5,27 +5,25 @@ import deepEqual from 'deep-equal';
 
 import type { ActionMeta, GroupBase } from '@navikt/familie-form-elements';
 import { useHttp } from '@navikt/familie-http';
-import type { FeiloppsummeringFeil, FeltState, ISkjema } from '@navikt/familie-skjema';
+import type { FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { byggFeiletRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
+import { grupperBegrunnelser } from './utils';
 import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
+import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
 import { useOppdaterStandardbegrunnelser } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
+import { useOppdaterVedtaksperiodeMedFritekster } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
-import type {
-    IRestPutVedtaksperiodeMedFritekster,
-    IVedtaksperiodeMedBegrunnelser,
-} from '../../../../../../typer/vedtaksperiode';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
-import { useVedtakContext } from '../VedtakContext';
-import { grupperBegrunnelser } from './utils';
-import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -41,7 +39,6 @@ interface VedtaksperiodeContextValue {
     erPanelEkspandert: boolean;
     grupperteBegrunnelser: GroupBase<OptionType>[];
     id: number;
-    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
     leggTilFritekst: () => void;
     maksAntallKulepunkter: number;
     makslengdeFritekst: number;
@@ -59,9 +56,8 @@ const VedtaksperiodeContext = createContext<VedtaksperiodeContextValue | undefin
 export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegrunnelser, children }: IProps) => {
     const { request } = useHttp();
     const queryClient = useQueryClient();
-    const { alleBegrunnelserRessurs } = useVedtakContext();
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
+    const { alleBegrunnelser } = useAlleBegrunnelserContext();
+    const behandlingId = useBehandlingContext().behandling.behandlingId;
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -69,6 +65,29 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
             vedtaksperiodeMedBegrunnelser.fritekster.length === 0
     );
     const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState<Ressurs<string>>(byggTomRessurs());
+
+    const {
+        mutateAsync: oppdaterVedtaksperiodeMedFritekster,
+        isPending: oppdaterVedtaksperiodeMedFriteksterIsLoading,
+        error: oppdaterVedtaksperiodeMedFriteksterError,
+    } = useOppdaterVedtaksperiodeMedFritekster(
+        {
+            onSuccess: vedtaksperioderMedBegrunnelser => {
+                queryClient.setQueryData(
+                    HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                    vedtaksperioderMedBegrunnelser
+                );
+                queryClient.invalidateQueries({
+                    queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
+                        vedtaksperiodeMedBegrunnelser.id
+                    ),
+                });
+
+                onPanelClose(false);
+            },
+        }
+        //'Klarte ikke oppdatere fritekst på vedtaksperiode' TODO NGHI
+    );
 
     const { mutate: oppdaterStandardbegrunnelser } = useOppdaterStandardbegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
         onSuccess: vedtaksperioderMedBegrunnelser => {
@@ -79,6 +98,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
             queryClient.invalidateQueries({
                 queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
             });
+            onPanelClose(false);
         },
     });
 
@@ -103,7 +123,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         },
     });
 
-    const { hentFeilTilOppsummering, kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
+    const { kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
         BegrunnelserSkjema,
         IVedtaksperiodeMedBegrunnelser[]
     >({
@@ -129,10 +149,8 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
     };
 
     useEffect(() => {
-        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-            populerSkjemaFraBackend();
-        }
-    }, [alleBegrunnelserRessurs, vedtaksperiodeMedBegrunnelser]);
+        populerSkjemaFraBackend();
+    }, [vedtaksperiodeMedBegrunnelser]);
 
     const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
         switch (action.action) {
@@ -202,32 +220,12 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
 
     const putVedtaksperiodeMedFritekster = () => {
         if (kanSendeSkjema()) {
-            request<IRestPutVedtaksperiodeMedFritekster, IVedtaksperiodeMedBegrunnelser[]>({
-                method: 'PUT',
-                url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${vedtaksperiodeMedBegrunnelser.id}`,
-                data: {
+            oppdaterVedtaksperiodeMedFritekster({
+                vedtaksperiodeMedBegrunnelserId: vedtaksperiodeMedBegrunnelser.id,
+                payload: {
                     fritekster: skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
                 },
-            }).then(vedtaksperioderMedBegrunnelserRessurs => {
-                if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                    queryClient.setQueryData(
-                        HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
-                        vedtaksperioderMedBegrunnelserRessurs.data
-                    );
-                    onPanelClose(false);
-                    queryClient.invalidateQueries({
-                        queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
-                            vedtaksperiodeMedBegrunnelser.id
-                        ),
-                    });
-                } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
-                    settStandardBegrunnelserPut(
-                        byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
-                    );
-                } else {
-                    settStandardBegrunnelserPut(byggFeiletRessurs('Klarte ikke oppdatere fritekst på vedtaksperiode'));
-                }
-            });
+            }).catch(error => console.error(error));
         }
     };
 
@@ -235,8 +233,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         <VedtaksperiodeContext.Provider
             value={{
                 erPanelEkspandert,
-                grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs),
-                hentFeilTilOppsummering,
+                grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelser),
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,
                 leggTilFritekst,
