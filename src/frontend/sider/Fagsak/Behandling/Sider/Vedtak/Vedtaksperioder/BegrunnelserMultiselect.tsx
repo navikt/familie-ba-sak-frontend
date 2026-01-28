@@ -10,14 +10,15 @@ import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { mapBegrunnelserTilSelectOptions } from './utils';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 import { useVedtakContext } from '../VedtakContext';
-import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 
 interface IProps {
@@ -32,9 +33,9 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
+    const { alleBegrunnelser } = useAlleBegrunnelserContext();
     const { id, onChangeBegrunnelse, grupperteBegrunnelser, standardBegrunnelserPut, vedtaksperiodeMedBegrunnelser } =
         useVedtaksperiodeContext();
-    const { alleBegrunnelserRessurs } = useVedtakContext();
     const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
         vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
     });
@@ -50,18 +51,14 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     ];
 
     useEffect(() => {
-        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-            settStandardbegrunnelser(
-                mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs.data)
-            );
-        }
-    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs]);
+        settStandardbegrunnelser(mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser));
+    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelser]);
 
     useEffect(() => {
         if (!skalAutomatiskUtfylle.current) {
             return;
         }
-        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS && genererteBrevbegrunnelser !== undefined) {
+        if (genererteBrevbegrunnelser !== undefined) {
             const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
             if (
                 genererteBrevbegrunnelser.length === 0 &&
@@ -77,7 +74,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             return;
         }
         skalAutomatiskUtfylle.current = false;
-    }, [genererteBrevbegrunnelser, grupperteBegrunnelser, alleBegrunnelserRessurs]);
+    }, [genererteBrevbegrunnelser, grupperteBegrunnelser]);
 
     return (
         <FamilieReactSelect
@@ -96,7 +93,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 multiValue: (provided, props) => {
                     const currentOption = props.data as OptionType;
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
-                        alleBegrunnelserRessurs,
+                        alleBegrunnelser,
                         currentOption.value as VedtakBegrunnelse
                     );
 
@@ -131,7 +128,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             }}
             formatOptionLabel={(option: OptionType, formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    alleBegrunnelserRessurs,
+                    alleBegrunnelser,
                     option.value as VedtakBegrunnelse
                 );
 

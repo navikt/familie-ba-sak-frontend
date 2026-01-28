@@ -4,9 +4,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggTomRessurs } from '@navikt/familie-typer';
 
-import { useBegrunnelseApi } from '../../../../../api/useBegrunnelseApi';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../typer/vedtaksperiode';
-import type { AlleBegrunnelser } from '../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface VedtakContextValue {
@@ -15,7 +13,6 @@ interface VedtakContextValue {
         React.SetStateAction<Ressurs<IVedtaksperiodeMedBegrunnelser[]>>
     >;
     hentVedtaksperioder: () => void;
-    alleBegrunnelserRessurs: Ressurs<AlleBegrunnelser>;
 }
 
 const VedtakContext = React.createContext<VedtakContextValue | undefined>(undefined);
@@ -25,16 +22,6 @@ export const VedtakProvider = ({ children }: PropsWithChildren) => {
     const behandlingId = behandling.behandlingId;
 
     const { request } = useHttp();
-    const { hentAlleBegrunnelser } = useBegrunnelseApi();
-
-    const [alleBegrunnelserRessurs, settAlleBegrunnelserRessurs] =
-        useState<Ressurs<AlleBegrunnelser>>(byggTomRessurs());
-
-    useEffect(() => {
-        hentAlleBegrunnelser().then((data: Ressurs<AlleBegrunnelser>) => {
-            settAlleBegrunnelserRessurs(data);
-        });
-    }, []);
 
     const hentVedtaksperioder = () => {
         request<void, IVedtaksperiodeMedBegrunnelser[]>({
@@ -59,7 +46,6 @@ export const VedtakProvider = ({ children }: PropsWithChildren) => {
                 vedtaksperioderMedBegrunnelserRessurs,
                 settVedtaksperioderMedBegrunnelserRessurs,
                 hentVedtaksperioder,
-                alleBegrunnelserRessurs,
             }}
         >
             {children}

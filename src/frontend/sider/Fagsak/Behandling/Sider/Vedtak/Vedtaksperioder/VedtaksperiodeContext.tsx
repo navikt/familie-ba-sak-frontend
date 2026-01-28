@@ -10,6 +10,7 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
@@ -23,7 +24,7 @@ import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
 import { useVedtakContext } from '../VedtakContext';
 import { grupperBegrunnelser } from './utils';
-import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
+import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -56,8 +57,8 @@ const VedtaksperiodeContext = createContext<VedtaksperiodeContextValue | undefin
 
 export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegrunnelser, children }: IProps) => {
     const { request } = useHttp();
+    const { alleBegrunnelser } = useAlleBegrunnelserContext();
     const queryClient = useQueryClient();
-    const { alleBegrunnelserRessurs } = useVedtakContext();
     const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
@@ -114,10 +115,8 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
     };
 
     useEffect(() => {
-        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-            populerSkjemaFraBackend();
-        }
-    }, [alleBegrunnelserRessurs, vedtaksperiodeMedBegrunnelser]);
+        populerSkjemaFraBackend();
+    }, [vedtaksperiodeMedBegrunnelser]);
 
     const onChangeBegrunnelse = (action: ActionMeta<OptionType>) => {
         switch (action.action) {
@@ -238,7 +237,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         <VedtaksperiodeContext.Provider
             value={{
                 erPanelEkspandert,
-                grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs),
+                grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelser),
                 hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,
