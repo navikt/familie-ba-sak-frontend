@@ -24,6 +24,7 @@ import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide'
 import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeContext';
 import { hentSideHref } from '../../../utils/miljø';
 import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
+import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 
 export function BehandlingRouter() {
     const { fagsak } = useFagsakContext();
@@ -86,7 +87,9 @@ export function BehandlingRouter() {
                             <FeilutbetaltValutaTabellProvider>
                                 <RefusjonEøsTabellProvider>
                                     <SammensattKontrollsakProvider åpenBehandling={behandling}>
-                                        <Vedtak åpenBehandling={behandling} bruker={bruker} />
+                                        <VedtaksperioderProvider>
+                                            <Vedtak åpenBehandling={behandling} bruker={bruker} />
+                                        </VedtaksperioderProvider>
                                     </SammensattKontrollsakProvider>
                                 </RefusjonEøsTabellProvider>
                             </FeilutbetaltValutaTabellProvider>

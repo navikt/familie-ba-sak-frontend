@@ -10,6 +10,7 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
+import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
@@ -23,7 +24,8 @@ import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
 import { useVedtakContext } from '../VedtakContext';
 import { grupperBegrunnelser } from './utils';
-import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
+import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
@@ -58,7 +60,9 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
     const { request } = useHttp();
     const queryClient = useQueryClient();
     const { alleBegrunnelserRessurs } = useVedtakContext();
-    const { settVedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
+
+    const { behandling } = useBehandlingContext();
+    const behandlingId = behandling.behandlingId;
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -163,12 +167,15 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         }).then(vedtaksperioderMedBegrunnelserRessurs => {
             if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
                 settStandardBegrunnelserPut(byggTomRessurs());
-                settVedtaksperioderMedBegrunnelserRessurs(vedtaksperioderMedBegrunnelserRessurs);
                 queryClient.invalidateQueries({
                     queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
                         vedtaksperiodeMedBegrunnelser.id
                     ),
                 });
+                queryClient.setQueryData(
+                    HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                    vedtaksperioderMedBegrunnelserRessurs.data
+                );
             } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
                 settStandardBegrunnelserPut(
                     byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
@@ -216,13 +223,16 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
                 },
             }).then(vedtaksperioderMedBegrunnelserRessurs => {
                 if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                    settVedtaksperioderMedBegrunnelserRessurs(vedtaksperioderMedBegrunnelserRessurs);
-                    onPanelClose(false);
+                    queryClient.setQueryData(
+                        HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                        vedtaksperioderMedBegrunnelserRessurs.data
+                    );
                     queryClient.invalidateQueries({
                         queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
                             vedtaksperiodeMedBegrunnelser.id
                         ),
                     });
+                    onPanelClose(false);
                 } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
                     settStandardBegrunnelserPut(
                         byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)

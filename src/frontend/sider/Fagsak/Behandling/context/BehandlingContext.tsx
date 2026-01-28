@@ -21,6 +21,7 @@ import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtakspe
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../../../utils/behandling';
 import { hentSideHref } from '../../../../utils/miljø';
 import { useFagsakContext } from '../../FagsakContext';
+import type { ISide, ITrinn, SideId } from '../Sider/sider';
 import {
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
@@ -28,7 +29,6 @@ import {
     hentTrinnForBehandling,
     KontrollertStatus,
 } from '../Sider/sider';
-import type { ISide, ITrinn, SideId } from '../Sider/sider';
 
 interface Props extends React.PropsWithChildren {
     behandling: IBehandling;
@@ -51,7 +51,7 @@ interface BehandlingContextValue {
         settVisModal: (visModal: boolean) => void,
         erUlagretNyFeilutbetaltValuta: boolean,
         erUlagretNyRefusjonEøs: boolean,
-        vedtaksperioderMedBegrunnelserRessurs: Ressurs<IVedtaksperiodeMedBegrunnelser[]>,
+        vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] | undefined,
         erSammensattKontrollsak: boolean
     ) => void;
     erMigreringsbehandling: boolean;
