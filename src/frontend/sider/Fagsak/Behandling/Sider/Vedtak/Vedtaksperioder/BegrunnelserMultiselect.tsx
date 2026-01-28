@@ -18,6 +18,7 @@ import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVedtakContext } from '../VedtakContext';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;
@@ -31,15 +32,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
-    const {
-        id,
-        onChangeBegrunnelse,
-        grupperteBegrunnelser,
-        standardBegrunnelserPut,
-        vedtaksperiodeMedBegrunnelser,
-        genererteBrevbegrunnelser,
-    } = useVedtaksperiodeContext();
+    const { id, onChangeBegrunnelse, grupperteBegrunnelser, standardBegrunnelserPut, vedtaksperiodeMedBegrunnelser } =
+        useVedtaksperiodeContext();
     const { alleBegrunnelserRessurs } = useVedtakContext();
+    const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
+        vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
+    });
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
@@ -63,13 +61,10 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         if (!skalAutomatiskUtfylle.current) {
             return;
         }
-        if (
-            alleBegrunnelserRessurs.status === RessursStatus.SUKSESS &&
-            genererteBrevbegrunnelser.status === RessursStatus.SUKSESS
-        ) {
+        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS && genererteBrevbegrunnelser !== undefined) {
             const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
             if (
-                genererteBrevbegrunnelser.data.length === 0 &&
+                genererteBrevbegrunnelser.length === 0 &&
                 valgmuligheter.length === 1 &&
                 enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
             ) {
