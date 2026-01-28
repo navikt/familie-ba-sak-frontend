@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useMutationState } from '@tanstack/react-query';
 import type { GroupBase } from 'react-select';
 import styled from 'styled-components';
 
@@ -18,6 +19,7 @@ import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVedtakContext } from '../VedtakContext';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { OppdaterVedtaksperioderMedFriteksterMutationKeyFactory } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;
@@ -42,6 +44,15 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { alleBegrunnelserRessurs } = useVedtakContext();
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
+
+    const oppdaterVedtaksperioderMedFriteksterMutation = useMutationState({
+        filters: {
+            mutationKey: OppdaterVedtaksperioderMedFriteksterMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
+                vedtaksperiodeMedBegrunnelser.id
+            ),
+        },
+        select: mutation => mutation.state,
+    }).at(-1);
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
@@ -120,12 +131,16 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
+            isDisabled={
+                skalIkkeEditeres ||
+                oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
+                standardBegrunnelserPut.status === RessursStatus.HENTER
+            }
             feil={
                 standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
                 standardBegrunnelserPut.status === RessursStatus.FEILET
                     ? standardBegrunnelserPut.frontendFeilmelding
-                    : undefined
+                    : oppdaterVedtaksperioderMedFriteksterMutation?.error?.message
             }
             label="Velg standardtekst i brev"
             creatable={false}
