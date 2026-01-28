@@ -7,6 +7,7 @@ import {
     HeartIcon,
     HouseIcon,
     PassportIcon,
+    PersonIcon,
 } from '@navikt/aksel-icons';
 import { Box, Detail, Heading } from '@navikt/ds-react';
 
@@ -52,6 +53,13 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         },
                     ]}
                 />
+                {registerHistorikk.historiskeIdenter && registerHistorikk.historiskeIdenter.length > 0 && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.HISTORISKE_IDENTER}
+                        ikon={<PersonIcon fontSize={'1.5rem'} title="Person-ikon" focusable="false" />}
+                        historikk={registerHistorikk.historiskeIdenter}
+                    />
+                )}
                 {personErDød && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.DØDSBOADRESSE}
