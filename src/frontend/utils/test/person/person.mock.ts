@@ -11,6 +11,7 @@ export const mockBarn: IGrunnlagPerson = {
     kjønn: 'KVINNE' as kjønnType,
     navn: 'Mock Barn',
     målform: Målform.NN,
+    harFalskIdentitet: false,
 };
 
 interface IMockSøker {
@@ -25,4 +26,5 @@ export const mockSøker = ({ målform = Målform.NB, personIdent = '12345678930'
     kjønn: 'KVINNE' as kjønnType,
     navn: 'Mock Søker',
     målform: målform,
+    harFalskIdentitet: false,
 });

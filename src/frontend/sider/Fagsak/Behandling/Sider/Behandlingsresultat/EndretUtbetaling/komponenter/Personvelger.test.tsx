@@ -24,6 +24,7 @@ const defaultBehandling: IBehandling = lagBehandling({
             navn: 'Mor',
             kjønn: kjønnType.KVINNE,
             målform: Målform.NB,
+            harFalskIdentitet: false,
         },
         {
             type: PersonType.BARN,
@@ -32,6 +33,7 @@ const defaultBehandling: IBehandling = lagBehandling({
             navn: 'Barn 1',
             kjønn: kjønnType.MANN,
             målform: Målform.NB,
+            harFalskIdentitet: false,
         },
         {
             type: PersonType.BARN,
@@ -40,6 +42,7 @@ const defaultBehandling: IBehandling = lagBehandling({
             navn: 'Barn 2',
             kjønn: kjønnType.KVINNE,
             målform: Målform.NB,
+            harFalskIdentitet: false,
         },
     ],
     personerMedAndelerTilkjentYtelse: [
