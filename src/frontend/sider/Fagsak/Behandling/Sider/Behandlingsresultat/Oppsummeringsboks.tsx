@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HGrid, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { ASpacing10, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
@@ -13,6 +13,8 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 import { useAppContext } from '../../../../../context/AppContext';
+import { FalskIdentitet } from '../../../../../komponenter/FalskIdentitet/FalskIdentitet';
+import { Skillelinje } from '../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -215,9 +217,14 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                         </UtbetalingsbeløpRad>
                         {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => (
                             <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
-                                <BodyShort>{`${detalj.person.navn} (${hentAlderSomString(
-                                    detalj.person.fødselsdato
-                                )}) | ${formaterIdent(detalj.person.personIdent)}`}</BodyShort>
+                                <HStack gap={'space-4'}>
+                                    <BodyShort>
+                                        {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
+                                    </BodyShort>
+                                    <Skillelinje />
+                                    <FalskIdentitet harFalskIdentitet={detalj.person.harFalskIdentitet} />
+                                    <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
+                                </HStack>
                                 <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
                                 {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
                                     <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
