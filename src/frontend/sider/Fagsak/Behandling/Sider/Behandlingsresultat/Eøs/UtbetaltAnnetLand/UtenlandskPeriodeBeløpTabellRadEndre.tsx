@@ -8,8 +8,9 @@ import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { Currency } from '@navikt/land-verktoy';
+import type { Country, Currency } from '@navikt/land-verktoy';
 
+import { useAppContext } from '../../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import {
@@ -17,11 +18,12 @@ import {
     UtenlandskPeriodeBeløpIntervall,
     utenlandskPeriodeBeløpIntervaller,
 } from '../../../../../../../typer/eøsPerioder';
+import { ToggleNavn } from '../../../../../../../typer/toggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
-import { StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';
+import { FamilieLandvelger, StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const UtbetaltBeløpRad = styled.div`
     width: 32rem;
@@ -71,6 +73,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const lesevisning = vurderErLesevisning(true);
+    const { toggles } = useAppContext();
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -182,6 +185,27 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </UtbetaltBeløpRad>
+                    <FamilieLandvelger
+                        erLesevisning={lesevisning}
+                        id={'utbetalingsland'}
+                        label={'Utbetalingsland'}
+                        kunEøs
+                        medFlag
+                        size="medium"
+                        kanNullstilles
+                        value={skjema.felter.utbetalingsland.verdi}
+                        onChange={(value: Country) => {
+                            const nyVerdi = value ? value.value : undefined;
+                            skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
+                        }}
+                        feil={
+                            skjema.visFeilmeldinger &&
+                            skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
+                                ? skjema.felter.utbetalingsland.feilmelding?.toString()
+                                : ''
+                        }
+                        utenMargin
+                    />
                 </Fieldset>
 
                 {!lesevisning && (
