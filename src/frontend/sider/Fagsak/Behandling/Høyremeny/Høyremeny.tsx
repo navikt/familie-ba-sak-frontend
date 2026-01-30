@@ -1,33 +1,18 @@
 import * as React from 'react';
 import { Activity } from 'react';
 
-import styled from 'styled-components';
-
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button, Stack, VStack } from '@navikt/ds-react';
-import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import { Behandlingskort } from './Behandlingskort';
 import { Hendelsesoversikt } from './Hendelsesoversikt/Hendelsesoversikt';
 import type { Hendelse } from './Hendelsesoversikt/typer';
+import Styles from './Høyremeny.module.css';
 import { useHøyremeny } from './useHøyremeny';
 import type { ILogg } from '../../../../typer/logg';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { useBehandlingContext } from '../context/BehandlingContext';
-
-const ToggleVisningHøyremeny = styled(Button)`
-    position: absolute;
-    margin-left: -21px;
-    top: 370px;
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    background-color: ${ASurfaceDefault};
-    z-index: 10;
-`;
 
 export function Høyremeny() {
     const { behandling, logg, hentLogg } = useBehandlingContext();
@@ -46,9 +31,10 @@ export function Høyremeny() {
 
     return (
         <Stack direction={'row'}>
-            <ToggleVisningHøyremeny
+            <Button
                 title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
                 aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                className={Styles.knapp}
                 variant={'secondary'}
                 size={'small'}
                 icon={icon}
