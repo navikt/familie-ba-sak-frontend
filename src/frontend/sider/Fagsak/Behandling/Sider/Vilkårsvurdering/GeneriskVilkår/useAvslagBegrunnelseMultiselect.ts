@@ -1,11 +1,7 @@
-import { useEffect, useState } from 'react';
-
-import { byggTomRessurs, RessursStatus, type Ressurs } from '@navikt/familie-typer';
-
-import { useBegrunnelseApi } from '../../../../../../api/useBegrunnelseApi';
+import { useHentAlleBegrunnelser } from '../../../../../../hooks/useHentAlleBegrunnelser';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { AlleBegrunnelser, VilkårType } from '../../../../../../typer/vilkår';
+import type { VilkårType } from '../../../../../../typer/vilkår';
 import { Regelverk } from '../../../../../../typer/vilkår';
 
 const useAvslagBegrunnelseMultiselect = (
@@ -13,19 +9,10 @@ const useAvslagBegrunnelseMultiselect = (
     regelverk: Regelverk | null,
     gjelderInstitusjon: boolean
 ) => {
-    const { hentAlleBegrunnelser } = useBegrunnelseApi();
-
-    const [alleBegrunnelserRessurs, settAlleBegrunnelserRessurs] =
-        useState<Ressurs<AlleBegrunnelser>>(byggTomRessurs());
-
-    useEffect(() => {
-        hentAlleBegrunnelser().then((data: Ressurs<AlleBegrunnelser>) => {
-            settAlleBegrunnelserRessurs(data);
-        });
-    }, []);
+    const { data: alleBegrunnelser, status: alleBegrunnelserStatus } = useHentAlleBegrunnelser();
 
     const finnAvslagsbegrunnelserForGjeldendeVilkår = () => {
-        if (alleBegrunnelserRessurs.status !== RessursStatus.SUKSESS) {
+        if (alleBegrunnelser === undefined) {
             return [];
         }
 
@@ -39,16 +26,16 @@ const useAvslagBegrunnelseMultiselect = (
             begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.AVSLAG;
         }
 
-        const avslagBegrunnelseTeksterForGjeldendeVilkår = alleBegrunnelserRessurs.data[
-            begrunnelsestypeGyldigForBehandling
-        ].filter((begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType);
+        const avslagBegrunnelseTeksterForGjeldendeVilkår = alleBegrunnelser[begrunnelsestypeGyldigForBehandling].filter(
+            (begrunnelse: IRestVedtakBegrunnelseTilknyttetVilkår) => begrunnelse.vilkår === vilkårType
+        );
 
         return avslagBegrunnelseTeksterForGjeldendeVilkår;
     };
 
     return {
         avslagsbegrunnelserForGjeldendeVilkår: finnAvslagsbegrunnelserForGjeldendeVilkår(),
-        begrunnelserStatus: alleBegrunnelserRessurs.status,
+        begrunnelserStatus: alleBegrunnelserStatus,
     };
 };
 
