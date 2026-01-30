@@ -91,53 +91,55 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
     }
 
     return (
-        <FamilieReactSelect
-            value={valgteBegrunnelser}
-            label={'Velg standardtekst i brev'}
-            creatable={false}
-            placeholder={'Velg begrunnelse(r)'}
-            isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
-            erLesevisning={erLesevisning}
-            isMulti={true}
-            onChange={(_, action: ActionMeta<OptionType>) => {
-                onChangeBegrunnelse(action);
-            }}
-            options={muligeOptions}
-            propSelectStyles={{
-                container: (provided, props) => ({
-                    ...provided,
-                    maxWidth: '25rem',
-                    zIndex: props.isFocused ? AZIndexPopover : 1,
-                }),
-                groupHeading: provided => ({
-                    ...provided,
-                    textTransform: 'none',
-                }),
-                multiValue: provided => {
-                    return {
+        <>
+            <FamilieReactSelect
+                value={valgteBegrunnelser}
+                label={'Velg standardtekst i brev'}
+                creatable={false}
+                placeholder={'Velg begrunnelse(r)'}
+                isLoading={vilkårSubmit !== VilkårSubmit.NONE}
+                isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+                erLesevisning={erLesevisning}
+                isMulti={true}
+                onChange={(_, action: ActionMeta<OptionType>) => {
+                    onChangeBegrunnelse(action);
+                }}
+                options={muligeOptions}
+                propSelectStyles={{
+                    container: (provided, props) => ({
                         ...provided,
-                        backgroundColor: hentBakgrunnsfarge(VedtakBegrunnelseType.AVSLAG),
-                        border: `1px solid ${hentBorderfarge(VedtakBegrunnelseType.AVSLAG)}`,
-                        borderRadius: '0.5rem',
-                    };
-                },
-                multiValueLabel: provided => ({
-                    ...provided,
-                    whiteSpace: 'pre-wrap',
-                    textOverflow: 'hidden',
-                    overflow: 'hidden',
-                }),
-                multiValueRemove: provided => ({
-                    ...provided,
-                    ':hover': {
-                        backgroundColor: ASurfaceActionHover,
-                        color: 'white',
-                        borderRadius: '0 .4rem .4rem 0',
+                        maxWidth: '25rem',
+                        zIndex: props.isFocused ? AZIndexPopover : 1,
+                    }),
+                    groupHeading: provided => ({
+                        ...provided,
+                        textTransform: 'none',
+                    }),
+                    multiValue: provided => {
+                        return {
+                            ...provided,
+                            backgroundColor: hentBakgrunnsfarge(VedtakBegrunnelseType.AVSLAG),
+                            border: `1px solid ${hentBorderfarge(VedtakBegrunnelseType.AVSLAG)}`,
+                            borderRadius: '0.5rem',
+                        };
                     },
-                }),
-            }}
-        />
+                    multiValueLabel: provided => ({
+                        ...provided,
+                        whiteSpace: 'pre-wrap',
+                        textOverflow: 'hidden',
+                        overflow: 'hidden',
+                    }),
+                    multiValueRemove: provided => ({
+                        ...provided,
+                        ':hover': {
+                            backgroundColor: ASurfaceActionHover,
+                            color: 'white',
+                            borderRadius: '0 .4rem .4rem 0',
+                        },
+                    }),
+                }}
+            />
+        </>
     );
 };
 
