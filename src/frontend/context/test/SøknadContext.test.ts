@@ -20,6 +20,7 @@ describe('SøknadContext', () => {
             navn: 'Mock Mockersen',
             personIdent: barnFnr,
             type: PersonType.BARN,
+            harFalskIdentitet: false,
         };
 
         const fagsak = FagsakTestdata.lagFagsak({

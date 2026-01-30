@@ -12,6 +12,7 @@ import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { PersonIkon } from '../PersonIkon';
 import styles from './PersonInformasjon.module.css';
+import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -29,7 +30,7 @@ const hentAdresseBeskyttelseGradering = (bruker: IPersonInfo, personIdent: strin
     }
 };
 
-const Skillelinje: React.FC<{ erHeading?: boolean }> = ({ erHeading = false }) => {
+export const Skillelinje: React.FC<{ erHeading?: boolean }> = ({ erHeading = false }) => {
     if (erHeading) {
         return (
             <Heading level="2" size="medium" as="span">
@@ -66,6 +67,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                         {navnOgAlder}
                     </Heading>
                     <Skillelinje erHeading />
+                    <FalskIdentitet harFalskIdentitet={person.harFalskIdentitet} erHeading />
                     <HStack gap="1" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
                             {formattertIdent}

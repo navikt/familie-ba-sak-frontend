@@ -78,6 +78,7 @@ export enum BehandlingÅrsak {
     IVERKSETTE_KA_VEDTAK = 'IVERKSETTE_KA_VEDTAK',
     FINNMARKSTILLEGG = 'FINNMARKSTILLEGG',
     SVALBARDTILLEGG = 'SVALBARDTILLEGG',
+    FALSK_IDENTITET = 'FALSK_IDENTITET',
 }
 
 export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak, string> = {
@@ -109,6 +110,7 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
     FINNMARKSTILLEGG: 'Finnmarkstillegg',
     SVALBARDTILLEGG: 'Svalbardtillegg',
+    FALSK_IDENTITET: 'Falsk identitet',
 
     /** Klage: **/
     ANNET: 'Annet',
