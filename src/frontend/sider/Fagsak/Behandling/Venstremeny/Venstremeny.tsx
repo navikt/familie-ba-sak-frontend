@@ -14,7 +14,6 @@ import {
     ASpacing2,
     ASpacing6,
     ASpacing8,
-    ASurfaceDefault,
     ASurfaceHover,
     ASurfaceNeutralSubtle,
     ASurfaceWarning,
@@ -22,23 +21,11 @@ import {
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useVenstremeny } from './useVenstremeny';
+import Styles from './Venstremeny.module.css';
 import { useFagsakId } from '../../../../hooks/useFagsakId';
 import { useBehandlingContext } from '../context/BehandlingContext';
 import type { IUnderside } from '../Sider/sider';
 import { erSidenAktiv } from '../Sider/sider';
-
-const ToggleVisningVenstremeny = styled(Button)`
-    position: absolute;
-    margin-right: -20px;
-    top: 370px;
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    background-color: ${ASurfaceDefault};
-    z-index: 10;
-`;
 
 const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
     text-decoration: none;
@@ -96,9 +83,10 @@ export function Venstremeny() {
 
     return (
         <Stack direction={'row-reverse'}>
-            <ToggleVisningVenstremeny
+            <Button
                 title={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
                 aria-label={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
+                className={Styles.knapp}
                 variant={'secondary'}
                 size={'small'}
                 icon={icon}
