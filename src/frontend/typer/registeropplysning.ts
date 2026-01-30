@@ -7,6 +7,7 @@ export enum Registeropplysning {
     DØDSBOADRESSE = 'DØDSBOADRESSE',
     FØDSELSDATO = 'FØDSELSDATO',
     DELTBOSTED = 'DELTBOSTED',
+    HISTORISKE_IDENTER = 'HISTORISKE_IDENTER',
 }
 
 export const registeropplysning: Record<Registeropplysning, string> = {
@@ -18,4 +19,5 @@ export const registeropplysning: Record<Registeropplysning, string> = {
     DØDSBOADRESSE: 'Dødsboadresse',
     FØDSELSDATO: 'Fødselsdato',
     DELTBOSTED: 'Delt bosted adresse',
+    HISTORISKE_IDENTER: 'Historiske identer',
 };
