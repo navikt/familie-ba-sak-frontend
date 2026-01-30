@@ -8,12 +8,12 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 import { OppdaterStandardbegrunnelserMutationKeyFactory } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
+import { OppdaterVedtaksperioderMedFriteksterMutationKeyFactory } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
@@ -35,11 +35,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
-    const { id, onChangeBegrunnelse, grupperteBegrunnelser, standardBegrunnelserPut, vedtaksperiodeMedBegrunnelser } =
+    const { id, onChangeBegrunnelse, grupperteBegrunnelser, vedtaksperiodeMedBegrunnelser } =
         useVedtaksperiodeContext();
     const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
         vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
     });
+    const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
     const oppdaterStandardbegrunnelserMutation = useMutationState({
         filters: {
             mutationKey: OppdaterStandardbegrunnelserMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
@@ -48,8 +49,14 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         },
         select: mutation => mutation.state,
     }).at(-1);
-
-    const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
+    const oppdaterVedtaksperioderMedFriteksterMutation = useMutationState({
+        filters: {
+            mutationKey: OppdaterVedtaksperioderMedFriteksterMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
+                vedtaksperiodeMedBegrunnelser.id
+            ),
+        },
+        select: mutation => mutation.state,
+    }).at(-1);
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
@@ -123,14 +130,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={
                 skalIkkeEditeres ||
-                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
-                standardBegrunnelserPut.status === RessursStatus.HENTER
+                oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
+                oppdaterStandardbegrunnelserMutation?.status === 'pending'
             }
             feil={
-                standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
-                standardBegrunnelserPut.status === RessursStatus.FEILET
-                    ? standardBegrunnelserPut.frontendFeilmelding
-                    : oppdaterStandardbegrunnelserMutation?.error?.message
+                oppdaterVedtaksperioderMedFriteksterMutation?.error?.message ??
+                oppdaterStandardbegrunnelserMutation?.error?.message
             }
             label="Velg standardtekst i brev"
             creatable={false}
