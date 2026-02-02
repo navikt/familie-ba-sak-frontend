@@ -214,9 +214,7 @@ const FritekstBegrunnelser: React.FC = () => {
             {!erLesevisning && (
                 <Knapperekke>
                     <Button
-                        onClick={() => {
-                            putVedtaksperiodeMedFritekster();
-                        }}
+                        onClick={putVedtaksperiodeMedFritekster}
                         size="small"
                         variant="primary"
                         loading={skjema.submitRessurs.status === RessursStatus.HENTER}
