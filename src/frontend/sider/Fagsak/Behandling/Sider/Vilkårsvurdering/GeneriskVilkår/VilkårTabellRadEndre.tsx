@@ -15,12 +15,10 @@ import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
-import { useAppContext } from '../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
@@ -75,9 +73,6 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settFokusPåKnapp,
     lesevisning,
 }) => {
-    const { toggles } = useAppContext();
-    const bosattFinnmarkNordtromsToggleErPå = toggles[ToggleNavn.bosattFinnmarkNordtroms];
-
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
@@ -282,20 +277,18 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             </Radio>
                         )}
                 </RadioGroup>
-                {(!gjelderInstitusjon || bosattFinnmarkNordtromsToggleErPå) && (
-                    <UtdypendeVilkårsvurderingMultiselect
-                        redigerbartVilkår={redigerbartVilkår}
-                        validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
-                        erLesevisning={lesevisning}
-                        personType={person.type}
-                        feilhåndtering={
-                            redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
-                                Valideringsstatus.FEIL && skalViseFeilmeldinger()
-                                ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
-                                : ''
-                        }
-                    />
-                )}
+                <UtdypendeVilkårsvurderingMultiselect
+                    redigerbartVilkår={redigerbartVilkår}
+                    validerOgSettRedigerbartVilkår={validerOgSettRedigerbartVilkår}
+                    erLesevisning={lesevisning}
+                    personType={person.type}
+                    feilhåndtering={
+                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.valideringsstatus ===
+                            Valideringsstatus.FEIL && skalViseFeilmeldinger()
+                            ? redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.feilmelding
+                            : ''
+                    }
+                />
                 {redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT && årsakErSøknad && (
                     <AvslagSkjema
                         redigerbartVilkår={redigerbartVilkår}

@@ -185,29 +185,27 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </UtbetaltBeløpRad>
-                    {toggles[ToggleNavn.skalHenteUtbetalingslandFraUtenlandskperiodebelop] && (
-                        <FamilieLandvelger
-                            erLesevisning={lesevisning}
-                            id={'utbetalingsland'}
-                            label={'Utbetalingsland'}
-                            kunEøs
-                            medFlag
-                            size="medium"
-                            kanNullstilles
-                            value={skjema.felter.utbetalingsland.verdi}
-                            onChange={(value: Country) => {
-                                const nyVerdi = value ? value.value : undefined;
-                                skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
-                            }}
-                            feil={
-                                skjema.visFeilmeldinger &&
-                                skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
-                                    ? skjema.felter.utbetalingsland.feilmelding?.toString()
-                                    : ''
-                            }
-                            utenMargin
-                        />
-                    )}
+                    <FamilieLandvelger
+                        erLesevisning={lesevisning}
+                        id={'utbetalingsland'}
+                        label={'Utbetalingsland'}
+                        kunEøs
+                        medFlag
+                        size="medium"
+                        kanNullstilles
+                        value={skjema.felter.utbetalingsland.verdi}
+                        onChange={(value: Country) => {
+                            const nyVerdi = value ? value.value : undefined;
+                            skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
+                        }}
+                        feil={
+                            skjema.visFeilmeldinger &&
+                            skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
+                                ? skjema.felter.utbetalingsland.feilmelding?.toString()
+                                : ''
+                        }
+                        utenMargin
+                    />
                 </Fieldset>
 
                 {!lesevisning && (

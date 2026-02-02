@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useMutationState } from '@tanstack/react-query';
 import type { GroupBase } from 'react-select';
 import styled from 'styled-components';
 
@@ -10,14 +11,16 @@ import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { mapBegrunnelserTilSelectOptions } from './utils';
+import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
+import { OppdaterStandardbegrunnelserMutationKeyFactory } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { useVedtakContext } from '../VedtakContext';
-import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
+import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 
 interface IProps {
     vedtaksperiodetype: Vedtaksperiodetype;
@@ -31,15 +34,20 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
-    const {
-        id,
-        onChangeBegrunnelse,
-        grupperteBegrunnelser,
-        standardBegrunnelserPut,
-        vedtaksperiodeMedBegrunnelser,
-        genererteBrevbegrunnelser,
-    } = useVedtaksperiodeContext();
-    const { alleBegrunnelserRessurs } = useVedtakContext();
+    const { alleBegrunnelser } = useAlleBegrunnelserContext();
+    const { id, onChangeBegrunnelse, grupperteBegrunnelser, standardBegrunnelserPut, vedtaksperiodeMedBegrunnelser } =
+        useVedtaksperiodeContext();
+    const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
+        vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
+    });
+    const oppdaterStandardbegrunnelserMutation = useMutationState({
+        filters: {
+            mutationKey: OppdaterStandardbegrunnelserMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
+                vedtaksperiodeMedBegrunnelser.id
+            ),
+        },
+        select: mutation => mutation.state,
+    }).at(-1);
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
@@ -52,24 +60,17 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     ];
 
     useEffect(() => {
-        if (alleBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-            settStandardbegrunnelser(
-                mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs.data)
-            );
-        }
-    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelserRessurs]);
+        settStandardbegrunnelser(mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser));
+    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelser]);
 
     useEffect(() => {
         if (!skalAutomatiskUtfylle.current) {
             return;
         }
-        if (
-            alleBegrunnelserRessurs.status === RessursStatus.SUKSESS &&
-            genererteBrevbegrunnelser.status === RessursStatus.SUKSESS
-        ) {
+        if (genererteBrevbegrunnelser !== undefined) {
             const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
             if (
-                genererteBrevbegrunnelser.data.length === 0 &&
+                genererteBrevbegrunnelser.length === 0 &&
                 valgmuligheter.length === 1 &&
                 enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
             ) {
@@ -82,7 +83,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             return;
         }
         skalAutomatiskUtfylle.current = false;
-    }, [genererteBrevbegrunnelser, grupperteBegrunnelser, alleBegrunnelserRessurs]);
+    }, [genererteBrevbegrunnelser, grupperteBegrunnelser]);
 
     return (
         <FamilieReactSelect
@@ -101,7 +102,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 multiValue: (provided, props) => {
                     const currentOption = props.data as OptionType;
                     const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
-                        alleBegrunnelserRessurs,
+                        alleBegrunnelser,
                         currentOption.value as VedtakBegrunnelse
                     );
 
@@ -120,12 +121,16 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
                 }),
             }}
             placeholder={'Velg begrunnelse(r)'}
-            isDisabled={skalIkkeEditeres || standardBegrunnelserPut.status === RessursStatus.HENTER}
+            isDisabled={
+                skalIkkeEditeres ||
+                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
+                standardBegrunnelserPut.status === RessursStatus.HENTER
+            }
             feil={
                 standardBegrunnelserPut.status === RessursStatus.FUNKSJONELL_FEIL ||
                 standardBegrunnelserPut.status === RessursStatus.FEILET
                     ? standardBegrunnelserPut.frontendFeilmelding
-                    : undefined
+                    : oppdaterStandardbegrunnelserMutation?.error?.message
             }
             label="Velg standardtekst i brev"
             creatable={false}
@@ -136,7 +141,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             }}
             formatOptionLabel={(option: OptionType, formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
-                    alleBegrunnelserRessurs,
+                    alleBegrunnelser,
                     option.value as VedtakBegrunnelse
                 );
 

@@ -9,11 +9,9 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useAppContext } from '../../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
@@ -31,7 +29,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { toggles } = useAppContext();
     const { fagsakId } = useSakOgBehandlingParams();
     const navigate = useNavigate();
     const {
@@ -52,12 +49,9 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
-    const erAvregningOgToggleErPå =
-        avregningsperioder.length > 0 && toggles[ToggleNavn.brukFunksjonalitetForUlovfestetMotregning];
-
-    const harOverlappendePerioderMedAndreFagsaker =
-        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0 &&
-        toggles[ToggleNavn.visOverlappendePerioderMedAndreFagsaker];
+    const harOverlappendePerioderMedAndreFagsakerOgSkalStanses =
+        !behandlingErEndreMigreringsdato &&
+        overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0;
 
     const nesteOnClick = () => {
         if (erLesevisning) {
@@ -90,14 +84,16 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         return <div />;
     }
 
+    const erAvregning = avregningsperioder.length > 0;
+
     const tilbakekrevingsvedtakMotregning = åpenBehandling.tilbakekrevingsvedtakMotregning;
 
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
     const skalDisableNesteKnapp =
-        (erAvregningOgToggleErPå && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsaker;
+        (erAvregning && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsakerOgSkalStanses;
 
-    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregningOgToggleErPå || heleBeløpetSkalKrevesTilbake);
+    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregning || heleBeløpetSkalKrevesTilbake);
 
     return (
         <Skjemasteg
@@ -134,7 +130,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                             }
                         />
 
-                        {harOverlappendePerioderMedAndreFagsaker && (
+                        {harOverlappendePerioderMedAndreFagsakerOgSkalStanses && (
                             <Box marginBlock="10 0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
@@ -173,7 +169,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                                 </Alert>
                             </Box>
                         )}
-                        {erAvregningOgToggleErPå && (
+                        {erAvregning && (
                             <TilbakekrevingsvedtakMotregning
                                 åpenBehandling={åpenBehandling}
                                 tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning}
