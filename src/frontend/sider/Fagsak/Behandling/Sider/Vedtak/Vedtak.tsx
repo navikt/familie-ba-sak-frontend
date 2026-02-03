@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import { AlleBegrunnelserProvider } from './AlleBegrunnelserContext';
 import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
-import { useVedtakContext } from './VedtakContext';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
@@ -23,6 +23,7 @@ import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import Skjemasteg from '../Skjemasteg';
 import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
+import { useHentVedtaksperioder } from '../../../../../hooks/useHentVedtaksperioder';
 
 interface IVedtakProps {
     åpenBehandling: IBehandling;
@@ -43,12 +44,14 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
-    const { vedtaksperioderMedBegrunnelserRessurs } = useVedtakContext();
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
     const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
-
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
+
+    const { behandling } = useBehandlingContext();
+    const behandlingId = behandling.behandlingId;
+    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(behandlingId);
 
     const erLesevisning = vurderErLesevisning();
 
@@ -63,7 +66,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
             (visModal: boolean) => settVisModal(visModal),
             erLeggTilFeilutbetaltValutaFormÅpen,
             erLeggTilRefusjonEøsFormÅpen,
-            vedtaksperioderMedBegrunnelserRessurs,
+            vedtaksperioderMedBegrunnelser,
             erSammensattKontrollsak
         );
     };
@@ -73,32 +76,34 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
     const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
-        <StyledSkjemaSteg
-            tittel="Vedtak"
-            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)}
-            nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
-            nesteKnappTittel={
-                erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
-                    ? 'Bekreft migrering'
-                    : 'Til godkjenning'
-            }
-            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
-            maxWidthStyle="54rem"
-            className={'vedtak'}
-            feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
-            steg={BehandlingSteg.BESLUTTE_VEDTAK}
-        >
-            {erVedtaksbrevutsending ? (
-                <>
-                    <Vedtaksmeny />
-                    <VedtaksbrevBygger åpenBehandling={åpenBehandling} bruker={bruker} />
-                </>
-            ) : (
-                <Vedtaksalert åpenBehandling={åpenBehandling} />
-            )}
+        <AlleBegrunnelserProvider>
+            <StyledSkjemaSteg
+                tittel="Vedtak"
+                forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/simulering`)}
+                nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
+                nesteKnappTittel={
+                    erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
+                        ? 'Bekreft migrering'
+                        : 'Til godkjenning'
+                }
+                senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+                maxWidthStyle="54rem"
+                className={'vedtak'}
+                feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
+                steg={BehandlingSteg.BESLUTTE_VEDTAK}
+            >
+                {erVedtaksbrevutsending ? (
+                    <>
+                        <Vedtaksmeny />
+                        <VedtaksbrevBygger åpenBehandling={åpenBehandling} bruker={bruker} />
+                    </>
+                ) : (
+                    <Vedtaksalert åpenBehandling={åpenBehandling} />
+                )}
 
-            {visModal && <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />}
-        </StyledSkjemaSteg>
+                {visModal && <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />}
+            </StyledSkjemaSteg>
+        </AlleBegrunnelserProvider>
     );
 };
 
