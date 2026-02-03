@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Alert } from '@navikt/ds-react';
+import { ErrorMessage, LocalAlert, Stack } from '@navikt/ds-react';
 import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elements';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
+import { useHentAlleBegrunnelser } from '../../../../../../hooks/useHentAlleBegrunnelser';
 import type { OptionType } from '../../../../../../typer/common';
 import {
     type IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -31,14 +32,20 @@ interface IOptionType {
 }
 
 const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange, regelverk }) => {
-    const { vurderErLesevisning, gjelderInstitusjon } = useBehandlingContext();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { vilkårSubmit } = useVilkårsvurderingContext();
 
-    const { avslagsbegrunnelserForGjeldendeVilkår, begrunnelserStatus } = useAvslagBegrunnelseMultiselect(
+    const {
+        data: alleBegrunnelser,
+        isPending: hentAlleBegrunnelserIsPending,
+        error: hentAlleBegrunnelserError,
+    } = useHentAlleBegrunnelser();
+
+    const { avslagsbegrunnelserForGjeldendeVilkår } = useAvslagBegrunnelseMultiselect(
         vilkårType,
         regelverk,
-        gjelderInstitusjon
+        alleBegrunnelser
     );
 
     const valgteBegrunnelser = begrunnelser
@@ -85,8 +92,20 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
         })
     );
 
-    if (begrunnelserStatus === 'error') {
-        return <Alert variant="error">Klarte ikke å hente inn begrunnelser for vilkår.</Alert>;
+    if (hentAlleBegrunnelserError) {
+        return (
+            <LocalAlert status={'error'}>
+                <LocalAlert.Header>
+                    <LocalAlert.Title>En teknisk feil oppstod.</LocalAlert.Title>
+                </LocalAlert.Header>
+                <LocalAlert.Content>
+                    <Stack direction={'column'} gap={'space-16'}>
+                        Klarte ikke å hente inn avslag begrunnelser for vilkår.
+                        <ErrorMessage>{hentAlleBegrunnelserError.message}</ErrorMessage>
+                    </Stack>
+                </LocalAlert.Content>
+            </LocalAlert>
+        );
     }
 
     return (
@@ -95,8 +114,8 @@ const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnel
             label={'Velg standardtekst i brev'}
             creatable={false}
             placeholder={'Velg begrunnelse(r)'}
-            isLoading={vilkårSubmit !== VilkårSubmit.NONE}
-            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE}
+            isLoading={vilkårSubmit !== VilkårSubmit.NONE || hentAlleBegrunnelserIsPending}
+            isDisabled={erLesevisning || vilkårSubmit !== VilkårSubmit.NONE || hentAlleBegrunnelserIsPending}
             erLesevisning={erLesevisning}
             isMulti={true}
             onChange={(_, action: ActionMeta<OptionType>) => {

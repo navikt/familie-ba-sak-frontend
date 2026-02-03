@@ -1,15 +1,15 @@
-import { useHentAlleBegrunnelser } from '../../../../../../hooks/useHentAlleBegrunnelser';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../../../typer/vedtak';
 import { VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { VilkårType } from '../../../../../../typer/vilkår';
+import type { AlleBegrunnelser, VilkårType } from '../../../../../../typer/vilkår';
 import { Regelverk } from '../../../../../../typer/vilkår';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const useAvslagBegrunnelseMultiselect = (
     vilkårType: VilkårType,
     regelverk: Regelverk | null,
-    gjelderInstitusjon: boolean
+    alleBegrunnelser: AlleBegrunnelser | undefined
 ) => {
-    const { data: alleBegrunnelser, status: alleBegrunnelserStatus } = useHentAlleBegrunnelser();
+    const { gjelderInstitusjon } = useBehandlingContext();
 
     const finnAvslagsbegrunnelserForGjeldendeVilkår = () => {
         if (alleBegrunnelser === undefined) {
@@ -35,7 +35,6 @@ const useAvslagBegrunnelseMultiselect = (
 
     return {
         avslagsbegrunnelserForGjeldendeVilkår: finnAvslagsbegrunnelserForGjeldendeVilkår(),
-        begrunnelserStatus: alleBegrunnelserStatus,
     };
 };
 
