@@ -1,20 +1,10 @@
 import React from 'react';
 
-import { Alert, UNSAFE_Combobox } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
-import { ErrorMessage, LocalAlert, Stack } from '@navikt/ds-react';
-import { ASurfaceActionHover, AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import { type ActionMeta, FamilieReactSelect } from '@navikt/familie-form-elements';
+import { ErrorMessage, LocalAlert, Stack, UNSAFE_Combobox } from '@navikt/ds-react';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '../../../../../../typer/vedtak';
 import { useHentAlleBegrunnelser } from '../../../../../../hooks/useHentAlleBegrunnelser';
-import type { OptionType } from '../../../../../../typer/common';
-import {
-    type IRestVedtakBegrunnelseTilknyttetVilkår,
-    type VedtakBegrunnelse,
-    VedtakBegrunnelseType,
-} from '../../../../../../typer/vedtak';
+import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '../../../../../../typer/vedtak';
 import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
