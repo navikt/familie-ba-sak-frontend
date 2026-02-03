@@ -5,12 +5,12 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import styles from './FalskIdentitet.module.css';
 import { Skillelinje } from '../PersonInformasjon/PersonInformasjon';
 
-interface IProps {
+interface Props {
     harFalskIdentitet: boolean;
     erHeading?: boolean;
 }
 
-export function FalskIdentitet({ harFalskIdentitet, erHeading }: IProps) {
+export function FalskIdentitet({ harFalskIdentitet, erHeading }: Props) {
     if (!harFalskIdentitet) {
         return null;
     }

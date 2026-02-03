@@ -8,9 +8,9 @@ import { render } from '../../testutils/testrender';
 describe('FalskIdentitet', () => {
     test('skal rendre komponent som forventet når harFalskIdentitet er true', () => {
         const { screen } = render(<FalskIdentitet harFalskIdentitet={true} />);
-        const mark = screen.queryByRole('mark');
+        const mark = screen.getByRole('mark');
         const span = mark?.parentElement;
-        const skillelinjeParagraf = screen.queryByText('|');
+        const skillelinjeParagraf = screen.getByText('|');
 
         expect(mark).toBeInTheDocument();
         expect(mark).toHaveTextContent('Falsk identitet');
@@ -22,9 +22,9 @@ describe('FalskIdentitet', () => {
 
     test('skal rendre komponent som heading når erHeading er true', () => {
         const { screen } = render(<FalskIdentitet harFalskIdentitet={true} erHeading />);
-        const mark = screen.queryByRole('mark');
+        const mark = screen.getByRole('mark');
         const span = mark?.parentElement;
-        const skillelinjeSpan = screen.queryByText('|');
+        const skillelinjeSpan = screen.getByText('|');
 
         expect(mark).toBeInTheDocument();
         expect(mark).toHaveTextContent('Falsk identitet');
