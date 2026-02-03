@@ -12,8 +12,8 @@ import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../utils/formatter';
 import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
+import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
 import { PersonIkon } from '../PersonIkon';
-import styles from './Personlinje.module.css';
 
 function InnholdContainer({ children }: PropsWithChildren) {
     return (
@@ -92,13 +92,9 @@ export function Personlinje({ bruker, fagsak }: Props) {
                     <HStack align={'center'} gap={'3 4'}>
                         <BodyShort as={'span'} weight={'semibold'}>
                             {fagsakeier.navn} ({fagsakeier.alder} år)
-                            {fagsakeier.harFalskIdentitet && (
-                                <BodyShort as={'span'} weight={'semibold'}>
-                                    - <mark className={styles.falskIdentitet}>Falsk identitet</mark>
-                                </BodyShort>
-                            )}
                         </BodyShort>
                         <Divider />
+                        <FalskIdentitet harFalskIdentitet={fagsakeier.harFalskIdentitet} />
                         <HStack align={'center'} gap={'1'}>
                             {fagsakeier.ident}
                             <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size={'small'} />

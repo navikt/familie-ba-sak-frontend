@@ -45,6 +45,7 @@ describe('utils/validators', () => {
             kjønn: kjønnType.KVINNE,
             navn: 'Mock Barn',
             målform: Målform.NB,
+            harFalskIdentitet: false,
         };
 
         return { ...defaults, ...overstyrendeProps };
