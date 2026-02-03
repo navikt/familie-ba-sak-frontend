@@ -1,23 +1,19 @@
 import * as React from 'react';
 
-import classNames from 'classnames';
 import { useNavigate } from 'react-router';
 
-import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Detail, ErrorMessage, ErrorSummary, HStack, List, VStack } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { Alert, BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, List, VStack } from '@navikt/ds-react';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
+import { OppdaterRegisteropplysninger } from './OppdaterRegisteropplysninger';
 import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
 import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
 import {
     annenVurderingConfig,
@@ -33,35 +29,25 @@ import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 import { useAppContext } from '../../../../../context/AppContext';
 import { ToggleNavn } from '../../../../../typer/toggles';
+import { useFagsakContext } from '../../../FagsakContext';
 
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
-const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling }) => {
+export function Vilkårsvurdering() {
     const { toggles } = useAppContext();
-    const { fagsakId } = useSakOgBehandlingParams();
+    const { fagsak } = useFagsakContext();
+    const { behandling, vurderErLesevisning, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } =
+        useBehandlingContext();
 
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
         useVilkårsvurderingContext();
-    const {
-        vurderErLesevisning,
-        oppdaterRegisteropplysninger,
-        vilkårsvurderingNesteOnClick,
-        behandlingsstegSubmitressurs,
-    } = useBehandlingContext();
 
     const erLesevisning = vurderErLesevisning();
 
-    const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
-
     const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
-    const [hentOpplysningerRessurs, settHentOpplysningerRessurs] = React.useState(byggTomRessurs());
 
     const navigate = useNavigate();
 
     const uregistrerteBarn =
-        åpenBehandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
+        behandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
@@ -72,20 +58,19 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
     return (
         <Skjemasteg
             skalViseForrigeKnapp={
-                åpenBehandling.årsak === BehandlingÅrsak.SØKNAD ||
-                åpenBehandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
+                behandling.årsak === BehandlingÅrsak.SØKNAD || behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
             }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
-                if (åpenBehandling.årsak === BehandlingÅrsak.SØKNAD) {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/registrer-soknad`);
+                if (behandling.årsak === BehandlingÅrsak.SØKNAD) {
+                    navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad`);
                 } else {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/filtreringsregler`);
+                    navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/filtreringsregler`);
                 }
             }}
             nesteOnClick={() => {
                 if (erLesevisning) {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/tilkjent-ytelse`);
+                    navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
                 } else if (erVilkårsvurderingenGyldig()) {
                     vilkårsvurderingNesteOnClick();
                 } else {
@@ -97,58 +82,23 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
             <>
-                {åpenBehandling?.migreringsdato !== null && (
+                {behandling?.migreringsdato !== null && (
                     <Detail
                         className={styles.hentetLabel}
                         children={`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
-                            isoString: åpenBehandling?.migreringsdato,
+                            isoString: behandling?.migreringsdato,
                             tilFormat: Datoformat.DATO,
                         })}`}
                     />
                 )}
-                <HStack wrap={false} align={'center'} marginBlock={'space-0 space-8'}>
-                    <Detail
-                        className={styles.hentetLabel}
-                        children={
-                            registeropplysningerHentetTidpsunkt
-                                ? `Registeropplysninger hentet ${isoStringTilFormatertString({
-                                      isoString: registeropplysningerHentetTidpsunkt,
-                                      tilFormat: Datoformat.DATO_TID_SEKUNDER,
-                                  })} fra Folkeregisteret`
-                                : 'Kunne ikke hente innhentingstidspunkt for registeropplysninger'
-                        }
-                    />
-                    {!erLesevisning && (
-                        <Button
-                            className={classNames('oppdater-registeropplysninger-knapp')}
-                            id={'oppdater-registeropplysninger'}
-                            aria-label={'Oppdater registeropplysninger'}
-                            title={'Oppdater'}
-                            onClick={() => {
-                                settHentOpplysningerRessurs(byggHenterRessurs());
-                                oppdaterRegisteropplysninger().then((response: Ressurs<IBehandling>) => {
-                                    settHentOpplysningerRessurs(response);
-                                });
-                            }}
-                            loading={hentOpplysningerRessurs.status === RessursStatus.HENTER}
-                            variant="tertiary"
-                            size="xsmall"
-                            icon={<ArrowsSquarepathIcon fontSize={'1.5rem'} focusable="false" />}
-                        />
-                    )}
-                </HStack>
-                {hentOpplysningerRessurs.status === RessursStatus.FEILET && (
-                    <ErrorMessage>{hentOpplysningerRessurs.frontendFeilmelding}</ErrorMessage>
-                )}
+                <OppdaterRegisteropplysninger />
             </>
-
             {!erProd() && !toggles[ToggleNavn.skalSkjuleTestmiljøknapper] && (
                 <HStack gap="4" marginBlock={'8 8'}>
-                    <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={åpenBehandling.behandlingId} />
+                    <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={behandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />
                 </HStack>
             )}
-
             <VStack gap="space-8">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
                 {uregistrerteBarn.length > 0 && (
@@ -197,6 +147,4 @@ const Vilkårsvurdering: React.FunctionComponent<IProps> = ({ åpenBehandling })
             </VStack>
         </Skjemasteg>
     );
-};
-
-export default Vilkårsvurdering;
+}
