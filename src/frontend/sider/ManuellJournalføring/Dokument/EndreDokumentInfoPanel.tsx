@@ -1,25 +1,12 @@
 import React from 'react';
 
-import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
-import type { OptionType } from '../../../typer/common';
-import { BrevkodeMap, DokumentTittel } from '../../../typer/manuell-journalføring';
-import { journalpostTittelList } from '../Journalpost';
+import { BrevkodeMap, DokumentTittel, JournalpostTittel } from '../../../typer/manuell-journalføring';
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
-const dokumentTittelList = Object.keys(DokumentTittel).map((_, index) => {
-    return {
-        value: Object.values(DokumentTittel)[index].toString(),
-        label: Object.values(DokumentTittel)[index].toString(),
-        isDisabled: false,
-    };
-});
-
-const tittelList = journalpostTittelList
-    .concat([{ value: '----------', label: '----------', isDisabled: true }])
-    .concat(dokumentTittelList);
+const tittelList = (Object.values(JournalpostTittel) as string[]).concat(Object.values(DokumentTittel));
 
 interface IProps {
     dokument: IDokumentInfo;
@@ -33,14 +20,9 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
     );
 
-    const hentVedleggList = (): OptionType[] => {
+    const hentVedleggList = (): string[] => {
         return dokumentFraSkjema
-            ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => {
-                  return {
-                      value: vedlegg.tittel,
-                      label: vedlegg.tittel,
-                  };
-              })
+            ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => vedlegg.tittel)
             : [];
     };
 
@@ -76,56 +58,41 @@ export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeld
 
     return (
         <>
-            <FamilieReactSelect
+            <UNSAFE_Combobox
                 label={'Dokumenttittel'}
-                erLesevisning={erLesevisning()}
-                creatable={true}
-                isClearable
+                readOnly={erLesevisning()}
+                allowNewValues
                 placeholder={'Skriv fritekst for å endre tittel...'}
-                isMulti={false}
+                isMultiSelect={false}
                 options={tittelList}
-                value={
-                    !dokumentFraSkjema?.tittel || dokumentFraSkjema.tittel === ''
-                        ? null
-                        : {
-                              value: dokumentFraSkjema.tittel,
-                              label: dokumentFraSkjema.tittel,
-                          }
+                selectedOptions={
+                    !dokumentFraSkjema?.tittel || dokumentFraSkjema.tittel === '' ? [] : [dokumentFraSkjema.tittel]
                 }
-                feil={visFeilmeldinger && dokumentFraSkjema?.tittel === '' ? 'Tittel er ikke satt' : undefined}
-                onChange={value => {
-                    if (value && 'value' in value) {
-                        settDokumentTittel(value.value);
+                error={visFeilmeldinger && dokumentFraSkjema?.tittel === '' ? 'Tittel er ikke satt' : undefined}
+                onToggleSelected={(value, isSelected) => {
+                    if (isSelected) {
+                        settDokumentTittel(value);
                     } else {
                         settDokumentTittel('');
                     }
                 }}
-                propSelectStyles={{
-                    container: (base, props) => ({
-                        ...base,
-                        zIndex: props.isFocused ? AZIndexPopover : 1,
-                    }),
-                }}
             />
             <br />
-            <FamilieReactSelect
+            <UNSAFE_Combobox
                 id="innholdSelect"
                 label={'Annet innhold'}
-                creatable={true}
-                isClearable
-                erLesevisning={erLesevisning()}
-                isMulti={true}
+                allowNewValues
+                readOnly={erLesevisning()}
+                isMultiSelect
                 options={tittelList}
-                value={hentVedleggList()}
+                selectedOptions={hentVedleggList()}
                 placeholder={'Velg innhold'}
-                onChange={options => {
-                    settLogiskeVedlegg(options instanceof Array ? options.map(({ value }) => value) : []);
-                }}
-                propSelectStyles={{
-                    container: (base, props) => ({
-                        ...base,
-                        zIndex: props.isFocused ? AZIndexPopover : 1,
-                    }),
+                onToggleSelected={(option, isSelected) => {
+                    if (isSelected) {
+                        settLogiskeVedlegg([...hentVedleggList(), option]);
+                    } else {
+                        settLogiskeVedlegg(hentVedleggList().filter(vedlegg => vedlegg !== option));
+                    }
                 }}
             />
         </>

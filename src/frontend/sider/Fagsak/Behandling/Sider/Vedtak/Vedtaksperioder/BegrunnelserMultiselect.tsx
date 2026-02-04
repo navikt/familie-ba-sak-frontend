@@ -24,8 +24,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
-    const { id, onChangeBegrunnelse, grupperteBegrunnelser, vedtaksperiodeMedBegrunnelser } =
-        useVedtaksperiodeContext();
+    const { onChangeBegrunnelse, grupperteBegrunnelser, vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
     const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
         vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
     });
@@ -81,7 +80,6 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
     return (
         <Box marginBlock={'space-0 space-16'}>
             <UNSAFE_Combobox
-                id={`${id}`}
                 selectedOptions={standardbegrunnelser}
                 placeholder={'Velg begrunnelse(r)'}
                 label="Velg standardtekst i brev"
