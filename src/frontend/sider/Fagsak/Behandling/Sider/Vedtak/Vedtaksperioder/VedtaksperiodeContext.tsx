@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import deepEqual from 'deep-equal';
 
 import type { ActionMeta, GroupBase } from '@navikt/familie-form-elements';
-import type { FeiloppsummeringFeil, FeltState, ISkjema } from '@navikt/familie-skjema';
+import type { FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { grupperBegrunnelser } from './utils';
@@ -37,7 +37,6 @@ interface VedtaksperiodeContextValue {
     erPanelEkspandert: boolean;
     grupperteBegrunnelser: GroupBase<OptionType>[];
     id: number;
-    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
     leggTilFritekst: () => void;
     maksAntallKulepunkter: number;
     makslengdeFritekst: number;
@@ -55,8 +54,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
     const queryClient = useQueryClient();
 
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
+    const behandlingId = useBehandlingContext().behandling.behandlingId;
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
@@ -66,13 +64,14 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
 
     const { mutate: oppdaterStandardbegrunnelser } = useOppdaterStandardbegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
         onSuccess: vedtaksperioderMedBegrunnelser => {
+            queryClient.invalidateQueries({
+                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
+            });
             queryClient.setQueryData(
                 HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
                 vedtaksperioderMedBegrunnelser
             );
-            queryClient.invalidateQueries({
-                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
-            });
+            onPanelClose(false);
         },
     });
 
@@ -115,7 +114,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         },
     });
 
-    const { hentFeilTilOppsummering, kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
+    const { kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
         BegrunnelserSkjema,
         IVedtaksperiodeMedBegrunnelser[]
     >({
@@ -223,7 +222,6 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
             value={{
                 erPanelEkspandert,
                 grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelser),
-                hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,
                 leggTilFritekst,

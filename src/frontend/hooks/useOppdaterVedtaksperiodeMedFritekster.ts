@@ -11,6 +11,7 @@ export const OppdaterVedtaksperioderMedFriteksterMutationKeyFactory = {
         vedtaksperiodeMedBegrunnelser,
     ],
 };
+
 type Options = Omit<
     UseMutationOptions<IVedtaksperiodeMedBegrunnelser[], DefaultError, IRestPutVedtaksperiodeMedFritekster, unknown>,
     'mutationFn'
