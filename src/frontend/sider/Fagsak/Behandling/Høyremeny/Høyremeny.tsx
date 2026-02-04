@@ -1,78 +1,76 @@
 import * as React from 'react';
-import { Activity } from 'react';
+import { Activity, useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { Button, Stack, VStack } from '@navikt/ds-react';
-import { ASurfaceDefault } from '@navikt/ds-tokens/dist/tokens';
+import { Button, Stack, Tabs, VStack } from '@navikt/ds-react';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
 import { Behandlingskort } from './Behandlingskort';
-import { Hendelsesoversikt } from './Hendelsesoversikt/Hendelsesoversikt';
-import type { Hendelse } from './Hendelsesoversikt/typer';
+import { Brev } from './Hendelsesoversikt/BrevModul/Brev';
+import { Totrinnskontroll } from './Hendelsesoversikt/Totrinnskontroll/Totrinnskontroll';
+import { type Hendelse, TabValg } from './Hendelsesoversikt/typer';
+import { HøyremenyKnappikon } from './HøyremenyKnappikon';
+import { Tabvelger } from './Tabvelger';
 import { useHøyremeny } from './useHøyremeny';
+import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
 import type { ILogg } from '../../../../typer/logg';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { useBehandlingContext } from '../context/BehandlingContext';
-
-const ToggleVisningHøyremeny = styled(Button)`
-    position: absolute;
-    margin-left: -21px;
-    top: 370px;
-    width: 34px;
-    min-width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    background-color: ${ASurfaceDefault};
-    z-index: 10;
-`;
+import { Historikk } from './Hendelsesoversikt/Historikk';
+import Styles from './Høyremeny.module.css';
 
 export function Høyremeny() {
     const { behandling, logg, hentLogg } = useBehandlingContext();
 
-    const [erÅpen, settErÅpen] = useHøyremeny();
+    const skalViseTotrinnskontroll = useSkalViseTotrinnskontroll();
 
-    React.useEffect(() => {
+    const [erÅpen, settErÅpen] = useHøyremeny();
+    const [aktivTab, settAktivTab] = useState(skalViseTotrinnskontroll ? TabValg.Totrinnskontroll : TabValg.Historikk);
+
+    useEffect(() => {
         hentLogg();
     }, [behandling]);
 
-    const icon = erÅpen ? (
-        <ChevronRightIcon aria-label={'Skjul høyremeny'} />
-    ) : (
-        <ChevronLeftIcon aria-label={'Vis høyremeny'} />
+    const hendelser = hentDataFraRessursMedFallback(logg, []).map(
+        (loggElement: ILogg): Hendelse => ({
+            id: loggElement.id.toString(),
+            dato: isoStringTilFormatertString({
+                isoString: loggElement.opprettetTidspunkt,
+                tilFormat: Datoformat.DATO_TID,
+            }),
+            utførtAv: loggElement.opprettetAv,
+            rolle: loggElement.rolle,
+            tittel: loggElement.tittel,
+            beskrivelse: loggElement.tekst,
+        })
     );
 
     return (
         <Stack direction={'row'}>
-            <ToggleVisningHøyremeny
+            <Button
                 title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
                 aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                className={Styles.knapp}
                 variant={'secondary'}
                 size={'small'}
-                icon={icon}
+                icon={<HøyremenyKnappikon erHøyremenyÅpen={erÅpen} />}
                 onMouseDown={e => e.preventDefault()}
                 onClick={() => settErÅpen(prev => !prev)}
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                 <VStack width={'25rem'}>
                     <Behandlingskort />
-                    <Hendelsesoversikt
-                        hendelser={hentDataFraRessursMedFallback(logg, []).map((loggElement: ILogg): Hendelse => {
-                            return {
-                                id: loggElement.id.toString(),
-                                dato: isoStringTilFormatertString({
-                                    isoString: loggElement.opprettetTidspunkt,
-                                    tilFormat: Datoformat.DATO_TID,
-                                }),
-                                utførtAv: loggElement.opprettetAv,
-                                rolle: loggElement.rolle,
-                                tittel: loggElement.tittel,
-                                beskrivelse: loggElement.tekst,
-                            };
-                        })}
-                    />
+                    <Tabs value={aktivTab} onChange={tab => settAktivTab(tab as TabValg)} iconPosition={'top'}>
+                        <Tabvelger skalViseTotrinnskontroll={skalViseTotrinnskontroll} />
+                        <Tabs.Panel value={TabValg.Totrinnskontroll}>
+                            <Totrinnskontroll />
+                        </Tabs.Panel>
+                        <Tabs.Panel value={TabValg.Historikk}>
+                            <Historikk hendelser={hendelser} />
+                        </Tabs.Panel>
+                        <Tabs.Panel value={TabValg.Meldinger}>
+                            <Brev onIModalClick={() => settAktivTab(TabValg.Historikk)} />
+                        </Tabs.Panel>
+                    </Tabs>
                 </VStack>
             </Activity>
         </Stack>
