@@ -4,23 +4,19 @@ import { useQueryClient } from '@tanstack/react-query';
 import deepEqual from 'deep-equal';
 
 import type { ActionMeta, GroupBase } from '@navikt/familie-form-elements';
-import { useHttp } from '@navikt/familie-http';
-import type { FeiloppsummeringFeil, FeltState, ISkjema } from '@navikt/familie-skjema';
+import type { FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { byggFeiletRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { grupperBegrunnelser } from './utils';
 import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
 import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
 import { useOppdaterStandardbegrunnelser } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
+import { useOppdaterVedtaksperiodeMedFritekster } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { Behandlingstype } from '../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
-import type {
-    IRestPutVedtaksperiodeMedFritekster,
-    IVedtaksperiodeMedBegrunnelser,
-} from '../../../../../../typer/vedtaksperiode';
+import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
 import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
 import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../../utils/fritekstfelter';
@@ -41,7 +37,6 @@ interface VedtaksperiodeContextValue {
     erPanelEkspandert: boolean;
     grupperteBegrunnelser: GroupBase<OptionType>[];
     id: number;
-    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
     leggTilFritekst: () => void;
     maksAntallKulepunkter: number;
     makslengdeFritekst: number;
@@ -51,37 +46,52 @@ interface VedtaksperiodeContextValue {
     skjema: ISkjema<BegrunnelserSkjema, IVedtaksperiodeMedBegrunnelser[]>;
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpenBehandling: IBehandling;
-    standardBegrunnelserPut: Ressurs<string>;
 }
 
 const VedtaksperiodeContext = createContext<VedtaksperiodeContextValue | undefined>(undefined);
 
 export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegrunnelser, children }: IProps) => {
-    const { request } = useHttp();
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
     const queryClient = useQueryClient();
 
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
+    const behandlingId = useBehandlingContext().behandling.behandlingId;
 
     const [erPanelEkspandert, settErPanelEkspandert] = useState(
         åpenBehandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
             vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0 &&
             vedtaksperiodeMedBegrunnelser.fritekster.length === 0
     );
-    const [standardBegrunnelserPut, settStandardBegrunnelserPut] = useState<Ressurs<string>>(byggTomRessurs());
 
     const { mutate: oppdaterStandardbegrunnelser } = useOppdaterStandardbegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
         onSuccess: vedtaksperioderMedBegrunnelser => {
+            queryClient.invalidateQueries({
+                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
+            });
             queryClient.setQueryData(
                 HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
                 vedtaksperioderMedBegrunnelser
             );
-            queryClient.invalidateQueries({
-                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
-            });
+            onPanelClose(false);
         },
     });
+
+    const { mutate: oppdaterVedtaksperiodeMedFritekster } = useOppdaterVedtaksperiodeMedFritekster(
+        vedtaksperiodeMedBegrunnelser.id,
+        {
+            onSuccess: vedtaksperioderMedBegrunnelser => {
+                queryClient.invalidateQueries({
+                    queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
+                        vedtaksperiodeMedBegrunnelser.id
+                    ),
+                });
+                queryClient.setQueryData(
+                    HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                    vedtaksperioderMedBegrunnelser
+                );
+                onPanelClose(false);
+            },
+        }
+    );
 
     const maksAntallKulepunkter = 3;
     const makslengdeFritekst = 350;
@@ -104,7 +114,7 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
         },
     });
 
-    const { hentFeilTilOppsummering, kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
+    const { kanSendeSkjema, settVisfeilmeldinger, skjema } = useSkjema<
         BegrunnelserSkjema,
         IVedtaksperiodeMedBegrunnelser[]
     >({
@@ -201,31 +211,8 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
 
     const putVedtaksperiodeMedFritekster = () => {
         if (kanSendeSkjema()) {
-            request<IRestPutVedtaksperiodeMedFritekster, IVedtaksperiodeMedBegrunnelser[]>({
-                method: 'PUT',
-                url: `/familie-ba-sak/api/vedtaksperioder/fritekster/${vedtaksperiodeMedBegrunnelser.id}`,
-                data: {
-                    fritekster: skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
-                },
-            }).then(vedtaksperioderMedBegrunnelserRessurs => {
-                if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.SUKSESS) {
-                    queryClient.setQueryData(
-                        HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
-                        vedtaksperioderMedBegrunnelserRessurs.data
-                    );
-                    queryClient.invalidateQueries({
-                        queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
-                            vedtaksperiodeMedBegrunnelser.id
-                        ),
-                    });
-                    onPanelClose(false);
-                } else if (vedtaksperioderMedBegrunnelserRessurs.status === RessursStatus.FUNKSJONELL_FEIL) {
-                    settStandardBegrunnelserPut(
-                        byggFeiletRessurs(vedtaksperioderMedBegrunnelserRessurs.frontendFeilmelding)
-                    );
-                } else {
-                    settStandardBegrunnelserPut(byggFeiletRessurs('Klarte ikke oppdatere fritekst på vedtaksperiode'));
-                }
+            oppdaterVedtaksperiodeMedFritekster({
+                fritekster: skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst),
             });
         }
     };
@@ -235,7 +222,6 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
             value={{
                 erPanelEkspandert,
                 grupperteBegrunnelser: grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelser),
-                hentFeilTilOppsummering,
                 id: vedtaksperiodeMedBegrunnelser.id,
                 vedtaksperiodeMedBegrunnelser,
                 leggTilFritekst,
@@ -246,7 +232,6 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
                 putVedtaksperiodeMedFritekster,
                 skjema,
                 åpenBehandling,
-                standardBegrunnelserPut,
             }}
         >
             {children}

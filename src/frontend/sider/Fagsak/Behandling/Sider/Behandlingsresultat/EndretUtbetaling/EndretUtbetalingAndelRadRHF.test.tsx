@@ -29,6 +29,7 @@ const defaultBehandling: IBehandling = {
             navn: 'Barn 1',
             kjønn: kjønnType.MANN,
             målform: Målform.NB,
+            harFalskIdentitet: false,
         },
         {
             type: PersonType.BARN,
@@ -37,6 +38,7 @@ const defaultBehandling: IBehandling = {
             navn: 'Barn 2',
             kjønn: kjønnType.KVINNE,
             målform: Målform.NB,
+            harFalskIdentitet: false,
         },
     ],
 };

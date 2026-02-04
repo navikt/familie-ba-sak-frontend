@@ -2,8 +2,7 @@ import React, { Fragment } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Heading } from '@navikt/ds-react';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
 import Vedtaksperiode from './Vedtaksperiode';
@@ -17,10 +16,6 @@ import { partition } from '../../../../../../utils/commons';
 const StyledHeading = styled(Heading)`
     display: flex;
     margin-top: 1rem;
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-bottom: 1rem;
 `;
 
 interface VedtaksperioderProps {
