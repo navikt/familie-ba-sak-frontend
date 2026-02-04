@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Tabs } from '@navikt/ds-react';
 
-import IkonDokumenter from './Hendelsesoversikt/ikoner/IkonDokumenter';
-import IkonHistorikk from './Hendelsesoversikt/ikoner/IkonHistorikk';
-import IkonMeldinger from './Hendelsesoversikt/ikoner/IkonMeldinger';
-import IkonTotrinnskontroll from './Hendelsesoversikt/ikoner/IkonTotrinnskontroll';
+import { TabValg } from './Høyremeny';
+import IkonDokumenter from './Ikoner/IkonDokumenter';
+import IkonHistorikk from './Ikoner/IkonHistorikk';
+import IkonMeldinger from './Ikoner/IkonMeldinger';
+import IkonTotrinnskontroll from './Ikoner/IkonTotrinnskontroll';
 import styles from './Tabvelger.module.css';
 import { Behandlingstype } from '../../../../typer/behandling';
 import { useBehandlingContext } from '../context/BehandlingContext';
-import { TabValg } from './Hendelsesoversikt/typer';
 
 interface Props {
     skalViseTotrinnskontroll: boolean;

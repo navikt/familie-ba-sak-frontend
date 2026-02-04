@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { opplysningsdokumenter } from '../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { opplysningsdokumenter } from '../../Behandling/Høyremeny/Brev/typer';
 import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
 const Container = styled.div`

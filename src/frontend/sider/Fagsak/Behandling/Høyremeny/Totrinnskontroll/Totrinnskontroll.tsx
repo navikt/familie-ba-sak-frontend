@@ -17,14 +17,14 @@ import type { Ressurs } from '@navikt/familie-typer';
 
 import TotrinnskontrollModalInnhold from './TotrinnskontrollModalInnhold';
 import { Totrinnskontrollskjema } from './Totrinnskontrollskjema';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { BehandlingStatus } from '../../../../../../typer/behandling';
-import type { ITotrinnskontrollData } from '../../../../../../typer/totrinnskontroll';
-import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
-import { useFagsakContext } from '../../../../FagsakContext';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import type { ITrinn } from '../../../Sider/sider';
-import { KontrollertStatus } from '../../../Sider/sider';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingStatus } from '../../../../../typer/behandling';
+import type { ITotrinnskontrollData } from '../../../../../typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '../../../../../typer/totrinnskontroll';
+import { useFagsakContext } from '../../../FagsakContext';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import type { ITrinn } from '../../Sider/sider';
+import { KontrollertStatus } from '../../Sider/sider';
 
 const Container = styled.div`
     padding: 0.5rem 1.5rem;

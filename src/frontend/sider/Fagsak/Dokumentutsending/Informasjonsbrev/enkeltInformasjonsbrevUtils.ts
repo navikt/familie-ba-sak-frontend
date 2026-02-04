@@ -1,7 +1,7 @@
 import type { SkjemaBrevmottaker } from '../../../../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IManueltBrevRequestPåFagsak } from '../../../../typer/dokument';
 import type { Målform } from '../../../../typer/søknad';
-import type { Informasjonsbrev } from '../../Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import type { Informasjonsbrev } from '../../Behandling/Høyremeny/Brev/typer';
 
 interface IHentEnkeltInformasjonsbrevRequestInput {
     målform: Målform;

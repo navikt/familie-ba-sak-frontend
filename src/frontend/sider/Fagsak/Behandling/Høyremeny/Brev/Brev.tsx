@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router';
 import { Button, Modal, VStack } from '@navikt/ds-react';
 
 import Brevskjema from './Brevskjema';
-import { useBrukerContext } from '../../../../BrukerContext';
-import { useFagsakContext } from '../../../../FagsakContext';
+import { useBrukerContext } from '../../../BrukerContext';
+import { useFagsakContext } from '../../../FagsakContext';
 
 interface Props {
     onIModalClick: () => void;

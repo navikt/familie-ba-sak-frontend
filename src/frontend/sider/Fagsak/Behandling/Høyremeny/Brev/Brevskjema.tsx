@@ -31,28 +31,28 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { ModalType } from '../../../../../../context/ModalContext';
-import { useModal } from '../../../../../../hooks/useModal';
+import { ModalType } from '../../../../../context/ModalContext';
+import { useModal } from '../../../../../hooks/useModal';
 import {
     mutationKey,
     useOpprettForhåndsvisbarBehandlingBrevPdf,
-} from '../../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
-import BrevmottakerListe from '../../../../../../komponenter/Brevmottaker/BrevmottakerListe';
-import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
-import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import { LeggTilBarnModal } from '../../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../../../typer/dokument';
-import type { IPersonInfo } from '../../../../../../typer/person';
-import { type IBarnMedOpplysninger, målform } from '../../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
-import { onOptionSelected } from '../../../../../../utils/skjema';
-import DeltBostedSkjema from '../../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { FamilieMultiLandvelger } from '../../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
+} from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
+import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
+import Knapperekke from '../../../../../komponenter/Knapperekke';
+import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
+import type { IBehandling } from '../../../../../typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import type { IPersonInfo } from '../../../../../typer/person';
+import { type IBarnMedOpplysninger, målform } from '../../../../../typer/søknad';
+import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { onOptionSelected } from '../../../../../utils/skjema';
+import DeltBostedSkjema from '../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import { FamilieMultiLandvelger } from '../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IProps {
     onSubmitSuccess: () => void;

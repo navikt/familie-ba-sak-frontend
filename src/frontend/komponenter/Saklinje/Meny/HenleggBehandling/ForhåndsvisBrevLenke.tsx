@@ -9,7 +9,7 @@ import {
     useOpprettForhåndsvisbarBehandlingBrevPdf,
 } from '../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { Brevmal } from '../../../../sider/Fagsak/Behandling/Høyremeny/Hendelsesoversikt/BrevModul/typer';
+import { Brevmal } from '../../../../sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
 import { type IManueltBrevRequestPåBehandling } from '../../../../typer/dokument';
 
