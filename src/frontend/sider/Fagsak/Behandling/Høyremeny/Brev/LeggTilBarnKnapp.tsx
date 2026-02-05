@@ -3,8 +3,8 @@ import * as React from 'react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
-import { useAppContext } from '../../../../../../context/AppContext';
-import { useLeggTilBarnModalContext } from '../../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { useAppContext } from '../../../../../context/AppContext';
+import { useLeggTilBarnModalContext } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 
 export function LeggTilBarnKnapp() {
     const { åpneModal } = useLeggTilBarnModalContext();

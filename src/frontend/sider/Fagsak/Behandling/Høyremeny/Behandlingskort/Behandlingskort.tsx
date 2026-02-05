@@ -13,11 +13,11 @@ import {
     behandlingstyper,
     behandlingÅrsak,
     erBehandlingHenlagt,
-} from '../../../../typer/behandling';
-import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-import { useFagsakContext } from '../../FagsakContext';
-import { sakstype } from '../../Saksoversikt/Saksoversikt';
-import { useBehandlingContext } from '../context/BehandlingContext';
+} from '../../../../../typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { useFagsakContext } from '../../../FagsakContext';
+import { sakstype } from '../../../Saksoversikt/Saksoversikt';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {

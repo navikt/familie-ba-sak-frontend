@@ -4,19 +4,25 @@ import { Activity, useEffect, useState } from 'react';
 import { Button, Stack, Tabs, VStack } from '@navikt/ds-react';
 import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
 
-import { Behandlingskort } from './Behandlingskort';
-import { Brev } from './Hendelsesoversikt/BrevModul/Brev';
-import { Totrinnskontroll } from './Hendelsesoversikt/Totrinnskontroll/Totrinnskontroll';
-import { type Hendelse, TabValg } from './Hendelsesoversikt/typer';
+import { Behandlingskort } from './Behandlingskort/Behandlingskort';
+import { Brev } from './Brev/Brev';
+import { type Hendelse, Historikk } from './Historikk/Historikk';
+import Styles from './Høyremeny.module.css';
 import { HøyremenyKnappikon } from './HøyremenyKnappikon';
 import { Tabvelger } from './Tabvelger';
+import { Totrinnskontroll } from './Totrinnskontroll/Totrinnskontroll';
 import { useHøyremeny } from './useHøyremeny';
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
 import type { ILogg } from '../../../../typer/logg';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 import { useBehandlingContext } from '../context/BehandlingContext';
-import { Historikk } from './Hendelsesoversikt/Historikk';
-import Styles from './Høyremeny.module.css';
+
+export enum TabValg {
+    Totrinnskontroll = 'Totrinnskontroll',
+    Historikk = 'Historikk',
+    Meldinger = 'Meldinger',
+    Dokumenter = 'Dokumenter',
+}
 
 export function Høyremeny() {
     const { behandling, logg, hentLogg } = useBehandlingContext();

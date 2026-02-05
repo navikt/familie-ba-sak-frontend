@@ -6,10 +6,10 @@ import { Alert, Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import styles from './BarnBrevetGjelder.module.css';
-import { BehandlingSteg, hentStegNummer } from '../../../../../../typer/behandling';
-import type { IBarnMedOpplysninger } from '../../../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../../../utils/dato';
-import { lagBarnLabel } from '../../../../../../utils/formatter';
+import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
+import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
+import { isoStringTilDate } from '../../../../../utils/dato';
+import { lagBarnLabel } from '../../../../../utils/formatter';
 
 interface IProps {
     barnBrevetGjelderFelt: Felt<IBarnMedOpplysninger[]>;

@@ -2,8 +2,17 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import HendelseItem from './komponenter/HendelseItem';
-import type { Hendelse } from './typer';
+import HendelseItem from './HendelseItem';
+import type { BehandlerRolle } from '../../../../../typer/behandling';
+
+export interface Hendelse {
+    id: string;
+    dato: string;
+    tittel: string;
+    utførtAv: string;
+    rolle: BehandlerRolle;
+    beskrivelse?: string;
+}
 
 interface Props {
     hendelser: Hendelse[];

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
 
-import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '../../../../../typer/totrinnskontroll';
 
 interface IProps {
     beslutning: TotrinnskontrollBeslutning;

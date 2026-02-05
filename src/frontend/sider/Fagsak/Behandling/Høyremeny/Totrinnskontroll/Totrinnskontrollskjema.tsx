@@ -18,16 +18,16 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../../../context/AppContext';
-import ØyeGrå from '../../../../../../ikoner/ØyeGrå';
-import ØyeGrønn from '../../../../../../ikoner/ØyeGrønn';
-import ØyeRød from '../../../../../../ikoner/ØyeRød';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { TotrinnskontrollBeslutning } from '../../../../../../typer/totrinnskontroll';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
-import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { KontrollertStatus } from '../../../Sider/sider';
+import { useAppContext } from '../../../../../context/AppContext';
+import ØyeGrå from '../../../../../ikoner/ØyeGrå';
+import ØyeGrønn from '../../../../../ikoner/ØyeGrønn';
+import ØyeRød from '../../../../../ikoner/ØyeRød';
+import type { IBehandling } from '../../../../../typer/behandling';
+import { TotrinnskontrollBeslutning } from '../../../../../typer/totrinnskontroll';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import { KontrollertStatus } from '../../Sider/sider';
 
 interface Props {
     innsendtVedtak: Ressurs<IBehandling>;

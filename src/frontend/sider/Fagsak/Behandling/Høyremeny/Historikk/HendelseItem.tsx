@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
 import { ABorderDefault, ABorderSubtle, ASpacing1, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
-import { BehandlerRolle, behandlerRoller } from '../../../../../../typer/behandling';
-import type { Hendelse } from '../typer';
+import type { Hendelse } from './Historikk';
+import { BehandlerRolle, behandlerRoller } from '../../../../../typer/behandling';
 
 interface IHendelseItemProps {
     hendelse: Hendelse;
