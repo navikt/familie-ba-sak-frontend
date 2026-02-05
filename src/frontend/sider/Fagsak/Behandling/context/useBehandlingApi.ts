@@ -1,20 +1,15 @@
 import { useState } from 'react';
 
-import type { AxiosError } from 'axios';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../typer/behandling';
 import { type ILogg } from '../../../../typer/logg';
 import { obfuskerLogg } from '../../../../utils/obfuskerData';
 
-const useBehandlingApi = (
-    oppdaterBehandling: (behandling: Ressurs<IBehandling>, oppdaterMinimalFagsak?: boolean) => void
-) => {
+const useBehandlingApi = () => {
     const { request } = useHttp();
     const { behandlingId } = useSakOgBehandlingParams();
 
@@ -43,35 +38,9 @@ const useBehandlingApi = (
         }
     };
 
-    const oppdaterRegisteropplysninger = (): Promise<Ressurs<IBehandling>> => {
-        return request<void, IBehandling>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
-            påvirkerSystemLaster: false,
-        })
-            .then((response: Ressurs<IBehandling>) => {
-                if (
-                    response.status === RessursStatus.FEILET ||
-                    response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    response.status === RessursStatus.IKKE_TILGANG
-                ) {
-                    return byggFeiletRessurs(
-                        'Kunne ikke oppdatere registeropplysninger. Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.'
-                    ) as Ressurs<IBehandling>;
-                } else {
-                    oppdaterBehandling(response);
-                    return response;
-                }
-            })
-            .catch((_error: AxiosError) => {
-                return byggFeiletRessurs('Ukjent feil ved oppdatering av registeropplysninger') as Ressurs<IBehandling>;
-            });
-    };
-
     return {
         logg,
         hentLogg,
-        oppdaterRegisteropplysninger,
     };
 };
 

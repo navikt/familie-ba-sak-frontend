@@ -46,7 +46,6 @@ interface BehandlingContextValue {
     behandlingsstegSubmitressurs: Ressurs<IBehandling>;
     vilkårsvurderingNesteOnClick: () => void;
     behandlingresultatNesteOnClick: () => void;
-    oppdaterRegisteropplysninger: () => Promise<Ressurs<IBehandling>>;
     sendTilBeslutterNesteOnClick: (
         settVisModal: (visModal: boolean) => void,
         erUlagretNyFeilutbetaltValuta: boolean,
@@ -77,7 +76,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
-    const { logg, hentLogg, oppdaterRegisteropplysninger } = useBehandlingApi(settBehandlingRessurs);
+    const { logg, hentLogg } = useBehandlingApi();
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -225,7 +224,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 behandlingsstegSubmitressurs,
                 vilkårsvurderingNesteOnClick,
                 behandlingresultatNesteOnClick,
-                oppdaterRegisteropplysninger,
                 sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
                 aktivSettPåVent: behandling?.aktivSettPåVent,
