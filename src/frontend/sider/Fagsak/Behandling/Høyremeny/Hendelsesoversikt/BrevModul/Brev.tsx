@@ -5,16 +5,17 @@ import { useNavigate } from 'react-router';
 import { Button, Modal, VStack } from '@navikt/ds-react';
 
 import Brevskjema from './Brevskjema';
-import useSakOgBehandlingParams from '../../../../../../hooks/useSakOgBehandlingParams';
-import type { IPersonInfo } from '../../../../../../typer/person';
+import { useBrukerContext } from '../../../../BrukerContext';
+import { useFagsakContext } from '../../../../FagsakContext';
 
-interface IProps {
+interface Props {
     onIModalClick: () => void;
-    bruker: IPersonInfo;
 }
 
-export const Brev = ({ onIModalClick, bruker }: IProps) => {
-    const { fagsakId } = useSakOgBehandlingParams();
+export function Brev({ onIModalClick }: Props) {
+    const { fagsak } = useFagsakContext();
+    const { bruker } = useBrukerContext();
+
     const navigate = useNavigate();
 
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
@@ -42,7 +43,7 @@ export const Brev = ({ onIModalClick, bruker }: IProps) => {
                             size={'medium'}
                             onClick={() => {
                                 onIModalClick();
-                                navigate(`/fagsak/${fagsakId}/saksoversikt`);
+                                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
                                 settVisInnsendtBrevModal(false);
                             }}
                             children={'Se saksoversikt'}
@@ -62,4 +63,4 @@ export const Brev = ({ onIModalClick, bruker }: IProps) => {
             )}
         </VStack>
     );
-};
+}

@@ -1,0 +1,9 @@
+.tabsListe {
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
+    > button {
+        flex: 1;
+    }
+}

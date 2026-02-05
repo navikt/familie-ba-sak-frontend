@@ -1,10 +1,10 @@
 import type { BehandlerRolle } from '../../../../../typer/behandling';
 
-export enum Tabs {
-    Totrinnskontroll,
-    Historikk,
-    Meldinger,
-    Dokumenter,
+export enum TabValg {
+    Totrinnskontroll = 'Totrinnskontroll',
+    Historikk = 'Historikk',
+    Meldinger = 'Meldinger',
+    Dokumenter = 'Dokumenter',
 }
 
 export interface Hendelse {
