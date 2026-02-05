@@ -7,6 +7,7 @@ import {
     HeartIcon,
     HouseIcon,
     PassportIcon,
+    PersonIcon,
 } from '@navikt/aksel-icons';
 import { Box, Detail, Heading } from '@navikt/ds-react';
 
@@ -15,6 +16,7 @@ import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
 import { Registeropplysning } from '../../../../../../typer/registeropplysning';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
+import { formaterIdent } from '../../../../../../utils/formatter';
 
 interface IRegisteropplysningerProps {
     registerHistorikk: IRestRegisterhistorikk;
@@ -52,6 +54,16 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         },
                     ]}
                 />
+                {registerHistorikk.historiskeIdenter && registerHistorikk.historiskeIdenter.length > 0 && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.HISTORISKE_IDENTER}
+                        ikon={<PersonIcon fontSize={'1.5rem'} title="Person-ikon" focusable="false" />}
+                        historikk={registerHistorikk.historiskeIdenter.map(ident => ({
+                            ...ident,
+                            verdi: formaterIdent(ident.verdi),
+                        }))}
+                    />
+                )}
                 {personErDød && (
                     <RegisteropplysningerTabell
                         opplysningstype={Registeropplysning.DØDSBOADRESSE}
