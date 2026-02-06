@@ -71,7 +71,6 @@ export const VedtaksperiodeProvider = ({ åpenBehandling, vedtaksperiodeMedBegru
                 HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
                 vedtaksperioderMedBegrunnelser
             );
-            onPanelClose(false);
         },
     });
 
