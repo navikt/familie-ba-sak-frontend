@@ -60,7 +60,7 @@ interface IProps {
 }
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling, settÅpenBehandling, vurderErLesevisning, hentLogg } = useBehandlingContext();
+    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     const {
@@ -440,7 +440,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             (ressurs: Ressurs<IBehandling>) => {
                                 onSubmitSuccess();
                                 settÅpenBehandling(ressurs);
-                                hentLogg();
                             }
                         );
                     }}
