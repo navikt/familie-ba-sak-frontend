@@ -10,7 +10,6 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country, Currency } from '@navikt/land-verktoy';
 
-import { useAppContext } from '../../../../../../../context/AppContext';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import {
@@ -18,7 +17,6 @@ import {
     UtenlandskPeriodeBeløpIntervall,
     utenlandskPeriodeBeløpIntervaller,
 } from '../../../../../../../typer/eøsPerioder';
-import { ToggleNavn } from '../../../../../../../typer/toggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
@@ -73,7 +71,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const lesevisning = vurderErLesevisning(true);
-    const { toggles } = useAppContext();
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {

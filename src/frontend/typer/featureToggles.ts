@@ -1,8 +1,8 @@
-export interface IToggles {
+export interface FeatureToggles {
     [name: string]: boolean;
 }
 
-export enum ToggleNavn {
+export enum FeatureToggle {
     // Operasjonelle
     kanOppretteOgEndreSammensatteKontrollsaker = 'familie-ba-sak.kan-opprette-og-endre-sammensatte-kontrollsaker',
     skalObfuskereData = 'familie-ba-sak.anonymiser-persondata',
@@ -15,10 +15,3 @@ export enum ToggleNavn {
     skalBrukeNyttSkjemaForEndretUtbetalingAndel = 'familie-ba-sak.endret-utbetaling-andel-skjema-rhf',
     skalKunneBehandleBaInstitusjonFagsaker = 'familie-klage.skal-kunne-behandle-ba-institusjon-fagsaker',
 }
-
-export const alleTogglerAv = (): IToggles => {
-    return Object.values(ToggleNavn).reduce((previousValue: IToggles, currentValue: ToggleNavn) => {
-        previousValue[currentValue] = false;
-        return previousValue;
-    }, {});
-};

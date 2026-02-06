@@ -6,11 +6,11 @@ import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../../../context/AppContext';
+import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import { PersonType } from '../../../../../../typer/person';
-import { ToggleNavn } from '../../../../../../typer/toggles';
 import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
 import { annenVurderingConfig, Resultat, vilkårConfig, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -26,7 +26,7 @@ interface IVilkårsvurderingSkjemaNormal {
 }
 
 const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({ visFeilmeldinger }) => {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const { vurderErLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent, behandling } =
         useBehandlingContext();
@@ -77,7 +77,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
     );
 
     const skalViseVarselboksForVilkårSomMåKontrolleres =
-        toggles[ToggleNavn.skalViseVarsellampeForManueltLagtTilBarn] &&
+        toggles[FeatureToggle.skalViseVarsellampeForManueltLagtTilBarn] &&
         vilkårSomMåKontrolleresPerPerson.length > 0 &&
         (behandling.steg == BehandlingSteg.VILKÅRSVURDERING || behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
 

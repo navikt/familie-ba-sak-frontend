@@ -7,9 +7,9 @@ import { Heading, Table } from '@navikt/ds-react';
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import EndretUtbetalingAndelRad from './EndretUtbetalingAndelRad';
 import { EndretUtbetalingAndelRadRHF } from './EndretUtbetalingAndelRadRHF';
-import { useAppContext } from '../../../../../../context/AppContext';
+import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import { ToggleNavn } from '../../../../../../typer/toggles';
+import { FeatureToggle } from '../../../../../../typer/featureToggles';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;
@@ -22,7 +22,7 @@ const EndredePerioderContainer = styled.div`
 const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
     åpenBehandling,
 }) => {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
 
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;
 
@@ -43,7 +43,7 @@ const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAnde
                 </Table.Header>
                 <Table.Body>
                     {endretUtbetalingAndeler.map(endretUtbetalingAndel =>
-                        toggles[ToggleNavn.skalBrukeNyttSkjemaForEndretUtbetalingAndel] ? (
+                        toggles[FeatureToggle.skalBrukeNyttSkjemaForEndretUtbetalingAndel] ? (
                             <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
                                 <EndretUtbetalingAndelRadRHF key={endretUtbetalingAndel.id} />
                             </EndretUtbetalingAndelProvider>
