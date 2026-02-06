@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router';
 import { type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
-import useBehandlingApi from './useBehandlingApi';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
 import { useAppContext } from '../../../../context/AppContext';
@@ -14,7 +13,6 @@ import type { BehandlingSteg, IBehandling, ISettPåVent } from '../../../../type
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
 import { FagsakType } from '../../../../typer/fagsak';
-import type { ILogg } from '../../../../typer/logg';
 import { PersonType } from '../../../../typer/person';
 import { Målform } from '../../../../typer/søknad';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
@@ -41,8 +39,6 @@ interface BehandlingContextValue {
     søkersMålform: Målform;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
-    logg: Ressurs<ILogg[]>;
-    hentLogg: () => void;
     behandlingsstegSubmitressurs: Ressurs<IBehandling>;
     vilkårsvurderingNesteOnClick: () => void;
     behandlingresultatNesteOnClick: () => void;
@@ -75,8 +71,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
-
-    const { logg, hentLogg } = useBehandlingApi();
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -219,8 +213,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 søkersMålform,
                 trinnPåBehandling,
                 behandling: behandling,
-                logg,
-                hentLogg,
                 behandlingsstegSubmitressurs,
                 vilkårsvurderingNesteOnClick,
                 behandlingresultatNesteOnClick,

@@ -1,20 +1,17 @@
-import * as React from 'react';
-import { Activity, useEffect, useState } from 'react';
+import React, { Activity, useState } from 'react';
 
-import { Button, Stack, Tabs, VStack } from '@navikt/ds-react';
-import { hentDataFraRessursMedFallback } from '@navikt/familie-typer';
+import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
 
 import { Behandlingskort } from './Behandlingskort/Behandlingskort';
 import { Brev } from './Brev/Brev';
-import { type Hendelse, Historikk } from './Historikk/Historikk';
+import { Historikk } from './Historikk/Historikk';
 import Styles from './Høyremeny.module.css';
 import { HøyremenyKnappikon } from './HøyremenyKnappikon';
 import { Tabvelger } from './Tabvelger';
 import { Totrinnskontroll } from './Totrinnskontroll/Totrinnskontroll';
 import { useHøyremeny } from './useHøyremeny';
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
-import type { ILogg } from '../../../../typer/logg';
-import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
+import { useHentHistorikkinnslag } from '../../../../hooks/useHentHistorikkinnslag';
 import { useBehandlingContext } from '../context/BehandlingContext';
 
 export enum TabValg {
@@ -25,33 +22,24 @@ export enum TabValg {
 }
 
 export function Høyremeny() {
-    const { behandling, logg, hentLogg } = useBehandlingContext();
+    const { behandling } = useBehandlingContext();
 
     const skalViseTotrinnskontroll = useSkalViseTotrinnskontroll();
 
     const [erÅpen, settErÅpen] = useHøyremeny();
     const [aktivTab, settAktivTab] = useState(skalViseTotrinnskontroll ? TabValg.Totrinnskontroll : TabValg.Historikk);
 
-    useEffect(() => {
-        hentLogg();
-    }, [behandling]);
-
-    const hendelser = hentDataFraRessursMedFallback(logg, []).map(
-        (loggElement: ILogg): Hendelse => ({
-            id: loggElement.id.toString(),
-            dato: isoStringTilFormatertString({
-                isoString: loggElement.opprettetTidspunkt,
-                tilFormat: Datoformat.DATO_TID,
-            }),
-            utførtAv: loggElement.opprettetAv,
-            rolle: loggElement.rolle,
-            tittel: loggElement.tittel,
-            beskrivelse: loggElement.tekst,
-        })
-    );
+    const {
+        data: historikkinnslag,
+        isPending: hentHistorikkinnslagIsPending,
+        error: hentHistorikkinnslagError,
+    } = useHentHistorikkinnslag(behandling.behandlingId, {
+        refetchOnWindowFocus: false, // TODO: Skru på når behandlingstilstanden er håndtert av react-query
+        refetchOnReconnect: false, // TODO: Skru på når behandlingstilstanden er håndtert av react-query
+    });
 
     return (
-        <Stack direction={'row'}>
+        <Box>
             <Button
                 title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
                 aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
@@ -71,7 +59,11 @@ export function Høyremeny() {
                             <Totrinnskontroll />
                         </Tabs.Panel>
                         <Tabs.Panel value={TabValg.Historikk}>
-                            <Historikk hendelser={hendelser} />
+                            <Historikk
+                                historikkinnslag={historikkinnslag}
+                                laster={hentHistorikkinnslagIsPending}
+                                feil={hentHistorikkinnslagError}
+                            />
                         </Tabs.Panel>
                         <Tabs.Panel value={TabValg.Meldinger}>
                             <Brev onIModalClick={() => settAktivTab(TabValg.Historikk)} />
@@ -79,6 +71,6 @@ export function Høyremeny() {
                     </Tabs>
                 </VStack>
             </Activity>
-        </Stack>
+        </Box>
     );
 }

@@ -4,7 +4,6 @@ import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 import type { IBehandling } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
-import { type ILogg, LoggType } from '../typer/logg';
 import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo, PersonType } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 
@@ -22,17 +21,6 @@ export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
             adresse.postNr = '0001';
             adresse.postSted = 'Oslo';
         });
-    }
-};
-
-export const obfuskerLogg = (logg: Ressurs<ILogg[]>) => {
-    if (logg.status === RessursStatus.SUKSESS) {
-        logg.data
-            ?.filter(
-                logg =>
-                    logg.type === LoggType.BREVMOTTAKER_LAGT_TIL_ELLER_FJERNET || logg.type === LoggType.BARN_LAGT_TIL
-            )
-            .forEach(logg => (logg.tekst = ''));
     }
 };
 

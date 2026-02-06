@@ -8,7 +8,7 @@ export const dagerFristForAvventerSamtykkeUlovfestetMotregning = 14;
 
 export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, hentLogg } = useBehandlingContext();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const tilbakekrevingsvedtakMotregningUrl = `/familie-ba-sak/api/behandling/${åpenBehandling.behandlingId}/tilbakekrevingsvedtak-motregning`;
 
@@ -19,7 +19,6 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
             påvirkerSystemLaster: true,
         }).then(behandling => {
             settÅpenBehandling(behandling);
-            hentLogg();
         });
 
     const oppdaterTilbakekrevingsvedtakMotregning = (
@@ -38,7 +37,6 @@ export const useTilbakekrevingsvedtakMotregning = (åpenBehandling: IBehandling)
             },
         }).then(behandling => {
             settÅpenBehandling(behandling);
-            hentLogg();
         });
 
     return {
