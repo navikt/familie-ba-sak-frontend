@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, CopyButton, Dropdown, Heading, HStack } from '@navikt/ds-react';
+import { BodyShort, CopyButton, Heading, HStack } from '@navikt/ds-react';
 
-import RegistrerDødsfallDato from './RegistrerDødsfallDato';
+import RegistrerDødsfallDatoMeny from './RegistrerDødsfallDatoMeny';
 import { useBrukerContext } from '../../sider/Fagsak/BrukerContext';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '../../typer/person';
@@ -77,21 +76,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     <Skillelinje erHeading />
                     <Heading level="2" size="medium" as="span">{`${personTypeMap[person.type]} `}</Heading>
                     {person.dødsfallDato?.length && <DødsfallTag dødsfallDato={person.dødsfallDato} />}
-                    {!person.dødsfallDato?.length && !erLesevisning && (
-                        <Dropdown>
-                            <Button
-                                aria-label="Åpne valgmeny"
-                                as={Dropdown.Toggle}
-                                icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
-                                variant="tertiary"
-                            />
-                            <Dropdown.Menu className={styles.dropdownMeny} placement={'right'}>
-                                <Dropdown.Menu.List>
-                                    <RegistrerDødsfallDato person={person} />
-                                </Dropdown.Menu.List>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    )}
+                    {!person.dødsfallDato?.length && !erLesevisning && <RegistrerDødsfallDatoMeny person={person} />}
                 </HStack>
             </HStack>
         );
