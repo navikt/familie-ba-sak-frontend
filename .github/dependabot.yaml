@@ -28,38 +28,62 @@ updates:
           - "@types/react-dom"
       babel:
         patterns:
-          - "@babel/*"
+          - "@babel/core"
+          - "@babel/preset-env"
+          - "@babel/preset-react"
+          - "@babel/preset-typescript"
       aksel:
         patterns:
           - "@navikt/aksel-icons"
           - "@navikt/ds-css"
           - "@navikt/ds-react"
+          - "@navikt/ds-tokens"
       familie:
         patterns:
-          - "@navikt/familie-*"
+          - "@navikt/familie-backend"
+          - "@navikt/familie-endringslogg"
+          - "@navikt/familie-form-elements"
+          - "@navikt/familie-header"
+          - "@navikt/familie-http"
+          - "@navikt/familie-ikoner"
+          - "@navikt/familie-logging"
+          - "@navikt/familie-skjema"
+          - "@navikt/familie-tidslinje"
+          - "@navikt/familie-typer"
       tanstack:
         patterns:
-          - "@tanstack/*"
+          - "@tanstack/react-query"
+          - "@tanstack/react-query-devtools"
       sentry:
         patterns:
-          - "@sentry/*"
+          - "@sentry/browser"
+          - "@sentry/webpack-plugin"
       testing-library:
         patterns:
-          - "@testing-library/*"
+          - "@testing-library/dom"
+          - "@testing-library/jest-dom"
+          - "@testing-library/react"
+          - "@testing-library/user-event"
       landvelger:
         patterns:
           - "@navikt/landvelger"
           - "@navikt/land-verktoy"
           - "@navikt/flagg-ikoner"
-      eslint:
+      linting:
         patterns:
           - "eslint"
-          - "@eslint/*"
-          - "eslint-*"
-          - "@types/eslint*"
-          - "typescript-eslint"
-          - "@typescript-eslint/*"
+          - "@eslint/js"
+          - "eslint-config-prettier"
+          - "eslint-plugin-import"
+          - "eslint-plugin-jsx-a11y"
+          - "eslint-plugin-prettier"
+          - "eslint-plugin-react-hooks"
+          - "@types/eslint-plugin-jsx-a11y"
           - "globals"
+          - "typescript-eslint"
+          - "prettier"
+          - "lint-staged"
+          - "husky"
       vitest:
         patterns:
           - "vitest"
@@ -72,6 +96,7 @@ updates:
         patterns:
           - "express"
           - "@types/express"
+          - "express-static-gzip"
       classnames:
         patterns:
           - "classnames"
@@ -100,11 +125,14 @@ updates:
           - "fork-ts-checker-webpack-plugin"
           - "css-minimizer-webpack-plugin"
           - "copy-webpack-plugin"
-          - "copy-webpack-plugin"
           - "compression-webpack-plugin"
           - "case-sensitive-paths-webpack-plugin"
-          - "case-sensitive-paths-webpack-plugin"
           - "@pmmmwh/react-refresh-webpack-plugin"
+          - "mini-css-extract-plugin"
+          - "css-loader"
+          - "file-loader"
+          - "style-loader"
+          - "babel-loader"
       types:
         patterns:
           - "@types/*"
