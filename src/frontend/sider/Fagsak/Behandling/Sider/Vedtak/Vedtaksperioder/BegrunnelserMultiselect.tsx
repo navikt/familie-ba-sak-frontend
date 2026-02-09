@@ -7,8 +7,9 @@ import { Box, UNSAFE_Combobox } from '@navikt/ds-react';
 import { mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
-import { OppdaterStandardbegrunnelserMutationKeyFactory } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
+import { useOppdaterStandardbegrunnelserMutationState } from '../../../../../../hooks/useOppdaterStandardbegrunnelserMutationState';
 import { OppdaterVedtaksperioderMedFriteksterMutationKeyFactory } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
+import { useOppdaterVedtaksperioderMedFriteksterMutationState } from '../../../../../../hooks/useOppdaterVedtaksperioderMedFriteksterMutationState';
 import type { OptionType } from '../../../../../../typer/common';
 import { Standardbegrunnelse } from '../../../../../../typer/vedtak';
 import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
@@ -29,22 +30,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
     });
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
-    const oppdaterStandardbegrunnelserMutation = useMutationState({
-        filters: {
-            mutationKey: OppdaterStandardbegrunnelserMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
-                vedtaksperiodeMedBegrunnelser.id
-            ),
-        },
-        select: mutation => mutation.state,
-    }).at(-1);
-    const oppdaterVedtaksperioderMedFriteksterMutation = useMutationState({
-        filters: {
-            mutationKey: OppdaterVedtaksperioderMedFriteksterMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
-                vedtaksperiodeMedBegrunnelser.id
-            ),
-        },
-        select: mutation => mutation.state,
-    }).at(-1);
+    const oppdaterStandardbegrunnelserMutation = useOppdaterStandardbegrunnelserMutationState(
+        vedtaksperiodeMedBegrunnelser.id
+    );
+    const oppdaterVedtaksperioderMedFriteksterMutation = useOppdaterVedtaksperioderMedFriteksterMutationState(
+        vedtaksperiodeMedBegrunnelser.id
+    );
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
