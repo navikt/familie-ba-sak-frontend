@@ -8,8 +8,7 @@ import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } f
 
 import { useAppContext } from '../../../../context/AppContext';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../typer/behandling';
-import { BehandlingResultat, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
+import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
 
@@ -88,6 +87,7 @@ const useBehandlingssteg = (
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
         behandling?.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
+        behandling?.årsak == BehandlingÅrsak.FALSK_IDENTITET ||
         behandling?.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const sendTilBeslutterNesteOnClick = (
