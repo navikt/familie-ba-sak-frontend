@@ -14,7 +14,9 @@ import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysn
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
 import {
     annenVurderingConfig,
     type IAnnenVurdering,
@@ -27,12 +29,11 @@ import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
-import { useAppContext } from '../../../../../context/AppContext';
-import { ToggleNavn } from '../../../../../typer/toggles';
 import { useFagsakContext } from '../../../FagsakContext';
 
 export function Vilkårsvurdering() {
-    const { toggles } = useAppContext();
+    const toggles = useFeatureToggles();
+
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandlingContext();
@@ -93,7 +94,7 @@ export function Vilkårsvurdering() {
                 )}
                 <OppdaterRegisteropplysninger />
             </>
-            {!erProd() && !toggles[ToggleNavn.skalSkjuleTestmiljøknapper] && (
+            {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (
                 <HStack gap="4" marginBlock={'8 8'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={behandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />
