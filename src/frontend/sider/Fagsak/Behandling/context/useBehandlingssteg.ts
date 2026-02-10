@@ -87,7 +87,7 @@ const useBehandlingssteg = (
         behandling?.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling?.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
         behandling?.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
-        behandling?.årsak == BehandlingÅrsak.FALSK_IDENTITET ||
+        behandling?.årsak === BehandlingÅrsak.FALSK_IDENTITET ||
         behandling?.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const sendTilBeslutterNesteOnClick = (
