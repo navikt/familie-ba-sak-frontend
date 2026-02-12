@@ -66,25 +66,22 @@ const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => 
             {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
                 <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
             )}
-            {genererteBrevbegrunnelser !== undefined && genererteBrevbegrunnelser.length > 0 && (
-                <>
-                    <Label>Begrunnelse(r)</Label>
-                    <ul>
-                        {genererteBrevbegrunnelser.map((begrunnelse: string, index: number) => (
-                            <li key={`begrunnelse-${index}`}>
-                                <BodyShort children={begrunnelse} />
-                            </li>
-                        ))}
-                    </ul>
-                </>
-            )}
-            {genererteBrevbegrunnelserError && (
-                <>
-                    <ErrorMessage>
-                        Noe gikk galt og vi klarte ikke generere forhåndsvisning av brevbegrunnelser. Ta kontakt med
-                        brukerstøtte hvis problemet vedvarer.
-                    </ErrorMessage>
-                </>
+            {genererteBrevbegrunnelserError ? (
+                <ErrorMessage>{genererteBrevbegrunnelserError.message}</ErrorMessage>
+            ) : (
+                genererteBrevbegrunnelser &&
+                genererteBrevbegrunnelser.length > 0 && (
+                    <>
+                        <Label>Begrunnelse(r)</Label>
+                        <ul>
+                            {genererteBrevbegrunnelser.map((begrunnelse: string, index: number) => (
+                                <li key={`begrunnelse-${index}`}>
+                                    <BodyShort children={begrunnelse} />
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )
             )}
             {visFritekster() && <FritekstBegrunnelser />}
         </EkspanderbarVedtaksperiode>
