@@ -25,10 +25,10 @@ export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBeh
             }
 
             const data = {
-                fagsakId: fagsak.id,
+                fagsakId: maskerId(fagsak.id),
                 fagsakType: fagsak.fagsakType,
                 fagsakStatus: fagsak.status,
-                behandlingId: behandling.behandlingId,
+                behandlingId: maskerId(behandling.behandlingId),
                 sideId: sideId,
                 type: behandling.type,
                 årsak: behandling.årsak,
@@ -46,4 +46,14 @@ export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBeh
             sendTilUmami('sidevisning_i_behandling', data);
         };
     }, [sidevisning]);
+};
+
+// NB: Ikke kryptografisk, bare en hash
+export const maskerId = (id: number) => {
+    const stortPrimtall = 2654435761;
+    const seed = 1234567890;
+
+    let hash = id ^ seed;
+    hash = (hash * stortPrimtall) >>> 0;
+    return hash.toString(36);
 };
