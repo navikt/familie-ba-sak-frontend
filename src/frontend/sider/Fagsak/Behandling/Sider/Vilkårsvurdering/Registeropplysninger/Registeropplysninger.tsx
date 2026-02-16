@@ -71,16 +71,20 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         historikk={registerHistorikk.dødsboadresse}
                     />
                 )}
-                <RegisteropplysningerTabell
-                    opplysningstype={Registeropplysning.SIVILSTAND}
-                    ikon={<HeartIcon fontSize={'1.5rem'} title="Hjerte-ikon" focusable="false" />}
-                    historikk={registerHistorikk.sivilstand}
-                />
-                <RegisteropplysningerTabell
-                    opplysningstype={Registeropplysning.OPPHOLD}
-                    ikon={<PassportIcon fontSize={'1.5rem'} title="Pass-ikon" focusable="false" />}
-                    historikk={registerHistorikk.oppholdstillatelse}
-                />
+                {registerHistorikk.sivilstand.length > 0 && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.SIVILSTAND}
+                        ikon={<HeartIcon fontSize={'1.5rem'} title="Hjerte-ikon" focusable="false" />}
+                        historikk={registerHistorikk.sivilstand}
+                    />
+                )}
+                {registerHistorikk.oppholdstillatelse.length > 0 && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.OPPHOLD}
+                        ikon={<PassportIcon fontSize={'1.5rem'} title="Pass-ikon" focusable="false" />}
+                        historikk={registerHistorikk.oppholdstillatelse}
+                    />
+                )}
                 <RegisteropplysningerTabell
                     opplysningstype={Registeropplysning.STATSBORGERSKAP}
                     ikon={<GlobeIcon fontSize={'1.5rem'} title="Globe-ikon" focusable="false" />}
