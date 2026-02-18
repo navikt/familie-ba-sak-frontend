@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { isBefore, subDays } from 'date-fns';
-import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OpprettBehandlingValg from './OpprettBehandlingValg';
@@ -13,16 +12,6 @@ import { Behandlingstype } from '../../../../typer/behandling';
 import { dagensDato } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Datovelger from '../../../Datovelger/Datovelger';
-
-const StyledAlert = styled(Alert)`
-    margin-top: 1.5rem;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    && > div:not(:last-child):not(:empty) {
-        margin-bottom: 1rem;
-    }
-`;
 
 interface Props {
     lukkModal: () => void;
@@ -63,43 +52,52 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
             }}
         >
             <Modal.Body>
-                <StyledFieldset
+                <Fieldset
                     error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
                     legend={'Opprett ny behandling'}
                     hideLegend
                 >
-                    <OpprettBehandlingValg skjema={opprettBehandlingSkjema} minimalFagsak={fagsak} bruker={bruker} />
-                    {opprettBehandlingSkjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                        opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                    <VStack gap={'space-16'}>
+                        <OpprettBehandlingValg
+                            skjema={opprettBehandlingSkjema}
+                            minimalFagsak={fagsak}
+                            bruker={bruker}
+                        />
+                        {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
+                            Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                            opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                                <Datovelger
+                                    felt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                    label={'Ny migreringsdato'}
+                                    maksDatoAvgrensning={maksdatoForMigrering}
+                                />
+                            )}
+                        {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
                             <Datovelger
-                                felt={opprettBehandlingSkjema.felter.migreringsdato}
+                                felt={opprettBehandlingSkjema.felter.søknadMottattDato}
                                 visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                label={'Ny migreringsdato'}
-                                maksDatoAvgrensning={maksdatoForMigrering}
+                                label={'Mottatt dato'}
+                                kanKunVelgeFortid
                             />
                         )}
-                    {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                        <Datovelger
-                            felt={opprettBehandlingSkjema.felter.søknadMottattDato}
-                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                            label={'Mottatt dato'}
-                            kanKunVelgeFortid
-                        />
-                    )}
-                    {opprettBehandlingSkjema.felter.klageMottattDato?.erSynlig && (
-                        <Datovelger
-                            felt={opprettBehandlingSkjema.felter.klageMottattDato}
-                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                            label={'Klage mottatt'}
-                            kanKunVelgeFortid
-                        />
-                    )}
-                </StyledFieldset>
+                        {opprettBehandlingSkjema.felter.klageMottattDato?.erSynlig && (
+                            <Datovelger
+                                felt={opprettBehandlingSkjema.felter.klageMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                label={'Klage mottatt'}
+                                kanKunVelgeFortid
+                            />
+                        )}
+                    </VStack>
+                </Fieldset>
                 {søknadMottattDatoErMerEnn360DagerSiden && (
-                    <StyledAlert variant={'warning'}>
-                        Er mottatt dato riktig? <br />
-                        Det er mer enn 360 dager siden denne datoen.
-                    </StyledAlert>
+                    <Box marginBlock={'space-24 space-0'}>
+                        <Alert variant={'warning'}>
+                            Er mottatt dato riktig? <br />
+                            Det er mer enn 360 dager siden denne datoen.
+                        </Alert>
+                    </Box>
                 )}
             </Modal.Body>
             <Modal.Footer>

@@ -35,6 +35,7 @@ const TidslinjeControls = styled.div`
 
 const TidslinjeContainer = styled.div`
     display: flex;
+
     & .tidslinje {
         margin: 0;
         overflow-x: hidden;

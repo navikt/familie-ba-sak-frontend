@@ -1,0 +1,9 @@
+.spinner {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    top: 20%;
+    z-index: var(--a-z-index-tooltip);
+}

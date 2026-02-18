@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-
-import { ErrorMessage } from '@navikt/ds-react';
+import { Box, ErrorMessage, HStack } from '@navikt/ds-react';
 
 import MånedVelger from './MånedVelger';
 import Årvelger from './ÅrVelger';
@@ -18,20 +16,6 @@ interface Props {
     antallÅrFrem: number;
     lesevisning?: boolean;
 }
-
-const Knapperad = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-const StyledMånedVelger = styled(MånedVelger)`
-    padding-right: 1em;
-`;
-
-const StyledErrorMessage = styled(ErrorMessage)`
-    margin-top: 0rem;
-    margin-bottom: 0.5rem;
-`;
 
 const MånedÅrVelger: React.FC<Props> = ({
     feil,
@@ -63,8 +47,8 @@ const MånedÅrVelger: React.FC<Props> = ({
 
     return (
         <div>
-            <Knapperad>
-                <StyledMånedVelger
+            <HStack gap={'space-16'}>
+                <MånedVelger
                     måned={måned}
                     settMåned={settMåned}
                     lesevisning={lesevisning}
@@ -79,8 +63,12 @@ const MånedÅrVelger: React.FC<Props> = ({
                     lesevisning={lesevisning}
                     feil={!!feil && !år}
                 />
-            </Knapperad>
-            {feil && <StyledErrorMessage>{feil}</StyledErrorMessage>}
+            </HStack>
+            {feil && (
+                <Box marginBlock={'space-0 space-8'}>
+                    <ErrorMessage>{feil}</ErrorMessage>
+                </Box>
+            )}
         </div>
     );
 };
