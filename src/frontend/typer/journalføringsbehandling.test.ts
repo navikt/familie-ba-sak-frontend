@@ -86,7 +86,7 @@ describe('Journalføringsbehandling', () => {
                 opprettJournalføringsbehandlingFraBarnetrygdbehandling(barnetrygdbehandling);
 
             // Expect
-            expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId + '');
+            expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId.toString());
             expect(journalføringsbehandling.opprettetTidspunkt).toBe(barnetrygdbehandling.opprettetTidspunkt);
             expect(journalføringsbehandling.type).toBe(barnetrygdbehandling.type);
             expect(journalføringsbehandling.status).toBe(barnetrygdbehandling.status);
@@ -96,7 +96,7 @@ describe('Journalføringsbehandling', () => {
             // Arrange
             const barnetrygdbehandling = {
                 aktiv: true,
-                behandlingId: '123',
+                behandlingId: 123,
                 opprettetTidspunkt: '2015-03-06',
                 aktivertTidspunkt: '2015-03-06',
                 status: BehandlingStatus.UTREDES,
@@ -110,7 +110,7 @@ describe('Journalføringsbehandling', () => {
                 opprettJournalføringsbehandlingFraBarnetrygdbehandling(barnetrygdbehandling);
 
             // Expect
-            expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId);
+            expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId.toString());
             expect(journalføringsbehandling.opprettetTidspunkt).toBe(barnetrygdbehandling.opprettetTidspunkt);
             expect(journalføringsbehandling.type).toBe(barnetrygdbehandling.type);
             expect(journalføringsbehandling.status).toBe(barnetrygdbehandling.status);
@@ -122,7 +122,7 @@ describe('Journalføringsbehandling', () => {
                 // Arrange
                 const barnetrygdbehandling = {
                     aktiv: true,
-                    behandlingId: '123',
+                    behandlingId: 123,
                     opprettetTidspunkt: '2015-03-06',
                     aktivertTidspunkt: '2015-03-06',
                     status: BehandlingStatus.UTREDES,
@@ -136,7 +136,7 @@ describe('Journalføringsbehandling', () => {
                     opprettJournalføringsbehandlingFraBarnetrygdbehandling(barnetrygdbehandling);
 
                 // Expect
-                expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId);
+                expect(journalføringsbehandling.id).toBe(barnetrygdbehandling.behandlingId.toString());
                 expect(journalføringsbehandling.opprettetTidspunkt).toBe(barnetrygdbehandling.opprettetTidspunkt);
                 expect(journalføringsbehandling.type).toBe(barnetrygdbehandling.type);
                 expect(journalføringsbehandling.status).toBe(barnetrygdbehandling.status);
