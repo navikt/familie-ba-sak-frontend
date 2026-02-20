@@ -1,12 +1,11 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
-
-import { BodyShort, CopyButton, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 
 import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { formaterIdent } from '../../utils/formatter';
+import { Skillelinje } from '../PersonInformasjon/PersonInformasjon';
 
 interface IProps {
     samhandler: ISamhandlerInfo;
@@ -14,76 +13,49 @@ interface IProps {
     width?: string;
 }
 
-const FlexDiv = styled.div`
-    display: flex;
-    align-items: center;
-
-    & .kontor-ikon {
-        margin-right: 1.5rem;
-
-        &--for-normaltekst {
-            margin-right: 0.5rem;
-        }
-    }
-
-    & .navn {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-`;
-
-const FlexBox = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-`;
-
 const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({ samhandler, somOverskrift = false }) => {
     const navn = samhandler.navn;
     const formattertOrgNummer = formaterIdent(samhandler.orgNummer);
     return (
-        <FlexDiv>
+        <VStack>
             {somOverskrift && (
-                <>
-                    <KontorIkonGrønn className={'kontor-ikon'} height={'32'} width={'32'} />
+                <HStack gap={'space-16'} align={'center'}>
+                    <Box marginInline={'space-0 space-8'}>
+                        <KontorIkonGrønn height={'32'} width={'32'} />
+                    </Box>
                     <Heading level="2" size="medium" className={'navn'} title={navn}>
                         {navn}
                     </Heading>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
-                    <FlexBox>
+                    <Skillelinje erHeading />
+                    <HStack gap={'space-4'} align={'center'}>
                         <Heading level="2" size="medium" as="span">
                             {formattertOrgNummer}
                         </Heading>
                         <CopyButton size={'small'} copyText={samhandler.orgNummer} />
-                    </FlexBox>
-                    <Heading level="2" size="medium" as="span">
-                        &ensp;|&ensp;
-                    </Heading>
+                    </HStack>
+                    <Skillelinje erHeading />
                     <Heading level="2" size="medium" as="span">
                         Institusjon
                     </Heading>
-                </>
+                </HStack>
             )}
 
             {!somOverskrift && (
-                <>
-                    <KontorIkonGrønn className={'kontor-ikon--for-normaltekst'} height={'24'} width={'24'} />
+                <HStack gap={'space-8'} align={'center'}>
+                    <KontorIkonGrønn height={'24'} width={'24'} />
                     <BodyShort className={'navn'} title={navn}>
                         {navn}
                     </BodyShort>
-                    <BodyShort>&ensp;|&ensp;</BodyShort>
-                    <FlexBox>
+                    <Skillelinje />
+                    <HStack gap={'space-4'} align={'center'}>
                         <BodyShort>{formattertOrgNummer}</BodyShort>
                         <CopyButton size={'small'} copyText={samhandler.orgNummer} />
-                    </FlexBox>
-                    <BodyShort>&ensp;|&ensp;</BodyShort>
+                    </HStack>
+                    <Skillelinje />
                     <BodyShort>Institusjon</BodyShort>
-                </>
+                </HStack>
             )}
-        </FlexDiv>
+        </VStack>
     );
 };
 

@@ -1,54 +1,16 @@
 import React, { useEffect } from 'react';
 
-import styled from 'styled-components';
+import classNames from 'classnames';
 
-import {
-    ABorderFocus,
-    ABorderSubtle,
-    ATextAction,
-    ATextActionSelected,
-    ATextDefault,
-} from '@navikt/ds-tokens/dist/tokens';
 import type { Etikett } from '@navikt/familie-tidslinje';
 
 import { TidslinjeVindu, useTidslinjeContext } from './TidslinjeContext';
 import FamilieBaseKnapp from '../FamilieBaseKnapp';
+import styles from './TidslinjeEtikett.module.css';
 
 interface IEtikettProp {
     etikett: Etikett;
 }
-
-const EtikettKnapp = styled(FamilieBaseKnapp)<{ disabled: boolean; $valgt: boolean }>`
-    padding: 3px 3px 3px ${({ $valgt }) => ($valgt ? '5px' : '3px')};
-    width: 90%;
-    text-align: left;
-    cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-    border-left: ${({ $valgt }) => ($valgt ? `1px solid ${ABorderSubtle}` : 'none')};
-
-    > span {
-        text-decoration: ${({ disabled, $valgt }) => (disabled || $valgt ? 'none' : 'underline')};
-        font-weight: ${({ $valgt }) => ($valgt ? 'bold' : 'normal')};
-        color: ${({ disabled, $valgt }) => {
-            if (disabled) return ATextDefault;
-            else if ($valgt) return ATextActionSelected;
-            else return ATextAction;
-        }};
-    }
-
-    :hover {
-        > span {
-            text-decoration: none;
-        }
-    }
-
-    :focus,
-    :active {
-        background-color: ${ABorderFocus};
-        > span {
-            color: #fff;
-        }
-    }
-`;
 
 const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) => {
     const {
@@ -75,14 +37,16 @@ const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) =>
     }, [etikett]);
 
     return (
-        <EtikettKnapp
+        <FamilieBaseKnapp
             aria-label={etikett.label}
             disabled={aktivtTidslinjeVindu.vindu.id === TidslinjeVindu.TRE_ÅR}
-            $valgt={!!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString()}
+            className={classNames(styles.etikettKnapp, {
+                [styles.valgt]: !!aktivEtikett && aktivEtikett.date.toDateString() === etikett.date.toDateString(),
+            })}
             onClick={onEtikettClick}
         >
             <span>{etikett.label}</span>
-        </EtikettKnapp>
+        </FamilieBaseKnapp>
     );
 };
 

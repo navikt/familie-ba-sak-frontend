@@ -1,26 +1,15 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
+import { Heading, Loader, VStack } from '@navikt/ds-react';
 
-import { Loader, Heading, VStack } from '@navikt/ds-react';
-import { AZIndexTooltip } from '@navikt/ds-tokens/dist/tokens';
-
-const PosisjonertVStack = styled(VStack)`
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    top: 20%;
-    z-index: ${AZIndexTooltip};
-`;
+import styles from './SystemetLaster.module.css';
 
 const SystemetLaster = () => {
     return (
-        <PosisjonertVStack gap="2">
+        <VStack gap="2" className={styles.spinner}>
             <Heading size={'medium'} children={'Systemet laster'} />
             <Loader size="large" transparent={true} title="Systemet laster data" />
-        </PosisjonertVStack>
+        </VStack>
     );
 };
 
