@@ -1965,14 +1965,6 @@
     prom-client "^15.1.3"
     redis "^5.10.0"
 
-"@navikt/familie-endringslogg@14.0.2":
-  version "14.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-endringslogg/14.0.2/39d9a6a1768508b5d8b029c23abb93097572edf9#39d9a6a1768508b5d8b029c23abb93097572edf9"
-  integrity sha512-J8a/YtWnMau3vHqWZOi71iMIRg025Ip7Skq0InlutCMbidirovUFAfuD+PjpuiZrycnsV+cwnB1rPw4FQNu1wg==
-  dependencies:
-    "@portabletext/react" "^3.2.0"
-    classnames "^2.5.1"
-
 "@navikt/familie-form-elements@21.0.7":
   version "21.0.7"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/21.0.7/bd36ecbdc77cb059fb1593bf29cde9078e863ce4#bd36ecbdc77cb059fb1593bf29cde9078e863ce4"
@@ -2306,26 +2298,6 @@
     html-entities "^2.1.0"
     schema-utils "^4.2.0"
     source-map "^0.7.3"
-
-"@portabletext/react@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-3.2.0.tgz#676ce1c7fc89ad574f6c1827eb02ec953ec5d630"
-  integrity sha512-BA216Z8yhb/eP24bfb09uiT0SVnQHTVZMPXf4MRBEZ+G8cMzZM/ab3tcp8owyp91+3kTKR0qSIpzYSKdm1Pakw==
-  dependencies:
-    "@portabletext/toolkit" "^2.0.16"
-    "@portabletext/types" "^2.0.13"
-
-"@portabletext/toolkit@^2.0.16":
-  version "2.0.16"
-  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-2.0.16.tgz#dbeff7ae2d86b3b6bb0e4ea586f5f65b91e51451"
-  integrity sha512-aBvnD8MscoAlEIuZBn0Aksd+oCuoMGFOT3CtHIgRBaac0Vu4YnnMUF45xo/B/T5vmwWcnDXoJEJdn+SKDg1m+A==
-  dependencies:
-    "@portabletext/types" "^2.0.13"
-
-"@portabletext/types@^2.0.13":
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-2.0.13.tgz#7a4bf6dac30713fbe1b4bc01dc572af0af72955d"
-  integrity sha512-5xk5MSyQU9CrDho3Rsguj38jhijhD36Mk8S6mZo3huv6PM+t4M/5kJN2KFIxgvt4ONpvOEs1pVIZAV0cL0Vi+Q==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"

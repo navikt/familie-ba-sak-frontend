@@ -41,7 +41,6 @@ updates:
       familie:
         patterns:
           - "@navikt/familie-backend"
-          - "@navikt/familie-endringslogg"
           - "@navikt/familie-form-elements"
           - "@navikt/familie-header"
           - "@navikt/familie-http"
