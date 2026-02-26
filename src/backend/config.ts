@@ -11,7 +11,6 @@ const Environment = () => {
             proxyUrl: 'http://localhost:8089/api',
             familieTilbakeUrl: 'http://localhost:8000',
             familieKlageUrl: 'http://localhost:8000',
-            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
             neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'lokalt-mot-preprod') {
@@ -21,7 +20,6 @@ const Environment = () => {
             proxyUrl: 'https://familie-ba-sak.intern.dev.nav.no/api',
             familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
-            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
             neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'e2e') {
@@ -31,7 +29,6 @@ const Environment = () => {
             proxyUrl: 'http://familie-ba-sak:8089/api',
             familieTilbakeUrl: 'http://tilbakekreving:8000',
             familieKlageUrl: '',
-            endringsloggProxyUrl: 'https://familie-endringslogg.intern.dev.nav.no',
             neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     } else if (process.env.ENV === 'preprod') {
@@ -41,7 +38,6 @@ const Environment = () => {
             proxyUrl: 'http://familie-ba-sak/api',
             familieTilbakeUrl: 'https://tilbakekreving.ansatt.dev.nav.no',
             familieKlageUrl: 'https://familie-klage.intern.dev.nav.no',
-            endringsloggProxyUrl: 'http://familie-endringslogg',
             neessiUrl: 'https://eux-neessi-q1.intern.dev.nav.no',
         };
     }
@@ -52,7 +48,6 @@ const Environment = () => {
         proxyUrl: 'http://familie-ba-sak/api',
         familieTilbakeUrl: 'https://tilbakekreving.intern.nav.no',
         familieKlageUrl: 'https://familie-klage.intern.nav.no',
-        endringsloggProxyUrl: 'http://familie-endringslogg',
         neessiUrl: 'https://neessi.intern.nav.no/',
     };
 };
@@ -87,7 +82,6 @@ export const oboConfig: IApi = {
 
 export const buildPath = env.buildPath;
 export const proxyUrl = env.proxyUrl;
-export const endringsloggProxyUrl = env.endringsloggProxyUrl;
 
 export const redirectRecords: Record<string, string> = {
     '/redirect/familie-tilbake': env.familieTilbakeUrl,

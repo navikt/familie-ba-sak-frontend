@@ -7,7 +7,7 @@ import type { Client } from '@navikt/familie-backend';
 import { getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger } from '@navikt/familie-logging';
 
-import { endringsloggProxyUrl, oboConfig, proxyUrl, redirectRecords } from './config.js';
+import { oboConfig, proxyUrl, redirectRecords } from './config.js';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
@@ -25,17 +25,6 @@ export const doProxy: any = () => {
         on: { proxyReq: restream },
         secure: true,
         target: `${proxyUrl}`,
-        logger: stdoutLogger,
-    });
-};
-
-// eslint-disable-next-line
-export const doEndringsloggProxy: any = () => {
-    return createProxyMiddleware({
-        changeOrigin: true,
-        on: { proxyReq: restream },
-        secure: true,
-        target: `${endringsloggProxyUrl}`,
         logger: stdoutLogger,
     });
 };

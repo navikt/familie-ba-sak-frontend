@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useNavigate } from 'react-router';
 
-import Endringslogg from '@navikt/familie-endringslogg';
 import type { ISøkeresultat } from '@navikt/familie-header';
 import { Søk } from '@navikt/familie-header';
 import { useHttp } from '@navikt/familie-http';
@@ -41,7 +40,6 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
 
 const FagsakDeltagerSøk: React.FC = () => {
     const { request } = useHttp();
-    const { innloggetSaksbehandler } = useAppContext();
     const navigate = useNavigate();
     const { skalObfuskereData } = useAppContext();
 
@@ -131,20 +129,6 @@ const FagsakDeltagerSøk: React.FC = () => {
                     return;
                 }}
             />
-
-            {innloggetSaksbehandler?.navIdent && (
-                <Endringslogg
-                    userId={innloggetSaksbehandler.navIdent}
-                    dataFetchingIntervalSeconds={60 * 15}
-                    appId={'BAKS'}
-                    backendUrl={'/endringslogg'}
-                    dataset={'production'}
-                    maxEntries={50}
-                    appName={'Barnetrygd'}
-                    alignLeft={true}
-                    stil={'lys'}
-                />
-            )}
         </>
     );
 };
