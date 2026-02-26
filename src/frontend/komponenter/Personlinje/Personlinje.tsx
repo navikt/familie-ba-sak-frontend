@@ -97,7 +97,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
                         <FalskIdentitet harFalskIdentitet={fagsakeier.harFalskIdentitet} />
                         <HStack align={'center'} gap={'1'}>
                             {fagsakeier.ident}
-                            <CopyButton copyText={fagsakeier.ident.replace(' ', '')} size={'small'} />
+                            <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />
                         </HStack>
                     </HStack>
                 </HStack>
@@ -117,7 +117,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
                             <Divider />
                             <HStack align={'center'} gap={'1'}>
                                 {søker.ident}
-                                <CopyButton copyText={søker.ident.replace(' ', '')} size={'small'} />
+                                <CopyButton copyText={søker.ident.replaceAll(' ', '')} size={'small'} />
                             </HStack>
                         </HStack>
                     </>
