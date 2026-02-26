@@ -52,8 +52,12 @@ export const sorterEøsPerioder = (
     }
 };
 
-export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined): string =>
-    verdi ? verdi.toString().replace('.', ',') : '0';
+export const konverterDesimalverdiTilSkjemaVisning = (verdi: string | undefined): string | undefined => {
+    if (verdi === undefined || verdi === null) {
+        return undefined;
+    }
+    return verdi.toString().replace('.', ',');
+};
 
 export const konverterSkjemaverdiTilDesimal = (verdi: string | undefined) =>
     verdi ? verdi.toString().replace(/\s+/g, '').replace(',', '.') : undefined;
