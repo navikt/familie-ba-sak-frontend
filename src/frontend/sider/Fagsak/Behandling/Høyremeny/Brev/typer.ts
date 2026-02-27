@@ -26,6 +26,7 @@ export enum Brevmal {
     FORLENGET_SVARTIDSBREV = 'FORLENGET_SVARTIDSBREV',
     FORLENGET_SVARTIDSBREV_INSTITUSJON = 'FORLENGET_SVARTIDSBREV_INSTITUSJON',
     UTBETALING_ETTER_KA_VEDTAK = 'UTBETALING_ETTER_KA_VEDTAK',
+    UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON = 'UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON',
 }
 
 export enum Informasjonsbrev {
@@ -67,6 +68,7 @@ export const brevmaler: Record<Brevmal, string> = {
     VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER: 'Varsel årlig revurdering EØS med innhenting',
     VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT: 'Varsel annen forelder med selvstendig rett søkt',
     UTBETALING_ETTER_KA_VEDTAK: 'Utbetaling etter KA-vedtak',
+    UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON: 'Utbetaling etter KA-vedtak institusjon',
 };
 
 export const leggTilValuePåOption = (option: Omit<ISelectOptionMedBrevtekst, 'value'>): ISelectOptionMedBrevtekst => ({
