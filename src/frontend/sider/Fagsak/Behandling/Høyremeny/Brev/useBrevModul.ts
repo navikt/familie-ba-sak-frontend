@@ -77,6 +77,7 @@ export const useBrevModul = () => {
                     Brevmal.SVARTIDSBREV_INSTITUSJON,
                     Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                     Brevmal.UTBETALING_ETTER_KA_VEDTAK,
+                    Brevmal.UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
@@ -108,6 +109,7 @@ export const useBrevModul = () => {
                     Brevmal.INNHENTE_OPPLYSNINGER,
                     Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
                     Brevmal.UTBETALING_ETTER_KA_VEDTAK,
+                    Brevmal.UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON,
                 ].includes(avhengigheter.brevmal.verdi)
             );
         },
