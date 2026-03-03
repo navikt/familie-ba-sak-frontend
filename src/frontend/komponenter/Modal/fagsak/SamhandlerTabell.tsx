@@ -19,7 +19,7 @@ export function SamhandlerTabell({ samhandler, slettSamhandler, readOnly }: Prop
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell colSpan={2}>
-                        <HStack gap={'4'} justify={'space-between'}>
+                        <HStack gap={'space-16'} justify={'space-between'}>
                             <div>Opplysninger om institusjon</div>
                             <div>
                                 <Button

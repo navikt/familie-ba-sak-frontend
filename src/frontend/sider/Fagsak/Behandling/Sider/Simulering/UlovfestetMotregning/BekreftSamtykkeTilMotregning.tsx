@@ -21,7 +21,7 @@ export const BekreftSamtykkeTilMotregning = ({
             <BodyLong spacing>
                 Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert feilutbetalingen
             </BodyLong>
-            <HStack gap="4" justify="center">
+            <HStack gap="space-16" justify="center">
                 <Button
                     onClick={() => {
                         settSletter(true);

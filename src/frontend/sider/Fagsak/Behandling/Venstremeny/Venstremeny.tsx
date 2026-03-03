@@ -7,17 +7,14 @@ import styled from 'styled-components';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Stack, VStack } from '@navikt/ds-react';
 import {
-    ABorderFocus,
-    ABorderSelected,
-    ABorderWarning,
-    AGrayalpha500,
-    ASpacing2,
-    ASpacing6,
-    ASpacing8,
-    ASurfaceHover,
-    ASurfaceNeutralSubtle,
-    ASurfaceWarning,
-    ATextDefault,
+    BgNeutralModerate,
+    BgNeutralSoft,
+    BgWarningModerate,
+    BorderAccent,
+    BorderFocus,
+    BorderWarning,
+    TextNeutral,
+    TextNeutralSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useVenstremeny } from './useVenstremeny';
@@ -29,38 +26,40 @@ import { erSidenAktiv } from '../Sider/sider';
 
 const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
     text-decoration: none;
-    color: ${props => (props.$erLenkenAktiv ? ATextDefault : AGrayalpha500)};
-    padding: ${ASpacing2} ${ASpacing8};
+    color: ${props => (props.$erLenkenAktiv ? TextNeutral : TextNeutralSubtle)};
+    padding: var(--ax-space-8) var(--ax-space-32);
 
     &:focus {
-        box-shadow: 0 0 0 3px ${ABorderFocus};
+        box-shadow: 0 0 0 3px ${BorderFocus};
         outline: none;
     }
 
     &.active {
-        background-color: ${ASurfaceNeutralSubtle};
-        box-shadow: inset 0.35rem 0 0 0 ${ABorderSelected};
+        background-color: ${BgNeutralSoft};
+        box-shadow: inset 0.35rem 0 0 0 ${BorderAccent};
     }
 
     ${props => {
         if (props.$erLenkenAktiv)
             return `
                 &:hover {
-                    background: ${ASurfaceHover};
+                    background: ${BgNeutralModerate};
                 }
         `;
     }};
 `;
 
 const UndersideSirkel = styled.span`
-    border-color: ${ABorderWarning};
+    border-color: ${BorderWarning};
+    border-width: 1px;
+    border-style: solid;
     border-radius: 50%;
-    background-color: ${ASurfaceWarning};
+    background-color: ${BgWarningModerate};
     display: inline-grid;
     grid-column: circle;
     place-items: center;
-    height: ${ASpacing6};
-    width: ${ASpacing6};
+    height: var(--ax-space-24);
+    width: var(--ax-space-24);
 `;
 
 export function Venstremeny() {
@@ -121,11 +120,11 @@ export function Venstremeny() {
                                                 stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
                                             }
                                         >
-                                            <HStack align={'center'} gap={'1'}>
+                                            <HStack align={'center'} gap={'space-4'}>
                                                 {antallAksjonspunkter > 0 ? (
                                                     <UndersideSirkel>{antallAksjonspunkter}</UndersideSirkel>
                                                 ) : (
-                                                    <Box padding={'3'} />
+                                                    <Box padding={'space-12'} />
                                                 )}
                                                 <BodyShort size={'small'}>{underside.navn}</BodyShort>
                                             </HStack>

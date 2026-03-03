@@ -25,7 +25,7 @@ const OppgavelisteNavigator: React.FunctionComponent = () => {
                 {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
             </Box>
             |
-            <Box paddingInline="space-16 0">
+            <Box paddingInline="space-16 space-0">
                 <Pagination size="small" page={side} count={antallSider} onPageChange={settSide} />
             </Box>
         </HStack>

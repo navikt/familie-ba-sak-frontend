@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Buildings3Icon } from '@navikt/aksel-icons';
-import { AGreen600 } from '@navikt/ds-tokens/dist/tokens';
+import { Success500 } from '@navikt/ds-tokens/dist/tokens';
 
 interface IKontorIkonGrønn {
     className?: string;
@@ -31,7 +31,7 @@ const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
     className,
     height = '24',
     width = '24',
-    color = AGreen600,
+    color = Success500,
 }) => {
     return (
         <IkonSirkel $height={height} $width={width} $color={color}>

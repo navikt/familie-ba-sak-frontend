@@ -64,7 +64,7 @@ export function Behandlinger() {
 
     if (klagebehandlingLaster || tilbakekrevingsbehandlingerLaster || barnetrygdbehandlingerLaster) {
         return (
-            <VStack gap={'2'} marginBlock={'1 0'}>
+            <VStack gap={'space-8'} marginBlock={'space-4 space-0'}>
                 <HStack width={'100%'} align={'center'} justify={'space-between'}>
                     <Heading level={'2'} size={'medium'} spacing={true}>
                         Behandlinger
@@ -88,10 +88,10 @@ export function Behandlinger() {
     );
 
     return (
-        <VStack gap={'6'}>
+        <VStack gap={'space-24'}>
             {barnetrygdbehandlingerError && (
                 <Alert variant={'warning'}>
-                    <VStack gap={'4'}>
+                    <VStack gap={'space-16'}>
                         <BodyShort>Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {barnetrygdbehandlingerError.message && (
                             <BodyShort>Feilmelding: {barnetrygdbehandlingerError.message}</BodyShort>
@@ -101,7 +101,7 @@ export function Behandlinger() {
             )}
             {klagebehandlingError && (
                 <Alert variant={'warning'}>
-                    <VStack gap={'4'}>
+                    <VStack gap={'space-16'}>
                         <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {klagebehandlingError.message && (
                             <BodyShort>Feilmelding: {klagebehandlingError.message}</BodyShort>
@@ -111,7 +111,7 @@ export function Behandlinger() {
             )}
             {tilbakekrevingsbehandlingerError && (
                 <Alert variant={'warning'}>
-                    <VStack gap={'4'}>
+                    <VStack gap={'space-16'}>
                         <BodyShort>Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
                         {tilbakekrevingsbehandlingerError.message && (
                             <BodyShort>Feilmelding: {tilbakekrevingsbehandlingerError.message}</BodyShort>

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, UNSAFE_Combobox } from '@navikt/ds-react';
-import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
+import { BorderNeutral } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
@@ -33,7 +33,7 @@ const StyledFieldset = styled(Fieldset)`
     margin-bottom: 1.5rem;
     padding-left: 2rem;
     margin-right: 2rem;
-    border-left: 0.0625rem solid ${ABorderAction};
+    border-left: 0.0625rem solid ${BorderNeutral};
     max-width: 30rem;
 `;
 

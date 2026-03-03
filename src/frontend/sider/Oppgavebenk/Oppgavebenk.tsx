@@ -22,7 +22,7 @@ const Container = styled.article`
 const OppgavebenkInnhold: React.FunctionComponent = () => {
     return (
         <Container>
-            <VStack gap="4">
+            <VStack gap="space-16">
                 <OppgaveHeader />
                 <OppgaveList />
             </VStack>

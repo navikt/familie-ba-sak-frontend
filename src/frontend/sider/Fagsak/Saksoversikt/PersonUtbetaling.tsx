@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, HStack } from '@navikt/ds-react';
-import { ASpacing2, ASpacing4, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { Space16, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
 import PersonInformasjon from '../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
@@ -11,12 +11,12 @@ import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, hentAlder } from '../../../utils/formatter';
 
 const Ytelser = styled.section`
-    margin: ${ASpacing2} 0 ${ASpacing4} ${ASpacing8};
+    margin: ${Space8} 0 ${Space16} ${Space32};
     border-bottom: 1px dashed;
 `;
 
 const Ytelselinje = styled(HStack)`
-    margin-bottom: ${ASpacing4};
+    margin-bottom: ${Space16};
 `;
 
 interface IPersonUtbetalingProps {

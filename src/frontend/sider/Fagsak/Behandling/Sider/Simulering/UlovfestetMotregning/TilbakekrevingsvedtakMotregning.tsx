@@ -39,7 +39,7 @@ export const TilbakekrevingsvedtakMotregning = ({
         åpenBehandling.aktivSettPåVent?.årsak === SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
 
     return (
-        <VStack marginBlock="10 0" width="90%" maxWidth="40rem" gap="4">
+        <VStack marginBlock="space-40 space-0" width="90%" maxWidth="40rem" gap="space-16">
             {tilbakekrevingsvedtakMotregning === null && (
                 <AvregningAlert
                     avregningsperioder={avregningsperioder}
@@ -69,7 +69,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                     )}
 
                     {tilbakekrevingsvedtakMotregning.samtykke && (
-                        <VStack gap="4">
+                        <VStack gap="space-16">
                             <Alert variant="info">
                                 Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
                                 saksbehandlingen.
