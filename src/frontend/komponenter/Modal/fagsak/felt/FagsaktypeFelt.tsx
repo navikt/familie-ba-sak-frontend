@@ -14,7 +14,7 @@ import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/Opp
 
 const SKJERMET_BARN_GRUPPE = {
     PROD: '2931da41-8b8e-42cd-99c0-04a169ddae40',
-    DEV: 'e98efc34-12d1-401f-b059-f17e62834065',
+    DEV: 'a1b518e2-3947-478d-8929-e5d685c47cac',
 };
 
 const fagsakTypeOptions = [

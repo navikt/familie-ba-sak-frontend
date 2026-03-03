@@ -36,7 +36,7 @@ spec:
           - id: "d21e00a4-969d-4b28-8782-dc818abfae65"  # SAKSBEHANDLER_ROLLE
           - id: "9449c153-5a1e-44a7-84c6-7cc7a8867233"  # BESLUTTER_ROLLE
           - id: "314fa714-f13c-4cdc-ac5c-e13ce08e241c"  # SUPERBRUKER_ROLLE
-          - id: "e98efc34-12d1-401f-b059-f17e62834065"  # 0000-GA-Strengt_Fortrolig_Adresse
+          - id: "a1b518e2-3947-478d-8929-e5d685c47cac"  # 0000-GA-Strengt_Fortrolig_Adresse
   resources:
     limits:
       cpu: 2000m
