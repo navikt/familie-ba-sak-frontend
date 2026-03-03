@@ -3,7 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { AGreen400, AOrange600 } from '@navikt/ds-tokens/dist/tokens';
+import {
+    Accent600,
+    MetaLime500,
+    MetaPurple800,
+    Neutral000,
+    Success500,
+    Warning500,
+} from '@navikt/ds-tokens/dist/tokens';
 import { GuttIkon, JenteIkon, KvinneIkon, MannIkon, NøytralPersonIkon } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
@@ -17,13 +24,13 @@ const StyledJenteIkon = styled(JenteIkon)<{ $adresseBeskyttet: boolean }>`
         if (props.$adresseBeskyttet) {
             return `
             g {
-                fill: var(--a-orange-600);
+                fill: ${Warning500};
             }
         `;
         } else {
             return `
                 g {
-                    fill: var(--a-purple-400);
+                    fill: ${MetaPurple800};
                 }
         `;
         }
@@ -35,13 +42,13 @@ const StyledKvinneIkon = styled(KvinneIkon)<{ $adresseBeskyttet: boolean }>`
         if (props.$adresseBeskyttet) {
             return `
             g {
-                fill: var(--a-orange-600);
+                fill: ${Warning500};
             }
         `;
         } else {
             return `
                 g {
-                    fill: var(--a-purple-400);
+                    fill: ${MetaPurple800};
                 }
         `;
         }
@@ -54,14 +61,14 @@ const StyledGuttIkon = styled(GuttIkon)<{ $adresseBeskyttet: boolean }>`
             {
                 return `
             g {
-                fill: var(--a-orange-600);
+                fill: ${Warning500};
             }
         `;
             }
         } else {
             return `
                 g {
-                    fill: var(--a-blue-400);
+                    fill: ${Accent600};
                 }
         `;
         }
@@ -73,13 +80,13 @@ const StyledMannIkon = styled(MannIkon)<{ $adresseBeskyttet: boolean }>`
         if (props.$adresseBeskyttet) {
             return `
             g {
-                fill: var(--a-orange-600);
+                fill: ${Warning500};
             }
         `;
         } else {
             return `
                 g {
-                    fill: var(--a-blue-400);
+                    fill: ${Accent600};
                 }
         `;
         }
@@ -91,7 +98,7 @@ const StyledNøytralIkon = styled(NøytralPersonIkon)<{ $adresseBeskyttet: boole
         if (props.$adresseBeskyttet)
             return `
                 path:first-of-type {
-                    fill: var(--a-orange-600);
+                    fill: ${Warning500};
                 }
             `;
     }}
@@ -102,13 +109,13 @@ const StyledEnsligMindreårigIkon = styled(PersonCircleFillIcon)<{ $adresseBesky
         if (props.$adresseBeskyttet) {
             return `
                 path {
-                    fill: var(--a-orange-600);
+                    fill: ${Warning500};
                 }
             `;
         } else {
             return `
             path {
-                fill: var(--a-limegreen-700);
+                fill: ${MetaLime500};
             `;
         }
     }};
@@ -116,7 +123,7 @@ const StyledEnsligMindreårigIkon = styled(PersonCircleFillIcon)<{ $adresseBesky
 
 const StyledNavIkon = styled(NavLogo)`
     path {
-        fill: var(--a-white);
+        fill: ${Neutral000};
     }
 
     margin: auto;
@@ -138,7 +145,7 @@ const StyledNavIkonContaier = styled.div<{
     max-height: 24px;
     max-width: 24px;
 
-    background-color: var(--a-blue-400);
+    background-color: ${Accent600};
 
     ${props => {
         if (props.$størrelse === 'm') {
@@ -154,7 +161,7 @@ const StyledNavIkonContaier = styled.div<{
     ${props => {
         if (props.$kjønn === 'KVINNE') {
             return `
-                background-color: var(--a-purple-400);
+                background-color: ${MetaPurple800};
             `;
         }
     }}
@@ -162,7 +169,7 @@ const StyledNavIkonContaier = styled.div<{
     ${props => {
         if (props.$adresseBeskyttet) {
             return `
-                background-color: var(--a-orange-600);
+                background-color: ${Warning500};
                 
             `;
         }
@@ -202,9 +209,9 @@ export const PersonIkon = ({
 
     if (fagsakType === FagsakType.INSTITUSJON) {
         if (størrelse === 'm') {
-            return <KontorIkonGrønn height="32" width="32" color={erAdresseBeskyttet ? AOrange600 : AGreen400} />;
+            return <KontorIkonGrønn height="32" width="32" color={erAdresseBeskyttet ? Warning500 : Success500} />;
         }
-        return <KontorIkonGrønn height="24" width="24" color={erAdresseBeskyttet ? AOrange600 : AGreen400} />;
+        return <KontorIkonGrønn height="24" width="24" color={erAdresseBeskyttet ? Warning500 : Success500} />;
     }
     let ikonProps = størrelse === 's' ? { height: 28, width: 28 } : { height: 36, width: 36 };
     if (fagsakType === FagsakType.SKJERMET_BARN) {

@@ -1,5 +1,5 @@
 .errorIcon {
-    color: var(--a-icon-danger);
+    color: var(--ax-danger-800);
 }
 
 .liste {
@@ -18,7 +18,7 @@
         content: '';
         height: 100%;
         width: 1px;
-        background: var(--a-bg-subtle);
+        background: var(--ax-border-neutral-subtle);
         top: 0;
         left: calc(0.5rem);
         transform: translateX(-0.5px);

@@ -6,7 +6,7 @@ import FilterSkjema from './FilterSkjema';
 
 const OppgaveHeader: React.FunctionComponent = () => {
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             <Heading size={'medium'} level={'2'}>
                 Oppgavebenken
             </Heading>

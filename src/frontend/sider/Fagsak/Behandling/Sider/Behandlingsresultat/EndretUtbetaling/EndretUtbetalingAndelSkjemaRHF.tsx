@@ -46,7 +46,7 @@ export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: E
     return (
         <FormProvider {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <VStack gap="4" maxWidth="30rem">
+                <VStack gap="space-16" maxWidth="30rem">
                     <Personvelger erLesevisning={låsFelter} />
 
                     <Årsakvelger erLesevisning={låsFelter} />

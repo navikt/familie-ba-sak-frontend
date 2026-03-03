@@ -4,7 +4,6 @@ import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -29,7 +28,7 @@ const PostnummerOgStedContainer = styled.div`
 
 const StyledFieldset = styled(Fieldset)`
     &.navds-fieldset > div:not(:first-of-type):not(:empty) {
-        margin-top: ${ASpacing6};
+        margin-top: var(--ax-space-24);
     }
 `;
 

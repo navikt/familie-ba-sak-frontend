@@ -14,7 +14,7 @@ import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     min-width: 1.5rem;
-    color: var(--a-blue-700);
+    color: var(--ax-accent-800);
 `;
 const StyledCogRotationIcon = styled(CogRotationIcon)`
     min-width: 1.5rem;
@@ -57,7 +57,7 @@ const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiFo
 };
 
 export const StatusOgBarnValutakurs: React.FC<Props> = ({ valutakurs, åpenBehandling }) => (
-    <HStack wrap={false} align="center" gap="4">
+    <HStack wrap={false} align="center" gap="space-16">
         <PeriodeStatus
             valutakurs={valutakurs}
             vurderingsstrategiForValutakurser={åpenBehandling.vurderingsstrategiForValutakurser}

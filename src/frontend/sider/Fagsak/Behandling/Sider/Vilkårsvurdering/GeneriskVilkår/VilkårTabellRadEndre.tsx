@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
-import { ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
+import { BorderAccent, BorderNeutral, BorderWarning } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -44,12 +44,12 @@ export const StyledVStack = styled(VStack)<{ $lesevisning: boolean; $vilkårResu
     border-left: 0.125rem solid
         ${props => {
             if (props.$lesevisning) {
-                return ABorderDefault;
+                return BorderNeutral;
             }
             if (props.$vilkårResultat === Resultat.IKKE_VURDERT) {
-                return ABorderWarning;
+                return BorderWarning;
             }
-            return ASurfaceAction;
+            return BorderAccent;
         }};
     padding-left: 2rem;
     margin-left: -3rem;
@@ -193,7 +193,11 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
             error={redigerbartVilkår.feilmelding !== '' ? redigerbartVilkår.feilmelding : undefined}
             errorPropagation={false}
         >
-            <StyledVStack $lesevisning={lesevisning} $vilkårResultat={vilkårResultat.verdi.resultat.verdi} gap="4">
+            <StyledVStack
+                $lesevisning={lesevisning}
+                $vilkårResultat={vilkårResultat.verdi.resultat.verdi}
+                gap="space-16"
+            >
                 {visRegelverkValg() && (
                     <Select
                         readOnly={lesevisning}

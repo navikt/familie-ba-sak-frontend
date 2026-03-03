@@ -79,7 +79,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend="Kompetanseskjema" hideLegend>
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="space-24">
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}

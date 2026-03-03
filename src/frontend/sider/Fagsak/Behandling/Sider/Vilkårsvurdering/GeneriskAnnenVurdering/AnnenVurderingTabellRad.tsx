@@ -30,6 +30,7 @@ const BeskrivelseCelle = styled(BodyShort)`
 
 const VurderingCelle = styled.div`
     display: flex;
+
     svg {
         margin-right: 1rem;
     }
@@ -40,6 +41,7 @@ const FlexDiv = styled.div`
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+
     > div:nth-child(n + 2) {
         padding-left: 0.5rem;
     }

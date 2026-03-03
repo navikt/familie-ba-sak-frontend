@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { ABorderStrong, ASpacing2, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
+import { BorderNeutralStrong, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import PersonUtbetaling from './PersonUtbetaling';
@@ -13,13 +13,13 @@ import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
 
 const LøpendeUtbetalinger = styled(VStack)`
     max-width: ${SaksoversiktPanelBredde};
-    margin-top: ${ASpacing8};
+    margin-top: ${Space32};
 `;
 
 const Totallinje = styled(HStack)`
-    margin-left: ${ASpacing8};
-    padding-bottom: ${ASpacing2};
-    border-bottom: 1px solid ${ABorderStrong};
+    margin-left: ${Space32};
+    padding-bottom: ${Space8};
+    border-bottom: 1px solid ${BorderNeutralStrong};
 `;
 
 interface IUtbetalingerProps {
@@ -45,7 +45,7 @@ const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
             }, {}) ?? {};
 
     return (
-        <LøpendeUtbetalinger gap="4">
+        <LøpendeUtbetalinger gap="space-16">
             {Object.values(utbetalingsperiodeDetaljerGruppertPåPerson).map(
                 (utbetalingsperiodeDetaljerForPerson, index) => {
                     return (

@@ -104,7 +104,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="space-24">
                 <Alert variant="info" inline>
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
