@@ -43,7 +43,7 @@ export function FagsakContainer() {
 
     if (isPendingFagsak) {
         return (
-            <HStack gap={'4'} margin={'space-16'}>
+            <HStack gap={'space-16'} margin={'space-16'}>
                 <Loader size={'small'} />
                 Laster fagsak...
             </HStack>
@@ -56,7 +56,7 @@ export function FagsakContainer() {
 
     if (isPendingBruker) {
         return (
-            <HStack gap={'4'} margin={'space-16'}>
+            <HStack gap={'space-16'} margin={'space-16'}>
                 <Loader size={'small'} />
                 Laster bruker...
             </HStack>

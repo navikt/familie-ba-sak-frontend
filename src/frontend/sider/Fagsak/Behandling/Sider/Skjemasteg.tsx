@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Box, Button, ErrorMessage, Heading, VStack } from '@navikt/ds-react';
-import { ASpacing24, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
 import { BehandlingPåVentAlert } from '../../../../komponenter/Alert/BehandlingPåVentAlert';
 import { MidlertidigEnhetAlert } from '../../../../komponenter/Alert/MidlertidigEnhetAlert';
@@ -30,17 +29,17 @@ interface IProps extends PropsWithChildren {
 }
 
 const StyledErrorMessage = styled(ErrorMessage)`
-    margin-top: ${ASpacing4};
+    margin-top: var(--ax-space-16);
 `;
 
 const Navigering = styled.div`
-    margin: ${ASpacing24} 0 ${ASpacing4};
+    margin: var(--ax-space-96) 0 var(--ax-space-16);
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
 
     button:not(:first-child) {
-        margin-right: ${ASpacing6};
+        margin-right: var(--ax-space-24);
     }
 `;
 

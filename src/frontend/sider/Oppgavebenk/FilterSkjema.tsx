@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Fieldset, Button, Select, HStack, VStack } from '@navikt/ds-react';
+import { Button, Fieldset, HStack, Select, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -74,14 +74,14 @@ const FilterSkjema: React.FunctionComponent = () => {
 
     return (
         <Fieldset legend="Oppgavebenken filterskjema" hideLegend>
-            <VStack gap="4">
-                <HStack gap="6">
+            <VStack gap="space-16">
+                <HStack gap="space-24">
                     {Object.values(oppgaveFelter)
                         .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
                         .map(tilOppgaveFeltKomponent)}
                 </HStack>
 
-                <HStack gap="2">
+                <HStack gap="space-8">
                     <Button
                         variant="primary"
                         onClick={() => {

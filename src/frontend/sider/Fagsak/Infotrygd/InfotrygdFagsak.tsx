@@ -11,7 +11,7 @@ interface InfotrygdFagsakProps {
 }
 
 const InnholdContainer = ({ children }: { children: React.ReactNode }) => (
-    <Box maxWidth="70rem" marginBlock="10" marginInline="16">
+    <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
         {children}
     </Box>
 );
@@ -22,7 +22,7 @@ export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
     if (isPending) {
         return (
             <InnholdContainer>
-                <HStack align="center" gap="2">
+                <HStack align="center" gap="space-8">
                     <BodyShort>Henter saker</BodyShort>
                     <Loader size="small" />
                 </HStack>

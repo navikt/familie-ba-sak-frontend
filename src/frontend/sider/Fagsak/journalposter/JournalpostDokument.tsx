@@ -6,12 +6,13 @@ import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
-import { Vedleggsliste, EllipsisBodyShort } from './JournalpostListe';
+import { EllipsisBodyShort, Vedleggsliste } from './JournalpostListe';
 import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
 import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;
+
     &:last-child {
         margin-bottom: 0;
     }
@@ -41,7 +42,7 @@ export const JournalpostDokument: React.FC<IProps> = ({ dokument, hentForhåndsv
 
     return (
         <ListeElement>
-            <HStack gap="1">
+            <HStack gap="space-4">
                 {journalpostTilgang.harTilgang ? (
                     <>
                         <EllipsisBodyShort size="small" title={dokumentTittel}>

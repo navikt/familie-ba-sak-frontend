@@ -52,7 +52,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
 
     if (somOverskrift) {
         return (
-            <HStack gap="6" wrap={false} align="center">
+            <HStack gap="space-24" wrap={false} align="center">
                 <PersonIkon
                     fagsakType={fagsak.fagsakType}
                     kjønn={person.kjønn}
@@ -61,13 +61,13 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                     erAdresseBeskyttet={erAdresseBeskyttet}
                     erEgenAnsatt={erEgenAnsatt}
                 />
-                <HStack gap="4" align="center" wrap={false}>
+                <HStack gap="space-16" align="center" wrap={false}>
                     <Heading className={styles.headingUtenOverflow} level="2" size="medium" title={navnOgAlder}>
                         {navnOgAlder}
                     </Heading>
                     <Skillelinje erHeading />
                     <FalskIdentitet harFalskIdentitet={person.harFalskIdentitet} erHeading />
-                    <HStack gap="1" wrap={false} align="center">
+                    <HStack gap="space-4" wrap={false} align="center">
                         <Heading level="2" size="medium" as="span">
                             {formattertIdent}
                         </Heading>
@@ -83,7 +83,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
     }
 
     return (
-        <HStack gap="2" align="center" wrap={false}>
+        <HStack gap="space-8" align="center" wrap={false}>
             <PersonIkon
                 fagsakType={fagsak.fagsakType}
                 kjønn={person.kjønn}
@@ -95,7 +95,7 @@ const PersonInformasjon: React.FunctionComponent<IProps> = ({ person, somOverskr
                 {navnOgAlder}
             </BodyShort>
             <Skillelinje />
-            <HStack gap="1" wrap={false} align="center">
+            <HStack gap="space-4" wrap={false} align="center">
                 <BodyShort>{formattertIdent}</BodyShort>
                 <CopyButton size="small" copyText={person.personIdent} />
             </HStack>

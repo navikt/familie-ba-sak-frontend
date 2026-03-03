@@ -3,7 +3,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
-import { AIconInfo, AIconSuccess, ASpacing4, ATextDanger, ATextDefault } from '@navikt/ds-tokens/dist/tokens';
+import { TextDanger, TextInfo, TextNeutral, TextSuccess } from '@navikt/ds-tokens/dist/tokens';
+import type { AkselColoredBorderToken } from '@navikt/ds-tokens/types';
 
 import Informasjonsbolk from './Informasjonsbolk';
 import {
@@ -19,50 +20,50 @@ import { useFagsakContext } from '../../../FagsakContext';
 import { sakstype } from '../../../Saksoversikt/Saksoversikt';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-const hentResultatfarge = (behandlingResultat: BehandlingResultat) => {
+const hentResultatfarge = (behandlingResultat: BehandlingResultat): AkselColoredBorderToken => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return 'border-subtle';
+        return 'neutral-subtle';
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return 'border-success';
+            return 'success';
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return 'border-action';
+            return 'accent';
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return 'border-danger';
+            return 'danger';
         case BehandlingResultat.IKKE_VURDERT:
-            return 'border-subtle';
+            return 'neutral-subtle';
         default:
-            return 'border-default';
+            return 'neutral';
     }
 };
 
 const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
     if (erBehandlingHenlagt(behandlingResultat)) {
-        return ATextDefault;
+        return TextNeutral;
     }
 
     switch (behandlingResultat) {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return AIconSuccess;
+            return TextSuccess;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return AIconInfo;
+            return TextInfo;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return ATextDanger;
+            return TextDanger;
         default:
-            return ATextDefault;
+            return TextNeutral;
     }
 };
 
 const StyledHeading = styled(Heading)`
-    font-size: ${ASpacing4};
+    font-size: var(--ax-space-16);
 `;
 
 export function Behandlingskort() {
@@ -78,21 +79,21 @@ export function Behandlingskort() {
 
     return (
         <Box
-            padding="2"
+            padding="space-8"
             borderColor={hentResultatfarge(behandling.resultat)}
             borderWidth="1 1 1 5"
-            borderRadius="medium"
-            margin="2"
+            borderRadius="4"
+            margin="space-8"
         >
-            <Box borderWidth="0 0 1 0" borderColor="border-subtle">
-                <VStack gap="1" marginBlock="0 2">
+            <Box borderWidth="0 0 1 0" borderColor="neutral-subtle">
+                <VStack gap="space-4" marginBlock="space-0 space-8">
                     <StyledHeading size={'xsmall'} level={'2'}>
                         {tittel}
                     </StyledHeading>
                     <BodyShort>{behandlingÅrsak[behandling.årsak]}</BodyShort>
                 </VStack>
             </Box>
-            <VStack gap="4" marginBlock="4">
+            <VStack gap="space-16" marginBlock="space-16">
                 <Informasjonsbolk label="Behandlingsstatus" tekst={behandlingsstatuser[behandling.status]} />
                 <Informasjonsbolk
                     label="Resultat"

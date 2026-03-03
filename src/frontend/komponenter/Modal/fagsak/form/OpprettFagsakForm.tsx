@@ -50,7 +50,7 @@ export function OpprettFagsakForm({ form, onSubmit, readOnly }: Props) {
     return (
         <FormProvider {...form}>
             <form id={OPPRETT_FAGSAK_FORM} onSubmit={handleSubmit(onSubmit)}>
-                <VStack gap={'4'}>
+                <VStack gap={'space-16'}>
                     <FagsaktypeFelt readOnly={readOnly} />
                     {fagsaktype === FagsakType.SKJERMET_BARN && <SkjermetBarnSøkerFelt />}
                 </VStack>

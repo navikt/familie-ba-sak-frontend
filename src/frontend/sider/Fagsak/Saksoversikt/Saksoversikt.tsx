@@ -115,14 +115,14 @@ export function Saksoversikt() {
     };
 
     return (
-        <Box maxWidth="70rem" marginBlock="10" marginInline="16">
+        <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
             <Heading size="large" level="1" children="Saksoversikt" />
 
             {harInnloggetSaksbehandlerSuperbrukerTilgang() && fagsak.løpendeKategori === BehandlingKategori.EØS && (
                 <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
             )}
 
-            <VStack gap="14">
+            <VStack gap="space-56">
                 <FagsakLenkepanel />
                 {fagsak.status === FagsakStatus.LØPENDE && (
                     <>

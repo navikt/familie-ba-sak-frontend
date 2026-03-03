@@ -83,7 +83,7 @@ export function KorrigerEtterbetalingModal() {
                 </Modal.Body>
                 <Modal.Footer>
                     {!erLesevisning && (
-                        <HStack gap={'0 space-64'}>
+                        <HStack gap={'space-0 space-64'}>
                             <HStack>
                                 {korrigertEtterbetaling && (
                                     <Button
