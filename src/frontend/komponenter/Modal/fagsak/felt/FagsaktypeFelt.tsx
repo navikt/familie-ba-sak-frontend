@@ -13,8 +13,8 @@ import { useFagsakerContext } from '../context/FagsakerContext';
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 
 const SKJERMET_BARN_GRUPPE = {
-    PROD: 'ad7b87a6-9180-467c-affc-20a566b0fec0',
-    DEV: '5ef775f2-61f8-4283-bf3d-8d03f428aa14',
+    PROD: '2931da41-8b8e-42cd-99c0-04a169ddae40',
+    DEV: 'e98efc34-12d1-401f-b059-f17e62834065',
 };
 
 const fagsakTypeOptions = [
