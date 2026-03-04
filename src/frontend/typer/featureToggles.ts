@@ -15,4 +15,5 @@ export enum FeatureToggle {
     skalBrukeNyttSkjemaForEndretUtbetalingAndel = 'familie-ba-sak.endret-utbetaling-andel-skjema-rhf',
     skalKunneBehandleBaInstitusjonFagsaker = 'familie-klage.skal-kunne-behandle-ba-institusjon-fagsaker',
     hentBehandlingEndepunktForBeslutter = 'familie-ba-sak.hent-behandling-endepunkt-for-beslutter',
+    preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',
 }

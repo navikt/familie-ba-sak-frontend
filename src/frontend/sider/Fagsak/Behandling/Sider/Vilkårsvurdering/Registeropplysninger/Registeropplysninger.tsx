@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+    BriefcaseIcon,
     CalendarIcon,
     FlowerPetalFallingIcon,
     GlobeIcon,
@@ -13,6 +14,8 @@ import { Box, Detail, Heading } from '@navikt/ds-react';
 
 import styles from './Registeropplysninger.module.css';
 import RegisteropplysningerTabell from './RegisteropplysningerTabell';
+import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
+import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
 import { Registeropplysning } from '../../../../../../typer/registeropplysning';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
@@ -25,6 +28,7 @@ interface IRegisteropplysningerProps {
 
 const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHistorikk, fødselsdato }) => {
     const personErDød = registerHistorikk.dødsboadresse.length > 0;
+    const toggles = useFeatureToggles();
 
     return (
         <>
@@ -107,6 +111,13 @@ const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHi
                         opplysningstype={Registeropplysning.DELTBOSTED}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                         historikk={registerHistorikk.deltBosted}
+                    />
+                )}
+                {toggles[FeatureToggle.preutfyllingLovligOpphold] && registerHistorikk.arbeidsforhold.length > 0 && (
+                    <RegisteropplysningerTabell
+                        opplysningstype={Registeropplysning.ARBEIDSFORHOLD}
+                        ikon={<BriefcaseIcon fontSize={'1.5rem'} title="Koffert-ikon" focusable="false" />}
+                        historikk={registerHistorikk.arbeidsforhold}
                     />
                 )}
             </Box>
