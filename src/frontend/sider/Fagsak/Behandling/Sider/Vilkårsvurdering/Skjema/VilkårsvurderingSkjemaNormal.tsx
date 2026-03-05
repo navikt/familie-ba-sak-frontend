@@ -11,8 +11,15 @@ import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/P
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
 import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import { PersonType } from '../../../../../../typer/person';
-import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
-import { annenVurderingConfig, Resultat, vilkårConfig, VilkårType } from '../../../../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    type IPersonResultat,
+    type IVilkårConfig,
+    type IVilkårResultat,
+    Resultat,
+    vilkårConfig,
+    VilkårType,
+} from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';

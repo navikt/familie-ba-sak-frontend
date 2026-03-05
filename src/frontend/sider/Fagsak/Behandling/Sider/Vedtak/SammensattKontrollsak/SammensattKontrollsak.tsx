@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Alert, Button, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useSammensattKontrollsakContext } from './SammensattKontrollsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const StyledVStack = styled(VStack)`
-    margin-bottom: ${ASpacing6};
+    margin-bottom: var(--ax-space-24);
 `;
 
 const StyledButton = styled(Button)`
@@ -28,7 +27,7 @@ const SammensattKontrollsak: React.FC = () => {
     const erLesevisning = vurderErLesevisning();
 
     return (
-        <StyledVStack gap="5">
+        <StyledVStack gap="space-20">
             <Textarea
                 label="Fritekst til vedtaksbrev"
                 description="Her skal du skrive hvilke vurderinger som er gjort, hvilken informasjon som er lagt til grunn og hvilke hjemler som er brukt."

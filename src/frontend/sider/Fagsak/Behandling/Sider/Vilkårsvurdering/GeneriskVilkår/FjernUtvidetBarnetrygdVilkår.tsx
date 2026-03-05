@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
-import { ASpacing5 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -14,7 +13,7 @@ import { VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const UtførKnapp = styled(Button)`
-    margin-top: ${ASpacing5};
+    margin-top: var(--ax-space-20);
 `;
 
 interface IProps {

@@ -107,12 +107,12 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, Ã
 
     return (
         <ValutakurserContainer>
-            <HStack gap="3" wrap={false}>
+            <HStack gap="space-12" wrap={false}>
                 <Heading spacing size="medium" level="3">
                     Valuta
                 </Heading>
                 <Spacer />
-                <VStack gap="2">
+                <VStack gap="space-8">
                     {finnesValutaperioderSomKanSkjules && (
                         <Switch
                             size="small"

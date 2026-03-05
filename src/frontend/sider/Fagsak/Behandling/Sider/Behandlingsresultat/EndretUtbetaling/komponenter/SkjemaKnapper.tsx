@@ -46,7 +46,7 @@ export const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
 
     return (
         <HStack justify="space-between">
-            <HStack gap="2">
+            <HStack gap="space-8">
                 <Button
                     size="small"
                     variant="secondary"

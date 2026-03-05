@@ -4,7 +4,6 @@ import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
 import { Alert, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
-import { ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -19,8 +18,8 @@ const PostnummerOgStedContainer = styled.div`
     grid-gap: 1rem;
     grid-template-columns: 8rem 1fr;
 
-    &:has(.navds-text-field--error) {
-        .navds-form-field .navds-form-field__error {
+    &:has(.aksel-text-field--error) {
+        .aksel-form-field .aksel-form-field__error {
             height: 3rem;
             display: initial;
         }
@@ -28,8 +27,8 @@ const PostnummerOgStedContainer = styled.div`
 `;
 
 const StyledFieldset = styled(Fieldset)`
-    &.navds-fieldset > div:not(:first-of-type):not(:empty) {
-        margin-top: ${ASpacing6};
+    &.aksel-fieldset > div:not(:first-of-type):not(:empty) {
+        margin-top: var(--ax-space-24);
     }
 `;
 

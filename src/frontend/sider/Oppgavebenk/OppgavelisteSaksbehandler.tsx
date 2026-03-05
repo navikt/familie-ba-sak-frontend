@@ -47,7 +47,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
         ) !== undefined;
 
     return oppgave.tilordnetRessurs ? (
-        <HGrid columns={2} gap={'6'} align="center">
+        <HGrid columns={2} gap={'space-24'} align="center">
             <BodyShort>{oppgave.tilordnetRessurs}</BodyShort>
             {oppgaveTypeErStøttet && (
                 <Button
@@ -62,7 +62,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
             )}
         </HGrid>
     ) : (
-        <HGrid columns={2} gap={'6'} align="center">
+        <HGrid columns={2} gap={'space-24'} align="center">
             <BodyShort>Ikke tildelt</BodyShort>
             {oppgaveTypeErStøttet && (
                 <Button

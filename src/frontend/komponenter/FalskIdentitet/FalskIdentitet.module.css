@@ -1,5 +1,5 @@
 .falskIdentitet {
-    background-color: var(--a-surface-warning-moderate);
-    color: var(--a-text-on-warning);
-    padding: 0 var(--a-spacing-05);
+    background-color: var(--ax-bg-warning-moderate);
+    color: var(--ax-text-warning);
+    padding: 0 var(--ax-space-2);
 }

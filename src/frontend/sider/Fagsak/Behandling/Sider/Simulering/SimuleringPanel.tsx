@@ -5,31 +5,26 @@ import styled from 'styled-components';
 
 import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
 import {
-    ABorderDefault,
-    AFontWeightBold,
-    AGreen700,
-    ASpacing4,
-    ATextDanger,
-    ATextDefault,
+    BorderNeutral,
+    FontWeightBold,
+    Space16,
+    TextDanger,
+    TextNeutral,
+    TextSuccess,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
-import { isoStringTilFormatertString, isoStringTilDate, Datoformat } from '../../../../../utils/dato';
+import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { formaterBeløp } from '../../../../../utils/formatter';
 
 const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
-    color: ${props => (props.$farge ? props.$farge : ATextDefault)};
-    font-weight: ${AFontWeightBold};
+    color: ${props => (props.$farge ? props.$farge : TextNeutral)};
+    font-weight: ${FontWeightBold};
 `;
 
 const HStackMedBorderTop = styled(HStack)`
-    border-top: 1px solid ${ABorderDefault};
-    padding-top: ${ASpacing4};
-`;
-
-const StyledBox = styled(Box)`
-    max-width: 26rem;
-    margin-bottom: 2.5rem;
+    border-top: 1px solid ${BorderNeutral};
+    padding-top: ${Space16};
 `;
 
 interface ISimuleringProps {
@@ -75,15 +70,21 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
     };
 
     return (
-        <StyledBox borderColor="border-strong" borderWidth="1" padding="10">
-            <VStack aria-label={'Simuleringsoversikt'} gap="3">
+        <Box
+            maxWidth={'26rem'}
+            marginBlock={'space-0 space-40'}
+            borderColor="neutral-strong"
+            borderWidth="1"
+            padding="space-40"
+        >
+            <VStack aria-label={'Simuleringsoversikt'} gap="space-12">
                 <HStack>
                     <BodyShort weight="semibold">{panelTittel()}</BodyShort>
                 </HStack>
                 <HStack>
                     <BodyShort>Feilutbetaling</BodyShort>
                     <Spacer />
-                    <BoldTekstMedFarge $farge={feilutbetaling > 0 ? ATextDanger : ATextDefault}>
+                    <BoldTekstMedFarge $farge={feilutbetaling > 0 ? TextDanger : TextNeutral}>
                         {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
                     </BoldTekstMedFarge>
                 </HStack>
@@ -110,14 +111,14 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                         </BodyShort>
                         <Spacer />
                         <BoldTekstMedFarge
-                            $farge={nestePeriode?.resultat && nestePeriode.resultat > 0 ? AGreen700 : ATextDefault}
+                            $farge={nestePeriode?.resultat && nestePeriode.resultat > 0 ? TextSuccess : TextNeutral}
                         >
                             {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
                         </BoldTekstMedFarge>
                     </HStack>
                 )}
             </VStack>
-        </StyledBox>
+        </Box>
     );
 };
 export default SimuleringPanel;

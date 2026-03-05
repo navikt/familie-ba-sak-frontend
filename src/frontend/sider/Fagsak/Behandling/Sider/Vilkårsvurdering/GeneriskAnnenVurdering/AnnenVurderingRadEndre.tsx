@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button, Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { annenVurderingBegrunnelseFeilmeldingId, annenVurderingResultatFeilmeldingId } from './AnnenVurderingTabell';
 import type { IBehandling } from '../../../../../../typer/behandling';
@@ -144,7 +144,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
             <StyledVStack
                 $lesevisning={erLesevisning}
                 $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
-                gap="4"
+                gap="space-16"
             >
                 <RadioGroup
                     readOnly={erLesevisning}
@@ -179,7 +179,6 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         {'Nei'}
                     </Radio>
                 </RadioGroup>
-
                 <Textarea
                     readOnly={erLesevisning}
                     value={redigerbartAnnenVurdering.verdi.begrunnelse.verdi}
@@ -206,7 +205,6 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                         });
                     }}
                 />
-
                 {!erLesevisning && (
                     <Knapperad>
                         <div>

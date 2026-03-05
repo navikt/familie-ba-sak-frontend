@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { BodyShort, Checkbox, ExpansionCard, TextField } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
+import styles from './AvsenderPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { EmailIkon } from '../../ikoner/EmailIkon';
@@ -13,14 +14,6 @@ import { formaterIdent } from '../../utils/formatter';
 
 const StyledExpansionCard = styled(ExpansionCard)`
     margin-top: 1rem;
-`;
-
-const StyledExpansionContent = styled(ExpansionCard.Content)`
-    .navds-expansioncard__content-inner {
-        margin: 1rem 4rem;
-    }
-    padding: 1rem;
-    padding-top: 0.5rem;
 `;
 
 export const AvsenderPanel: React.FC = () => {
@@ -64,7 +57,7 @@ export const AvsenderPanel: React.FC = () => {
                     />
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
-            <StyledExpansionContent>
+            <ExpansionCard.Content className={styles.innerContent}>
                 {lesevisning ? (
                     brukerErAvsender ? (
                         <BodyShort
@@ -107,7 +100,7 @@ export const AvsenderPanel: React.FC = () => {
                     placeholder={'Fnr/dnr/orgnr'}
                     disabled={brukerErAvsender}
                 />
-            </StyledExpansionContent>
+            </ExpansionCard.Content>
         </StyledExpansionCard>
     );
 };

@@ -3,13 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Checkbox, Fieldset, Heading } from '@navikt/ds-react';
-import { ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import OpprettBehandlingValg from '../../komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingValg';
 
 const StyledFieldset = styled(Fieldset)`
-    margin-top: ${ASpacing8};
+    margin-top: var(--ax-space-32);
 `;
 
 /**

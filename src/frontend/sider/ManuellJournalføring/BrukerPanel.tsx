@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ExpansionCard, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
-import { ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
+import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { KontoSirkel } from '../../ikoner/KontoSirkel';
@@ -28,14 +29,6 @@ const StyledButton = styled(Button)`
     margin-left: 1rem;
     margin-top: auto;
     width: 10rem;
-`;
-
-const StyledExpansionContent = styled(ExpansionCard.Content)`
-    .navds-expansioncard__content-inner {
-        margin: 1rem 4rem;
-    }
-    padding: 1rem;
-    padding-top: 0.5rem;
 `;
 
 const StyledExpansionCard = styled(ExpansionCard)`
@@ -133,7 +126,7 @@ export const BrukerPanel: React.FC = () => {
                     <DeltagerInfo
                         ikon={
                             erBrukerPåInstitusjon ? (
-                                <Buildings3FillIcon color={ASurfaceAction} width={48} height={48} />
+                                <Buildings3FillIcon color={BgAccentStrong} width={48} height={48} />
                             ) : (
                                 <KontoSirkel filled={åpen} width={48} height={48} />
                             )
@@ -144,7 +137,7 @@ export const BrukerPanel: React.FC = () => {
                     />
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
-            <StyledExpansionContent>
+            <ExpansionCard.Content className={styles.innerContent}>
                 {!erLesevisning() && (
                     <>
                         <FlexDiv>
@@ -253,7 +246,7 @@ export const BrukerPanel: React.FC = () => {
                         <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi} />
                     </ToppMargin>
                 )}
-            </StyledExpansionContent>
+            </ExpansionCard.Content>
         </StyledExpansionCard>
     );
 };
