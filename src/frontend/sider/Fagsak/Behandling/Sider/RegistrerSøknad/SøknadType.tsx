@@ -18,7 +18,7 @@ export const SøknadType: React.FunctionComponent = () => {
 
     return (
         <RadioGroup
-            className={styles.radioGroup}
+            //className={styles.radioGroup}
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             readOnly={erLesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}

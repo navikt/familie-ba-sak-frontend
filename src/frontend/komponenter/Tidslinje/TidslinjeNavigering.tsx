@@ -1,10 +1,8 @@
 import type { PropsWithChildren } from 'react';
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 
 import { NavigeringsRetning } from './TidslinjeContext';
 
@@ -16,17 +14,6 @@ interface IProps extends PropsWithChildren {
     navigerTilHøyreTittel?: string;
 }
 
-const StyledTidslinjenavigering = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 0.625rem;
-`;
-
-const FlexMedSentrering = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
 const TidslinjeNavigering: React.FC<IProps> = ({
     naviger,
     kanNavigereTilHøyre = true,
@@ -36,7 +23,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
     children,
 }) => {
     return (
-        <StyledTidslinjenavigering className={'tidslinje-header__navigering'}>
+        <HStack gap={'space-12'}>
             <Button
                 title={navigerTilVenstreTittel}
                 variant="tertiary"
@@ -45,7 +32,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 onClick={() => naviger(NavigeringsRetning.VENSTRE)}
                 icon={<ChevronLeftIcon title={navigerTilVenstreTittel} fontSize={'1.8rem'} />}
             />
-            {children && <FlexMedSentrering>{children}</FlexMedSentrering>}
+            {children && <HStack align={'center'}>{children}</HStack>}
             <Button
                 title={navigerTilHøyreTittel}
                 variant="tertiary"
@@ -54,7 +41,7 @@ const TidslinjeNavigering: React.FC<IProps> = ({
                 onClick={() => naviger(NavigeringsRetning.HØYRE)}
                 icon={<ChevronRightIcon title={navigerTilHøyreTittel} fontSize={'1.8rem'} />}
             />
-        </StyledTidslinjenavigering>
+        </HStack>
     );
 };
 
