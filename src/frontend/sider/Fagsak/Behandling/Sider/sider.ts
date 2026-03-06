@@ -152,7 +152,13 @@ export const finnSideForBehandlingssteg = (behandling: IBehandling): ISide | und
     const steg = finnSteg(behandling);
 
     if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        return sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling) ? sider.VEDTAK : sider.SIMULERING;
+        if (sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)) {
+            return sider.VEDTAK;
+        }
+        if (sider.SIMULERING.visSide && sider.SIMULERING.visSide(behandling)) {
+            return sider.SIMULERING;
+        }
+        return sider.BEHANDLINGRESULTAT;
     }
 
     const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
