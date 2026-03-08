@@ -29,7 +29,6 @@ export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 export interface IRestNyBehandling {
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
-    søkersIdent: string;
     behandlingType: Behandlingstype;
     journalpostID?: string;
     behandlingÅrsak?: BehandlingÅrsak;
@@ -331,7 +330,6 @@ export interface IOpprettBehandlingData {
     behandlingÅrsak: BehandlingÅrsak;
     kategori: BehandlingKategori;
     navIdent?: string;
-    søkersIdent: string;
     underkategori: BehandlingUnderkategori;
 }
 
