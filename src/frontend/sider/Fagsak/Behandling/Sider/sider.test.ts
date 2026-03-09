@@ -6,13 +6,13 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
 } from './sider';
+import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../../typer/behandling';
-import { mockBehandling } from '../../../../utils/test/behandling/behandling.mock';
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
         test('REGISTRERE_MOTTAKER returneres når behandling.stegTilstand inneholder steget REGISTRERE_INSTITUSJON_OG_VERGE', () => {
-            const behandling = mockBehandling({
+            const behandling = lagBehandling({
                 stegTilstand: [
                     {
                         behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON,
@@ -23,23 +23,23 @@ describe('sider.ts', () => {
             expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRER_INSTITUSJON);
         });
         test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
-            const behandling = mockBehandling({ årsak: BehandlingÅrsak.SØKNAD });
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD });
             expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRERE_SØKNAD);
         });
         test('FILTRERING_FØDSELSHENDELSER returneres ved årsak FØDSELSHENDELSE', () => {
-            const behandling = mockBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
             expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.FILTRERING_FØDSELSHENDELSER);
         });
         test('SIMULERING returneres ikke ved automatisk behandling', () => {
-            const behandling = mockBehandling({ skalBehandlesAutomatisk: true });
+            const behandling = lagBehandling({ skalBehandlesAutomatisk: true });
             expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(SideId.SIMULERING);
         });
         test('VEDTAK returneres ikke ved årsak SATSENDRING', () => {
-            const behandling = mockBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
             expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(SideId.VEDTAK);
         });
         test('Standard revurdering uten søknad viser alle sider bortsett fra FILTRERING_FØDSELSHENDELSER og REGISTRERE_SØKNAD', () => {
-            const behandling = mockBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER });
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER });
             expect(Object.keys(hentTrinnForBehandling(behandling))).toEqual(
                 Object.values(SideId).filter(
                     side =>
@@ -90,13 +90,13 @@ describe('sider.ts', () => {
 
     describe('finnSideForBehandlingssteg', () => {
         test('Skal returnere første side for behandlingssteget dersom det er før "send til beslutter"', () => {
-            const behandling = mockBehandling({
+            const behandling = lagBehandling({
                 årsak: BehandlingÅrsak.SØKNAD,
                 steg: BehandlingSteg.REGISTRERE_SØKNAD,
             });
             expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.REGISTRERE_SØKNAD);
 
-            const behandling2 = mockBehandling({
+            const behandling2 = lagBehandling({
                 årsak: BehandlingÅrsak.SØKNAD,
                 steg: BehandlingSteg.VURDER_TILBAKEKREVING,
             });
@@ -107,7 +107,7 @@ describe('sider.ts', () => {
             'Skal returnere Vedtak-siden dersom behandlingssteget er er etter "send til beslutter" ' +
                 'og behandlinsårsaken ikke er "satsendring"',
             () => {
-                const behandling = mockBehandling({
+                const behandling = lagBehandling({
                     årsak: BehandlingÅrsak.SØKNAD,
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
                 });
@@ -119,7 +119,7 @@ describe('sider.ts', () => {
             'Skal returnere Simulering-siden dersom behandlingssteget er etter "send til beslutter" ' +
                 'og behandlinsårsaken er "satsendring"',
             () => {
-                const behandling = mockBehandling({
+                const behandling = lagBehandling({
                     årsak: BehandlingÅrsak.SATSENDRING,
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
                 });

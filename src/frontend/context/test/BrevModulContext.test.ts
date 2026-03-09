@@ -1,15 +1,15 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { Brevmal } from '../../sider/Fagsak/Behandling/Høyremeny/Brev/typer';
+import { lagBehandling } from '../../testutils/testdata/behandlingTestdata';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import { Målform } from '../../typer/søknad';
 import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '../../utils/brevmal';
-import { mockBehandling } from '../../utils/test/behandling/behandling.mock';
 import { mockBarn, mockSøker } from '../../utils/test/person/person.mock';
 
 describe('BrevmodulContext', () => {
     describe('hentMuligeBrevmalerImplementering', () => {
-        const behandlingSøknad = mockBehandling({
+        const behandlingSøknad = lagBehandling({
             årsak: BehandlingÅrsak.SØKNAD,
             type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         });
@@ -41,7 +41,7 @@ describe('BrevmodulContext', () => {
                     .map(årsak =>
                         expect(
                             hentMuligeBrevmalerImplementering(
-                                mockBehandling({
+                                lagBehandling({
                                     årsak: årsak,
                                     type: Behandlingstype.REVURDERING,
                                 })
