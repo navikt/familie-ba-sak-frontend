@@ -10488,9 +10488,9 @@ synckit@^0.11.7:
     "@pkgr/core" "^0.2.4"
 
 systeminformation@^5.27.14:
-  version "5.29.1"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.29.1.tgz#0bc36dee106cfa2e5d62004d41717a8d346a6e93"
-  integrity sha512-bBroZc2we1tpgTBKZL7JguBdObC1OY+eXAoEBdsTp3utfcCa8+jUf+Wq/intTCJmiKJcuLEPsjCU6uMye0qvsQ==
+  version "5.31.3"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.31.3.tgz#82840c71e8cf7ee5a5bdaf40e45d085eda6ceb06"
+  integrity sha512-vX0eeI7oGIr79NLiJRWnK8SyxDjyiNOEanaQnHRNyb5ep8QcpD8QMDvrukdrxV4pV4AKjwUDfaypXnWHMC/65A==
 
 tabbable@^6.0.0:
   version "6.2.0"
