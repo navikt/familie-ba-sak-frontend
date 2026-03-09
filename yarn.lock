@@ -2009,15 +2009,7 @@
     "@navikt/familie-typer" "^8.0.5"
     "@navikt/fnrvalidator" "2.2.0"
 
-"@navikt/familie-http@8.0.19":
-  version "8.0.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-http/8.0.19/e85fded8bbf42eae1a0c3c91f1f62137da4e0115#e85fded8bbf42eae1a0c3c91f1f62137da4e0115"
-  integrity sha512-q7q/g5CKZPIM6QU7U8jsOw6GWePdbtNZSrQAJNRvTqVjycVBdzwDPZOhMMQnteDig9xzxcDkBAdO0AMBilmH3g==
-  dependencies:
-    "@navikt/familie-typer" "^8.0.5"
-    "@sentry/core" "10.39.0"
-
-"@navikt/familie-http@^8.0.19":
+"@navikt/familie-http@8.0.20", "@navikt/familie-http@^8.0.20":
   version "8.0.20"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-http/8.0.20/a10905246e51a60aa47a2120909217a15dd58a23#a10905246e51a60aa47a2120909217a15dd58a23"
   integrity sha512-Xbc8THM0kQ1IPF4FT+0yxBBQ8rPC9ZjT9lLxdobWS8Ul6LIFjLMvM/+2u/fN2GnrBqsdj8vqhwlqQHJNfFsTAQ==
@@ -2039,12 +2031,12 @@
   dependencies:
     winston "3.19.0"
 
-"@navikt/familie-skjema@8.2.45":
-  version "8.2.45"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.45/83c032c4ce544d53bc15c500223f978766f0e8be#83c032c4ce544d53bc15c500223f978766f0e8be"
-  integrity sha512-eKtkvTTWGUVcCPgxMyO9WvK56MDaFByhaqS8qebt0T0nnVKuikitNcQ+dvXNbrxrrL4U7WiJT9SI6rJaRVoVaA==
+"@navikt/familie-skjema@8.2.46":
+  version "8.2.46"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.46/a3029dc6f989d213cddd8a7d7c5051b629bc1d5b#a3029dc6f989d213cddd8a7d7c5051b629bc1d5b"
+  integrity sha512-JONp/IbFKFIbLMvoVejt7FauqbaHbnrQCySDXjHDlrxDdcRABr4u86KfKuoVLioU8wBM4aYVUG/uhrIPxnh7Vg==
   dependencies:
-    "@navikt/familie-http" "^8.0.19"
+    "@navikt/familie-http" "^8.0.20"
     "@navikt/familie-typer" "^8.0.5"
     "@types/deep-equal" "1.0.4"
     deep-equal "2.2.3"
@@ -2673,11 +2665,6 @@
   version "10.38.0"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-10.38.0.tgz#391f2535fde084e3eff4b1d2d634aa5619629b34"
   integrity sha512-1pubWDZE5y5HZEPMAZERP4fVl2NH3Ihp1A+vMoVkb3Qc66Diqj1WierAnStlZP7tCx0TBa0dK85GTW/ZFYyB9g==
-
-"@sentry/core@10.39.0":
-  version "10.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-10.39.0.tgz#52a4fc948e3e361e1ec4a6999c2403ef8cf83ae8"
-  integrity sha512-xCLip2mBwCdRrvXHtVEULX0NffUTYZZBhEUGht0WFL+GNdNQ7gmBOGOczhZlrf2hgFFtDO0fs1xiP9bqq5orEQ==
 
 "@sentry/core@10.40.0":
   version "10.40.0"
