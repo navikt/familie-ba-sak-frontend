@@ -102,6 +102,7 @@ export interface IRestRegisterhistorikk {
     dødsboadresse: IRestRegisteropplysning[];
     deltBosted: IRestRegisteropplysning[];
     historiskeIdenter: IRestRegisteropplysning[];
+    arbeidsforhold: IRestRegisteropplysning[];
 }
 
 export interface IRestRegisteropplysning {

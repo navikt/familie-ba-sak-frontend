@@ -15,3 +15,7 @@
         width: 12rem;
     }
 }
+
+.dataCell {
+    white-space: pre-line;
+}

@@ -110,7 +110,7 @@ const RegisteropplysningerTabell: React.FC<IRegisteropplysningerTabellProps> = (
                         {!manglerOpplysninger &&
                             synligHistorikk.map(periode => (
                                 <Table.Row key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
-                                    <Table.DataCell children={periode.verdi} />
+                                    <Table.DataCell className={styles.dataCell} children={periode.verdi} />
                                     <Table.DataCell children={hentDatoVerdi(opplysningstype, periode)} />
                                 </Table.Row>
                             ))}
