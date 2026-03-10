@@ -23,7 +23,7 @@ export function Valutavelger({ label, value, options, onChange, error, readOnly 
     const values = value ? [value] : [];
 
     const labelElement = readOnly ? (
-        <HStack wrap={false} align={'center'} gap={'2'}>
+        <HStack wrap={false} align={'center'} gap={'space-8'}>
             <PadlockLockedFillIcon />
             <Label htmlFor={id}>{label}</Label>
         </HStack>

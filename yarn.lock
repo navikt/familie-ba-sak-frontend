@@ -1977,17 +1977,17 @@
     prom-client "15.1.3"
     redis "5.11.0"
 
-"@navikt/familie-form-elements@21.0.8":
-  version "21.0.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/21.0.8/4ea8a352134c4d30e1ce0f16f54fd19a4ffd8dc7#4ea8a352134c4d30e1ce0f16f54fd19a4ffd8dc7"
-  integrity sha512-HDqE6AU12nFM5e/e5hQsdOOsTSjxhColeiEVcopVm9f/GiECgw0lksj8kw4VsFxDohbl3+cYCx6rbDzMGeaJAA==
+"@navikt/familie-form-elements@22.0.1":
+  version "22.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/22.0.1/8a18208cad1a699cc48496cca93bc242b3a60f60#8a18208cad1a699cc48496cca93bc242b3a60f60"
+  integrity sha512-K5BmXg7ifVSskpt3TIwcUha/saWmra7KCndYJ/+kG7FCr8SGQ5Kg8BInY9OkM+AEZH00S/gwSNMS4uCdxg+fnA==
   dependencies:
     react-select "5.10.2"
 
-"@navikt/familie-header@16.1.4":
-  version "16.1.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/16.1.4/a6bd98baef8c5e30374b86aa60605c8945a9a738#a6bd98baef8c5e30374b86aa60605c8945a9a738"
-  integrity sha512-hLty4BQHy1kFCxdymIQzMIq4dMOozL48tasLqe0LxSWUwxT0EOO93FvTFpVEBQvw/xOEnul4Iq1ccyeC5mR5dA==
+"@navikt/familie-header@17.0.1":
+  version "17.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/17.0.1/f447675868a739749cb282c04f2a6ee4ffdc9bd1#f447675868a739749cb282c04f2a6ee4ffdc9bd1"
+  integrity sha512-XQtmLAlzgqZzsrtDdKCVFUWC/vnOJ6j5U8eCeAIOJ2o/L+z/qxat1zXpfTzVcdLaQNTicKIvbJL//OTRFsjc8A==
   dependencies:
     "@navikt/familie-ikoner" "^9.1.4"
     "@navikt/familie-typer" "^8.0.5"
@@ -2026,10 +2026,10 @@
     deep-equal "2.2.3"
     hashids "2.3.0"
 
-"@navikt/familie-tidslinje@10.0.10":
-  version "10.0.10"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.10/d66cd20c534dc4815706f98234c363a0f1c1fdfc#d66cd20c534dc4815706f98234c363a0f1c1fdfc"
-  integrity sha512-ytpX7+x3/YWbOO4tSyf2XAiX1B8eSOc34wk79AfOwVb/oKuNcbT2lK6ytWAzIn84mOO9TGc4mFb5do2NmgOaTA==
+"@navikt/familie-tidslinje@11.0.1":
+  version "11.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/11.0.1/5b363d977d1caf08bc4f1bb82c69dd3ffcdd0992#5b363d977d1caf08bc4f1bb82c69dd3ffcdd0992"
+  integrity sha512-+JuIyg1QydywVGlIiafgCrNIgGtmnccqATlucSZ+fp47b983XSQPZHJ6X/q6TYR+MsLeBSIn/sJF0MEU8YYdMw==
   dependencies:
     classnames "2.5.1"
     nanoid "5.1.5"
