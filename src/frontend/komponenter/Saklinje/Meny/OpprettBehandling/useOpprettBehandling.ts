@@ -207,7 +207,7 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         );
     };
 
-    const opprettBehandling = (søkersIdent: string, fagsakType: FagsakType) => {
+    const opprettBehandling = () => {
         const erMigreringFraInfoTrygd = behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
         const erHelmanuellMigrering =
             erMigreringFraInfoTrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
@@ -217,7 +217,6 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
                 data: {
                     kategori: behandlingstema.verdi?.kategori ?? null,
                     underkategori: behandlingstema.verdi?.underkategori ?? null,
-                    søkersIdent,
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
                     navIdent: innloggetSaksbehandler?.navIdent,
@@ -226,7 +225,6 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
                         : undefined,
                     søknadMottattDato: dateTilIsoDatoStringEllerUndefined(søknadMottattDato.verdi),
                     barnasIdenter: erHelmanuellMigrering ? valgteBarn.verdi.map(option => option.value) : undefined,
-                    fagsakType: fagsakType,
                     fagsakId: fagsakId,
                 },
                 method: 'POST',
@@ -261,14 +259,14 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         );
     };
 
-    const onBekreft = (søkersIdent: string, fagsakType: FagsakType) => {
+    const onBekreft = () => {
         if (kanSendeSkjema()) {
             if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
                 opprettTilbakekreving();
             } else if (behandlingstype.verdi === Klagebehandlingstype.KLAGE) {
                 opprettKlagebehandling();
             } else {
-                opprettBehandling(søkersIdent, fagsakType);
+                opprettBehandling();
             }
         }
     };
