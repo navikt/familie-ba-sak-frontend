@@ -110,7 +110,7 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
                         if (opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER) {
                             return;
                         }
-                        onBekreft(fagsak.fagsakType);
+                        onBekreft();
                     }}
                     children={'Bekreft'}
                     loading={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
