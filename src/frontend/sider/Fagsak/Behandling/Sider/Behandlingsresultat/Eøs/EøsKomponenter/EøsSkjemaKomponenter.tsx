@@ -20,7 +20,7 @@ interface IEøsPeriodeSkjemaContainerProps {
 }
 
 export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
-    max-width: 34rem;
+    max-width: 40rem;
     border-left: 0.125rem solid
         ${props => {
             if (props.$lesevisning) return ABorderDefault;
