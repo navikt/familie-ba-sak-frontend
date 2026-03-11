@@ -1,63 +1,70 @@
 import React from 'react';
 
-import { Button, Fieldset, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { FormProvider } from 'react-hook-form';
 
-import useEndreBehandlingstema from './useEndreBehandlingstema';
+import { Button, Fieldset, Modal } from '@navikt/ds-react';
+
+import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 interface Props {
     lukkModal: () => void;
 }
 
-export function EndreBehandlingstemaModal({ lukkModal }: Props) {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() => lukkModal());
+export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
     const { fagsak } = useFagsakContext();
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
 
-    const lukkEndreBehandlingModal = () => {
-        nullstillSkjema();
+    const formValues = form.getValues();
+    console.log('form: ', form);
+    console.log('formValues: ', formValues);
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+        reset,
+    } = form;
+
+    const onClose = () => {
         lukkModal();
+        reset(); // TODO: use reset or nullstillSkjema?
     };
+
     return (
         <Modal
             open
-            onClose={lukkEndreBehandlingModal}
+            onClose={onClose}
             header={{ heading: 'Endre behandlingstema', size: 'small' }}
             width={'35rem'}
             portal
         >
-            <Modal.Body>
-                <Fieldset error={hentFrontendFeilmelding(ressurs)} legend="Endre behandlingstema" hideLegend>
-                    <BehandlingstemaSelect
-                        behandlingstema={skjema.felter.behandlingstema}
-                        fagsakType={fagsak.fagsakType}
-                        erLesevisning={vurderErLesevisning()}
-                    />
-                </Fieldset>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    key={'bekreft'}
-                    variant="primary"
-                    size="small"
-                    onClick={() => {
-                        endreBehandlingstema(behandling.behandlingId);
-                    }}
-                    children={'Bekreft'}
-                    loading={ressurs.status === RessursStatus.HENTER}
-                />
-                <Button
-                    key={'avbryt'}
-                    variant="secondary"
-                    size="small"
-                    onClick={lukkEndreBehandlingModal}
-                    children={'Avbryt'}
-                />
-            </Modal.Footer>
+            <FormProvider {...form}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Modal.Body>
+                        <Fieldset error={errors.root?.message} legend="Endre behandlingstema" hideLegend>
+                            <BehandlingstemaSelect
+                                behandlingstema={formValues}
+                                fagsakType={fagsak.fagsakType}
+                                erLesevisning={vurderErLesevisning()}
+                            />
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            key={'bekreft'}
+                            type={'submit'}
+                            variant="primary"
+                            size="small"
+                            children={'Bekreft'}
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
+                        />
+                        <Button key={'avbryt'} variant="secondary" size="small" onClick={onClose} children={'Avbryt'} />
+                    </Modal.Footer>
+                </form>
+            </FormProvider>
         </Modal>
     );
-}
+};

@@ -1,21 +1,66 @@
-import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import { useHttp } from '@navikt/familie-http';
-import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
+import { useEndreBehandlingstema } from '../../../../hooks/useEndreBehandlingstema';
+import { useOnFormSubmitSuccessful } from '../../../../hooks/useOnFormSubmitSuccessful';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import type { IBehandlingstema, IRestEndreBehandlingUnderkategori } from '../../../../typer/behandlingstema';
-import { tilBehandlingstema } from '../../../../typer/behandlingstema';
+import type { BehandlingKategori, BehandlingUnderkategori } from '../../../../typer/behandlingstema';
 
-const useEndreBehandling = (lukkModal: () => void) => {
-    const { request } = useHttp();
+interface Props {
+    lukkModal: () => void;
+}
+
+export enum EndreBehandlingstemaFelt {
+    KATEGORI = 'kategori',
+    UNDERKATEGORI = 'underkategori',
+}
+
+export interface EndreBehandlingstemaFormValues {
+    [EndreBehandlingstemaFelt.KATEGORI]: BehandlingKategori | null;
+    [EndreBehandlingstemaFelt.UNDERKATEGORI]: BehandlingUnderkategori | null;
+}
+
+type TransformedEndreBehandlingstemaFormValues = {
+    [EndreBehandlingstemaFelt.KATEGORI]: BehandlingKategori;
+    [EndreBehandlingstemaFelt.UNDERKATEGORI]: BehandlingUnderkategori;
+};
+
+export const useEndreBehandlingstemaSkjema = ({ lukkModal }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { mutateAsync: endreBehandlingstema } = useEndreBehandlingstema();
 
-    const [ressurs, settRessurs] = useState(byggTomRessurs());
+    const form = useForm<EndreBehandlingstemaFormValues, unknown, TransformedEndreBehandlingstemaFormValues>({
+        values: {
+            [EndreBehandlingstemaFelt.KATEGORI]: null, // TODO: set to the current kategori?
+            [EndreBehandlingstemaFelt.UNDERKATEGORI]: null, // TODO: set to the current underkategori?
+        },
+    });
+
+    const { control, reset, setError } = form; // TODO: instead of using reset, perhaps use the nullstillSkjema function
+    useOnFormSubmitSuccessful(control, () => reset()); // TODO: obv check what this does
+
+    const onSubmit = async (values: TransformedEndreBehandlingstemaFormValues) => {
+        const { kategori, underkategori } = values;
+
+        const endreBehandlingstemaParameters = {
+            behandlingUnderkategori: underkategori,
+            behandlingKategori: kategori,
+            behandlingId: behandling.behandlingId,
+        };
+
+        return endreBehandlingstema(endreBehandlingstemaParameters)
+            .then(behandling => {
+                settÅpenBehandling(byggSuksessRessurs(behandling));
+                lukkModal();
+            })
+            .catch((e: unknown) =>
+                setError('root', {
+                    message: e instanceof Error ? e.message : 'Teknisk feil ved endring av behandlingstema.',
+                })
+            );
+    };
+    /*
 
     const { skjema } = useSkjema<{ behandlingstema: IBehandlingstema | undefined }, string>({
         felter: {
@@ -57,13 +102,10 @@ const useEndreBehandling = (lukkModal: () => void) => {
             tilBehandlingstema(behandling.kategori, behandling.underkategori)
         );
     };
+     */
 
     return {
-        skjema,
-        nullstillSkjema,
-        endreBehandlingstema,
-        ressurs,
+        form,
+        onSubmit,
     };
 };
-
-export default useEndreBehandling;
