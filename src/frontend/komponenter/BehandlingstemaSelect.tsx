@@ -1,26 +1,34 @@
 import React from 'react';
 
+import { useFormContext } from 'react-hook-form';
+
 import { Select } from '@navikt/ds-react';
 
 import { BehandlingKategori, behandlingstemaer } from '../typer/behandlingstema';
 import { FagsakType } from '../typer/fagsak';
-import type { EndreBehandlingstemaFormValues } from './Saklinje/Meny/EndreBehandling/useEndreBehandlingstema';
+import {
+    EndreBehandlingstemaFelt,
+    type EndreBehandlingstemaFormValues,
+} from './Saklinje/Meny/EndreBehandling/useEndreBehandlingstema';
 
 interface Props {
-    behandlingstema: EndreBehandlingstemaFormValues;
     fagsakType: FagsakType | undefined;
-    erLesevisning: boolean;
     visFeilmeldinger?: boolean;
 }
 
-export const BehandlingstemaSelect = ({
-    behandlingstema,
-    fagsakType,
-    erLesevisning,
-    visFeilmeldinger = false,
-}: Props) => {
+export const BehandlingstemaSelect = ({ fagsakType, visFeilmeldinger = false }: Props) => {
+    const {
+        register,
+        formState: { isSubmitting, errors },
+    } = useFormContext<EndreBehandlingstemaFormValues>();
     return (
-        <Select label={'Velg behandlingstema'} onChange={evt => console.log(evt.target.value)}>
+        <Select
+            {...register(EndreBehandlingstemaFelt.BEHANDLINGSTEMA, { required: 'Velg et behandlingstema' })}
+            label={'Velg behandlingstema'}
+            readOnly={isSubmitting}
+            disabled={isSubmitting}
+            error={errors.root?.message}
+        >
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(

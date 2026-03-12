@@ -5,35 +5,33 @@ import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useEndreBehandlingstema } from '../../../../hooks/useEndreBehandlingstema';
 import { useOnFormSubmitSuccessful } from '../../../../hooks/useOnFormSubmitSuccessful';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import type { BehandlingKategori, BehandlingUnderkategori } from '../../../../typer/behandlingstema';
+import type { Behandlingstema } from '../../../../typer/behandlingstema';
+import { behandlingstemaer } from '../../../../typer/behandlingstema';
 
 interface Props {
     lukkModal: () => void;
 }
 
 export enum EndreBehandlingstemaFelt {
-    KATEGORI = 'kategori',
-    UNDERKATEGORI = 'underkategori',
+    BEHANDLINGSTEMA = 'behandlingstema',
 }
 
 export interface EndreBehandlingstemaFormValues {
-    [EndreBehandlingstemaFelt.KATEGORI]: BehandlingKategori | null;
-    [EndreBehandlingstemaFelt.UNDERKATEGORI]: BehandlingUnderkategori | null;
+    [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: Behandlingstema | null;
 }
 
 type TransformedEndreBehandlingstemaFormValues = {
-    [EndreBehandlingstemaFelt.KATEGORI]: BehandlingKategori;
-    [EndreBehandlingstemaFelt.UNDERKATEGORI]: BehandlingUnderkategori;
+    [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: Behandlingstema;
 };
 
 export const useEndreBehandlingstemaSkjema = ({ lukkModal }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: endreBehandlingstema } = useEndreBehandlingstema();
 
+    console.log('in useEndreBehandlingstema - current behandlingstema', behandling.kategori, behandling.underkategori);
     const form = useForm<EndreBehandlingstemaFormValues, unknown, TransformedEndreBehandlingstemaFormValues>({
         values: {
-            [EndreBehandlingstemaFelt.KATEGORI]: null, // TODO: set to the current kategori?
-            [EndreBehandlingstemaFelt.UNDERKATEGORI]: null, // TODO: set to the current underkategori?
+            [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: null, // TODO: set to the current kategori?
         },
     });
 
@@ -41,24 +39,33 @@ export const useEndreBehandlingstemaSkjema = ({ lukkModal }: Props) => {
     useOnFormSubmitSuccessful(control, () => reset()); // TODO: obv check what this does
 
     const onSubmit = async (values: TransformedEndreBehandlingstemaFormValues) => {
-        const { kategori, underkategori } = values;
+        const { behandlingstema } = values;
+        console.log('in onSubmit - behandlingstema', behandlingstema);
 
         const endreBehandlingstemaParameters = {
-            behandlingUnderkategori: underkategori,
-            behandlingKategori: kategori,
+            behandlingUnderkategori: behandlingstemaer[behandlingstema].underkategori,
+            behandlingKategori: behandlingstemaer[behandlingstema].kategori,
             behandlingId: behandling.behandlingId,
         };
 
-        return endreBehandlingstema(endreBehandlingstemaParameters)
-            .then(behandling => {
-                settÅpenBehandling(byggSuksessRessurs(behandling));
-                lukkModal();
-            })
-            .catch((e: unknown) =>
-                setError('root', {
-                    message: e instanceof Error ? e.message : 'Teknisk feil ved endring av behandlingstema.',
+        console.log('in onsubmit - endreBehandlingstemaParameters', endreBehandlingstemaParameters);
+
+        if (
+            // TODO: want to have this check somewhere, just not sure where
+            endreBehandlingstemaParameters.behandlingUnderkategori !== null &&
+            endreBehandlingstemaParameters.behandlingKategori !== null
+        ) {
+            return endreBehandlingstema(endreBehandlingstemaParameters)
+                .then(behandling => {
+                    settÅpenBehandling(byggSuksessRessurs(behandling));
+                    lukkModal();
                 })
-            );
+                .catch((e: unknown) =>
+                    setError('root', {
+                        message: e instanceof Error ? e.message : 'Teknisk feil ved endring av behandlingstema.',
+                    })
+                );
+        }
     };
     /*
 
