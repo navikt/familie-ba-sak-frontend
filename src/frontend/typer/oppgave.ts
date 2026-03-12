@@ -190,6 +190,7 @@ export enum PrioritetFilter {
     NORM = 'Normal',
     HOY = 'Høy',
     LAV = 'Lav',
+    KRITISK = 'Kritisk',
 }
 
 export interface IRestLukkOppgaveOgKnyttJournalpost {
