@@ -1,27 +1,16 @@
 import React, { useEffect } from 'react';
 
-import styled from 'styled-components';
-
-import { Modal, Loader, Alert, Heading, VStack, HStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Alert, Heading, HStack, Loader, Modal, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import styles from './PdfVisningModal.module.css';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;
     onRequestOpen?: () => void;
     pdfdata: Ressurs<string>;
 }
-
-const StyledModal = styled(Modal)`
-    width: 80%;
-    height: 80%;
-    overflow: hidden;
-    section {
-        height: 100%;
-        width: 90%;
-        margin: 0 auto;
-    }
-`;
 
 /**
  * @Deprecated - Erstattes av {@link ForhåndsvisPdfModal}.
@@ -34,8 +23,8 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, onRe
     }, []);
 
     return (
-        <StyledModal
-            className={'pdfvisning-modal'}
+        <Modal
+            className={styles.modal}
             open
             onClose={onRequestClose}
             aria-label={'pdfvisning'}
@@ -44,15 +33,9 @@ const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, onRe
             portal
         >
             <Dokument pdfdata={pdfdata} />
-        </StyledModal>
+        </Modal>
     );
 };
-
-const IframePdfVisning = styled.iframe`
-    margin: 0 auto;
-    height: 100%;
-    width: 100%;
-`;
 
 const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
     switch (pdfdata.status) {
@@ -66,17 +49,11 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
                 </HStack>
             );
         case RessursStatus.SUKSESS:
-            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} tabIndex={0} />;
+            return <iframe className={styles.iframe} title={'Dokument'} src={pdfdata.data} />; // tabIndex={0} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
-            return (
-                <Alert
-                    variant="error"
-                    className={'pdfvisning-modal__document--feil'}
-                    children={pdfdata.frontendFeilmelding}
-                />
-            );
+            return <Alert variant="error" children={pdfdata.frontendFeilmelding} />;
         default:
             return null;
     }

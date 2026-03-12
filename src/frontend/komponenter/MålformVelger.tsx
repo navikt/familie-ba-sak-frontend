@@ -33,7 +33,7 @@ const MålformVelger: React.FC<IProps> = ({
     };
 
     return (
-        <StyledRadioGroup
+        <RadioGroup
             {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             readOnly={erLesevisning}
             value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
@@ -56,7 +56,7 @@ const MålformVelger: React.FC<IProps> = ({
             >
                 {målform[Målform.NN]}
             </StyledRadio>
-        </StyledRadioGroup>
+        </RadioGroup>
     );
 };
 
