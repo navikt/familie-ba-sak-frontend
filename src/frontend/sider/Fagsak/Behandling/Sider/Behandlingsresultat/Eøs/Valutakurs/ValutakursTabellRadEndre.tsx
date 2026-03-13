@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { CogRotationIcon, PadlockLockedFillIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
+import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -11,6 +11,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
+import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
@@ -18,7 +19,6 @@ import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
-import { StyledFamilieValutavelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const ValutakursRad = styled.div`
     width: 32rem;
@@ -151,19 +151,10 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             disableWeekends
                             kanKunVelgeFortid
                         />
-                        <StyledFamilieValutavelger
-                            erLesevisning={true}
-                            id={'valuta'}
-                            label={
-                                <HStack wrap={false} align={'center'} gap={'2'}>
-                                    <PadlockLockedFillIcon />
-                                    <Label>Valuta</Label>
-                                </HStack>
-                            }
-                            kunEøs
-                            medFlag
-                            size="small"
+                        <Valutavelger
+                            label={'Valuta'}
                             value={skjema.felter.valutakode?.verdi}
+                            options={EØS_CURRENCY}
                             onChange={(value: Currency) => {
                                 if (value) {
                                     skjema.felter.valutakode?.validerOgSettFelt(value.value);
@@ -171,9 +162,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                     skjema.felter.valutakode?.nullstill();
                                 }
                             }}
-                            utenMargin
-                            kanNullstilles
-                            dempetEtikett={!erLesevisning}
+                            readOnly={erLesevisning}
                         />
                         <StyledTextField
                             label={'Valutakurs'}
