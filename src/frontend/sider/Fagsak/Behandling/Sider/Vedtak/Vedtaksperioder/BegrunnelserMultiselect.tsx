@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useMutationState } from '@tanstack/react-query';
-import type { GroupBase } from 'react-select';
+import type { GroupBase, StylesConfig } from 'react-select';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
@@ -12,8 +11,8 @@ import { FamilieReactSelect } from '@navikt/familie-form-elements';
 import { mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
-import { OppdaterStandardbegrunnelserMutationKeyFactory } from '../../../../../../hooks/useOppdaterStandardbegrunnelser';
-import { OppdaterVedtaksperioderMedFriteksterMutationKeyFactory } from '../../../../../../hooks/useOppdaterVedtaksperiodeMedFritekster';
+import { useOppdaterStandardbegrunnelserMutationState } from '../../../../../../hooks/useOppdaterStandardbegrunnelserMutationState';
+import { useOppdaterVedtaksperioderMedFriteksterMutationState } from '../../../../../../hooks/useOppdaterVedtaksperioderMedFriteksterMutationState';
 import type { OptionType } from '../../../../../../typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
@@ -41,22 +40,12 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
     });
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
-    const oppdaterStandardbegrunnelserMutation = useMutationState({
-        filters: {
-            mutationKey: OppdaterStandardbegrunnelserMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
-                vedtaksperiodeMedBegrunnelser.id
-            ),
-        },
-        select: mutation => mutation.state,
-    }).at(-1);
-    const oppdaterVedtaksperioderMedFriteksterMutation = useMutationState({
-        filters: {
-            mutationKey: OppdaterVedtaksperioderMedFriteksterMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
-                vedtaksperiodeMedBegrunnelser.id
-            ),
-        },
-        select: mutation => mutation.state,
-    }).at(-1);
+    const oppdaterStandardbegrunnelserMutation = useOppdaterStandardbegrunnelserMutationState(
+        vedtaksperiodeMedBegrunnelser.id
+    );
+    const oppdaterVedtaksperioderMedFriteksterMutation = useOppdaterVedtaksperioderMedFriteksterMutationState(
+        vedtaksperiodeMedBegrunnelser.id
+    );
 
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
     const enkeltverdierSomKanSettesAutomatisk = [
@@ -92,41 +81,42 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         skalAutomatiskUtfylle.current = false;
     }, [genererteBrevbegrunnelser, grupperteBegrunnelser]);
 
+    const propSelectStyles: StylesConfig<OptionType, boolean, GroupBase<OptionType>> = {
+        container: (provided, props) =>
+            Object.assign({}, provided, {
+                maxWidth: '50rem',
+                zIndex: props.isFocused ? Number(AZIndexPopover) : 1,
+            }),
+        groupHeading: provided =>
+            Object.assign({}, provided, {
+                textTransform: 'none',
+            }),
+        multiValue: (provided, props) => {
+            const currentOption = props.data;
+            const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
+                alleBegrunnelser,
+                currentOption.value as VedtakBegrunnelse
+            );
+
+            return Object.assign({}, provided, {
+                backgroundColor: hentBakgrunnsfarge(vedtakBegrunnelseType),
+                border: `1px solid ${hentBorderfarge(vedtakBegrunnelseType)}`,
+                borderRadius: '0.5rem',
+            });
+        },
+        multiValueLabel: provided =>
+            Object.assign({}, provided, {
+                whiteSpace: 'pre-wrap',
+                textOverflow: 'hidden',
+                overflow: 'hidden',
+            }),
+    };
+
     return (
         <FamilieReactSelect
             id={`${id}`}
             value={standardbegrunnelser}
-            propSelectStyles={{
-                container: (provided, props) => ({
-                    ...provided,
-                    maxWidth: '50rem',
-                    zIndex: props.isFocused ? AZIndexPopover : 1,
-                }),
-                groupHeading: provided => ({
-                    ...provided,
-                    textTransform: 'none',
-                }),
-                multiValue: (provided, props) => {
-                    const currentOption = props.data as OptionType;
-                    const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
-                        alleBegrunnelser,
-                        currentOption.value as VedtakBegrunnelse
-                    );
-
-                    return {
-                        ...provided,
-                        backgroundColor: hentBakgrunnsfarge(vedtakBegrunnelseType),
-                        border: `1px solid ${hentBorderfarge(vedtakBegrunnelseType)}`,
-                        borderRadius: '0.5rem',
-                    };
-                },
-                multiValueLabel: provided => ({
-                    ...provided,
-                    whiteSpace: 'pre-wrap',
-                    textOverflow: 'hidden',
-                    overflow: 'hidden',
-                }),
-            }}
+            propSelectStyles={propSelectStyles}
             placeholder={'Velg begrunnelse(r)'}
             isDisabled={
                 skalIkkeEditeres ||
