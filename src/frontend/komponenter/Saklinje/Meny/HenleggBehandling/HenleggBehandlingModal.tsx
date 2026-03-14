@@ -49,7 +49,7 @@ function Innhold() {
     return (
         <>
             <Modal.Body>
-                <VStack gap={'4'}>
+                <VStack gap={'space-16'}>
                     <Alert variant={'info'}>
                         <BodyLong>
                             Skriv en begrunnelse som forklarer hvorfor behandlingen henlegges. Dette kan gi andre
@@ -60,7 +60,7 @@ function Innhold() {
                     <FormProvider {...form}>
                         <form id={HENLEGG_BEHANDLING_FORM_ID} onSubmit={handleSubmit(onSubmit)}>
                             <Fieldset legend={'Henlegg behandling'} hideLegend={true} error={submitError}>
-                                <VStack gap={'4'}>
+                                <VStack gap={'space-16'}>
                                     <ÅrsakFelt />
                                     <BegrunnelseFelt />
                                 </VStack>

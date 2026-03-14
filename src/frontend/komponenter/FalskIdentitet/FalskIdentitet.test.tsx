@@ -15,9 +15,9 @@ describe('FalskIdentitet', () => {
         expect(mark).toBeInTheDocument();
         expect(mark).toHaveTextContent('Falsk identitet');
         expect(span).toBeInTheDocument();
-        expect(span).toHaveClass('navds-body-short');
+        expect(span).toHaveClass('aksel-body-short');
         expect(skillelinjeParagraf).toBeInTheDocument();
-        expect(skillelinjeParagraf).toHaveClass('navds-body-short');
+        expect(skillelinjeParagraf).toHaveClass('aksel-body-short');
     });
 
     test('skal rendre komponent som heading når erHeading er true', () => {
@@ -29,9 +29,9 @@ describe('FalskIdentitet', () => {
         expect(mark).toBeInTheDocument();
         expect(mark).toHaveTextContent('Falsk identitet');
         expect(span).toBeInTheDocument();
-        expect(span).toHaveClass('navds-heading');
+        expect(span).toHaveClass('aksel-heading');
         expect(skillelinjeSpan).toBeInTheDocument();
-        expect(skillelinjeSpan).toHaveClass('navds-heading');
+        expect(skillelinjeSpan).toHaveClass('aksel-heading');
     });
 
     test('skal ikke rendre komponent når harFalskIdentitet er false', async () => {

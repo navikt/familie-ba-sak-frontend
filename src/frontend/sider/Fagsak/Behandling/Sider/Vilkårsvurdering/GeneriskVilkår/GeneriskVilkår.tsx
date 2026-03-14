@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
-import { ASpacing16, ASpacing5, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -30,15 +29,15 @@ interface IProps {
 }
 
 const Container = styled.div`
-    margin-top: ${ASpacing16};
+    margin-top: var('--ax-space-64');
 
     &:last-child {
-        margin-bottom: ${ASpacing8};
+        margin-bottom: var('--ax-space-20');
     }
 `;
 
 const UtførKnapp = styled(Button)`
-    margin-top: ${ASpacing5};
+    margin-top: var('--ax-space-20');
 `;
 
 const GeneriskVilkår: React.FC<IProps> = ({
@@ -124,8 +123,8 @@ const GeneriskVilkår: React.FC<IProps> = ({
                 legend={vilkårFraConfig.tittel}
                 hideLegend
             >
-                <HStack gap="4" align="center">
-                    {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--a-icon-warning)" />}
+                <HStack gap="space-16" align="center">
+                    {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--ax-warning-500)" />}
                     <Heading size="medium" level="3">
                         {vilkårFraConfig.tittel}
                     </Heading>

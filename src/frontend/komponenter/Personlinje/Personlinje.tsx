@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import React from 'react';
 
 import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
@@ -14,14 +14,6 @@ import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
 import { PersonIkon } from '../PersonIkon';
-
-function InnholdContainer({ children }: PropsWithChildren) {
-    return (
-        <Box borderWidth={'0 0 1 0'} borderColor={'border-subtle'} paddingInline={'4'} paddingBlock={'2'}>
-            {children}
-        </Box>
-    );
-}
 
 function Divider() {
     return <div>|</div>;
@@ -79,9 +71,9 @@ export function Personlinje({ bruker, fagsak }: Props) {
     const søker = utledSøker(fagsak, søkerData);
 
     return (
-        <InnholdContainer>
-            <HStack align={'center'} gap={'3 4'}>
-                <HStack gap={'3 4'}>
+        <Box borderWidth={'0 0 1 0'} borderColor={'neutral'} paddingInline={'space-16'} paddingBlock={'space-8'}>
+            <HStack align={'center'} gap={'space-12 space-16'}>
+                <HStack gap={'space-12 space-16'}>
                     <PersonIkon
                         fagsakType={fagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
@@ -89,13 +81,13 @@ export function Personlinje({ bruker, fagsak }: Props) {
                         erAdresseBeskyttet={erAdresseBeskyttet(søkerData?.adressebeskyttelseGradering)}
                         erEgenAnsatt={fagsakeier.erEgenAnsatt}
                     />
-                    <HStack align={'center'} gap={'3 4'}>
+                    <HStack align={'center'} gap={'space-12 space-16'}>
                         <BodyShort as={'span'} weight={'semibold'}>
                             {fagsakeier.navn} ({fagsakeier.alder} år)
                         </BodyShort>
                         <Divider />
                         <FalskIdentitet harFalskIdentitet={fagsakeier.harFalskIdentitet} />
-                        <HStack align={'center'} gap={'1'}>
+                        <HStack align={'center'} gap={'space-4'}>
                             {fagsakeier.ident}
                             <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />
                         </HStack>
@@ -106,7 +98,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
                 {søker && (
                     <>
                         <Divider />
-                        <HStack align={'center'} gap={'3 4'}>
+                        <HStack align={'center'} gap={'space-12 space-16'}>
                             <span>
                                 <BodyShort as={'span'} weight={'semibold'}>
                                     Søker:{' '}
@@ -115,7 +107,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
                                 {søker.alder && <> ({søker.alder} år)</>}
                             </span>
                             <Divider />
-                            <HStack align={'center'} gap={'1'}>
+                            <HStack align={'center'} gap={'space-4'}>
                                 {søker.ident}
                                 <CopyButton copyText={søker.ident.replaceAll(' ', '')} size={'small'} />
                             </HStack>
@@ -141,6 +133,6 @@ export function Personlinje({ bruker, fagsak }: Props) {
                     </>
                 )}
             </HStack>
-        </InnholdContainer>
+        </Box>
     );
 }

@@ -35,18 +35,19 @@ const TidslinjeControls = styled.div`
 
 const TidslinjeContainer = styled.div`
     display: flex;
+
     & .tidslinje {
         margin: 0;
         overflow-x: hidden;
     }
 
-    & .navds-body-short {
+    & .aksel-body-short {
         &:first-child {
             margin-top: 4.8rem;
         }
     }
 
-    & .navds-body-short {
+    & .aksel-body-short {
         &:not(:first-child) {
             margin-top: 2.125rem;
         }

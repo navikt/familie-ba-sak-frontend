@@ -1,5 +1,5 @@
 .fieldset {
-    margin-top: 4rem;
+    margin-top: var(--ax-space-64);
     width: 90%;
     max-width: 40rem;
 }
@@ -11,5 +11,5 @@
 }
 
 .brevmottakereAlert {
-    margin: var(--a-spacing-4) var(--a-spacing-0) var(--a-spacing-12) var(--a-spacing-8);
+    margin: var(--ax-space-16) var(--ax-space-0) var(--ax-space-48) var(--ax-space-32);
 }

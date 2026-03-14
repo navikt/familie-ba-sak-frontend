@@ -79,7 +79,7 @@ export const TilbakekrevingsvedtakMotregning = ({
         <>
             <FormProvider {...form}>
                 <form onSubmit={handleSubmit(lagreTilbakekrevingsvedtakOgLukkModal)}>
-                    <VStack gap="3" marginBlock="8">
+                    <VStack gap="space-12" marginBlock="space-32">
                         <Heading level="2" size="small">
                             Tilbakekrevingsvedtak ved motregning
                         </Heading>
@@ -95,7 +95,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                                 </ExpansionCard.Title>
                             </ExpansionCard.Header>
                             <ExpansionCard.Content>
-                                <VStack gap="6">
+                                <VStack gap="space-24">
                                     <Datovelger
                                         feltnavn="varselDato"
                                         tittel="Varseldato"

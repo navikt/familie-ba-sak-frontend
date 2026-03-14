@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Fieldset, Heading } from '@navikt/ds-react';
-import { ASpacing16, ASpacing8 } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import AnnenVurderingTabell from './AnnenVurderingTabell';
@@ -18,9 +17,10 @@ interface IProps {
 }
 
 const Container = styled.div`
-    margin-top: ${ASpacing16};
+    margin-top: var(--ax-space-64);
+
     &:last-child {
-        margin-bottom: ${ASpacing8};
+        margin-bottom: var(--ax-space-32);
     }
 `;
 

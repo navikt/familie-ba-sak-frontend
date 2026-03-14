@@ -6,13 +6,12 @@ import styled from 'styled-components';
 
 import { Alert, Heading, Switch, Table } from '@navikt/ds-react';
 import {
-    AFontWeightBold,
-    AFontWeightRegular,
-    AGreen700,
-    ASpacing18,
-    ASurfaceSubtle,
-    ATextDanger,
-    ATextDefault,
+    BgNeutralSoft,
+    FontWeightBold,
+    FontWeightRegular,
+    TextDanger,
+    TextNeutral,
+    TextSuccess,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
@@ -35,7 +34,7 @@ const StyledAlert = styled(Alert)`
 `;
 
 const ManuellPosteringRad = styled(Table.Row)`
-    background-color: ${ASurfaceSubtle};
+    background-color: ${BgNeutralSoft};
 `;
 
 const HeaderCelle = styled(Table.HeaderCell)<{ $skalViseStipletLinje: boolean }>`
@@ -43,7 +42,7 @@ const HeaderCelle = styled(Table.HeaderCell)<{ $skalViseStipletLinje: boolean }>
 `;
 
 const DataCelle = styled(Table.DataCell)<{ $skalViseStipletLinje: boolean }>`
-    width: ${ASpacing18};
+    width: var(--ax-space-72);
     border-left: ${props => props.$skalViseStipletLinje && '1px dashed'};
 `;
 
@@ -53,13 +52,13 @@ const DataCellMedFarge = styled(DataCelle)<{
     $skalViseStipletLinje: boolean; // Sendes videre til DataCelle
 }>`
     color: ${props => {
-        if (props.$erNegativtBeløp) return ATextDanger;
+        if (props.$erNegativtBeløp) return TextDanger;
         else if (props.$erNesteUtbetalingsperiode) {
-            return AGreen700;
+            return TextSuccess;
         }
-        return ATextDefault;
+        return TextNeutral;
     }};
-    font-weight: ${props => (props.$erNesteUtbetalingsperiode ? AFontWeightBold : AFontWeightRegular)};
+    font-weight: ${props => (props.$erNesteUtbetalingsperiode ? FontWeightBold : FontWeightRegular)};
 `;
 
 const StyledSwitch = styled(Switch)`
@@ -223,7 +222,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             </DataCellMedFarge>
                         ))}
                     </Table.Row>
-                    {visManuellePosteringer && (
+                    {!visManuellePosteringer && (
                         <ManuellPosteringRad>
                             <FørsteKolonne>Manuell postering</FørsteKolonne>
                             {perioderSomSkalVisesITabellen.map(periode => (

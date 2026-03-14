@@ -106,15 +106,15 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend={'Valutakurs skjema'} hideLegend>
-            <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="6">
+            <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="space-24">
                 {erValutakursVurdertAutomatisk && (
-                    <HStack wrap={false} align={'center'} gap={'4'}>
+                    <HStack wrap={false} align={'center'} gap={'space-16'}>
                         <CogRotationIcon title="Automatisk registrert valutakurs" fontSize="1.5rem" />
                         <Label>Automatisk registrert valutakurs</Label>
                     </HStack>
                 )}
                 {vurderingsform === Vurderingsform.MANUELL && (
-                    <HStack wrap={false} align={'center'} gap={'4'}>
+                    <HStack wrap={false} align={'center'} gap={'space-16'}>
                         <PersonGavelIcon title="Manuelt registrert valutakurs" fontSize="1.5rem" />
                         <Label>Manuelt registrert valutakurs</Label>
                     </HStack>

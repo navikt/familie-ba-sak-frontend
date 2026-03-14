@@ -3,8 +3,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { BodyShort, Checkbox, Fieldset, VStack } from '@navikt/ds-react';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
@@ -38,7 +38,7 @@ const AvslagSkjema: React.FC<IProps> = ({
             legend="Er vurderingen et avslag?"
             hideLegend
         >
-            <VStack gap="4">
+            <VStack gap="space-16">
                 {erLesevisning ? (
                     redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
                         <BodyShort

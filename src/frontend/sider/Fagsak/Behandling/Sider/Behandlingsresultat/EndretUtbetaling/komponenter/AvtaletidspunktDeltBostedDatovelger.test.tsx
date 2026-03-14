@@ -107,7 +107,7 @@ describe('AvtaletidspunktDeltBostedDatovelger', () => {
 
         await user.click(kalenderknapp);
 
-        const kalender = screen.getByRole('dialog');
+        const kalender = screen.getByRole('button', { name: 'Lukk datovelger' });
         expect(kalender).toBeInTheDocument();
     });
 
