@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import type { GroupBase, StylesConfig } from 'react-select';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
 import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
-import type { ActionMeta, FormatOptionLabelMeta } from '@navikt/familie-form-elements';
+import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
 import { mapBegrunnelserTilSelectOptions } from './utils';
