@@ -14,11 +14,11 @@ import type { IApp } from '@navikt/familie-backend';
 import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import { logInfo } from '@navikt/familie-logging';
 
-import { sessionConfig } from './config';
-import { prometheusTellere } from './metrikker';
-import { attachToken, doProxy, doRedirectProxy } from './proxy';
-import setupRouter from './router';
-import webpackDevConfig from '../webpack/webpack.dev';
+import { sessionConfig } from './config.js';
+import { prometheusTellere } from './metrikker.js';
+import { attachToken, doProxy, doRedirectProxy } from './proxy.js';
+import setupRouter from './router.js';
+import webpackDevConfig from '../webpack/webpack.dev.js';
 
 const port = 8000;
 

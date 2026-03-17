@@ -6,8 +6,8 @@ import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
-import { frontendPath } from './config';
-import { prometheusTellere } from './metrikker';
+import { frontendPath } from './config.js';
+import { prometheusTellere } from './metrikker.js';
 
 const redirectHvisInternUrlIPreprod = () => {
     return async (req: Request, res: Response, next: NextFunction) => {
