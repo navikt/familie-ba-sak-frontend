@@ -1,23 +1,16 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "allowJs": true,
-    "skipLibCheck": true,
-    "outDir": "backend",
-    "rootDir": "../",
-    "resolveJsonModule": true,
-    "types": [
-      "express-session"
-    ]
-  },
-  "include": [
-    ".",
-    "../webpack"
-  ],
-  "exclude": [
-    "../frontend"
-  ],
-  "lib": [
-    "es2015"
-  ]
+    /* Language and Environment */
+    "lib": [
+      "ES2022"
+    ],
+    /* Emit */
+    "importHelpers": true,
+    // tslib dependency påkrevd
+    "outDir": "../../dist_backend",
+    /* Modules */
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  }
 }

@@ -1,18 +1,27 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "module": "esnext",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "lib": [
-    "es2015",
-    "esnext"
-  ],
-  "include": [
-    "."
-  ]
+    /* Language and Environment */
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    /* TODO: bytt til react-jsx*/
+    "jsx": "react",
+    /* Emit */
+    "noEmit": true,
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "noUncheckedSideEffectImports": false,
+    // Trenger for import av @navikt/ds-css,
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "@testing-library/jest-dom"
+    ]
+  }
 }

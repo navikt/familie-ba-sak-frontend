@@ -1,8 +1,6 @@
 node_modules
-frontend_production
-frontend_development
-backend
-dist
+dist_frontend
+dist_backend
 .DS_Store
 .idea
 VERSION
