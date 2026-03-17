@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
+import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -29,15 +29,11 @@ interface IProps {
 }
 
 const Container = styled.div`
-    margin-top: var('--ax-space-64');
+    margin-top: var(--ax-space-64);
 
     &:last-child {
-        margin-bottom: var('--ax-space-20');
+        margin-bottom: var(--ax-space-20);
     }
-`;
-
-const UtførKnapp = styled(Button)`
-    margin-top: var('--ax-space-20');
 `;
 
 const GeneriskVilkår: React.FC<IProps> = ({
@@ -137,20 +133,22 @@ const GeneriskVilkår: React.FC<IProps> = ({
                     settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
                 />
                 {skalViseLeggTilKnapp() && (
-                    <UtførKnapp
-                        onClick={() => {
-                            const promise = postVilkår(person.personIdent, vilkårFraConfig.key as VilkårType);
-                            håndterNyPeriodeVilkårsvurdering(promise);
-                        }}
-                        id={leggTilPeriodeKnappId}
-                        loading={vilkårSubmit === VilkårSubmit.POST}
-                        disabled={vilkårSubmit === VilkårSubmit.POST}
-                        variant="tertiary"
-                        size="medium"
-                        icon={<PlusCircleIcon />}
-                    >
-                        Legg til periode
-                    </UtførKnapp>
+                    <Box marginBlock={'space-20 space-0'}>
+                        <Button
+                            onClick={() => {
+                                const promise = postVilkår(person.personIdent, vilkårFraConfig.key as VilkårType);
+                                håndterNyPeriodeVilkårsvurdering(promise);
+                            }}
+                            id={leggTilPeriodeKnappId}
+                            loading={vilkårSubmit === VilkårSubmit.POST}
+                            disabled={vilkårSubmit === VilkårSubmit.POST}
+                            variant="tertiary"
+                            size="medium"
+                            icon={<PlusCircleIcon />}
+                        >
+                            Legg til periode
+                        </Button>
+                    </Box>
                 )}
                 {skalViseFjernUtvidetBarnetrygdKnapp() && (
                     <FjernUtvidetBarnetrygdVilkår

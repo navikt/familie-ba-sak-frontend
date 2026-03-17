@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Box, Heading, VStack } from '@navikt/ds-react';
-import { TextDanger, TextInfo, TextNeutral, TextSuccess } from '@navikt/ds-tokens/dist/tokens';
+import { TextDangerSubtle, TextInfoSubtle, TextNeutral, TextSuccessSubtle } from '@navikt/ds-tokens/dist/tokens';
 import type { AkselColoredBorderToken } from '@navikt/ds-tokens/types';
 
 import Informasjonsbolk from './Informasjonsbolk';
@@ -51,12 +51,12 @@ const hentResultatfargeTekst = (behandlingResultat: BehandlingResultat) => {
         case BehandlingResultat.INNVILGET:
         case BehandlingResultat.DELVIS_INNVILGET:
         case BehandlingResultat.FORTSATT_INNVILGET:
-            return TextSuccess;
+            return TextSuccessSubtle;
         case (BehandlingResultat.ENDRET_UTBETALING, BehandlingResultat.ENDRET_UTEN_UTBETALING):
-            return TextInfo;
+            return TextInfoSubtle;
         case BehandlingResultat.AVSLÅTT:
         case (BehandlingResultat.OPPHØRT, BehandlingResultat.FORTSATT_OPPHØRT):
-            return TextDanger;
+            return TextDangerSubtle;
         default:
             return TextNeutral;
     }

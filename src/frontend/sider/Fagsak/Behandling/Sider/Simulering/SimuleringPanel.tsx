@@ -10,7 +10,7 @@ import {
     Space16,
     TextDanger,
     TextNeutral,
-    TextSuccess,
+    TextSuccessSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
@@ -18,7 +18,7 @@ import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../..
 import { formaterBeløp } from '../../../../../utils/formatter';
 
 const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
-    color: ${props => (props.$farge ? props.$farge : TextNeutral)};
+    color: ${props => (props.$farge ? TextSuccessSubtle : TextNeutral)};
     font-weight: ${FontWeightBold};
 `;
 
@@ -110,9 +110,7 @@ const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
                             )}
                         </BodyShort>
                         <Spacer />
-                        <BoldTekstMedFarge
-                            $farge={nestePeriode?.resultat && nestePeriode.resultat > 0 ? TextSuccess : TextNeutral}
-                        >
+                        <BoldTekstMedFarge $farge={nestePeriode?.resultat && nestePeriode.resultat > 0}>
                             {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
                         </BoldTekstMedFarge>
                     </HStack>

@@ -71,7 +71,6 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
             return BorderNeutralSubtle;
     }
 };
-
 export const vedtakHarFortsattUtbetaling = (behandlingResultat: BehandlingResultat) =>
     [
         BehandlingResultat.INNVILGET,

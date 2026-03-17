@@ -100,7 +100,7 @@ export function Vilkårsvurdering() {
                     <TømPersonopplysningerCacheITestmiljøKnapp />
                 </HStack>
             )}
-            <VStack gap="space-8">
+            <VStack gap="space-40">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
                 {uregistrerteBarn.length > 0 && (
                     <Alert variant="info">

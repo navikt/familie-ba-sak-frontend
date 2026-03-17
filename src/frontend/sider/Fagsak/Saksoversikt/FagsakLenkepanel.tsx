@@ -26,7 +26,7 @@ const BodyTekst = styled(BodyShort)`
 
 const StyledAlert = styled(Alert)`
     width: ${SaksoversiktPanelBredde};
-    margin-top: var('--ax-space-64');
+    margin-top: var(--ax-space-64);
 `;
 
 function Innholdstabell() {

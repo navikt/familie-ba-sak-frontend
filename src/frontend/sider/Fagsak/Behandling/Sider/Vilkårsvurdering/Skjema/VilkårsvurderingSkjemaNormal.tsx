@@ -124,12 +124,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <HStack
-                            wrap={false}
-                            justify={'space-between'}
-                            paddingBlock={'space-32 space-0'}
-                            className={styles.personLinje}
-                        >
+                        <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
                             <PersonInformasjon
                                 person={personResultat.person}
                                 somOverskrift
