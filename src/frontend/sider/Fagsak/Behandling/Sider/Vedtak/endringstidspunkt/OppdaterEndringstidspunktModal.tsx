@@ -1,108 +1,133 @@
-import React from 'react';
+import React, { useId } from 'react';
 
-import styled from 'styled-components';
+import { FormProvider } from 'react-hook-form';
 
-import { Alert, BodyShort, Button, ErrorMessage, Fieldset, Label, Loader, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import {
+    BodyShort,
+    Button,
+    ErrorMessage,
+    Fieldset,
+    HStack,
+    InlineMessage,
+    Label,
+    Loader,
+    Modal,
+    VStack,
+} from '@navikt/ds-react';
 
-import { useEndringstidspunkt } from './useEndringstidspunkt';
-import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
-import { dateTilFormatertString, Datoformat } from '../../../../../../utils/dato';
-import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
+import { EndringstidspunktFelt } from './EndringstidspunktFelt';
+import { useEndringstidspunktForm } from './useEndringstidspunktForm';
+import { useHentEndringstidspunkt } from '../../../../../../hooks/useHentEndringstidspunkt';
+import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
-const StyledAlert = styled(Alert)`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-`;
+const FALLBACK_ERROR_MESSAGE =
+    'Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt brukerstøtte.';
 
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 2rem;
-`;
-
-interface IProps {
-    lukkModal: () => void;
-    behandlingId: number;
+function formaterDato(endringstidspunkt: string) {
+    return isoStringTilFormatertString({ isoString: endringstidspunkt, tilFormat: Datoformat.DATO });
 }
 
-export const OppdaterEndringstidspunktModal: React.FC<IProps> = ({ lukkModal, behandlingId }) => {
-    const erLesevisning = useBehandlingContext().vurderErLesevisning();
-    const { endringstidspunktRessurs, endringstidspunkt, skjema, oppdaterEndringstidspunkt } = useEndringstidspunkt({
-        behandlingId,
-        lukkModal,
-    });
+interface Props {
+    lukkModal: () => void;
+}
+
+export function OppdaterEndringstidspunktModal({ lukkModal }: Props) {
+    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const hentetEndringstidspunktId = useId();
+
+    const {
+        data: endringstidspunkt,
+        isPending: hentEndringstidspunktIsPending,
+        error: hentEndringstidspunktError,
+    } = useHentEndringstidspunkt(behandling.behandlingId);
+
+    const { form, onSubmit } = useEndringstidspunktForm({ lukkModal });
+
+    const {
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = form;
+
+    const erLesevisning = vurderErLesevisning();
 
     return (
         <Modal
-            open
+            open={true}
             onClose={lukkModal}
             width={'35rem'}
             header={{ heading: 'Oppdater endringstidspunkt', size: 'medium' }}
-            portal
+            portal={true}
         >
-            <Modal.Body>
-                <StyledAlert inline variant={'info'}>
-                    Dersom du ønsker å vise perioder som er filtrert bort i vedtaksbildet, kan du oppdatere
-                    endringstidspunktet tilbake i tid.
-                </StyledAlert>
-
-                <Label size="medium">Endringstidspunkt</Label>
-                {endringstidspunktRessurs.status === RessursStatus.HENTER && (
-                    <div>
-                        <Loader />
-                    </div>
-                )}
-                {endringstidspunktRessurs.status === RessursStatus.SUKSESS && (
-                    <BodyShort>
-                        {dateTilFormatertString({
-                            date: endringstidspunkt,
-                            tilFormat: Datoformat.DATO,
-                            defaultString: 'Ingen dato satt',
-                        })}
-                    </BodyShort>
-                )}
-                {(endringstidspunktRessurs.status === RessursStatus.FEILET ||
-                    endringstidspunktRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    endringstidspunktRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <ErrorMessage>
-                        Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt brukerstøtte.
-                    </ErrorMessage>
-                )}
-
-                <StyledFieldset
-                    error={hentFrontendFeilmelding(skjema.submitRessurs)}
-                    errorPropagation={false}
-                    legend="Nytt endringstidspunkt"
-                    hideLegend
-                >
-                    <Datovelger
-                        felt={skjema.felter.endringstidspunkt}
-                        label={'Nytt endringstidspunkt'}
-                        readOnly={erLesevisning}
-                        visFeilmeldinger={skjema.visFeilmeldinger}
-                        kanKunVelgeFortid
-                    />
-                </StyledFieldset>
-            </Modal.Body>
-            <Modal.Footer>
-                {erLesevisning ? (
-                    <Button variant="primary" key="Lukk">
-                        Lukk
-                    </Button>
-                ) : (
-                    <>
-                        <Button
-                            variant={'primary'}
-                            key={'Oppdater'}
-                            onClick={oppdaterEndringstidspunkt}
-                            children={'Oppdater'}
-                            loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        />
-                        <Button variant={'tertiary'} key={'Avbryt'} onClick={lukkModal} children={'Avbryt'} />
-                    </>
-                )}
-            </Modal.Footer>
+            <FormProvider {...form}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Modal.Body>
+                        <VStack gap={'space-24'}>
+                            <InlineMessage status={'info'}>
+                                Dersom du ønsker å vise perioder som er filtrert bort i vedtaksbildet, kan du oppdatere
+                                endringstidspunktet tilbake i tid.
+                            </InlineMessage>
+                            <VStack gap={'space-4'}>
+                                <Label htmlFor={hentetEndringstidspunktId}>Endringstidspunkt</Label>
+                                {hentEndringstidspunktIsPending && (
+                                    <HStack gap={'space-8'}>
+                                        <Loader size={'small'} />
+                                        <BodyShort id={hentetEndringstidspunktId}>
+                                            Henter endringstidspunkt...
+                                        </BodyShort>
+                                    </HStack>
+                                )}
+                                {endringstidspunkt && <BodyShort>{formaterDato(endringstidspunkt)}</BodyShort>}
+                                {hentEndringstidspunktError && (
+                                    <ErrorMessage>
+                                        <HStack gap={'space-4'} align={'center'}>
+                                            <ExclamationmarkTriangleFillIcon fontSize={'0.9rem'} />
+                                            {hentEndringstidspunktError.message ?? FALLBACK_ERROR_MESSAGE}
+                                        </HStack>
+                                    </ErrorMessage>
+                                )}
+                            </VStack>
+                            <Fieldset
+                                error={errors.root?.message}
+                                legend={'Oppdater endringstidspunkt'}
+                                hideLegend={true}
+                            >
+                                <EndringstidspunktFelt
+                                    readOnly={
+                                        isSubmitting ||
+                                        erLesevisning ||
+                                        hentEndringstidspunktIsPending ||
+                                        !!hentEndringstidspunktError
+                                    }
+                                />
+                            </Fieldset>
+                        </VStack>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {!erLesevisning && (
+                            <>
+                                <Button
+                                    type={'submit'}
+                                    variant={'primary'}
+                                    loading={isSubmitting}
+                                    disabled={hentEndringstidspunktIsPending || !!hentEndringstidspunktError}
+                                >
+                                    Oppdater
+                                </Button>
+                                <Button variant={'tertiary'} onClick={lukkModal} disabled={isSubmitting}>
+                                    Avbryt
+                                </Button>
+                            </>
+                        )}
+                        {erLesevisning && (
+                            <Button variant={'primary'} onClick={lukkModal}>
+                                Lukk
+                            </Button>
+                        )}
+                    </Modal.Footer>
+                </form>
+            </FormProvider>
         </Modal>
     );
-};
+}
