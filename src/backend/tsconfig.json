@@ -1,3 +1,23 @@
 {
-  "extends": "../../tsconfig.backend.json"
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "skipLibCheck": true,
+    "outDir": "backend",
+    "rootDir": "../",
+    "resolveJsonModule": true,
+    "types": [
+      "express-session"
+    ]
+  },
+  "include": [
+    ".",
+    "../webpack"
+  ],
+  "exclude": [
+    "../frontend"
+  ],
+  "lib": [
+    "es2015"
+  ]
 }
