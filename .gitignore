@@ -5,7 +5,7 @@ dist_backend
 .idea
 VERSION
 yarn-error.log
-.env
+.secrets.env
 secure.log
 ci-tests/reports
 *.iml

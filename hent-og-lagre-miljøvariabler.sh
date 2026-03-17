@@ -1,4 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SECRET_FILNAVN=".secrets.env"
+MAKS_ALDER_SEKUNDER=3600 # En time
+
+# Avbryt hvis forrige henting skjedde innen en time
+function avbryt_hvis_nylig_hentet() {
+  # Sjekk om fil eksisterer
+  [[ -f "$SECRET_FILNAVN" ]] || return 0
+
+  # Hent FORRIGE_HENTING fra $SECRET_FILNAVN
+  local string_tidspunkt
+  string_tidspunkt=$(grep '^FORRIGE_HENTING=' "$SECRET_FILNAVN" 2>/dev/null | cut -d= -f2 | tr -d "'\"" || echo "")
+  [[ -n "$string_tidspunkt" ]] || return 0
+
+  # Konverter DD-MM-YY HH:MM:SS format til Unix timestamp for sammenligning
+  local parset_tidspunkt
+  parset_tidspunkt=$(date -j -f "%d-%m-%y %H:%M:%S" "$string_tidspunkt" +%s 2>/dev/null || echo "0")
+  [[ "$parset_tidspunkt" =~ ^[0-9]+$ ]] || return 0
+
+  local alder
+  alder=$(( $(date +%s) - parset_tidspunkt ))
+  if (( alder < MAKS_ALDER_SEKUNDER )); then
+    echo "$SECRET_FILNAVN er nylig oppdatert. Hopper over."
+    exit 0
+  fi
+}
+avbryt_hvis_nylig_hentet
+
 kubectl config use-context dev-gcp
+
+if ! kubectl auth can-i get pods >/dev/null 2>&1; then
+  echo "Du er ikke autentisert mot Kubernetes. Skru på Naisdevice og kjør: 'nais login'."
+  exit 1
+fi
 
 function get_secrets() {
   local repo=$1
@@ -7,43 +42,31 @@ function get_secrets() {
 
 LOKAL_SECRETS=$(get_secrets azuread-familie-ba-sak-frontend-lokal)
 
-CLIENT_ID=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_ID')
-CLIENT_SECRET=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_SECRET')
+AZURE_APP_CLIENT_ID=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_ID')
+AZURE_APP_CLIENT_SECRET=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_SECRET')
+
+if [[ -z "$AZURE_APP_CLIENT_ID" || -z "$AZURE_APP_CLIENT_SECRET" ]]; then
+  echo "Noe gikk galt. Klarte ikke å hente miljøvariabler."
+  exit 1
+fi
 
 # Generate random 32 character strings for the cookie and session keys
 COOKIE_KEY1=$(openssl rand -hex 16)
 COOKIE_KEY2=$(openssl rand -hex 16)
 SESSION_SECRET=$(openssl rand -hex 16)
+FORRIGE_HENTING=$(date +"%d-%m-%y %H:%M:%S")
 
-if [ -z "$CLIENT_ID" ]
-then
-      echo "Klarte ikke å hente miljøvariabler. Er du pålogget Naisdevice og google cloud?"
-      return 1
-fi
-
-# Write the variables into the .env file
-cat << EOF > .env
+# Skriv variablene til fil
+cat << EOF > $SECRET_FILNAVN
 # Denne filen er generert automatisk ved å kjøre \`hent-og-lagre-miljøvariabler.sh\`
+FORRIGE_HENTING='$FORRIGE_HENTING'
 
 COOKIE_KEY1='$COOKIE_KEY1'
 COOKIE_KEY2='$COOKIE_KEY2'
 SESSION_SECRET='$SESSION_SECRET'
-DREK_URL='<any string eller en url for testing>'
 
-CLIENT_ID='$CLIENT_ID'
-CLIENT_SECRET='$CLIENT_SECRET'
-
-APP_VERSION=0.0.1
-
-# Ønsker du å kjøre mot lokal backend som ikke går mot preprod bruker du disse variablene
-# BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
-# ENV=local
-
-# Ønsker du å kjøre mot lokal backend som går mot preprod bruker du disse variablene
-# BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
-# ENV=local
-
-# Ønsker du å kjøre direkte mot preprod bruker du disse variablene
-BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
-ENV=lokalt-mot-preprod
+AZURE_APP_CLIENT_ID='$AZURE_APP_CLIENT_ID'
+AZURE_APP_CLIENT_SECRET='$AZURE_APP_CLIENT_SECRET'
 EOF
+
+echo "$SECRET_FILNAVN oppdatert: $FORRIGE_HENTING"
