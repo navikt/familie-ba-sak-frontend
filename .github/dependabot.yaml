@@ -26,12 +26,6 @@ updates:
           - "@types/react"
           - "react-dom"
           - "@types/react-dom"
-      babel:
-        patterns:
-          - "@babel/core"
-          - "@babel/preset-env"
-          - "@babel/preset-react"
-          - "@babel/preset-typescript"
       aksel:
         patterns:
           - "@navikt/aksel-icons"
@@ -112,26 +106,6 @@ updates:
         patterns:
           - "uuid"
           - "@types/uuid"
-      webpack:
-        patterns:
-          - "webpack"
-          - "webpack-cli"
-          - "webpack-dev-middleware"
-          - "webpack-dev-server"
-          - "webpack-hot-middleware"
-          - "@types/webpack-hot-middleware"
-          - "html-webpack-plugin"
-          - "fork-ts-checker-webpack-plugin"
-          - "css-minimizer-webpack-plugin"
-          - "copy-webpack-plugin"
-          - "compression-webpack-plugin"
-          - "case-sensitive-paths-webpack-plugin"
-          - "@pmmmwh/react-refresh-webpack-plugin"
-          - "mini-css-extract-plugin"
-          - "css-loader"
-          - "file-loader"
-          - "style-loader"
-          - "babel-loader"
       types:
         patterns:
           - "@types/*"

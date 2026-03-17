@@ -6,9 +6,6 @@ import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
 import { v4 as uuidv4 } from 'uuid';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import type { IApp } from '@navikt/familie-backend';
 import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
@@ -18,27 +15,11 @@ import { sessionConfig } from './config.js';
 import { prometheusTellere } from './metrikker.js';
 import { attachToken, doProxy, doRedirectProxy } from './proxy.js';
 import setupRouter from './router.js';
-import webpackDevConfig from '../webpack/webpack.dev.js';
 
 const port = 8000;
 
 backend(sessionConfig, prometheusTellere).then(({ app, azureAuthClient, router }: IApp) => {
     if (process.env.NODE_ENV === 'development') {
-        const compiler = webpack(webpackDevConfig);
-
-        if (!compiler) {
-            throw new Error('Webpack compileren feilet');
-        }
-
-        const middleware = webpackDevMiddleware(compiler, {
-            // eslint-disable-next-line
-            // @ts-ignore
-            publicPath: webpackDevConfig.output.publicPath,
-            writeToDisk: true,
-        });
-
-        app.use(middleware);
-        app.use(webpackHotMiddleware(compiler));
         app.use('/assets/favicon.svg', express.static('./frontend_development/assets/favicon.svg'));
     } else {
         app.use('/assets', expressStaticGzip(path.join(process.cwd(), 'frontend_production'), {}));
