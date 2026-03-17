@@ -2,9 +2,6 @@
 .idea
 .vscode
 .github
-cypress/
-cypress.json
-cypress.config.cjs
 frontend_development
 .nais
 pull_request_template.md

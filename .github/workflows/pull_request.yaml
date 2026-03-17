@@ -16,5 +16,4 @@ jobs:
     uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-yarn.yaml@main # ratchet:exclude
     with:
       node-version: '24'
-      skip-cypress: false
     secrets: inherit

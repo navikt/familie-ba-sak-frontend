@@ -27,7 +27,6 @@ jobs:
     with:
       build-image: true
       push-image: true
-      skip-cypress: false
     secrets: inherit
   deploy-dev:
     name: Deploy dev
