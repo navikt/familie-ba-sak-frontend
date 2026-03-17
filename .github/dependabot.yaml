@@ -50,7 +50,7 @@ updates:
       sentry:
         patterns:
           - "@sentry/browser"
-          - "@sentry/webpack-plugin"
+          - "@sentry/vite-plugin"
       testing-library:
         patterns:
           - "@testing-library/dom"
