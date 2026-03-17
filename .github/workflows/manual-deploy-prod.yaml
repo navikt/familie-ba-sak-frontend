@@ -24,6 +24,7 @@ jobs:
       push-image: true
       skip-tests: ${{ inputs.skip-tests }}
       skip-validation: ${{ inputs.skip-validation }}
+      build-profile: 'prod'
     secrets: inherit
   deploy-with-new-image:
     name: Deploy with new image
