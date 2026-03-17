@@ -6,7 +6,7 @@ import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
-import { buildPath } from './config';
+import { frontendPath } from './config';
 import { prometheusTellere } from './metrikker';
 
 const redirectHvisInternUrlIPreprod = () => {
@@ -45,7 +45,7 @@ export default (authClient: Client, router: Router) => {
         (_: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 
-            res.sendFile('index.html', { root: path.join(process.cwd(), buildPath) });
+            res.sendFile('index.html', { root: path.join(process.cwd(), frontendPath) });
         }
     );
 
