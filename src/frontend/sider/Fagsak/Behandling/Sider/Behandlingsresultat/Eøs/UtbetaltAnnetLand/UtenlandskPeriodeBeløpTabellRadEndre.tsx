@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Fieldset, HStack, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { OptionType } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -12,6 +11,7 @@ import type { Country, Currency } from '@navikt/land-verktoy';
 
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
+import type { OptionType } from '../../../../../../../typer/common';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import {
     EøsPeriodeStatus,
