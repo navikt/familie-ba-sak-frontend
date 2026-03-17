@@ -1,11 +1,12 @@
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { Felt } from '@navikt/familie-skjema';
+
+import type { OptionType } from '../typer/common';
 
 export const onOptionSelected = (
     optionValue: string,
     isSelected: boolean,
-    skjemafelt: Felt<ComboboxOption[]>,
-    muligeValg: ComboboxOption[]
+    skjemafelt: Felt<OptionType[]>,
+    muligeValg: OptionType[]
 ) => {
     if (isSelected) {
         const nyttValg = muligeValg.find(valg => valg.value === optionValue);

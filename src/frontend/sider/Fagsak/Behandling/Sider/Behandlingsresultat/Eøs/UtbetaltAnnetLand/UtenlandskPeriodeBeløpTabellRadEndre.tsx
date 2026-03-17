@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Button, Fieldset, HStack, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
+import type { OptionType } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -48,7 +48,7 @@ const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
 
 interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
+    tilgjengeligeBarn: OptionType[];
     status: EøsPeriodeStatus;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Select, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import type { IBehandling } from '../../../../../../../typer/behandling';
+import type { OptionType } from '../../../../../../../typer/common';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
@@ -31,7 +31,7 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
 
 interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
+    tilgjengeligeBarn: OptionType[];
     status: EøsPeriodeStatus;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { ISkjema } from '@navikt/familie-skjema';
 
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
@@ -18,6 +17,7 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
+import type { OptionType } from '../../../../typer/common';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../typer/fagsak';
 import { FeatureToggle } from '../../../../typer/featureToggles';
@@ -138,7 +138,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const barn =
         bruker?.forelderBarnRelasjon
             .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-            .map<ComboboxOption>(relasjon => ({
+            .map<OptionType>(relasjon => ({
                 value: relasjon.personIdent,
                 label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år) | ${relasjon.personIdent}`,
             })) ?? [];

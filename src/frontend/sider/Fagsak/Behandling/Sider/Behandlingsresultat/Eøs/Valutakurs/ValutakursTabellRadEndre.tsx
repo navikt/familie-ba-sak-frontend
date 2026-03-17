@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
+import type { OptionType } from '@navikt/familie-form-elements';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -46,7 +46,7 @@ const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandl
 
 interface IProps {
     skjema: ISkjema<IValutakurs, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
+    tilgjengeligeBarn: OptionType[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;
