@@ -4,8 +4,7 @@ import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
 
-import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstema';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
+import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';
 import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 interface Props {
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
-    const { fagsak } = useFagsakContext();
     const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
 
     const {
@@ -39,7 +37,7 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Body>
                         <Fieldset error={errors.root?.message} legend="Endre behandlingstema" hideLegend>
-                            <BehandlingstemaSelect fagsakType={fagsak.fagsakType} />
+                            <BehandlingstemaSelect />
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>

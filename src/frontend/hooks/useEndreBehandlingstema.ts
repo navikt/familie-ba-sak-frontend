@@ -1,14 +1,11 @@
-// TODO: rename IRestEndreBehandlingUnderkategori to EndreBehandlingstemaPayload or similar
-
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
-import { endreBehandlingstema } from '../api/endreBehandlingstema';
+import { endreBehandlingstema, type EndreBehandlingstemaPayload } from '../api/endreBehandlingstema';
 import type { IBehandling } from '../typer/behandling';
-import type { IRestEndreBehandlingUnderkategori } from '../typer/behandlingstema';
 
-interface EndreBehandlingstemaParameters extends IRestEndreBehandlingUnderkategori {
+interface EndreBehandlingstemaParameters extends EndreBehandlingstemaPayload {
     behandlingId: number;
 }
 
@@ -20,8 +17,7 @@ export const useEndreBehandlingstema = (options?: Options) => {
     return useMutation<IBehandling, Error, EndreBehandlingstemaParameters>({
         mutationFn: (parameters: EndreBehandlingstemaParameters): Promise<IBehandling> => {
             const { behandlingUnderkategori, behandlingKategori, behandlingId } = parameters;
-            const payload = { behandlingUnderkategori, behandlingKategori };
-            return endreBehandlingstema(request, payload, behandlingId);
+            return endreBehandlingstema(request, behandlingKategori, behandlingUnderkategori, behandlingId);
         },
         ...options,
     });

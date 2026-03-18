@@ -1,59 +1,52 @@
 import React from 'react';
 
-import { useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { BehandlingKategori, behandlingstemaer } from '../typer/behandlingstema';
+import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
+import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
 import { FagsakType } from '../typer/fagsak';
 import {
     EndreBehandlingstemaFelt,
     type EndreBehandlingstemaFormValues,
-} from './Saklinje/Meny/EndreBehandling/useEndreBehandlingstema';
+} from './Saklinje/Meny/EndreBehandling/useEndreBehandlingstemaSkjema';
+import { useBehandlingContext } from '../sider/Fagsak/Behandling/context/BehandlingContext';
 
-interface Props {
-    fagsakType: FagsakType | undefined;
-    visFeilmeldinger?: boolean;
-}
+export const BehandlingstemaSelect = () => {
+    const { fagsak } = useFagsakContext();
+    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = vurderErLesevisning();
 
-export const BehandlingstemaSelect = ({ fagsakType, visFeilmeldinger = false }: Props) => {
+    const { control } = useFormContext<EndreBehandlingstemaFormValues>();
     const {
-        register,
-        formState: { isSubmitting, errors },
-    } = useFormContext<EndreBehandlingstemaFormValues>();
+        field: { value, onChange },
+        fieldState: { error },
+        formState: { isSubmitting },
+    } = useController({
+        name: EndreBehandlingstemaFelt.BEHANDLINGSTEMA,
+        control,
+        rules: {
+            required: 'Behandlingstema må velges.',
+        },
+    });
+
+    const konverterTilBehandlingstema = (behandlingstemaId: string): IBehandlingstema => {
+        return Object.values(behandlingstemaer).find(it => it.id === behandlingstemaId)!;
+    };
+
     return (
         <Select
-            {...register(EndreBehandlingstemaFelt.BEHANDLINGSTEMA, { required: 'Velg et behandlingstema' })}
             label={'Velg behandlingstema'}
-            readOnly={isSubmitting}
+            readOnly={erLesevisning || isSubmitting}
             disabled={isSubmitting}
-            error={errors.root?.message}
-        >
-            {Object.values(behandlingstemaer)
-                .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
-                .filter(
-                    it => it.kategori !== BehandlingKategori.EØS || fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
-                )
-                .map(tema => {
-                    return (
-                        <option key={tema.id} value={tema.id}>
-                            {tema.navn}
-                        </option>
-                    );
-                })}
-        </Select>
-    );
-    /*
-        <Select
-            {...behandlingstema.hentNavInputProps(visFeilmeldinger)}
-            value={verdi !== undefined ? verdi.id : ''}
-            label={'Velg behandlingstema'}
-            onChange={evt => {
-                behandlingstema.validerOgSettFelt(behandlingstemaer[evt.target.value as Behandlingstema]);
+            value={value?.id}
+            onChange={event => {
+                onChange(konverterTilBehandlingstema(event.target.value));
             }}
-            readOnly={erLesevisning}
+            error={error?.message}
         >
-            {verdi === undefined && (
+            {value === undefined && (
                 <option disabled key={'behandlingstema-select-disabled'} value={''} aria-selected={true}>
                     Velg behandlingstema
                 </option>
@@ -61,20 +54,17 @@ export const BehandlingstemaSelect = ({ fagsakType, visFeilmeldinger = false }: 
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
-                    it => it.kategori !== BehandlingKategori.EØS || fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
+                    it =>
+                        it.kategori !== BehandlingKategori.EØS ||
+                        fagsak.fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
                 )
                 .map(tema => {
                     return (
-                        <option
-                            key={tema.id}
-                            aria-selected={verdi !== undefined && verdi.id === tema.id}
-                            value={tema.id}
-                        >
+                        <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
                             {tema.navn}
                         </option>
                     );
                 })}
         </Select>
     );
-         */
 };
