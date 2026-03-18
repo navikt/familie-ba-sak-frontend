@@ -20,7 +20,7 @@ export const SamhandlerFormServerErrors: Record<
 };
 
 export interface SamhandlerFormValues {
-    [SamhandlerFeltnavn.ORGNR]: '';
+    [SamhandlerFeltnavn.ORGNR]: string;
 }
 
 export enum SamhandlerFeltnavn {
