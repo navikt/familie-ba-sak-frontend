@@ -10,14 +10,15 @@
     ],
     /* TODO: bytt til react-jsx*/
     "jsx": "react",
+
     /* Emit */
     "noEmit": true,
+
     /* Modules */
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "moduleDetection": "force",
-    "noUncheckedSideEffectImports": false,
-    // Trenger for import av @navikt/ds-css,
+    "noUncheckedSideEffectImports": false, // Trenger for import av @navikt/ds-css
     "types": [
       "vite/client",
       "vitest/globals",
