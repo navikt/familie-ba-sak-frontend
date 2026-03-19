@@ -9,7 +9,7 @@
   "scripts": {
     "start": "yarn start:backend:prod",
     "start:dev": "yarn start:lokalt-mot-preprod",
-    "start-env": "yarn miljøvariabler && yarn build:backend && ENV=\"$ENV\" yarn start:backend:dev && vite dev src/frontend --mode \"$ENV\"",
+    "start-env": "yarn miljøvariabler && yarn build:backend && ENV=\"$ENV\" yarn start:backend:dev",
     "start:lokal": "ENV=lokal yarn start-env",
     "start:hybrid": "ENV=hybrid yarn start-env",
     "start:lokalt-mot-preprod": "ENV=lokalt-mot-preprod yarn start-env",

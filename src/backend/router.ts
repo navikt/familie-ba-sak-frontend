@@ -44,6 +44,7 @@ export default async (authClient: Client, router: Router) => {
     if (erLokal()) {
         vite = await createServer({
             root: path.join(process.cwd(), frontendPath),
+            mode: process.env.ENV,
             server: { middlewareMode: true },
             appType: 'custom',
         });
