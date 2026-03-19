@@ -1,6 +1,6 @@
 import { erProd } from '../utils/miljø';
 
-export const behandendeEnheter: IArbeidsfordelingsenhet[] = [
+export const behandlendeEnheter: IArbeidsfordelingsenhet[] = [
     { enhetId: '2103', enhetNavn: 'NAV Vikafossen' },
     { enhetId: '4806', enhetNavn: 'NAV Familie- og pensjonsytelser Drammen' },
     { enhetId: '4820', enhetNavn: 'NAV Familie- og pensjonsytelser Vadsø' },
