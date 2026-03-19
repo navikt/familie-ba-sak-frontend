@@ -32,7 +32,7 @@ interface Props {
 export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingOpprettet }: Props) {
     const { fagsak } = useFagsakContext();
 
-    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering, valideringErOk } =
+    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering } =
         useOpprettBehandling(
             fagsak.id,
             () => lukkModal(),

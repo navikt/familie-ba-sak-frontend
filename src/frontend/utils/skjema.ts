@@ -1,5 +1,6 @@
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import type { Felt } from '@navikt/familie-skjema';
+
+import type { ComboboxOption } from '../typer/common';
 
 export const onOptionSelected = (
     optionValue: string,
