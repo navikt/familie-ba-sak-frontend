@@ -4,9 +4,9 @@ import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
 
+import { BehandlingstemaSelect } from './BehandlingstemaSelect';
 import { useOppdaterBehandlingstemaSkjema } from './useOppdaterBehandlingstemaSkjema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 interface Props {
     lukkModal: () => void;

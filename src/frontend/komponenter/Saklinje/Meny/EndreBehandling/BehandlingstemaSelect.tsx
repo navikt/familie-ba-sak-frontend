@@ -4,13 +4,13 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
-import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
-import { FagsakType } from '../typer/fagsak';
 import {
     OppdaterBehandlingstemaFelt,
     type OppdaterBehandlingstemaFormValues,
-} from './Saklinje/Meny/EndreBehandling/useOppdaterBehandlingstemaSkjema';
+} from './useOppdaterBehandlingstemaSkjema';
+import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
+import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../../../../typer/behandlingstema';
+import { FagsakType } from '../../../../typer/fagsak';
 
 interface Props {
     erLesevisning: boolean;
