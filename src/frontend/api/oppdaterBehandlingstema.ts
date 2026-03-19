@@ -4,18 +4,18 @@ import type { IBehandling } from '../typer/behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from '../typer/behandlingstema';
 import { RessursResolver } from '../utils/ressursResolver';
 
-export interface EndreBehandlingstemaPayload {
+export interface OppdaterBehandlingstemaPayload {
     behandlingKategori: BehandlingKategori;
     behandlingUnderkategori: BehandlingUnderkategori;
 }
 
-export const endreBehandlingstema = async (
+export const oppdaterBehandlingstema = async (
     request: FamilieRequest,
     behandlingKategori: BehandlingKategori,
     behandlingUnderkategori: BehandlingUnderkategori,
     behandlingId: number
 ) => {
-    const ressurs = await request<EndreBehandlingstemaPayload, IBehandling>({
+    const ressurs = await request<OppdaterBehandlingstemaPayload, IBehandling>({
         data: {
             behandlingKategori: behandlingKategori,
             behandlingUnderkategori: behandlingUnderkategori,

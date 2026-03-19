@@ -16,6 +16,11 @@ export enum Behandlingstema {
     EØS_UTVIDET = 'EØS_UTVIDET',
 }
 
+export interface IRestEndrebehandlingUnderkategori {
+    behandlingKategori: BehandlingKategori;
+    behandlingUnderkategori: BehandlingUnderkategori;
+}
+
 export const behandlingKategori: Record<BehandlingKategori, string> = {
     NASJONAL: 'Nasjonal',
     EØS: 'EØS',

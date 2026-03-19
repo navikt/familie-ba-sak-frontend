@@ -8,23 +8,24 @@ import { useFagsakContext } from '../sider/Fagsak/FagsakContext';
 import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../typer/behandlingstema';
 import { FagsakType } from '../typer/fagsak';
 import {
-    EndreBehandlingstemaFelt,
-    type EndreBehandlingstemaFormValues,
-} from './Saklinje/Meny/EndreBehandling/useEndreBehandlingstemaSkjema';
-import { useBehandlingContext } from '../sider/Fagsak/Behandling/context/BehandlingContext';
+    OppdaterBehandlingstemaFelt,
+    type OppdaterBehandlingstemaFormValues,
+} from './Saklinje/Meny/EndreBehandling/useOppdaterBehandlingstemaSkjema';
 
-export const BehandlingstemaSelect = () => {
+interface Props {
+    erLesevisning: boolean;
+}
+
+export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
     const { fagsak } = useFagsakContext();
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
 
-    const { control } = useFormContext<EndreBehandlingstemaFormValues>();
+    const { control } = useFormContext<OppdaterBehandlingstemaFormValues>();
     const {
         field: { value, onChange },
         fieldState: { error },
         formState: { isSubmitting },
     } = useController({
-        name: EndreBehandlingstemaFelt.BEHANDLINGSTEMA,
+        name: OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA,
         control,
         rules: {
             required: 'Behandlingstema må velges.',
@@ -32,7 +33,7 @@ export const BehandlingstemaSelect = () => {
     });
 
     const konverterTilBehandlingstema = (behandlingstemaId: string): IBehandlingstema => {
-        return Object.values(behandlingstemaer).find(it => it.id === behandlingstemaId)!;
+        return behandlingstemaer[behandlingstemaId as keyof typeof behandlingstemaer];
     };
 
     return (

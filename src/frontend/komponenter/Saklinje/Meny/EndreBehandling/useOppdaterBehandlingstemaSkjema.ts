@@ -2,53 +2,53 @@ import { useForm } from 'react-hook-form';
 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-import { useEndreBehandlingstema } from '../../../../hooks/useEndreBehandlingstema';
+import { useOppdaterBehandlingstema } from '../../../../hooks/useOppdaterBehandlingstema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IBehandlingstema } from '../../../../typer/behandlingstema';
 import { behandlingstemaer } from '../../../../typer/behandlingstema';
 
-export enum EndreBehandlingstemaFelt {
+export enum OppdaterBehandlingstemaFelt {
     BEHANDLINGSTEMA = 'behandlingstema',
 }
 
-export interface EndreBehandlingstemaFormValues {
-    [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema | undefined;
+export interface OppdaterBehandlingstemaFormValues {
+    [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema | null;
 }
 
-type TransformedEndreBehandlingstemaFormValues = {
-    [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema;
+type TransformedOppdaterBehandlingstemaFormValues = {
+    [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema;
 };
 
 interface Props {
     lukkModal: () => void;
 }
 
-export const useEndreBehandlingstemaSkjema = ({ lukkModal }: Props) => {
+export const useOppdaterBehandlingstemaSkjema = ({ lukkModal }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { mutateAsync: endreBehandlingstema } = useEndreBehandlingstema();
+    const { mutateAsync: oppdaterBehandlingstema } = useOppdaterBehandlingstema();
 
     const eksisterendeBehandlingstema = Object.values(behandlingstemaer)
         .filter(it => it.id !== 'NASJONAL_ORDINÆR')
         .find(it => it.kategori === behandling.kategori && it.underkategori === behandling.underkategori)!;
 
-    const form = useForm<EndreBehandlingstemaFormValues, unknown, TransformedEndreBehandlingstemaFormValues>({
+    const form = useForm<OppdaterBehandlingstemaFormValues, unknown, TransformedOppdaterBehandlingstemaFormValues>({
         values: {
-            [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: eksisterendeBehandlingstema,
+            [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: eksisterendeBehandlingstema,
         },
     });
 
     const { setError } = form;
 
-    const onSubmit = async (values: TransformedEndreBehandlingstemaFormValues) => {
+    const onSubmit = async (values: TransformedOppdaterBehandlingstemaFormValues) => {
         const { behandlingstema } = values;
 
-        const endreBehandlingstemaParameters = {
+        const oppdaterBehandlingstemaParameters = {
             behandlingUnderkategori: behandlingstema.underkategori,
             behandlingKategori: behandlingstema.kategori,
             behandlingId: behandling.behandlingId,
         };
 
-        return endreBehandlingstema(endreBehandlingstemaParameters)
+        return oppdaterBehandlingstema(oppdaterBehandlingstemaParameters)
             .then(behandling => {
                 settÅpenBehandling(byggSuksessRessurs(behandling));
                 lukkModal();

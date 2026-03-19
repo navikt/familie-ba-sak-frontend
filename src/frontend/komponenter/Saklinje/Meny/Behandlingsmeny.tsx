@@ -8,7 +8,7 @@ import Styles from './Behandlingsmeny.module.css';
 import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import { EndreBehandlendeEnhetModal } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetModal';
 import { EndreBehandlingstema } from './EndreBehandling/EndreBehandlingstema';
-import { EndreBehandlingstemaModal } from './EndreBehandling/EndreBehandlingstemaModal';
+import { OppdaterBehandlingstemaModal } from './EndreBehandling/OppdaterBehandlingstemaModal';
 import { HenleggBehandling } from './HenleggBehandling/HenleggBehandling';
 import { SettBehandlingPåVentModal } from './LeggBehandlingPåVent/SettBehandlingPåVentModal';
 import { SettEllerOppdaterVenting } from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
@@ -36,7 +36,7 @@ export function Behandlingsmeny() {
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
         useState(false);
     const [visEndreBehandlendeEnhetModal, settVisEndreBehandlendeEnhetModal] = useState(erBehandleneEnhetMidlertidig);
-    const [visEndreBehandlingstemaModal, settVisEndreBehandlingstemaModal] = useState(false);
+    const [visOppdaterBehandlingstemaModal, settVisOppdaterBehandlingstemaModal] = useState(false);
     const [visLeggTilBarnPåBehandlingaModal, settVisLeggTilBarnPåBehandlingaModal] = useState(false);
     const [visBehandlingPåVentModal, settVisBehandlingPåVentModal] = useState(erBehandlingPåVent);
     const [visTaBehandlingAvVentModal, settVisTaBehandlingAvVentModal] = useState(false);
@@ -58,8 +58,8 @@ export function Behandlingsmeny() {
             {visEndreBehandlendeEnhetModal && (
                 <EndreBehandlendeEnhetModal lukkModal={() => settVisEndreBehandlendeEnhetModal(false)} />
             )}
-            {visEndreBehandlingstemaModal && (
-                <EndreBehandlingstemaModal lukkModal={() => settVisEndreBehandlingstemaModal(false)} />
+            {visOppdaterBehandlingstemaModal && (
+                <OppdaterBehandlingstemaModal lukkModal={() => settVisOppdaterBehandlingstemaModal(false)} />
             )}
             {visLeggTilBarnPåBehandlingaModal && (
                 <LeggTilBarnPåBehandlingModal lukkModal={() => settVisLeggTilBarnPåBehandlingaModal(false)} />
@@ -91,7 +91,7 @@ export function Behandlingsmeny() {
                     <ActionMenu.Group className={Styles.group} aria-label={'Behandling'}>
                         <HenleggBehandling />
                         <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
-                        <EndreBehandlingstema åpneModal={() => settVisEndreBehandlingstemaModal(true)} />
+                        <EndreBehandlingstema åpneModal={() => settVisOppdaterBehandlingstemaModal(true)} />
                         <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                         <SettEllerOppdaterVenting åpneModal={() => settVisBehandlingPåVentModal(true)} />
                         <TaBehandlingAvVent åpneModal={() => settVisTaBehandlingAvVentModal(true)} />

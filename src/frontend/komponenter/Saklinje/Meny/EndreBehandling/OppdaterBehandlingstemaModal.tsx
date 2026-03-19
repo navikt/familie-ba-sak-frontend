@@ -4,15 +4,17 @@ import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
 
-import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';
+import { useOppdaterBehandlingstemaSkjema } from './useOppdaterBehandlingstemaSkjema';
+import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 interface Props {
     lukkModal: () => void;
 }
 
-export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
-    const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
+export const OppdaterBehandlingstemaModal = ({ lukkModal }: Props) => {
+    const { vurderErLesevisning } = useBehandlingContext();
+    const { form, onSubmit } = useOppdaterBehandlingstemaSkjema({ lukkModal });
 
     const {
         handleSubmit,
@@ -22,7 +24,7 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
 
     const onClose = () => {
         lukkModal();
-        reset(); // TODO: use reset or nullstillSkjema?
+        reset();
     };
 
     return (
@@ -37,7 +39,7 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Body>
                         <Fieldset error={errors.root?.message} legend="Endre behandlingstema" hideLegend>
-                            <BehandlingstemaSelect />
+                            <BehandlingstemaSelect erLesevisning={vurderErLesevisning()} />
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
