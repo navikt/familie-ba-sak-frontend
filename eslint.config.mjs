@@ -21,10 +21,12 @@ export default [
         },
 
         languageOptions: {
-            globals: globals.browser,
+            globals: {
+                ...globals.node,
+            },
 
             parser: tseslint.parser,
-            ecmaVersion: 2022,
+            ecmaVersion: 2020,
             sourceType: 'module',
 
             parserOptions: {

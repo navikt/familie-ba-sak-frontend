@@ -17,8 +17,8 @@ on:
       - 'eslint.config.mjs'
 
 jobs:
-  build-dev:
-    name: Build dev
+  build:
+    name: Build
     if: github.ref == 'refs/heads/main' # Only deploy to prod from main branch
     permissions:
       contents: read
@@ -27,47 +27,35 @@ jobs:
     with:
       build-image: true
       push-image: true
-      build-profile: 'preprod'
+      skip-cypress: false
     secrets: inherit
   deploy-dev:
     name: Deploy dev
     permissions:
       contents: read
       id-token: write
-    needs: [build-dev]
+    needs: [build]
     uses: navikt/familie-baks-gha-workflows/.github/workflows/deploy.yaml@main # ratchet:exclude
     with:
-      image: ${{ needs.build-dev.outputs.image }}
+      image: ${{ needs.build.outputs.image }}
       cluster: dev-gcp
       resource: .nais/app-dev.yaml
-    secrets: inherit
-  build-prod:
-    name: Build prod
-    if: github.ref == 'refs/heads/main' # Only deploy to prod from main branch
-    permissions:
-      contents: read
-      id-token: write
-    uses: navikt/familie-baks-gha-workflows/.github/workflows/build-yarn-app.yaml@main # ratchet:exclude
-    with:
-      build-image: true
-      push-image: true
-      build-profile: 'prod'
     secrets: inherit
   deploy-prod:
     name: Deploy prod
     permissions:
       contents: read
       id-token: write
-    needs: [build-prod]
+    needs: [build, deploy-dev]
     uses: navikt/familie-baks-gha-workflows/.github/workflows/deploy.yaml@main # ratchet:exclude
     with:
-      image: ${{ needs.build-prod.outputs.image }}
+      image: ${{ needs.build.outputs.image }}
       cluster: prod-gcp
       resource: .nais/app-prod.yaml
     secrets: inherit
   varsle-slack:
     name: Slack-melding ved feil
     if: failure()
-    needs: [ build-dev, build-prod, deploy-dev, deploy-prod ]
+    needs: [ build, deploy-dev, deploy-prod ]
     uses: navikt/familie-baks-gha-workflows/.github/workflows/notify-slack.yaml@main # ratchet:exclude
     secrets: inherit
