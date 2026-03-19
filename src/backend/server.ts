@@ -27,8 +27,8 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
     });
 
     if (!erLokal()) {
-        app.use('/assets', expressStaticGzip(path.join(process.cwd(), frontendPath, '/assets'), {}));
-        app.use('/favicon.svg', express.static(path.join(process.cwd(), frontendPath, '/favicon.svg'), {}));
+        app.use('/assets', expressStaticGzip(path.join(process.cwd(), frontendPath, 'assets'), {}));
+        app.use('/favicon.svg', express.static(path.join(process.cwd(), frontendPath, 'favicon.svg'), {}));
     }
 
     app.use('/familie-ba-sak/api', ensureAuthenticated(azureAuthClient, true), attachToken(azureAuthClient), doProxy());
