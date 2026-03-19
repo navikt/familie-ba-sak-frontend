@@ -33,7 +33,7 @@ export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
     const { setError } = form;
 
     async function onSubmit(formValues: EndreBehandlendeEnhetFormValues) {
-        mutateAsync({
+        return mutateAsync({
             enhetId: formValues.enhetId,
             begrunnelse: formValues.begrunnelse,
         })
