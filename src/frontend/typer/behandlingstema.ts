@@ -16,7 +16,7 @@ export enum Behandlingstema {
     EØS_UTVIDET = 'EØS_UTVIDET',
 }
 
-export interface IRestEndrebehandlingUnderkategori {
+export interface IRestEndreBehandlingUnderkategori {
     behandlingKategori: BehandlingKategori;
     behandlingUnderkategori: BehandlingUnderkategori;
 }
