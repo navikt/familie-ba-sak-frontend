@@ -35,36 +35,31 @@ curl --location --request GET ‘https://login.microsoftonline.com/navq.onmicros
 ---
 
 ## Miljøvariabler
+For å hente miljøvariabler kan du logge på naisdevice og gcloud og kjøre [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh).
 
-Appen bruker .env filer for håndtering av miljøvariabler. Hver fil representerer hvert sitt miljø/mode. De er som
-følger:
+Appen krever en del environment variabler og legges til i .env fila i root på prosjektet.
+Disse kan hentes ved å kjøre `kubectl -n teamfamilie get secret azuread-familie-ba-sak-frontend-lokal -o json | jq '.data | map_values(@base64d)'`
+mot dev-gcp clusteret i konsollen.
+```
+    CLIENT_ID='AZURE_APP_CLIENT_ID' (fra konsollen)
+    CLIENT_SECRET='AZURE_APP_CLIENT_SECRET' (fra konsollen)
+    COOKIE_KEY1='<any string of length 32>'
+    COOKIE_KEY2='<any string of length 32>'
+    DREK_URL=<any string eller en url for testing>
+    
+    SESSION_SECRET='<any string of length 32>'
+    
+    BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak-lokal/.default
+    ENV=local
+    
+    APP_VERSION=0.0.1
+```
 
-* `.env` - lastes i alle miljøer
-* `.env.lokal` - lokal frontend, med lokal backend
-* `.env.hybrid` - lokal frontend, med lokal backend som går mot preprod
-* `.env.lokalt-mot-preprod` - lokal frontend, som går mot preprod
-* `.env.preprod` - preprod (dev)
-* `.env.prod` - produksjon
-
-Verdiene kan hentes via `process.env.X` i backend og `import.meta.env.VITE_X` i frontend.
-Merk: `VITE_` prefiks er påkrevd for å kunne eksponere verdiene til frontend.
-
-De lokale profilene kan kjøres med sine tilsvarende yarn-kommandoer.
-
-- `yarn start:lokal`
-- `yarn start:hybrid`
-- `yarn start:lokalt-mot-preprod` (kan også kjøre `yarn start:dev`)
-
-### Secrets
-
-For lokal kjøring er scriptet: [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) bakt inn.
-Dette scriptet henter secrets man trenger for utvikling og lagrer det i `.secrets.env`. Denne skal ikke lagres i git.
-
-Scriptet krever at man er pålogget naisdevice og Google Cloud (`nais login`).
-
-I kjørende miljø (preprod og prod) er secrets definert i Nais Console, under "Secrets" (pluss et lite dryss i
-nais-filene).
-Andre secrets injectes automatisk av Nais, eksempelvis verdier for Redis, Azure og Kubernetes. Se Nais doc for mer info.
+Ønsker du å kjøre mot preprod gjøres det med dette i .env fila.
+```
+ BA_SAK_SCOPE=api://dev-gcp.teamfamilie.familie-ba-sak/.default
+ ENV=lokalt-mot-preprod
+```
 
 # Bygg og deploy
 Appen bygges hos github actions, og gir beskjed til nais deploy om å deployere appen i gcp området. Alle commits til feature brancher går til dev miljøet og main går til produksjon.

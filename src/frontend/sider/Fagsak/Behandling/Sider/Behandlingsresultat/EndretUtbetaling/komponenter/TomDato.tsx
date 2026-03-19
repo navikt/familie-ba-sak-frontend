@@ -24,7 +24,7 @@ export const TomDato = ({ erLesevisning, tidligsteDato, senesteDato, valgfri }: 
     const {
         field: { value, onChange, ref },
         fieldState: { error },
-        formState: { isSubmitting },
+        formState: { isSubmitting, isSubmitted },
     } = useController({
         name: EndretUtbetalingAndelFeltnavn.TOM,
         control,

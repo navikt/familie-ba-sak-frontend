@@ -52,12 +52,12 @@ spec:
       rules:
         - application: familie-ba-sak
   envFrom:
-    - secret: familie-ba-sak-frontend
+    - secret: ba-sak-frontend
   env:
     - name: APP_VERSION
       value: {{ VERSION }}
     - name: ENV
-      value: prod
+      value: production
   valkey:
     - instance: sessions
       access: readwrite
