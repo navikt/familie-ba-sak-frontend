@@ -6,7 +6,7 @@ import { Select } from '@navikt/ds-react';
 
 import { EndreBehandlendeEnhetFormFields, type EndreBehandlendeEnhetFormValues } from './useEndreBehandlendeEnhetForm';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { behandendeEnheter, type IArbeidsfordelingsenhet } from '../../../../typer/enhet';
+import { behandlendeEnheter } from '../../../../typer/enhet';
 
 interface Props {
     readOnly: boolean;
@@ -32,15 +32,12 @@ export function VelgNyEnhetField({ readOnly }: Props) {
         <Select
             disabled={isSubmitting}
             readOnly={readOnly}
-            name="enhet"
             value={value}
             label={'Velg ny enhet'}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                onChange(event.target.value);
-            }}
+            onChange={event => onChange(event.target.value)}
             error={error?.message}
         >
-            {behandendeEnheter.map((enhet: IArbeidsfordelingsenhet) => {
+            {behandlendeEnheter.map(enhet => {
                 return (
                     <option
                         aria-selected={value === enhet.enhetId}

@@ -27,11 +27,11 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
     } = form;
 
     const erLesevisningPåBehandling = () => {
-        const steg = behandling?.steg;
+        const steg = behandling.steg;
         if (
             steg &&
             hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK) &&
-            innloggetSaksbehandler?.navIdent !== behandling?.totrinnskontroll?.saksbehandlerId
+            innloggetSaksbehandler?.navIdent !== behandling.totrinnskontroll?.saksbehandlerId
         ) {
             return false;
         } else {

@@ -22,6 +22,7 @@ export function BegrunnelseField({ readOnly }: Props) {
         rules: {
             required: 'Begrunnelse må fylles ut.',
             minLength: { value: 3, message: 'Må bruke minst tre tegn.' },
+            maxLength: { value: 4000, message: 'Maks 4000 tegn.' },
         },
     });
 
@@ -32,9 +33,7 @@ export function BegrunnelseField({ readOnly }: Props) {
             label={'Begrunnelse'}
             value={value}
             maxLength={4000}
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                onChange(event.target.value);
-            }}
+            onChange={event => onChange(event.target.value)}
             error={error?.message}
         />
     );
