@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 import { ABorderAction } from '@navikt/ds-tokens/dist/tokens';
 import type { ISkjema } from '@navikt/familie-skjema';
 
@@ -14,6 +13,7 @@ import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
+import type { ComboboxOption } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../../../../utils/dato';
