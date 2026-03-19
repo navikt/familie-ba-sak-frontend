@@ -1,20 +1,17 @@
-import fs from 'fs';
 import path from 'path';
 
 import type { Response, Request, Router, NextFunction } from 'express';
-import { createServer, type ViteDevServer } from 'vite';
 
 import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 
-import { frontendPath } from './config.js';
-import { erLokal, erPreprod } from './env.js';
-import { prometheusTellere } from './metrikker.js';
+import { buildPath } from './config';
+import { prometheusTellere } from './metrikker';
 
 const redirectHvisInternUrlIPreprod = () => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        if (erPreprod() && req.headers.host === 'barnetrygd.intern.dev.nav.no') {
+        if (process.env.ENV === 'preprod' && req.headers.host === 'barnetrygd.intern.dev.nav.no') {
             res.redirect(`https://barnetrygd.ansatt.dev.nav.no${req.url}`);
         } else {
             next();
@@ -22,7 +19,7 @@ const redirectHvisInternUrlIPreprod = () => {
     };
 };
 
-export default async (authClient: Client, router: Router) => {
+export default (authClient: Client, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
             .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
@@ -40,34 +37,15 @@ export default async (authClient: Client, router: Router) => {
         res.status(200).send();
     });
 
-    let vite: ViteDevServer;
-    if (erLokal()) {
-        vite = await createServer({
-            root: path.join(process.cwd(), frontendPath),
-            mode: process.env.ENV,
-            server: { middlewareMode: true },
-            appType: 'custom',
-        });
-        router.use(vite.middlewares);
-    }
-
-    const htmlPath = path.join(process.cwd(), frontendPath, 'index.html');
-
     // APP
     router.get(
         '*splat',
         redirectHvisInternUrlIPreprod(),
         ensureAuthenticated(authClient, false),
-        async (req: Request, res: Response) => {
+        (_: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 
-            if (erLokal()) {
-                const htmlInnhold = await fs.promises.readFile(htmlPath, 'utf-8');
-                const transformed = await vite.transformIndexHtml(req.url, htmlInnhold);
-                res.status(200).type('html').send(transformed);
-            } else {
-                res.sendFile(htmlPath);
-            }
+            res.sendFile('index.html', { root: path.join(process.cwd(), buildPath) });
         }
     );
 

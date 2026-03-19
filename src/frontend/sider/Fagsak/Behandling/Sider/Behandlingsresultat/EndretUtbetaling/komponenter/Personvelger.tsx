@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
+import type { ComboboxOption } from '@navikt/ds-react/cjs/form/combobox/types';
 
-import type { ComboboxOption } from '../../../../../../../typer/common';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {

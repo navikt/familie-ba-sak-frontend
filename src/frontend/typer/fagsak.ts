@@ -1,3 +1,4 @@
+import type { BehandlingÅrsak } from './behandling';
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { IInstitusjon } from './institusjon';
