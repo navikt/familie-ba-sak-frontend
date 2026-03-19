@@ -13,7 +13,7 @@ import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
-import type { OptionType } from '../../../../../../../typer/common';
+import type { ComboboxOption } from '../../../../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
@@ -46,7 +46,7 @@ const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandl
 
 interface IProps {
     skjema: ISkjema<IValutakurs, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     valideringErOk: () => boolean;
     sendInnSkjema: () => void;

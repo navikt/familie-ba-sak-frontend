@@ -1,12 +1,12 @@
 import type { Felt } from '@navikt/familie-skjema';
 
-import type { OptionType } from '../typer/common';
+import type { ComboboxOption } from '../typer/common';
 
 export const onOptionSelected = (
     optionValue: string,
     isSelected: boolean,
-    skjemafelt: Felt<OptionType[]>,
-    muligeValg: OptionType[]
+    skjemafelt: Felt<ComboboxOption[]>,
+    muligeValg: ComboboxOption[]
 ) => {
     if (isSelected) {
         const nyttValg = muligeValg.find(valg => valg.value === optionValue);

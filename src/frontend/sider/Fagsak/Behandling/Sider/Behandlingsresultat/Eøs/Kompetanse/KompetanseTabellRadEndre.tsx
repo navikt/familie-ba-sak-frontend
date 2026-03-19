@@ -8,7 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Country } from '@navikt/land-verktoy';
 
 import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { OptionType } from '../../../../../../../typer/common';
+import type { ComboboxOption } from '../../../../../../../typer/common';
 import type { IKompetanse, KompetanseAktivitet } from '../../../../../../../typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
@@ -31,7 +31,7 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
 
 interface IProps {
     skjema: ISkjema<IKompetanse, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;

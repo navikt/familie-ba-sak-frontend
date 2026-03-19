@@ -13,7 +13,7 @@ import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
 import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
 import type { IBehandling } from '../../../../../../typer/behandling';
-import type { OptionType } from '../../../../../../typer/common';
+import type { ComboboxOption } from '../../../../../../typer/common';
 import type { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { årsaker, årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import type { IsoMånedString } from '../../../../../../utils/dato';
@@ -100,7 +100,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
         }
     }, [skjema.submitRessurs]);
 
-    const tilgjengeligePersoner: OptionType[] = åpenBehandling.personer
+    const tilgjengeligePersoner: ComboboxOption[] = åpenBehandling.personer
         .filter(person =>
             åpenBehandling.personerMedAndelerTilkjentYtelse
                 .map(personMedAndeler => personMedAndeler.personIdent)

@@ -11,7 +11,7 @@ import type { Country, Currency } from '@navikt/land-verktoy';
 
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { OptionType } from '../../../../../../../typer/common';
+import type { ComboboxOption } from '../../../../../../../typer/common';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import {
     EøsPeriodeStatus,
@@ -48,7 +48,7 @@ const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
 
 interface IProps {
     skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
-    tilgjengeligeBarn: OptionType[];
+    tilgjengeligeBarn: ComboboxOption[];
     status: EøsPeriodeStatus;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;

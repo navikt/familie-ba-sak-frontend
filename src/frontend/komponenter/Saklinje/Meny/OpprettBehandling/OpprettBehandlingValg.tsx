@@ -17,7 +17,7 @@ import {
     BehandlingÅrsak,
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
-import type { OptionType } from '../../../../typer/common';
+import type { ComboboxOption } from '../../../../typer/common';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { FagsakStatus } from '../../../../typer/fagsak';
 import { FeatureToggle } from '../../../../typer/featureToggles';
@@ -138,7 +138,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     const barn =
         bruker?.forelderBarnRelasjon
             .filter(relasjon => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-            .map<OptionType>(relasjon => ({
+            .map<ComboboxOption>(relasjon => ({
                 value: relasjon.personIdent,
                 label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år) | ${relasjon.personIdent}`,
             })) ?? [];

@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import type { OptionType } from '../../../../../../../typer/common';
+import type { ComboboxOption } from '../../../../../../../typer/common';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {
@@ -17,7 +17,7 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { behandling } = useBehandlingContext();
     const { control, getValues } = useFormContext<EndretUtbetalingAndelFormValues>();
 
-    const tilgjengeligePersoner: OptionType[] = behandling.personer
+    const tilgjengeligePersoner: ComboboxOption[] = behandling.personer
         .filter(person =>
             behandling.personerMedAndelerTilkjentYtelse
                 .map(personMedAndeler => personMedAndeler.personIdent)
