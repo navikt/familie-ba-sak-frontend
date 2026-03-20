@@ -170,7 +170,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 </StyledAlert>
             )}
             {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />}
-
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}

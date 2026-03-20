@@ -1,24 +1,12 @@
 import React from 'react';
 
 import { type MutationKey, useMutationState } from '@tanstack/react-query';
-import styled from 'styled-components';
 
 import { Alert, Heading, HStack, Loader, Modal, VStack } from '@navikt/ds-react';
 
+import styles from './ForhåndsvisOpprettingAvPdfModal.module.css';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
-
-const StyledModal = styled(Modal)`
-    width: 80%;
-    height: 80%;
-    overflow: hidden;
-
-    section {
-        height: 100%;
-        width: 90%;
-        margin: 0 auto;
-    }
-`;
 
 export function ForhåndsvisOpprettingAvPdfModal() {
     const { args, erModalÅpen, lukkModal, tittel, bredde } = useModal(ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF);
@@ -26,7 +14,8 @@ export function ForhåndsvisOpprettingAvPdfModal() {
     const mutationKey = args?.mutationKey ?? [];
 
     return (
-        <StyledModal
+        <Modal
+            className={styles.modal}
             open={erModalÅpen}
             onClose={lukkModal}
             header={{ heading: tittel, closeButton: true }}
@@ -34,7 +23,7 @@ export function ForhåndsvisOpprettingAvPdfModal() {
             portal={true}
         >
             {erModalÅpen && <Innhold mutationKey={mutationKey} />}
-        </StyledModal>
+        </Modal>
     );
 }
 
