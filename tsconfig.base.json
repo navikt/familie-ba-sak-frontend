@@ -1,29 +1,25 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "es6",
-      "lib": ["dom", "esnext", "es6"],
-      "importHelpers": true,
-      "declaration": true,
-      "strict": true,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "strictFunctionTypes": true,
-      "strictPropertyInitialization": true,
-      "noImplicitThis": true,
-      "alwaysStrict": true,
-      "noImplicitReturns": false,
-      "noFallthroughCasesInSwitch": true,
-      "moduleResolution": "node",
-      "traceResolution": false,
-      "jsx": "react",
-      "esModuleInterop": true,
-      "isolatedModules": true,
-      "verbatimModuleSyntax": true,
-      "types": [
-        "node",
-        "vitest/globals",
-        "@testing-library/jest-dom"
-      ],
-    }
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* Modules */
+    "resolveJsonModule": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* Completeness */
+    "skipLibCheck": true
   }
+}

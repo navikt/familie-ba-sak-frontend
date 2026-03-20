@@ -10,10 +10,6 @@ on:
         description: 'Skip validation? (eslint, prettier, typecheck)'
         default: false
         type: boolean
-      skip-cypress:
-        description: 'Skip cypress?'
-        default: false
-        type: boolean
 
 jobs:
   build:
@@ -27,7 +23,7 @@ jobs:
       push-image: true
       skip-tests: ${{ inputs.skip-tests }}
       skip-validation: ${{ inputs.skip-validation }}
-      skip-cypress: ${{ inputs.skip-cypress }}
+      build-profile: 'preprod'
     secrets: inherit
   deploy-with-new-image:
     name: Deploy with new image

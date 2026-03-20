@@ -20,6 +20,7 @@ import { useAppContext } from '../../context/AppContext';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
 import { FagsakDeltagerRolle, type IFagsakDeltager, type ISøkParam } from '../../typer/fagsakdeltager';
+import { erLokal } from '../../utils/miljø';
 import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
 import { erAdresseBeskyttet } from '../../utils/validators';
 import { PersonIkon } from '../PersonIkon';
@@ -57,7 +58,7 @@ const FagsakDeltagerSøk: React.FC = () => {
             return;
         }
 
-        if (fnrValidator(personIdent) || process.env.NODE_ENV === 'development') {
+        if (fnrValidator(personIdent) || erLokal()) {
             settFagsakDeltagere(byggHenterRessurs());
             request<ISøkParam, IFagsakDeltager[]>({
                 method: 'POST',
