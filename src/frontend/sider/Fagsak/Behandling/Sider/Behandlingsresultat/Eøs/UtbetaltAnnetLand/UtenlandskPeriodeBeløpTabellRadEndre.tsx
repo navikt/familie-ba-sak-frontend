@@ -3,12 +3,14 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, HStack, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Fieldset, HGrid, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Country, Currency } from '@navikt/land-verktoy';
 
+import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
+import { type CurrencyCode, CurrencyCombobox, EØS_CURRENCY_CODES } from '../../../../../../../komponenter/FlagCombobox';
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
@@ -18,6 +20,7 @@ import {
     UtenlandskPeriodeBeløpIntervall,
     utenlandskPeriodeBeløpIntervaller,
 } from '../../../../../../../typer/eøsPerioder';
+import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
@@ -26,10 +29,6 @@ import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
-`;
-
-const StyledTextField = styled(TextField)`
-    width: 9rem;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
@@ -64,6 +63,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     slettUtenlandskPeriodeBeløp,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const toggles = useFeatureToggles();
+
     const lesevisning = vurderErLesevisning(true);
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
@@ -127,8 +128,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     legend={'Utbetalt i det andre landet'}
                     size={'medium'}
                 >
-                    <HStack gap={'space-32'} wrap={false} justify={'start'} align={'start'}>
-                        <StyledTextField
+                    <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
+                        <TextField
                             label={'Beløp per barn'}
                             readOnly={lesevisning}
                             value={skjema.felter.beløp?.verdi}
@@ -137,20 +138,37 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             }
                             size={'medium'}
                         />
-                        <Valutavelger
-                            label={'Valuta'}
-                            value={skjema.felter.valutakode?.verdi}
-                            options={EØS_CURRENCY}
-                            onChange={(value: Currency) => {
-                                if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                } else {
-                                    skjema.felter.valutakode?.nullstill();
-                                }
-                            }}
-                            readOnly={lesevisning}
-                            error={skjema.felter.valutakode?.feilmelding?.toString()}
-                        />
+                        {toggles[FeatureToggle.brukNyFlagCombobox] ? (
+                            <CurrencyCombobox
+                                label={'Valuta'}
+                                value={skjema.felter.valutakode?.verdi as CurrencyCode}
+                                options={EØS_CURRENCY_CODES}
+                                onChange={value => {
+                                    if (value) {
+                                        skjema.felter.valutakode?.validerOgSettFelt(value);
+                                    } else {
+                                        skjema.felter.valutakode?.nullstill();
+                                    }
+                                }}
+                                readOnly={lesevisning}
+                                error={skjema.felter.valutakode?.feilmelding?.toString()}
+                            />
+                        ) : (
+                            <Valutavelger
+                                label={'Valuta'}
+                                value={skjema.felter.valutakode?.verdi}
+                                options={EØS_CURRENCY}
+                                onChange={(value: Currency) => {
+                                    if (value) {
+                                        skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                                    } else {
+                                        skjema.felter.valutakode?.nullstill();
+                                    }
+                                }}
+                                readOnly={lesevisning}
+                                error={skjema.felter.valutakode?.feilmelding?.toString()}
+                            />
+                        )}
                         <Select
                             label={'Intervall'}
                             readOnly={lesevisning}
@@ -173,7 +191,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 );
                             })}
                         </Select>
-                    </HStack>
+                    </HGrid>
                     <FamilieLandvelger
                         erLesevisning={lesevisning}
                         id={'utbetalingsland'}

@@ -47,6 +47,7 @@ updates:
         patterns:
           - "@tanstack/react-query"
           - "@tanstack/react-query-devtools"
+          - "@tanstack/react-virtual"
       sentry:
         patterns:
           - "@sentry/browser"
