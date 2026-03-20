@@ -26,6 +26,7 @@ export default (authClient: Client, router: Router) => {
             .end();
     });
 
+    // Brukes av familie-felles-frontend
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });

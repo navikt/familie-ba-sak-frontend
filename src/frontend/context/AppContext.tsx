@@ -3,7 +3,7 @@ import React, { createContext, type PropsWithChildren, useState, type JSX } from
 import type { AxiosRequestConfig } from 'axios';
 
 import { BodyShort, Button, HStack } from '@navikt/ds-react';
-import { loggFeil, useHttp } from '@navikt/familie-http';
+import { useHttp } from '@navikt/familie-http';
 import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -16,7 +16,6 @@ import { FeatureToggle } from '../typer/featureToggles';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
 import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
-import { tilFeilside } from '../utils/commons';
 
 export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;
@@ -131,12 +130,7 @@ const AppProvider = (props: PropsWithChildren) => {
         }
 
         if (innloggetSaksbehandler && rolle === BehandlerRolle.UKJENT) {
-            loggFeil(
-                undefined,
-                innloggetSaksbehandler,
-                'Saksbehandler tilhører ingen av de definerte tilgangsgruppene.'
-            );
-            tilFeilside();
+            throw new Error('Finner ikke rolle til saksbehandler.');
         }
 
         return rolle;

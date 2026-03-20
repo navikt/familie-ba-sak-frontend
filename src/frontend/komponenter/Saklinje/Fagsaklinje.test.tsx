@@ -93,7 +93,7 @@ describe('Fagsaklinje', () => {
             wrapper: props => (
                 <Wrapper
                     {...props}
-                    saksbehandler={lagSaksbehandler({ groups: ['71f503a2-c28f-4394-a05a-8da263ceca4a'] })}
+                    saksbehandler={lagSaksbehandler({ groups: ['93a26831-9866-4410-927b-74ff51a9107c'] })}
                 />
             ),
         });

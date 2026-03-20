@@ -47,7 +47,7 @@ describe('SendInformasjonsbrev', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1' }]}
-                    saksbehandler={lagSaksbehandler({ groups: [] })}
+                    saksbehandler={lagSaksbehandler({ groups: ['93a26831-9866-4410-927b-74ff51a9107c'] })}
                 />
             ),
         });
