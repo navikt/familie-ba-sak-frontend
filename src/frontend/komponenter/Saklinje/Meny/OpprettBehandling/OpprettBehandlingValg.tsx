@@ -115,7 +115,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteRevurdering && harInnloggetSaksbehandlerSuperbrukerTilgang();
+    const kanOppretteTekniskEndring = kanOppretteBehandling && harInnloggetSaksbehandlerSuperbrukerTilgang();
     const kanManueltKorrigereMedVedtaksbrev = harInnloggetSaksbehandlerSuperbrukerTilgang() ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
@@ -176,7 +176,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                 )}
 
-                {kanOppretteRevurdering && kanOppretteTekniskEndring && (
+                {kanOppretteTekniskEndring && (
                     <option
                         aria-selected={behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING}
                         value={Behandlingstype.TEKNISK_ENDRING}
