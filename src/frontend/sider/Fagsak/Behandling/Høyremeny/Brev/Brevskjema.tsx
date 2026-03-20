@@ -32,6 +32,7 @@ import {
 } from './typer';
 import { useBrevModul } from './useBrevModul';
 import { ModalType } from '../../../../../context/ModalContext';
+import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
 import { useModal } from '../../../../../hooks/useModal';
 import {
     mutationKey,
@@ -39,12 +40,14 @@ import {
 } from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../komponenter/FlaggCombobox';
 import Knapperekke from '../../../../../komponenter/Knapperekke';
 import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
 import type { IBehandling } from '../../../../../typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
+import { FeatureToggle } from '../../../../../typer/featureToggles';
 import type { IPersonInfo } from '../../../../../typer/person';
 import { type IBarnMedOpplysninger, målform } from '../../../../../typer/søknad';
 import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
@@ -62,6 +65,8 @@ interface IProps {
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
+
+    const toggles = useFeatureToggles();
 
     const {
         skjema,
@@ -382,26 +387,53 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                         ].includes(skjema.felter.brevmal.verdi) && (
-                            <FamilieMultiLandvelger
-                                erLesevisning={false}
-                                id={'mottakerlandSED'}
-                                label={'SED er sendt til'}
-                                kunEøs
-                                eksluderLand={['NO']}
-                                medFlag
-                                size="medium"
-                                kanNullstilles
-                                value={skjema.felter.mottakerlandSed?.verdi}
-                                onChange={(value: Country[]) => {
-                                    skjema.felter.mottakerlandSed.validerOgSettFelt(value.map(land => land.value));
-                                }}
-                                feil={
-                                    skjema.visFeilmeldinger &&
-                                    skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
-                                        ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
-                                        : ''
-                                }
-                            />
+                            <>
+                                {toggles[FeatureToggle.brukNyFlagCombobox] ? (
+                                    <RegionCombobox
+                                        label={'SED er sendt til'}
+                                        value={(skjema.felter.mottakerlandSed?.verdi ?? []) as Regionkode[]}
+                                        options={EØS_LAND_REGIONKODER}
+                                        onChange={value => {
+                                            if (value) {
+                                                skjema.felter.mottakerlandSed.validerOgSettFelt(value);
+                                            } else {
+                                                skjema.felter.mottakerlandSed.nullstill();
+                                            }
+                                        }}
+                                        readOnly={false}
+                                        error={
+                                            skjema.visFeilmeldinger &&
+                                            skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
+                                                ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
+                                                : ''
+                                        }
+                                        isMulti={true}
+                                    />
+                                ) : (
+                                    <FamilieMultiLandvelger
+                                        erLesevisning={false}
+                                        id={'mottakerlandSED'}
+                                        label={'SED er sendt til'}
+                                        kunEøs
+                                        eksluderLand={['NO']}
+                                        medFlag
+                                        size="medium"
+                                        kanNullstilles
+                                        value={skjema.felter.mottakerlandSed?.verdi}
+                                        onChange={(value: Country[]) => {
+                                            skjema.felter.mottakerlandSed.validerOgSettFelt(
+                                                value.map(land => land.value)
+                                            );
+                                        }}
+                                        feil={
+                                            skjema.visFeilmeldinger &&
+                                            skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
+                                                ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
+                                                : ''
+                                        }
+                                    />
+                                )}
+                            </>
                         )}
                 </VStack>
             </Fieldset>

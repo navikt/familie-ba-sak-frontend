@@ -10,7 +10,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Country, Currency } from '@navikt/land-verktoy';
 
 import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
-import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '../../../../../../../komponenter/FlaggCombobox';
+import {
+    type Valutakode,
+    ValutaCombobox,
+    EØS_VALUTAKODER,
+    RegionCombobox,
+    type Regionkode,
+    EØS_LAND_REGIONKODER,
+} from '../../../../../../../komponenter/FlaggCombobox';
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
@@ -192,27 +199,49 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </HGrid>
-                    <FamilieLandvelger
-                        erLesevisning={lesevisning}
-                        id={'utbetalingsland'}
-                        label={'Utbetalingsland'}
-                        kunEøs
-                        medFlag
-                        size="medium"
-                        kanNullstilles
-                        value={skjema.felter.utbetalingsland.verdi}
-                        onChange={(value: Country) => {
-                            const nyVerdi = value ? value.value : undefined;
-                            skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
-                        }}
-                        feil={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.utbetalingsland.feilmelding?.toString()
-                                : ''
-                        }
-                        utenMargin
-                    />
+                    {toggles[FeatureToggle.brukNyFlagCombobox] ? (
+                        <RegionCombobox
+                            label={'Utbetalingsland'}
+                            value={skjema.felter.utbetalingsland.verdi as Regionkode}
+                            options={EØS_LAND_REGIONKODER}
+                            onChange={value => {
+                                if (value) {
+                                    skjema.felter.utbetalingsland.validerOgSettFelt(value);
+                                } else {
+                                    skjema.felter.utbetalingsland.nullstill();
+                                }
+                            }}
+                            readOnly={lesevisning}
+                            error={
+                                skjema.visFeilmeldinger &&
+                                skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
+                                    ? skjema.felter.utbetalingsland.feilmelding?.toString()
+                                    : ''
+                            }
+                        />
+                    ) : (
+                        <FamilieLandvelger
+                            erLesevisning={lesevisning}
+                            id={'utbetalingsland'}
+                            label={'Utbetalingsland'}
+                            kunEøs
+                            medFlag
+                            size="medium"
+                            kanNullstilles
+                            value={skjema.felter.utbetalingsland.verdi}
+                            onChange={(value: Country) => {
+                                const nyVerdi = value ? value.value : undefined;
+                                skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
+                            }}
+                            feil={
+                                skjema.visFeilmeldinger &&
+                                skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
+                                    ? skjema.felter.utbetalingsland.feilmelding?.toString()
+                                    : ''
+                            }
+                            utenMargin
+                        />
+                    )}
                 </Fieldset>
 
                 {!lesevisning && (
