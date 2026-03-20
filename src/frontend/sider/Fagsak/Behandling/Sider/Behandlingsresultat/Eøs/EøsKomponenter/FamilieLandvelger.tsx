@@ -15,7 +15,11 @@ import {
 import { CountryFilter } from '@navikt/land-verktoy';
 import type { Country, Currency } from '@navikt/land-verktoy';
 import type { CountrySelectProps } from '@navikt/landvelger';
-import CountrySelect from '@navikt/landvelger';
+import _CountrySelect from '@navikt/landvelger';
+
+// Plaster for problem med default export i landvelger. Spiller ikke på lag ved konvertering fra CJS til ESM.
+// Ekstraherer default med fallbacks
+const CountrySelect = (_CountrySelect as unknown as { default?: typeof _CountrySelect }).default ?? _CountrySelect;
 
 const Landvelger = styled(CountrySelect)`
     display: grid;
