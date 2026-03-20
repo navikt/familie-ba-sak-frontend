@@ -54,10 +54,7 @@ export function Vedtaksmeny() {
                 />
             )}
             {visEndreEndringstidspunktModal && (
-                <OppdaterEndringstidspunktModal
-                    lukkModal={() => settVisEndreEndringstidspunktModal(false)}
-                    behandlingId={behandling.behandlingId}
-                />
+                <OppdaterEndringstidspunktModal lukkModal={() => settVisEndreEndringstidspunktModal(false)} />
             )}
             <ActionMenu>
                 <ActionMenu.Trigger>
