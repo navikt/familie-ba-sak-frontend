@@ -3,13 +3,14 @@ import React from 'react';
 import { isBefore, subDays } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Modal } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { Behandlingstype } from '../../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { dagensDato } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Datovelger from '../../../Datovelger/Datovelger';
@@ -76,6 +77,19 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
                                 visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
                                 label={'Ny migreringsdato'}
                                 maksDatoAvgrensning={maksdatoForMigrering}
+                            />
+                        )}
+                    {opprettBehandlingSkjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.TEKNISK_ENDRING &&
+                        opprettBehandlingSkjema.felter.begrunnelse?.erSynlig && (
+                            <Textarea
+                                label={'Begrunnelse for opprettelse av teknisk endring'}
+                                onChange={(event): void => {
+                                    opprettBehandlingSkjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
+                                }}
+                                error={
+                                    opprettBehandlingSkjema.felter.begrunnelse.valideringsstatus ==
+                                        Valideringsstatus.FEIL && opprettBehandlingSkjema.felter.begrunnelse.feilmelding
+                                }
                             />
                         )}
                     {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (

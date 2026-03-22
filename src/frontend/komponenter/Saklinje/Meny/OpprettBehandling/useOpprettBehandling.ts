@@ -35,6 +35,7 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
     migreringsdato: Date | undefined;
     søknadMottattDato: Date | undefined;
     klageMottattDato: Date | undefined;
+    begrunnelse: string | undefined;
     valgteBarn: OptionType[];
 }
 
@@ -122,6 +123,20 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         },
     });
 
+    const begrunnelse = useFelt<string | undefined>({
+        verdi: undefined,
+        avhengigheter: { behandlingsårsak, fagsak },
+        valideringsfunksjon: felt => {
+            return felt.verdi !== '' && felt.verdi !== undefined
+                ? ok(felt)
+                : feil(felt, 'Vennligst skriv en begrunnelse på hvorfor den tekniske endringen er opprettet.');
+        },
+        skalFeltetVises: avhengigheter => {
+            const { verdi: behandlingsårsakVerdi } = avhengigheter.behandlingsårsak;
+            return behandlingsårsakVerdi == BehandlingÅrsak.TEKNISK_ENDRING;
+        },
+    });
+
     const klageMottattDato = useFelt<Date | undefined>({
         verdi: undefined,
         valideringsfunksjon: validerGyldigDato,
@@ -152,6 +167,7 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
             behandlingsårsak,
             behandlingstema,
             migreringsdato,
+            begrunnelse,
             søknadMottattDato,
             klageMottattDato,
             valgteBarn,
@@ -226,6 +242,7 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
                     søknadMottattDato: dateTilIsoDatoStringEllerUndefined(søknadMottattDato.verdi),
                     barnasIdenter: erHelmanuellMigrering ? valgteBarn.verdi.map(option => option.value) : undefined,
                     fagsakId: fagsakId,
+                    begrunnelse: begrunnelse.verdi,
                 },
                 method: 'POST',
                 url: '/familie-ba-sak/api/behandlinger',
