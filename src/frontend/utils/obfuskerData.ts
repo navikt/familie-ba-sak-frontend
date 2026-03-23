@@ -37,8 +37,17 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
             } else {
                 person.navn = 'Søker Søkersen';
             }
-            person.registerhistorikk?.bostedsadresse.forEach(adresse => {
-                adresse.verdi = 'Adresseveien 1';
+            person.registerhistorikk?.bostedsadresse.forEach((adresse, index: number) => {
+                adresse.verdi = `Bostedsadresse ${index + 1}`;
+            });
+            person.registerhistorikk?.oppholdsadresse.forEach((adresse, index: number) => {
+                adresse.verdi = `Oppholdsadresse ${index + 1}`;
+            });
+            person.registerhistorikk?.deltBosted.forEach((adresse, index: number) => {
+                adresse.verdi = `Deltbostedsadresse ${index + 1}`;
+            });
+            person.registerhistorikk?.dødsboadresse.forEach((adresse, index: number) => {
+                adresse.verdi = `Dødsbosadresse ${index + 1}`;
             });
         });
         behandlingRessurs.data.utbetalingsperioder.forEach(ubp => {
