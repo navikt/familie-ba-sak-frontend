@@ -222,7 +222,7 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
                             </DataCellMedFarge>
                         ))}
                     </Table.Row>
-                    {!visManuellePosteringer && (
+                    {visManuellePosteringer && (
                         <ManuellPosteringRad>
                             <FørsteKolonne>Manuell postering</FørsteKolonne>
                             {perioderSomSkalVisesITabellen.map(periode => (
