@@ -1,6 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+
+import { HentEndringstidspunktQueryKeyFactory } from '../../../../../../hooks/useHentEndringstidspunkt';
 import { HentVedtaksperioderQueryKeyFactory } from '../../../../../../hooks/useHentVedtaksperioder';
 import { useOppdaterEndringstidspunkt } from '../../../../../../hooks/useOppdaterEndringstidspunkt';
 import type { IsoDatoString } from '../../../../../../utils/dato';
@@ -23,7 +26,7 @@ interface Props {
 }
 
 export function useEndringstidspunktForm({ lukkModal }: Props) {
-    const { behandling } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const queryClient = useQueryClient();
     const { mutateAsync: oppdaterEndringstidspunk } = useOppdaterEndringstidspunkt(behandling.behandlingId);
 
@@ -38,11 +41,15 @@ export function useEndringstidspunktForm({ lukkModal }: Props) {
     async function onSubmit(formValues: TransformedFormValues) {
         const { endringstidspunkt } = formValues;
         return oppdaterEndringstidspunk({ endringstidspunkt })
-            .then(() => {
-                lukkModal();
+            .then(behandling => {
+                queryClient.invalidateQueries({
+                    queryKey: HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandling.behandlingId),
+                });
                 queryClient.invalidateQueries({
                     queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
                 });
+                settÅpenBehandling(byggSuksessRessurs(behandling));
+                lukkModal();
             })
             .catch(error => setError('root', { message: error.message ?? 'Ukjent feil' }));
     }

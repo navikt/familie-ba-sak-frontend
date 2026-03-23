@@ -21,7 +21,7 @@ interface Props {
 
 export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { mutateAsync } = useOppdaterBehandlendeEnhet(behandling.behandlingId);
+    const { mutateAsync: oppdaterBehandlendeEnhet } = useOppdaterBehandlendeEnhet(behandling.behandlingId);
 
     const form = useForm<EndreBehandlendeEnhetFormValues>({
         values: {
@@ -33,17 +33,13 @@ export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
     const { setError } = form;
 
     async function onSubmit(formValues: EndreBehandlendeEnhetFormValues) {
-        return mutateAsync({
-            enhetId: formValues.enhetId,
-            begrunnelse: formValues.begrunnelse,
-        })
+        const { enhetId, begrunnelse } = formValues;
+        return oppdaterBehandlendeEnhet({ enhetId, begrunnelse })
             .then(behandling => {
                 settÅpenBehandling(byggSuksessRessurs(behandling));
                 lukkModal();
             })
-            .catch(error => {
-                setError('root', { message: error.message ?? 'Ukjent feil' });
-            });
+            .catch(error => setError('root', { message: error.message ?? 'Ukjent feil' }));
     }
 
     return { form, onSubmit };
