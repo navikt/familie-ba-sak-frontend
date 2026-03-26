@@ -9,6 +9,7 @@ interface RegionComboboxBaseProps {
     error?: string | Error;
     readOnly?: boolean;
     placeholder?: string;
+    dropdownPlacement?: 'bottom' | 'top' | 'auto';
     className?: string;
 }
 

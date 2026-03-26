@@ -23,6 +23,7 @@ interface FlagComboboxBaseProps<T extends string> {
     error?: string | Error;
     readOnly?: boolean;
     placeholder?: string;
+    dropdownPlacement?: 'bottom' | 'top' | 'auto';
     className?: string;
 }
 
@@ -43,16 +44,28 @@ export type FlagComboboxProps<T extends string> = (FlagComboboxSingleProps<T> | 
 };
 
 export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
-    const { ref, options, label, error, readOnly = false, placeholder = '', className } = props;
+    const {
+        ref,
+        options,
+        label,
+        error,
+        readOnly = false,
+        placeholder = '',
+        className,
+        dropdownPlacement = 'auto',
+    } = props;
+
     const inputId = useId();
 
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(0);
-    const [dropdownPlacement, setDropdownPlacement] = useState<'bottom' | 'top'>('bottom');
+    const [internalDropdownPlacement, setInternalDropdownPlacement] = useState<'bottom' | 'top'>('bottom');
 
     const singleValue = !props.isMulti ? (props.value as T | null | undefined) : null;
     const multiValues = props.isMulti ? (props.value as T[] | undefined) || [] : [];
     const hasValue = props.isMulti ? multiValues.length > 0 : singleValue !== null && singleValue !== undefined;
+
+    const activeDropdownPlacement = dropdownPlacement === 'auto' ? internalDropdownPlacement : dropdownPlacement;
 
     const [inputValue, setInputValue] = useState(() => {
         if (props.isMulti) return '';
@@ -130,7 +143,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
     }, [isOpen, highlightedIndex, rowVirtualizer]);
 
     useLayoutEffect(() => {
-        if (!isOpen || !anchorRef.current) return;
+        if (!isOpen || !anchorRef.current || dropdownPlacement !== 'auto') return;
 
         const updatePlacement = () => {
             if (!anchorRef.current) return;
@@ -142,9 +155,9 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
             const requiredSpace = 260;
 
             if (spaceBelow < requiredSpace && spaceAbove > spaceBelow) {
-                setDropdownPlacement('top');
+                setInternalDropdownPlacement('top');
             } else {
-                setDropdownPlacement('bottom');
+                setInternalDropdownPlacement('bottom');
             }
         };
 
@@ -157,7 +170,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
             window.removeEventListener('resize', updatePlacement);
             window.removeEventListener('scroll', updatePlacement, true);
         };
-    }, [isOpen]);
+    }, [isOpen, dropdownPlacement]);
 
     function handleOnWrapperClicked() {
         if (readOnly) {
@@ -451,7 +464,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                 {isOpen && (
                     <ul
                         id={`${inputId}-listbox`}
-                        className={`${styles.dropdown} ${dropdownPlacement === 'top' ? styles.dropdownTop : styles.dropdownBottom}`}
+                        className={`${styles.dropdown} ${activeDropdownPlacement === 'top' ? styles.dropdownTop : styles.dropdownBottom}`}
                         role={'listbox'}
                         ref={listboxRef}
                         onMouseMove={() => (isKeyboardNavRef.current = false)}
