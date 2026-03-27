@@ -21,6 +21,7 @@ interface IEndretUtbetalingAndelRadProps {
 
 const PersonCelle = styled.div`
     display: flex;
+
     svg {
         margin-right: 1rem;
     }

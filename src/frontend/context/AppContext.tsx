@@ -1,4 +1,4 @@
-import React, { createContext, type PropsWithChildren, useState, type JSX } from 'react';
+import React, { createContext, type JSX, type PropsWithChildren, useState } from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 
@@ -41,7 +41,7 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
     onClose: () => lukkModal(),
     innhold: () => {
         return (
-            <HStack gap="4" align="center" marginBlock="2">
+            <HStack gap="space-16" align="center" marginBlock="space-8">
                 <StatusIkon status={Status.FEIL} />
                 <BodyShort>
                     {`Bruker har diskresjonskode ${adressebeskyttelsestyper[data.adressebeskyttelsegradering]}`}

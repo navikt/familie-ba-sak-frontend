@@ -1,14 +1,14 @@
 import {
-    ABorderDanger,
-    ABorderDefault,
-    ABorderSubtle,
-    ABorderSuccess,
-    ABorderWarning,
-    ASurfaceActionSubtle,
-    ASurfaceDangerSubtle,
-    ASurfaceNeutralSubtle,
-    ASurfaceSuccessSubtle,
-    ASurfaceWarningSubtle,
+    BgAccentSoft,
+    BgDangerSoft,
+    BgNeutralSoft,
+    BgSuccessSoft,
+    BgWarningSoft,
+    BorderDanger,
+    BorderNeutral,
+    BorderNeutralSubtle,
+    BorderSuccess,
+    BorderWarning,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { BehandlingResultat } from '../typer/behandling';
@@ -36,18 +36,18 @@ export const hentBakgrunnsfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return ASurfaceSuccessSubtle;
+            return BgSuccessSoft;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return ASurfaceDangerSubtle;
+            return BgDangerSoft;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return ASurfaceWarningSubtle;
+            return BgWarningSoft;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return ASurfaceNeutralSubtle;
+            return BgNeutralSoft;
         default:
-            return ASurfaceActionSubtle;
+            return BgAccentSoft;
     }
 };
 
@@ -57,21 +57,20 @@ export const hentBorderfarge = (vedtakBegrunnelseType?: VedtakBegrunnelseType) =
         case VedtakBegrunnelseType.FORTSATT_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_INNVILGET:
         case VedtakBegrunnelseType.INSTITUSJON_FORTSATT_INNVILGET:
-            return ABorderSuccess;
+            return BorderSuccess;
         case VedtakBegrunnelseType.AVSLAG:
         case VedtakBegrunnelseType.INSTITUSJON_AVSLAG:
-            return ABorderDanger;
+            return BorderDanger;
         case VedtakBegrunnelseType.REDUKSJON:
         case VedtakBegrunnelseType.INSTITUSJON_REDUKSJON:
-            return ABorderWarning;
+            return BorderWarning;
         case VedtakBegrunnelseType.OPPHØR:
         case VedtakBegrunnelseType.INSTITUSJON_OPPHØR:
-            return ABorderDefault;
+            return BorderNeutral;
         default:
-            return ABorderSubtle;
+            return BorderNeutralSubtle;
     }
 };
-
 export const vedtakHarFortsattUtbetaling = (behandlingResultat: BehandlingResultat) =>
     [
         BehandlingResultat.INNVILGET,

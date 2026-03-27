@@ -131,7 +131,7 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
                         />
 
                         {harOverlappendePerioderMedAndreFagsakerOgSkalStanses && (
-                            <Box marginBlock="10 0" maxWidth="40rem">
+                            <Box marginBlock="space-40 space-0" maxWidth="40rem">
                                 <Alert variant="warning">
                                     <BodyShort spacing>
                                         En annen fagsak tilknyttet personen inneholder en feilutbetaling eller

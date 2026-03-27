@@ -95,12 +95,12 @@ export function Vilkårsvurdering() {
                 <OppdaterRegisteropplysninger />
             </>
             {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (
-                <HStack gap="4" marginBlock={'8 8'}>
+                <HStack gap="space-16" marginBlock={'space-32 space-32'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={behandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />
                 </HStack>
             )}
-            <VStack gap="space-8">
+            <VStack gap="space-40">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
                 {uregistrerteBarn.length > 0 && (
                     <Alert variant="info">

@@ -65,10 +65,10 @@ export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props)
                 )
             }
         >
-            <VStack gap="4" marginBlock="0 6">
+            <VStack gap="space-16" marginBlock="space-0 space-24">
                 <RadioGroup value={beslutning} legend={''}>
                     {egetVedtak ? (
-                        <VStack gap="4" marginBlock="0 4">
+                        <VStack gap="space-16" marginBlock="space-0 space-16">
                             <div>
                                 <BodyShort>
                                     {isoStringTilFormatertString({
@@ -95,7 +95,7 @@ export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props)
                             <br />
                         </>
                     )}
-                    <Stack gap="0 6" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
+                    <Stack gap="space-0 space-24" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                         <Radio
                             value={TotrinnskontrollBeslutning.GODKJENT}
                             name={'totrinnskontroll'}

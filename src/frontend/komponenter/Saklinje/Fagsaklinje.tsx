@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useLocation, Link as ReactRouterLink } from 'react-router';
+import { Link as ReactRouterLink, useLocation } from 'react-router';
 
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
@@ -21,8 +21,8 @@ export function Fagsaklinje() {
     const { pathname } = useLocation();
 
     return (
-        <Box borderWidth={'0 0 1 0'} borderColor={'border-subtle'}>
-            <HStack paddingInline={'2 4'} paddingBlock={'2'} justify={'space-between'}>
+        <Box borderWidth={'0 0 1 0'} borderColor={'neutral-subtle'}>
+            <HStack paddingInline={'space-8 space-16'} paddingBlock={'space-8'} justify={'space-between'}>
                 <HStack>
                     <Button
                         as={ReactRouterLink}

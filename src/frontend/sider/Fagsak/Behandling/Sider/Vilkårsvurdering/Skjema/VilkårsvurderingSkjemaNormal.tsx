@@ -11,8 +11,15 @@ import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/P
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
 import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import { PersonType } from '../../../../../../typer/person';
-import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
-import { annenVurderingConfig, Resultat, vilkårConfig, VilkårType } from '../../../../../../typer/vilkår';
+import {
+    annenVurderingConfig,
+    type IPersonResultat,
+    type IVilkårConfig,
+    type IVilkårResultat,
+    Resultat,
+    vilkårConfig,
+    VilkårType,
+} from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -117,12 +124,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <HStack
-                            wrap={false}
-                            justify={'space-between'}
-                            paddingBlock={'space-32 space-0'}
-                            className={styles.personLinje}
-                        >
+                        <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
                             <PersonInformasjon
                                 person={personResultat.person}
                                 somOverskrift

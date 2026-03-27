@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Alert, Table } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Heading, Table } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-typer';
 import {
@@ -92,7 +92,7 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
 const StyledButton = styled(Button)`
     padding: 0;
 
-    .navds-label {
+    .aksel-label {
         font-weight: normal;
     }
 `;

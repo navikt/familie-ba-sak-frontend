@@ -5,14 +5,16 @@
 }
 
 .textarea {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: var(--ax-space-8);
+    margin-bottom: var(--ax-space-8);
     flex: auto;
 }
+
 .removeButton {
     align-self: center;
     height: fit-content;
 }
+
 .addButton {
     justify-content: flex-start;
 }
