@@ -369,6 +369,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                                             size={'XS'}
                                             animate={false}
                                             wave={false}
+                                            className={styles.chipFlag}
                                         />
                                         {opt.label}
                                         {!readOnly && (

@@ -5,12 +5,12 @@
 .inputWrapper {
     display: flex;
     justify-content: space-between;
-    padding: 6px 12px;
+    padding: 4px 12px;
     min-height: 3rem;
     cursor: text;
-    background-color: var(--a-surface-default);
-    border: 1px solid var(--a-border-default);
-    border-radius: var(--a-border-radius-medium);
+    background-color: var(--ax-bg-input);
+    border: 1px solid var(--ax-border-neutral);
+    border-radius: var(--ax-radius-8);
     box-shadow: 0 0 0 1px transparent;
 }
 
@@ -19,22 +19,24 @@
 }
 
 .inputWrapperMulti {
-    align-items: flex-start;
+    align-items: center;
 }
 
 .inputWrapper:not(:disabled, .inputWrapperReadOnly):focus-within {
-    box-shadow: var(--a-shadow-focus);
-    border-color: var(--a-border-focus);
+    box-shadow: var(--ax-shadow-dialog);
+    border-color: var(--ax-border-strong);
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: 3px;
 }
 
 .inputWrapperError:not(:hover, :focus-within, :disabled) {
-    box-shadow: 0 0 0 1px var(--a-border-danger);
-    border-color: var(--a-border-danger);
+    box-shadow: 0 0 0 1px var(--ax-border-danger);
+    border-color: var(--ax-border-danger);
 }
 
 .inputWrapperReadOnly {
-    background-color: var(--a-surface-subtle);
-    border-color: var(--a-border-subtle);
+    background-color: var(--ax-bg-neutral-moderate);
+    border-color: var(--ax-border-neutral);
     box-shadow: none;
     cursor: default;
 }
@@ -53,10 +55,10 @@
     padding: 0;
     margin: 0;
     background: transparent;
-    font-family: var(--a-font-family), serif;
-    font-size: var(--a-font-size-large);
-    font-weight: var(--a-font-weight-regular);
-    line-height: var(--a-font-line-height-large);
+    font-family: var(--ax-font-family), serif;
+    font-size: var(--ax-font-size-large);
+    font-weight: var(--ax-font-weight-regular);
+    line-height: var(--ax-font-line-height-medium);
 }
 
 .arrowButton {
@@ -64,7 +66,7 @@
     border: none;
     padding: 0;
     margin-left: 8px;
-    color: var(--a-text-default);
+    color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -75,8 +77,8 @@
     position: absolute;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #d1d5db;
+    background: var(--ax-bg-default);
+    border: 1px solid var(--ax-border-neutral);
     border-radius: 6px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     max-height: 250px;
@@ -89,12 +91,12 @@
 }
 
 .dropdownBottom {
-    top: calc(100% + 6px);
+    top: calc(100% + 8px);
     bottom: auto;
 }
 
 .dropdownTop {
-    bottom: calc(100% + 6px);
+    bottom: calc(100% + 8px);
     top: auto;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
 }
@@ -114,12 +116,12 @@
 
 .option:hover,
 .optionFocused {
-    background-color: var(--a-surface-hover);
-    border-left: 4px solid var(--a-border-strong);
+    background-color: var(--ax-bg-neutral-moderate-hover);
+    border-left: 4px solid var(--ax-border-neutral-strong);
 }
 
 .optionText {
-    color: var(--a-text-default);
+    color: var(--ax-text-neutral);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -139,14 +141,21 @@
     margin: 0 !important;
 }
 
+.chipFlag {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+}
+
 .selectedOption {
-    background-color: var(--a-surface-selected);
+    background-color: var(--ax-bg-accent-moderate-pressedA);
 }
 
 .noResults {
     padding: 8px 12px;
-    color: var(--a-text-subtle);
-    font-size: var(--a-font-size-medium);
+    color: var(--ax-text-neutral-subtle);
+    font-size: var(--ax-font-size-medium);
     text-align: center;
 }
 
@@ -164,7 +173,7 @@
     background: none;
     border: none;
     padding: 4px;
-    color: var(--a-text-default);
+    color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -182,12 +191,12 @@
 
 .checkmarkSvg {
     margin-left: auto;
-    color: var(--a-text-default);
+    color: var(--ax-text-neutral);
     flex-shrink: 0;
 }
 
 .errorMessageIcon {
-    color: var(--a-icon-danger);
+    color: var(--ax-text-danger-subtle);
     padding-bottom: 1px;
 }
 
@@ -199,21 +208,23 @@
 .chip {
     display: flex;
     align-items: center;
-    background-color: var(--a-surface-action-subtle);
-    color: var(--a-text-default);
-    padding: 2px 8px;
-    border-radius: var(--a-border-radius-medium);
-    font-size: var(--a-font-size-small);
-    line-height: 1.5;
+    justify-content: center;
+    gap: 4px;
+    background-color: var(--ax-bg-neutral-moderateA);
+    border: 1px solid var(--ax-border-neutral-subtle);
+    color: var(--ax-text-neutral);
+    padding: 0 6px;
+    border-radius: var(--ax-radius-4);
+    font-size: var(--ax-font-size-large);
     white-space: nowrap;
 }
 
 .chipRemove {
     background: none;
     border: none;
-    padding: 2px;
+    padding: 4px;
     margin-left: 6px;
-    color: var(--a-text-subtle);
+    color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -222,8 +233,8 @@
 }
 
 .chipRemove:hover {
-    background-color: var(--a-surface-action-subtle-hover);
-    color: var(--a-text-default);
+    background-color: var(--ax-bg-neutral-moderate-hover);
+    color: var(--ax-text-neutral);
 }
 
 .valueContainer {
