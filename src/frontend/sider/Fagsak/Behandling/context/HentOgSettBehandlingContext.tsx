@@ -8,12 +8,10 @@ import { useHttp } from '@navikt/familie-http';
 import { byggFeiletRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
-import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
 import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
 import { HentHistorikkinnslagQueryKeyFactory } from '../../../../hooks/useHentHistorikkinnslag';
 import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
 import { BehandlerRolle, type IBehandling } from '../../../../typer/behandling';
-import { FeatureToggle } from '../../../../typer/featureToggles';
 import { obfuskerBehandling } from '../../../../utils/obfuskerData';
 import { useFagsakContext } from '../../FagsakContext';
 
@@ -32,7 +30,6 @@ export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
     const [behandlingRessurs, privatSettBehandlingRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
     const navigate = useNavigate();
     const { skalObfuskereData, hentSaksbehandlerRolle } = useAppContext();
-    const toggles = useFeatureToggles();
 
     const erBehandlingDelAvFagsak = fagsak.behandlinger.some(
         visningBehandling => visningBehandling.behandlingId.toString() === behandlingId
@@ -62,10 +59,7 @@ export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
         privatSettBehandlingRessurs(byggTomRessurs());
 
         const requestBasertPåBehandlerRolle = () => {
-            if (
-                hentSaksbehandlerRolle() === BehandlerRolle.BESLUTTER &&
-                toggles[FeatureToggle.hentBehandlingEndepunktForBeslutter]
-            ) {
+            if (hentSaksbehandlerRolle() === BehandlerRolle.BESLUTTER) {
                 return request<void, IBehandling>({
                     method: 'PUT',
                     url: `/familie-ba-sak/api/behandlinger/${behandlingId}/oppdatert-valutakurs`,

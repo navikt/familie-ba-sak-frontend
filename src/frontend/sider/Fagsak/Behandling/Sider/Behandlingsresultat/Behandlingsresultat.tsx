@@ -14,7 +14,6 @@ import { kompetanseFeilmeldingId } from './Eøs/Kompetanse/useKompetansePeriodeS
 import { useEøs } from './Eøs/useEøs';
 import { utenlandskPeriodeBeløpFeilmeldingId } from './Eøs/UtbetaltAnnetLand/useUtenlandskPeriodeBeløpSkjema';
 import UtbetaltAnnetLand from './Eøs/UtbetaltAnnetLand/UtbetaltAnnetLand';
-import { useOppdaterValutakursOgSimuleringPåBeslutterSteg } from './Eøs/Valutakurs/useOppdaterValutakursOgSimuleringPåBeslutterSteg';
 import { valutakursFeilmeldingId } from './Eøs/Valutakurs/useValutakursSkjema';
 import Valutakurser from './Eøs/Valutakurs/Valutakurser';
 import MigreringInfoboks from './MigreringInfoboks';
@@ -85,8 +84,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =
         useTidslinjeContext();
-
-    useOppdaterValutakursOgSimuleringPåBeslutterSteg();
 
     const { vurderErLesevisning, behandlingresultatNesteOnClick, behandlingsstegSubmitressurs } =
         useBehandlingContext();
