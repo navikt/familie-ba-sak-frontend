@@ -106,7 +106,6 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             Object.assign({}, provided, {
                 whiteSpace: 'pre-wrap',
                 textOverflow: 'hidden',
-                overflow: 'hidden',
             }),
     };
 
