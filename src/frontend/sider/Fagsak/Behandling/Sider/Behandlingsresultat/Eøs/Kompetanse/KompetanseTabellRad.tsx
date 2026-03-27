@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 
-import KompetanseTabellRadEndre from './KompetanseTabellRadEndre';
+import { KompetanseTabellRadEndre } from './KompetanseTabellRadEndre';
 import { kompetanseFeilmeldingId, useKompetansePeriodeSkjema } from './useKompetansePeriodeSkjema';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
@@ -84,7 +84,6 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, vi
                         sendInnSkjema={sendInnSkjema}
                         toggleForm={toggleForm}
                         slettKompetanse={slettKompetanse}
-                        status={kompetanse.status}
                         erAnnenForelderOmfattetAvNorskLovgivning={kompetanse.erAnnenForelderOmfattetAvNorskLovgivning}
                     />
                 )
