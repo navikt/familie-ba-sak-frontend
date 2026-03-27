@@ -138,7 +138,9 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                 preventScrollRef.current = false;
                 return;
             }
-            rowVirtualizer.scrollToIndex(highlightedIndex, { align: 'auto' });
+            requestAnimationFrame(() => {
+                rowVirtualizer.scrollToIndex(highlightedIndex, { align: 'auto' });
+            });
         }
     }, [isOpen, highlightedIndex, rowVirtualizer]);
 
@@ -238,7 +240,8 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                 const index = options.findIndex(opt => opt.value === singleValue);
                 setHighlightedIndex(index !== -1 ? index : 0);
             } else {
-                setHighlightedIndex(0);
+                const index = options.findIndex(opt => multiValues.includes(opt.value));
+                setHighlightedIndex(index !== -1 ? index : 0);
             }
         }
     }
@@ -310,6 +313,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
         }
         event.stopPropagation();
         props.onChange(multiValues.filter(v => v !== valToRemove));
+        internalInputRef.current?.focus();
     }
 
     const selectedSingleOption = !props.isMulti ? options.find(opt => opt.value === singleValue) : null;
