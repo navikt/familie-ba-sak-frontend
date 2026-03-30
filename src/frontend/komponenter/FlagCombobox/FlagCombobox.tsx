@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useId, type KeyboardEvent, useLayoutEffect, useMemo } from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
+import classNames from 'classnames';
 
 import { ExclamationmarkTriangleFillIcon, PadlockLockedFillIcon } from '@navikt/aksel-icons';
 import { ErrorMessage, HStack, Label, VStack } from '@navikt/ds-react';
@@ -75,7 +76,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
 
     const internalInputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const listboxRef = useRef<HTMLUListElement>(null);
+    const listboxRef = useRef<HTMLDivElement>(null);
     const preventScrollRef = useRef(false);
     const isKeyboardNavRef = useRef(false);
     const anchorRef = useRef<HTMLDivElement>(null);
@@ -165,12 +166,12 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
 
         updatePlacement();
 
-        window.addEventListener('resize', updatePlacement);
-        window.addEventListener('scroll', updatePlacement, true);
+        window.addEventListener('resize', updatePlacement, { passive: true });
+        window.addEventListener('scroll', updatePlacement, { capture: true, passive: true });
 
         return () => {
             window.removeEventListener('resize', updatePlacement);
-            window.removeEventListener('scroll', updatePlacement, true);
+            window.removeEventListener('scroll', updatePlacement, { capture: true });
         };
     }, [isOpen, dropdownPlacement]);
 
@@ -320,7 +321,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
     const errorMessage = error instanceof Error ? error.message : error;
 
     return (
-        <VStack gap={'space-4'} className={`${styles.container} ${className}`} ref={containerRef}>
+        <VStack gap={'space-4'} className={classNames(styles.container, className)} ref={containerRef}>
             <HStack wrap={false} align={'center'} gap={'space-4'} paddingBlock={'space-2'}>
                 {readOnly && <PadlockLockedFillIcon />}
                 <Label size={'medium'} htmlFor={inputId}>
@@ -330,16 +331,19 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
             <div className={styles.relativeAnchor} ref={anchorRef}>
                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                 <div
-                    className={`
-                    ${styles.inputWrapper} 
-                    ${props.isMulti ? styles.inputWrapperMulti : styles.inputWrapperSingle} 
-                    ${errorMessage && !readOnly ? styles.inputWrapperError : ''} 
-                    ${readOnly ? styles.inputWrapperReadOnly : ''}
-                `}
+                    className={classNames(styles.inputWrapper, {
+                        [styles.inputWrapperMulti]: props.isMulti,
+                        [styles.inputWrapperSingle]: !props.isMulti,
+                        [styles.inputWrapperError]: errorMessage && !readOnly,
+                        [styles.inputWrapperReadOnly]: readOnly,
+                    })}
                     onClick={handleOnWrapperClicked}
                 >
                     <div
-                        className={`${styles.valueContainer} ${props.isMulti ? styles.valueContainerMulti : styles.valueContainerSingle}`}
+                        className={classNames(
+                            styles.valueContainer,
+                            props.isMulti ? styles.valueContainerMulti : styles.valueContainerSingle
+                        )}
                     >
                         {selectedSingleOption?.regionCode && (
                             <div className={styles.selectedFlag}>
@@ -453,7 +457,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                             onClick={handleOnDropdownArrowClicked}
                         >
                             <svg
-                                className={`${isOpen ? styles.arrowIconOpen : ''}`}
+                                className={classNames({ [styles.arrowIconOpen]: isOpen })}
                                 width={'16'}
                                 height={'16'}
                                 viewBox={'0 0 24 24'}
@@ -467,9 +471,13 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                     </div>
                 </div>
                 {isOpen && (
-                    <ul
+                    // eslint-disable-next-line jsx-a11y/interactive-supports-focus
+                    <div
                         id={`${inputId}-listbox`}
-                        className={`${styles.dropdown} ${activeDropdownPlacement === 'top' ? styles.dropdownTop : styles.dropdownBottom}`}
+                        className={classNames(
+                            styles.dropdown,
+                            activeDropdownPlacement === 'top' ? styles.dropdownTop : styles.dropdownBottom
+                        )}
                         role={'listbox'}
                         ref={listboxRef}
                         onMouseMove={() => (isKeyboardNavRef.current = false)}
@@ -489,13 +497,16 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                                         ? multiValues.includes(option.value)
                                         : singleValue === option.value;
                                     return (
-                                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                                        <li
+                                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/interactive-supports-focus
+                                        <div
                                             key={option.value}
                                             id={`${inputId}-option-${option.value}`}
                                             role={'option'}
                                             aria-selected={isSelected}
-                                            className={`${styles.option} ${highlightedIndex === index ? styles.optionFocused : ''} ${isSelected ? styles.selectedOption : ''}`}
+                                            className={classNames(styles.option, {
+                                                [styles.optionFocused]: highlightedIndex === index,
+                                                [styles.selectedOption]: isSelected,
+                                            })}
                                             onClick={() => handleOnOptionSelected(option)}
                                             onMouseEnter={() => handleOnOptionMouseEntered(index)}
                                             style={{
@@ -531,21 +542,21 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                                                     />
                                                 </svg>
                                             )}
-                                        </li>
+                                        </div>
                                     );
                                 })}
                             </div>
                         ) : (
-                            <li
+                            <div
                                 className={styles.noResults}
                                 role={'option'}
                                 aria-selected={false}
                                 aria-disabled={'true'}
                             >
                                 Fant ingen treff
-                            </li>
+                            </div>
                         )}
-                    </ul>
+                    </div>
                 )}
             </div>
             {errorMessage && !readOnly && (
