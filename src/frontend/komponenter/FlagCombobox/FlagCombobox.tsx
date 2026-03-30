@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useId, type KeyboardEvent, useLayoutEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useId, type KeyboardEvent, useLayoutEffect, useMemo } from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
@@ -9,6 +9,7 @@ import _Flag from '@navikt/flagg-ikoner';
 
 import styles from './FlagCombobox.module.css';
 import { type RegionCode } from './RegionCombobox/region';
+import { useMergedRef } from '../../hooks/useMergedRef';
 
 const Flag = (_Flag as unknown as { default?: typeof _Flag }).default ?? _Flag;
 
@@ -96,16 +97,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
         overscan: 5,
     });
 
-    useLayoutEffect(() => {
-        if (!ref) {
-            return;
-        }
-        if (typeof ref === 'function') {
-            ref(internalInputRef.current);
-        } else {
-            ref.current = internalInputRef.current;
-        }
-    }, [ref]);
+    const mergedInputRef = useMergedRef(ref, internalInputRef);
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
@@ -202,7 +194,6 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
             if (singleValue === option.value) {
                 props.onChange(null);
                 setInputValue('');
-                setIsOpen(true);
             } else {
                 props.onChange(option.value);
                 setIsOpen(false);
@@ -405,7 +396,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
 
                         <input
                             id={inputId}
-                            ref={internalInputRef}
+                            ref={mergedInputRef}
                             type={'text'}
                             className={styles.input}
                             value={inputValue}
@@ -484,6 +475,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                     >
                         {filteredOptions.length > 0 ? (
                             <div
+                                role={'presentation'}
                                 style={{
                                     height: `${rowVirtualizer.getTotalSize()}px`,
                                     width: '100%',
@@ -552,6 +544,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
                                 role={'option'}
                                 aria-selected={false}
                                 aria-disabled={'true'}
+                                aria-live={'polite'}
                             >
                                 Fant ingen treff
                             </div>
