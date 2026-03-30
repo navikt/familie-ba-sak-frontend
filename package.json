@@ -46,7 +46,7 @@
     "@navikt/ds-css": "8.6.0",
     "@navikt/ds-react": "8.6.0",
     "@navikt/ds-tokens": "8.6.0",
-    "@navikt/familie-backend": "10.1.21",
+    "@navikt/familie-backend": "10.1.22",
     "@navikt/familie-form-elements": "22.0.1",
     "@navikt/familie-header": "17.0.1",
     "@navikt/familie-http": "8.0.20",
