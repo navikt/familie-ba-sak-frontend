@@ -1,82 +1,71 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { FormProvider } from 'react-hook-form';
 import { useLocation } from 'react-router';
-import styled from 'styled-components';
 
-import { Fieldset, TextField, Button, Heading } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
 
-import { useSamhandlerSkjema } from '../../komponenter/Samhandler/useSamhandler';
-import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-
-const SamhandlerContainer = styled.div`
-    padding: 1rem;
-    overflow: auto;
-    height: calc(100vh - 50px);
-`;
-
-const HentSakerFlex = styled.div`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    display: flex;
-`;
-
-const HentSakerButton = styled(Button)`
-    margin-left: 1rem;
-    margin-top: 2rem;
-    margin-bottom: auto;
-    height: 3rem;
-`;
+import { OrganisasjonsnummerFelt } from './OrganisasjonsnummerFelt';
+import { SamhandlerFeltnavn, useSamhandlerForm } from './useSamhandlerForm';
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 
 export const Samhandler: React.FC = () => {
-    const { onSubmitWrapper, samhandlerSkjema } = useSamhandlerSkjema();
-
     const location = useLocation();
+    const [samhandler, setSamhandler] = useState<ISamhandlerInfo | null>(null);
+
+    const { form, onSubmit } = useSamhandlerForm({
+        settSamhandler: samhandler => {
+            setSamhandler(samhandler);
+        },
+    });
+
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+        setValue,
+    } = form;
+
     useEffect(() => {
         if (location.state) {
             const state = location.state as { bruker: string };
-            samhandlerSkjema.felter.orgnr.validerOgSettFelt(state.bruker);
-            onSubmitWrapper();
+            setValue(SamhandlerFeltnavn.ORGNR, state.bruker);
+            handleSubmit(onSubmit)();
         }
     }, []);
 
-    const skjemaErLåst = samhandlerSkjema.submitRessurs.status === RessursStatus.HENTER;
-
     return (
-        <SamhandlerContainer>
+        <Box height={'calc(100vh - 50px)'} padding={'space-16'} overflow={'auto'}>
             <Heading size={'large'} level={'1'}>
                 Søk samhandler
             </Heading>
-            <HentSakerFlex>
-                <Fieldset
-                    error={hentFrontendFeilmelding(samhandlerSkjema.submitRessurs)}
-                    legend="Søk samhandler"
-                    hideLegend
+            <FormProvider {...form}>
+                <form
+                    onSubmit={e => {
+                        handleSubmit(onSubmit)(e);
+                        if (e.target.value !== samhandler?.orgNummer) {
+                            setSamhandler(null);
+                        }
+                    }}
                 >
-                    <TextField
-                        {...samhandlerSkjema.felter.orgnr.hentNavInputProps(samhandlerSkjema.visFeilmeldinger)}
-                        id={'hent-samhandler'}
-                        label={'Skriv inn orgnr'}
-                        size="medium"
-                        placeholder={'orgnr'}
-                    />
-                </Fieldset>
-                <HentSakerButton
-                    variant={'secondary'}
-                    loading={skjemaErLåst}
-                    disabled={skjemaErLåst}
-                    onClick={onSubmitWrapper}
-                >
-                    Hent samhandler
-                </HentSakerButton>
-            </HentSakerFlex>
-            {samhandlerSkjema.submitRessurs.status === RessursStatus.SUKSESS ? (
+                    <HStack marginBlock={'space-32'} align={'start'}>
+                        <Fieldset error={errors.root?.message} legend="Søk samhandler" hideLegend>
+                            <OrganisasjonsnummerFelt />
+                        </Fieldset>
+                        <Box marginBlock={'space-32 auto'} marginInline={'space-16 auto'} height={'3rem'}>
+                            <Button variant={'primary'} type={'submit'} loading={isSubmitting}>
+                                Hent samhandler
+                            </Button>
+                        </Box>
+                    </HStack>
+                </form>
+            </FormProvider>
+
+            {samhandler !== null && (
                 <Heading size={'large'}>
-                    {samhandlerSkjema.submitRessurs.data.tssEksternId} {samhandlerSkjema.submitRessurs.data.navn} <br />
-                    {samhandlerSkjema.submitRessurs.data.adresser[0].adresseType}{' '}
-                    {samhandlerSkjema.submitRessurs.data.adresser[0].postSted}
+                    {samhandler.tssEksternId} {samhandler.navn} <br />
+                    {samhandler.adresser[0].adresseType} {samhandler.adresser[0].postSted}
                 </Heading>
-            ) : undefined}
-        </SamhandlerContainer>
+            )}
+        </Box>
     );
 };
