@@ -10,7 +10,7 @@ import {
     BorderDanger,
     BorderFocus,
     Space8,
-    TextDanger,
+    TextDangerSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 import type { Country, Currency } from '@navikt/land-verktoy';
 import { CountryFilter } from '@navikt/land-verktoy';
@@ -67,7 +67,7 @@ const Landvelger = styled(CountrySelect)`
     }
 
     .navds-error-message {
-        color: ${TextDanger};
+        color: ${TextDangerSubtle};
         font-size: 1rem;
         font-weight: bold;
 
