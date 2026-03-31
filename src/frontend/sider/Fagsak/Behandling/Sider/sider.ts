@@ -5,7 +5,6 @@ import type { IBehandling } from '../../../../typer/behandling';
 import { BehandlingSteg, BehandlingStegStatus, BehandlingÅrsak, hentStegNummer } from '../../../../typer/behandling';
 import type { IPersonResultat, IVilkårResultat } from '../../../../typer/vilkår';
 import { Resultat } from '../../../../typer/vilkår';
-import { formaterIdent } from '../../../../utils/formatter';
 
 export interface ISide {
     href: string;
@@ -17,6 +16,7 @@ export interface ISide {
 
 export interface IUnderside {
     navn: string;
+    ident: string;
     antallAksjonspunkter: () => number;
     hash: string;
 }
@@ -82,7 +82,8 @@ export const sider: Record<SideId, ISide> = {
 
             return personResultater.map((personResultat: IPersonResultat, index: number): IUnderside => {
                 return {
-                    navn: `${personResultat.person.navn}, ${formaterIdent(personResultat.person.personIdent)}`,
+                    navn: personResultat.person.navn,
+                    ident: personResultat.person.personIdent,
                     hash: `${index}_${personResultat.person.fødselsdato}`,
                     antallAksjonspunkter: () =>
                         personResultat.vilkårResultater.filter((vilkårResultat: FeltState<IVilkårResultat>) => {

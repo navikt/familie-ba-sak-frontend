@@ -1,66 +1,18 @@
 import * as React from 'react';
 import { Activity } from 'react';
 
+import classNames from 'classnames';
 import { NavLink } from 'react-router';
-import styled from 'styled-components';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Stack, VStack } from '@navikt/ds-react';
-import {
-    BgNeutralModerate,
-    BgNeutralSoft,
-    BgWarningModerate,
-    BorderAccent,
-    BorderFocus,
-    BorderWarning,
-    TextNeutral,
-    TextNeutralSubtle,
-} from '@navikt/ds-tokens/dist/tokens';
 
 import { useVenstremeny } from './useVenstremeny';
 import Styles from './Venstremeny.module.css';
 import { useFagsakId } from '../../../../hooks/useFagsakId';
+import { formaterIdent } from '../../../../utils/formatter';
 import { useBehandlingContext } from '../context/BehandlingContext';
-import type { IUnderside } from '../Sider/sider';
 import { erSidenAktiv } from '../Sider/sider';
-
-const MenyLenke = styled(NavLink)<{ $erLenkenAktiv: boolean }>`
-    text-decoration: none;
-    color: ${props => (props.$erLenkenAktiv ? TextNeutral : TextNeutralSubtle)};
-    padding: var(--ax-space-8) var(--ax-space-32);
-
-    &:focus {
-        box-shadow: 0 0 0 3px ${BorderFocus};
-        outline: none;
-    }
-
-    &.active {
-        background-color: ${BgNeutralSoft};
-        box-shadow: inset 0.35rem 0 0 0 ${BorderAccent};
-    }
-
-    ${props => {
-        if (props.$erLenkenAktiv)
-            return `
-                &:hover {
-                    background: ${BgNeutralModerate};
-                }
-        `;
-    }};
-`;
-
-const UndersideSirkel = styled.span`
-    border-color: ${BorderWarning};
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 50%;
-    background-color: ${BgWarningModerate};
-    display: inline-grid;
-    grid-column: circle;
-    place-items: center;
-    height: var(--ax-space-24);
-    width: var(--ax-space-24);
-`;
 
 export function Venstremeny() {
     const { behandling, trinnPåBehandling } = useBehandlingContext();
@@ -68,11 +20,11 @@ export function Venstremeny() {
     const fagsakId = useFagsakId();
     const [erÅpen, settErÅpen] = useVenstremeny();
 
-    const stansNavigeringDersomSidenIkkeErAktiv = (event: React.MouseEvent, sidenErAktiv: boolean) => {
+    function stansNavigeringDersomSidenIkkeErAktiv(event: React.MouseEvent, sidenErAktiv: boolean) {
         if (!sidenErAktiv) {
             event.preventDefault();
         }
-    };
+    }
 
     const icon = erÅpen ? (
         <ChevronLeftIcon aria-label={'Vis venstremeny'} />
@@ -93,42 +45,56 @@ export function Venstremeny() {
                 onClick={() => settErÅpen(prev => !prev)}
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box as={'nav'} paddingBlock={'space-8'}>
+                <Box as={'nav'}>
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
                         const undersider = side.undersider ? side.undersider(behandling) : [];
                         const sidenErAktiv = erSidenAktiv(side, behandling);
                         return (
                             <VStack key={sideId}>
-                                <MenyLenke
-                                    id={sideId}
+                                <NavLink
                                     to={tilPath}
-                                    $erLenkenAktiv={sidenErAktiv}
+                                    className={({ isActive }) =>
+                                        classNames(Styles.menylenke, {
+                                            [Styles.active]: isActive,
+                                            [Styles.lenkeAktiv]: sidenErAktiv,
+                                            [Styles.lenkeInaktiv]: !sidenErAktiv,
+                                        })
+                                    }
                                     onClick={event => stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)}
                                 >
-                                    {`${side.steg ? `${index + 1}. ` : ''}${side.navn}`}
-                                </MenyLenke>
-                                {undersider.map((underside: IUnderside) => {
+                                    {`${index + 1}. ${side.navn}`}
+                                </NavLink>
+                                {undersider.map(underside => {
                                     const antallAksjonspunkter = underside.antallAksjonspunkter();
                                     return (
-                                        <MenyLenke
+                                        <NavLink
                                             key={`${sideId}_${underside.hash}`}
-                                            id={`${sideId}_${underside.hash}`}
                                             to={`${tilPath}#${underside.hash}`}
-                                            $erLenkenAktiv={sidenErAktiv}
+                                            className={({ isActive }) =>
+                                                classNames(Styles.undersidelenke, {
+                                                    [Styles.active]: isActive,
+                                                    [Styles.lenkeAktiv]: sidenErAktiv,
+                                                    [Styles.lenkeInaktiv]: !sidenErAktiv,
+                                                })
+                                            }
                                             onClick={event =>
                                                 stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
                                             }
                                         >
-                                            <HStack align={'center'} gap={'space-4'}>
+                                            <HStack align={'center'} gap={'space-8'} wrap={false}>
                                                 {antallAksjonspunkter > 0 ? (
-                                                    <UndersideSirkel>{antallAksjonspunkter}</UndersideSirkel>
+                                                    <span className={Styles.undersideSirkel}>
+                                                        {antallAksjonspunkter}
+                                                    </span>
                                                 ) : (
                                                     <Box padding={'space-12'} />
                                                 )}
-                                                <BodyShort size={'small'}>{underside.navn}</BodyShort>
+                                                <BodyShort size={'small'}>
+                                                    {underside.navn}, {formaterIdent(underside.ident)}
+                                                </BodyShort>
                                             </HStack>
-                                        </MenyLenke>
+                                        </NavLink>
                                     );
                                 })}
                             </VStack>
