@@ -9,9 +9,9 @@ import {
     BgNeutralSoft,
     FontWeightBold,
     FontWeightRegular,
-    TextDanger,
+    TextDangerSubtle,
     TextNeutral,
-    TextSuccess,
+    TextSuccessSubtle,
 } from '@navikt/ds-tokens/dist/tokens';
 
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
@@ -52,9 +52,9 @@ const DataCellMedFarge = styled(DataCelle)<{
     $skalViseStipletLinje: boolean; // Sendes videre til DataCelle
 }>`
     color: ${props => {
-        if (props.$erNegativtBeløp) return TextDanger;
+        if (props.$erNegativtBeløp) return TextDangerSubtle;
         else if (props.$erNesteUtbetalingsperiode) {
-            return TextSuccess;
+            return TextSuccessSubtle;
         }
         return TextNeutral;
     }};
