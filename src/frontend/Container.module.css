@@ -1,0 +1,12 @@
+.main {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.systemLaster {
+    filter: blur(12px);
+    -webkit-filter: blur(12px);
+    pointer-events: none;
+    user-select: none;
+}
