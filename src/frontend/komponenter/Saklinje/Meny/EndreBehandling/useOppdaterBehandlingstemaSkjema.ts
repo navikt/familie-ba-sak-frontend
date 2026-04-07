@@ -12,12 +12,8 @@ export enum OppdaterBehandlingstemaFelt {
 }
 
 export interface OppdaterBehandlingstemaFormValues {
-    [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema | null;
-}
-
-type TransformedOppdaterBehandlingstemaFormValues = {
     [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema;
-};
+}
 
 interface Props {
     lukkModal: () => void;
@@ -31,7 +27,7 @@ export const useOppdaterBehandlingstemaSkjema = ({ lukkModal }: Props) => {
         .filter(it => it.id !== 'NASJONAL_ORDINÆR')
         .find(it => it.kategori === behandling.kategori && it.underkategori === behandling.underkategori)!;
 
-    const form = useForm<OppdaterBehandlingstemaFormValues, unknown, TransformedOppdaterBehandlingstemaFormValues>({
+    const form = useForm<OppdaterBehandlingstemaFormValues, unknown, OppdaterBehandlingstemaFormValues>({
         values: {
             [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: eksisterendeBehandlingstema,
         },
@@ -39,7 +35,7 @@ export const useOppdaterBehandlingstemaSkjema = ({ lukkModal }: Props) => {
 
     const { setError } = form;
 
-    const onSubmit = async (values: TransformedOppdaterBehandlingstemaFormValues) => {
+    const onSubmit = async (values: OppdaterBehandlingstemaFormValues) => {
         const { behandlingstema } = values;
 
         const oppdaterBehandlingstemaParameters = {

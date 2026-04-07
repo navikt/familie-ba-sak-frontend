@@ -41,17 +41,12 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
             label={'Velg behandlingstema'}
             readOnly={erLesevisning || isSubmitting}
             disabled={isSubmitting}
-            value={value?.id}
+            value={value.id}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));
             }}
             error={error?.message}
         >
-            {value === undefined && (
-                <option disabled key={'behandlingstema-select-disabled'} value={''} aria-selected={true}>
-                    Velg behandlingstema
-                </option>
-            )}
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
@@ -61,7 +56,7 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
                 )
                 .map(tema => {
                     return (
-                        <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
+                        <option key={tema.id} aria-selected={value.id === tema.id} value={tema.id}>
                             {tema.navn}
                         </option>
                     );
