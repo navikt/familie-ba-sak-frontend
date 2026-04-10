@@ -18,13 +18,14 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    uses: navikt/familie-baks-gha-workflows/.github/workflows/build-yarn-app.yaml@main # ratchet:exclude
+    uses: navikt/familie-baks-gha-workflows/.github/workflows/build-pnpm-app.yaml@main # ratchet:exclude
     with:
       build-image: true
       push-image: true
       skip-tests: ${{ inputs.skip-tests }}
       skip-validation: ${{ inputs.skip-validation }}
       build-profile: 'prod'
+      node-version: '24'
     secrets: inherit
   deploy-with-new-image:
     name: Deploy with new image

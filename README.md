@@ -8,15 +8,15 @@ Frontend app for barnetrygd sak.
 * Logg deg på naisdevice og gcloud, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler. 
 * Installer [NVM] (https://github.com/nvm-sh/nvm).
 * Kjør `nvm use`
-* Installere avhengigheter `yarn`
-* Starte dev-server `yarn start:dev`
+* Installere avhengigheter `pnpm install`
+* Starte dev-server `pnpm start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
 
 Hente avhengigheter krever at du har et Personal Access Token i GitHub med SSO til Nav-IT. For å opprette det må du gjøre følgende:
 1. Lag/forny access token med read rettigheter på pakker i Github (under developer settings)
 2. Logg inn på npm med `npm login --scope=@navikt --registry=https://npm.pkg.github.com` og benytt brukernavn, epost og tokenet du nettopp genererte
 
-For å bygge prodversjon kjør `yarn build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
+For å bygge prodversjon kjør `pnpm build`. Prodversjonen vil ikke kjøre lokalt med mindre det gjøres en del endringer i forbindelse med uthenting av environment variabler og URLer for uthenting av informasjon.
 
 ## Få token mot ba-sak
 For å få token for å gå mot familie-ba-sak kan du kjøre følgende kommando i terminalen med samme verdier for cliend_id, 
@@ -49,11 +49,11 @@ følger:
 Verdiene kan hentes via `process.env.X` i backend og `import.meta.env.VITE_X` i frontend.
 Merk: `VITE_` prefiks er påkrevd for å kunne eksponere verdiene til frontend.
 
-De lokale profilene kan kjøres med sine tilsvarende yarn-kommandoer.
+De lokale profilene kan kjøres med sine tilsvarende pnpm-kommandoer.
 
-- `yarn start:lokal`
-- `yarn start:hybrid`
-- `yarn start:lokalt-mot-preprod` (kan også kjøre `yarn start:dev`)
+- `pnpm start:lokal`
+- `pnpm start:hybrid`
+- `pnpm start:lokalt-mot-preprod` (kan også kjøre `pnpm start:dev`)
 
 ### Secrets
 

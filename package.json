@@ -7,19 +7,19 @@
   "author": "Team BAKS",
   "license": "MIT",
   "scripts": {
-    "start": "yarn start:backend:prod",
-    "start:dev": "yarn start:lokalt-mot-preprod",
-    "start-env": "yarn miljøvariabler && yarn build:backend && ENV=\"$ENV\" yarn start:backend:dev",
-    "start:lokal": "ENV=lokal yarn start-env",
-    "start:hybrid": "ENV=hybrid yarn start-env",
-    "start:lokalt-mot-preprod": "ENV=lokalt-mot-preprod yarn start-env",
+    "start": "pnpm start:backend:prod",
+    "start:dev": "pnpm start:lokalt-mot-preprod",
+    "start-env": "pnpm miljøvariabler && pnpm build:backend && ENV=\"$ENV\" pnpm start:backend:dev",
+    "start:lokal": "ENV=lokal pnpm start-env",
+    "start:hybrid": "ENV=hybrid pnpm start-env",
+    "start:lokalt-mot-preprod": "ENV=lokalt-mot-preprod pnpm start-env",
     "start:backend:dev": "NODE_ENV=development node dist_backend/server.js",
     "start:backend:prod": "NODE_ENV=production ENV=prod node dist_backend/server.js",
     "miljøvariabler": "./hent-og-lagre-miljøvariabler.sh",
-    "build": "yarn build:prod",
-    "build:dev": "NODE_ENV=development yarn build:backend && yarn build:frontend --mode lokalt-mot-preprod",
-    "build:preprod": "NODE_ENV=production yarn build:backend && yarn build:frontend --mode preprod",
-    "build:prod": "NODE_ENV=production yarn build:backend && yarn build:frontend --mode prod",
+    "build": "pnpm build:prod",
+    "build:dev": "NODE_ENV=development pnpm build:backend && pnpm build:frontend --mode lokalt-mot-preprod",
+    "build:preprod": "NODE_ENV=production pnpm build:backend && pnpm build:frontend --mode preprod",
+    "build:prod": "NODE_ENV=production pnpm build:backend && pnpm build:frontend --mode prod",
     "build:backend": "tsc -p src/backend/tsconfig.json",
     "build:frontend": "vite build src/frontend",
     "test": "vitest",
@@ -29,7 +29,7 @@
     "prettier:fix": "prettier --write './src/**/*.{js,jsx,ts,tsx,json,css}'",
     "prepare": "husky",
     "typecheck": "tsc --noEmit -p src/backend/tsconfig.json && tsc --noEmit -p src/frontend/tsconfig.json",
-    "validate": "yarn typecheck && yarn lint && yarn prettier"
+    "validate": "pnpm typecheck && pnpm lint && pnpm prettier"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
