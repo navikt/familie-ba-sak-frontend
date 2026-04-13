@@ -62,7 +62,6 @@ interface AppContextValue {
     settToast: (toastId: ToastTyper, toast: IToast) => void;
     settToasts: React.Dispatch<React.SetStateAction<{ [toastId: string]: IToast }>>;
     sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
-    systemetLaster: () => boolean;
     toasts: { [toastId: string]: IToast };
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
     skalObfuskereData: boolean;
@@ -72,7 +71,7 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const AppProvider = (props: PropsWithChildren) => {
     const { autentisert, innloggetSaksbehandler } = useAuthContext();
-    const { request, systemetLaster } = useHttp();
+    const { request } = useHttp();
     const toggles = useFeatureToggles();
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
@@ -163,7 +162,6 @@ const AppProvider = (props: PropsWithChildren) => {
                     }),
                 settToasts,
                 sjekkTilgang,
-                systemetLaster,
                 toasts,
                 hentPerson,
                 skalObfuskereData,

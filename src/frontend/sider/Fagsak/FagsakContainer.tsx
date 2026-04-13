@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { Navigate, Route, Routes } from 'react-router';
-import styled from 'styled-components';
 
-import { Alert, HStack, Loader } from '@navikt/ds-react';
+import { Alert, Box, HStack, Loader } from '@navikt/ds-react';
 
 import { BehandlingContainer } from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from './BrukerContext';
 import { Dokumentutsending } from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
+import Styles from './FagsakContainer.module.css';
 import { FagsakProvider } from './FagsakContext';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import { JournalpostListe } from './journalposter/JournalpostListe';
@@ -23,11 +23,6 @@ import { useSyncModiaContext } from '../../hooks/useSyncModiaContext';
 import { Personlinje } from '../../komponenter/Personlinje/Personlinje';
 import { Fagsaklinje } from '../../komponenter/Saklinje/Fagsaklinje';
 import { FagsakType } from '../../typer/fagsak';
-
-const HovedInnhold = styled.div`
-    height: calc(100vh - 3rem);
-    overflow: auto;
-`;
 
 export function FagsakContainer() {
     const fagsakId = useFagsakId();
@@ -51,7 +46,11 @@ export function FagsakContainer() {
     }
 
     if (fagsakError) {
-        return <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>;
+        return (
+            <Box margin={'space-8'}>
+                <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>
+            </Box>
+        );
     }
 
     if (isPendingBruker) {
@@ -64,14 +63,18 @@ export function FagsakContainer() {
     }
 
     if (brukerError) {
-        return <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>;
+        return (
+            <Box padding={'space-8'}>
+                <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>
+            </Box>
+        );
     }
 
     return (
-        <FagsakProvider fagsak={fagsak}>
-            <BrukerProvider bruker={bruker}>
-                <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
-                    <HovedInnhold>
+        <Box className={Styles.container}>
+            <FagsakProvider fagsak={fagsak}>
+                <BrukerProvider bruker={bruker}>
+                    <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
                         <Personlinje bruker={bruker} fagsak={fagsak} />
                         <Routes>
                             <Route
@@ -129,9 +132,9 @@ export function FagsakContainer() {
                                 }
                             />
                         </Routes>
-                    </HovedInnhold>
-                </ManuelleBrevmottakerePåFagsakProvider>
-            </BrukerProvider>
-        </FagsakProvider>
+                    </ManuelleBrevmottakerePåFagsakProvider>
+                </BrukerProvider>
+            </FagsakProvider>
+        </Box>
     );
 }
