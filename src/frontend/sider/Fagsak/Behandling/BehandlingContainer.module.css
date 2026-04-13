@@ -5,6 +5,7 @@
 
 .venstreKolonne {
     min-width: 1rem;
+    max-width: 22rem;
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
