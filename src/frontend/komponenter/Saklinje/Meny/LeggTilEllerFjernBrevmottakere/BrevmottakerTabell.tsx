@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FontWeightBold } from '@navikt/ds-tokens/dist/tokens';
-import CountryData from '@navikt/land-verktoy';
+import _CountryData from '@navikt/land-verktoy';
 
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
+
+const CountryData = (_CountryData as unknown as { default?: typeof _CountryData }).default ?? _CountryData;
 
 const FlexDiv = styled.div`
     display: flex;
