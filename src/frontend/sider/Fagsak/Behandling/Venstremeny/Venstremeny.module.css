@@ -1,3 +1,7 @@
+.container {
+    min-width: 18rem;
+}
+
 .knapp {
     position: absolute;
     margin-right: -20px;
@@ -15,6 +19,7 @@
     text-decoration: none;
     padding: var(--ax-space-8) var(--ax-space-20);
     border-left: 5px solid transparent;
+    user-select: text;
 }
 
 .menylenke:focus-visible {
@@ -31,6 +36,7 @@
     text-decoration: none;
     padding: var(--ax-space-8) var(--ax-space-16);
     border-left: 5px solid transparent;
+    user-select: text;
 }
 
 .undersidelenke.active {
@@ -64,4 +70,8 @@
     place-items: center;
     height: var(--ax-space-24);
     width: var(--ax-space-24);
+}
+
+.ident {
+    font-style: italic;
 }

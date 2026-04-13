@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, Stack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, CopyButton, HStack, Stack, VStack } from '@navikt/ds-react';
 
 import { useVenstremeny } from './useVenstremeny';
 import Styles from './Venstremeny.module.css';
@@ -45,7 +45,7 @@ export function Venstremeny() {
                 onClick={() => settErÅpen(prev => !prev)}
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box as={'nav'}>
+                <Box as={'nav'} className={Styles.container}>
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
                         const undersider = side.undersider ? side.undersider(behandling) : [];
@@ -62,6 +62,7 @@ export function Venstremeny() {
                                         })
                                     }
                                     onClick={event => stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)}
+                                    draggable={false}
                                 >
                                     {`${index + 1}. ${side.navn}`}
                                 </NavLink>
@@ -81,6 +82,7 @@ export function Venstremeny() {
                                             onClick={event =>
                                                 stansNavigeringDersomSidenIkkeErAktiv(event, sidenErAktiv)
                                             }
+                                            draggable={false}
                                         >
                                             <HStack align={'center'} gap={'space-8'} wrap={false}>
                                                 {antallAksjonspunkter > 0 ? (
@@ -90,9 +92,15 @@ export function Venstremeny() {
                                                 ) : (
                                                     <Box padding={'space-12'} />
                                                 )}
-                                                <BodyShort size={'small'}>
-                                                    {underside.navn}, {formaterIdent(underside.ident)}
-                                                </BodyShort>
+                                                <VStack>
+                                                    <BodyShort>{underside.navn}</BodyShort>
+                                                    <HStack align={'center'}>
+                                                        <BodyShort size={'small'} className={Styles.ident}>
+                                                            {formaterIdent(underside.ident)}
+                                                        </BodyShort>
+                                                        <CopyButton copyText={underside.ident} size={'xsmall'} />
+                                                    </HStack>
+                                                </VStack>
                                             </HStack>
                                         </NavLink>
                                     );
