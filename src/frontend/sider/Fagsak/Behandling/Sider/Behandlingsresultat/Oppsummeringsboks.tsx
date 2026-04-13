@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { ASpacing10, ASpacing4, ASpacing6 } from '@navikt/ds-tokens/dist/tokens';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -38,18 +37,18 @@ const AlertWithBottomMargin = styled(Alert)`
 `;
 
 const UtbetalingsbeløpStack = styled(VStack)`
-    padding: ${ASpacing6} ${ASpacing10} ${ASpacing4} 0;
+    padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
 `;
 
 const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <HGrid columns="1fr 8rem 5rem" gap={'2'}>
+    <HGrid columns="1fr 8rem 5rem" gap={'space-8'}>
         {children}
     </HGrid>
 );
 
 const TotaltUtbetaltRad = styled(HGrid)`
     border-top: 1px dashed;
-    padding-top: ${ASpacing4};
+    padding-top: var(--ax-space-16);
 `;
 
 interface IProps {
@@ -191,7 +190,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     };
 
     return (
-        <Box borderColor="border-strong" borderWidth="1" padding="10">
+        <Box borderColor="neutral-strong" borderWidth="1" padding="space-40">
             <HGrid columns={'1fr 3rem'} align="center">
                 <Heading level={'3'} size="xsmall">
                     {månedNavnOgÅr()}
@@ -209,7 +208,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                 <BodyShort spacing>Ingen utbetalinger</BodyShort>
             ) : (
                 <>
-                    <UtbetalingsbeløpStack gap={'4'}>
+                    <UtbetalingsbeløpStack gap={'space-16'}>
                         <UtbetalingsbeløpRad>
                             <BodyShort>Person</BodyShort>
                             <BodyShort>Sats</BodyShort>

@@ -20,7 +20,7 @@ export const SamhandlerFormServerErrors: Record<
 };
 
 export interface SamhandlerFormValues {
-    [SamhandlerFeltnavn.ORGNR]: '';
+    [SamhandlerFeltnavn.ORGNR]: string;
 }
 
 export enum SamhandlerFeltnavn {
@@ -44,7 +44,7 @@ export function SamhandlerForm({ form, onSubmit }: Props) {
     return (
         <FormProvider {...form}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <HGrid columns={2} gap={'4'} align={'start'}>
+                <HGrid columns={2} gap={'space-16'} align={'start'}>
                     <OrganisasjonsnummerFelt />
                     <Box as={'div'} marginBlock={'space-28'}>
                         <Button type={'submit'} variant={'secondary'} size={'small'} loading={isSubmitting}>

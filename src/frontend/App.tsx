@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { hentInnloggetBruker } from './api/saksbehandler';
-import Container from './Container';
+import { Container } from './Container';
 import { AppProvider } from './context/AppContext';
 import { AuthContextProvider } from './context/AuthContext';
 import { HttpContextProvider } from './context/HttpContext';

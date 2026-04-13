@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Select, UNSAFE_Combobox } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, HStack, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -21,7 +21,6 @@ import {
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
-import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
@@ -29,25 +28,23 @@ const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehand
         kompetanse.felter.periode.verdi.fom
     }`;
 
-interface IProps {
+interface Props {
     skjema: ISkjema<IKompetanse, IBehandling>;
     tilgjengeligeBarn: ComboboxOption[];
-    status: EøsPeriodeStatus;
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
     erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
 }
 
-const KompetanseTabellRadEndre: React.FC<IProps> = ({
+export function KompetanseTabellRadEndre({
     skjema,
     tilgjengeligeBarn,
-    status,
     sendInnSkjema,
     toggleForm,
     slettKompetanse,
     erAnnenForelderOmfattetAvNorskLovgivning,
-}) => {
+}: Props) {
     const { vurderErLesevisning } = useBehandlingContext();
     const lesevisning = vurderErLesevisning(true);
 
@@ -64,6 +61,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
     };
 
     const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
+
     const nasjonalRettDifferanseberegningMedUlikeAktivitetsland =
         skjema.felter.resultat?.verdi === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING &&
         skjema.felter.barnetsBostedsland.verdi === 'NO' &&
@@ -79,7 +77,7 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
 
     return (
         <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend="Kompetanseskjema" hideLegend>
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="6">
+            <VStack gap={'space-16'} maxWidth={'40rem'} paddingInline={'space-4 space-4'}>
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}
@@ -242,27 +240,23 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                     </option>
                 </Select>
                 {toPrimærland && (
-                    <Alert
-                        variant={'warning'}
-                        inline
-                        size={'small'}
-                        children={
-                            'Norge og annen forelders aktivitetsland er primærland. Saksbehandler må manuelt vurdere om Norge skal utbetale barnetrygden.'
-                        }
-                    />
+                    <Box marginBlock={'space-2 space-2'}>
+                        <Alert variant={'warning'} size={'small'} inline={true}>
+                            Norge og annen forelders aktivitetsland er primærland. Saksbehandler må manuelt vurdere om
+                            Norge skal utbetale barnetrygden.
+                        </Alert>
+                    </Box>
                 )}
                 {nasjonalRettDifferanseberegningMedUlikeAktivitetsland && (
-                    <Alert
-                        variant={'warning'}
-                        inline
-                        size={'small'}
-                        children={
-                            'To andre EØS-land er primærland. Saksbehandler må manuelt beregne hvilket av EØS-landene som utbetaler den høyeste barnetrygden og som Norge skal differanseberegne mot.'
-                        }
-                    />
+                    <Box marginBlock={'space-2 space-2'}>
+                        <Alert variant={'warning'} size={'small'} inline={true}>
+                            To andre EØS-land er primærland. Saksbehandler må manuelt beregne hvilket av EØS-landene som
+                            utbetaler den høyeste barnetrygden og som Norge skal differanseberegne mot.
+                        </Alert>
+                    </Box>
                 )}
                 {!lesevisning && (
-                    <Knapperad>
+                    <HStack justify={'space-between'} marginBlock={'space-12 space-0'}>
                         <div>
                             <Button
                                 onClick={() => sendInnSkjema()}
@@ -281,7 +275,6 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 Avbryt
                             </Button>
                         </div>
-
                         {skjema.felter.status.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
                                 variant={'tertiary'}
@@ -293,14 +286,12 @@ const KompetanseTabellRadEndre: React.FC<IProps> = ({
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >
-                                {'Fjern'}
+                                Fjern
                             </Button>
                         )}
-                    </Knapperad>
+                    </HStack>
                 )}
-            </EøsPeriodeSkjemaContainer>
+            </VStack>
         </Fieldset>
     );
-};
-
-export default KompetanseTabellRadEndre;
+}

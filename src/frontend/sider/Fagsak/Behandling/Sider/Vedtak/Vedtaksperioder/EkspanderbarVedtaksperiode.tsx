@@ -35,6 +35,10 @@ const StyledExpansionTitle = styled(ExpansionCard.Title)`
     margin-left: 0;
 `;
 
+const StyledExpansionContent = styled(ExpansionCard.Content)`
+    overflow: visible;
+`;
+
 interface EkspanderbarVedtaksperiodeProps extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
     åpen: boolean;
@@ -84,7 +88,7 @@ const EkspanderbarVedtaksperiode: React.FC<EkspanderbarVedtaksperiodeProps> = ({
                     {skalViseSum && <BodyShort>{formaterBeløp(sum)}</BodyShort>}
                 </StyledExpansionTitle>
             </StyledExpansionHeader>
-            <ExpansionCard.Content>{children}</ExpansionCard.Content>
+            <StyledExpansionContent>{children}</StyledExpansionContent>
         </StyledExpansionCard>
     );
 };

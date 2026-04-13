@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
-import { AZIndexPopover } from '@navikt/ds-tokens/dist/tokens';
 import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
@@ -84,7 +83,7 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
         container: (provided, props) =>
             Object.assign({}, provided, {
                 maxWidth: '50rem',
-                zIndex: props.isFocused ? Number(AZIndexPopover) : 1,
+                zIndex: props.isFocused ? 1000 : 1,
             }),
         groupHeading: provided =>
             Object.assign({}, provided, {
@@ -107,7 +106,6 @@ const BegrunnelserMultiselect: React.FC<IProps> = ({ vedtaksperiodetype }) => {
             Object.assign({}, provided, {
                 whiteSpace: 'pre-wrap',
                 textOverflow: 'hidden',
-                overflow: 'hidden',
             }),
     };
 

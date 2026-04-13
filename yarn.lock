@@ -933,43 +933,42 @@
     "@emnapi/runtime" "^1.7.1"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.36.0":
-  version "7.36.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.36.0/5d01680f20cd3ad3c447ea53fd4f71d9e40056e1#5d01680f20cd3ad3c447ea53fd4f71d9e40056e1"
-  integrity sha512-zFLkhbaKFyXLWxXSnx3GW9tEGDz/fJ/Eug29tfgb6Lb934s3VEVUXQiYB8+BuUt6fTLz3ZGh3jv0NfWoGGtR1A==
+"@navikt/aksel-icons@8.6.0":
+  version "8.6.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/8.6.0/ff360cbe68f878b6e8deb59c19a23aa30eacab9e#ff360cbe68f878b6e8deb59c19a23aa30eacab9e"
+  integrity sha512-e+evlFA6eq7vW1pZDg1Fc9V7L7h/Mp1Luubv7kTJUp4IrWQN7Is+nfVj65TLcrQqMm9fjkmc1eI5PcmuY9ibvQ==
 
-"@navikt/aksel-icons@^7.36.0":
-  version "7.37.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/7.37.0/69470b7e21c152f7705df217fd5e3566237c8bc4#69470b7e21c152f7705df217fd5e3566237c8bc4"
-  integrity sha512-4FwjmO0m2z1390DUJBISTeR6VRmzJZsyrpp+UWxNBk3marIq5vM/11BF1dnIUOjxM3/n0D8DqXS/1q8YiJWPbA==
+"@navikt/aksel-icons@^8.6.0":
+  version "8.8.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/aksel-icons/8.8.0/9b61d6181f2dec2ea5f721c40f24d10e8fb42d21#9b61d6181f2dec2ea5f721c40f24d10e8fb42d21"
+  integrity sha512-VUyD/P/LLsmOisc127ih1/AIvx8kG6ENwfZNgQLgOjASkNLfzhvDBZ582q7m2lFLS+jC/D6hxJMNlRr76zsvGQ==
 
-"@navikt/ds-css@7.36.0":
-  version "7.36.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/7.36.0/d9e4574fe73a39a74ec442ac341d22ff61aab0d4#d9e4574fe73a39a74ec442ac341d22ff61aab0d4"
-  integrity sha512-MLWHW8jj0ypW2l0suDE+k6ZmqX15kKzvlM9qLacbyDBrOP5AQY/nRWFem5IRple6mjDNUcLfzk3Z7UVMozzqCA==
+"@navikt/ds-css@8.6.0":
+  version "8.6.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/8.6.0/4c763d8f5f64587336bba5cba74b8a16ab379619#4c763d8f5f64587336bba5cba74b8a16ab379619"
+  integrity sha512-Rv39j5USosDDcOlcfNUG9uVOJ+ZgMjEvVRQdAN0QTVY3rBpceNlMbrBQEo1YzDlA6WpD9d8DyiGuDYYVpakoLw==
 
-"@navikt/ds-react@7.36.0":
-  version "7.36.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/7.36.0/6deea33d6483ed91e7eee9a7dc57c0d10c9185c6#6deea33d6483ed91e7eee9a7dc57c0d10c9185c6"
-  integrity sha512-mDTLc31q35kkf5KwIKbKISTKW2KjEplXDAhk/mAaa/E1HfZciLwhkOfnqVF89ktb4XsAUORwGVzrHp9PqabTUw==
+"@navikt/ds-react@8.6.0":
+  version "8.6.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/8.6.0/484ac00ed4dbee8147f6a6cde76720bd7874b93b#484ac00ed4dbee8147f6a6cde76720bd7874b93b"
+  integrity sha512-yAZAZT+Ii9exJFbxqVy1ONjJvb1k+iKH8KoIFgroPHS6k+QhiBnB52aas1LSoWR7eqHpgUNV6QMUsQt24kmT3A==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.36.0"
-    "@navikt/ds-tokens" "^7.36.0"
-    clsx "^2.1.0"
+    "@navikt/aksel-icons" "^8.6.0"
+    "@navikt/ds-tokens" "^8.6.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tokens@7.36.0":
-  version "7.36.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.36.0/ad3ab2a9f2179c5a4703738de33233af54336dc2#ad3ab2a9f2179c5a4703738de33233af54336dc2"
-  integrity sha512-qGLDJfnqQJoSHz03lsxqXkbl4MqN/d9W532TKyGcXswsYSeTEj425weFUvPwTh2w29dM4ncGmomijZAUjFYH/w==
+"@navikt/ds-tokens@8.6.0":
+  version "8.6.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/8.6.0/acac1517c2bc4c4eda259f1bc591db24656f102f#acac1517c2bc4c4eda259f1bc591db24656f102f"
+  integrity sha512-MdnPFvi7wPF0N5ms6psNqW0IevlHhoswUCOYFQl7hFwL+uRcqFna6rT8fm/co04z/HDUKKfadbrW0yodzDxj1w==
 
-"@navikt/ds-tokens@^7.36.0":
-  version "7.37.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/7.37.0/faec0475b4703e1ad10265855d1bca1393f1224b#faec0475b4703e1ad10265855d1bca1393f1224b"
-  integrity sha512-+ewS/zBXgDE6NgpCsgZe+szCHVc4L+9M2Hmz5oxwvLE79gc4aoBv05ZYzokE/rZWaHLZxZAtv41Omv4XRwrK8g==
+"@navikt/ds-tokens@^8.6.0":
+  version "8.8.0"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/8.8.0/1b64643ec409921069ede0fc5eab1850afa23393#1b64643ec409921069ede0fc5eab1850afa23393"
+  integrity sha512-xrX+4l4EOOSdLXy4NdIft87052I95m3tLDNPjTuyOBMyZZdEivLskc8KbemLhTGJJZ2TfiDe6jpkYwP0iFFLGA==
 
 "@navikt/familie-backend@10.1.21":
   version "10.1.21"
@@ -992,17 +991,17 @@
     prom-client "15.1.3"
     redis "5.11.0"
 
-"@navikt/familie-form-elements@21.0.8":
-  version "21.0.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/21.0.8/4ea8a352134c4d30e1ce0f16f54fd19a4ffd8dc7#4ea8a352134c4d30e1ce0f16f54fd19a4ffd8dc7"
-  integrity sha512-HDqE6AU12nFM5e/e5hQsdOOsTSjxhColeiEVcopVm9f/GiECgw0lksj8kw4VsFxDohbl3+cYCx6rbDzMGeaJAA==
+"@navikt/familie-form-elements@22.0.1":
+  version "22.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-form-elements/22.0.1/8a18208cad1a699cc48496cca93bc242b3a60f60#8a18208cad1a699cc48496cca93bc242b3a60f60"
+  integrity sha512-K5BmXg7ifVSskpt3TIwcUha/saWmra7KCndYJ/+kG7FCr8SGQ5Kg8BInY9OkM+AEZH00S/gwSNMS4uCdxg+fnA==
   dependencies:
     react-select "5.10.2"
 
-"@navikt/familie-header@16.1.4":
-  version "16.1.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/16.1.4/a6bd98baef8c5e30374b86aa60605c8945a9a738#a6bd98baef8c5e30374b86aa60605c8945a9a738"
-  integrity sha512-hLty4BQHy1kFCxdymIQzMIq4dMOozL48tasLqe0LxSWUwxT0EOO93FvTFpVEBQvw/xOEnul4Iq1ccyeC5mR5dA==
+"@navikt/familie-header@17.0.1":
+  version "17.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-header/17.0.1/f447675868a739749cb282c04f2a6ee4ffdc9bd1#f447675868a739749cb282c04f2a6ee4ffdc9bd1"
+  integrity sha512-XQtmLAlzgqZzsrtDdKCVFUWC/vnOJ6j5U8eCeAIOJ2o/L+z/qxat1zXpfTzVcdLaQNTicKIvbJL//OTRFsjc8A==
   dependencies:
     "@navikt/familie-ikoner" "^9.1.4"
     "@navikt/familie-typer" "^8.0.5"
@@ -1041,10 +1040,10 @@
     deep-equal "2.2.3"
     hashids "2.3.0"
 
-"@navikt/familie-tidslinje@10.0.10":
-  version "10.0.10"
-  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/10.0.10/d66cd20c534dc4815706f98234c363a0f1c1fdfc#d66cd20c534dc4815706f98234c363a0f1c1fdfc"
-  integrity sha512-ytpX7+x3/YWbOO4tSyf2XAiX1B8eSOc34wk79AfOwVb/oKuNcbT2lK6ytWAzIn84mOO9TGc4mFb5do2NmgOaTA==
+"@navikt/familie-tidslinje@11.0.1":
+  version "11.0.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/familie-tidslinje/11.0.1/5b363d977d1caf08bc4f1bb82c69dd3ffcdd0992#5b363d977d1caf08bc4f1bb82c69dd3ffcdd0992"
+  integrity sha512-+JuIyg1QydywVGlIiafgCrNIgGtmnccqATlucSZ+fp47b983XSQPZHJ6X/q6TYR+MsLeBSIn/sJF0MEU8YYdMw==
   dependencies:
     classnames "2.5.1"
     nanoid "5.1.5"
@@ -2636,10 +2635,10 @@ cliui@^8.0.1:
     strip-ansi "^6.0.1"
     wrap-ansi "^7.0.0"
 
-clsx@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.0.tgz#e851283bcb5c80ee7608db18487433f7b23f77cb"
-  integrity sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==
+clsx@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
+  integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
 cluster-key-slot@1.1.2:
   version "1.1.2"

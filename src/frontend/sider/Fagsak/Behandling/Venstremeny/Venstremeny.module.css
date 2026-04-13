@@ -7,6 +7,61 @@
     height: 34px;
     border-radius: 50%;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    background-color: var(--a-surface-default);
+    background-color: var(--ax-bg-default);
     z-index: 10;
+}
+
+.menylenke {
+    text-decoration: none;
+    padding: var(--ax-space-8) var(--ax-space-20);
+    border-left: 5px solid transparent;
+}
+
+.menylenke:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: -3px;
+}
+
+.menylenke.active {
+    background-color: var(--ax-bg-neutral-soft);
+    border-left: 5px solid var(--ax-border-accent);
+}
+
+.undersidelenke {
+    text-decoration: none;
+    padding: var(--ax-space-8) var(--ax-space-16);
+    border-left: 5px solid transparent;
+}
+
+.undersidelenke.active {
+    background-color: var(--ax-bg-neutral-soft);
+    border-left: 5px solid var(--ax-border-accent);
+}
+
+.undersidelenke:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: -3px;
+}
+
+.lenkeAktiv {
+    color: var(--ax-text-neutral);
+}
+
+.lenkeAktiv:hover {
+    background: var(--ax-bg-neutral-moderate);
+}
+
+.lenkeInaktiv {
+    color: var(--ax-text-neutral-subtle);
+    pointer-events: none;
+}
+
+.undersideSirkel {
+    border: 1px solid var(--ax-border-warning);
+    border-radius: 50%;
+    background-color: var(--ax-bg-warning-moderate);
+    display: inline-grid;
+    place-items: center;
+    height: var(--ax-space-24);
+    width: var(--ax-space-24);
 }

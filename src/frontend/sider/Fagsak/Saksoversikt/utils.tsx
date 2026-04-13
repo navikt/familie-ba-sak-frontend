@@ -23,9 +23,9 @@ import {
     erKlageFeilregistrertAvKA,
     harAnkeEksistertPåKlagebehandling,
     type IKlagebehandling,
+    Klagebehandlingstype,
     utledKlagebehandlingResultattekst,
 } from '../../../typer/klage';
-import { Klagebehandlingstype } from '../../../typer/klage';
 import type { ITilbakekrevingsbehandling } from '../../../typer/tilbakekrevingsbehandling';
 import { Behandlingsresultatstype, Tilbakekrevingsbehandlingstype } from '../../../typer/tilbakekrevingsbehandling';
 import { isoStringTilDate } from '../../../utils/dato';
@@ -208,7 +208,7 @@ export const lagLenkePåResultat = (fagsakId: number, behandling: Saksoversiktsb
             );
         case Saksoversiktbehandlingstype.KLAGE: {
             return (
-                <HStack gap={'2'}>
+                <HStack gap={'space-8'}>
                     <Link
                         href={`/redirect/familie-klage/behandling/${behandling.id}`}
                         onMouseDown={event => event.preventDefault()}

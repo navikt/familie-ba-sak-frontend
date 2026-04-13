@@ -10,6 +10,7 @@ import {
     ErrorSummary,
     Fieldset,
     Heading,
+    HelpText,
     HStack,
     Label,
     Link,
@@ -32,7 +33,6 @@ import {
     useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf,
 } from '../../../../../hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
-import HelpText from '../../../../../komponenter/HelpText';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
 import type { Målform } from '../../../../../typer/søknad';

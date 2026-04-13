@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
-import { ABorderDanger, ABorderDefault, ABorderWarning, ASurfaceAction } from '@navikt/ds-tokens/dist/tokens';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
-import { EøsPeriodeStatus, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
+import type { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';
+import { Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../../../../../../../typer/person';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../../utils/dato';
 import type { IIsoMånedPeriode } from '../../../../../../../utils/dato';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../../utils/dato';
 import { mapEøsPeriodeStatusTilStatus } from '../../../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
 
@@ -21,13 +21,6 @@ interface IEøsPeriodeSkjemaContainerProps {
 
 export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
     max-width: 40rem;
-    border-left: 0.125rem solid
-        ${props => {
-            if (props.$lesevisning) return ABorderDefault;
-            if (props.$status === EøsPeriodeStatus.IKKE_UTFYLT) return ABorderWarning;
-            if (props.$status === EøsPeriodeStatus.UFULLSTENDIG) return ABorderDanger;
-            return ASurfaceAction;
-        }};
     padding-left: 2rem;
     margin-left: -3rem;
 `;
@@ -59,7 +52,7 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
     return (
         <>
             <Table.DataCell>
-                <HStack wrap={false} align="center" gap="4">
+                <HStack wrap={false} align="center" gap="space-16">
                     {props.vurderingsform === Vurderingsform.AUTOMATISK ? (
                         <StyledCogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
                     ) : (

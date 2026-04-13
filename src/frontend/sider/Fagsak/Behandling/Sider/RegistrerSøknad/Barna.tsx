@@ -56,7 +56,11 @@ export const Barna: React.FunctionComponent = () => {
             <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
             {maskerteRelasjoner.map((forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                 return (
-                    <HStack gap="2" margin="2" key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}>
+                    <HStack
+                        gap="space-8"
+                        margin="space-8"
+                        key={`${index}_${forelderBarnRelasjonMaskert.relasjonRolle}`}
+                    >
                         <StatusIkon status={Status.FEIL} />
                         <BodyShort>{`Bruker har barn med diskresjonskode ${
                             adressebeskyttelsestyper[forelderBarnRelasjonMaskert.adressebeskyttelseGradering] ??

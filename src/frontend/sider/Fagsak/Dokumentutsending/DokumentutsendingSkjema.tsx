@@ -10,9 +10,9 @@ import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import {
     dokumentÅrsak,
+    type DokumentÅrsak,
     DokumentÅrsakPerson,
     useDokumentutsendingContext,
-    type DokumentÅrsak,
 } from './DokumentutsendingContext';
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
@@ -261,7 +261,7 @@ export function DokumentutsendingSkjema() {
 
                         {skjema.felter.årsak.verdi === DokumentÅrsakPerson.KAN_SØKE && <KanSøkeSkjema />}
                         {skjema.felter.fritekstAvsnitt.erSynlig && (
-                            <Box paddingBlock={'space-4 0'}>
+                            <Box paddingBlock={'space-16 space-0'}>
                                 <FritekstAvsnitt />
                             </Box>
                         )}

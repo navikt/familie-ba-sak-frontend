@@ -55,7 +55,7 @@ export const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
     );
 
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             <Label>Fastsett periode</Label>
             <FomDato erLesevisning={erLesevisning} tidligsteDato={tidligsteDato} senesteDato={senesteDato} />
 

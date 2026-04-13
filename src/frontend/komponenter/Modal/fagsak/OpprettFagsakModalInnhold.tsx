@@ -62,7 +62,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         return (
             <>
                 <Modal.Body>
-                    <VStack gap={'4'}>
+                    <VStack gap={'space-16'}>
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
@@ -84,7 +84,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         return (
             <>
                 <Modal.Body>
-                    <VStack gap={'4'}>
+                    <VStack gap={'space-16'}>
                         {personError && <Alert variant={'error'}>{personError.message}</Alert>}
                         {fagsakerError && <Alert variant={'error'}>{fagsakerError.message}</Alert>}
                     </VStack>
@@ -104,7 +104,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     return (
         <FagsakerProvider fagsaker={fagsaker}>
             <Modal.Body>
-                <VStack gap={'4'}>
+                <VStack gap={'space-16'}>
                     <Undertittel fagsaker={fagsaker} />
                     <PersonDetaljer person={person} />
                     <OpprettFagsakForm
