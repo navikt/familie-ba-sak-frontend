@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ChangeEvent } from 'react';
 
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -11,7 +11,8 @@ interface Props {
 }
 
 export function BegrunnelseField({ readOnly }: Props) {
-    const { control } = useFormContext<EndreBehandlendeEnhetFormValues>();
+    const { control, clearErrors } = useFormContext<EndreBehandlendeEnhetFormValues>();
+
     const {
         field: { value, onChange },
         fieldState: { error },
@@ -26,14 +27,18 @@ export function BegrunnelseField({ readOnly }: Props) {
         },
     });
 
+    function handleOnChange(event: ChangeEvent<HTMLTextAreaElement>) {
+        clearErrors('root');
+        onChange(event.target.value);
+    }
+
     return (
         <Textarea
-            disabled={isSubmitting}
-            readOnly={readOnly}
             label={'Begrunnelse'}
             value={value}
             maxLength={4000}
-            onChange={event => onChange(event.target.value)}
+            onChange={handleOnChange}
+            readOnly={readOnly || isSubmitting}
             error={error?.message}
         />
     );

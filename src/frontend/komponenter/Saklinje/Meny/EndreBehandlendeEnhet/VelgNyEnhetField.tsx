@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ChangeEvent } from 'react';
 
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -15,7 +15,8 @@ interface Props {
 export function VelgNyEnhetField({ readOnly }: Props) {
     const { behandling } = useBehandlingContext();
 
-    const { control } = useFormContext<EndreBehandlendeEnhetFormValues>();
+    const { control, clearErrors } = useFormContext<EndreBehandlendeEnhetFormValues>();
+
     const {
         field: { value, onChange },
         fieldState: { error },
@@ -23,26 +24,28 @@ export function VelgNyEnhetField({ readOnly }: Props) {
     } = useController({
         name: EndreBehandlendeEnhetFormFields.ENHET_ID,
         control,
-        rules: {
-            required: 'Enhet må velges.',
-        },
+        rules: { required: 'Enhet må velges.' },
     });
+
+    function handleOnChange(event: ChangeEvent<HTMLSelectElement>) {
+        clearErrors('root');
+        onChange(event.target.value);
+    }
 
     return (
         <Select
-            disabled={isSubmitting}
-            readOnly={readOnly}
-            value={value}
             label={'Velg ny enhet'}
-            onChange={event => onChange(event.target.value)}
+            value={value}
+            onChange={handleOnChange}
+            readOnly={readOnly || isSubmitting}
             error={error?.message}
         >
             {behandlendeEnheter.map(enhet => {
                 return (
                     <option
-                        aria-selected={value === enhet.enhetId}
                         key={enhet.enhetId}
                         value={enhet.enhetId}
+                        aria-selected={value === enhet.enhetId}
                         disabled={behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === enhet.enhetId}
                     >
                         {`${enhet.enhetId} ${enhet.enhetNavn}`}
