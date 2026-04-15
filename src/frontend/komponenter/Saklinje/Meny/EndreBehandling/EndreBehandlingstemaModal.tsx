@@ -21,14 +21,10 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
         formState: { isSubmitting, errors },
     } = form;
 
-    const onClose = () => {
-        lukkModal();
-    };
-
     return (
         <Modal
             open
-            onClose={onClose}
+            onClose={lukkModal}
             header={{ heading: 'Endre behandlingstema', size: 'small' }}
             width={'35rem'}
             portal
@@ -44,7 +40,7 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                         <Button type={'submit'} variant="primary" size="small" loading={isSubmitting}>
                             Bekreft
                         </Button>
-                        <Button variant="secondary" size="small" onClick={onClose}>
+                        <Button variant="secondary" size="small" onClick={lukkModal}>
                             Avbryt
                         </Button>
                     </Modal.Footer>
