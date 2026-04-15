@@ -36,7 +36,7 @@
 
 .inputWrapperReadOnly {
     background-color: var(--ax-bg-neutral-moderate);
-    border-color: var(--ax-border-neutral);
+    border-color: var(--ax-border-neutral-subtleA);
     box-shadow: none;
     cursor: default;
 }
