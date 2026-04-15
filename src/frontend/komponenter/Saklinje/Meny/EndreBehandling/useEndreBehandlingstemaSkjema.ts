@@ -7,19 +7,19 @@ import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/contex
 import type { IBehandlingstema } from '../../../../typer/behandlingstema';
 import { behandlingstemaer } from '../../../../typer/behandlingstema';
 
-export enum OppdaterBehandlingstemaFelt {
+export enum EndreBehandlingstemaFelt {
     BEHANDLINGSTEMA = 'behandlingstema',
 }
 
-export interface OppdaterBehandlingstemaFormValues {
-    [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema;
+export interface EndreBehandlingstemaFormValues {
+    [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: IBehandlingstema;
 }
 
 interface Props {
     lukkModal: () => void;
 }
 
-export const useOppdaterBehandlingstemaSkjema = ({ lukkModal }: Props) => {
+export const useEndreBehandlingstemaSkjema = ({ lukkModal }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: oppdaterBehandlingstema } = useOppdaterBehandlingstema();
 
@@ -27,15 +27,15 @@ export const useOppdaterBehandlingstemaSkjema = ({ lukkModal }: Props) => {
         .filter(it => it.id !== 'NASJONAL_ORDINÆR')
         .find(it => it.kategori === behandling.kategori && it.underkategori === behandling.underkategori)!;
 
-    const form = useForm<OppdaterBehandlingstemaFormValues, unknown, OppdaterBehandlingstemaFormValues>({
+    const form = useForm<EndreBehandlingstemaFormValues>({
         values: {
-            [OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA]: eksisterendeBehandlingstema,
+            [EndreBehandlingstemaFelt.BEHANDLINGSTEMA]: eksisterendeBehandlingstema,
         },
     });
 
     const { setError } = form;
 
-    const onSubmit = async (values: OppdaterBehandlingstemaFormValues) => {
+    const onSubmit = async (values: EndreBehandlingstemaFormValues) => {
         const { behandlingstema } = values;
 
         const oppdaterBehandlingstemaParameters = {

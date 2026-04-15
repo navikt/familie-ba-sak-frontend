@@ -5,26 +5,24 @@ import { FormProvider } from 'react-hook-form';
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
 
 import { BehandlingstemaSelect } from './BehandlingstemaSelect';
-import { useOppdaterBehandlingstemaSkjema } from './useOppdaterBehandlingstemaSkjema';
+import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 
 interface Props {
     lukkModal: () => void;
 }
 
-export const OppdaterBehandlingstemaModal = ({ lukkModal }: Props) => {
+export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
     const { vurderErLesevisning } = useBehandlingContext();
-    const { form, onSubmit } = useOppdaterBehandlingstemaSkjema({ lukkModal });
+    const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
 
     const {
         handleSubmit,
         formState: { isSubmitting, errors },
-        reset,
     } = form;
 
     const onClose = () => {
         lukkModal();
-        reset();
     };
 
     return (
@@ -43,16 +41,12 @@ export const OppdaterBehandlingstemaModal = ({ lukkModal }: Props) => {
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            key={'bekreft'}
-                            type={'submit'}
-                            variant="primary"
-                            size="small"
-                            children={'Bekreft'}
-                            loading={isSubmitting}
-                            disabled={isSubmitting}
-                        />
-                        <Button key={'avbryt'} variant="secondary" size="small" onClick={onClose} children={'Avbryt'} />
+                        <Button type={'submit'} variant="primary" size="small" loading={isSubmitting}>
+                            Bekreft
+                        </Button>
+                        <Button variant="secondary" size="small" onClick={onClose}>
+                            Avbryt
+                        </Button>
                     </Modal.Footer>
                 </form>
             </FormProvider>

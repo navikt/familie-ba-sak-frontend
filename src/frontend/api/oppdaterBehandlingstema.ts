@@ -22,7 +22,6 @@ export const oppdaterBehandlingstema = async (
         },
         method: 'PUT',
         url: `/familie-ba-sak/api/behandlinger/${behandlingId}/behandlingstema`,
-        påvirkerSystemLaster: true,
     });
     return RessursResolver.resolveToPromise(ressurs);
 };

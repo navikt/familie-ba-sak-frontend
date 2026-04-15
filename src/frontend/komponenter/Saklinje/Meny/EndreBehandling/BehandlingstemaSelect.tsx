@@ -4,10 +4,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import {
-    OppdaterBehandlingstemaFelt,
-    type OppdaterBehandlingstemaFormValues,
-} from './useOppdaterBehandlingstemaSkjema';
+import { EndreBehandlingstemaFelt, type EndreBehandlingstemaFormValues } from './useEndreBehandlingstemaSkjema';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
 import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../../../../typer/behandlingstema';
 import { FagsakType } from '../../../../typer/fagsak';
@@ -19,13 +16,13 @@ interface Props {
 export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
     const { fagsak } = useFagsakContext();
 
-    const { control } = useFormContext<OppdaterBehandlingstemaFormValues>();
+    const { control } = useFormContext<EndreBehandlingstemaFormValues>();
     const {
         field: { value, onChange },
         fieldState: { error },
         formState: { isSubmitting },
     } = useController({
-        name: OppdaterBehandlingstemaFelt.BEHANDLINGSTEMA,
+        name: EndreBehandlingstemaFelt.BEHANDLINGSTEMA,
         control,
         rules: {
             required: 'Behandlingstema må velges.',
@@ -40,7 +37,6 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
         <Select
             label={'Velg behandlingstema'}
             readOnly={erLesevisning || isSubmitting}
-            disabled={isSubmitting}
             value={value.id}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));
