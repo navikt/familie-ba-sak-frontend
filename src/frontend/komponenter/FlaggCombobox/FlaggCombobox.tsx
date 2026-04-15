@@ -7,22 +7,22 @@ import { ExclamationmarkTriangleFillIcon, PadlockLockedFillIcon } from '@navikt/
 import { ErrorMessage, HStack, Label, VStack } from '@navikt/ds-react';
 import _Flag from '@navikt/flagg-ikoner';
 
-import styles from './FlagCombobox.module.css';
-import { type RegionCode } from './RegionCombobox/region';
+import styles from './FlaggCombobox.module.css';
+import { type Regionkode } from './RegionCombobox/region';
 import { useMergedRef } from '../../hooks/useMergedRef';
 
 const Flag = (_Flag as unknown as { default?: typeof _Flag }).default ?? _Flag;
 
 const estimateVirtualizerSize = () => 36;
 
-export interface FlagComboboxOption<T extends string = string> {
+export interface FlaggComboboxOption<T extends string = string> {
     value: T;
     label: string;
-    regionCode: RegionCode;
+    regionCode: Regionkode;
 }
 
-interface FlagComboboxBaseProps<T extends string> {
-    options: FlagComboboxOption<T>[];
+interface FlaggComboboxBaseProps<T extends string> {
+    options: FlaggComboboxOption<T>[];
     label: string;
     error?: string | Error;
     readOnly?: boolean;
@@ -31,23 +31,23 @@ interface FlagComboboxBaseProps<T extends string> {
     className?: string;
 }
 
-export interface FlagComboboxSingleProps<T extends string> extends FlagComboboxBaseProps<T> {
+export interface FlaggComboboxSingleProps<T extends string> extends FlaggComboboxBaseProps<T> {
     isMulti?: false;
     value: T | undefined | null;
     onChange: (value: T | null) => void;
 }
 
-export interface FlagComboboxMultiProps<T extends string> extends FlagComboboxBaseProps<T> {
+export interface FlaggComboboxMultiProps<T extends string> extends FlaggComboboxBaseProps<T> {
     isMulti: true;
     value: T[] | undefined;
     onChange: (value: T[]) => void;
 }
 
-export type FlagComboboxProps<T extends string> = (FlagComboboxSingleProps<T> | FlagComboboxMultiProps<T>) & {
+export type FlaggComboboxProps<T extends string> = (FlaggComboboxSingleProps<T> | FlaggComboboxMultiProps<T>) & {
     ref?: React.Ref<HTMLInputElement>;
 };
 
-export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
+export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
     const {
         ref,
         options,
@@ -85,7 +85,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
     const anchorRef = useRef<HTMLDivElement>(null);
 
     const optionsMap = useMemo(() => {
-        const map = new Map<T, FlagComboboxOption<T>>();
+        const map = new Map<T, FlaggComboboxOption<T>>();
         options.forEach(opt => map.set(opt.value, opt));
         return map;
     }, [options]);
@@ -199,7 +199,7 @@ export function FlagCombobox<T extends string>(props: FlagComboboxProps<T>) {
         }
     }
 
-    function handleOnOptionSelected(option: FlagComboboxOption<T>) {
+    function handleOnOptionSelected(option: FlaggComboboxOption<T>) {
         if (props.isMulti) {
             const isSelected = multiValues.includes(option.value);
             const newValues = isSelected ? multiValues.filter(v => v !== option.value) : [...multiValues, option.value];

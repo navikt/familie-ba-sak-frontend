@@ -1,4 +1,4 @@
-export type RegionCode =
+export type Regionkode =
     | 'AD'
     | 'AE'
     | 'AF'
@@ -256,7 +256,7 @@ export type RegionCode =
     | 'XS'
     | 'EU';
 
-export const EØS_COUNTRIES_REGION_CODES: RegionCode[] = [
+export const EØS_LAND_REGIONKODER: Regionkode[] = [
     'DK',
     'FI',
     'IS',
@@ -293,7 +293,7 @@ export const EØS_COUNTRIES_REGION_CODES: RegionCode[] = [
     'SK',
 ];
 
-export const ALL_COUNTRIES_REGION_CODES: RegionCode[] = [
+export const ALLE_LAND_REGIONKODER: Regionkode[] = [
     'NO',
     'SE',
     'DK',
@@ -552,7 +552,7 @@ export const ALL_COUNTRIES_REGION_CODES: RegionCode[] = [
     'XS', // Ukjent
 ];
 
-export const REGION_CODE_LABELS: Record<RegionCode, string> = {
+export const REGIONKODE_TIL_LABEL: Record<Regionkode, string> = {
     AD: 'Andorra',
     AE: 'De forente arabiske emirater',
     AF: 'Afghanistan',

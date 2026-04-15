@@ -1,20 +1,8 @@
-import type { RegionCode } from '../RegionCombobox/region';
+import type { Regionkode } from '../RegionCombobox/region';
 
-export type CurrencyCode =
-    | 'DKK'
-    | 'SEK'
-    | 'ISK'
-    | 'EUR'
-    | 'PLN'
-    | 'BGN'
-    | 'CZK'
-    | 'HUF'
-    | 'HRK'
-    | 'RON'
-    | 'GBP'
-    | 'CHF';
+export type Valutakode = 'DKK' | 'SEK' | 'ISK' | 'EUR' | 'PLN' | 'BGN' | 'CZK' | 'HUF' | 'HRK' | 'RON' | 'GBP' | 'CHF';
 
-export const EØS_CURRENCY_CODES: CurrencyCode[] = [
+export const EØS_VALUTAKODER: Valutakode[] = [
     'DKK',
     'SEK',
     'BGN',
@@ -29,7 +17,7 @@ export const EØS_CURRENCY_CODES: CurrencyCode[] = [
     'RON',
 ];
 
-export const CURRENCY_CODE_TO_REGION_CODE: Record<CurrencyCode, RegionCode> = {
+export const VALUTAKODE_TIL_REGIONKODE: Record<Valutakode, Regionkode> = {
     DKK: 'DK',
     SEK: 'SE',
     ISK: 'IS',
@@ -44,7 +32,7 @@ export const CURRENCY_CODE_TO_REGION_CODE: Record<CurrencyCode, RegionCode> = {
     CHF: 'CH',
 };
 
-export const CURRENCY_CODE_LABELS: Record<CurrencyCode, string> = {
+export const VALUTAKODE_TIL_LABEL: Record<Valutakode, string> = {
     SEK: 'SEK - Svensk krone',
     DKK: 'DKK - Dansk krone',
     GBP: 'GBP - Britisk pund',

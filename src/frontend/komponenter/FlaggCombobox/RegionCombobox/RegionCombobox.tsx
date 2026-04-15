@@ -1,10 +1,10 @@
 import React, { type Ref, useMemo } from 'react';
 
-import { FlagCombobox } from '../FlagCombobox';
-import { REGION_CODE_LABELS, type RegionCode } from './region';
+import { FlaggCombobox } from '../FlaggCombobox';
+import { REGIONKODE_TIL_LABEL, type Regionkode } from './region';
 
 interface RegionComboboxBaseProps {
-    options: RegionCode[];
+    options: Regionkode[];
     label: string;
     error?: string | Error;
     readOnly?: boolean;
@@ -15,14 +15,14 @@ interface RegionComboboxBaseProps {
 
 interface RegionComboboxSingleProps extends RegionComboboxBaseProps {
     isMulti?: false;
-    value: RegionCode | undefined | null;
-    onChange: (value: RegionCode | null) => void;
+    value: Regionkode | undefined | null;
+    onChange: (value: Regionkode | null) => void;
 }
 
 interface RegionComboboxMultiProps extends RegionComboboxBaseProps {
     isMulti: true;
-    value: RegionCode[] | undefined;
-    onChange: (value: RegionCode[]) => void;
+    value: Regionkode[] | undefined;
+    onChange: (value: Regionkode[]) => void;
 }
 
 type RegionComboboxProps = (RegionComboboxSingleProps | RegionComboboxMultiProps) & {
@@ -33,10 +33,10 @@ export function RegionCombobox({ options, ...rest }: RegionComboboxProps) {
     const regionOptions = useMemo(() => {
         return options.map(regionCode => ({
             value: regionCode,
-            label: REGION_CODE_LABELS[regionCode],
+            label: REGIONKODE_TIL_LABEL[regionCode],
             regionCode: regionCode,
         }));
     }, [options]);
 
-    return <FlagCombobox {...rest} options={regionOptions} />;
+    return <FlaggCombobox {...rest} options={regionOptions} />;
 }

@@ -10,7 +10,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { Country, Currency } from '@navikt/land-verktoy';
 
 import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
-import { type CurrencyCode, CurrencyCombobox, EØS_CURRENCY_CODES } from '../../../../../../../komponenter/FlagCombobox';
+import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '../../../../../../../komponenter/FlaggCombobox';
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
@@ -139,10 +139,10 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             size={'medium'}
                         />
                         {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                            <CurrencyCombobox
+                            <ValutaCombobox
                                 label={'Valuta'}
-                                value={skjema.felter.valutakode?.verdi as CurrencyCode}
-                                options={EØS_CURRENCY_CODES}
+                                value={skjema.felter.valutakode?.verdi as Valutakode}
+                                options={EØS_VALUTAKODER}
                                 onChange={value => {
                                     if (value) {
                                         skjema.felter.valutakode?.validerOgSettFelt(value);

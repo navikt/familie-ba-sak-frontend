@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import { fireEvent } from '@testing-library/dom';
 import { vi, beforeAll, afterAll } from 'vitest';
 
-import { FlagCombobox, type FlagComboboxOption } from './FlagCombobox';
+import { FlaggCombobox, type FlaggComboboxOption } from './FlaggCombobox';
 import { render } from '../../testutils/testrender';
 
-const currencyOptions: FlagComboboxOption[] = [
+const valutaOptions: FlaggComboboxOption[] = [
     { value: 'SEK', label: 'SEK - Svensk krone', regionCode: 'SE' },
     { value: 'DKK', label: 'DKK - Dansk krone', regionCode: 'DK' },
     { value: 'EUR', label: 'EUR - Euro', regionCode: 'EU' },
 ];
 
-const regionOptions: FlagComboboxOption[] = [
+const regionOptions: FlaggComboboxOption[] = [
     { value: 'NO', label: 'Norge', regionCode: 'NO' },
     { value: 'SE', label: 'Sverige', regionCode: 'SE' },
     { value: 'DK', label: 'Danmark', regionCode: 'DK' },
@@ -20,13 +20,13 @@ const regionOptions: FlagComboboxOption[] = [
 
 interface SingleComboboxWrapperProps {
     label: string;
-    options: FlagComboboxOption[];
+    options: FlaggComboboxOption[];
     onChangeMock: (newVal: string | null) => void;
 }
 
 interface MultiComboboxWrapperProps {
     label: string;
-    options: FlagComboboxOption[];
+    options: FlaggComboboxOption[];
     initialValue: string[];
     onChangeMock: (newVals: string[]) => void;
 }
@@ -34,7 +34,7 @@ interface MultiComboboxWrapperProps {
 function SingleComboboxWrapper({ label, options, onChangeMock }: SingleComboboxWrapperProps) {
     const [val, setVal] = useState<string | null>(null);
     return (
-        <FlagCombobox
+        <FlaggCombobox
             label={label}
             options={options}
             value={val}
@@ -50,7 +50,7 @@ function SingleComboboxWrapper({ label, options, onChangeMock }: SingleComboboxW
 function MultiComboboxWrapper({ label, options, initialValue, onChangeMock }: MultiComboboxWrapperProps) {
     const [vals, setVals] = useState<string[]>(initialValue);
     return (
-        <FlagCombobox
+        <FlaggCombobox
             label={label}
             options={options}
             value={vals}
@@ -63,7 +63,7 @@ function MultiComboboxWrapper({ label, options, initialValue, onChangeMock }: Mu
     );
 }
 
-describe('FlagCombobox', () => {
+describe('FlaggCombobox', () => {
     // --- Localized Virtualizer Mocks ---
     const originalResizeObserver = globalThis.ResizeObserver;
     const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
@@ -118,7 +118,7 @@ describe('FlagCombobox', () => {
         const onChangeMock = vi.fn();
 
         const { user, screen } = render(
-            <SingleComboboxWrapper label={'Velg valuta'} options={currencyOptions} onChangeMock={onChangeMock} />
+            <SingleComboboxWrapper label={'Velg valuta'} options={valutaOptions} onChangeMock={onChangeMock} />
         );
 
         const input = screen.getByRole('combobox', { name: 'Velg valuta' });
@@ -139,7 +139,7 @@ describe('FlagCombobox', () => {
         const { user, screen } = render(
             <MultiComboboxWrapper
                 label={'Velg valutaer'}
-                options={currencyOptions}
+                options={valutaOptions}
                 initialValue={['SEK']}
                 onChangeMock={onChangeMock}
             />
