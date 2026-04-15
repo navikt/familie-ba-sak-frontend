@@ -56,7 +56,7 @@ export function Høyremeny() {
                     <Tabs value={aktivTab} onChange={tab => settAktivTab(tab as TabValg)} iconPosition={'top'}>
                         <Tabvelger skalViseTotrinnskontroll={skalViseTotrinnskontroll} />
                         <Tabs.Panel value={TabValg.Totrinnskontroll}>
-                            <Totrinnskontroll />
+                            <Totrinnskontroll navigeringVedLukkingAvModal={() => settAktivTab(TabValg.Historikk)} />
                         </Tabs.Panel>
                         <Tabs.Panel value={TabValg.Historikk}>
                             <Historikk

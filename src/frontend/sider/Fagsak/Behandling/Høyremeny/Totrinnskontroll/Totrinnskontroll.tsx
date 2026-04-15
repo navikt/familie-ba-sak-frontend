@@ -41,7 +41,7 @@ const initiellModalVerdi = {
     beslutning: TotrinnskontrollBeslutning.IKKE_VURDERT,
 };
 
-export function Totrinnskontroll() {
+export function Totrinnskontroll({ navigeringVedLukkingAvModal }: { navigeringVedLukkingAvModal: () => void }) {
     const { fagsak } = useFagsakContext();
     const { behandling, trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
         useBehandlingContext();
@@ -131,7 +131,10 @@ export function Totrinnskontroll() {
             {modalVerdi.skalVises && (
                 <Modal
                     open
-                    onClose={() => settModalVerdi(initiellModalVerdi)}
+                    onClose={() => {
+                        settModalVerdi(initiellModalVerdi);
+                        navigeringVedLukkingAvModal();
+                    }}
                     header={{ heading: 'Totrinnskontroll', size: 'medium' }}
                 >
                     <Modal.Body>
