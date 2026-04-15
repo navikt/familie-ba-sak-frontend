@@ -3,35 +3,39 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, Heading, HStack, Label, Link, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
+import {
+    Alert,
+    Button,
+    Fieldset,
+    Heading,
+    HGrid,
+    HStack,
+    Label,
+    Link,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { Currency } from '@navikt/land-verktoy';
 
+import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
+import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '../../../../../../../komponenter/FlaggCombobox';
 import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
+import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
-const ValutakursRad = styled.div`
-    width: 32rem;
-    display: flex;
-    gap: 1rem;
-`;
-
 const StyledISKAlert = styled(Alert)`
     margin-top: 2rem;
-`;
-
-const StyledTextField = styled(TextField)`
-    width: 8rem;
 `;
 
 const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
@@ -71,6 +75,8 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     åpenBehandling,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const toggles = useFeatureToggles();
+
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
         åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
@@ -142,7 +148,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                     legend={'Registrer valutakursdato'}
                     hideLegend={erValutakursVurdertAutomatisk}
                 >
-                    <ValutakursRad>
+                    <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
                         <Datovelger
                             felt={skjema.felter.valutakursdato}
                             label={'Valutakursdato'}
@@ -151,20 +157,30 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             disableWeekends
                             kanKunVelgeFortid
                         />
-                        <Valutavelger
-                            label={'Valuta'}
-                            value={skjema.felter.valutakode?.verdi}
-                            options={EØS_CURRENCY}
-                            onChange={(value: Currency) => {
-                                if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                } else {
-                                    skjema.felter.valutakode?.nullstill();
-                                }
-                            }}
-                            readOnly={erLesevisning}
-                        />
-                        <StyledTextField
+                        {toggles[FeatureToggle.brukNyFlagCombobox] ? (
+                            <ValutaCombobox
+                                label={'Valuta'}
+                                value={skjema.felter.valutakode?.verdi as Valutakode}
+                                options={EØS_VALUTAKODER}
+                                onChange={() => {}}
+                                readOnly={true}
+                            />
+                        ) : (
+                            <Valutavelger
+                                label={'Valuta'}
+                                value={skjema.felter.valutakode?.verdi}
+                                options={EØS_CURRENCY}
+                                onChange={(value: Currency) => {
+                                    if (value) {
+                                        skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                                    } else {
+                                        skjema.felter.valutakode?.nullstill();
+                                    }
+                                }}
+                                readOnly={true}
+                            />
+                        )}
+                        <TextField
                             label={'Valutakurs'}
                             readOnly={erLesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
@@ -172,7 +188,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
                         />
-                    </ValutakursRad>
+                    </HGrid>
                     {erManuellInputAvKurs && (
                         <StyledISKAlert variant="warning" size="small" inline>
                             <Heading size="xsmall">Manuell innhenting av valutakurs for Islandske kroner (ISK)</Heading>

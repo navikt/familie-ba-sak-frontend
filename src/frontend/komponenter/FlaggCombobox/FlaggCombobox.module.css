@@ -1,0 +1,268 @@
+.container {
+    width: 100%;
+}
+
+.inputWrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 12px;
+    min-height: 3rem;
+    cursor: text;
+    background-color: var(--ax-bg-input);
+    border: 1px solid var(--ax-border-neutral);
+    border-radius: var(--ax-radius-8);
+    box-shadow: 0 0 0 1px transparent;
+}
+
+.inputWrapperSingle {
+    align-items: center;
+}
+
+.inputWrapperMulti {
+    align-items: center;
+}
+
+.inputWrapper:not(:disabled, .inputWrapperReadOnly):focus-within {
+    box-shadow: var(--ax-shadow-dialog);
+    border-color: var(--ax-border-strong);
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: 3px;
+}
+
+.inputWrapperError:not(:hover, :focus-within, :disabled) {
+    box-shadow: 0 0 0 1px var(--ax-border-danger);
+    border-color: var(--ax-border-danger);
+}
+
+.inputWrapperReadOnly {
+    background-color: var(--ax-bg-neutral-moderate);
+    border-color: var(--ax-border-neutral-subtleA);
+    box-shadow: none;
+    cursor: default;
+}
+
+.selectedFlag {
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    min-width: 60px;
+    width: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    font-family: var(--ax-font-family), serif;
+    font-size: var(--ax-font-size-large);
+    font-weight: var(--ax-font-weight-regular);
+    line-height: var(--ax-font-line-height-medium);
+}
+
+.arrowButton {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 8px;
+    color: var(--ax-text-neutral);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: var(--ax-bg-default);
+    border: 1px solid var(--ax-border-neutral);
+    border-radius: 6px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 50;
+    padding: 4px 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.dropdownBottom {
+    top: calc(100% + 8px);
+    bottom: auto;
+}
+
+.dropdownTop {
+    bottom: calc(100% + 8px);
+    top: auto;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.option:hover,
+.optionFocused {
+    background-color: var(--ax-bg-neutral-moderate-hover);
+    border-left: 4px solid var(--ax-border-neutral-strong);
+}
+
+.optionText {
+    color: var(--ax-text-neutral);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.optionFlagContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.optionFlag {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+}
+
+.chipFlag {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+}
+
+.selectedOption {
+    background-color: var(--ax-bg-accent-moderate-pressedA);
+}
+
+.noResults {
+    padding: 8px 12px;
+    color: var(--ax-text-neutral-subtle);
+    font-size: var(--ax-font-size-medium);
+    text-align: center;
+}
+
+.flagSvg {
+    width: 24px;
+    height: 16px;
+    border-radius: 2px;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.clearButton {
+    background: none;
+    border: none;
+    padding: 4px;
+    color: var(--ax-text-neutral);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearButton svg {
+    width: 14px;
+    height: 14px;
+}
+
+.arrowIconOpen {
+    transform: rotate(180deg);
+}
+
+.checkmarkSvg {
+    margin-left: auto;
+    color: var(--ax-text-neutral);
+    flex-shrink: 0;
+}
+
+.errorMessageIcon {
+    color: var(--ax-text-danger-subtle);
+    padding-bottom: 1px;
+}
+
+.arrowButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background-color: var(--ax-bg-neutral-moderateA);
+    border: 1px solid var(--ax-border-neutral-subtle);
+    color: var(--ax-text-neutral);
+    padding: 0 6px;
+    border-radius: var(--ax-radius-4);
+    font-size: var(--ax-font-size-large);
+    white-space: nowrap;
+}
+
+.chipRemove {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin-left: 6px;
+    color: var(--ax-text-neutral);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.chipRemove:hover {
+    background-color: var(--ax-bg-neutral-moderate-hover);
+    color: var(--ax-text-neutral);
+}
+
+.valueContainer {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.valueContainerSingle {
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.valueContainerMulti {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-block: 4px;
+}
+
+.actionsContainer {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.relativeAnchor {
+    position: relative;
+    width: 100%;
+}
