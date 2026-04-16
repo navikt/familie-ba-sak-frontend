@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, Box, HStack, VStack } from '@navikt/ds-react';
+import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import Styles from './BehandlingContainer.module.css';
@@ -47,10 +47,22 @@ export function BehandlingContainer() {
                 </BehandlingProvider>
             );
         case RessursStatus.IKKE_TILGANG:
-            return <Alert variant={'warning'}>Du har ikke tilgang til å se denne behandlingen.</Alert>;
+            return (
+                <GlobalAlert status="warning">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
+            );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <Alert variant={'error'}>{behandlingRessurs.frontendFeilmelding}</Alert>;
+            return (
+                <GlobalAlert status="error">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
+            );
         default:
             return <div />;
     }

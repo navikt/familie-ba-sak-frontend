@@ -3,7 +3,19 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyLong, Button, Heading, HStack, Modal, Spacer, Switch, Table, VStack } from '@navikt/ds-react';
+import {
+    BodyLong,
+    Box,
+    Button,
+    Heading,
+    HStack,
+    LocalAlert,
+    Modal,
+    Spacer,
+    Switch,
+    Table,
+    VStack,
+} from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
@@ -27,10 +39,6 @@ const StyledTable = styled(Table)`
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-top: 1rem;
 `;
 
 const StyledHeaderCell = styled(Table.HeaderCell)`
@@ -149,11 +157,15 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, �
                 </VStack>
             </HStack>
             {!erValutakurserGyldige() && (
-                <StyledAlert
-                    variant={'warning'}
-                    fullWidth
-                    children={'For perioder som skal differanseberegnes, må valutakursdato registeres'}
-                />
+                <Box marginBlock={'space-16 space-0'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                For perioder som skal differanseberegnes, må valutakursdato registeres
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
             <StyledTable>
                 <Table.Header>

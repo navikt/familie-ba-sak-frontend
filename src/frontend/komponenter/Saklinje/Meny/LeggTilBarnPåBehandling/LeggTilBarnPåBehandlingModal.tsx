@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Heading, HelpText, Modal, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, Heading, HelpText, InlineMessage, Modal, TextField } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -121,10 +121,10 @@ export function LeggTilBarnPåBehandlingModal({ lukkModal }: Props) {
                         label={'Fødselsnummer'}
                         placeholder={'11 siffer'}
                     />
-                    <Alert variant="info" inline={true}>
+                    <InlineMessage status="info">
                         Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke reverseres uten å
                         henlegge.
-                    </Alert>
+                    </InlineMessage>
                 </Fieldset>
             </Modal.Body>
             <Modal.Footer>

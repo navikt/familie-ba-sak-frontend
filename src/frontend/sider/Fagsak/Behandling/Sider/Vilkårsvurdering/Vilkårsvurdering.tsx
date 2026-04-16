@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import { useNavigate } from 'react-router';
 
-import { Alert, BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, List, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
@@ -103,22 +104,26 @@ export function Vilkårsvurdering() {
             <VStack gap="space-40">
                 <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
                 {uregistrerteBarn.length > 0 && (
-                    <Alert variant="info">
-                        <BodyShort>Du har registrert følgende barn som ikke er registrert i Folkeregisteret:</BodyShort>
-                        <List as={'ol'}>
-                            {uregistrerteBarn.map(uregistrertBarn => (
-                                <List.Item key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
-                                    <BodyShort>
-                                        {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
-                                            isoString: uregistrertBarn.fødselsdato,
-                                            tilFormat: Datoformat.DATO,
-                                        })}`}
-                                    </BodyShort>
-                                </List.Item>
-                            ))}
-                        </List>
-                        <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
-                    </Alert>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            <BodyShort>
+                                Du har registrert følgende barn som ikke er registrert i Folkeregisteret:
+                            </BodyShort>
+                            <List as={'ol'}>
+                                {uregistrerteBarn.map(uregistrertBarn => (
+                                    <List.Item key={`${uregistrertBarn.navn}_${uregistrertBarn.fødselsdato}`}>
+                                        <BodyShort>
+                                            {`${uregistrertBarn.navn} - ${isoStringTilFormatertString({
+                                                isoString: uregistrertBarn.fødselsdato,
+                                                tilFormat: Datoformat.DATO,
+                                            })}`}
+                                        </BodyShort>
+                                    </List.Item>
+                                ))}
+                            </List>
+                            <BodyShort>Dette vil føre til avslag for barna i listen.</BodyShort>
+                        </InfoCard.Message>
+                    </InfoCard>
                 )}
                 {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) && visFeilmeldinger && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">

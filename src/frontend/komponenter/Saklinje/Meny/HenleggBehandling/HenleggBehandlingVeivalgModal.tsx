@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useNavigate } from 'react-router';
 
-import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, LocalAlert, Modal } from '@navikt/ds-react';
 
 import { ModalType } from '../../../../context/ModalContext';
 import { useModal } from '../../../../hooks/useModal';
@@ -24,7 +24,11 @@ export function HenleggBehandlingVeivalgModal() {
                 <>
                     {args === undefined && (
                         <Modal.Body>
-                            <Alert variant={'error'}>En feil oppstod ved innlasting av modalen.</Alert>
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>En feil oppstod ved innlasting av modalen.</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
                         </Modal.Body>
                     )}
                     {args !== undefined && <Innhold årsak={args.årsak} />}

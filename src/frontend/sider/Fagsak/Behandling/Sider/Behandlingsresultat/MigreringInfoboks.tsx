@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-
-import { Alert } from '@navikt/ds-react';
+import { Box, LocalAlert } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { byggTomRessurs } from '@navikt/familie-typer';
 import type { Ressurs } from '@navikt/familie-typer';
+import { byggTomRessurs } from '@navikt/familie-typer';
 
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 interface IProps {
     behandlingId: number;
 }
-
-const StyledAlert = styled(Alert)`
-    margin: 1rem 0;
-`;
 
 const MigreringInfoboks: React.FC<IProps> = ({ behandlingId }) => {
     const { request } = useHttp();
@@ -33,7 +27,15 @@ const MigreringInfoboks: React.FC<IProps> = ({ behandlingId }) => {
     const feilmelding = hentFrontendFeilmelding(melding);
 
     if (feilmelding !== undefined) {
-        return <StyledAlert variant="info">{feilmelding}</StyledAlert>;
+        return (
+            <Box marginBlock={'space-16'}>
+                <LocalAlert status={'error'}>
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>{feilmelding}</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
+            </Box>
+        );
     } else return null;
 };
 

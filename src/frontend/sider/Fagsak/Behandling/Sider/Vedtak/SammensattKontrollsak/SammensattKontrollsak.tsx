@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Button, ErrorMessage, Textarea, VStack } from '@navikt/ds-react';
+import { Button, ErrorMessage, LocalAlert, Textarea, VStack } from '@navikt/ds-react';
 
 import { useSammensattKontrollsakContext } from './SammensattKontrollsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -39,11 +39,16 @@ const SammensattKontrollsak: React.FC = () => {
                 readOnly={erLesevisning}
             />
             {fritekstErEndret && (
-                <Alert variant="warning" size="small">
-                    Du har ikke lagret dine siste endringer, og vil miste disse om du forlater siden uten å lagre.
-                </Alert>
+                <LocalAlert status="warning" size={'small'}>
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            Du har ikke lagret dine siste endringer, og vil miste disse om du forlater siden uten å
+                            lagre.
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             )}
-            {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
+            {feilmelding && <ErrorMessage showIcon>{feilmelding}</ErrorMessage>}
             {!erLesevisning && (
                 <StyledButton
                     onClick={() => opprettEllerOppdaterSammensattKontrollsak(fritekst)}

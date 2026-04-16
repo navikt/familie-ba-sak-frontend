@@ -2,9 +2,9 @@ import React from 'react';
 
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import { Link as ReactRouterLink } from 'react-router';
-import styled from 'styled-components';
 
-import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Heading, InfoCard, Link, LocalAlert, VStack } from '@navikt/ds-react';
 
 import { Behandlinger } from './Behandlinger';
 import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
@@ -20,10 +20,6 @@ import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
 import { useFagsakContext } from '../FagsakContext';
-
-const StyledAlert = styled(Alert)`
-    width: ${SaksoversiktPanelBredde};
-`;
 
 export function Saksoversikt() {
     const { fagsak } = useFagsakContext();
@@ -78,38 +74,48 @@ export function Saksoversikt() {
         ) {
             return utbetalingsperiodeInneværendeMåned.utbetaltPerMnd < 1 &&
                 gjeldendeBehandling?.kategori === BehandlingKategori.EØS ? (
-                <StyledAlert variant="info">
-                    Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra Nav
-                </StyledAlert>
+                <InfoCard data-color="info" style={{ maxWidth: SaksoversiktPanelBredde }}>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        Siste gjeldende vedtak er en EØS-sak uten månedlige utbetalinger fra Nav
+                    </InfoCard.Message>
+                </InfoCard>
             ) : (
                 <>
                     {utbetalingsperiodeNesteMåned &&
                         utbetalingsperiodeNesteMåned !== utbetalingsperiodeInneværendeMåned && (
-                            <StyledAlert variant="info">
-                                <VStack>
-                                    {`Utbetalingen endres fra og med ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
-                                    {lenkeTilBehandlingsresultat()}
-                                </VStack>
-                            </StyledAlert>
+                            <InfoCard data-color="info" style={{ maxWidth: SaksoversiktPanelBredde }}>
+                                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                    <VStack>
+                                        {`Utbetalingen endres fra og med ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
+                                        {lenkeTilBehandlingsresultat()}
+                                    </VStack>
+                                </InfoCard.Message>
+                            </InfoCard>
                         )}
                     <Utbetalinger vedtaksperiode={utbetalingsperiodeInneværendeMåned} />
                 </>
             );
         } else if (utbetalingsperiodeNesteMåned) {
             return (
-                <StyledAlert variant="info">
-                    <VStack>
-                        {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
-                        {lenkeTilBehandlingsresultat()}
-                    </VStack>
-                </StyledAlert>
+                <InfoCard data-color="info" style={{ maxWidth: SaksoversiktPanelBredde }}>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        <VStack>
+                            {`Utbetalingen starter ${format(nesteMåned, Datoformat.MÅNED_ÅR_NAVN)}.`}
+                            {lenkeTilBehandlingsresultat()}
+                        </VStack>
+                    </InfoCard.Message>
+                </InfoCard>
             );
         } else {
             return (
-                <StyledAlert variant="error">
-                    Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte hvis problemet
-                    vedvarer.
-                </StyledAlert>
+                <LocalAlert status="error" style={{ maxWidth: SaksoversiktPanelBredde }}>
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            Noe gikk galt ved henting av utbetalinger. Prøv igjen eller kontakt brukerstøtte hvis
+                            problemet vedvarer.
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             );
         }
     };

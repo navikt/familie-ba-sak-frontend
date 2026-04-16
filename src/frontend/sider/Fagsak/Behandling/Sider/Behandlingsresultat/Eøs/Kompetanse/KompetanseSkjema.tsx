@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Heading, InfoCard, LocalAlert, Table } from '@navikt/ds-react';
 
 import KompetanseTabellRad from './KompetanseTabellRad';
 import type { IBehandling } from '../../../../../../../typer/behandling';
@@ -47,20 +48,21 @@ const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visF
                 Kompetanse
             </Heading>
             {harUfullstendigeKompetanser && åpenBehandling.årsak !== BehandlingÅrsak.MIGRERING && (
-                <Alert
-                    variant={'warning'}
-                    fullWidth
-                    children={'For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse'}
-                />
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            For EØS-perioder med tilkjent ytelse, må det fastsettes kompetanse
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             )}
             {harUfullstendigeKompetanser && åpenBehandling.årsak === BehandlingÅrsak.MIGRERING && (
-                <Alert
-                    variant={'info'}
-                    fullWidth
-                    children={
-                        'Saken er migrert og kompetansen er hentet fra Infotrygd. Kompetanseskjemaet er derfor ikke fullstendig utfylt.'
-                    }
-                />
+                <InfoCard data-color="info">
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        Saken er migrert og kompetansen er hentet fra Infotrygd. Kompetanseskjemaet er derfor ikke
+                        fullstendig utfylt.
+                    </InfoCard.Message>
+                </InfoCard>
             )}
             <StyledTable>
                 <Table.Header>

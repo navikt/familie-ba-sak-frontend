@@ -3,7 +3,7 @@ import React from 'react';
 import { type MutationKey, useMutationState } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import { Alert, Heading, HStack, Loader, Modal, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Loader, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
@@ -51,7 +51,15 @@ function Innhold({ mutationKey }: { mutationKey: MutationKey }) {
     const state = states[states.length - 1];
 
     if (!state || state.error) {
-        return <Alert variant={'error'}>{state.error?.message ?? 'En ukjent feil oppstod.'}</Alert>;
+        return (
+            <div>
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>{state?.error?.message ?? 'En ukjent feil oppstod.'}</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
+            </div>
+        );
     }
 
     if (state.isPending) {

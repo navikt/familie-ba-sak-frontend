@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Navigate, Route, Routes } from 'react-router';
 
-import { Alert, Box, HStack, Loader } from '@navikt/ds-react';
+import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 
 import { BehandlingContainer } from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
@@ -48,7 +48,12 @@ export function FagsakContainer() {
     if (fagsakError) {
         return (
             <Box margin={'space-8'}>
-                <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>
+                <GlobalAlert status={'error'}>
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Feil oppstod ved innlasting av fagsak</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                    <GlobalAlert.Content>{fagsakError.message}</GlobalAlert.Content>
+                </GlobalAlert>
             </Box>
         );
     }
@@ -65,7 +70,12 @@ export function FagsakContainer() {
     if (brukerError) {
         return (
             <Box padding={'space-8'}>
-                <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>
+                <GlobalAlert status={'error'}>
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Feil oppstod ved innlasting av bruker</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                    <GlobalAlert.Content>{brukerError.message}</GlobalAlert.Content>
+                </GlobalAlert>
             </Box>
         );
     }

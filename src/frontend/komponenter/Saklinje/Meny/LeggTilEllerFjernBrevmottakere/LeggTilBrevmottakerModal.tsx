@@ -3,16 +3,13 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { InformationSquareIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading, InfoCard, Modal } from '@navikt/ds-react';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
 import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 
-const StyledAlert = styled(Alert)`
-    margin: 1rem 0 2.5rem;
-`;
 const StyledHeading = styled(Heading)`
     margin: 1rem 0 0.75rem;
 `;
@@ -68,11 +65,15 @@ export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBre
     return (
         <Modal open onClose={lukkModalOgSkjema} header={{ heading: heading, size: 'medium' }} width={'35rem'} portal>
             <Modal.Body>
-                <StyledAlert variant="info">
-                    Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken kanal. Legg til mottaker
-                    dersom brev skal sendes til utenlandsk adresse, fullmektig
-                    {erPåDokumentutsending ? ' eller verge' : ', verge eller dødsbo'}.
-                </StyledAlert>
+                <Box marginBlock={'space-16 space-40'}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Brev sendes til brukers folkeregistrerte adresse eller annen foretrukken kanal. Legg til
+                            mottaker dersom brev skal sendes til utenlandsk adresse, fullmektig
+                            {erPåDokumentutsending ? ' eller verge' : ', verge eller dødsbo'}.
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
                 {brevmottakere.map(mottaker => (
                     <BrevmottakerTabell
                         mottaker={mottaker}

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { AlleBegrunnelserProvider } from './AlleBegrunnelserContext';
@@ -34,10 +33,6 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     .typo-innholdstittel {
         margin-bottom: 1.4rem;
     }
-`;
-
-export const BehandlingKorrigertAlert = styled(Alert)`
-    margin-bottom: 1.5rem;
 `;
 
 const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {

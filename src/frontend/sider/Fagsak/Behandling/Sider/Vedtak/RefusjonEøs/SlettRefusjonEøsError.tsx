@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useMutationState } from '@tanstack/react-query';
 
-import { Alert } from '@navikt/ds-react';
+import { LocalAlert } from '@navikt/ds-react';
 
 import { lagMutationKey } from '../../../../../../hooks/useSlettRefusjonEøs';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
@@ -41,8 +41,12 @@ export function SlettRefusjonEøsError({ refusjonEøs }: Props) {
     });
 
     return (
-        <Alert variant={'error'} size={'small'} closeButton={true} onClose={() => settVisAlert(false)}>
-            En teknisk feil oppstod ved sletting av perioden {dato}: {state.error?.message ?? 'En ukjent feil oppstod.'}
-        </Alert>
+        <LocalAlert status="error" size={'small'}>
+            <LocalAlert.Header>
+                <LocalAlert.Title>En teknisk feil oppstod ved sletting av perioden {dato}</LocalAlert.Title>
+                <LocalAlert.CloseButton onClick={() => settVisAlert(false)} />
+            </LocalAlert.Header>
+            <LocalAlert.Content>{state.error?.message ?? 'En ukjent feil oppstod.'}</LocalAlert.Content>
+        </LocalAlert>
     );
 }
