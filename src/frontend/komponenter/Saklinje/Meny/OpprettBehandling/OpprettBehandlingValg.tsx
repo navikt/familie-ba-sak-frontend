@@ -3,6 +3,7 @@ import React from 'react';
 import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
 import { useAppContext } from '../../../../context/AppContext';
 import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
@@ -18,8 +19,7 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../typer/common';
-import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
-import { FagsakStatus } from '../../../../typer/fagsak';
+import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { FeatureToggle } from '../../../../typer/featureToggles';
 import { Klagebehandlingstype } from '../../../../typer/klage';
 import type { IPersonInfo } from '../../../../typer/person';
@@ -28,7 +28,6 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekreving
 import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../utils/fagsak';
 import { hentAlder } from '../../../../utils/formatter';
 import { onOptionSelected } from '../../../../utils/skjema';
-import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 const erOpprettBehandlingSkjema = (
     skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>
@@ -253,7 +252,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 />
             )}
             {behandlingstema.erSynlig && (
-                <BehandlingstemaSelect
+                <OpprettBehandlingBehandlingstemaSelect
                     behandlingstema={behandlingstema}
                     fagsakType={minimalFagsak?.fagsakType}
                     erLesevisning={erLesevisning}

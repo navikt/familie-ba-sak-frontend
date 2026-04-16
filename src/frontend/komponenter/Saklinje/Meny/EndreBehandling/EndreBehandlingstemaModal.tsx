@@ -1,63 +1,59 @@
 import React from 'react';
 
-import { Button, Fieldset, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { FormProvider } from 'react-hook-form';
 
-import useEndreBehandlingstema from './useEndreBehandlingstema';
+import { Button, Fieldset, Modal } from '@navikt/ds-react';
+
+import { BehandlingstemaSelect } from './BehandlingstemaSelect';
+import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
-import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 interface Props {
     lukkModal: () => void;
 }
 
-export function EndreBehandlingstemaModal({ lukkModal }: Props) {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const { skjema, endreBehandlingstema, ressurs, nullstillSkjema } = useEndreBehandlingstema(() => lukkModal());
-    const { fagsak } = useFagsakContext();
+export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
+    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = vurderErLesevisning();
 
-    const lukkEndreBehandlingModal = () => {
-        nullstillSkjema();
-        lukkModal();
-    };
+    const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
+
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+    } = form;
+
     return (
         <Modal
             open
-            onClose={lukkEndreBehandlingModal}
+            onClose={lukkModal}
             header={{ heading: 'Endre behandlingstema', size: 'small' }}
             width={'35rem'}
             portal
         >
-            <Modal.Body>
-                <Fieldset error={hentFrontendFeilmelding(ressurs)} legend="Endre behandlingstema" hideLegend>
-                    <BehandlingstemaSelect
-                        behandlingstema={skjema.felter.behandlingstema}
-                        fagsakType={fagsak.fagsakType}
-                        erLesevisning={vurderErLesevisning()}
-                    />
-                </Fieldset>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    key={'bekreft'}
-                    variant="primary"
-                    size="small"
-                    onClick={() => {
-                        endreBehandlingstema(behandling.behandlingId);
-                    }}
-                    children={'Bekreft'}
-                    loading={ressurs.status === RessursStatus.HENTER}
-                />
-                <Button
-                    key={'avbryt'}
-                    variant="secondary"
-                    size="small"
-                    onClick={lukkEndreBehandlingModal}
-                    children={'Avbryt'}
-                />
-            </Modal.Footer>
+            <FormProvider {...form}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Modal.Body>
+                        <Fieldset error={errors.root?.message} legend="Endre behandlingstema" hideLegend>
+                            <BehandlingstemaSelect erLesevisning={erLesevisning} />
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            type={'submit'}
+                            variant="primary"
+                            size="small"
+                            loading={isSubmitting}
+                            disabled={erLesevisning}
+                        >
+                            Bekreft
+                        </Button>
+                        <Button variant="secondary" size="small" onClick={lukkModal}>
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
+                </form>
+            </FormProvider>
         </Modal>
     );
-}
+};

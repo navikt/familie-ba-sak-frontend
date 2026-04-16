@@ -3,9 +3,9 @@ import React from 'react';
 import { Select } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
-import type { Behandlingstema, IBehandlingstema } from '../typer/behandlingstema';
-import { BehandlingKategori, behandlingstemaer } from '../typer/behandlingstema';
-import { FagsakType } from '../typer/fagsak';
+import type { Behandlingstema } from '../../../../typer/behandlingstema';
+import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../../../../typer/behandlingstema';
+import { FagsakType } from '../../../../typer/fagsak';
 
 interface Props {
     behandlingstema: Felt<IBehandlingstema | undefined>;
@@ -14,7 +14,7 @@ interface Props {
     visFeilmeldinger?: boolean;
 }
 
-export const BehandlingstemaSelect = ({
+export const OpprettBehandlingBehandlingstemaSelect = ({
     behandlingstema,
     fagsakType,
     erLesevisning,
