@@ -1,5 +1,5 @@
-import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Button } from '@navikt/ds-react';
+import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Button, InfoCard } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
@@ -9,7 +9,6 @@ import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellC
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
-import { BehandlingKorrigertAlert } from './Vedtak';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
 import useDokument from '../../../../../hooks/useDokument';
 import { useSaksbehandler } from '../../../../../hooks/useSaksbehandler';
@@ -117,12 +116,22 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
             )}
             <div>
                 {åpenBehandling.korrigertEtterbetaling && (
-                    <BehandlingKorrigertAlert variant="info">
-                        Etterbetalingsbeløp i brevet er manuelt korrigert
-                    </BehandlingKorrigertAlert>
+                    <Box marginBlock={'space-24'}>
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                Etterbetalingsbeløp i brevet er manuelt korrigert
+                            </InfoCard.Message>
+                        </InfoCard>
+                    </Box>
                 )}
                 {åpenBehandling.korrigertVedtak && (
-                    <BehandlingKorrigertAlert variant="info">Vedtaket er korrigert etter § 35</BehandlingKorrigertAlert>
+                    <Box marginBlock={'space-24'}>
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                Vedtaket er korrigert etter § 35
+                            </InfoCard.Message>
+                        </InfoCard>
+                    </Box>
                 )}
                 <BrevmottakereAlert
                     bruker={bruker}
@@ -134,13 +143,17 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                 {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                 åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                 åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
-                    <Alert variant="info" style={{ margin: '2rem 0 1rem 0' }}>
-                        {hentInfostripeTekst(
-                            åpenBehandling.årsak,
-                            åpenBehandling.status,
-                            automatiskBehandlingMedFortsattInnvilgetSomResultat
-                        )}
-                    </Alert>
+                    <Box marginBlock={'space-32 space-16'}>
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                {hentInfostripeTekst(
+                                    åpenBehandling.årsak,
+                                    åpenBehandling.status,
+                                    automatiskBehandlingMedFortsattInnvilgetSomResultat
+                                )}
+                            </InfoCard.Message>
+                        </InfoCard>
+                    </Box>
                 ) : (
                     <>
                         {erSammensattKontrollsak ? (
@@ -154,7 +167,6 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                         )}
                     </>
                 )}
-
                 {!automatiskBehandlingMedFortsattInnvilgetSomResultat && (
                     <Button
                         id={'forhandsvis-vedtaksbrev'}
@@ -170,7 +182,6 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                         Vis vedtaksbrev
                     </Button>
                 )}
-
                 {åpenBehandling.tilbakekrevingsvedtakMotregning !== null && (
                     <TilbakekrevingsvedtakMotregning
                         tilbakekrevingsvedtakMotregning={åpenBehandling.tilbakekrevingsvedtakMotregning}

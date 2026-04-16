@@ -1,5 +1,16 @@
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, HStack, Modal, Select, Spacer, Textarea, TextField, VStack } from '@navikt/ds-react';
+import {
+    Button,
+    Fieldset,
+    HStack,
+    InlineMessage,
+    Modal,
+    Select,
+    Spacer,
+    Textarea,
+    TextField,
+    VStack,
+} from '@navikt/ds-react';
 
 import { useKorrigerEtterbetalingForm, årsaker } from './useKorrigerEtterbetalingForm';
 import { erEtterbetalingsbeløpGyldig, erÅrsakForKorrigeringGyldig } from './validering';
@@ -66,13 +77,13 @@ export function KorrigerEtterbetalingModal() {
                             />
                             {!erLesevisning && (
                                 <>
-                                    <Alert variant="info" inline>
+                                    <InlineMessage status="info">
                                         Husk å sende korrigeringsmelding til NØS
-                                    </Alert>
+                                    </InlineMessage>
                                     {form.formState.errors.root?.message && (
-                                        <Alert variant="error" inline>
+                                        <InlineMessage status="error">
                                             {form.formState.errors.root.message}
-                                        </Alert>
+                                        </InlineMessage>
                                     )}
                                 </>
                             )}

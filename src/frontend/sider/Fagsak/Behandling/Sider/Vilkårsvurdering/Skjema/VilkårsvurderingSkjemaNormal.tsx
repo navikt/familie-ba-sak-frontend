@@ -1,7 +1,7 @@
 import { Activity, useEffect, useState } from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HStack, List } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -88,27 +88,31 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
     return (
         <>
             {skalViseVarselboksForVilkårSomMåKontrolleres && (
-                <Alert variant="warning" contentMaxWidth={false} style={{ width: 'fit-content' }}>
-                    <BodyShort>
-                        {behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
-                            ? 'Automatisk utfylte vilkår som saksbehandler 1 ikke har gjort endringer på:'
-                            : 'Vær oppmerksom:'}
-                    </BodyShort>
-                    <List as="ul">
-                        {vilkårSomMåKontrolleresPerPerson.map(([navn, avvik]) => (
-                            <List.Item key={navn}>
-                                {navn}
-                                <List as="ul" size="small">
-                                    {avvik.map(avvik => (
-                                        <List.Item key={avvik}>
-                                            <BodyShort size="small">{avvik}</BodyShort>
-                                        </List.Item>
-                                    ))}
-                                </List>
-                            </List.Item>
-                        ))}
-                    </List>
-                </Alert>
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            {behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
+                                ? 'Automatisk utfylte vilkår som saksbehandler 1 ikke har gjort endringer på:'
+                                : 'Vær oppmerksom:'}
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>
+                        <List as="ul">
+                            {vilkårSomMåKontrolleresPerPerson.map(([navn, avvik]) => (
+                                <List.Item key={navn}>
+                                    {navn}
+                                    <List as="ul" size="small">
+                                        {avvik.map(avvik => (
+                                            <List.Item key={avvik}>
+                                                <BodyShort size="small">{avvik}</BodyShort>
+                                            </List.Item>
+                                        ))}
+                                    </List>
+                                </List.Item>
+                            ))}
+                        </List>
+                    </LocalAlert.Content>
+                </LocalAlert>
             )}
             {vilkårsvurdering.map((personResultat: IPersonResultat, index: number) => {
                 const andreVurderinger = personResultat.andreVurderinger;
@@ -184,10 +188,13 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                                                 fødselsdato={personResultat.person.fødselsdato}
                                             />
                                         ) : (
-                                            <Alert
-                                                variant="warning"
-                                                children={'Klarte ikke hente registeropplysninger'}
-                                            />
+                                            <LocalAlert status="warning">
+                                                <LocalAlert.Header>
+                                                    <LocalAlert.Title>
+                                                        Klarte ikke hente registeropplysninger
+                                                    </LocalAlert.Title>
+                                                </LocalAlert.Header>
+                                            </LocalAlert>
                                         )}
                                         {Object.values(vilkårConfig)
                                             .filter(vc => vc.parterDetteGjelderFor.includes(personResultat.person.type))

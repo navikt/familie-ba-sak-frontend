@@ -1,4 +1,5 @@
-import { Alert } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { InfoCard } from '@navikt/ds-react';
 
 import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { SettPåVentÅrsak, settPåVentÅrsaker } from '../../typer/behandling';
@@ -19,8 +20,13 @@ export function BehandlingPåVentAlert() {
     });
 
     return (
-        <Alert variant={'info'}>
-            Behandlingen er satt på vent. Årsak: {årsak}. Frist: {dato}. Fortsett behandling via menyen.
-        </Alert>
+        <InfoCard data-color="info">
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                <InfoCard.Title>Behandlingen er satt på vent.</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+                Årsak: {årsak}. Frist: {dato}. Fortsett behandling via menyen.
+            </InfoCard.Content>
+        </InfoCard>
     );
 }

@@ -1,11 +1,4 @@
-import styled from 'styled-components';
-
-import { Alert } from '@navikt/ds-react';
-
-const StyledBeløpsgrenseAlert = styled(Alert)`
-    margin-top: 2rem;
-    width: fit-content;
-`;
+import { Box, LocalAlert } from '@navikt/ds-react';
 
 interface IProps {
     behandlingErEndreMigreringsdato: boolean;
@@ -25,43 +18,84 @@ export const MigreringAlerts = ({
     return (
         <>
             {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
-                <StyledBeløpsgrenseAlert variant="warning">
-                    Migrering av denne saken gir ingen utbetaling for periodene etter migreringsdato. Når
-                    behandlingsresultatet blir 0 kr i alle perioder, får vi ikke simulert mot økonomi for å se
-                    eventuelle avvik. Det er derfor viktig at du selv sjekker at det ikke har vært noen utbetalinger fra
-                    Infotrygd i disse periodene.
-                </StyledBeløpsgrenseAlert>
+                <Box marginBlock={'space-32 space-0'} maxWidth={'48rem'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Migrering av denne saken gir ingen utbetaling for periodene etter migreringsdato.
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Når behandlingsresultatet blir 0 kr i alle perioder, får vi ikke simulert mot økonomi for å
+                            se eventuelle avvik. Det er derfor viktig at du selv sjekker at det ikke har vært noen
+                            utbetalinger fra Infotrygd i disse periodene.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
+            )}
+            {behandlingErMigreringFraInfotrygdMedKun0Utbetalinger && (
+                <Box marginBlock={'space-32 space-0'} maxWidth={'48rem'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Simuleringen viser en feilutbetaling eller etterbetaling.
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Du trenger ikke sende oppgave til NØS, da beløpet ikke sendes til oppdrag. Hvis bruker skal
+                            ha en etterbetaling eller feilutbetaling må dette behandles i en egen revurderingsbehandling
+                            med vedtaksbrev til bruker.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
             )}
             {behandlingErEndreMigreringsdato &&
                 (behandlingErMigreringMedAvvikInnenforBeløpsgrenser ||
                     behandlingErMigreringMedAvvikUtenforBeløpsgrenser) && (
-                    <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                        Simuleringen viser en feilutbetaling eller etterbetaling. Du trenger ikke sende oppgave til NØS,
-                        da beløpet ikke sendes til oppdrag. Hvis bruker skal ha en etterbetaling eller feilutbetaling må
-                        dette behandles i en egen revurderingsbehandling med vedtaksbrev til bruker.
-                    </StyledBeløpsgrenseAlert>
+                    <Box marginBlock={'space-32 space-0'} maxWidth={'48rem'}>
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Behandlingen medfører avvik i simulering.</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                Ved avvik på mindre enn totalt 100 kroner, kan du gå videre i behandlingen uten
+                                totrinnskontroll. Du må huske å sende oppgave til NØS om at det ikke skal etterbetales /
+                                opprettes kravgrunnlag.
+                            </LocalAlert.Content>
+                        </LocalAlert>
+                    </Box>
                 )}
-            {!behandlingErEndreMigreringsdato && behandlingErMigreringMedAvvikInnenforBeløpsgrenser && (
-                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                    Behandlingen medfører avvik i simulering. Ved avvik på mindre enn totalt 100 kroner, kan du gå
-                    videre i behandlingen uten totrinnskontroll. Du må huske å sende oppgave til NØS om at det ikke skal
-                    etterbetales / opprettes kravgrunnlag.
-                </StyledBeløpsgrenseAlert>
-            )}
             {!behandlingErEndreMigreringsdato && behandlingErMigreringMedAvvikUtenforBeløpsgrenser && (
-                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                    Simuleringen viser en feilutbetaling eller etterbetaling. Hvis du velger å gå videre i behandlingen
-                    kreves det totrinnskontroll. Det må sendes manuell oppgave til NØS for å sikre at det ikke går ut
-                    etterbetaling eller blir opprettet feilutbetalingssak i migreringsbehandlingen. Hvis bruker skal ha
-                    en etterbetaling eller feilutbetaling, må dette behandles i en egen revurderingsbehandling med
-                    vedtaksbrev til bruker.
-                </StyledBeløpsgrenseAlert>
+                <Box marginBlock={'space-32 space-0'} maxWidth={'48rem'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Simuleringen viser en feilutbetaling eller etterbetaling.
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Hvis du velger å gå videre i behandlingen kreves det totrinnskontroll. Det må sendes manuell
+                            oppgave til NØS for å sikre at det ikke går ut etterbetaling eller blir opprettet
+                            feilutbetalingssak i migreringsbehandlingen. Hvis bruker skal ha en etterbetaling eller
+                            feilutbetaling, må dette behandles i en egen revurderingsbehandling med vedtaksbrev til
+                            bruker.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
             )}
             {!behandlingErEndreMigreringsdato && behandlingErMigreringMedManuellePosteringer && (
-                <StyledBeløpsgrenseAlert variant="warning" size="medium">
-                    Det finnes manuelle posteringer tilknyttet tidligere behandling. Hvis du velger å gå videre i
-                    behandlingen kreves det totrinnskontroll.
-                </StyledBeløpsgrenseAlert>
+                <Box marginBlock={'space-32 space-0'} maxWidth={'48rem'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Det finnes manuelle posteringer tilknyttet tidligere behandling.
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Hvis du velger å gå videre i behandlingen kreves det totrinnskontroll.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
             )}
         </>
     );

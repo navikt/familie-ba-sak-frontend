@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
@@ -14,10 +14,6 @@ import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
 import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
 
 const StyledBodyShort = styled(BodyShort)`
-    padding-bottom: 1rem;
-`;
-
-const StyledAlert = styled(Alert)`
     padding-bottom: 1rem;
 `;
 
@@ -73,7 +69,13 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                 <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
 
                 {submitRessurs.status === RessursStatus.FEILET && (
-                    <StyledAlert variant="error">{submitRessurs.frontendFeilmelding}</StyledAlert>
+                    <Box paddingBlock={'space-0 space-16'}>
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>{submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                            </LocalAlert.Header>
+                        </LocalAlert>
+                    </Box>
                 )}
             </Modal.Body>
             <Modal.Footer>

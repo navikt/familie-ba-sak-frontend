@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Heading, HStack, Skeleton, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, LocalAlert, Skeleton, Table, VStack } from '@navikt/ds-react';
 
 import { Behandling } from './Behandling';
 import { filtrerSaksoversiktbehandlinger, hentBehandlingerTilSaksoversikten, hentBehandlingId } from './utils';
@@ -88,34 +88,36 @@ export function Behandlinger() {
     return (
         <VStack gap={'space-24'}>
             {barnetrygdbehandlingerError && (
-                <Alert variant={'warning'}>
-                    <VStack gap={'space-16'}>
-                        <BodyShort>Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
-                        {barnetrygdbehandlingerError.message && (
-                            <BodyShort>Feilmelding: {barnetrygdbehandlingerError.message}</BodyShort>
-                        )}
-                    </VStack>
-                </Alert>
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Barnetrygdbehandlinger er ikke tilgjengelig for øyeblikket.</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    {barnetrygdbehandlingerError.message && (
+                        <LocalAlert.Content>Feilmelding: ${barnetrygdbehandlingerError.message}</LocalAlert.Content>
+                    )}
+                </LocalAlert>
             )}
             {klagebehandlingError && (
-                <Alert variant={'warning'}>
-                    <VStack gap={'space-16'}>
-                        <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
-                        {klagebehandlingError.message && (
-                            <BodyShort>Feilmelding: {klagebehandlingError.message}</BodyShort>
-                        )}
-                    </VStack>
-                </Alert>
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    {klagebehandlingError.message && (
+                        <LocalAlert.Content>Feilmelding: {klagebehandlingError.message}</LocalAlert.Content>
+                    )}
+                </LocalAlert>
             )}
             {tilbakekrevingsbehandlingerError && (
-                <Alert variant={'warning'}>
-                    <VStack gap={'space-16'}>
-                        <BodyShort>Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
-                        {tilbakekrevingsbehandlingerError.message && (
-                            <BodyShort>Feilmelding: {tilbakekrevingsbehandlingerError.message}</BodyShort>
-                        )}
-                    </VStack>
-                </Alert>
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            Tilbakekrevingsbehandlinger er ikke tilgjengelig for øyeblikket.
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                    {tilbakekrevingsbehandlingerError.message && (
+                        <LocalAlert.Content>Feilmelding: {tilbakekrevingsbehandlingerError.message}</LocalAlert.Content>
+                    )}
+                </LocalAlert>
             )}
             <div>
                 <HStack width={'100%'} align={'end'} justify={'space-between'}>
