@@ -14,6 +14,8 @@ interface Props {
 
 export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
     const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = vurderErLesevisning();
+
     const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
 
     const {
@@ -33,11 +35,17 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Body>
                         <Fieldset error={errors.root?.message} legend="Endre behandlingstema" hideLegend>
-                            <BehandlingstemaSelect erLesevisning={vurderErLesevisning()} />
+                            <BehandlingstemaSelect erLesevisning={erLesevisning} />
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button type={'submit'} variant="primary" size="small" loading={isSubmitting}>
+                        <Button
+                            type={'submit'}
+                            variant="primary"
+                            size="small"
+                            loading={isSubmitting}
+                            disabled={erLesevisning}
+                        >
                             Bekreft
                         </Button>
                         <Button variant="secondary" size="small" onClick={lukkModal}>
