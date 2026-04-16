@@ -3,9 +3,11 @@ import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Heading, HelpText, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Button, Fieldset, Heading, HelpText, Modal } from '@navikt/ds-react';
 
+import { LeggTilBarnFelt } from './LeggTilBarnFelt';
 import { useLeggTilBarnPåBehandlingSkjema } from './useLeggTilBarnPåBehandlingSkjema';
+import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 
 const LeggTilBarnLegend = styled.div`
     margin-top: 1rem;
@@ -17,21 +19,18 @@ interface Props {
 }
 
 export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
+    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = vurderErLesevisning();
+
     const { form, onSubmit } = useLeggTilBarnPåBehandlingSkjema({ lukkModal });
 
     const {
         handleSubmit,
         formState: { isSubmitting, errors },
-        reset,
     } = form;
 
-    const onClose = () => {
-        lukkModal();
-        reset();
-    };
-
     return (
-        <Modal open onClose={onClose} aria-label={'Legg til barn'} width={'35rem'} portal>
+        <Modal open onClose={lukkModal} aria-label={'Legg til barn'} width={'35rem'} portal>
             <FormProvider {...form}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header>
@@ -52,7 +51,7 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                             legend="Legg til barn på behandling"
                             hideLegend
                         >
-                            <TextField label={'Fødselsnummer'} placeholder={'11 siffer'} />
+                            <LeggTilBarnFelt erLesevisning={erLesevisning} />
                             <Alert variant="info" inline={true}>
                                 Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke reverseres
                                 uten å henlegge.
@@ -61,15 +60,17 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button
-                            key={'Legg til'}
                             type={'submit'}
                             variant="primary"
                             size="small"
-                            children={'Legg til'}
                             loading={isSubmitting}
-                            disabled={isSubmitting}
-                        />
-                        <Button key={'Avbryt'} variant="tertiary" size="small" onClick={onClose} children={'Avbryt'} />
+                            disabled={erLesevisning}
+                        >
+                            Legg til
+                        </Button>
+                        <Button variant="tertiary" size="small" onClick={lukkModal}>
+                            Avbryt
+                        </Button>
                     </Modal.Footer>
                 </form>
             </FormProvider>

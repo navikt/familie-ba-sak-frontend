@@ -21,11 +21,12 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
     const { settÅpenBehandling, behandling } = useBehandlingContext();
     const { mutateAsync: leggTilBarnPåBehandling } = useLeggTilBarnPåBehandling();
 
-    // TODO: bruk eksisterende identValidator?
-    const form = useForm<LeggTilBarnPåBehandlingFormValues, unknown, LeggTilBarnPåBehandlingFormValues>({
+    const form = useForm<LeggTilBarnPåBehandlingFormValues>({
         defaultValues: {
             [LeggTilBarnPåBehandlingFelt.BARNIDENT]: undefined,
         },
+        // TODO: validate
+        // TODO: bruk eksisterende identValidator?
     });
 
     const { setError } = form;
@@ -45,8 +46,8 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
             })
             .catch((e: unknown) => {
                 setError('root', {
-                    // TODO: fiks feilmeldingen
-                    message: e instanceof Error ? e.message : 'Teknisk feil ved tileggelse av barn på behandling.',
+                    message:
+                        e instanceof Error ? e.message : 'Teknisk feil ved forsøk på å legge til barn på behandling.',
                 });
             });
     };
