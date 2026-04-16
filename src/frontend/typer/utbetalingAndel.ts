@@ -11,6 +11,7 @@ export interface IRestEndretUtbetalingAndel {
     avtaletidspunktDeltBosted?: IsoDatoString;
     årsak?: IEndretUtbetalingAndelÅrsak;
     erTilknyttetAndeler?: boolean;
+    inneholderSkjermetBarn?: boolean;
 }
 
 export enum IEndretUtbetalingAndelÅrsak {

@@ -38,6 +38,7 @@ interface Props {
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
     erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
+    inneholderSkjermetBarn?: boolean;
 }
 
 export function KompetanseTabellRadEndre({
@@ -47,10 +48,11 @@ export function KompetanseTabellRadEndre({
     toggleForm,
     slettKompetanse,
     erAnnenForelderOmfattetAvNorskLovgivning,
+    inneholderSkjermetBarn,
 }: Props) {
     const { vurderErLesevisning } = useBehandlingContext();
     const toggles = useFeatureToggles();
-    const lesevisning = vurderErLesevisning(true);
+    const lesevisning = vurderErLesevisning(true) || !!inneholderSkjermetBarn;
 
     const visSubmitFeilmelding = () => {
         if (

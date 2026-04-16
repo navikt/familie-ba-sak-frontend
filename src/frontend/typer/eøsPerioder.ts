@@ -81,6 +81,7 @@ export interface IRestEøsPeriode extends IEøsPeriodeStatus {
     fom: IsoMånedString;
     tom?: IsoMånedString;
     barnIdenter: string[];
+    inneholderSkjermetBarn?: boolean;
 }
 
 export interface IRestKompetanse extends IRestEøsPeriode {
@@ -105,6 +106,7 @@ export interface IKompetanse extends IEøsPeriodeStatus {
     annenForeldersAktivitetsland: string | undefined;
     barnetsBostedsland: string | undefined;
     resultat: KompetanseResultat | undefined;
+    inneholderSkjermetBarn?: boolean;
 }
 
 export enum UtenlandskPeriodeBeløpIntervall {
@@ -140,6 +142,7 @@ export interface IUtenlandskPeriodeBeløp {
     valutakode?: string | undefined;
     intervall?: UtenlandskPeriodeBeløpIntervall | undefined;
     utbetalingsland: string | undefined;
+    inneholderSkjermetBarn?: boolean;
 }
 
 export enum Vurderingsform {
@@ -165,4 +168,5 @@ export interface IValutakurs {
     valutakode: string | undefined;
     valutakursdato: Date | undefined;
     kurs: string | undefined;
+    inneholderSkjermetBarn?: boolean;
 }

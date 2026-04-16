@@ -32,6 +32,8 @@ const erPersonId = (personIdent: string) => {
     return /^[+-]?\d+(\.\d+)?$/.test(id) && id.length === 11;
 };
 
+const erSkjermetBarn = (personIdent: string) => personIdent.toLowerCase().includes('skjermet barn');
+
 export const erOrgNr = (orgNr: string) => {
     // Sjekker kun etter ni siffer, validerer ikke kontrollsifferet (det 9. sifferet)
     return kunSiffer(orgNr) && orgNr.length === 9;
@@ -40,6 +42,10 @@ export const erOrgNr = (orgNr: string) => {
 export const formaterIdent = (personIdent: string, ukjentTekst = 'Ukjent id') => {
     if (personIdent === '') {
         return ukjentTekst;
+    }
+
+    if (erSkjermetBarn(personIdent)) {
+        return personIdent;
     }
 
     return erPersonId(personIdent)
@@ -58,20 +64,17 @@ export const formaterNavnAlderOgIdent = (person: {
 };
 
 export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): string => {
-    const person = personer.find(person => person.personIdent === ident);
-    if (person) {
-        return formaterNavnAlderOgIdent({ ...person });
-    } else {
-        return ident;
-    }
+    const person = personer.find(p => p.personIdent === ident);
+    if (!person) return ident;
+    if (person.skjermet) return person.navn;
+    return formaterNavnAlderOgIdent(person);
 };
 
 export const lagBrukerLabel = (bruker: IPersonInfo): string =>
     `${bruker.navn} (${hentAlder(bruker.fødselsdato)} år) ${formaterIdent(bruker.personIdent)}`;
 
-export const lagBarnLabel = (barn: IBarnMedOpplysninger): string => {
-    return `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(barn.fødselsdato)}) | ${formaterIdent(barn.ident)}`;
-};
+export const lagBarnLabel = (barn: IBarnMedOpplysninger): string =>
+    `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(barn.fødselsdato)}) | ${formaterIdent(barn.ident)}`;
 
 export const sorterPåDato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
     if (personA.fødselsdato === personB.fødselsdato) {
@@ -87,7 +90,19 @@ export const sorterPåDato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson
 export const sorterPåFødselsnummer = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) =>
     Number(personA.personIdent) - Number(personB.personIdent);
 
+const sorterSkjermetBarnSist = (
+    a: { navn: string; skjermet?: boolean },
+    b: { navn: string; skjermet?: boolean }
+): number | null => {
+    if (a.skjermet && !b.skjermet) return 1;
+    if (!a.skjermet && b.skjermet) return -1;
+    if (a.skjermet && b.skjermet) return a.navn.localeCompare(b.navn);
+    return null;
+};
+
 export const sorterPersonTypeOgFødselsdato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
+    const anonymisertResultat = sorterSkjermetBarnSist(personA, personB);
+    if (anonymisertResultat !== null) return anonymisertResultat;
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
     else return sorterPåDato(personA, personB);
@@ -97,6 +112,11 @@ export const sorterUtbetaling = (
     utbetalingsperiodeDetaljA: IUtbetalingsperiodeDetalj,
     utbetalingsperiodeDetaljB: IUtbetalingsperiodeDetalj
 ) => {
+    const anonymisertResultat = sorterSkjermetBarnSist(
+        utbetalingsperiodeDetaljA.person,
+        utbetalingsperiodeDetaljB.person
+    );
+    if (anonymisertResultat !== null) return anonymisertResultat;
     if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return -1;
     else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return 1;
     else if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.SMÅBARNSTILLEGG) return -1;
