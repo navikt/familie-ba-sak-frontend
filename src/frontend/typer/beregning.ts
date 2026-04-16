@@ -7,7 +7,6 @@ export interface IPersonMedAndelerTilkjentYtelse {
     beløp: number;
     stønadFom: IsoMånedString;
     stønadTom: IsoMånedString;
-    skjermet?: boolean;
 }
 
 export interface IYtelsePeriode {

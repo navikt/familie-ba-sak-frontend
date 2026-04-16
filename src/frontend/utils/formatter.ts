@@ -66,7 +66,7 @@ export const formaterNavnAlderOgIdent = (person: {
 export const lagPersonLabel = (ident: string, personer: IGrunnlagPerson[]): string => {
     const person = personer.find(p => p.personIdent === ident);
     if (!person) return ident;
-    if (person.skjermet) return person.navn;
+    if (person.skjermesForBruker) return person.navn;
     return formaterNavnAlderOgIdent(person);
 };
 
@@ -91,18 +91,18 @@ export const sorterPåFødselsnummer = (personA: IGrunnlagPerson, personB: IGrun
     Number(personA.personIdent) - Number(personB.personIdent);
 
 const sorterSkjermetBarnSist = (
-    a: { navn: string; skjermet?: boolean },
-    b: { navn: string; skjermet?: boolean }
+    a: { navn: string; skjermesForBruker?: boolean },
+    b: { navn: string; skjermesForBruker?: boolean }
 ): number | null => {
-    if (a.skjermet && !b.skjermet) return 1;
-    if (!a.skjermet && b.skjermet) return -1;
-    if (a.skjermet && b.skjermet) return a.navn.localeCompare(b.navn);
+    if (a.skjermesForBruker && !b.skjermesForBruker) return 1;
+    if (!a.skjermesForBruker && b.skjermesForBruker) return -1;
+    if (a.skjermesForBruker && b.skjermesForBruker) return a.navn.localeCompare(b.navn);
     return null;
 };
 
 export const sorterPersonTypeOgFødselsdato = (personA: IGrunnlagPerson, personB: IGrunnlagPerson) => {
-    const anonymisertResultat = sorterSkjermetBarnSist(personA, personB);
-    if (anonymisertResultat !== null) return anonymisertResultat;
+    const sorterBarnSomSkalSkjermesAvBrukerSist = sorterSkjermetBarnSist(personA, personB);
+    if (sorterBarnSomSkalSkjermesAvBrukerSist !== null) return sorterBarnSomSkalSkjermesAvBrukerSist;
     if (personA.type === PersonType.SØKER) return -1;
     else if (personB.type === PersonType.SØKER) return 1;
     else return sorterPåDato(personA, personB);
@@ -112,11 +112,11 @@ export const sorterUtbetaling = (
     utbetalingsperiodeDetaljA: IUtbetalingsperiodeDetalj,
     utbetalingsperiodeDetaljB: IUtbetalingsperiodeDetalj
 ) => {
-    const anonymisertResultat = sorterSkjermetBarnSist(
+    const sorterBarnSomSkalSkjermesAvBrukerSist = sorterSkjermetBarnSist(
         utbetalingsperiodeDetaljA.person,
         utbetalingsperiodeDetaljB.person
     );
-    if (anonymisertResultat !== null) return anonymisertResultat;
+    if (sorterBarnSomSkalSkjermesAvBrukerSist !== null) return sorterBarnSomSkalSkjermesAvBrukerSist;
     if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return -1;
     else if (utbetalingsperiodeDetaljB.ytelseType === YtelseType.UTVIDET_BARNETRYGD) return 1;
     else if (utbetalingsperiodeDetaljA.ytelseType === YtelseType.SMÅBARNSTILLEGG) return -1;

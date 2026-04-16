@@ -31,7 +31,7 @@ export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: E
 
     const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
-    const erLesevisning = vurderErLesevisning() || endretUtbetalingAndel.inneholderSkjermetBarn;
+    const erLesevisning = vurderErLesevisning() || endretUtbetalingAndel.inneholderBarnSomSkalSkjermes;
     const låsFelter = erLesevisning || sletterEndretUtbetalingAndel || oppdatererEndretUtbetalingAndel;
 
     const {

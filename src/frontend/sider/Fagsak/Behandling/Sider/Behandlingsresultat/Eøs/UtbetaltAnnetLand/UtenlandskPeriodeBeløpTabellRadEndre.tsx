@@ -59,7 +59,7 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettUtenlandskPeriodeBeløp: () => void;
-    inneholderSkjermetBarn?: boolean;
+    inneholderBarnSomSkalSkjermes?: boolean;
 }
 
 const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
@@ -69,12 +69,12 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     sendInnSkjema,
     toggleForm,
     slettUtenlandskPeriodeBeløp,
-    inneholderSkjermetBarn,
+    inneholderBarnSomSkalSkjermes,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const toggles = useFeatureToggles();
 
-    const lesevisning = vurderErLesevisning(true) || !!inneholderSkjermetBarn;
+    const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
 
     const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {

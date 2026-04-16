@@ -94,7 +94,7 @@ export function Venstremeny() {
                                                 )}
                                                 <VStack>
                                                     <BodyShort size={'small'}>{underside.navn}</BodyShort>
-                                                    {underside.ident && !underside.skjermet && (
+                                                    {underside.ident && !underside.skjermesForBruker && (
                                                         <HStack align={'center'}>
                                                             <BodyShort size={'small'} className={Styles.ident}>
                                                                 {formaterIdent(underside.ident)}

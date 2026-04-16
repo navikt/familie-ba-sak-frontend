@@ -50,7 +50,7 @@ export interface IGrunnlagPerson {
     dødsfallDato?: string;
     erManueltLagtTilISøknad?: boolean;
     harFalskIdentitet: boolean;
-    skjermet?: boolean;
+    skjermesForBruker?: boolean;
 }
 
 export interface IPersonInfo {

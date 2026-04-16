@@ -26,7 +26,7 @@ export interface IBarnMedOpplysningerBackend {
     manueltRegistrert: boolean;
     navn?: string;
     erFolkeregistrert: boolean;
-    skjermet?: boolean;
+    skjermesForBruker?: boolean;
 }
 
 export interface IBarnMedOpplysninger {
@@ -36,7 +36,7 @@ export interface IBarnMedOpplysninger {
     manueltRegistrert: boolean;
     navn?: string;
     erFolkeregistrert: boolean;
-    skjermet?: boolean;
+    skjermesForBruker?: boolean;
 }
 
 export enum Målform {

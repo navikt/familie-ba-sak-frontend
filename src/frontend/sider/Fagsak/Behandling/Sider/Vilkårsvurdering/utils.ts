@@ -71,8 +71,8 @@ export const mapFraRestPersonResultatTilPersonResultat = (
 ): IPersonResultat[] => {
     const mappedPersonIdenter = new Set(personResultater.map(pr => pr.personIdent));
 
-    const skjermedePersoner: IPersonResultat[] = personer
-        .filter(person => person.skjermet && !mappedPersonIdenter.has(person.personIdent))
+    const personerSomSkalSkjermesForBruker: IPersonResultat[] = personer
+        .filter(person => person.skjermesForBruker && !mappedPersonIdenter.has(person.personIdent))
         .sort((a, b) => a.navn.localeCompare(b.navn))
         .map(person => ({
             person,
@@ -164,7 +164,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                 isoStringTilDate(a.person.fødselsdato)
             );
         })
-        .concat(skjermedePersoner);
+        .concat(personerSomSkalSkjermesForBruker);
 };
 
 export const utledVilkårSomMåKontrolleresPerPerson = (

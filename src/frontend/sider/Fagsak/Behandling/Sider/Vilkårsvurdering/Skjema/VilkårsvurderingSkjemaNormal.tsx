@@ -115,14 +115,14 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                 const harUtvidet = personResultat.vilkårResultater.find(
                     vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
-                const personErSkjermet = personResultat.person.skjermet;
+                const personSkalSkjermesForBruker = personResultat.person.skjermesForBruker;
 
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        {personErSkjermet ? (
+                        {personSkalSkjermesForBruker ? (
                             <HStack gap="space-24" wrap={false} align="center">
                                 <ShieldLockFillIcon
                                     fontSize="2.5rem"

@@ -215,10 +215,11 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             <BodyShort align="end">Beløp</BodyShort>
                         </UtbetalingsbeløpRad>
                         {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => {
-                            const anonymisert = detalj.person.skjermet;
+                            const personSkalSkjermesForBruker = detalj.person.skjermesForBruker;
+
                             return (
                                 <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
-                                    {anonymisert ? (
+                                    {personSkalSkjermesForBruker ? (
                                         <BodyShort>{detalj.person.navn}</BodyShort>
                                     ) : (
                                         <HStack gap={'space-4'}>
@@ -231,7 +232,8 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                         </HStack>
                                     )}
                                     <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
-                                    {!anonymisert && !utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
+                                    {!personSkalSkjermesForBruker &&
+                                    !utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
                                         <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
                                     ) : (
                                         <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
