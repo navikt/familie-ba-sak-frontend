@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -7,57 +7,44 @@ import { Button, Modal, VStack } from '@navikt/ds-react';
 import Brevskjema from './Brevskjema';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useFagsakContext } from '../../../FagsakContext';
+import { Tab, useTabContext } from '../TabContextProvider';
 
-interface Props {
-    onIModalClick: () => void;
-}
-
-export function Brev({ onIModalClick }: Props) {
+export function Brev() {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
+    const { settTab } = useTabContext();
 
     const navigate = useNavigate();
 
-    const [visInnsendtBrevModal, settVisInnsendtBrevModal] = React.useState(false);
+    const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
+
+    function onClose() {
+        settVisInnsendtBrevModal(false);
+        settTab(Tab.Historikk);
+    }
+
+    function navigerTilSaksoversikt() {
+        settVisInnsendtBrevModal(false);
+        navigate(`/fagsak/${fagsak.id}/saksoversikt`);
+    }
+
+    function navigerTilOppgaver() {
+        settVisInnsendtBrevModal(false);
+        navigate('/oppgaver');
+    }
 
     return (
         <VStack marginBlock={'space-16'} marginInline={'space-20'}>
             <Brevskjema onSubmitSuccess={() => settVisInnsendtBrevModal(true)} bruker={bruker} />
             {visInnsendtBrevModal && (
-                <Modal
-                    open
-                    onClose={() => {
-                        settVisInnsendtBrevModal(false);
-                        onIModalClick();
-                    }}
-                    header={{
-                        heading: 'Brevet er sendt',
-                        size: 'medium',
-                    }}
-                    portal
-                >
+                <Modal open={true} onClose={onClose} header={{ heading: 'Brevet er sendt' }} portal={true}>
                     <Modal.Footer>
-                        <Button
-                            variant={'secondary'}
-                            key={'til saksoversikt'}
-                            size={'medium'}
-                            onClick={() => {
-                                onIModalClick();
-                                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
-                                settVisInnsendtBrevModal(false);
-                            }}
-                            children={'Se saksoversikt'}
-                        />
-                        <Button
-                            variant={'secondary'}
-                            key={'til oppgavebenken'}
-                            size={'medium'}
-                            onClick={() => {
-                                onIModalClick();
-                                navigate('/oppgaver');
-                            }}
-                            children={'Se oppgavebenk'}
-                        />
+                        <Button variant={'secondary'} size={'medium'} onClick={navigerTilSaksoversikt}>
+                            Se saksoversikt
+                        </Button>
+                        <Button variant={'secondary'} size={'medium'} onClick={navigerTilOppgaver}>
+                            Se oppgavebenk
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             )}
