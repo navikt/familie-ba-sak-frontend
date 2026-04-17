@@ -83,6 +83,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     max-height: 250px;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 50;
     padding: 4px 0;
     margin: 0;
@@ -105,19 +106,20 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 12px;
+    padding: 0.75rem;
+    margin-inline: var(--ax-space-8);
+    margin-block: var(--ax-space-2);
+    border-radius: var(--ax-radius-8);
     cursor: pointer;
-    border-left: 4px solid transparent;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
 }
 
 .option:hover,
 .optionFocused {
-    background-color: var(--ax-bg-neutral-moderate-hover);
-    border-left: 4px solid var(--ax-border-neutral-strong);
+    outline: 2px solid var(--ax-border-focus);
 }
 
 .optionText {
@@ -214,7 +216,7 @@
     border: 1px solid var(--ax-border-neutral-subtle);
     color: var(--ax-text-neutral);
     padding: 0 6px;
-    border-radius: var(--ax-radius-4);
+    border-radius: var(--ax-radius-full);
     font-size: var(--ax-font-size-large);
     white-space: nowrap;
 }
