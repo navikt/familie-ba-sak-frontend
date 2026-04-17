@@ -8,6 +8,8 @@ import { BehandlingRouter } from './BehandlingRouter';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
+import { TabContextProvider } from './Høyremeny/TabContextProvider';
+import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
 import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 import { Venstremeny } from './Venstremeny/Venstremeny';
 import { Behandlingslinje } from '../../../komponenter/Saklinje/Behandlingslinje';
@@ -34,7 +36,11 @@ export function BehandlingContainer() {
                                 <BehandlingRouter />
                             </Box>
                             <Box className={Styles.høyreKolonne}>
-                                <Høyremeny />
+                                <TotrinnskontrollModalContextProvider>
+                                    <TabContextProvider>
+                                        <Høyremeny />
+                                    </TabContextProvider>
+                                </TotrinnskontrollModalContextProvider>
                             </Box>
                         </HStack>
                     </VStack>
