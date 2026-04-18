@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 
 interface Props {
     settVisModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,7 +12,7 @@ interface Props {
 
 export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Props> = ({ settVisModal }) => {
     const navigate = useNavigate();
-    const { fagsakId } = useSakOgBehandlingParams();
+    const fagsakId = useFagsakId();
 
     return (
         <Modal open onClose={() => settVisModal(false)} header={{ heading: 'Totrinnskontroll', size: 'medium' }}>

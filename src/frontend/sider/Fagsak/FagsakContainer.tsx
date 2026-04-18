@@ -15,7 +15,7 @@ import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import { JournalpostListe } from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
 import { Saksoversikt } from './Saksoversikt/Saksoversikt';
-import { useFagsakId } from '../../hooks/useFagsakId';
+import { useFagsakIdParam } from '../../hooks/useFagsakIdParam';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
@@ -25,9 +25,9 @@ import { Fagsaklinje } from '../../komponenter/Saklinje/Fagsaklinje';
 import { FagsakType } from '../../typer/fagsak';
 
 export function FagsakContainer() {
-    const fagsakId = useFagsakId();
+    const fagsakIdParam = useFagsakIdParam();
 
-    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
+    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakIdParam);
 
     const ident = fagsak?.fagsakType === FagsakType.SKJERMET_BARN ? fagsak?.fagsakeier : fagsak?.søkerFødselsnummer;
 

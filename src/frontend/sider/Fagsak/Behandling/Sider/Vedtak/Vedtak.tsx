@@ -13,7 +13,7 @@ import { useSammensattKontrollsakContext } from './SammensattKontrollsak/Sammens
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
@@ -41,7 +41,6 @@ export const BehandlingKorrigertAlert = styled(Alert)`
 `;
 
 const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
@@ -50,9 +49,9 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
-    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(behandlingId);
+    const fagsakId = useFagsakId();
+
+    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(åpenBehandling.behandlingId);
 
     const erLesevisning = vurderErLesevisning();
 

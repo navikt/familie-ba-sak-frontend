@@ -9,7 +9,7 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
 import type { ITilbakekreving } from '../../../../../typer/simulering';
 import { hentSøkersMålform } from '../../../../../utils/behandling';
@@ -29,8 +29,6 @@ const StyledAlert = styled(Alert)`
 `;
 
 const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
-    const navigate = useNavigate();
     const {
         hentSkjemadata,
         onSubmit,
@@ -46,7 +44,12 @@ const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling
         behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
+
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
+
+    const fagsakId = useFagsakId();
+    const navigate = useNavigate();
+
     const erLesevisning = vurderErLesevisning();
 
     const harOverlappendePerioderMedAndreFagsakerOgSkalStanses =

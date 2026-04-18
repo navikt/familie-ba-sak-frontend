@@ -20,7 +20,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import { useFagsakId } from '../../../../../hooks/useFagsakId';
+import { useFagsak } from '../../../../../hooks/useFagsak';
 import { useOpprettEndretUtbetalingAndel } from '../../../../../hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -34,7 +34,6 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -61,10 +60,10 @@ interface IBehandlingsresultatProps {
 }
 
 const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
-    const navigate = useNavigate();
-    const fagsakId = useFagsakId();
-    const { fagsak } = useFagsakContext();
     const { settÅpenBehandling } = useBehandlingContext();
+
+    const fagsak = useFagsak();
+    const navigate = useNavigate();
 
     const {
         visFeilmeldinger,
@@ -143,10 +142,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
-            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
+            forrigeOnClick={() => navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
             nesteOnClick={() => {
                 if (erLesevisning) {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
+                    navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {

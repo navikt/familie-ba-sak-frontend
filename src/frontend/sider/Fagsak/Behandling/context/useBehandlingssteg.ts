@@ -7,19 +7,19 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useAppContext } from '../../../../context/AppContext';
-import useSakOgBehandlingParams from '../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../hooks/useFagsakId';
 import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
 
 const useBehandlingssteg = (
     oppdaterBehandling: (behandling: Ressurs<IBehandling>) => void,
-    behandling?: IBehandling
+    behandling: IBehandling
 ) => {
     const { request } = useHttp();
     const { innloggetSaksbehandler } = useAppContext();
-    const { fagsakId, behandlingId } = useSakOgBehandlingParams();
 
+    const fagsakId = useFagsakId();
     const navigate = useNavigate();
 
     const [submitRessurs, settSubmitRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
@@ -29,7 +29,7 @@ const useBehandlingssteg = (
 
         request<void, IBehandling>({
             method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/vilkårsvurdering`,
+            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/vilkårsvurdering`,
         })
             .then((response: Ressurs<IBehandling>) => {
                 settSubmitRessurs(response);
@@ -50,7 +50,7 @@ const useBehandlingssteg = (
 
         request<void, IBehandling>({
             method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/behandlingsresultat`,
+            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/behandlingsresultat`,
         })
             .then((response: Ressurs<IBehandling>) => {
                 settSubmitRessurs(response);
@@ -60,9 +60,9 @@ const useBehandlingssteg = (
                     oppdaterBehandling(response);
 
                     if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
-                        navigate(`/fagsak/${fagsakId}/${behandlingId}/simulering`);
+                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/simulering`);
                     } else {
-                        navigate(`/fagsak/${fagsakId}/${behandlingId}/vedtak`);
+                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
                     }
                 }
             })
