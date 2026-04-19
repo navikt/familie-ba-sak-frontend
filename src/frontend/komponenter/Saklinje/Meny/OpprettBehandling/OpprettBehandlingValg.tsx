@@ -131,6 +131,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     const kanOppretteKlagebehandling =
         minimalFagsak !== undefined &&
+        !minimalFagsak.finnesStrengtFortroligPersonIFagsak &&
         (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
             toggles[FeatureToggle.skalKunneBehandleBaInstitusjonFagsaker]);
 
