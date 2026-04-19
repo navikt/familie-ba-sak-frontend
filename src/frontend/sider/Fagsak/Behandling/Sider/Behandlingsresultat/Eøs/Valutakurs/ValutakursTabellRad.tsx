@@ -83,6 +83,7 @@ const ValutakursTabellRad: React.FC<IProps> = ({ valutakurs, åpenBehandling, vi
                         key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
                         vurderingsform={valutakurs.vurderingsform}
                         åpenBehandling={åpenBehandling}
+                        inneholderBarnSomSkalSkjermes={valutakurs.inneholderBarnSomSkalSkjermes}
                     />
                 ) : null
             }

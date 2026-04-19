@@ -1,11 +1,11 @@
 import React, { Activity, useEffect, useState } from 'react';
 
-import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, HStack, List } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
+import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
+import { Alert, BodyShort, Box, Button, Heading, HStack, List } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import styles from './VilkårsvurderingSkjema.module.css';
 import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
@@ -14,8 +14,6 @@ import { PersonType } from '../../../../../../typer/person';
 import {
     annenVurderingConfig,
     type IPersonResultat,
-    type IVilkårConfig,
-    type IVilkårResultat,
     Resultat,
     vilkårConfig,
     VilkårType,
@@ -26,7 +24,6 @@ import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
-import styles from './VilkårsvurderingSkjema.module.css';
 
 interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
@@ -118,115 +115,129 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                 const harUtvidet = personResultat.vilkårResultater.find(
                     vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
+                const personSkalSkjermesForBruker = personResultat.person.skjermesForBruker;
 
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}
                         id={`${index}_${personResultat.person.fødselsdato}`}
                     >
-                        <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
-                            <PersonInformasjon
-                                person={personResultat.person}
-                                somOverskrift
-                                erLesevisning={erLesevisning}
-                            />
-                            {!erLesevisning &&
-                                personErEkspandert[personResultat.personIdent] &&
-                                personResultat.person.type === PersonType.SØKER &&
-                                !harUtvidet &&
-                                kanLeggeTilUtvidetVilkår && (
+                        {personSkalSkjermesForBruker ? (
+                            <HStack gap="space-24" wrap={false} align="center">
+                                <ShieldLockFillIcon
+                                    fontSize="2.5rem"
+                                    color="var(--ax-warning-500)"
+                                    style={{ margin: '-0.25rem' }}
+                                />{' '}
+                                <Heading level="2" size="medium">
+                                    {personResultat.person.navn}
+                                </Heading>
+                            </HStack>
+                        ) : (
+                            <>
+                                <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
+                                    <PersonInformasjon
+                                        person={personResultat.person}
+                                        somOverskrift
+                                        erLesevisning={erLesevisning}
+                                    />
+                                    {!erLesevisning &&
+                                        personErEkspandert[personResultat.personIdent] &&
+                                        personResultat.person.type === PersonType.SØKER &&
+                                        !harUtvidet &&
+                                        kanLeggeTilUtvidetVilkår && (
+                                            <Button
+                                                variant={'tertiary'}
+                                                id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
+                                                onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
+                                                size={'small'}
+                                                icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
+                                            >
+                                                {`Legg til vilkår utvidet barnetrygd`}
+                                            </Button>
+                                        )}
                                     <Button
-                                        variant={'tertiary'}
-                                        id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
-                                        onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
-                                        size={'small'}
-                                        icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
-                                    >
-                                        {`Legg til vilkår utvidet barnetrygd`}
-                                    </Button>
-                                )}
-                            <Button
-                                id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
-                                variant="tertiary"
-                                onClick={() =>
-                                    settPersonErEkspandert({
-                                        ...personErEkspandert,
-                                        [personResultat.personIdent]: !personErEkspandert[personResultat.personIdent],
-                                    })
-                                }
-                                icon={
-                                    personErEkspandert[personResultat.personIdent] ? (
-                                        <ChevronUpIcon aria-hidden />
-                                    ) : (
-                                        <ChevronDownIcon aria-hidden />
-                                    )
-                                }
-                                iconPosition="right"
-                            >
-                                {personErEkspandert[personResultat.personIdent]
-                                    ? 'Skjul vilkårsvurdering'
-                                    : 'Vis vilkårsvurdering'}
-                            </Button>
-                        </HStack>
-                        <Activity mode={personErEkspandert[personResultat.personIdent] ? 'visible' : 'hidden'}>
-                            <Box paddingInline={'space-56 space-0'}>
-                                <>
-                                    {personResultat.person.registerhistorikk ? (
-                                        <Registeropplysninger
-                                            registerHistorikk={personResultat.person.registerhistorikk}
-                                            fødselsdato={personResultat.person.fødselsdato}
-                                        />
-                                    ) : (
-                                        <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
-                                    )}
-                                </>
-                                {Object.values(vilkårConfig)
-                                    .filter((vc: IVilkårConfig) =>
-                                        vc.parterDetteGjelderFor.includes(personResultat.person.type)
-                                    )
-                                    .map((vc: IVilkårConfig) => {
-                                        const vilkårResultater: FeltState<IVilkårResultat>[] =
-                                            personResultat.vilkårResultater.filter(
-                                                (vilkårResultat: FeltState<IVilkårResultat>) =>
-                                                    vilkårResultat.verdi.vilkårType === vc.key
-                                            );
-
-                                        if (
-                                            vilkårResultater.length === 0 &&
-                                            personResultat.person.type === PersonType.SØKER
-                                        )
-                                            return undefined;
-                                        // For barn ønsker vi alltid å rendre alle vilkår slik at man evt kan legge til tom periode
-                                        else
-                                            return (
-                                                <GeneriskVilkår
-                                                    key={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
-                                                    generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
-                                                    person={personResultat.person}
-                                                    vilkårResultater={vilkårResultater}
-                                                    vilkårFraConfig={vc}
-                                                    visFeilmeldinger={visFeilmeldinger}
-                                                />
-                                            );
-                                    })}
-                                {andreVurderinger.length > 0 &&
-                                    Object.values(annenVurderingConfig)
-                                        .filter(annenVurderingConfig =>
-                                            annenVurderingConfig.parterDetteGjelderFor.includes(
-                                                personResultat.person.type
+                                        id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
+                                        variant="tertiary"
+                                        onClick={() =>
+                                            settPersonErEkspandert({
+                                                ...personErEkspandert,
+                                                [personResultat.personIdent]:
+                                                    !personErEkspandert[personResultat.personIdent],
+                                            })
+                                        }
+                                        icon={
+                                            personErEkspandert[personResultat.personIdent] ? (
+                                                <ChevronUpIcon aria-hidden />
+                                            ) : (
+                                                <ChevronDownIcon aria-hidden />
                                             )
-                                        )
-                                        .map(annenVurderingConfig => (
-                                            <GeneriskAnnenVurdering
-                                                key={`${index}_${personResultat.person.fødselsdato}_${annenVurderingConfig.key}`}
-                                                person={personResultat.person}
-                                                andreVurderinger={personResultat.andreVurderinger}
-                                                annenVurderingConfig={annenVurderingConfig}
-                                                visFeilmeldinger={visFeilmeldinger}
+                                        }
+                                        iconPosition="right"
+                                    >
+                                        {personErEkspandert[personResultat.personIdent]
+                                            ? 'Skjul vilkårsvurdering'
+                                            : 'Vis vilkårsvurdering'}
+                                    </Button>
+                                </HStack>
+                                <Activity mode={personErEkspandert[personResultat.personIdent] ? 'visible' : 'hidden'}>
+                                    <Box paddingInline={'space-56 space-0'}>
+                                        {personResultat.person.registerhistorikk ? (
+                                            <Registeropplysninger
+                                                registerHistorikk={personResultat.person.registerhistorikk}
+                                                fødselsdato={personResultat.person.fødselsdato}
                                             />
-                                        ))}
-                            </Box>
-                        </Activity>
+                                        ) : (
+                                            <Alert
+                                                variant="warning"
+                                                children={'Klarte ikke hente registeropplysninger'}
+                                            />
+                                        )}
+                                        {Object.values(vilkårConfig)
+                                            .filter(vc => vc.parterDetteGjelderFor.includes(personResultat.person.type))
+                                            .map(vc => {
+                                                const vilkårResultater = personResultat.vilkårResultater.filter(
+                                                    vilkårResultat => vilkårResultat.verdi.vilkårType === vc.key
+                                                );
+
+                                                if (
+                                                    vilkårResultater.length === 0 &&
+                                                    personResultat.person.type === PersonType.SØKER
+                                                )
+                                                    return undefined;
+                                                // For barn ønsker vi alltid å rendre alle vilkår slik at man evt kan legge til tom periode
+                                                else
+                                                    return (
+                                                        <GeneriskVilkår
+                                                            key={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
+                                                            generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
+                                                            person={personResultat.person}
+                                                            vilkårResultater={vilkårResultater}
+                                                            vilkårFraConfig={vc}
+                                                            visFeilmeldinger={visFeilmeldinger}
+                                                        />
+                                                    );
+                                            })}
+                                        {andreVurderinger.length > 0 &&
+                                            Object.values(annenVurderingConfig)
+                                                .filter(annenVurderingConfig =>
+                                                    annenVurderingConfig.parterDetteGjelderFor.includes(
+                                                        personResultat.person.type
+                                                    )
+                                                )
+                                                .map(annenVurderingConfig => (
+                                                    <GeneriskAnnenVurdering
+                                                        key={`${index}_${personResultat.person.fødselsdato}_${annenVurderingConfig.key}`}
+                                                        person={personResultat.person}
+                                                        andreVurderinger={personResultat.andreVurderinger}
+                                                        annenVurderingConfig={annenVurderingConfig}
+                                                        visFeilmeldinger={visFeilmeldinger}
+                                                    />
+                                                ))}
+                                    </Box>
+                                </Activity>
+                            </>
+                        )}
                     </div>
                 );
             })}

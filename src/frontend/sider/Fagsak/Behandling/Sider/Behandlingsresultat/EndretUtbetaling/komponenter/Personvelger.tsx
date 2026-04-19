@@ -23,6 +23,7 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
                 .map(personMedAndeler => personMedAndeler.personIdent)
                 .includes(person.personIdent)
         )
+        .filter(person => !person.skjermesForBruker)
         .map(person => ({
             value: person.personIdent,
             label: lagPersonLabel(person.personIdent, behandling.personer),

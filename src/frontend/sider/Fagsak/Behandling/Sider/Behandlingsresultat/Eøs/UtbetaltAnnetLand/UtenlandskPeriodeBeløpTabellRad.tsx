@@ -84,6 +84,7 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({ utenlandskPeriodeBeløp,
                         toggleForm={toggleForm}
                         slettUtenlandskPeriodeBeløp={slettUtenlandskPeriodeBeløp}
                         status={utenlandskPeriodeBeløp.status}
+                        inneholderBarnSomSkalSkjermes={utenlandskPeriodeBeløp.inneholderBarnSomSkalSkjermes}
                     />
                 )
             }

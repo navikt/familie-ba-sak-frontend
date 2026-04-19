@@ -93,13 +93,15 @@ export function Venstremeny() {
                                                     <Box padding={'space-12'} />
                                                 )}
                                                 <VStack>
-                                                    <BodyShort>{underside.navn}</BodyShort>
-                                                    <HStack align={'center'}>
-                                                        <BodyShort size={'small'} className={Styles.ident}>
-                                                            {formaterIdent(underside.ident)}
-                                                        </BodyShort>
-                                                        <CopyButton copyText={underside.ident} size={'xsmall'} />
-                                                    </HStack>
+                                                    <BodyShort size={'small'}>{underside.navn}</BodyShort>
+                                                    {underside.ident && !underside.skjermesForBruker && (
+                                                        <HStack align={'center'}>
+                                                            <BodyShort size={'small'} className={Styles.ident}>
+                                                                {formaterIdent(underside.ident)}
+                                                            </BodyShort>
+                                                            <CopyButton copyText={underside.ident} size={'xsmall'} />
+                                                        </HStack>
+                                                    )}
                                                 </VStack>
                                             </HStack>
                                         </NavLink>

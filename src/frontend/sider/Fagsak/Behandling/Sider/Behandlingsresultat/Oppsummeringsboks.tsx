@@ -214,24 +214,33 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             <BodyShort>Sats</BodyShort>
                             <BodyShort align="end">Beløp</BodyShort>
                         </UtbetalingsbeløpRad>
-                        {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => (
-                            <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
-                                <HStack gap={'space-4'}>
-                                    <BodyShort>
-                                        {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
-                                    </BodyShort>
-                                    <Skillelinje />
-                                    <FalskIdentitet harFalskIdentitet={detalj.person.harFalskIdentitet} />
-                                    <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
-                                </HStack>
-                                <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
-                                {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
-                                    <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
-                                ) : (
-                                    <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
-                                )}
-                            </UtbetalingsbeløpRad>
-                        ))}
+                        {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => {
+                            const personSkalSkjermesForBruker = detalj.person.skjermesForBruker;
+
+                            return (
+                                <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
+                                    {personSkalSkjermesForBruker ? (
+                                        <BodyShort>{detalj.person.navn}</BodyShort>
+                                    ) : (
+                                        <HStack gap={'space-4'}>
+                                            <BodyShort>
+                                                {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
+                                            </BodyShort>
+                                            <Skillelinje />
+                                            <FalskIdentitet harFalskIdentitet={detalj.person.harFalskIdentitet} />
+                                            <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
+                                        </HStack>
+                                    )}
+                                    <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
+                                    {!personSkalSkjermesForBruker &&
+                                    !utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
+                                        <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
+                                    ) : (
+                                        <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
+                                    )}
+                                </UtbetalingsbeløpRad>
+                            );
+                        })}
                         <TotaltUtbetaltRad columns="1fr 5rem">
                             <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
                             <BodyShort weight="semibold" align="end">

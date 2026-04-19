@@ -23,6 +23,10 @@ const TidslinjeHeader = styled.div`
     margin-bottom: 1rem;
 `;
 
+const StyledBodyShort = styled(BodyShort)`
+    padding-right: 0.5rem;
+`;
+
 const TidslinjeControls = styled.div`
     display: flex;
     flex-direction: column;
@@ -84,9 +88,9 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                 <TidslinjeLabels>
                     {grunnlagPersoner.map((person, index) => {
                         return (
-                            <BodyShort key={index} title={person.navn}>
+                            <StyledBodyShort key={index} title={person.navn}>
                                 {formaterIdent(person.personIdent)}
-                            </BodyShort>
+                            </StyledBodyShort>
                         );
                     })}
                 </TidslinjeLabels>

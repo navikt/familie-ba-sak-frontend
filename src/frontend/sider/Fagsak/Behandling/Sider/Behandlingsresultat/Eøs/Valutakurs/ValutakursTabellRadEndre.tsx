@@ -60,6 +60,7 @@ interface IProps {
     erManuellInputAvKurs: boolean;
     vurderingsform: Vurderingsform | undefined;
     åpenBehandling: IBehandling;
+    inneholderBarnSomSkalSkjermes?: boolean;
 }
 
 const ValutakursTabellRadEndre: React.FC<IProps> = ({
@@ -73,6 +74,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     sletterValutakurs,
     erManuellInputAvKurs,
     åpenBehandling,
+    inneholderBarnSomSkalSkjermes,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const toggles = useFeatureToggles();
@@ -82,7 +84,9 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
         åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
     const erLesevisning =
-        vurderErLesevisning(true) || (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
+        vurderErLesevisning(true) ||
+        !!inneholderBarnSomSkalSkjermes ||
+        (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
     const visKursGruppeFeilmelding = (): React.ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
