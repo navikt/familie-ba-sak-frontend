@@ -6,8 +6,8 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../context/AppContext';
 import { useFagsakId } from '../../../../hooks/useFagsakId';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
@@ -17,7 +17,7 @@ const useBehandlingssteg = (
     behandling: IBehandling
 ) => {
     const { request } = useHttp();
-    const { innloggetSaksbehandler } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
     const fagsakId = useFagsakId();
     const navigate = useNavigate();
@@ -126,7 +126,7 @@ const useBehandlingssteg = (
                 method: 'POST',
                 url: `/familie-ba-sak/api/behandlinger/${
                     behandling?.behandlingId
-                }/steg/send-til-beslutter?behandlendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
+                }/steg/send-til-beslutter?behandlendeEnhet=${saksbehandler.enhet ?? '9999'}`,
             }).then((response: Ressurs<IBehandling>) => {
                 settSubmitRessurs(response);
 

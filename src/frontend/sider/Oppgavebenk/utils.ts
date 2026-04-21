@@ -1,8 +1,7 @@
-import type { ISaksbehandler } from '@navikt/familie-typer';
-
 import type { IPar } from '../../typer/common';
 import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '../../typer/oppgave';
 import { behandlingstypeFilter, enhetFilter } from '../../typer/oppgave';
+import type { Saksbehandler } from '../../typer/saksbehandler';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 export enum Sorteringsnøkkel {
@@ -21,7 +20,7 @@ export enum Sorteringsnøkkel {
 
 export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs' | 'identer'> {
     ident: IOppgaveIdent[] | undefined;
-    tilordnetRessurs: { oppg: IOppgave; innloggetSaksbehandler?: ISaksbehandler };
+    tilordnetRessurs: { oppg: IOppgave; saksbehandler: Saksbehandler };
     handlinger: IOppgave;
 }
 
@@ -48,10 +47,7 @@ export const sorterEtterNøkkel = (a: IOppgaveRad, b: IOppgaveRad, sorteringsnø
     return 0;
 };
 
-export const mapIOppgaverTilOppgaveRad = (
-    oppgaver: IOppgave[],
-    innloggetSaksbehandler?: ISaksbehandler
-): IOppgaveRad[] =>
+export const mapIOppgaverTilOppgaveRad = (oppgaver: IOppgave[], saksbehandler: Saksbehandler): IOppgaveRad[] =>
     oppgaver.map((oppg: IOppgave) => {
         const enhet: IPar | undefined = enhetFilter[`E${oppg.tildeltEnhetsnr}` as EnhetFilter];
         return {
@@ -66,7 +62,7 @@ export const mapIOppgaverTilOppgaveRad = (
             beskrivelse: oppg.beskrivelse,
             opprettetTidspunkt: oppg.opprettetTidspunkt,
             prioritet: oppg.prioritet,
-            tilordnetRessurs: { oppg, innloggetSaksbehandler },
+            tilordnetRessurs: { oppg, saksbehandler },
             tildeltEnhetsnr: enhet ? enhet.navn : oppg.tildeltEnhetsnr,
             handlinger: oppg,
         };

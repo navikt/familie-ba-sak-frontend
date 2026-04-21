@@ -1,34 +1,16 @@
-import React, { createContext, useEffect, type PropsWithChildren, useState } from 'react';
-
-import type { ISaksbehandler } from '@navikt/familie-typer';
+import React, { createContext, type PropsWithChildren, useState } from 'react';
 
 interface Context {
     autentisert: boolean;
     settAutentisert: (autentisert: boolean) => void;
-    innloggetSaksbehandler: ISaksbehandler | undefined;
 }
 
 const AuthContext = createContext<Context | undefined>(undefined);
 
-interface Props extends PropsWithChildren {
-    autentisertSaksbehandler: ISaksbehandler | undefined;
-}
-
-export function AuthContextProvider({ autentisertSaksbehandler, children }: Props) {
+export function AuthContextProvider({ children }: PropsWithChildren) {
     const [autentisert, settAutentisert] = useState(true);
-    const [innloggetSaksbehandler, settInnloggetSaksbehandler] = React.useState(autentisertSaksbehandler);
 
-    useEffect(() => {
-        if (autentisertSaksbehandler) {
-            settInnloggetSaksbehandler(autentisertSaksbehandler);
-        }
-    }, [autentisertSaksbehandler]);
-
-    return (
-        <AuthContext.Provider value={{ autentisert, settAutentisert, innloggetSaksbehandler }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{ autentisert, settAutentisert }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuthContext() {

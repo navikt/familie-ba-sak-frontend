@@ -11,8 +11,8 @@ import { hentDataFraRessurs, type IDokumentInfo, Journalstatus, type Ressurs } f
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import { useKlageApi } from '../../api/useKlageApi';
-import { useAppContext } from '../../context/AppContext';
 import useDokument from '../../hooks/useDokument';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import type { IOpprettBehandlingSkjemaBase } from '../../komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import type { IBehandlingstema } from '../../typer/behandlingstema';
@@ -85,7 +85,7 @@ interface ManuellJournalføringContextValue {
 const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(undefined);
 
 export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
-    const { innloggetSaksbehandler } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
     const navigate = useNavigate();
     const { request } = useHttp();
@@ -405,7 +405,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                     method: 'POST',
                     url: `/familie-ba-sak/api/journalpost/${
                         dataForManuellJournalføring.data.journalpost.journalpostId
-                    }/journalfør/${oppgaveId}?journalfoerendeEnhet=${innloggetSaksbehandler?.enhet ?? '9999'}`,
+                    }/journalfør/${oppgaveId}?journalfoerendeEnhet=${saksbehandler.enhet ?? '9999'}`,
                     data: {
                         journalpostTittel: skjema.felter.journalpostTittel.verdi,
                         kategori: behandlingstema?.kategori ?? null,
@@ -448,7 +448,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                   ? BehandlingÅrsak.SØKNAD
                                   : nyBehandlingsårsak,
 
-                        navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                        navIdent: saksbehandler.navIdent,
                         fagsakType: skjema.felter.fagsakType.verdi,
                         institusjon:
                             skjema.felter.samhandler && skjema.felter.samhandler.verdi?.orgNummer
@@ -515,7 +515,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                                     : nyBehandlingsårsak === ''
                                       ? BehandlingÅrsak.SØKNAD
                                       : nyBehandlingsårsak,
-                            navIdent: innloggetSaksbehandler?.navIdent ?? '',
+                            navIdent: saksbehandler.navIdent,
                         },
                     },
                     (fagsakId: Ressurs<string>) => {
@@ -532,8 +532,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
 
     const erTilordnetInnloggetSaksbehandler = () =>
         dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
-        innloggetSaksbehandler !== undefined &&
-        dataForManuellJournalføring.data.oppgave.tilordnetRessurs === innloggetSaksbehandler.navIdent;
+        dataForManuellJournalføring.data.oppgave.tilordnetRessurs === saksbehandler.navIdent;
 
     const erLesevisning = () => {
         return (

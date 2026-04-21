@@ -7,7 +7,7 @@ import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { BegrunnelseField } from './BegrunnelseField';
 import { useEndreBehandlendeEnhetForm } from './useEndreBehandlendeEnhetForm';
 import { VelgNyEnhetField } from './VelgNyEnhetField';
-import { useAppContext } from '../../../../context/AppContext';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 
@@ -17,7 +17,7 @@ interface Props {
 
 export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const { innloggetSaksbehandler } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
     const { form, onSubmit } = useEndreBehandlendeEnhetForm({ lukkModal });
 
@@ -31,7 +31,7 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
         if (
             steg &&
             hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK) &&
-            innloggetSaksbehandler?.navIdent !== behandling.totrinnskontroll?.saksbehandlerId
+            saksbehandler.navIdent !== behandling.totrinnskontroll?.saksbehandlerId
         ) {
             return false;
         } else {

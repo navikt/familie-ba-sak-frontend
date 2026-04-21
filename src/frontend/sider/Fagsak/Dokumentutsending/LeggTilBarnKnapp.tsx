@@ -3,14 +3,14 @@ import * as React from 'react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
-import { useAppContext } from '../../../context/AppContext';
+import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 import { useLeggTilBarnModalContext } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 
 export function LeggTilBarnKnapp() {
     const { åpneModal } = useLeggTilBarnModalContext();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
-    if (!harInnloggetSaksbehandlerSkrivetilgang()) {
+    if (!saksbehandler.harSkrivetilgang) {
         return null;
     }
 

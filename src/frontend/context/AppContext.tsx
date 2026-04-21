@@ -4,18 +4,17 @@ import type { AxiosRequestConfig } from 'axios';
 
 import { BodyShort, Button, HStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import type { ISaksbehandler, Ressurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useAuthContext } from './AuthContext';
 import { useFeatureToggles } from '../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../hooks/useSaksbehandler';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
-import { BehandlerRolle } from '../typer/behandling';
 import { FeatureToggle } from '../typer/featureToggles';
 import type { IPersonInfo, IRestTilgang } from '../typer/person';
 import { adressebeskyttelsestyper } from '../typer/person';
-import { gruppeIdTilRolle, gruppeIdTilSuperbrukerRolle } from '../utils/behandling';
 
 export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;
@@ -54,10 +53,6 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
 
 interface AppContextValue {
     autentisert: boolean;
-    hentSaksbehandlerRolle: () => BehandlerRolle;
-    innloggetSaksbehandler: ISaksbehandler | undefined;
-    harInnloggetSaksbehandlerSkrivetilgang: () => boolean;
-    harInnloggetSaksbehandlerSuperbrukerTilgang: () => boolean | undefined;
     appInfoModal: IModal;
     settToast: (toastId: ToastTyper, toast: IToast) => void;
     settToasts: React.Dispatch<React.SetStateAction<{ [toastId: string]: IToast }>>;
@@ -70,12 +65,14 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const AppProvider = (props: PropsWithChildren) => {
-    const { autentisert, innloggetSaksbehandler } = useAuthContext();
+    const { autentisert } = useAuthContext();
     const { request } = useHttp();
     const toggles = useFeatureToggles();
 
     const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
+
+    const saksbehandler = useSaksbehandler();
 
     const lukkModal = () => {
         settAppInfoModal(initalState);
@@ -120,40 +117,12 @@ const AppProvider = (props: PropsWithChildren) => {
         });
     };
 
-    const hentSaksbehandlerRolle = (): BehandlerRolle => {
-        let rolle = BehandlerRolle.UKJENT;
-        if (innloggetSaksbehandler && innloggetSaksbehandler.groups) {
-            innloggetSaksbehandler.groups.forEach((id: string) => {
-                rolle = rolle < gruppeIdTilRolle(id) ? gruppeIdTilRolle(id) : rolle;
-            });
-        }
-
-        if (innloggetSaksbehandler && rolle === BehandlerRolle.UKJENT) {
-            throw new Error('Finner ikke rolle til saksbehandler.');
-        }
-
-        return rolle;
-    };
-
-    const harInnloggetSaksbehandlerSkrivetilgang = () => {
-        const rolle = hentSaksbehandlerRolle();
-
-        return rolle >= BehandlerRolle.SAKSBEHANDLER;
-    };
-
-    const harInnloggetSaksbehandlerSuperbrukerTilgang = () =>
-        innloggetSaksbehandler?.groups?.includes(gruppeIdTilSuperbrukerRolle);
-
-    const skalObfuskereData = toggles[FeatureToggle.skalObfuskereData] && !harInnloggetSaksbehandlerSkrivetilgang();
+    const skalObfuskereData = toggles[FeatureToggle.skalObfuskereData] && !saksbehandler.harSkrivetilgang;
 
     return (
         <AppContext.Provider
             value={{
                 autentisert,
-                hentSaksbehandlerRolle,
-                innloggetSaksbehandler,
-                harInnloggetSaksbehandlerSkrivetilgang,
-                harInnloggetSaksbehandlerSuperbrukerTilgang,
                 appInfoModal,
                 settToast: (toastId: ToastTyper, toast: IToast) =>
                     settToasts({

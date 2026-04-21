@@ -3,17 +3,15 @@ import React from 'react';
 import { Header } from '@navikt/familie-header';
 
 import FagsakDeltagerSøk from './FagsakDeltagerSøk';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
-interface IHeaderMedSøkProps {
-    brukerNavn?: string;
-    brukerEnhet?: string;
-}
+export function HeaderMedSøk() {
+    const saksbehandler = useSaksbehandler();
 
-export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ brukerNavn, brukerEnhet }) => {
     return (
         <Header
-            tittel="Nav Barnetrygd"
-            brukerinfo={{ navn: brukerNavn ?? 'Ukjent', enhet: brukerEnhet ?? 'Ukjent' }}
+            tittel={'Nav Barnetrygd'}
+            brukerinfo={{ navn: saksbehandler.displayName, enhet: saksbehandler.enhet }}
             brukerPopoverItems={[{ name: 'Logg ut', href: `${window.origin}/auth/logout` }]}
             eksterneLenker={[
                 {
@@ -31,4 +29,4 @@ export const HeaderMedSøk: React.FunctionComponent<IHeaderMedSøkProps> = ({ br
             <FagsakDeltagerSøk />
         </Header>
     );
-};
+}

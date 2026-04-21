@@ -15,6 +15,7 @@ import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils
 import { mapIOppgaverTilOppgaveRad } from './utils';
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useAppContext } from '../../context/AppContext';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '../../komponenter/Toast/typer';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { FagsakStatus } from '../../typer/fagsak';
@@ -51,8 +52,9 @@ interface OppgavebenkContextValue {
 const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(undefined);
 
 export const OppgavebenkProvider = (props: PropsWithChildren) => {
+    const { settToast } = useAppContext();
+    const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
-    const { innloggetSaksbehandler, settToast } = useAppContext();
     const { request } = useHttp();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
@@ -60,11 +62,11 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
 
     const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(byggTomRessurs<IHentOppgaveDto>());
 
-    const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(initialOppgaveFelter(innloggetSaksbehandler));
+    const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(initialOppgaveFelter(saksbehandler));
 
     const oppgaverader: IOppgaveRad[] = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
-            ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, innloggetSaksbehandler)
+            ? mapIOppgaverTilOppgaveRad(oppgaver.data.oppgaver, saksbehandler)
             : [];
     }, [oppgaver]);
 
@@ -100,11 +102,11 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
     };
 
     useEffect(() => {
-        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
-    }, [innloggetSaksbehandler]);
+        settOppgaveFelter(initialOppgaveFelter(saksbehandler));
+    }, [saksbehandler]);
 
     useEffect(() => {
-        if (hentOppgaverVedSidelast && innloggetSaksbehandler) {
+        if (hentOppgaverVedSidelast) {
             if (
                 Object.values(oppgaveFelter).filter(
                     (oppgaveFelt: IOppgaveFelt) =>
@@ -182,7 +184,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
 
     const tilbakestillOppgaveFelter = () => {
         tilbakestillOppgaveFeltILocalStorage();
-        settOppgaveFelter(initialOppgaveFelter(innloggetSaksbehandler));
+        settOppgaveFelter(initialOppgaveFelter(saksbehandler));
     };
 
     const { hentFagsakerForPerson } = useFagsakApi();
@@ -347,7 +349,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
             hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
             hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
             hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
-            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET ? innloggetSaksbehandler?.navIdent : undefined,
+            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET ? saksbehandler.navIdent : undefined,
             tildeltRessurs
         ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
             settOppgaver(oppgaverRessurs);

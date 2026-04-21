@@ -13,8 +13,8 @@ import { useSammensattKontrollsakContext } from './SammensattKontrollsak/Sammens
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { BehandlingKorrigertAlert } from './Vedtak';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
-import { useAppContext } from '../../../../../context/AppContext';
 import useDokument from '../../../../../hooks/useDokument';
+import { useSaksbehandler } from '../../../../../hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import {
@@ -36,7 +36,6 @@ interface Props {
 }
 
 export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
-    const { hentSaksbehandlerRolle } = useAppContext();
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
@@ -47,6 +46,8 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
     const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
+
+    const saksbehandler = useSaksbehandler();
 
     const erLesevisning = vurderErLesevisning();
 
@@ -71,15 +72,12 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const hentVedtaksbrev = () => {
         const vedtak = åpenBehandling.vedtak;
-        const rolle = hentSaksbehandlerRolle();
         const genererBrevUnderBehandling =
-            rolle &&
-            rolle > BehandlerRolle.VEILEDER &&
+            saksbehandler.rolle > BehandlerRolle.VEILEDER &&
             hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const genererBrevUnderBeslutning =
-            rolle &&
-            rolle === BehandlerRolle.BESLUTTER &&
+            saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
@@ -92,15 +90,12 @@ export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandl
 
     const hentBrevForTilbakekrevingsvedtakMotregning = () => {
         const behandlingId = åpenBehandling.behandlingId;
-        const rolle = hentSaksbehandlerRolle();
         const genererBrevUnderBehandling =
-            rolle !== undefined &&
-            rolle > BehandlerRolle.VEILEDER &&
+            saksbehandler.rolle > BehandlerRolle.VEILEDER &&
             hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const genererBrevUnderBeslutning =
-            rolle !== undefined &&
-            rolle === BehandlerRolle.BESLUTTER &&
+            saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
             hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';

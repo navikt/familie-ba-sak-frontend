@@ -1,8 +1,8 @@
-import { type ISaksbehandler } from '@navikt/familie-typer';
+import type { Saksbehandler } from '../../typer/saksbehandler';
 
-export function lagSaksbehandler(saksbehandler: Partial<ISaksbehandler> = {}): ISaksbehandler {
+export function lagSaksbehandler(saksbehandler: Partial<Saksbehandler> = {}): Saksbehandler {
     return {
-        displayName: 'Saksbehandler',
+        displayName: 'Sak Behandler',
         email: 'saksbehandler@nav.no',
         firstName: 'Sak',
         groups: ['d21e00a4-969d-4b28-8782-dc818abfae65'],

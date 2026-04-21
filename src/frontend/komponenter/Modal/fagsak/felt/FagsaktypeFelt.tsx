@@ -4,8 +4,8 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { useAuthContext } from '../../../../context/AuthContext';
 import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { FagsakType } from '../../../../typer/fagsak';
 import { FeatureToggle } from '../../../../typer/featureToggles';
 import { erProd } from '../../../../utils/miljø';
@@ -41,7 +41,7 @@ interface Props {
 }
 
 export function FagsaktypeFelt({ readOnly }: Props) {
-    const { innloggetSaksbehandler } = useAuthContext();
+    const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
     const { harNormalFagsak, harBarnEnsligMindreårigFagsak } = useFagsakerContext();
 
@@ -56,9 +56,8 @@ export function FagsaktypeFelt({ readOnly }: Props) {
     const options = fagsakTypeOptions
         .filter(option => {
             if (option.value === FagsakType.SKJERMET_BARN) {
-                const groups = innloggetSaksbehandler?.groups ?? [];
                 const aktuellGruppe = erProd() ? SKJERMET_BARN_GRUPPE.PROD : SKJERMET_BARN_GRUPPE.DEV;
-                const harTilgang = groups.some(group => group === aktuellGruppe);
+                const harTilgang = saksbehandler.groups.some(group => group === aktuellGruppe);
                 return harTilgang && toggles[FeatureToggle.tillattBehandlingAvSkjermetBarn];
             }
             return true;
