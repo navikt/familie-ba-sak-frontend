@@ -8,7 +8,7 @@ import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
 import { PersonType } from '../../../../../typer/person';
@@ -59,15 +59,19 @@ const SimuleringContext = createContext<SimuleringContextValue | undefined>(unde
 
 export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     const { request } = useHttp();
-    const { fagsakId } = useSakOgBehandlingParams();
-    const vedtak = åpenBehandling.vedtak;
-    const personerMedAndelerTilkjentYtelse = åpenBehandling.personerMedAndelerTilkjentYtelse;
+
+    const fagsakId = useFagsakId();
+
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
     });
+
     const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<Ressurs<boolean>>({
         status: RessursStatus.HENTER,
     });
+
+    const vedtak = åpenBehandling.vedtak;
+    const personerMedAndelerTilkjentYtelse = åpenBehandling.personerMedAndelerTilkjentYtelse;
     const maksLengdeTekst = 1500;
     const maksgrenseForAvvikIBeløpVedMigrering = 100;
     const mars2023 = '2023-03-01';

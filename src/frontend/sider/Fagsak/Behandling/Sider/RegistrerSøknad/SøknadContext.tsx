@@ -8,7 +8,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsak } from '../../../../../hooks/useFagsak';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '../../../../../typer/person';
@@ -20,7 +20,6 @@ import type {
 } from '../../../../../typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
 import { useBrukerContext } from '../../../BrukerContext';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface Props extends React.PropsWithChildren {
@@ -54,10 +53,12 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         gjelderEnsligMindreårig,
         gjelderSkjermetBarn,
     } = useBehandlingContext();
-    const { fagsakId } = useSakOgBehandlingParams();
-    const navigate = useNavigate();
-    const { fagsak } = useFagsakContext();
+
     const { bruker } = useBrukerContext();
+
+    const fagsak = useFagsak();
+    const navigate = useNavigate();
+
     const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
@@ -155,7 +156,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
         if (vurderErLesevisning()) {
-            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+            navigate(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
         } else {
             onSubmit<IRestRegistrerSøknad>(
                 {
@@ -183,7 +184,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(response);
-                        navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+                        navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
                     }
                 },
                 (errorResponse: Ressurs<IBehandling>) => {
