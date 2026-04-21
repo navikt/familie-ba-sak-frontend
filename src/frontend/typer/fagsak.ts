@@ -72,7 +72,7 @@ export const mapMinimalFagsakTilBaseFagsak = (it: IMinimalFagsak): IBaseFagsak =
     løpendeUnderkategori: it.løpendeUnderkategori,
     fagsakType: it.fagsakType,
     institusjon: it.institusjon,
-    harStrengtFortroligPersonIFagsak: it.harStrengtFortroligPersonIFagsak,
+    finnesStrengtFortroligPersonIFagsak: it.finnesStrengtFortroligPersonIFagsak,
 });
 
 export const fagsakStatus: INøkkelPar = {
