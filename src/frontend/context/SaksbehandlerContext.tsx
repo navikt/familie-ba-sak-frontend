@@ -1,6 +1,6 @@
 import React, { createContext, type PropsWithChildren, useContext } from 'react';
 
-import { Box, LocalAlert } from '@navikt/ds-react';
+import { Box, GlobalAlert } from '@navikt/ds-react';
 
 import { useHentSaksbehandler } from '../hooks/useHentSaksbehandler';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
@@ -26,12 +26,12 @@ export function SaksbehandlerProvider({ saksbehandler, children }: Props) {
     if (error) {
         return (
             <Box padding={'space-8'}>
-                <LocalAlert status={'error'}>
-                    <LocalAlert.Header>
-                        <LocalAlert.Title>Feil oppstod ved innlasting av saksbehandler</LocalAlert.Title>
-                    </LocalAlert.Header>
-                    <LocalAlert.Content>{error.message ?? 'En ukjent feil oppstod.'}</LocalAlert.Content>
-                </LocalAlert>
+                <GlobalAlert status={'error'}>
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Feil oppstod ved innlasting av saksbehandler</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                    <GlobalAlert.Content>{error.message ?? 'En ukjent feil oppstod.'}</GlobalAlert.Content>
+                </GlobalAlert>
             </Box>
         );
     }
