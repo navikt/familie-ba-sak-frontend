@@ -216,10 +216,18 @@ export const PersonIkon = ({
     let ikonProps = størrelse === 's' ? { height: 28, width: 28 } : { height: 36, width: 36 };
     if (fagsakType === FagsakType.SKJERMET_BARN) {
         if (kjønn === kjønnType.KVINNE) {
-            return <StyledJenteIkon $adresseBeskyttet={true} {...ikonProps} />;
+            return erBarn ? (
+                <StyledJenteIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            ) : (
+                <StyledKvinneIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            );
         }
         if (kjønn === kjønnType.MANN) {
-            return <StyledGuttIkon $adresseBeskyttet={true} {...ikonProps} />;
+            return erBarn ? (
+                <StyledGuttIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            ) : (
+                <StyledMannIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            );
         }
     }
 
