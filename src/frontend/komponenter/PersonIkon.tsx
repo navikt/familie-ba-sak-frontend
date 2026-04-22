@@ -213,29 +213,20 @@ export const PersonIkon = ({
         }
         return <KontorIkonGrønn height="24" width="24" color={erAdresseBeskyttet ? Warning500 : Success500} />;
     }
-    let ikonProps = størrelse === 's' ? { height: 28, width: 28 } : { height: 36, width: 36 };
-    if (fagsakType === FagsakType.SKJERMET_BARN) {
-        if (kjønn === kjønnType.KVINNE) {
-            return erBarn ? (
-                <StyledJenteIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
-            ) : (
-                <StyledKvinneIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
-            );
-        }
-        if (kjønn === kjønnType.MANN) {
-            return erBarn ? (
-                <StyledGuttIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
-            ) : (
-                <StyledMannIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
-            );
-        }
-    }
+    const brukStørreIkon = fagsakType === FagsakType.SKJERMET_BARN || fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
+
+    const ikonProps = brukStørreIkon
+        ? størrelse === 's'
+            ? { height: 28, width: 28 }
+            : { height: 36, width: 36 }
+        : størrelse === 's'
+          ? { height: 24, width: 24 }
+          : { height: 32, width: 32 };
 
     if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
         return <StyledEnsligMindreårigIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />;
     }
 
-    ikonProps = størrelse === 's' ? { height: 24, width: 24 } : { height: 32, width: 32 };
     if (kjønn === kjønnType.KVINNE) {
         return erBarn ? (
             <StyledJenteIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
