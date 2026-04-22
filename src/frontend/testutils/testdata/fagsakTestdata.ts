@@ -15,6 +15,7 @@ export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
         løpendeUnderkategori: BehandlingUnderkategori.ORDINÆR,
         fagsakType: FagsakType.NORMAL,
         institusjon: undefined,
+        finnesStrengtFortroligPersonIFagsak: false,
         migreringsdato: '',
         behandlinger: [BehandlingTestdata.lagVisningBehandling()],
         gjeldendeUtbetalingsperioder: [],
