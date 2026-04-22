@@ -2,8 +2,10 @@ import { useForm } from 'react-hook-form';
 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
+import { useHarSaksbehandlerTilgang } from '../../../../hooks/useHarSaksbehandlerTilgang';
 import { useLeggTilBarnPåBehandling } from '../../../../hooks/useLeggTilBarnPåBehandling';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
+import { adressebeskyttelsestyper } from '../../../../typer/person';
 
 export enum LeggTilBarnPåBehandlingFelt {
     BARNIDENT = 'barnIdent',
@@ -19,6 +21,7 @@ interface Props {
 
 export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
     const { settÅpenBehandling, behandling } = useBehandlingContext();
+    const { mutateAsync: harSaksbehandlerTilgang } = useHarSaksbehandlerTilgang();
     const { mutateAsync: leggTilBarnPåBehandling } = useLeggTilBarnPåBehandling();
 
     const form = useForm<LeggTilBarnPåBehandlingFormValues>({
@@ -26,7 +29,6 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
             [LeggTilBarnPåBehandlingFelt.BARNIDENT]: undefined,
         },
         // TODO: validate
-        // TODO: bruk eksisterende identValidator?
     });
 
     const { setError } = form;
@@ -34,22 +36,46 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
     const onSubmit = async (values: LeggTilBarnPåBehandlingFormValues) => {
         const { barnIdent } = values;
 
-        const leggTilBarnPåBehandlingParameters = {
-            barnIdent: barnIdent,
-            behandlingId: behandling.behandlingId,
+        const harSaksbehandlerTilgangParameters = {
+            brukerIdent: barnIdent,
         };
 
-        return leggTilBarnPåBehandling(leggTilBarnPåBehandlingParameters)
-            .then(behandling => {
-                settÅpenBehandling(byggSuksessRessurs(behandling));
-                lukkModal();
+        harSaksbehandlerTilgang(harSaksbehandlerTilgangParameters)
+            .then(res => {
+                if (res.saksbehandlerHarTilgang) {
+                    const leggTilBarnPåBehandlingParameters = {
+                        barnIdent: barnIdent,
+                        behandlingId: behandling.behandlingId,
+                    };
+
+                    leggTilBarnPåBehandling(leggTilBarnPåBehandlingParameters)
+                        .then(behandling => {
+                            settÅpenBehandling(byggSuksessRessurs(behandling));
+                            lukkModal();
+                        })
+                        .catch((e: unknown) => {
+                            setError('root', {
+                                message:
+                                    e instanceof Error
+                                        ? e.message
+                                        : 'Teknisk feil ved forsøk på å legge til barn på behandling.',
+                            });
+                        });
+                } else {
+                    setError('root', {
+                        message: `Barnet kan ikke legges til på grunn av diskresjonskode ${
+                            adressebeskyttelsestyper[res.adressebeskyttelsegradering] ?? 'ukjent'
+                        }`,
+                    });
+                }
             })
             .catch((e: unknown) => {
                 setError('root', {
                     message:
-                        e instanceof Error ? e.message : 'Teknisk feil ved forsøk på å legge til barn på behandling.',
+                        e instanceof Error ? e.message : 'Det skjedde en feil ved sjekk av tilgangen til saksbehandler',
                 });
             });
+        return;
     };
 
     return {
