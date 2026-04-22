@@ -37,7 +37,7 @@ export function utledBehandlerRolle(saksbehandler: Saksbehandler): BehandlerRoll
     return rolle;
 }
 
-export function harSuperbrukerTilgang(saksbehandler: Saksbehandler) {
+export function harSuperbrukertilgang(saksbehandler: Saksbehandler) {
     return saksbehandler.groups.includes(hentGruppeIdTilSuperbrukerRolle());
 }
 

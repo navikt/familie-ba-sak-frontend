@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { BehandlerRolle } from './behandling';
-import { utledBehandlerRolle, harSuperbrukerTilgang, harSkrivetilgang } from './saksbehandler';
+import { utledBehandlerRolle, harSuperbrukertilgang, harSkrivetilgang } from './saksbehandler';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
 import { erProd } from '../utils/miljø';
 
@@ -42,7 +42,7 @@ describe('Saksbehandler', () => {
         describe('harSuperbrukerTilgang', () => {
             it('skal returnere true hvis bruker har superbruker-gruppe', () => {
                 const saksbehandler = lagSaksbehandler({ groups: [devGrupper.superbruker] });
-                expect(harSuperbrukerTilgang(saksbehandler)).toBe(true);
+                expect(harSuperbrukertilgang(saksbehandler)).toBe(true);
             });
         });
 
@@ -87,7 +87,7 @@ describe('Saksbehandler', () => {
         describe('harSuperbrukerTilgang', () => {
             it('skal returnere true for prod-superbruker', () => {
                 const saksbehandler = lagSaksbehandler({ groups: [prodGrupper.superbruker] });
-                expect(harSuperbrukerTilgang(saksbehandler)).toBe(true);
+                expect(harSuperbrukertilgang(saksbehandler)).toBe(true);
             });
         });
     });
