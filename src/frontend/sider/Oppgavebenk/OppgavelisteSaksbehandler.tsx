@@ -66,7 +66,7 @@ const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehand
                         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
 
                         if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-                            fordelOppgave(oppgave, saksbehandler?.navIdent);
+                            fordelOppgave(oppgave, saksbehandler.navIdent);
                         }
                     }}
                     children={'Tildel meg'}
