@@ -38,7 +38,6 @@ interface BehandlingContextValue {
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
     behandlingsstegSubmitressurs: Ressurs<IBehandling>;
-    vilkårsvurderingNesteOnClick: () => void;
     behandlingresultatNesteOnClick: () => void;
     sendTilBeslutterNesteOnClick: (
         settVisModal: (visModal: boolean) => void,
@@ -65,7 +64,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
     const {
         submitRessurs: behandlingsstegSubmitressurs,
-        vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
@@ -195,7 +193,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 trinnPåBehandling,
                 behandling: behandling,
                 behandlingsstegSubmitressurs,
-                vilkårsvurderingNesteOnClick,
                 behandlingresultatNesteOnClick,
                 sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
