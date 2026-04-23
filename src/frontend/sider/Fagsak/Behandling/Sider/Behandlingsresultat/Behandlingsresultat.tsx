@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
-import { byggDataRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggDataRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
@@ -21,9 +21,10 @@ import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
 import { useFagsak } from '../../../../../hooks/useFagsak';
+import { useOppdaterBehandlingsresultat } from '../../../../../hooks/useOppdaterBehandlingsresultat';
 import { useOpprettEndretUtbetalingAndel } from '../../../../../hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
-import type { IBehandling } from '../../../../../typer/behandling';
+import { BehandlingResultat, type IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import {
     type IRestKompetanse,
@@ -33,7 +34,6 @@ import {
 import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -60,7 +60,7 @@ interface IBehandlingsresultatProps {
 }
 
 const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
-    const { settÅpenBehandling } = useBehandlingContext();
+    const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
 
     const fagsak = useFagsak();
     const navigate = useNavigate();
@@ -73,6 +73,21 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
     } = useBehandlingsresultat(åpenBehandling);
 
     const {
+        mutate: oppdaterBehandlingsresultat,
+        isPending: oppdaterBehandlingsresultatIsPending,
+        error: oppdaterBehandlingsresultatError,
+    } = useOppdaterBehandlingsresultat({
+        onSuccess: behandling => {
+            settÅpenBehandling(byggSuksessRessurs(behandling));
+            if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
+                navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/simulering`);
+            } else {
+                navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vedtak`);
+            }
+        },
+    });
+
+    const {
         mutate: opprettEndretUtbetalingAndel,
         isPending: isOpprettEndretUtbetalingAndelPending,
         isError: isOpprettEndretUtbetalingAndelError,
@@ -83,9 +98,6 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =
         useTidslinjeContext();
-
-    const { vurderErLesevisning, behandlingresultatNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandlingContext();
 
     const {
         erEøsInformasjonGyldig,
@@ -139,7 +151,7 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
 
     return (
         <Skjemasteg
-            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            senderInn={oppdaterBehandlingsresultatIsPending}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
             forrigeOnClick={() => navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
@@ -149,11 +161,11 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {
-                    behandlingresultatNesteOnClick();
+                    oppdaterBehandlingsresultat({ behandlingId: åpenBehandling.behandlingId });
                 }
             }}
             maxWidthStyle={'80rem'}
-            feilmelding={hentFrontendFeilmelding(behandlingsstegSubmitressurs)}
+            feilmelding={oppdaterBehandlingsresultatError?.message}
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
