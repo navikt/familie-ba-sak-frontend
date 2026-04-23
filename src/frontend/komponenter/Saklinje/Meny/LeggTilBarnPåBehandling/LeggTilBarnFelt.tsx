@@ -8,6 +8,7 @@ import {
     LeggTilBarnPåBehandlingFelt,
     type LeggTilBarnPåBehandlingFormValues,
 } from './useLeggTilBarnPåBehandlingSkjema';
+import { sjekkEr11Tall, sjekkErGyldigIdent } from '../../../../utils/validators';
 
 interface Props {
     erLesevisning: boolean;
@@ -24,10 +25,15 @@ export const LeggTilBarnFelt = ({ erLesevisning }: Props) => {
         name: LeggTilBarnPåBehandlingFelt.BARNIDENT,
         control,
         rules: {
-            required: 'Ident må oppgis.',
-            // TODO: stemmer dette, eller finnes det noen identtyper der lengden ikke er 11?
-            minLength: { value: 11, message: 'Ident må være på 11 siffer' },
-            maxLength: { value: 11, message: 'Ident må være på 11 siffer' },
+            required: 'Fødselsnummer eller D-nummer må oppgis.',
+            validate: value => {
+                if (!sjekkEr11Tall(value)) {
+                    return 'Fødselsnummer eller D-nummer må være 11 siffer.';
+                }
+                if (!sjekkErGyldigIdent(value)) {
+                    return 'Fødselsnummer eller D-nummer er ugyldig.';
+                }
+            },
         },
     });
 

@@ -52,6 +52,7 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
                         .then(behandling => {
                             settÅpenBehandling(byggSuksessRessurs(behandling));
                             lukkModal();
+                            return;
                         })
                         .catch((e: unknown) => {
                             setError('root', {
@@ -71,8 +72,7 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
             })
             .catch((e: unknown) => {
                 setError('root', {
-                    message:
-                        e instanceof Error ? e.message : 'Det skjedde en feil ved sjekk av tilgangen til saksbehandler',
+                    message: e instanceof Error ? e.message : 'Teknisk feil ved sjekk av tilgangen til saksbehandler',
                 });
             });
         return;
