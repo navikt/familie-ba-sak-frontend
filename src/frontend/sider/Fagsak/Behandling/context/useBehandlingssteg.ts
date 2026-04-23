@@ -1,14 +1,11 @@
 import { useState } from 'react';
 
-import { useNavigate } from 'react-router';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useFagsakId } from '../../../../hooks/useFagsakId';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
 import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
 
@@ -19,36 +16,7 @@ const useBehandlingssteg = (
     const { request } = useHttp();
     const saksbehandler = useSaksbehandler();
 
-    const fagsakId = useFagsakId();
-    const navigate = useNavigate();
-
     const [submitRessurs, settSubmitRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
-
-    const behandlingresultatNesteOnClick = () => {
-        settSubmitRessurs(byggHenterRessurs());
-
-        request<void, IBehandling>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/behandlingsresultat`,
-        })
-            .then((response: Ressurs<IBehandling>) => {
-                settSubmitRessurs(response);
-
-                if (response.status === RessursStatus.SUKSESS) {
-                    const behandling = response.data;
-                    oppdaterBehandling(response);
-
-                    if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
-                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/simulering`);
-                    } else {
-                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
-                    }
-                }
-            })
-            .catch(() => {
-                settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
-            });
-    };
 
     const minstEnPeriodeharBegrunnelseEllerFritekst = (
         vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[]
@@ -121,7 +89,6 @@ const useBehandlingssteg = (
 
     return {
         submitRessurs,
-        behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
     };
 };
