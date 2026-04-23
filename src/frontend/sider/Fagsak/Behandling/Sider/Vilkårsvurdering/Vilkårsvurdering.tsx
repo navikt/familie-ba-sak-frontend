@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router';
 
 import { Alert, BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, List, VStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
@@ -15,6 +15,7 @@ import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkin
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
+import { useOppdaterVilkårsvurdering } from '../../../../../hooks/useOppdaterVilkårsvurdering';
 import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
 import { FeatureToggle } from '../../../../../typer/featureToggles';
 import {
@@ -25,7 +26,6 @@ import {
 } from '../../../../../typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { erProd } from '../../../../../utils/miljø';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
@@ -35,8 +35,7 @@ export function Vilkårsvurdering() {
     const toggles = useFeatureToggles();
 
     const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandlingContext();
+    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
 
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
         useVilkårsvurderingContext();
@@ -47,14 +46,23 @@ export function Vilkårsvurdering() {
 
     const navigate = useNavigate();
 
+    const {
+        mutate: oppdaterVilkårsvurdering,
+        isPending: oppdaterVilkårsvurderingIsPending,
+        error: oppdaterVilkårsvurderingError,
+    } = useOppdaterVilkårsvurdering({
+        onSuccess: behandling => {
+            settÅpenBehandling(byggSuksessRessurs(behandling));
+            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
+        },
+    });
+
     const uregistrerteBarn =
         behandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
     }
-
-    const skjemaFeilmelding = hentFrontendFeilmelding(behandlingsstegSubmitressurs);
 
     return (
         <Skjemasteg
@@ -73,13 +81,13 @@ export function Vilkårsvurdering() {
                 if (erLesevisning) {
                     navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
                 } else if (erVilkårsvurderingenGyldig()) {
-                    vilkårsvurderingNesteOnClick();
+                    oppdaterVilkårsvurdering({ behandlingId: behandling.behandlingId });
                 } else {
                     settVisFeilmeldinger(true);
                 }
             }}
             maxWidthStyle={'80rem'}
-            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            senderInn={oppdaterVilkårsvurderingIsPending}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
             <>
@@ -140,8 +148,8 @@ export function Vilkårsvurdering() {
                         ))}
                     </ErrorSummary>
                 )}
-                {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
-                    <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
+                {oppdaterVilkårsvurderingError && (
+                    <ErrorMessage>{oppdaterVilkårsvurderingError.message ?? 'En ukjent feil oppstod.'}</ErrorMessage>
                 )}
                 <ManglendeSvalbardmerkingVarsel />
                 <ManglendeFinnmarkmerkingVarsel />
