@@ -5,9 +5,7 @@ import { Alert, Box, Button, Fieldset, HStack, Select, UNSAFE_Combobox, VStack }
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { Country } from '@navikt/land-verktoy';
 
-import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
 import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../../../komponenter/FlaggCombobox';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
@@ -20,11 +18,9 @@ import {
     kompetanseResultater,
     SøkersAktivitet,
 } from '../../../../../../../typer/eøsPerioder';
-import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
-import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
     `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${
@@ -51,7 +47,6 @@ export function KompetanseTabellRadEndre({
     inneholderBarnSomSkalSkjermes,
 }: Props) {
     const { vurderErLesevisning } = useBehandlingContext();
-    const toggles = useFeatureToggles();
     const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
 
     const visSubmitFeilmelding = () => {
@@ -153,135 +148,63 @@ export function KompetanseTabellRadEndre({
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
                     </Alert>
                 )}
-                {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                    <RegionCombobox
-                        label={'Søkers aktivitetsland'}
-                        value={skjema.felter.søkersAktivitetsland.verdi as Regionkode}
-                        options={EØS_LAND_REGIONKODER}
-                        onChange={value => {
-                            if (value) {
-                                skjema.felter.søkersAktivitetsland.validerOgSettFelt(value);
-                            } else {
-                                skjema.felter.søkersAktivitetsland.nullstill();
-                            }
-                        }}
-                        readOnly={lesevisning}
-                        error={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
-                                : ''
+                <RegionCombobox
+                    label={'Søkers aktivitetsland'}
+                    value={skjema.felter.søkersAktivitetsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.søkersAktivitetsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.søkersAktivitetsland.nullstill();
                         }
-                    />
-                ) : (
-                    <FamilieLandvelger
-                        erLesevisning={lesevisning}
-                        id={'søkersAktivitetsland'}
-                        label={'Søkers aktivitetsland'}
-                        kunEøs
-                        medFlag
-                        size="medium"
-                        kanNullstilles
-                        value={skjema.felter.søkersAktivitetsland.verdi}
-                        onChange={(value: Country) => {
-                            const nyVerdi = value ? value.value : undefined;
-                            skjema.felter.søkersAktivitetsland.validerOgSettFelt(nyVerdi);
-                        }}
-                        feil={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
-                                : ''
+                    }}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
+                            ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
+                            : ''
+                    }
+                />
+                <RegionCombobox
+                    label={'Annen forelders aktivitetsland'}
+                    value={skjema.felter.annenForeldersAktivitetsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.annenForeldersAktivitetsland.nullstill();
                         }
-                        utenMargin
-                    />
-                )}
-                {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                    <RegionCombobox
-                        label={'Annen forelders aktivitetsland'}
-                        value={skjema.felter.annenForeldersAktivitetsland.verdi as Regionkode}
-                        options={EØS_LAND_REGIONKODER}
-                        onChange={value => {
-                            if (value) {
-                                skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(value);
-                            } else {
-                                skjema.felter.annenForeldersAktivitetsland.nullstill();
-                            }
-                        }}
-                        readOnly={lesevisning}
-                        error={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
-                                : ''
+                    }}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
+                            ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
+                            : ''
+                    }
+                />
+                <RegionCombobox
+                    label={'Barnets bostedsland'}
+                    value={skjema.felter.barnetsBostedsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.barnetsBostedsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.barnetsBostedsland.nullstill();
                         }
-                    />
-                ) : (
-                    <FamilieLandvelger
-                        erLesevisning={lesevisning}
-                        id={'annenForeldersAktivitetsland'}
-                        label={'Annen forelders aktivitetsland'}
-                        kunEøs
-                        medFlag
-                        size="medium"
-                        kanNullstilles
-                        value={skjema.felter.annenForeldersAktivitetsland.verdi}
-                        onChange={(value: Country) => {
-                            const nyVerdi = value ? value.value : undefined;
-                            skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(nyVerdi);
-                        }}
-                        feil={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
-                                : ''
-                        }
-                        utenMargin
-                    />
-                )}
-                {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                    <RegionCombobox
-                        label={'Barnets bostedsland'}
-                        value={skjema.felter.barnetsBostedsland.verdi as Regionkode}
-                        options={EØS_LAND_REGIONKODER}
-                        onChange={value => {
-                            if (value) {
-                                skjema.felter.barnetsBostedsland.validerOgSettFelt(value);
-                            } else {
-                                skjema.felter.barnetsBostedsland.nullstill();
-                            }
-                        }}
-                        readOnly={lesevisning}
-                        error={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.barnetsBostedsland.feilmelding?.toString()
-                                : ''
-                        }
-                    />
-                ) : (
-                    <FamilieLandvelger
-                        erLesevisning={lesevisning}
-                        id={'bostedadresse'}
-                        label={'Barnets bostedsland'}
-                        kunEøs
-                        medFlag
-                        size="medium"
-                        kanNullstilles
-                        value={skjema.felter.barnetsBostedsland?.verdi}
-                        onChange={(value: Country) => {
-                            const nyVerdi = value ? value.value : undefined;
-                            skjema.felter.barnetsBostedsland.validerOgSettFelt(nyVerdi);
-                        }}
-                        feil={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.barnetsBostedsland?.feilmelding?.toString()
-                                : ''
-                        }
-                        utenMargin
-                    />
-                )}
+                    }}
+                    readOnly={lesevisning}
+                    error={
+                        skjema.visFeilmeldinger &&
+                        skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
+                            ? skjema.felter.barnetsBostedsland.feilmelding?.toString()
+                            : ''
+                    }
+                />
                 <Select
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
                     readOnly={lesevisning}
