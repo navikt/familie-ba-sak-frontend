@@ -26,9 +26,8 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
 
     const form = useForm<LeggTilBarnPåBehandlingFormValues>({
         defaultValues: {
-            [LeggTilBarnPåBehandlingFelt.BARNIDENT]: undefined,
+            [LeggTilBarnPåBehandlingFelt.BARNIDENT]: '',
         },
-        // TODO: validate
     });
 
     const { setError } = form;

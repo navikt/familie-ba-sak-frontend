@@ -26,7 +26,7 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
 
     const {
         handleSubmit,
-        formState: { isSubmitting, errors },
+        formState: { isValid, isSubmitting, errors },
     } = form;
 
     return (
@@ -64,7 +64,7 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                             variant="primary"
                             size="small"
                             loading={isSubmitting}
-                            disabled={erLesevisning}
+                            disabled={erLesevisning || !isValid}
                         >
                             Legg til
                         </Button>

@@ -42,9 +42,7 @@ export const LeggTilBarnFelt = ({ erLesevisning }: Props) => {
             label={'Fødselsnummer'}
             placeholder={'11 siffer'}
             value={value}
-            onChange={event => {
-                onChange(event.target.value);
-            }}
+            onChange={onChange}
             maxLength={11}
             error={error?.message}
             readOnly={erLesevisning || isSubmitting}
