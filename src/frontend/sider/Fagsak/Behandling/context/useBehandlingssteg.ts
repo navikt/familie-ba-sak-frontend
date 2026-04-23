@@ -24,27 +24,6 @@ const useBehandlingssteg = (
 
     const [submitRessurs, settSubmitRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
 
-    const vilkårsvurderingNesteOnClick = () => {
-        settSubmitRessurs(byggHenterRessurs());
-
-        request<void, IBehandling>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/vilkårsvurdering`,
-        })
-            .then((response: Ressurs<IBehandling>) => {
-                settSubmitRessurs(response);
-                if (response.status === RessursStatus.SUKSESS) {
-                    const behandling = response.data;
-                    oppdaterBehandling(response);
-
-                    navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
-                }
-            })
-            .catch(() => {
-                settSubmitRessurs(byggFeiletRessurs(defaultFunksjonellFeil));
-            });
-    };
-
     const behandlingresultatNesteOnClick = () => {
         settSubmitRessurs(byggHenterRessurs());
 
@@ -142,7 +121,6 @@ const useBehandlingssteg = (
 
     return {
         submitRessurs,
-        vilkårsvurderingNesteOnClick,
         behandlingresultatNesteOnClick,
         sendTilBeslutterNesteOnClick,
     };
