@@ -6,7 +6,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { useHentSaksbehandler } from './useHentSaksbehandler';
 import { hentSaksbehandler } from '../api/hentSaksbehandler';
-import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
+import { lagISaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
+import { BehandlerRolle } from '../typer/behandling';
 
 vi.mock('../api/hentSaksbehandler', () => ({
     hentSaksbehandler: vi.fn(),
@@ -28,8 +29,8 @@ describe('useHentSaksbehandler', () => {
 
     it('skal hente saksbehandler', async () => {
         // Arrange
-        const saksbehandler = lagSaksbehandler();
-        vi.mocked(hentSaksbehandler).mockResolvedValueOnce(saksbehandler);
+        const iSaksbehandler = lagISaksbehandler();
+        vi.mocked(hentSaksbehandler).mockResolvedValueOnce(iSaksbehandler);
 
         const queryClient = createTestQueryClient();
         const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -42,7 +43,12 @@ describe('useHentSaksbehandler', () => {
         // Assert
         expect(result.current.isPending).toBe(true);
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(result.current.data).toBe(saksbehandler);
+        expect(result.current.data).toEqual({
+            ...iSaksbehandler,
+            rolle: BehandlerRolle.SAKSBEHANDLER,
+            harSkrivetilgang: true,
+            harSuperbrukertilgang: false,
+        });
         expect(result.current.isPending).toBe(false);
         expect(result.current.error).toBe(null);
         expect(hentSaksbehandler).toHaveBeenCalledTimes(1);
@@ -76,17 +82,22 @@ describe('useHentSaksbehandler', () => {
 
     it('skal kunne sette initialData', () => {
         // Arrange
-        const saksbehandler = lagSaksbehandler();
+        const iSaksbehandler = lagISaksbehandler();
         const queryClient = createTestQueryClient();
         const wrapper = ({ children }: { children: React.ReactNode }) => (
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         );
 
         // Act
-        const { result } = renderHook(() => useHentSaksbehandler({ initialData: saksbehandler }), { wrapper });
+        const { result } = renderHook(() => useHentSaksbehandler({ initialData: iSaksbehandler }), { wrapper });
 
         // Assert
-        expect(result.current.data).toBe(saksbehandler);
+        expect(result.current.data).toEqual({
+            ...iSaksbehandler,
+            rolle: BehandlerRolle.SAKSBEHANDLER,
+            harSkrivetilgang: true,
+            harSuperbrukertilgang: false,
+        });
         expect(result.current.isPending).toBe(false);
         expect(result.current.error).toBe(null);
     });

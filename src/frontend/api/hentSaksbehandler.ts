@@ -1,12 +1,7 @@
 import { preferredAxios } from '@navikt/familie-http';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 
-import type { Saksbehandler } from '../typer/saksbehandler';
-
-export async function hentSaksbehandler(): Promise<Saksbehandler> {
+export async function hentSaksbehandler(): Promise<ISaksbehandler> {
     const response = await preferredAxios.get<ISaksbehandler>(`/user/profile`);
-    return {
-        ...response.data,
-        groups: response.data.groups ?? [],
-    };
+    return response.data;
 }

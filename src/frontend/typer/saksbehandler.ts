@@ -24,11 +24,15 @@ function hentGruppeIdTilSuperbrukerRolle() {
 
 export interface Saksbehandler extends ISaksbehandler {
     groups: string[];
+    rolle: BehandlerRolle;
+    harSkrivetilgang: boolean;
+    harSuperbrukertilgang: boolean;
 }
 
-export function utledBehandlerRolle(saksbehandler: Saksbehandler): BehandlerRolle {
+export function utledBehandlerRolle(iSaksbehandler: ISaksbehandler): BehandlerRolle {
     let rolle = BehandlerRolle.UKJENT;
-    saksbehandler.groups.forEach(id => {
+    const groups = iSaksbehandler.groups ?? [];
+    groups.forEach(id => {
         rolle = rolle < gruppeIdTilRolle(id) ? gruppeIdTilRolle(id) : rolle;
     });
     if (rolle === BehandlerRolle.UKJENT) {
@@ -37,11 +41,22 @@ export function utledBehandlerRolle(saksbehandler: Saksbehandler): BehandlerRoll
     return rolle;
 }
 
-export function harSuperbrukertilgang(saksbehandler: Saksbehandler) {
-    return saksbehandler.groups.includes(hentGruppeIdTilSuperbrukerRolle());
+export function harSuperbrukertilgang(iSaksbehandler: ISaksbehandler) {
+    const groups = iSaksbehandler.groups ?? [];
+    return groups.includes(hentGruppeIdTilSuperbrukerRolle());
 }
 
-export function harSkrivetilgang(saksbehandler: Saksbehandler) {
-    const rolle = utledBehandlerRolle(saksbehandler);
+export function harSkrivetilgang(iSaksbehandler: ISaksbehandler) {
+    const rolle = utledBehandlerRolle(iSaksbehandler);
     return rolle >= BehandlerRolle.SAKSBEHANDLER;
+}
+
+export function mapISaksbehandlerTilSaksbehandler(iSaksbehandler: ISaksbehandler): Saksbehandler {
+    return {
+        ...iSaksbehandler,
+        groups: iSaksbehandler.groups ?? [],
+        rolle: utledBehandlerRolle(iSaksbehandler),
+        harSkrivetilgang: harSkrivetilgang(iSaksbehandler),
+        harSuperbrukertilgang: harSuperbrukertilgang(iSaksbehandler),
+    };
 }
