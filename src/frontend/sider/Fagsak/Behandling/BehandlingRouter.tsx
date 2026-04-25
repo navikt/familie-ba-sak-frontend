@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import { Route, Routes, useLocation } from 'react-router';
 
-import { useBrukerContext } from '../BrukerContext';
 import { useFagsakContext } from '../FagsakContext';
 import { useBehandlingContext } from './context/BehandlingContext';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
@@ -16,7 +15,7 @@ import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
-import Vedtak from './Sider/Vedtak/Vedtak';
+import { Vedtak } from './Sider/Vedtak/Vedtak';
 import { Vilkårsvurdering } from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
@@ -27,7 +26,6 @@ import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/Vedtaksp
 
 export function BehandlingRouter() {
     const { fagsak } = useFagsakContext();
-    const { bruker } = useBrukerContext();
     const { behandling, leggTilBesøktSide } = useBehandlingContext();
 
     const location = useLocation();
@@ -86,7 +84,7 @@ export function BehandlingRouter() {
                             <RefusjonEøsTabellProvider>
                                 <SammensattKontrollsakProvider åpenBehandling={behandling}>
                                     <VedtaksperioderProvider>
-                                        <Vedtak åpenBehandling={behandling} bruker={bruker} />
+                                        <Vedtak />
                                     </VedtaksperioderProvider>
                                 </SammensattKontrollsakProvider>
                             </RefusjonEøsTabellProvider>
