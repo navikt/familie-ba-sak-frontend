@@ -7,7 +7,6 @@ import type { BehandlingSteg, IBehandling } from '@typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { harTilgangTilEnhet } from '@typer/enhet';
 import { FagsakStatus, FagsakType } from '@typer/fagsak';
-import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
 import { hentSideHref } from '@utils/miljø';
 import { useLocation } from 'react-router';
@@ -15,8 +14,6 @@ import { useLocation } from 'react-router';
 import { type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
-import useBehandlingssteg from './useBehandlingssteg';
-import { saksbehandlerHarKunLesevisning } from './utils';
 import { useFagsakContext } from '../../FagsakContext';
 import type { ITrinn, SideId } from '../Sider/sider';
 import { hentTrinnForBehandling, KontrollertStatus } from '../Sider/sider';
@@ -34,14 +31,6 @@ interface BehandlingContextValue {
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
-    behandlingsstegSubmitressurs: Ressurs<IBehandling>;
-    sendTilBeslutterNesteOnClick: (
-        settVisModal: (visModal: boolean) => void,
-        erUlagretNyFeilutbetaltValuta: boolean,
-        erUlagretNyRefusjonEøs: boolean,
-        vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] | undefined,
-        erSammensattKontrollsak: boolean
-    ) => void;
     erMigreringsbehandling: boolean;
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
@@ -57,11 +46,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
 
     useNavigerAutomatiskTilSideForBehandlingssteg({ behandling });
-
-    const { submitRessurs: behandlingsstegSubmitressurs, sendTilBeslutterNesteOnClick } = useBehandlingssteg(
-        settBehandlingRessurs,
-        behandling
-    );
 
     const saksbehandler = useSaksbehandler();
 
@@ -183,8 +167,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 settIkkeKontrollerteSiderTilManglerKontroll,
                 trinnPåBehandling,
                 behandling: behandling,
-                behandlingsstegSubmitressurs,
-                sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
                 gjelderInstitusjon,
                 samhandlerOrgnr,
