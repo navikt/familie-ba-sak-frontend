@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Tabs } from '@navikt/ds-react';
 
-import IkonDokumenter from './Ikoner/IkonDokumenter';
 import IkonHistorikk from './Ikoner/IkonHistorikk';
 import IkonMeldinger from './Ikoner/IkonMeldinger';
 import IkonTotrinnskontroll from './Ikoner/IkonTotrinnskontroll';
@@ -25,7 +24,6 @@ export function Tabvelger() {
                 <Tabs.Tab value={Tab.Totrinnskontroll} label={Tab.Totrinnskontroll} icon={<IkonTotrinnskontroll />} />
             )}
             <Tabs.Tab value={Tab.Historikk} label={Tab.Historikk} icon={<IkonHistorikk />} />
-            <Tabs.Tab value={Tab.Dokumenter} label={Tab.Dokumenter} icon={<IkonDokumenter />} />
             {!erLesevisning && !erMigreringFraInfotrygd && (
                 <Tabs.Tab value={Tab.Meldinger} label={'Send brev'} icon={<IkonMeldinger />} />
             )}

@@ -45,7 +45,7 @@ export function Venstremeny() {
                 onClick={() => settErÅpen(prev => !prev)}
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box as={'nav'} className={Styles.container}>
+                <Box as={'nav'} width={'clamp(14rem, 15vw, 25rem)'}>
                     {Object.entries(trinnPåBehandling).map(([sideId, side], index) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
                         const undersider = side.undersider ? side.undersider(behandling) : [];
