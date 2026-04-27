@@ -7,8 +7,8 @@ import { type Ressurs } from '@navikt/familie-typer';
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
-import { useAppContext } from '../../../../context/AppContext';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '../../../../hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import type { BehandlingSteg, IBehandling, ISettPåVent } from '../../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
@@ -67,12 +67,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         sendTilBeslutterNesteOnClick,
     } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
-    const {
-        harInnloggetSaksbehandlerSkrivetilgang,
-        harInnloggetSaksbehandlerSuperbrukerTilgang,
-        innloggetSaksbehandler,
-        hentSaksbehandlerRolle,
-    } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
     const location = useLocation();
     const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{ [sideId: string]: ITrinn }>({});
@@ -139,8 +134,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
             return true;
         }
 
-        const innloggetSaksbehandlerSkrivetilgang = harInnloggetSaksbehandlerSkrivetilgang();
-        const saksbehandlerHarSuperbrukerRolle = harInnloggetSaksbehandlerSuperbrukerTilgang();
         const behandlingsårsak = åpenBehandlingData?.årsak;
         const behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak =
             behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING ||
@@ -148,16 +141,16 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
         const saksbehandlerHarTilgangTilEnhet =
             behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak ||
-            saksbehandlerHarSuperbrukerRolle ||
+            saksbehandler.harSuperbrukertilgang ||
             harTilgangTilEnhet(
                 åpenBehandlingData?.arbeidsfordelingPåBehandling.behandlendeEnhetId ?? '',
-                innloggetSaksbehandler?.groups ?? []
+                saksbehandler.groups
             );
 
         const steg = hentStegPåÅpenBehandling();
 
         return saksbehandlerHarKunLesevisning(
-            innloggetSaksbehandlerSkrivetilgang,
+            saksbehandler.harSkrivetilgang,
             saksbehandlerHarTilgangTilEnhet,
             steg,
             sjekkTilgangTilEnhet
@@ -169,8 +162,8 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
 
     const kanBeslutteVedtak =
         behandling.status === BehandlingStatus.FATTER_VEDTAK &&
-        BehandlerRolle.BESLUTTER === hentSaksbehandlerRolle() &&
-        innloggetSaksbehandler?.email !== behandling.endretAv;
+        BehandlerRolle.BESLUTTER === saksbehandler.rolle &&
+        saksbehandler.email !== behandling.endretAv;
 
     const erMigreringsbehandling = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 

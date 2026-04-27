@@ -6,15 +6,16 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
-import { useAppContext } from '../../context/AppContext';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
 
 const FilterSkjema: React.FunctionComponent = () => {
-    const { innloggetSaksbehandler } = useAppContext();
     const { hentOppgaver, oppgaver, oppgaveFelter, settVerdiPåOppgaveFelt, tilbakestillOppgaveFelter, validerSkjema } =
         useOppgavebenkContext();
+
+    const saksbehandler = useSaksbehandler();
 
     function tilOppgaveFeltKomponent(oppgaveFelt: IOppgaveFelt) {
         switch (oppgaveFelt.filter?.type) {
@@ -49,7 +50,7 @@ const FilterSkjema: React.FunctionComponent = () => {
                             {oppgaveFelt.filter.nøkkelPar &&
                                 Object.values(oppgaveFelt.filter.nøkkelPar)
                                     .filter((par: IPar) =>
-                                        oppgaveFelt.erSynlig ? oppgaveFelt.erSynlig(par, innloggetSaksbehandler) : true
+                                        oppgaveFelt.erSynlig ? oppgaveFelt.erSynlig(par, saksbehandler) : true
                                     )
                                     .map((par: IPar) => {
                                         return (

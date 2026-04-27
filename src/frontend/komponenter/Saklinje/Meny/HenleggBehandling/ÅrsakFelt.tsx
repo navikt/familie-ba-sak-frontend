@@ -5,14 +5,12 @@ import { useController, useFormContext } from 'react-hook-form';
 import { Select } from '@navikt/ds-react';
 
 import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from './useHenleggBehandlingForm';
-import { useAppContext } from '../../../../context/AppContext';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '../../../../typer/behandling';
 
 export function ÅrsakFelt() {
     const { behandling } = useBehandlingContext();
-
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
 
     const { control } = useFormContext<HenleggBehandlingFormValues>();
 
@@ -22,7 +20,9 @@ export function ÅrsakFelt() {
         rules: { required: 'Årsak er påkrevd.' },
     });
 
-    const harTilgangTilTekniskVedlikeholdHenleggelse = harInnloggetSaksbehandlerSuperbrukerTilgang();
+    const saksbehandler = useSaksbehandler();
+
+    const harTilgangTilTekniskVedlikeholdHenleggelse = saksbehandler.harSuperbrukertilgang;
 
     const valgmuligheter = Object.values(HenleggÅrsak)
         .filter(årsak => årsak !== HenleggÅrsak.FØDSELSHENDELSE_UGYLDIG_UTFALL)

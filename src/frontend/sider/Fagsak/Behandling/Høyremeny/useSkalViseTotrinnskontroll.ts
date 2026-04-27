@@ -1,16 +1,14 @@
-import { useAppContext } from '../../../../context/AppContext';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { BehandlerRolle, BehandlingStatus } from '../../../../typer/behandling';
 import { useBehandlingContext } from '../context/BehandlingContext';
 
 export function useSkalViseTotrinnskontroll() {
     const { behandling } = useBehandlingContext();
-    const { hentSaksbehandlerRolle, innloggetSaksbehandler } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
-    const saksbehandlerrolle = hentSaksbehandlerRolle();
-    const egetVedtak = behandling.totrinnskontroll?.saksbehandlerId === innloggetSaksbehandler?.navIdent;
+    const erBeslutter = BehandlerRolle.BESLUTTER === saksbehandler.rolle;
+    const erEgetVedtak = behandling.totrinnskontroll?.saksbehandlerId === saksbehandler.navIdent;
+    const erPåFatterVedtak = behandling.status === BehandlingStatus.FATTER_VEDTAK;
 
-    return (
-        (BehandlerRolle.BESLUTTER === saksbehandlerrolle || egetVedtak) &&
-        behandling.status === BehandlingStatus.FATTER_VEDTAK
-    );
+    return (erBeslutter || erEgetVedtak) && erPåFatterVedtak;
 }

@@ -1,14 +1,16 @@
-import type { PropsWithChildren } from 'react';
-import * as React from 'react';
+import { Component, type PropsWithChildren, type ReactNode } from 'react';
+import React from 'react';
 
 import * as Sentry from '@sentry/browser';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
-import type { ISaksbehandler } from '@navikt/familie-typer';
+
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
+import type { Saksbehandler } from '../../typer/saksbehandler';
 
 interface Props extends PropsWithChildren {
-    autentisertSaksbehandler?: ISaksbehandler;
+    saksbehandler?: Saksbehandler;
 }
 
 interface State {
@@ -16,7 +18,7 @@ interface State {
     error?: Error;
 }
 
-export class ErrorBoundary extends React.Component<Props, State> {
+export class ErrorBoundary extends Component<Props, State> {
     public constructor(props: Props) {
         super(props);
         this.state = { hasError: false };
@@ -32,10 +34,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
         console.error(error, info);
         if (Sentry.isEnabled()) {
             Sentry.setUser({
-                username: this.props.autentisertSaksbehandler
-                    ? this.props.autentisertSaksbehandler.displayName
-                    : 'Ukjent bruker',
-                email: this.props.autentisertSaksbehandler ? this.props.autentisertSaksbehandler.email : 'Ukjent email',
+                username: this.props.saksbehandler?.displayName ?? 'Ukjent navn',
+                email: this.props.saksbehandler?.email ?? 'Ukjent e-post',
             });
             Sentry.withScope(scope => {
                 Object.keys(info).forEach(key => {
@@ -43,11 +43,29 @@ export class ErrorBoundary extends React.Component<Props, State> {
                     Sentry.captureException(error);
                 });
             });
-            this.visSentryDialog();
         }
     }
 
-    render(): React.ReactNode {
+    private visSentryDialog() {
+        if (Sentry.isEnabled()) {
+            Sentry.showReportDialog({
+                title: 'En feil har oppstått i vedtaksløsningen',
+                subtitle: '',
+                subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
+                user: {
+                    name: this.props.saksbehandler?.displayName ?? 'Ukjent navn',
+                    email: this.props.saksbehandler?.email ?? 'Ukjent e-post',
+                },
+                labelName: 'NAVN',
+                labelComments: 'HVA SKJEDDE?',
+                labelClose: 'Lukk',
+                labelSubmit: 'Send inn rapport',
+                successMessage: 'Rapport er innsendt',
+            });
+        }
+    }
+
+    render(): ReactNode {
         if (this.state.hasError) {
             return (
                 <VStack height={'100vh'} align={'center'} justify={'center'}>
@@ -82,23 +100,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
         }
         return this.props.children;
     }
+}
 
-    private visSentryDialog() {
-        if (Sentry.isEnabled()) {
-            Sentry.showReportDialog({
-                title: 'En feil har oppstått i vedtaksløsningen',
-                subtitle: '',
-                subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
-                user: {
-                    name: this.props.autentisertSaksbehandler?.displayName,
-                    email: this.props.autentisertSaksbehandler?.email,
-                },
-                labelName: 'NAVN',
-                labelComments: 'HVA SKJEDDE?',
-                labelClose: 'Lukk',
-                labelSubmit: 'Send inn rapport',
-                successMessage: 'Rapport er innsendt',
-            });
-        }
-    }
+export function ErrorBoundaryMedSaksbehandler({ children }: PropsWithChildren) {
+    const saksbehandler = useSaksbehandler();
+    return <ErrorBoundary saksbehandler={saksbehandler}>{children}</ErrorBoundary>;
 }

@@ -12,6 +12,7 @@ import { useBehandlingIdParam } from '../../../../hooks/useBehandlingIdParam';
 import { useFagsak } from '../../../../hooks/useFagsak';
 import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
 import { HentHistorikkinnslagQueryKeyFactory } from '../../../../hooks/useHentHistorikkinnslag';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { BehandlerRolle, type IBehandling } from '../../../../typer/behandling';
 import { obfuskerBehandling } from '../../../../utils/obfuskerData';
 
@@ -23,9 +24,10 @@ interface HentOgSettBehandlingContextValue {
 const HentOgSettBehandlingContext = createContext<HentOgSettBehandlingContextValue | undefined>(undefined);
 
 export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
-    const { skalObfuskereData, hentSaksbehandlerRolle } = useAppContext();
+    const { skalObfuskereData } = useAppContext();
     const { request } = useHttp();
 
+    const saksbehandler = useSaksbehandler();
     const fagsak = useFagsak();
     const behandlingIdParam = useBehandlingIdParam();
 
@@ -62,7 +64,7 @@ export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
         privatSettBehandlingRessurs(byggTomRessurs());
 
         const requestBasertPåBehandlerRolle = () => {
-            if (hentSaksbehandlerRolle() === BehandlerRolle.BESLUTTER) {
+            if (saksbehandler.rolle === BehandlerRolle.BESLUTTER) {
                 return request<void, IBehandling>({
                     method: 'PUT',
                     url: `/familie-ba-sak/api/behandlinger/${behandlingIdParam}/oppdatert-valutakurs`,

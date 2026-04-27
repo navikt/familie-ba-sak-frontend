@@ -3,17 +3,17 @@ import React, { type PropsWithChildren } from 'react';
 import { describe, expect } from 'vitest';
 
 import { ActionMenu } from '@navikt/ds-react';
-import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { SendInformasjonsbrev } from './SendInformasjonsbrev';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../../../../testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
+import type { Saksbehandler } from '../../../../typer/saksbehandler';
 
 interface WrapperProps extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];
-    saksbehandler?: ISaksbehandler;
+    saksbehandler?: Saksbehandler;
 }
 
 function Wrapper({

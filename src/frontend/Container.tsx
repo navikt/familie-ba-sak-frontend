@@ -22,7 +22,7 @@ import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 
 export function Container() {
-    const { autentisert, innloggetSaksbehandler, appInfoModal } = useAppContext();
+    const { autentisert, appInfoModal } = useAppContext();
     const { systemetLaster } = useHttp();
 
     return (
@@ -36,10 +36,7 @@ export function Container() {
                         <OpprettFagsakModal />
                         <FeilmeldingModal />
                         <ForhåndsvisOpprettingAvPdfModal />
-                        <HeaderMedSøk
-                            brukerNavn={innloggetSaksbehandler?.displayName}
-                            brukerEnhet={innloggetSaksbehandler?.enhet}
-                        />
+                        <HeaderMedSøk />
                         <Routes>
                             <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
                             <Route path="/oppgaver/journalfor/:oppgaveId" element={<ManuellJournalføring />} />

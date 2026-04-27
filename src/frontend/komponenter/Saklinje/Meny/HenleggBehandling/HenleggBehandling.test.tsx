@@ -1,6 +1,7 @@
 import React, { type PropsWithChildren } from 'react';
 
-import { describe, expect, vi, afterEach } from 'vitest';
+import { http, HttpResponse } from 'msw';
+import { describe, expect } from 'vitest';
 
 import { ActionMenu } from '@navikt/ds-react';
 
@@ -11,34 +12,14 @@ import { useModal } from '../../../../hooks/useModal';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
+import { server } from '../../../../testutils/mocks/node';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
+import { lagSaksbehandler } from '../../../../testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
-
-const { mockState } = vi.hoisted(() => ({
-    mockState: {
-        superbruker: false,
-    },
-}));
-
-vi.mock('../../../../context/AppContext', async () => {
-    const actual = await vi.importActual('../../../../context/AppContext');
-    const originalUseAppContext = (actual as { useAppContext: () => object }).useAppContext;
-
-    return {
-        ...actual,
-        useAppContext: () => ({
-            ...originalUseAppContext(),
-            harInnloggetSaksbehandlerSuperbrukerTilgang: () => mockState.superbruker,
-        }),
-    };
-});
-
-afterEach(() => {
-    mockState.superbruker = false;
-});
+import type { Saksbehandler } from '../../../../typer/saksbehandler';
 
 function ModalWrapper() {
     const { erModalÅpen } = useModal(ModalType.HENLEGG_BEHANDLING);
@@ -51,11 +32,17 @@ function ModalWrapper() {
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;
     behandling?: IBehandling;
+    saksbehandler?: Saksbehandler;
 }
 
-function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children }: WrapperProps) {
+function Wrapper({
+    fagsak = lagFagsak(),
+    behandling = lagBehandling(),
+    saksbehandler = lagSaksbehandler(),
+    children,
+}: WrapperProps) {
     return (
-        <TestProviders>
+        <TestProviders saksbehandler={saksbehandler}>
             <FagsakProvider fagsak={fagsak}>
                 <HentOgSettBehandlingProvider>
                     <BehandlingProvider behandling={behandling}>
@@ -107,18 +94,29 @@ describe('HenleggBehandling', () => {
     });
 
     test('skal vise knapp selv om det er lesevisning og på et steg som ikke er henlegtbart hvis man er superbruker', async () => {
-        mockState.superbruker = true;
+        const saksbehandler = lagSaksbehandler({
+            groups: ['d21e00a4-969d-4b28-8782-dc818abfae65', '314fa714-f13c-4cdc-ac5c-e13ce08e241c'],
+        });
+
+        server.use(
+            http.get('/user/profile', () => {
+                return HttpResponse.json(saksbehandler);
+            })
+        );
 
         const { screen } = render(<HenleggBehandling />, {
-            wrapper: props => (
-                <Wrapper
-                    {...props}
-                    behandling={lagBehandling({
-                        status: BehandlingStatus.UTREDES,
-                        steg: BehandlingSteg.BESLUTTE_VEDTAK,
-                    })}
-                />
-            ),
+            wrapper: props => {
+                return (
+                    <Wrapper
+                        {...props}
+                        behandling={lagBehandling({
+                            status: BehandlingStatus.UTREDES,
+                            steg: BehandlingSteg.BESLUTTE_VEDTAK,
+                        })}
+                        saksbehandler={saksbehandler}
+                    />
+                );
+            },
         });
 
         const knapp = await screen.findByRole('menuitem', { name: 'Henlegg behandling' });

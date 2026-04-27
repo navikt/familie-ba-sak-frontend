@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useAppContext } from '../context/AppContext';
+import { useSaksbehandler } from './useSaksbehandler';
 import { hentSideFraUrl } from '../sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
@@ -8,9 +8,10 @@ import { hentSideHref } from '../utils/miljø';
 import { sendTilUmami } from '../utils/umami';
 
 export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBehandling) => {
+    const saksbehandler = useSaksbehandler();
+
     const sidevisning = hentSideHref(location.pathname);
     const sideId = hentSideFraUrl(sidevisning);
-    const { hentSaksbehandlerRolle } = useAppContext();
 
     useEffect(() => {
         const startTid = new Date();
@@ -37,7 +38,7 @@ export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBeh
                 behandlingStatus: behandling.status,
                 resultat: behandling.resultat,
                 stegTilstand: behandling.stegTilstand,
-                behandlerRolle: hentSaksbehandlerRolle(),
+                behandlerRolle: saksbehandler.rolle,
                 startTid: startTid,
                 sluttTid: sluttTid,
                 intervallISekunder: intervallISekunder,

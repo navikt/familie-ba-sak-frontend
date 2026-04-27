@@ -5,8 +5,8 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useAppContext } from '../../../../context/AppContext';
 import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -100,7 +100,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
     manuellJournalfør = false,
     bruker = undefined,
 }) => {
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+    const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
@@ -114,8 +114,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteBehandling && harInnloggetSaksbehandlerSuperbrukerTilgang();
-    const kanManueltKorrigereMedVedtaksbrev = harInnloggetSaksbehandlerSuperbrukerTilgang() ?? false;
+    const kanOppretteTekniskEndring = kanOppretteBehandling && saksbehandler.harSuperbrukertilgang;
+    const kanManueltKorrigereMedVedtaksbrev = saksbehandler.harSuperbrukertilgang ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =

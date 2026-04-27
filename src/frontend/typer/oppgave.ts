@@ -1,5 +1,3 @@
-import type { ISaksbehandler } from '@navikt/familie-typer';
-
 import {
     type BehandlingKategori,
     type BehandlingUnderkategori,
@@ -10,6 +8,7 @@ import {
 } from './behandlingstema';
 import type { IPar } from './common';
 import type { INavnOgIdent, TilknyttetBehandling } from './manuell-journalføring';
+import type { Saksbehandler } from './saksbehandler';
 
 export interface IFinnOppgaveRequest {
     behandlingstema?: string;
@@ -92,10 +91,8 @@ export enum SaksbehandlerFilter {
     UFORDELTE = 'UFORDELTE',
 }
 
-export const saksbehandlerFilter = (
-    innloggetSaksbehandler: ISaksbehandler | undefined
-): Record<SaksbehandlerFilter, IPar> => ({
-    INNLOGGET: { id: 'INNLOGGET', navn: innloggetSaksbehandler?.displayName ?? 'INNLOGGET' },
+export const saksbehandlerFilter = (saksbehandler: Saksbehandler): Record<SaksbehandlerFilter, IPar> => ({
+    INNLOGGET: { id: 'INNLOGGET', navn: saksbehandler.displayName },
     ALLE: { id: 'ALLE', navn: 'Alle' },
     FORDELTE: { id: 'FORDELTE', navn: 'Fordelte' },
     UFORDELTE: { id: 'UFORDELTE', navn: 'Ufordelte' },

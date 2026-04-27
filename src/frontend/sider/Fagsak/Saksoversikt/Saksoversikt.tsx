@@ -11,7 +11,7 @@ import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useAppContext } from '../../../context/AppContext';
+import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
 import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
@@ -27,7 +27,7 @@ const StyledAlert = styled(Alert)`
 
 export function Saksoversikt() {
     const { fagsak } = useFagsakContext();
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+    const saksbehandler = useSaksbehandler();
 
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -118,7 +118,7 @@ export function Saksoversikt() {
         <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
             <Heading size="large" level="1" children="Saksoversikt" />
 
-            {harInnloggetSaksbehandlerSuperbrukerTilgang() && fagsak.løpendeKategori === BehandlingKategori.EØS && (
+            {saksbehandler.harSuperbrukertilgang && fagsak.løpendeKategori === BehandlingKategori.EØS && (
                 <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
             )}
 

@@ -17,8 +17,8 @@ import {
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useAppContext } from '../../../context/AppContext';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
@@ -86,7 +86,8 @@ export function DokumentutsendingSkjema() {
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
     } = useDokumentutsendingContext();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+
+    const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
 
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
@@ -152,7 +153,7 @@ export function DokumentutsendingSkjema() {
         }
     };
 
-    const erLesevisning = !harInnloggetSaksbehandlerSkrivetilgang();
+    const erLesevisning = !saksbehandler.harSkrivetilgang;
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
         if (skjema.felter.årsak.verdi === DokumentÅrsakPerson.DELT_BOSTED) {
@@ -241,7 +242,7 @@ export function DokumentutsendingSkjema() {
                                     visFeilmeldinger={skjema.visFeilmeldinger}
                                     settVisFeilmeldinger={settVisfeilmeldinger}
                                     manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
-                                    vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
+                                    vurderErLesevisning={() => !saksbehandler.harSkrivetilgang}
                                 />
                                 {!erLesevisning && <LeggTilBarnKnapp />}
                             </>
