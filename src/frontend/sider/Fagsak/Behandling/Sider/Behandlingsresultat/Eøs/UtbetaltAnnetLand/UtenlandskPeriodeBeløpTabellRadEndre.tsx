@@ -7,9 +7,7 @@ import { Alert, BodyShort, Button, Fieldset, HGrid, Select, TextField, UNSAFE_Co
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { Country, Currency } from '@navikt/land-verktoy';
 
-import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
 import {
     type Valutakode,
     ValutaCombobox,
@@ -18,7 +16,6 @@ import {
     type Regionkode,
     EØS_LAND_REGIONKODER,
 } from '../../../../../../../komponenter/FlaggCombobox';
-import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
 import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
@@ -27,12 +24,10 @@ import {
     UtenlandskPeriodeBeløpIntervall,
     utenlandskPeriodeBeløpIntervaller,
 } from '../../../../../../../typer/eøsPerioder';
-import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
-import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
@@ -72,7 +67,6 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
     inneholderBarnSomSkalSkjermes,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
-    const toggles = useFeatureToggles();
 
     const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
 
@@ -147,37 +141,20 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             }
                             size={'medium'}
                         />
-                        {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                            <ValutaCombobox
-                                label={'Valuta'}
-                                value={skjema.felter.valutakode?.verdi as Valutakode}
-                                options={EØS_VALUTAKODER}
-                                onChange={value => {
-                                    if (value) {
-                                        skjema.felter.valutakode?.validerOgSettFelt(value);
-                                    } else {
-                                        skjema.felter.valutakode?.nullstill();
-                                    }
-                                }}
-                                readOnly={lesevisning}
-                                error={skjema.felter.valutakode?.feilmelding?.toString()}
-                            />
-                        ) : (
-                            <Valutavelger
-                                label={'Valuta'}
-                                value={skjema.felter.valutakode?.verdi}
-                                options={EØS_CURRENCY}
-                                onChange={(value: Currency) => {
-                                    if (value) {
-                                        skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                    } else {
-                                        skjema.felter.valutakode?.nullstill();
-                                    }
-                                }}
-                                readOnly={lesevisning}
-                                error={skjema.felter.valutakode?.feilmelding?.toString()}
-                            />
-                        )}
+                        <ValutaCombobox
+                            label={'Valuta'}
+                            value={skjema.felter.valutakode?.verdi as Valutakode}
+                            options={EØS_VALUTAKODER}
+                            onChange={value => {
+                                if (value) {
+                                    skjema.felter.valutakode?.validerOgSettFelt(value);
+                                } else {
+                                    skjema.felter.valutakode?.nullstill();
+                                }
+                            }}
+                            readOnly={lesevisning}
+                            error={skjema.felter.valutakode?.feilmelding?.toString()}
+                        />
                         <Select
                             label={'Intervall'}
                             readOnly={lesevisning}
@@ -201,49 +178,25 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             })}
                         </Select>
                     </HGrid>
-                    {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                        <RegionCombobox
-                            label={'Utbetalingsland'}
-                            value={skjema.felter.utbetalingsland.verdi as Regionkode}
-                            options={EØS_LAND_REGIONKODER}
-                            onChange={value => {
-                                if (value) {
-                                    skjema.felter.utbetalingsland.validerOgSettFelt(value);
-                                } else {
-                                    skjema.felter.utbetalingsland.nullstill();
-                                }
-                            }}
-                            readOnly={lesevisning}
-                            error={
-                                skjema.visFeilmeldinger &&
-                                skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
-                                    ? skjema.felter.utbetalingsland.feilmelding?.toString()
-                                    : ''
+                    <RegionCombobox
+                        label={'Utbetalingsland'}
+                        value={skjema.felter.utbetalingsland.verdi as Regionkode}
+                        options={EØS_LAND_REGIONKODER}
+                        onChange={value => {
+                            if (value) {
+                                skjema.felter.utbetalingsland.validerOgSettFelt(value);
+                            } else {
+                                skjema.felter.utbetalingsland.nullstill();
                             }
-                        />
-                    ) : (
-                        <FamilieLandvelger
-                            erLesevisning={lesevisning}
-                            id={'utbetalingsland'}
-                            label={'Utbetalingsland'}
-                            kunEøs
-                            medFlag
-                            size="medium"
-                            kanNullstilles
-                            value={skjema.felter.utbetalingsland.verdi}
-                            onChange={(value: Country) => {
-                                const nyVerdi = value ? value.value : undefined;
-                                skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
-                            }}
-                            feil={
-                                skjema.visFeilmeldinger &&
-                                skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
-                                    ? skjema.felter.utbetalingsland.feilmelding?.toString()
-                                    : ''
-                            }
-                            utenMargin
-                        />
-                    )}
+                        }}
+                        readOnly={lesevisning}
+                        error={
+                            skjema.visFeilmeldinger &&
+                            skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
+                                ? skjema.felter.utbetalingsland.feilmelding?.toString()
+                                : ''
+                        }
+                    />
                 </Fieldset>
 
                 {!lesevisning && (

@@ -18,17 +18,13 @@ import {
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { Currency } from '@navikt/land-verktoy';
 
-import { useFeatureToggles } from '../../../../../../../hooks/useFeatureToggles';
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
 import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '../../../../../../../komponenter/FlaggCombobox';
-import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../../../../typer/common';
 import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
-import { FeatureToggle } from '../../../../../../../typer/featureToggles';
 import { onOptionSelected } from '../../../../../../../utils/skjema';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
@@ -77,7 +73,6 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     inneholderBarnSomSkalSkjermes,
 }) => {
     const { vurderErLesevisning } = useBehandlingContext();
-    const toggles = useFeatureToggles();
 
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
@@ -161,29 +156,13 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             disableWeekends
                             kanKunVelgeFortid
                         />
-                        {toggles[FeatureToggle.brukNyFlagCombobox] ? (
-                            <ValutaCombobox
-                                label={'Valuta'}
-                                value={skjema.felter.valutakode?.verdi as Valutakode}
-                                options={EØS_VALUTAKODER}
-                                onChange={() => {}}
-                                readOnly={true}
-                            />
-                        ) : (
-                            <Valutavelger
-                                label={'Valuta'}
-                                value={skjema.felter.valutakode?.verdi}
-                                options={EØS_CURRENCY}
-                                onChange={(value: Currency) => {
-                                    if (value) {
-                                        skjema.felter.valutakode?.validerOgSettFelt(value.value);
-                                    } else {
-                                        skjema.felter.valutakode?.nullstill();
-                                    }
-                                }}
-                                readOnly={true}
-                            />
-                        )}
+                        <ValutaCombobox
+                            label={'Valuta'}
+                            value={skjema.felter.valutakode?.verdi as Valutakode}
+                            options={EØS_VALUTAKODER}
+                            onChange={() => {}}
+                            readOnly={true}
+                        />
                         <TextField
                             label={'Valutakurs'}
                             readOnly={erLesevisning || !erManuellInputAvKurs}
