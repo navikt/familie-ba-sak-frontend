@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
-import { BorderAccent, BorderNeutral, BorderWarning } from '@navikt/ds-tokens/dist/tokens';
+import { BorderNeutral, TextInfoSubtle, TextWarningSubtle } from '@navikt/ds-tokens/dist/tokens';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -19,8 +19,15 @@ import type { IBehandling } from '../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../typer/behandling';
 import type { IGrunnlagPerson } from '../../../../../../typer/person';
 import { PersonType } from '../../../../../../typer/person';
-import type { IPersonResultat, IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
-import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../../../../../../typer/vilkår';
+import {
+    type IPersonResultat,
+    type IVilkårConfig,
+    type IVilkårResultat,
+    Regelverk,
+    Resultat,
+    ResultatBegrunnelse,
+    VilkårType,
+} from '../../../../../../typer/vilkår';
 import { alleRegelverk } from '../../../../../../utils/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { validerVilkår } from '../validering';
@@ -47,9 +54,9 @@ export const StyledVStack = styled(VStack)<{ $lesevisning: boolean; $vilkårResu
                 return BorderNeutral;
             }
             if (props.$vilkårResultat === Resultat.IKKE_VURDERT) {
-                return BorderWarning;
+                return TextWarningSubtle;
             }
-            return BorderAccent;
+            return TextInfoSubtle;
         }};
     padding-left: 2rem;
     margin-left: -3rem;
