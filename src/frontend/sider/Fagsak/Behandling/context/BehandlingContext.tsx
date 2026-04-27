@@ -5,7 +5,6 @@ import { useLocation } from 'react-router';
 import { type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
-import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
 import { useAppContext } from '../../../../context/AppContext';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '../../../../hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
@@ -15,7 +14,6 @@ import { harTilgangTilEnhet } from '../../../../typer/enhet';
 import { FagsakType } from '../../../../typer/fagsak';
 import { PersonType } from '../../../../typer/person';
 import { Målform } from '../../../../typer/søknad';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../../../utils/behandling';
 import { hentSideHref } from '../../../../utils/miljø';
 import { useFagsakContext } from '../../FagsakContext';
@@ -33,16 +31,6 @@ interface BehandlingContextValue {
     søkersMålform: Målform;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
-    behandlingsstegSubmitressurs: Ressurs<IBehandling>;
-    vilkårsvurderingNesteOnClick: () => void;
-    behandlingresultatNesteOnClick: () => void;
-    sendTilBeslutterNesteOnClick: (
-        settVisModal: (visModal: boolean) => void,
-        erUlagretNyFeilutbetaltValuta: boolean,
-        erUlagretNyRefusjonEøs: boolean,
-        vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[] | undefined,
-        erSammensattKontrollsak: boolean
-    ) => void;
     erMigreringsbehandling: boolean;
     aktivSettPåVent?: ISettPåVent | undefined;
     gjelderInstitusjon: boolean;
@@ -59,13 +47,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
 
     useNavigerAutomatiskTilSideForBehandlingssteg({ behandling });
-
-    const {
-        submitRessurs: behandlingsstegSubmitressurs,
-        vilkårsvurderingNesteOnClick,
-        behandlingresultatNesteOnClick,
-        sendTilBeslutterNesteOnClick,
-    } = useBehandlingssteg(settBehandlingRessurs, behandling);
 
     const {
         harInnloggetSaksbehandlerSkrivetilgang,
@@ -192,10 +173,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 søkersMålform,
                 trinnPåBehandling,
                 behandling: behandling,
-                behandlingsstegSubmitressurs,
-                vilkårsvurderingNesteOnClick,
-                behandlingresultatNesteOnClick,
-                sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
                 aktivSettPåVent: behandling?.aktivSettPåVent,
                 gjelderInstitusjon,
