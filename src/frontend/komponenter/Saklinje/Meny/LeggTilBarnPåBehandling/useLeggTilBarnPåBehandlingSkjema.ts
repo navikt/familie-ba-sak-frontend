@@ -35,46 +35,32 @@ export const useLeggTilBarnPåBehandlingSkjema = ({ lukkModal }: Props) => {
     const onSubmit = async (values: LeggTilBarnPåBehandlingFormValues) => {
         const { barnIdent } = values;
 
-        const harSaksbehandlerTilgangParameters = {
-            brukerIdent: barnIdent,
-        };
-
-        harSaksbehandlerTilgang(harSaksbehandlerTilgangParameters)
-            .then(res => {
-                if (res.saksbehandlerHarTilgang) {
-                    const leggTilBarnPåBehandlingParameters = {
-                        barnIdent: barnIdent,
-                        behandlingId: behandling.behandlingId,
-                    };
-
-                    leggTilBarnPåBehandling(leggTilBarnPåBehandlingParameters)
-                        .then(behandling => {
-                            settÅpenBehandling(byggSuksessRessurs(behandling));
-                            lukkModal();
-                            return;
-                        })
-                        .catch((e: unknown) => {
-                            setError('root', {
-                                message:
-                                    e instanceof Error
-                                        ? e.message
-                                        : 'Teknisk feil ved forsøk på å legge til barn på behandling.',
-                            });
-                        });
-                } else {
-                    setError('root', {
-                        message: `Barnet kan ikke legges til på grunn av diskresjonskode ${
-                            adressebeskyttelsestyper[res.adressebeskyttelsegradering] ?? 'ukjent'
-                        }`,
-                    });
-                }
-            })
-            .catch((e: unknown) => {
-                setError('root', {
-                    message: e instanceof Error ? e.message : 'Teknisk feil ved sjekk av tilgangen til saksbehandler',
-                });
+        try {
+            const tilgangRes = await harSaksbehandlerTilgang({
+                brukerIdent: barnIdent,
             });
-        return;
+
+            if (!tilgangRes.saksbehandlerHarTilgang) {
+                setError('root', {
+                    message: `Barnet kan ikke legges til på grunn av diskresjonskode ${
+                        adressebeskyttelsestyper[tilgangRes.adressebeskyttelsegradering] ?? 'ukjent'
+                    }`,
+                });
+                return;
+            }
+
+            const behandlingResult = await leggTilBarnPåBehandling({
+                barnIdent,
+                behandlingId: behandling.behandlingId,
+            });
+
+            settÅpenBehandling(byggSuksessRessurs(behandlingResult));
+            lukkModal();
+        } catch (e: unknown) {
+            setError('root', {
+                message: e instanceof Error ? e.message : 'Teknisk feil ved forsøk på å legge til barn på behandling.',
+            });
+        }
     };
 
     return {

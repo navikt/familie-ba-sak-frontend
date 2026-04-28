@@ -1,18 +1,13 @@
 import React from 'react';
 
 import { FormProvider } from 'react-hook-form';
-import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Heading, HelpText, Modal } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Button, Fieldset, Heading, HelpText, HStack, InfoCard, Modal } from '@navikt/ds-react';
 
 import { LeggTilBarnFelt } from './LeggTilBarnFelt';
 import { useLeggTilBarnPåBehandlingSkjema } from './useLeggTilBarnPåBehandlingSkjema';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-
-const LeggTilBarnLegend = styled.div`
-    margin-top: 1rem;
-    display: flex;
-`;
 
 interface Props {
     lukkModal: () => void;
@@ -26,7 +21,7 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
 
     const {
         handleSubmit,
-        formState: { isValid, isSubmitting, errors },
+        formState: { isSubmitting, errors },
     } = form;
 
     return (
@@ -35,13 +30,13 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Modal.Header>
                         <Heading level="2" size="small">
-                            <LeggTilBarnLegend>
+                            <HStack margin={'space-8'} marginInline={'space-4'}>
                                 Legg til barn
                                 <HelpText style={{ marginLeft: '0.5rem' }}>
                                     Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger
                                     ligger på behandlingen fordi vi tidligere har avslått eller opphørt.
                                 </HelpText>
-                            </LeggTilBarnLegend>
+                            </HStack>
                         </Heading>
                     </Modal.Header>
                     <Modal.Body>
@@ -51,11 +46,15 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                             legend="Legg til barn på behandling"
                             hideLegend
                         >
+                            <InfoCard data-color="info">
+                                <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                                    <InfoCard.Title>
+                                        Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke
+                                        reverseres uten å henlegge.
+                                    </InfoCard.Title>
+                                </InfoCard.Header>
+                            </InfoCard>
                             <LeggTilBarnFelt erLesevisning={erLesevisning} />
-                            <Alert variant="info" inline={true}>
-                                Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke reverseres
-                                uten å henlegge.
-                            </Alert>
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
@@ -64,7 +63,7 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                             variant="primary"
                             size="small"
                             loading={isSubmitting}
-                            disabled={erLesevisning || !isValid}
+                            disabled={erLesevisning}
                         >
                             Legg til
                         </Button>
