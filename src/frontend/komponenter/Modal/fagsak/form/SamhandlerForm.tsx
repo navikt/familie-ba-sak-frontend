@@ -2,7 +2,7 @@ import React from 'react';
 
 import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
-import { Alert, Box, Button, HGrid } from '@navikt/ds-react';
+import { Box, Button, HGrid, LocalAlert } from '@navikt/ds-react';
 
 import { OrganisasjonsnummerFelt } from '../felt/OrganisasjonsnummerFelt';
 
@@ -53,13 +53,14 @@ export function SamhandlerForm({ form, onSubmit }: Props) {
                     </Box>
                 </HGrid>
                 {onSubmitFeilmelding && (
-                    <Alert
-                        variant={'error'}
-                        closeButton={true}
-                        onClose={() => clearErrors(SamhandlerFormServerErrors.onSubmitError.id)}
-                    >
-                        {onSubmitFeilmelding}
-                    </Alert>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{onSubmitFeilmelding}</LocalAlert.Title>
+                            <LocalAlert.CloseButton
+                                onClick={() => clearErrors(SamhandlerFormServerErrors.onSubmitError.id)}
+                            />
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
             </form>
         </FormProvider>

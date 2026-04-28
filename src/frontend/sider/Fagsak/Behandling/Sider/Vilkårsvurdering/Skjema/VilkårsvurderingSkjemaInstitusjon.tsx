@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, Bleed, Box, HStack } from '@navikt/ds-react';
+import { Bleed, Box, HStack, LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
@@ -42,7 +42,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
                         {samhandlerRessurs.status === RessursStatus.SUKSESS ? (
                             <SamhandlerInformasjon samhandler={samhandlerRessurs.data} somOverskrift />
                         ) : (
-                            <Alert variant="warning" children={'Klarte ikke hente opplysninger om institusjon'} />
+                            <LocalAlert status="warning">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>Klarte ikke hente opplysninger om institusjon</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
                         )}
                     </HStack>
                     <Bleed marginBlock={'space-0 space-24'}>
@@ -67,7 +71,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
                         fødselsdato={personResultat.person.fødselsdato}
                     />
                 ) : (
-                    <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Klarte ikke hente registeropplysninger</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {vilkårConfigInstitusjon.map(vilkårConfig => {
                     return (
@@ -86,7 +94,11 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
             </Box>
         </>
     ) : (
-        <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
+        <LocalAlert status="error">
+            <LocalAlert.Header>
+                <LocalAlert.Title>Finner ingen vilkår på behandlingen</LocalAlert.Title>
+            </LocalAlert.Header>
+        </LocalAlert>
     );
 };
 

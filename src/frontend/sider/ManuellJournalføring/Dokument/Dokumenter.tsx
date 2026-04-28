@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, ErrorMessage } from '@navikt/ds-react';
+import { ErrorMessage, LocalAlert } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { DokumentVelger } from './DokumentVelger';
@@ -10,7 +10,11 @@ export const Dokumenter: React.FC = () => {
     const { skjema } = useManuellJournalføringContext();
 
     return skjema.felter.dokumenter.verdi.length === 0 ? (
-        <Alert variant="warning" children={'Ingen innhold'} />
+        <LocalAlert status="warning">
+            <LocalAlert.Header>
+                <LocalAlert.Title>Ingen innhold</LocalAlert.Title>
+            </LocalAlert.Header>
+        </LocalAlert>
     ) : (
         <div id={skjema.felter.dokumenter.id}>
             {skjema.felter.dokumenter.verdi.map((dokument, index) => (

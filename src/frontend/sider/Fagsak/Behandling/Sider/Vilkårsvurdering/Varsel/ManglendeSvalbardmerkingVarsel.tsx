@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, BodyLong, Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, LocalAlert, Table, VStack } from '@navikt/ds-react';
 
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
@@ -15,43 +15,45 @@ export function ManglendeSvalbardmerkingVarsel() {
     }
 
     return (
-        <Alert variant={'warning'} contentMaxWidth={false}>
-            <Heading spacing={true} size={'small'} level={'3'}>
-                Bosatt på Svalbard
-            </Heading>
-            <VStack gap={'space-8'}>
-                <BodyLong>
-                    Personer i behandlingen har oppholdsadresse på Svalbard i en periode hvor «Bosatt på Svalbard» ikke
-                    er lagt til i "Bosatt i riket"-vilkåret. Dette gjelder:
-                </BodyLong>
-                <Table size={'small'} style={{ width: '20rem' }}>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell scope={'col'}>Person</Table.HeaderCell>
-                            <Table.HeaderCell scope={'col'}>Periode</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {behandling.manglendeSvalbardmerking.map(manglendeSvalbardmerking => {
-                            return manglendeSvalbardmerking.manglendeFinnmarkSvalbardMerkingPerioder.map(
-                                (manglendeSvalbardmerkingPeriode, i) => {
-                                    return (
-                                        <Table.Row key={i + manglendeSvalbardmerking.ident} shadeOnHover={false}>
-                                            <Table.DataCell>{manglendeSvalbardmerking.ident}</Table.DataCell>
-                                            <Table.DataCell>
-                                                {isoDatoPeriodeTilFormatertString({
-                                                    fom: manglendeSvalbardmerkingPeriode.fom,
-                                                    tom: manglendeSvalbardmerkingPeriode.tom,
-                                                })}
-                                            </Table.DataCell>
-                                        </Table.Row>
-                                    );
-                                }
-                            );
-                        })}
-                    </Table.Body>
-                </Table>
-            </VStack>
-        </Alert>
+        <LocalAlert status={'warning'}>
+            <LocalAlert.Header>
+                <LocalAlert.Title as={'h3'}>Bosatt på Svalbard</LocalAlert.Title>
+            </LocalAlert.Header>
+            <LocalAlert.Content>
+                <VStack gap={'space-8'}>
+                    <BodyLong>
+                        Personer i behandlingen har oppholdsadresse på Svalbard i en periode hvor «Bosatt på Svalbard»
+                        ikke er lagt til i "Bosatt i riket"-vilkåret. Dette gjelder:
+                    </BodyLong>
+                    <Table size={'small'} style={{ width: '20rem' }}>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell scope={'col'}>Person</Table.HeaderCell>
+                                <Table.HeaderCell scope={'col'}>Periode</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {behandling.manglendeSvalbardmerking.map(manglendeSvalbardmerking => {
+                                return manglendeSvalbardmerking.manglendeFinnmarkSvalbardMerkingPerioder.map(
+                                    (manglendeSvalbardmerkingPeriode, i) => {
+                                        return (
+                                            <Table.Row key={i + manglendeSvalbardmerking.ident} shadeOnHover={false}>
+                                                <Table.DataCell>{manglendeSvalbardmerking.ident}</Table.DataCell>
+                                                <Table.DataCell>
+                                                    {isoDatoPeriodeTilFormatertString({
+                                                        fom: manglendeSvalbardmerkingPeriode.fom,
+                                                        tom: manglendeSvalbardmerkingPeriode.tom,
+                                                    })}
+                                                </Table.DataCell>
+                                            </Table.Row>
+                                        );
+                                    }
+                                );
+                            })}
+                        </Table.Body>
+                    </Table>
+                </VStack>
+            </LocalAlert.Content>
+        </LocalAlert>
     );
 }

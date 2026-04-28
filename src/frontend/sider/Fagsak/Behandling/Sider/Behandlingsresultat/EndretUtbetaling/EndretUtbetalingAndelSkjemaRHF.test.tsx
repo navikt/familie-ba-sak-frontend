@@ -143,7 +143,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
         const feilmelding = await screen.findByText(/Dette er en feilmelding/);
         expect(feilmelding).toBeInTheDocument();
 
-        const lukkButton = screen.getByLabelText('Lukk');
+        const lukkButton = screen.getByTitle('Lukk');
         await user.click(lukkButton);
 
         expect(feilmelding).not.toBeInTheDocument();

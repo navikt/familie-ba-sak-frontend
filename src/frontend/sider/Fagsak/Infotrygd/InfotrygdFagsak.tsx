@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, BodyShort, Box, Heading, HStack, Loader } from '@navikt/ds-react';
+import { BodyShort, Box, GlobalAlert, Heading, HStack, Loader } from '@navikt/ds-react';
 
 import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
@@ -33,7 +33,11 @@ export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
     if (error) {
         return (
             <InnholdContainer>
-                <Alert variant="error">En feil har oppstått ved henting av saker</Alert>
+                <GlobalAlert status="error">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>En feil har oppstått ved henting av saker</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
             </InnholdContainer>
         );
     }

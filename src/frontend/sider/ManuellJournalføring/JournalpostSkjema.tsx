@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
-import { Alert, Button, ErrorMessage, ErrorSummary, Heading } from '@navikt/ds-react';
+import { Button, ErrorMessage, ErrorSummary, Heading, LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { AvsenderPanel } from './AvsenderPanel';
@@ -80,7 +80,11 @@ export const JournalpostSkjema: React.FC = () => {
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                     skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">

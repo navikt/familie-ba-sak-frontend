@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, Button, Modal } from '@navikt/ds-react';
+import { Button, LocalAlert, Modal } from '@navikt/ds-react';
 
 import { OpprettFagsakModalInnhold } from './OpprettFagsakModalInnhold';
 import { ModalType } from '../../../context/ModalContext';
@@ -22,7 +22,13 @@ export function OpprettFagsakModal() {
                     {args === undefined && (
                         <>
                             <Modal.Body>
-                                <Alert variant={'error'}>Feil oppstod ved innhenting av argumenter for modal.</Alert>
+                                <LocalAlert status="error">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            Feil oppstod ved innhenting av argumenter for modal.
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                </LocalAlert>
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button key={'Bekreft'} variant={'primary'} disabled={true}>

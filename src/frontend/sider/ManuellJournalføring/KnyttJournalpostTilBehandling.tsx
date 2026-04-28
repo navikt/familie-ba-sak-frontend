@@ -2,7 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Checkbox, Heading, Table, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Checkbox, Heading, InfoCard, LocalAlert, Table, VStack } from '@navikt/ds-react';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
@@ -17,10 +18,6 @@ const KnyttDiv = styled.div`
 
 const GenerellSakInfoStripeTittel = styled.div`
     font-weight: bold;
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-top: var(--ax-space-32);
 `;
 
 export const KnyttJournalpostTilBehandling: React.FC = () => {
@@ -44,9 +41,13 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             {sorterteJournalføringsbehandlinger.length > 0 && (
                 <VStack gap="space-24">
                     {ressursHarFeilet(klageStatus) && (
-                        <Alert variant="warning">
-                            <BodyShort>Klagebehandlinger er ikke tilgjengelig for øyeblikket.</BodyShort>
-                        </Alert>
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Klagebehandlinger er ikke tilgjengelig for øyeblikket.
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                        </LocalAlert>
                     )}
                     <div>
                         <Heading size={'small'} level={'2'}>
@@ -122,13 +123,17 @@ export const KnyttJournalpostTilBehandling: React.FC = () => {
             )}
             <KnyttTilNyBehandling />
             {visGenerellSakInfoStripe && (
-                <StyledAlert variant="info">
-                    <GenerellSakInfoStripeTittel>
-                        {sorterteJournalføringsbehandlinger.length > 0
-                            ? `Du velger å journalføre uten å knytte til behandling(er).`
-                            : `Du velger å journalføre uten å knytte til ny behandling.`}
-                    </GenerellSakInfoStripeTittel>
-                </StyledAlert>
+                <Box marginBlock={'space-32 space-0'}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            <GenerellSakInfoStripeTittel>
+                                {sorterteJournalføringsbehandlinger.length > 0
+                                    ? `Du velger å journalføre uten å knytte til behandling(er).`
+                                    : `Du velger å journalføre uten å knytte til ny behandling.`}
+                            </GenerellSakInfoStripeTittel>
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
             )}
         </KnyttDiv>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { differenceInMilliseconds } from 'date-fns';
 
-import { Alert, Checkbox, CheckboxGroup } from '@navikt/ds-react';
+import { Checkbox, CheckboxGroup, InlineMessage } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import styles from './BarnBrevetGjelder.module.css';
@@ -72,11 +72,10 @@ export const BarnBrevetGjelder = (props: IProps) => {
                 );
             })}
             {skalViseVarselOmManglendeBarn && (
-                <Alert
-                    variant="warning"
+                <InlineMessage
+                    status="warning"
                     children={'Du må trykke "Bekreft og fortsett" før du kan legge til barn.'}
                     size={'small'}
-                    inline
                 />
             )}
         </CheckboxGroup>
