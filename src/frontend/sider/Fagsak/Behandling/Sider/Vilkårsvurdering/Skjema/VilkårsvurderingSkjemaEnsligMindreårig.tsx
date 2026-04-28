@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert, Box, HStack } from '@navikt/ds-react';
 
-import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
 import type { IPersonResultat } from '../../../../../../typer/vilkår';
 import {
@@ -11,7 +11,6 @@ import {
     vilkårConfigEnsligMindreårig,
     VilkårType,
 } from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
@@ -23,7 +22,6 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
@@ -39,7 +37,7 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                 paddingBlock={'space-32 space-0'}
                 className={styles.personLinje}
             >
-                <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
+                <PersonInformasjon person={personResultat.person} />
             </HStack>
 
             <Box paddingInline={'space-56 space-0'}>

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { BodyShort, HStack } from '@navikt/ds-react';
 import { Space16, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
-import PersonInformasjon from '../../../komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonInformasjonUtbetaling } from './PersonInformasjonUtbetaling';
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
 import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, hentAlder } from '../../../utils/formatter';
@@ -29,7 +29,7 @@ const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiode
 
     return (
         <section>
-            <PersonInformasjon person={utbetalingsperiodeDetaljer[0].person} erLesevisning={false} />
+            <PersonInformasjonUtbetaling person={utbetalingsperiodeDetaljer[0].person} />
             <Ytelser>
                 {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
                     return (

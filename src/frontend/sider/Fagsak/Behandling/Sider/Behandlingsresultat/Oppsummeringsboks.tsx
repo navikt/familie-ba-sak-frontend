@@ -227,7 +227,12 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                                                 {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
                                             </BodyShort>
                                             <Skillelinje />
-                                            <FalskIdentitet harFalskIdentitet={detalj.person.harFalskIdentitet} />
+                                            {detalj.person.harFalskIdentitet && (
+                                                <HStack gap={'space-4'}>
+                                                    <FalskIdentitet />
+                                                    <Skillelinje />
+                                                </HStack>
+                                            )}
                                             <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
                                         </HStack>
                                     )}

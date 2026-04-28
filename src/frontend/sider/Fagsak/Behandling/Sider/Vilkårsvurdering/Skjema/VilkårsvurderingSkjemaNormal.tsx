@@ -7,7 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import styles from './VilkårsvurderingSkjema.module.css';
 import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
-import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
 import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import { PersonType } from '../../../../../../typer/person';
@@ -136,11 +136,7 @@ const VilkårsvurderingSkjemaNormal: React.FunctionComponent<IVilkårsvurderingS
                         ) : (
                             <>
                                 <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
-                                    <PersonInformasjon
-                                        person={personResultat.person}
-                                        somOverskrift
-                                        erLesevisning={erLesevisning}
-                                    />
+                                    <PersonInformasjon person={personResultat.person} />
                                     {!erLesevisning &&
                                         personErEkspandert[personResultat.personIdent] &&
                                         personResultat.person.type === PersonType.SØKER &&
