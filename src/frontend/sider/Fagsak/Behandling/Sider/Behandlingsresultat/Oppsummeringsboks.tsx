@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { type FunctionComponent, type PropsWithChildren, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -40,7 +39,7 @@ const UtbetalingsbeløpStack = styled(VStack)`
     padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
 `;
 
-const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
+const UtbetalingsbeløpRad: FunctionComponent<PropsWithChildren> = ({ children }) => (
     <HGrid columns="1fr 8rem 5rem" gap={'space-8'}>
         {children}
     </HGrid>
@@ -105,7 +104,7 @@ const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) =>
     return eøsPeriodeStatus.every(eøsPeriode => eøsPeriode.status === EøsPeriodeStatus.OK);
 };
 
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+const Oppsummeringsboks: FunctionComponent<IProps> = ({
     utbetalingsperiode,
     aktivEtikett,
     kompetanser,
@@ -118,7 +117,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
     const { settToast } = useAppContext();
     const { settAktivEtikett } = useTidslinjeContext();
 
-    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(new Map<string, boolean>());
+    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
@@ -179,7 +178,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         });
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         setUtbetalingsBeløpStatusMap(
             finnUtbetalingsBeløpStatusMap(utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser)
         );

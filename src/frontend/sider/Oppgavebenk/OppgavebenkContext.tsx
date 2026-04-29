@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import * as React from 'react';
 
 import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';
@@ -62,7 +61,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
     const [side, settSide] = useState<number>(1);
 
-    const [oppgaver, settOppgaver] = React.useState<Ressurs<IHentOppgaveDto>>(byggTomRessurs<IHentOppgaveDto>());
+    const [oppgaver, settOppgaver] = useState<Ressurs<IHentOppgaveDto>>(byggTomRessurs<IHentOppgaveDto>());
 
     const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(initialOppgaveFelter(saksbehandler));
 

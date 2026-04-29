@@ -1,6 +1,12 @@
-import type { JSX, PropsWithChildren } from 'react';
+import {
+    type Dispatch,
+    type JSX,
+    type PropsWithChildren,
+    type ReactNode,
+    type SetStateAction,
+    useContext,
+} from 'react';
 import { createContext, useState } from 'react';
-import * as React from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 
@@ -24,7 +30,7 @@ export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
 
 export interface IModal {
     actions?: JSX.Element[] | JSX.Element;
-    innhold?: () => React.ReactNode;
+    innhold?: () => ReactNode;
     onClose?: () => void;
     tittel: string;
     visModal: boolean;
@@ -55,7 +61,7 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
 interface AppContextValue {
     appInfoModal: IModal;
     settToast: (toastId: ToastTyper, toast: IToast) => void;
-    settToasts: React.Dispatch<React.SetStateAction<{ [toastId: string]: IToast }>>;
+    settToasts: Dispatch<SetStateAction<{ [toastId: string]: IToast }>>;
     sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
     toasts: { [toastId: string]: IToast };
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
@@ -68,7 +74,7 @@ const AppProvider = (props: PropsWithChildren) => {
     const { request } = useHttp();
     const toggles = useFeatureToggles();
 
-    const [appInfoModal, settAppInfoModal] = React.useState<IModal>(initalState);
+    const [appInfoModal, settAppInfoModal] = useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
 
     const saksbehandler = useSaksbehandler();
@@ -140,7 +146,7 @@ const AppProvider = (props: PropsWithChildren) => {
 };
 
 const useAppContext = () => {
-    const context = React.useContext(AppContext);
+    const context = useContext(AppContext);
     if (!context) {
         throw new Error('useAppContext må brukes innenfor AppProvider');
     }

@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import * as React from 'react';
 
 import type { AxiosError } from 'axios';
 import { differenceInMilliseconds } from 'date-fns';
@@ -144,7 +143,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
         },
     });
 
-    const [valgtDokumentId, settValgtDokumentId] = React.useState<string | undefined>(undefined);
+    const [valgtDokumentId, settValgtDokumentId] = useState<string | undefined>(undefined);
     const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<
         ManuellJournalføringSkjemaFelter,
         string

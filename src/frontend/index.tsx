@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import axe from '@axe-core/react';
 import * as Sentry from '@sentry/browser';
 import { setDefaultOptions } from 'date-fns';
