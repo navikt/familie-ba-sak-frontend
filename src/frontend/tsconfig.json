@@ -23,6 +23,18 @@
       "vite/client",
       "vitest/globals",
       "@testing-library/jest-dom"
-    ]
+    ],
+    "paths": {
+      "@api/*": ["./api/*"],
+      "@context/*": ["./context/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@ikoner/*": ["./ikoner/*"],
+      "@komponeter/*": ["./komponeter/*"],
+      "@public/*": ["./public/*"],
+      "@sider/*": ["./sider/*"],
+      "@testutils/*": ["./testutils/*"],
+      "@typer/*": ["./typer/*"],
+      "@utils/*": ["./utils/*"],
+    }
   }
 }
