@@ -7,6 +7,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import styles from './VilkårsvurderingSkjema.module.css';
 import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
+import { Skjermstørrelse, useSkjermstørrelse } from '../../../../../../hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '../../../../../../typer/behandling';
 import { FeatureToggle } from '../../../../../../typer/featureToggles';
@@ -30,10 +31,13 @@ interface IVilkårsvurderingSkjemaNormal {
 }
 
 const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingSkjemaNormal) => {
-    const toggles = useFeatureToggles();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const { vurderErLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent, behandling } =
         useBehandlingContext();
+
+    const toggles = useFeatureToggles();
+    const skjermstørrelse = useSkjermstørrelse();
+
     const erLesevisning = vurderErLesevisning();
 
     const kanLeggeTilUtvidetVilkår =
@@ -117,6 +121,15 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                 );
                 const personSkalSkjermesForBruker = personResultat.person.skjermesForBruker;
 
+                const skalKunneLeggeTilUtvidetBarnetrygdVilkår =
+                    !erLesevisning &&
+                    personErEkspandert[personResultat.personIdent] &&
+                    personResultat.person.type === PersonType.SØKER &&
+                    !harUtvidet &&
+                    kanLeggeTilUtvidetVilkår;
+
+                const erEkspandert = personErEkspandert[personResultat.personIdent];
+
                 return (
                     <div
                         key={`${index}_${personResultat.person.fødselsdato}`}
@@ -135,49 +148,52 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                             </HStack>
                         ) : (
                             <>
-                                <HStack wrap={false} justify={'space-between'} className={styles.personLinje}>
+                                <HStack
+                                    gap={'space-8'}
+                                    justify={'space-between'}
+                                    wrap={true}
+                                    className={styles.personLinje}
+                                >
                                     <PersonInformasjon person={personResultat.person} />
-                                    {!erLesevisning &&
-                                        personErEkspandert[personResultat.personIdent] &&
-                                        personResultat.person.type === PersonType.SØKER &&
-                                        !harUtvidet &&
-                                        kanLeggeTilUtvidetVilkår && (
+                                    <HStack gap={'space-8'} justify={'space-between'} wrap={false}>
+                                        {skalKunneLeggeTilUtvidetBarnetrygdVilkår && (
                                             <Button
                                                 variant={'tertiary'}
-                                                id={`${index}_${personResultat.person.fødselsdato}__legg-til-vilkår-utvidet`}
+                                                size={skjermstørrelse > Skjermstørrelse.XL ? 'medium' : 'small'}
                                                 onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
-                                                size={'small'}
                                                 icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
                                             >
-                                                {`Legg til vilkår utvidet barnetrygd`}
+                                                Legg til vilkår utvidet barnetrygd
                                             </Button>
                                         )}
-                                    <Button
-                                        id={`vis-skjul-vilkårsvurdering-${index}_${personResultat.person.fødselsdato}}`}
-                                        variant="tertiary"
-                                        onClick={() =>
-                                            settPersonErEkspandert({
-                                                ...personErEkspandert,
-                                                [personResultat.personIdent]:
-                                                    !personErEkspandert[personResultat.personIdent],
-                                            })
-                                        }
-                                        icon={
-                                            personErEkspandert[personResultat.personIdent] ? (
-                                                <ChevronUpIcon aria-hidden />
-                                            ) : (
-                                                <ChevronDownIcon aria-hidden />
-                                            )
-                                        }
-                                        iconPosition="right"
-                                    >
-                                        {personErEkspandert[personResultat.personIdent]
-                                            ? 'Skjul vilkårsvurdering'
-                                            : 'Vis vilkårsvurdering'}
-                                    </Button>
+                                        <Button
+                                            variant={'tertiary'}
+                                            size={skjermstørrelse > Skjermstørrelse.XL ? 'medium' : 'small'}
+                                            onClick={() =>
+                                                settPersonErEkspandert(prev => ({
+                                                    ...prev,
+                                                    [personResultat.personIdent]: !erEkspandert,
+                                                }))
+                                            }
+                                            icon={
+                                                erEkspandert ? (
+                                                    <ChevronUpIcon aria-hidden />
+                                                ) : (
+                                                    <ChevronDownIcon aria-hidden />
+                                                )
+                                            }
+                                            iconPosition={'right'}
+                                        >
+                                            {erEkspandert ? 'Skjul vilkårsvurdering' : 'Vis vilkårsvurdering'}
+                                        </Button>
+                                    </HStack>
                                 </HStack>
-                                <Activity mode={personErEkspandert[personResultat.personIdent] ? 'visible' : 'hidden'}>
-                                    <Box paddingInline={'space-56 space-0'}>
+                                <Activity mode={erEkspandert ? 'visible' : 'hidden'}>
+                                    <Box
+                                        paddingInline={
+                                            skjermstørrelse > Skjermstørrelse.XL ? 'space-56 space-0' : 'space-0'
+                                        }
+                                    >
                                         {personResultat.person.registerhistorikk ? (
                                             <Registeropplysninger
                                                 registerHistorikk={personResultat.person.registerhistorikk}
