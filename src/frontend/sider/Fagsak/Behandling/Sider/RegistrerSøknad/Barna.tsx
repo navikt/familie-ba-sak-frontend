@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { differenceInMilliseconds } from 'date-fns';
 
@@ -14,7 +14,7 @@ import { isoStringTilDate } from '../../../../../utils/dato';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const Barna: React.FunctionComponent = () => {
+export const Barna: FunctionComponent = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();
     const lesevisning = vurderErLesevisning();

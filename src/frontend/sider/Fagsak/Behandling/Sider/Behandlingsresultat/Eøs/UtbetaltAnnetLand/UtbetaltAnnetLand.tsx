@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -42,7 +42,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const UtbetaltAnnetLand: React.FC<IProps> = ({
+const UtbetaltAnnetLand: FC<IProps> = ({
     utbetaltAnnetLandBeløp,
     erUtbetaltAnnetLandBeløpGyldige,
     åpenBehandling,

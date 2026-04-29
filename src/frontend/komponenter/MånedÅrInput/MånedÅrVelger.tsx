@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import React, { useEffect, useState } from 'react';
+import type { FC, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -33,7 +33,7 @@ const StyledErrorMessage = styled(ErrorMessage)`
     margin-bottom: 0.5rem;
 `;
 
-const MånedÅrVelger: React.FC<Props> = ({
+const MånedÅrVelger: FC<Props> = ({
     feil,
     value,
     label,

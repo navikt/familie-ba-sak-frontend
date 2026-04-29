@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import type { FunctionComponent } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -48,7 +49,7 @@ const EtikettKnapp = styled(FamilieBaseKnapp)<{ disabled: boolean; $valgt: boole
     }
 `;
 
-const TidslinjeEtikett: React.FunctionComponent<IEtikettProp> = ({ etikett }) => {
+const TidslinjeEtikett: FunctionComponent<IEtikettProp> = ({ etikett }) => {
     const {
         aktivEtikett,
         settAktivEtikett,

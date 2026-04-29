@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -15,7 +16,7 @@ interface IOppgaveDirektelenke {
     oppgave: IOppgave;
 }
 
-const OppgaveDirektelenke: React.FC<IOppgaveDirektelenke> = ({ oppgave }) => {
+const OppgaveDirektelenke: FC<IOppgaveDirektelenke> = ({ oppgave }) => {
     const { settToast } = useAppContext();
     const { gåTilFagsakEllerVisFeilmelding } = useOppgavebenkContext();
     const { sjekkTilgang } = useAppContext();

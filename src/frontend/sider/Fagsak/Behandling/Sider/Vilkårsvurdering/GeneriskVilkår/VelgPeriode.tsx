@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
@@ -37,7 +37,7 @@ const FlexDiv = styled.div`
     gap: 1.125rem;
 `;
 
-const VelgPeriode: React.FC<IProps> = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }) => {
+const VelgPeriode: FC<IProps> = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 

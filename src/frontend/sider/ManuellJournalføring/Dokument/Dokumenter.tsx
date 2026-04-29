@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { Alert, ErrorMessage } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -6,7 +6,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { DokumentVelger } from './DokumentVelger';
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
-export const Dokumenter: React.FC = () => {
+export const Dokumenter: FC = () => {
     const { skjema } = useManuellJournalføringContext();
 
     return skjema.felter.dokumenter.verdi.length === 0 ? (

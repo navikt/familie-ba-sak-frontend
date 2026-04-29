@@ -1,4 +1,5 @@
-import React, { type Ref, useMemo } from 'react';
+import type { Ref } from 'react';
+import { useMemo } from 'react';
 
 import { FlaggCombobox } from '../FlaggCombobox';
 import { REGIONKODE_TIL_LABEL, type Regionkode } from './region';

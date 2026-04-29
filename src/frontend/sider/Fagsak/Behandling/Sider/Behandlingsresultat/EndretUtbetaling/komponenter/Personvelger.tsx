@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';

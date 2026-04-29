@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 interface IØyeGrå {
     className?: string;
@@ -6,7 +6,7 @@ interface IØyeGrå {
     width?: number;
 }
 
-const ØyeGrå: React.FunctionComponent<IØyeGrå> = ({ className, height, width }) => {
+const ØyeGrå: FunctionComponent<IØyeGrå> = ({ className, height, width }) => {
     return (
         <svg
             aria-labelledby={'Øye grå'}

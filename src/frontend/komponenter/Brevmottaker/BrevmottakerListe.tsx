@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { FagsakType } from '../../typer/fagsak';
@@ -12,7 +12,7 @@ interface IProps {
     brevmottakere: SkjemaBrevmottaker[];
 }
 
-const BrevmottakerListe: React.FC<IProps> = ({ bruker, brevmottakere }) => {
+const BrevmottakerListe: FC<IProps> = ({ bruker, brevmottakere }) => {
     const { fagsak } = useFagsakContext();
     const institusjon = fagsak.institusjon;
     const fagsakType = fagsak.fagsakType;

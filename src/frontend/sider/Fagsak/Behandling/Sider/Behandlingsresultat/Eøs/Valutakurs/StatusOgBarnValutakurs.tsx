@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -35,7 +35,7 @@ interface StatusProps {
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
 }
 
-const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValutakurser }) => {
+const PeriodeStatus: FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValutakurser }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
@@ -56,7 +56,7 @@ const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiFo
     }
 };
 
-export const StatusOgBarnValutakurs: React.FC<Props> = ({ valutakurs, åpenBehandling }) => (
+export const StatusOgBarnValutakurs: FC<Props> = ({ valutakurs, åpenBehandling }) => (
     <HStack wrap={false} align="center" gap="space-16">
         <PeriodeStatus
             valutakurs={valutakurs}

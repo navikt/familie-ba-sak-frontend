@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Tabs } from '@navikt/ds-react';
 
 import IkonHistorikk from './Ikoner/IkonHistorikk';

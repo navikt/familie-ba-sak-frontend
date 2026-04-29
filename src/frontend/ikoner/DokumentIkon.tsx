@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 interface IDokumentIkon {
     filled?: boolean;
@@ -7,7 +7,7 @@ interface IDokumentIkon {
     width?: number;
 }
 
-export const DokumentIkon: React.FC<IDokumentIkon> = ({ className, filled = false, width = 48, height = 48 }) => {
+export const DokumentIkon: FC<IDokumentIkon> = ({ className, filled = false, width = 48, height = 48 }) => {
     return filled ? (
         <svg
             aria-labelledby={'dokument'}

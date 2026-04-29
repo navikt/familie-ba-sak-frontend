@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useContext, createContext, useState } from 'react';
 
 interface Context {
     autentisert: boolean;
@@ -14,7 +15,7 @@ export function AuthContextProvider({ children }: PropsWithChildren) {
 }
 
 export function useAuthContext() {
-    const context = React.useContext(AuthContext);
+    const context = useContext(AuthContext);
     if (!context) {
         throw new Error('useAuthContext må brukes innenfor AuthContextProvider');
     }

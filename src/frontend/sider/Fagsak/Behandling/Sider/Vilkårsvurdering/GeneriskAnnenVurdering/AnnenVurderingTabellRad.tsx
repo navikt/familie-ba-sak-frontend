@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
@@ -52,12 +53,7 @@ const StyledPersonIcon = styled(PersonIcon)`
     min-width: 1.5rem;
 `;
 
-const AnnenVurderingTabellRad: React.FC<IProps> = ({
-    person,
-    annenVurderingConfig,
-    visFeilmeldinger,
-    annenVurdering,
-}) => {
+const AnnenVurderingTabellRad: FC<IProps> = ({ person, annenVurderingConfig, visFeilmeldinger, annenVurdering }) => {
     const { vurderErLesevisning } = useBehandlingContext();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(

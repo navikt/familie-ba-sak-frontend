@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FunctionComponent, FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -19,7 +19,7 @@ const Container = styled.article`
     }
 `;
 
-const OppgavebenkInnhold: React.FunctionComponent = () => {
+const OppgavebenkInnhold: FunctionComponent = () => {
     return (
         <Container>
             <VStack gap="space-16">
@@ -30,7 +30,7 @@ const OppgavebenkInnhold: React.FunctionComponent = () => {
     );
 };
 
-export const Oppgavebenk: React.FC = () => {
+export const Oppgavebenk: FC = () => {
     return (
         <OppgavebenkProvider>
             <OppgavebenkInnhold />

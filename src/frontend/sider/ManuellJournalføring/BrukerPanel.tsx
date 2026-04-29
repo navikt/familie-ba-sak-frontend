@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type { FC, ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -48,7 +49,7 @@ const StyledAlert = styled(Alert)`
     margin-top: 2rem;
 `;
 
-export const BrukerPanel: React.FC = () => {
+export const BrukerPanel: FC = () => {
     const {
         skjema,
         endreBrukerOgSettNormalFagsak,
@@ -176,7 +177,7 @@ export const BrukerPanel: React.FC = () => {
                                 <StyledSelect
                                     label="Fagsaktype"
                                     size="small"
-                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                                         oppdaterFagsaktype(event.target.value as FagsakType)
                                     }
                                     value={skjema.felter.fagsakType.verdi}
@@ -189,7 +190,7 @@ export const BrukerPanel: React.FC = () => {
                                     <StyledSelect
                                         label="Institusjon"
                                         size="small"
-                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                        onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                                             settValgtInstitusjon(event.target.value)
                                         }
                                         value={valgtInstitusjon}

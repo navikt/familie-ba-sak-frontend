@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';

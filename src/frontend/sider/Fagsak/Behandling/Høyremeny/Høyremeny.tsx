@@ -1,4 +1,4 @@
-import React, { Activity } from 'react';
+import { Activity } from 'react';
 
 import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
 

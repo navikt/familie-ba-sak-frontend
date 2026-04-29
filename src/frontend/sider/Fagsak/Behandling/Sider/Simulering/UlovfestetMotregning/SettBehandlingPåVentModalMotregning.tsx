@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import { addDays } from 'date-fns';
 import styled from 'styled-components';
@@ -30,7 +31,7 @@ interface IProps {
     behandling: IBehandling;
 }
 
-export const SettBehandlingPåVentModalMotregning: React.FC<IProps> = ({ lukkModal, behandling }) => {
+export const SettBehandlingPåVentModalMotregning: FC<IProps> = ({ lukkModal, behandling }) => {
     const { settÅpenBehandling } = useBehandlingContext();
 
     const { request } = useHttp();

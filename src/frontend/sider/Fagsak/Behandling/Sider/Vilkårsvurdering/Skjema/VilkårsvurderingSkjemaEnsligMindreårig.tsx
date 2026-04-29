@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { Alert, Box, HStack } from '@navikt/ds-react';
 
@@ -21,7 +21,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
+const VilkårsvurderingSkjemaEnsligMindreårig: FC<IProps> = ({ visFeilmeldinger }) => {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);

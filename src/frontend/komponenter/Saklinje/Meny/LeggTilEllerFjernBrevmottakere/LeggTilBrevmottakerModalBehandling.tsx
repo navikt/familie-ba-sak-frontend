@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import { useLagreEllerFjernMottakerPåBehandling } from './useLagreOgFjernMottakerPåBehandling';
@@ -8,7 +8,7 @@ interface IBehandlingModalProps {
     lukkModal: () => void;
 }
 
-export const LeggTilBrevmottakerModalBehandling: React.FC<IBehandlingModalProps> = ({ lukkModal }) => {
+export const LeggTilBrevmottakerModalBehandling: FC<IBehandlingModalProps> = ({ lukkModal }) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
     const { lagreMottaker, fjernMottaker } = useLagreEllerFjernMottakerPåBehandling({

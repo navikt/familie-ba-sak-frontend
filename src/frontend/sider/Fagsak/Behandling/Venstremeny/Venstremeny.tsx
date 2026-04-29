@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { MouseEvent } from 'react';
 import { Activity } from 'react';
 
 import classNames from 'classnames';
@@ -20,7 +20,7 @@ export function Venstremeny() {
     const fagsakId = useFagsakId();
     const [erÅpen, settErÅpen] = useVenstremeny();
 
-    function stansNavigeringDersomSidenIkkeErAktiv(event: React.MouseEvent, sidenErAktiv: boolean) {
+    function stansNavigeringDersomSidenIkkeErAktiv(event: MouseEvent, sidenErAktiv: boolean) {
         if (!sidenErAktiv) {
             event.preventDefault();
         }

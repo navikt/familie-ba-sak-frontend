@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import deepEqual from 'deep-equal';

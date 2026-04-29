@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 interface IEmailIkon {
     filled?: boolean;
@@ -7,7 +7,7 @@ interface IEmailIkon {
     width?: number;
 }
 
-export const EmailIkon: React.FC<IEmailIkon> = ({ className, filled = false, width = 48, height = 48 }) => {
+export const EmailIkon: FC<IEmailIkon> = ({ className, filled = false, width = 48, height = 48 }) => {
     return filled ? (
         <svg
             aria-labelledby={'email'}

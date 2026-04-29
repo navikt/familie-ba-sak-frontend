@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { isBefore } from 'date-fns';
 import styled from 'styled-components';
@@ -31,7 +31,7 @@ interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
 
-const SimuleringPanel: React.FunctionComponent<ISimuleringProps> = ({
+const SimuleringPanel: FunctionComponent<ISimuleringProps> = ({
     simulering: { feilutbetaling, fom, etterbetaling, fomDatoNestePeriode, perioder, tomSisteUtbetaling },
 }) => {
     const kapitaliserTekst = (tekst: string): string => {

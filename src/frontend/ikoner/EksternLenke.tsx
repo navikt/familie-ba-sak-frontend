@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 interface IEksternLenke {
     className?: string;
@@ -6,7 +6,7 @@ interface IEksternLenke {
     width?: number;
 }
 
-export const EksternLenke: React.FC<IEksternLenke> = ({ className, width = 16, height = 16 }) => {
+export const EksternLenke: FC<IEksternLenke> = ({ className, width = 16, height = 16 }) => {
     //<!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
     return (
         <svg

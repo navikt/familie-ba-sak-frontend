@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Textarea } from '@navikt/ds-react';
 
@@ -13,7 +13,7 @@ const FritekstAvsnitt = () => {
             label="Skriv inn fritekst avsnitt"
             value={skjema.felter.fritekstAvsnitt.verdi}
             maxLength={maksLengdeFritekstAvsnitt}
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                 skjema.felter.fritekstAvsnitt.validerOgSettFelt(event.target.value)
             }
             error={skjema.visFeilmeldinger && skjema.felter.fritekstAvsnitt?.feilmelding}

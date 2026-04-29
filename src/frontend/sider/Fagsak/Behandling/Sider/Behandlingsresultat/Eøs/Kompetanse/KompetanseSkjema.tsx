@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -37,7 +37,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const KompetanseSkjema: React.FC<IProps> = ({ kompetanser, åpenBehandling, visFeilmeldinger }) => {
+const KompetanseSkjema: FC<IProps> = ({ kompetanser, åpenBehandling, visFeilmeldinger }) => {
     const harUfullstendigeKompetanser =
         åpenBehandling.kompetanser?.filter(kompetanse => kompetanse.status !== EøsPeriodeStatus.OK).length > 0;
 

@@ -1,5 +1,4 @@
-import type { PropsWithChildren } from 'react';
-import React from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 import styled from 'styled-components';
 
@@ -27,7 +26,7 @@ const FlexMedSentrering = styled.div`
     align-items: center;
 `;
 
-const TidslinjeNavigering: React.FC<IProps> = ({
+const TidslinjeNavigering: FC<IProps> = ({
     naviger,
     kanNavigereTilHøyre = true,
     kanNavigereTilVenstre = true,

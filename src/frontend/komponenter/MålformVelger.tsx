@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { ReactNode, FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -19,10 +19,10 @@ interface IProps {
     målformFelt: Felt<Målform | undefined>;
     visFeilmeldinger: boolean;
     erLesevisning: boolean;
-    Legend?: React.ReactNode;
+    Legend?: ReactNode;
 }
 
-const MålformVelger: React.FC<IProps> = ({
+const MålformVelger: FC<IProps> = ({
     målformFelt,
     visFeilmeldinger,
     erLesevisning,

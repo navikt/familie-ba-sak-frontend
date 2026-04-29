@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -10,7 +10,7 @@ const IngenSakerTekst = styled(BodyShort)`
     margin: 1rem;
 `;
 
-export const Sakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
+export const Sakstabell: FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
     return (
         <>
             <Table>

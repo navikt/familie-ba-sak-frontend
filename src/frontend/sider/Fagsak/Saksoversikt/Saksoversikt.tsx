@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';

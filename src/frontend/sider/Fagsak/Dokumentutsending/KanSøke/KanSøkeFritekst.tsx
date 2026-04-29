@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -45,7 +45,7 @@ const KanSøkeFritekst = ({
         ]);
     };
 
-    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
+    const onChangeFritekst = (event: ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         friteksterFelt.validerOgSettFelt([
             ...friteksterFelt.verdi.map(mapFritekst => {
                 if (mapFritekst.verdi.id === fritekstId) {
@@ -82,14 +82,13 @@ const KanSøkeFritekst = ({
                                 label={`Kulepunkt ${fritekstId}`}
                                 hideLabel={true}
                                 maxLength={makslengdeFritekst}
-                                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                     onChangeFritekst(event, fritekstId)
                                 }
                                 error={skjema.visFeilmeldinger && fritekst.feilmelding}
                                 /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                 autoFocus
                             />
-
                             <SletteKnapp
                                 variant={'tertiary'}
                                 onClick={() => {
@@ -110,7 +109,6 @@ const KanSøkeFritekst = ({
                     );
                 })}
             </Fieldset>
-
             {!erMaksAntallKulepunkter && (
                 <Button
                     variant={'tertiary'}

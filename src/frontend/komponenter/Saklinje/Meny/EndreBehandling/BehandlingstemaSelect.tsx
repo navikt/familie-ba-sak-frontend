@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';

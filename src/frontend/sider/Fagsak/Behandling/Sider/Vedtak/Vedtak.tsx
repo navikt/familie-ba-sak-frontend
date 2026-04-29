@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
+import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -40,7 +41,7 @@ export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
-const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
+const Vedtak: FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
@@ -57,7 +58,7 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
 
     const navigate = useNavigate();
 
-    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [visModal, settVisModal] = useState<boolean>(false);
 
     const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 

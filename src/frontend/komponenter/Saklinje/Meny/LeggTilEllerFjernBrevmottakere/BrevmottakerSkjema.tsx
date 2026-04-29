@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
@@ -71,7 +71,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     readOnly={erLesevisning}
                     label="Mottaker"
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                    onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
                         skjema.felter.mottaker.validerOgSettFelt(event.target.value as Mottaker);
                     }}
                 >

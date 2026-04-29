@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 
 import type { AxiosError } from 'axios';
 import { differenceInMilliseconds } from 'date-fns';

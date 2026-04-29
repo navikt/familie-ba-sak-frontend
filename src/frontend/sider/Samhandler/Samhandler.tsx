@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FormProvider } from 'react-hook-form';
 import { useLocation } from 'react-router';
@@ -9,7 +10,7 @@ import { OrganisasjonsnummerFelt } from './OrganisasjonsnummerFelt';
 import { SamhandlerFeltnavn, useSamhandlerForm } from './useSamhandlerForm';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 
-export const Samhandler: React.FC = () => {
+export const Samhandler: FC = () => {
     const location = useLocation();
     const [samhandler, setSamhandler] = useState<ISamhandlerInfo | null>(null);
 

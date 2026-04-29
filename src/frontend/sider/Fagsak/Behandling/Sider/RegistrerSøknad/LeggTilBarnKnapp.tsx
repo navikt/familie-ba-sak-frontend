@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 

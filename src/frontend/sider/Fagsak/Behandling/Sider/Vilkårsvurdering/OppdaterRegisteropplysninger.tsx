@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';

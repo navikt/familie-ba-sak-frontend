@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -20,7 +20,7 @@ interface Props {
     årISimuleringen: number[];
 }
 
-export const Årsvelger: React.FC<Props> = ({
+export const Årsvelger: FC<Props> = ({
     settIndexFramvistÅr,
     indexFramvistÅr,
     erISisteÅrAvPerioden,

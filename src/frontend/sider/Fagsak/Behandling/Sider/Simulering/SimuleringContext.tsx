@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { isAfter, isBefore } from 'date-fns';
 
@@ -22,7 +23,7 @@ import type {
 import { Tilbakekrevingsvalg } from '../../../../../typer/simulering';
 import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../utils/dato';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps extends PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 

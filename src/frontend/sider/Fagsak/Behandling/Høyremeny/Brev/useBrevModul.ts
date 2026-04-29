@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
@@ -29,7 +29,7 @@ export const useBrevModul = () => {
     const makslengdeFritekstHvertKulepunkt = 220;
     const maksLengdeFritekstAvsnitt = 1000;
 
-    const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = React.useState(false);
+    const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = useState(false);
 
     const behandlingKategori = behandling?.kategori;
 

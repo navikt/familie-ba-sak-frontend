@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Switch } from '@navikt/ds-react';
 
 import { type Saksoversiktsbehandling, skalVisesNårHenlagtBehandlingerSkjules } from './utils';

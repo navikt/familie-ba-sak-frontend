@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -49,7 +49,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const BarnCheckbox: React.FC<IProps> = ({
+const BarnCheckbox: FC<IProps> = ({
     barn,
     barnMedDeltBostedFelt,
     avtalerOmDeltBostedPerBarnFelt,

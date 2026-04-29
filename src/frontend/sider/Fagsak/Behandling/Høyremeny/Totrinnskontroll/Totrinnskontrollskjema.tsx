@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -38,10 +39,8 @@ export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props)
     const { behandling, trinnPåBehandling } = useBehandlingContext();
     const saksbehandler = useSaksbehandler();
 
-    const [beslutning, settBeslutning] = React.useState<TotrinnskontrollBeslutning>(
-        TotrinnskontrollBeslutning.IKKE_VURDERT
-    );
-    const [begrunnelse, settBegrunnelse] = React.useState<string>('');
+    const [beslutning, settBeslutning] = useState<TotrinnskontrollBeslutning>(TotrinnskontrollBeslutning.IKKE_VURDERT);
+    const [begrunnelse, settBegrunnelse] = useState<string>('');
 
     const senderInn = innsendtVedtak.status === RessursStatus.HENTER;
 
@@ -168,7 +167,7 @@ const Trinn = styled.div`
     }
 `;
 
-const TrinnStatus: React.FC<{
+const TrinnStatus: FC<{
     kontrollertStatus: KontrollertStatus;
     navn: string;
 }> = ({ kontrollertStatus, navn }) => {

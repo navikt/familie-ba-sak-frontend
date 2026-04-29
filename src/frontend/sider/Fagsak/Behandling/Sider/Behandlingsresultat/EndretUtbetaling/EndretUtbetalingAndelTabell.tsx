@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import styled from 'styled-components';
 
@@ -19,9 +19,7 @@ const EndredePerioderContainer = styled.div`
     margin-top: 6rem;
 `;
 
-const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
-    åpenBehandling,
-}) => {
+const EndretUtbetalingAndelTabell: FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({ åpenBehandling }) => {
     const toggles = useFeatureToggles();
 
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;

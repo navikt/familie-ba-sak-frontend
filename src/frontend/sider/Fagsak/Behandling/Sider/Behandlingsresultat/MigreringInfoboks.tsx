@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -17,7 +18,7 @@ const StyledAlert = styled(Alert)`
     margin: 1rem 0;
 `;
 
-const MigreringInfoboks: React.FC<IProps> = ({ behandlingId }) => {
+const MigreringInfoboks: FC<IProps> = ({ behandlingId }) => {
     const { request } = useHttp();
     const [melding, settMelding] = useState<Ressurs<boolean>>(byggTomRessurs());
 

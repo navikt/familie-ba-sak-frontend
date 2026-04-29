@@ -1,4 +1,5 @@
-import React from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 
@@ -17,7 +18,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, visFeilmeldinger }) => {
+const KompetanseTabellRad: FC<IProps> = ({ kompetanse, åpenBehandling, visFeilmeldinger }) => {
     const barn: OptionType[] = kompetanse.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
@@ -34,14 +35,14 @@ const KompetanseTabellRad: React.FC<IProps> = ({ kompetanse, åpenBehandling, vi
         erKompetanseSkjemaEndret,
     } = useKompetansePeriodeSkjema({ barnIKompetanse: barn, kompetanse });
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (åpenBehandling) {
             nullstillSkjema();
             settErKompetanseEkspandert(false);
         }
     }, [åpenBehandling]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (visFeilmeldinger && erKompetanseEkspandert) {
             kanSendeSkjema();
         }

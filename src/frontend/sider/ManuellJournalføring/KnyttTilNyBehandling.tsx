@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -16,7 +16,7 @@ const StyledFieldset = styled(Fieldset)`
  * så kan man kanskje sjekke hvilken behandling
  * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
  */
-export const KnyttTilNyBehandling: React.FC = () => {
+export const KnyttTilNyBehandling: FC = () => {
     const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } = useManuellJournalføringContext();
     const { knyttTilNyBehandling, behandlingstype } = skjema.felter;
     return (

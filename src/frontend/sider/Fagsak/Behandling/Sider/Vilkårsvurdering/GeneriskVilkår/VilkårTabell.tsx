@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -47,7 +47,7 @@ const TabellHeader = styled(Table.HeaderCell)`
     }
 `;
 
-const VilkårTabell: React.FC<IProps> = ({
+const VilkårTabell: FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -43,12 +43,7 @@ const TabellHeader = styled(Table.HeaderCell)`
     }
 `;
 
-const AnnenVurderingTabell: React.FC<IProps> = ({
-    person,
-    annenVurderingConfig,
-    andreVurderinger,
-    visFeilmeldinger,
-}) => {
+const AnnenVurderingTabell: FC<IProps> = ({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }) => {
     return (
         <Table>
             <Table.Header>

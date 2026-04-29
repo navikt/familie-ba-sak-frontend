@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
 
@@ -16,7 +16,7 @@ interface IProps {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
 }
 
-const Vedtaksperiode: React.FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
+const Vedtaksperiode: FC<IProps> = ({ vedtaksperiodeMedBegrunnelser }) => {
     const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeContext();
 
     const { data: genererteBrevbegrunnelser, error: genererteBrevbegrunnelserError } = useHentGenererteBrevbegrunnelser(

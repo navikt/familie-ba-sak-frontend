@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Link as ReactRouterLink, useLocation } from 'react-router';
 
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';

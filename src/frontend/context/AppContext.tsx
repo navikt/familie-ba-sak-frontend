@@ -1,4 +1,6 @@
-import React, { createContext, type JSX, type PropsWithChildren, useState } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
+import { createContext, useState } from 'react';
+import * as React from 'react';
 
 import type { AxiosRequestConfig } from 'axios';
 

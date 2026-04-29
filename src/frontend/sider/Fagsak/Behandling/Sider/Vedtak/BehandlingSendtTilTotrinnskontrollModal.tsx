@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { SetStateAction, Dispatch, FunctionComponent } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -7,10 +7,10 @@ import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useFagsakId } from '../../../../../hooks/useFagsakId';
 
 interface Props {
-    settVisModal: React.Dispatch<React.SetStateAction<boolean>>;
+    settVisModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const BehandlingSendtTilTotrinnskontrollModal: React.FunctionComponent<Props> = ({ settVisModal }) => {
+export const BehandlingSendtTilTotrinnskontrollModal: FunctionComponent<Props> = ({ settVisModal }) => {
     const navigate = useNavigate();
     const fagsakId = useFagsakId();
 

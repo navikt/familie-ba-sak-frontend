@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { ErrorMessage, LocalAlert, Stack, UNSAFE_Combobox } from '@navikt/ds-react';
 
@@ -23,7 +23,7 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange, regelverk }) => {
+const AvslagBegrunnelseMultiselect: FC<IProps> = ({ vilkårType, begrunnelser, onChange, regelverk }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { vilkårSubmit } = useVilkårsvurderingContext();

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { Alert, Bleed, Box, HStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -20,7 +20,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ visFeilmeldinger }) => {
+const VilkårsvurderingSkjemaInstitusjon: FunctionComponent<IProps> = ({ visFeilmeldinger }) => {
     const { behandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);

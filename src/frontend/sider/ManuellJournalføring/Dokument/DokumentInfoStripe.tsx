@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -44,7 +44,7 @@ interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ valgt, journalpostId, dokument }) => {
+export const DokumentInfoStripe: FC<IDokumentInfoStripeProps> = ({ valgt, journalpostId, dokument }) => {
     return (
         <DokumentInfoStripeContainer>
             <StyledDokumentIkonDiv>

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -51,7 +51,7 @@ const visDelytelseTom = (stønad: IInfotrygdStønad) => {
     });
 };
 
-export const Vedtakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
+export const Vedtakstabell: FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
     const sakerMedVedtak = saker.filter(sak => sak.stønad);
 
     return (

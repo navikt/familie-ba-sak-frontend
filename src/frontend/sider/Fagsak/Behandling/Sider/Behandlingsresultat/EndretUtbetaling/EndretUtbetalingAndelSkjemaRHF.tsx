@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { Alert, VStack } from '@navikt/ds-react';

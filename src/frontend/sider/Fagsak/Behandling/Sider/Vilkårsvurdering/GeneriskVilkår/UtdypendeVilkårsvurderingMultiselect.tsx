@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import React, { useEffect } from 'react';
+import type { FC, ReactNode } from 'react';
+import { useEffect } from 'react';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -78,7 +78,7 @@ function mapOgLeggTilUtdypendeVilkårsvurdering(option: OptionType, vilkår: IVi
         : vilkår;
 }
 
-export const UtdypendeVilkårsvurderingMultiselect: React.FC<Props> = ({
+export const UtdypendeVilkårsvurderingMultiselect: FC<Props> = ({
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
     erLesevisning,

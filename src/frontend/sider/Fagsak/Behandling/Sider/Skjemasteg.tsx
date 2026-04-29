@@ -1,5 +1,4 @@
-import type { PropsWithChildren } from 'react';
-import * as React from 'react';
+import type { ReactNode, FunctionComponent, PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 
 import styled from 'styled-components';
@@ -19,7 +18,7 @@ interface IProps extends PropsWithChildren {
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
     senderInn: boolean;
-    tittel: string | React.ReactNode;
+    tittel: string | ReactNode;
     maxWidthStyle?: string;
     skalDisableNesteKnapp?: boolean;
     skalViseNesteKnapp?: boolean;
@@ -43,7 +42,7 @@ const Navigering = styled.div`
     }
 `;
 
-const Skjemasteg: React.FunctionComponent<IProps> = ({
+const Skjemasteg: FunctionComponent<IProps> = ({
     children,
     className,
     forrigeKnappTittel = 'Forrige steg',

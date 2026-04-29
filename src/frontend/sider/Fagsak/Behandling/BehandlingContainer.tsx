@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Box, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 

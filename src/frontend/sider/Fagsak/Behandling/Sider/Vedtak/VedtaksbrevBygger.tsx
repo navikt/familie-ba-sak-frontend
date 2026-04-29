@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Alert, Button } from '@navikt/ds-react';
@@ -35,7 +35,7 @@ interface Props {
     bruker: IPersonInfo;
 }
 
-export const VedtaksbrevBygger: React.FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
+export const VedtaksbrevBygger: FunctionComponent<Props> = ({ åpenBehandling, bruker }) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();

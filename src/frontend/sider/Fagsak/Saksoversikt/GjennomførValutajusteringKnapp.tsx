@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FunctionComponent } from 'react';
+import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
@@ -18,7 +19,7 @@ const StyledButton = styled(Button)`
     margin-top: 1rem;
 `;
 
-export const GjennomførValutajusteringKnapp: React.FunctionComponent<Props> = ({ fagsakId }) => {
+export const GjennomførValutajusteringKnapp: FunctionComponent<Props> = ({ fagsakId }) => {
     const { request } = useHttp();
     const queryClient = useQueryClient();
     const [visFeilmelidng, settVisFeilmelding] = useState(false);

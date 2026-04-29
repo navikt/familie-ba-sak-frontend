@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
@@ -71,7 +72,7 @@ const StyledPersonIcon = styled(PersonIcon)`
     min-width: 1.5rem;
 `;
 
-const VilkårTabellRad: React.FC<IProps> = ({
+const VilkårTabellRad: FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultat,

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -32,7 +32,7 @@ interface IProps {
     className?: string;
 }
 
-const EøsPeriodeSkjema: React.FC<IProps> = ({
+const EøsPeriodeSkjema: FC<IProps> = ({
     periode,
     periodeFeilmeldingId,
     initielFom,

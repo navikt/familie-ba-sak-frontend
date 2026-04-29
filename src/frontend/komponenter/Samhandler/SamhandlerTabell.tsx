@@ -1,11 +1,11 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { Table } from '@navikt/ds-react';
 
 import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { formaterIdent, formaterTekstStorForbokstav } from '../../utils/formatter';
 
-export const SamhandlerTabell: React.FC<{ samhandler: ISamhandlerInfo }> = ({ samhandler }) => {
+export const SamhandlerTabell: FC<{ samhandler: ISamhandlerInfo }> = ({ samhandler }) => {
     return (
         <Table size="small">
             <Table.Header>

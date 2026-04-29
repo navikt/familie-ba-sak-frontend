@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -204,7 +205,7 @@ export function DokumentutsendingSkjema() {
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={'Velg årsak'}
                         value={skjema.felter.årsak.verdi || ''}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
                             skjema.felter.årsak.onChange(event.target.value as DokumentÅrsakPerson);
                         }}
                         size={'medium'}

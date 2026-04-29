@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 

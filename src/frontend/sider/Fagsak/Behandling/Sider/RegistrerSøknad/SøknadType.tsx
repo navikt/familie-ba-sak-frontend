@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
@@ -7,7 +7,7 @@ import styles from './SøknadType.module.css';
 import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const SøknadType: React.FunctionComponent = () => {
+export const SøknadType: FunctionComponent = () => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const { skjema } = useSøknadContext();

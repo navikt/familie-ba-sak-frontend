@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -33,7 +33,7 @@ const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
         return saksnrA - saksnrB;
     });
 
-export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({ ident, saker, minimalFagsak }) => {
+export const Infotrygdtabeller: FC<InfotrygdtabellerProps> = ({ ident, saker, minimalFagsak }) => {
     return (
         <>
             {minimalFagsak?.migreringsdato !== null && (

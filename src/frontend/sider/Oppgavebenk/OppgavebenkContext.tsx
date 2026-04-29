@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 
 import type { AxiosError } from 'axios';
 import { useNavigate } from 'react-router';

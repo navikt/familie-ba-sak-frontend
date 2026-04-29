@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Fieldset, HStack, Modal, Select, Spacer, Textarea, TextField, VStack } from '@navikt/ds-react';
 

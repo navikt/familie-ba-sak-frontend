@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { FormProvider } from 'react-hook-form';
 
 import { Alert, BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';

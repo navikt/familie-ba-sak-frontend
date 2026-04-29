@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import classNames from 'classnames';
 
@@ -15,7 +15,7 @@ interface IProps {
     barn: IBarnMedOpplysninger;
 }
 
-export const BarnMedOpplysninger: React.FunctionComponent<IProps> = ({ barn }) => {
+export const BarnMedOpplysninger: FunctionComponent<IProps> = ({ barn }) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknadContext();
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -36,7 +37,7 @@ const Container = styled.div`
     }
 `;
 
-const GeneriskVilkår: React.FC<IProps> = ({
+const GeneriskVilkår: FC<IProps> = ({
     person,
     vilkårFraConfig,
     vilkårResultater,

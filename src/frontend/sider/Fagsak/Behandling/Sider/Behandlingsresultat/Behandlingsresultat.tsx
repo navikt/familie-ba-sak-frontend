@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
@@ -59,7 +59,7 @@ interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
 
-const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
+const Behandlingsresultat: FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
     const { settÅpenBehandling } = useBehandlingContext();
 
     const fagsak = useFagsak();

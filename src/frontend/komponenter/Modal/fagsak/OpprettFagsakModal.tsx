@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Button, Modal } from '@navikt/ds-react';
 
 import { OpprettFagsakModalInnhold } from './OpprettFagsakModalInnhold';

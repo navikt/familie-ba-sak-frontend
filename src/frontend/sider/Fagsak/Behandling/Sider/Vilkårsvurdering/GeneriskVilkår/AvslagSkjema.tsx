@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import classNames from 'classnames';
 
@@ -18,7 +18,7 @@ interface IProps {
     settVisFeilmeldingerForEttVilkår: (visFeilmeldinger: boolean) => void;
 }
 
-const AvslagSkjema: React.FC<IProps> = ({
+const AvslagSkjema: FC<IProps> = ({
     redigerbartVilkår,
     settRedigerbartVilkår,
     visFeilmeldinger,

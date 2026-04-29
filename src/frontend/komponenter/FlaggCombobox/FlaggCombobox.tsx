@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect, useId, type KeyboardEvent, useLayoutEffect, useMemo } from 'react';
+import type { KeyboardEvent } from 'react';
+import { useState, useRef, useEffect, useId, useLayoutEffect, useMemo } from 'react';
+import * as React from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';

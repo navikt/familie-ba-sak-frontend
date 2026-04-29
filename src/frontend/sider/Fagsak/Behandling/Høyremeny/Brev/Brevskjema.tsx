@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -115,7 +115,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
         : opplysningsdokumenter.map(leggTilValuePåOption);
 
-    const onChangeFritekstKulepunkt = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstKulepunktId: number) =>
+    const onChangeFritekstKulepunkt = (event: ChangeEvent<HTMLTextAreaElement>, fritekstKulepunktId: number) =>
         skjema.felter.fritekstKulepunkter.validerOgSettFelt([
             ...skjema.felter.fritekstKulepunkter.verdi.map(fritekstKulepunkt => {
                 if (fritekstKulepunkt.verdi.id === fritekstKulepunktId) {
@@ -170,7 +170,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 </Tag>
                             </HStack>
                         }
-                        onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
+                        onChange={(event: ChangeEvent<BrevtypeSelect>): void => {
                             skjema.felter.brevmal.onChange(event.target.value);
                             skjema.felter.dokumenter.nullstill();
                         }}
@@ -230,7 +230,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekstHvertKulepunkt}
                                                         description={hjelpetekst}
-                                                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                                             onChangeFritekstKulepunkt(event, fritekstId)
                                                         }
                                                         error={skjema.visFeilmeldinger && fritekst.feilmelding}
@@ -294,7 +294,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                             className={styles.textarea}
                                             value={skjema.felter.fritekstAvsnitt.verdi}
                                             maxLength={maksLengdeFritekstAvsnitt}
-                                            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                                 skjema.felter.fritekstAvsnitt.validerOgSettFelt(event.target.value)
                                             }
                                             error={

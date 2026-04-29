@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import axe from '@axe-core/react';
 import * as Sentry from '@sentry/browser';

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ const IkonSirkel = styled.span<{
     color: white;
 `;
 
-const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
+const KontorIkonGrønn: FunctionComponent<IKontorIkonGrønn> = ({
     className,
     height = '24',
     width = '24',

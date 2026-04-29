@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FunctionComponent } from 'react';
 
 import styled from 'styled-components';
 
@@ -46,7 +46,7 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
     white-space: nowrap;
 `;
 
-const OppgaveList: React.FunctionComponent = () => {
+const OppgaveList: FunctionComponent = () => {
     const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgavebenkContext();
 
     const oppgaverPåDenneSiden = sorterteOppgaverader.slice((side - 1) * oppgaveSideLimit, side * oppgaveSideLimit);

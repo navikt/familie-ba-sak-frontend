@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { expect } from 'vitest';
 
 import { FalskIdentitet } from './FalskIdentitet';

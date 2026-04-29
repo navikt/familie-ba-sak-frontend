@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -23,7 +23,7 @@ interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
 }
 
-const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
+const PersonUtbetaling: FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
     const genererTekstForOrdinær = (fødselsdato: string) =>
         hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { isBefore, subDays } from 'date-fns';
 import styled from 'styled-components';
 

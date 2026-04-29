@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Modal } from '@navikt/ds-react';
 
 import { ModalType } from '../../../context/ModalContext';

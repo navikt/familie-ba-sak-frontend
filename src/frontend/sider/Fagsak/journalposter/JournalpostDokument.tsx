@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -24,7 +24,7 @@ interface IProps {
     tilgangsstyrtJournalpost: ITilgangsstyrtJournalpost;
 }
 
-export const JournalpostDokument: React.FC<IProps> = ({ dokument, hentForhåndsvisning, tilgangsstyrtJournalpost }) => {
+export const JournalpostDokument: FC<IProps> = ({ dokument, hentForhåndsvisning, tilgangsstyrtJournalpost }) => {
     const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {

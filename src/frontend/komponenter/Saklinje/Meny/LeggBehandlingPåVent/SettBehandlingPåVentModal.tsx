@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ interface IProps {
     lukkModal: () => void;
 }
 
-export const SettBehandlingPåVentModal: React.FC<IProps> = ({ lukkModal }) => {
+export const SettBehandlingPåVentModal: FC<IProps> = ({ lukkModal }) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const årsaker = hentVelgbareÅrsaker();
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(behandling.aktivSettPåVent);

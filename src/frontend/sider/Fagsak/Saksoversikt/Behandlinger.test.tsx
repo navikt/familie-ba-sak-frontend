@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react';
-import React from 'react';
 
 import { waitFor, waitForElementToBeRemoved, within } from '@testing-library/dom';
 import { delay, http, HttpResponse } from 'msw';

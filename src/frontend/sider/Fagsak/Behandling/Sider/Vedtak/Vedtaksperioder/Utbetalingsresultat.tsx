@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -20,7 +20,7 @@ const UtbetalingsperiodeDetalj = styled.div`
     }
 `;
 
-const Utbetalingsresultat: React.FC<IProps> = ({ utbetalingsperiodeDetaljer }) => {
+const Utbetalingsresultat: FC<IProps> = ({ utbetalingsperiodeDetaljer }) => {
     if (utbetalingsperiodeDetaljer.length === 0) return null;
 
     return (

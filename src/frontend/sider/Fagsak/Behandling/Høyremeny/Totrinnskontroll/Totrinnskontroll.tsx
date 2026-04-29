@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import type { AxiosError } from 'axios';
 import styled from 'styled-components';
@@ -37,9 +37,9 @@ export function Totrinnskontroll() {
 
     const { request } = useHttp();
 
-    const [innsendtVedtak, settInnsendtVedtak] = React.useState<Ressurs<IBehandling>>(byggTomRessurs());
+    const [innsendtVedtak, settInnsendtVedtak] = useState<Ressurs<IBehandling>>(byggTomRessurs());
 
-    const [forrigeState, settForrigeState] = React.useState(trinnPåBehandling);
+    const [forrigeState, settForrigeState] = useState(trinnPåBehandling);
 
     const nullstillFeilmelding = () => {
         const erFørsteSjekk = Object.entries(forrigeState).some(([sideId, trinn]) => {
@@ -58,7 +58,7 @@ export function Totrinnskontroll() {
         settForrigeState(trinnPåBehandling);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         nullstillFeilmelding();
     }, [trinnPåBehandling]);
 

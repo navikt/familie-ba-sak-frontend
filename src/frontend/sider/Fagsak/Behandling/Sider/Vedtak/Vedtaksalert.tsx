@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { Alert } from '@navikt/ds-react';
 
@@ -8,7 +8,7 @@ interface Props {
     åpenBehandling: IBehandling;
 }
 
-export const Vedtaksalert: React.FunctionComponent<Props> = ({ åpenBehandling }) => {
+export const Vedtaksalert: FunctionComponent<Props> = ({ åpenBehandling }) => {
     if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return <Alert variant="info">Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.</Alert>;
     }

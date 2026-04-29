@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { Tag } from '@navikt/ds-react';
 
@@ -8,7 +8,7 @@ interface IDødsfallTagProps {
     dødsfallDato: string;
 }
 
-const DødsfallTag: React.FC<IDødsfallTagProps> = ({ dødsfallDato }) => {
+const DødsfallTag: FC<IDødsfallTagProps> = ({ dødsfallDato }) => {
     const formatertDato = isoStringTilFormatertString({
         isoString: dødsfallDato,
         tilFormat: Datoformat.DATO,

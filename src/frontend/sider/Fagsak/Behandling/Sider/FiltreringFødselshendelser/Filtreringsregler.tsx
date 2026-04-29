@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -15,7 +15,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
+const Filtreringsregler: FC<IProps> = ({ åpenBehandling }) => {
     const fagsakId = useFagsakId();
     const navigate = useNavigate();
 

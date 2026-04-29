@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
 import { Alert, BodyShort, Box, Heading, HStack, Loader } from '@navikt/ds-react';
 
@@ -10,7 +10,7 @@ interface InfotrygdFagsakProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const InnholdContainer = ({ children }: { children: React.ReactNode }) => (
+const InnholdContainer = ({ children }: { children: ReactNode }) => (
     <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
         {children}
     </Box>

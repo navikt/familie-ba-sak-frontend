@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -21,7 +22,7 @@ interface IProps {
     slettVilkårId: string;
 }
 
-const FjernUtvidetBarnetrygdVilkår: React.FC<IProps> = ({ personIdent, slettVilkårId }) => {
+const FjernUtvidetBarnetrygdVilkår: FC<IProps> = ({ personIdent, slettVilkårId }) => {
     const { request } = useHttp();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const [visModal, settVisModal] = useState<boolean>(false);

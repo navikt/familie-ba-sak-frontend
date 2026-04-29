@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -18,7 +18,7 @@ const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
     height: calc(100vh - ${props => (props.$viserAlert ? fagsakHeaderHøydeRem + 5.25 : fagsakHeaderHøydeRem)}rem);
 `;
 
-const ManuellJournalføringContent: React.FC = () => {
+const ManuellJournalføringContent: FC = () => {
     const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalføringContext();
 
     switch (dataForManuellJournalføring.status) {
@@ -61,7 +61,7 @@ const ManuellJournalføringContent: React.FC = () => {
     }
 };
 
-const ManuellJournalføring: React.FC = () => {
+const ManuellJournalføring: FC = () => {
     return (
         <ManuellJournalføringProvider>
             <ManuellJournalføringContent />

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { describe, expect, test } from 'vitest';
 
 import { Historikk } from './Historikk';

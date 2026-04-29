@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
 import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
@@ -11,7 +11,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
+const VilkårsvurderingSkjema: FC<IProps> = ({ visFeilmeldinger }) => {
     const { fagsak } = useFagsakContext();
 
     const { samhandlerOrgnr } = useBehandlingContext();

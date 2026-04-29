@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { Select } from '@navikt/ds-react';
 
@@ -26,14 +26,7 @@ const lagÅrOptions = (år: number | undefined, antallÅrFrem: number, antallÅr
     });
 };
 
-const Årvelger: React.FC<ÅrProps> = ({
-    år,
-    settÅr,
-    antallÅrFrem,
-    antallÅrTilbake,
-    lesevisning = false,
-    feil = false,
-}) => {
+const Årvelger: FC<ÅrProps> = ({ år, settÅr, antallÅrFrem, antallÅrTilbake, lesevisning = false, feil = false }) => {
     const årOptions = lagÅrOptions(år, antallÅrFrem, antallÅrTilbake);
     return (
         <Select

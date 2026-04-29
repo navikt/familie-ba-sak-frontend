@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Select } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 

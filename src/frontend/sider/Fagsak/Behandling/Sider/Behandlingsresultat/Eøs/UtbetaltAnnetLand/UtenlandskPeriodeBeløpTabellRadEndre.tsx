@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC, ReactNode, ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -57,7 +57,7 @@ interface IProps {
     inneholderBarnSomSkalSkjermes?: boolean;
 }
 
-const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
+const UtenlandskPeriodeBeløpTabellRadEndre: FC<IProps> = ({
     skjema,
     tilgjengeligeBarn,
     status,
@@ -70,7 +70,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
 
     const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
 
-    const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
+    const visUtbetaltBeløpGruppeFeilmelding = (): ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
             return skjema.felter.beløp.feilmelding;
         } else if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -136,7 +136,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                             label={'Beløp per barn'}
                             readOnly={lesevisning}
                             value={skjema.felter.beløp?.verdi}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.beløp?.validerOgSettFelt(event.target.value)
                             }
                             size={'medium'}

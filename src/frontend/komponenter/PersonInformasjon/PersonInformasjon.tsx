@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { BodyShort, CopyButton, Heading, HStack } from '@navikt/ds-react';
 
 import RegistrerDødsfallDatoMeny from './RegistrerDødsfallDatoMeny';

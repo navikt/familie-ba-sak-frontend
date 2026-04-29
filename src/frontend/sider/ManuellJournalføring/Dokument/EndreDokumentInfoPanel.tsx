@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
@@ -13,7 +13,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-export const EndreDokumentInfoPanel: React.FC<IProps> = ({ dokument, visFeilmeldinger }) => {
+export const EndreDokumentInfoPanel: FC<IProps> = ({ dokument, visFeilmeldinger }) => {
     const { skjema, erLesevisning } = useManuellJournalføringContext();
 
     const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(

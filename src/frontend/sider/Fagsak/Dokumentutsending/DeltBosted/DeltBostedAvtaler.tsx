@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -39,7 +39,7 @@ const LeggTilAvtaleKnapp = styled(Button)`
     margin-bottom: 1rem;
 `;
 
-const DeltBostedAvtaler: React.FC<IProps> = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }) => {
+const DeltBostedAvtaler: FC<IProps> = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }) => {
     const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: IsoDatoString) => {

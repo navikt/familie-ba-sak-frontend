@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 

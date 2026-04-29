@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -17,7 +17,7 @@ const DokumentDataAlert = styled(Alert)`
     width: 100%;
 `;
 
-export const DokumentPanel: React.FC = () => {
+export const DokumentPanel: FC = () => {
     const { hentetDokument } = useManuellJournalføringContext();
     return (
         <DokumentDiv>

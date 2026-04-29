@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import type { BrevmottakerUseSkjema, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
@@ -9,7 +9,7 @@ interface IFagsakModalProps {
     lukkModal: () => void;
 }
 
-export const LeggTilBrevmottakerModalFagsak: React.FC<IFagsakModalProps> = ({ lukkModal }) => {
+export const LeggTilBrevmottakerModalFagsak: FC<IFagsakModalProps> = ({ lukkModal }) => {
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
 

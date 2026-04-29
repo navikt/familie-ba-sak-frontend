@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -27,7 +27,7 @@ const PersonCelle = styled.div`
     }
 `;
 
-const EndretUtbetalingAndelRad: React.FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
+const EndretUtbetalingAndelRad: FunctionComponent<IEndretUtbetalingAndelRadProps> = ({
     lagretEndretUtbetalingAndel,
     åpenBehandling,
 }) => {

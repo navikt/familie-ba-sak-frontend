@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Table } from '@navikt/ds-react';
 
 import type { Saksoversiktsbehandling } from './utils';

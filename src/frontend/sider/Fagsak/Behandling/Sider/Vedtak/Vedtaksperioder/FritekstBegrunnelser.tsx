@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC, ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -66,7 +66,7 @@ const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
-const FritekstBegrunnelser: React.FC = () => {
+const FritekstBegrunnelser: FC = () => {
     const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const {
@@ -81,7 +81,7 @@ const FritekstBegrunnelser: React.FC = () => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
+    const onChangeFritekst = (event: ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
             ...skjema.felter.fritekster.verdi.map(mapFritekst => {
                 if (mapFritekst.verdi.id === fritekstId) {
@@ -172,7 +172,7 @@ const FritekstBegrunnelser: React.FC = () => {
                                     resize
                                     value={fritekst.verdi.tekst}
                                     maxLength={makslengdeFritekst}
-                                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                         onChangeFritekst(event, fritekstId)
                                     }
                                     error={skjema.visFeilmeldinger && fritekst.feilmelding}

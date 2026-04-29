@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -46,7 +46,7 @@ interface IProps {
     barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
 }
 
-const BarnCheckbox: React.FC<IProps> = ({ barn, barnIBrevFelt }) => {
+const BarnCheckbox: FC<IProps> = ({ barn, barnIBrevFelt }) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (

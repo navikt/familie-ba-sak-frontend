@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { Label, Radio, RadioGroup } from '@navikt/ds-react';

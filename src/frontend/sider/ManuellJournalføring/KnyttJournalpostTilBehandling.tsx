@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -23,7 +23,7 @@ const StyledAlert = styled(Alert)`
     margin-top: var(--ax-space-32);
 `;
 
-export const KnyttJournalpostTilBehandling: React.FC = () => {
+export const KnyttJournalpostTilBehandling: FC = () => {
     const {
         skjema,
         hentSorterteJournalføringsbehandlinger,

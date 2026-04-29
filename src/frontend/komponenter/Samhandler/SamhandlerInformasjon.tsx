@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent } from 'react';
 
 import styled from 'styled-components';
 
@@ -39,7 +39,7 @@ const FlexBox = styled.div`
     gap: 0.25rem;
 `;
 
-const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({ samhandler, somOverskrift = false }) => {
+const SamhandlerInformasjon: FunctionComponent<IProps> = ({ samhandler, somOverskrift = false }) => {
     const navn = samhandler.navn;
     const formattertOrgNummer = formaterIdent(samhandler.orgNummer);
     return (

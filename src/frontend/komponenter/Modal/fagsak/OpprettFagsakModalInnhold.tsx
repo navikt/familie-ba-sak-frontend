@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Button, Modal, Skeleton, VStack } from '@navikt/ds-react';
 
 import { FagsakerProvider } from './context/FagsakerContext';

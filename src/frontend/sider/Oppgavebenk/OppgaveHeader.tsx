@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FunctionComponent } from 'react';
 
 import { Heading, VStack } from '@navikt/ds-react';
 
 import FilterSkjema from './FilterSkjema';
 
-const OppgaveHeader: React.FunctionComponent = () => {
+const OppgaveHeader: FunctionComponent = () => {
     return (
         <VStack gap="space-8">
             <Heading size={'medium'} level={'2'}>

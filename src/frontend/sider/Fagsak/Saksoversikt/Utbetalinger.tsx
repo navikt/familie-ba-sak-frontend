@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 
 import styled from 'styled-components';
 
@@ -26,7 +26,7 @@ interface IUtbetalingerProps {
     vedtaksperiode?: Vedtaksperiode;
 }
 
-const Utbetalinger: React.FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
+const Utbetalinger: FC<IUtbetalingerProps> = ({ vedtaksperiode }) => {
     if (vedtaksperiode?.vedtaksperiodetype !== Vedtaksperiodetype.UTBETALING) return null;
 
     const utbetalingsperiodeDetaljerGruppertPåPerson =

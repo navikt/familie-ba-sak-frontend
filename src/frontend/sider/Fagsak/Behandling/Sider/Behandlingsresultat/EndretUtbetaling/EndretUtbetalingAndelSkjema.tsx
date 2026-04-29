@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FunctionComponent, ChangeEvent } from 'react';
 import { useEffect } from 'react';
 
 import styled from 'styled-components';
@@ -58,7 +58,7 @@ interface IEndretUtbetalingAndelSkjemaProps {
     slettEndretUtbetaling: () => void;
 }
 
-const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
+const EndretUtbetalingAndelSkjema: FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
     åpenBehandling,
     lukkSkjema,
     skjema,
@@ -245,7 +245,7 @@ const EndretUtbetalingAndelSkjema: React.FunctionComponent<IEndretUtbetalingAnde
                                 ? skjema.felter.begrunnelse.verdi
                                 : ''
                         }
-                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
                             skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
                         }}
                     />
