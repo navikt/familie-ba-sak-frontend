@@ -1,4 +1,4 @@
-import type { FC, ChangeEvent, FocusEvent, ReactNode } from 'react';
+import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -68,7 +68,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const VilkårTabellRadEndre: FC<IProps> = ({
+const VilkårTabellRadEndre = ({
     person,
     vilkårFraConfig,
     vilkårResultat,
@@ -79,7 +79,7 @@ const VilkårTabellRadEndre: FC<IProps> = ({
     settEkspandertVilkår,
     settFokusPåKnapp,
     lesevisning,
-}) => {
+}: IProps) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();

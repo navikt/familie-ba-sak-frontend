@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -58,7 +57,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const Valutakurser: FC<IProps> = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }) => {
+const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }: IProps) => {
     const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
     const { request } = useHttp();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =

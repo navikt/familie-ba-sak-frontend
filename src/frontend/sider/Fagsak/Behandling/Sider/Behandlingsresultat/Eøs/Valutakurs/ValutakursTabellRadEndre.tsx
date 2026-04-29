@@ -1,4 +1,4 @@
-import type { FC, ReactNode, ChangeEvent } from 'react';
+import type { ReactNode, ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -59,7 +59,7 @@ interface IProps {
     inneholderBarnSomSkalSkjermes?: boolean;
 }
 
-const ValutakursTabellRadEndre: FC<IProps> = ({
+const ValutakursTabellRadEndre = ({
     vurderingsform,
     skjema,
     tilgjengeligeBarn,
@@ -71,7 +71,7 @@ const ValutakursTabellRadEndre: FC<IProps> = ({
     erManuellInputAvKurs,
     åpenBehandling,
     inneholderBarnSomSkalSkjermes,
-}) => {
+}: IProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
 
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;

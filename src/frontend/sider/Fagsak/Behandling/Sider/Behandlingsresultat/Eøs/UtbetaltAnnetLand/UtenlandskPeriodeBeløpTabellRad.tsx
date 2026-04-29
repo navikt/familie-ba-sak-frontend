@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect } from 'react';
 
 import { Table } from '@navikt/ds-react';
@@ -20,7 +19,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const UtenlandskPeriodeBeløpRad: FC<IProps> = ({ utenlandskPeriodeBeløp, åpenBehandling, visFeilmeldinger }) => {
+const UtenlandskPeriodeBeløpRad = ({ utenlandskPeriodeBeløp, åpenBehandling, visFeilmeldinger }: IProps) => {
     const barn: OptionType[] = utenlandskPeriodeBeløp.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),

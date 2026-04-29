@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -167,10 +166,7 @@ const Trinn = styled.div`
     }
 `;
 
-const TrinnStatus: FC<{
-    kontrollertStatus: KontrollertStatus;
-    navn: string;
-}> = ({ kontrollertStatus, navn }) => {
+const TrinnStatus = ({ kontrollertStatus, navn }: { kontrollertStatus: KontrollertStatus; navn: string }) => {
     return (
         <Trinn>
             {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && <ØyeGrå height={24} width={24} />}

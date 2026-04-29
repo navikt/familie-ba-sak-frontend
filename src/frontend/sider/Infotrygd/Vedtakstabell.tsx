@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
@@ -51,7 +49,7 @@ const visDelytelseTom = (stønad: IInfotrygdStønad) => {
     });
 };
 
-export const Vedtakstabell: FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
+export const Vedtakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
     const sakerMedVedtak = saker.filter(sak => sak.stønad);
 
     return (

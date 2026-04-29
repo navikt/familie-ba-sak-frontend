@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { Fieldset } from '@navikt/ds-react';
@@ -32,14 +30,14 @@ interface IProps {
     className?: string;
 }
 
-const EøsPeriodeSkjema: FC<IProps> = ({
+const EøsPeriodeSkjema = ({
     periode,
     periodeFeilmeldingId,
     initielFom,
     visFeilmeldinger,
     lesevisning,
     className = '',
-}) => {
+}: IProps) => {
     const finnÅrTilbakeTil = (): number => {
         return new Date().getFullYear() - new Date(initielFom.verdi).getFullYear();
     };

@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -39,7 +37,7 @@ const LeggTilAvtaleKnapp = styled(Button)`
     margin-bottom: 1rem;
 `;
 
-const DeltBostedAvtaler: FC<IProps> = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }) => {
+const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
     const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: IsoDatoString) => {

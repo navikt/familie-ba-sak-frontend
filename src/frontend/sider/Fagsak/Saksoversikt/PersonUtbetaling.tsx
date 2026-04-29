@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, HStack } from '@navikt/ds-react';
@@ -23,7 +21,7 @@ interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
 }
 
-const PersonUtbetaling: FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
+const PersonUtbetaling = ({ utbetalingsperiodeDetaljer }: IPersonUtbetalingProps) => {
     const genererTekstForOrdinær = (fødselsdato: string) =>
         hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
 

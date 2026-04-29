@@ -1,4 +1,4 @@
-import type { ReactNode, FunctionComponent, PropsWithChildren } from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 
 import styled from 'styled-components';
@@ -42,7 +42,7 @@ const Navigering = styled.div`
     }
 `;
 
-const Skjemasteg: FunctionComponent<IProps> = ({
+const Skjemasteg = ({
     children,
     className,
     forrigeKnappTittel = 'Forrige steg',
@@ -56,7 +56,7 @@ const Skjemasteg: FunctionComponent<IProps> = ({
     skalDisableNesteKnapp = false,
     skalViseForrigeKnapp = true,
     feilmelding = '',
-}) => {
+}: IProps) => {
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 
     useEffect(() => {

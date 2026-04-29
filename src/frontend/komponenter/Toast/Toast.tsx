@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
@@ -21,7 +20,7 @@ const Container = styled.div`
     }
 `;
 
-const Toast: FC<{ toastId: string; toast: IToast }> = ({ toastId, toast }) => {
+const Toast = ({ toastId, toast }: { toastId: string; toast: IToast }) => {
     const { toasts, settToasts } = useAppContext();
     const toastRef = useRef<HTMLDivElement>(null);
 

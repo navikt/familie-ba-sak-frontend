@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -37,13 +36,7 @@ const Container = styled.div`
     }
 `;
 
-const GeneriskVilkår: FC<IProps> = ({
-    person,
-    vilkårFraConfig,
-    vilkårResultater,
-    visFeilmeldinger,
-    generiskVilkårKey,
-}) => {
+const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
     const toggles = useFeatureToggles();
     const { behandling, vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();

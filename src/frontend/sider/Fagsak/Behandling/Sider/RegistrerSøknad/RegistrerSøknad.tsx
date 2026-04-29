@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { Alert, BodyShort, Button, ErrorSummary, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -19,7 +17,7 @@ import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import styles from './RegistrerSøknad.module.css';
 
-export const RegistrerSøknad: FC = () => {
+export const RegistrerSøknad = () => {
     const { fagsak } = useFagsakContext();
     const { behandling, vurderErLesevisning } = useBehandlingContext();
 

@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useState } from 'react';
 
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
@@ -11,7 +10,7 @@ interface IRegistrerDødsfallDato {
     person: IGrunnlagPerson;
 }
 
-const RegistrerDødsfallDatoMeny: FC<IRegistrerDødsfallDato> = ({ person }) => {
+const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
     const [visModal, settVisModal] = useState<boolean>(false);
 
     return (

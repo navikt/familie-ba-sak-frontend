@@ -1,4 +1,4 @@
-import type { ReactNode, FC } from 'react';
+import type { ReactNode } from 'react';
 
 import styled from 'styled-components';
 
@@ -21,7 +21,7 @@ const MarginedDiv = styled.div`
     margin-right: 1rem;
 `;
 
-export const DeltagerInfo: FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
+export const DeltagerInfo = ({ ikon, navn, undertittel, ident }: DeltagerProps) => {
     return (
         <div>
             <HSplit>

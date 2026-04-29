@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { Alert, BodyShort, Checkbox, Heading, Table, VStack } from '@navikt/ds-react';
@@ -23,7 +21,7 @@ const StyledAlert = styled(Alert)`
     margin-top: var(--ax-space-32);
 `;
 
-export const KnyttJournalpostTilBehandling: FC = () => {
+export const KnyttJournalpostTilBehandling = () => {
     const {
         skjema,
         hentSorterteJournalføringsbehandlinger,

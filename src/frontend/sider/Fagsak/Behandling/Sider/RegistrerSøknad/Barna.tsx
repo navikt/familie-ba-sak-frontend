@@ -1,5 +1,3 @@
-import type { FunctionComponent } from 'react';
-
 import { differenceInMilliseconds } from 'date-fns';
 
 import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label, VStack } from '@navikt/ds-react';
@@ -14,7 +12,7 @@ import { isoStringTilDate } from '../../../../../utils/dato';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const Barna: FunctionComponent = () => {
+export const Barna = () => {
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();
     const lesevisning = vurderErLesevisning();

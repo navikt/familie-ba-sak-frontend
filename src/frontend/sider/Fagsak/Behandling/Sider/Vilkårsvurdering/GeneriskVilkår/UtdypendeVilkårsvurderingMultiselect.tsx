@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
@@ -78,13 +78,13 @@ function mapOgLeggTilUtdypendeVilkårsvurdering(option: OptionType, vilkår: IVi
         : vilkår;
 }
 
-export const UtdypendeVilkårsvurderingMultiselect: FC<Props> = ({
+export const UtdypendeVilkårsvurderingMultiselect = ({
     redigerbartVilkår,
     validerOgSettRedigerbartVilkår,
     erLesevisning,
     personType,
     feilhåndtering,
-}) => {
+}: Props) => {
     const utdypendeVilkårsvurderingAvhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
         personType,
         vilkårType: redigerbartVilkår.verdi.vilkårType,

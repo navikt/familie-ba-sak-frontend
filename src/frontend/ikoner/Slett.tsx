@@ -1,12 +1,10 @@
-import type { FunctionComponent } from 'react';
-
 interface ISlett {
     className?: string;
     height?: number;
     width?: number;
 }
 
-const Slett: FunctionComponent<ISlett> = ({ className, height = 24, width = 24 }) => {
+const Slett = ({ className, height = 24, width = 24 }: ISlett) => {
     return (
         <svg
             aria-labelledby={'Slett'}

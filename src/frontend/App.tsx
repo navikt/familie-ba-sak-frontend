@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect } from 'react';
 
 import '@navikt/ds-css';
@@ -27,7 +26,7 @@ const queryClient = new QueryClient({
     },
 });
 
-const App: FC = () => {
+const App = () => {
     useStartUmami();
 
     useEffect(() => {

@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { Alert, Heading } from '@navikt/ds-react';
@@ -33,7 +31,7 @@ const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
         return saksnrA - saksnrB;
     });
 
-export const Infotrygdtabeller: FC<InfotrygdtabellerProps> = ({ ident, saker, minimalFagsak }) => {
+export const Infotrygdtabeller = ({ ident, saker, minimalFagsak }: InfotrygdtabellerProps) => {
     return (
         <>
             {minimalFagsak?.migreringsdato !== null && (

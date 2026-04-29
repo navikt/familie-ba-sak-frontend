@@ -1,11 +1,9 @@
-import type { FunctionComponent } from 'react';
-
 import { Heading, Textarea, VStack } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const Annet: FunctionComponent = () => {
+export const Annet = () => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { skjema } = useSøknadContext();
     const lesevisning = vurderErLesevisning();

@@ -1,4 +1,3 @@
-import type { FunctionComponent } from 'react';
 import { useState } from 'react';
 
 import { isAfter } from 'date-fns';
@@ -73,7 +72,7 @@ interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
 
-const SimuleringTabell: FunctionComponent<ISimuleringProps> = ({ simulering }) => {
+const SimuleringTabell = ({ simulering }: ISimuleringProps) => {
     const {
         fomDatoNestePeriode,
         fom,

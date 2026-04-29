@@ -1,5 +1,3 @@
-import type { FunctionComponent } from 'react';
-
 import classNames from 'classnames';
 
 import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
@@ -15,7 +13,7 @@ interface IProps {
     barn: IBarnMedOpplysninger;
 }
 
-export const BarnMedOpplysninger: FunctionComponent<IProps> = ({ barn }) => {
+export const BarnMedOpplysninger = ({ barn }: IProps) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknadContext();
     const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();

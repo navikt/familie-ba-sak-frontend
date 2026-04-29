@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useState, useEffect } from 'react';
 
 import { Table } from '@navikt/ds-react';
@@ -19,7 +18,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const ValutakursTabellRad: FC<IProps> = ({ valutakurs, åpenBehandling, visFeilmeldinger }) => {
+const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: IProps) => {
     const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] = useState(false);
 
     const barn: OptionType[] = valutakurs.barnIdenter.map(barn => ({

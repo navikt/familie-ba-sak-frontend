@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, Button, Fieldset, Modal, Select } from '@navikt/ds-react';
@@ -27,7 +25,7 @@ interface IProps {
     lukkModal: () => void;
 }
 
-export const SettBehandlingPåVentModal: FC<IProps> = ({ lukkModal }) => {
+export const SettBehandlingPåVentModal = ({ lukkModal }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const årsaker = hentVelgbareÅrsaker();
     const { skjema, kanSendeSkjema, onSubmit } = useSettPåVentSkjema(behandling.aktivSettPåVent);

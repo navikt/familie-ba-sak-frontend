@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import Toast from './Toast';
@@ -13,7 +11,7 @@ const Container = styled.div`
     z-index: 9999;
 `;
 
-const Toasts: FC = () => {
+const Toasts = () => {
     const { toasts } = useAppContext();
 
     return (

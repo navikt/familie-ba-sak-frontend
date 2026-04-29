@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
@@ -35,7 +33,7 @@ interface StatusProps {
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
 }
 
-const PeriodeStatus: FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValutakurser }) => {
+const PeriodeStatus = ({ valutakurs, vurderingsstrategiForValutakurser }: StatusProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
@@ -56,7 +54,7 @@ const PeriodeStatus: FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValut
     }
 };
 
-export const StatusOgBarnValutakurs: FC<Props> = ({ valutakurs, åpenBehandling }) => (
+export const StatusOgBarnValutakurs = ({ valutakurs, åpenBehandling }: Props) => (
     <HStack wrap={false} align="center" gap="space-16">
         <PeriodeStatus
             valutakurs={valutakurs}

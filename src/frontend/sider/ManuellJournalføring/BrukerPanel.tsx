@@ -1,4 +1,4 @@
-import type { FC, ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
@@ -49,7 +49,7 @@ const StyledAlert = styled(Alert)`
     margin-top: 2rem;
 `;
 
-export const BrukerPanel: FC = () => {
+export const BrukerPanel = () => {
     const {
         skjema,
         endreBrukerOgSettNormalFagsak,

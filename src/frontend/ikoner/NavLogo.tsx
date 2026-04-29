@@ -1,12 +1,10 @@
-import type { FunctionComponent } from 'react';
-
 interface INavLogo {
     className?: string;
     height?: number;
     width?: number;
 }
 
-const NavLogo: FunctionComponent<INavLogo> = ({ className, height = 20, width = 65 }) => {
+const NavLogo = ({ className, height = 20, width = 65 }: INavLogo) => {
     return (
         <svg
             width={width}

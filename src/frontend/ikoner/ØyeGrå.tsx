@@ -1,12 +1,10 @@
-import type { FunctionComponent } from 'react';
-
 interface IØyeGrå {
     className?: string;
     height?: number;
     width?: number;
 }
 
-const ØyeGrå: FunctionComponent<IØyeGrå> = ({ className, height, width }) => {
+const ØyeGrå = ({ className, height, width }: IØyeGrå) => {
     return (
         <svg
             aria-labelledby={'Øye grå'}

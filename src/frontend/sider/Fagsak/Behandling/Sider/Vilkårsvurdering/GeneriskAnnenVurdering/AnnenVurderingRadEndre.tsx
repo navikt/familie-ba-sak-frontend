@@ -1,4 +1,4 @@
-import type { FC, FocusEvent } from 'react';
+import type { FocusEvent } from 'react';
 import { useState } from 'react';
 
 import styled from 'styled-components';
@@ -36,7 +36,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const AnnenVurderingRadEndre: FC<IProps> = ({
+const AnnenVurderingRadEndre = ({
     person,
     annenVurderingConfig,
     visFeilmeldinger,
@@ -44,7 +44,7 @@ const AnnenVurderingRadEndre: FC<IProps> = ({
     redigerbartAnnenVurdering,
     settRedigerbartAnnenVurdering,
     settEkspandertAnnenVurdering,
-}) => {
+}: IProps) => {
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();

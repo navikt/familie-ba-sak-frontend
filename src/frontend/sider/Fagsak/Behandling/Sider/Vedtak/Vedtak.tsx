@@ -1,4 +1,3 @@
-import type { FunctionComponent } from 'react';
 import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
@@ -41,7 +40,7 @@ export const BehandlingKorrigertAlert = styled(Alert)`
     margin-bottom: 1.5rem;
 `;
 
-const Vedtak: FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
+const Vedtak = ({ åpenBehandling, bruker }: IVedtakProps) => {
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();

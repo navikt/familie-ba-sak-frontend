@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
@@ -21,7 +20,7 @@ const StyledExpansionCard = styled(ExpansionCard)`
     width: 100%;
 `;
 
-export const DokumentVelger: FC<IDokumentVelgerProps> = ({ dokument, visFeilmeldinger }) => {
+export const DokumentVelger = ({ dokument, visFeilmeldinger }: IDokumentVelgerProps) => {
     const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } = useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);
 

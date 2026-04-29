@@ -1,4 +1,4 @@
-import type { ReactNode, FC } from 'react';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
@@ -40,7 +40,7 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): ReactNode {
     );
 }
 
-const FagsakDeltagerSøk: FC = () => {
+const FagsakDeltagerSøk = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
     const { skalObfuskereData } = useAppContext();

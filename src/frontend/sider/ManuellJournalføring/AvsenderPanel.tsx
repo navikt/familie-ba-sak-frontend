@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
@@ -17,7 +16,7 @@ const StyledExpansionCard = styled(ExpansionCard)`
     margin-top: 1rem;
 `;
 
-export const AvsenderPanel: FC = () => {
+export const AvsenderPanel = () => {
     const { skjema, erLesevisning, settAvsenderLikBruker, tilbakestillAvsender, erDigitaltInnsendtDokument } =
         useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);

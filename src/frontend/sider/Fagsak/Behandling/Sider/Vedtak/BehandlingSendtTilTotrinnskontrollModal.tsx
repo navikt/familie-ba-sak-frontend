@@ -1,4 +1,4 @@
-import type { SetStateAction, Dispatch, FunctionComponent } from 'react';
+import type { SetStateAction, Dispatch } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -10,7 +10,7 @@ interface Props {
     settVisModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const BehandlingSendtTilTotrinnskontrollModal: FunctionComponent<Props> = ({ settVisModal }) => {
+export const BehandlingSendtTilTotrinnskontrollModal = ({ settVisModal }: Props) => {
     const navigate = useNavigate();
     const fagsakId = useFagsakId();
 

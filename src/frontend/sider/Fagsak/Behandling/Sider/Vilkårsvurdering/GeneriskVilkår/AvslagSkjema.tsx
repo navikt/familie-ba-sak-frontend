@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import classNames from 'classnames';
 
 import { BodyShort, Checkbox, Fieldset, VStack } from '@navikt/ds-react';
@@ -18,12 +16,12 @@ interface IProps {
     settVisFeilmeldingerForEttVilkår: (visFeilmeldinger: boolean) => void;
 }
 
-const AvslagSkjema: FC<IProps> = ({
+const AvslagSkjema = ({
     redigerbartVilkår,
     settRedigerbartVilkår,
     visFeilmeldinger,
     settVisFeilmeldingerForEttVilkår,
-}) => {
+}: IProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 

@@ -1,4 +1,4 @@
-import type { FC, ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -66,7 +66,7 @@ const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
-const FritekstBegrunnelser: FC = () => {
+const FritekstBegrunnelser = () => {
     const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
     const {

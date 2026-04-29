@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect } from 'react';
 
 import { BodyShort, Table } from '@navikt/ds-react';
@@ -18,7 +17,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const KompetanseTabellRad: FC<IProps> = ({ kompetanse, åpenBehandling, visFeilmeldinger }) => {
+const KompetanseTabellRad = ({ kompetanse, åpenBehandling, visFeilmeldinger }: IProps) => {
     const barn: OptionType[] = kompetanse.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),

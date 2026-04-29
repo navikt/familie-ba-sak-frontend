@@ -1,4 +1,3 @@
-import type { FunctionComponent } from 'react';
 import { Activity, useEffect, useState } from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
@@ -30,7 +29,7 @@ interface IVilkårsvurderingSkjemaNormal {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaNormal: FunctionComponent<IVilkårsvurderingSkjemaNormal> = ({ visFeilmeldinger }) => {
+const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingSkjemaNormal) => {
     const toggles = useFeatureToggles();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const { vurderErLesevisning, erMigreringsbehandling, settÅpenBehandling, aktivSettPåVent, behandling } =

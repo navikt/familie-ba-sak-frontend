@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { BodyShort } from '@navikt/ds-react';
 
 import { type IRestValutakurs } from '../../../../../../../typer/eøsPerioder';
@@ -9,7 +7,7 @@ interface IStatusBarnCelleOgPeriodeCelleProps {
     valutakurs: IRestValutakurs;
 }
 
-export const PeriodeValutakurs: FC<IStatusBarnCelleOgPeriodeCelleProps> = ({ valutakurs }) => (
+export const PeriodeValutakurs = ({ valutakurs }: IStatusBarnCelleOgPeriodeCelleProps) => (
     <BodyShort size="small">
         {isoMånedPeriodeTilFormatertString({
             periode: {

@@ -1,4 +1,4 @@
-import type { FC, ReactNode, ChangeEvent } from 'react';
+import type { ReactNode, ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -57,7 +57,7 @@ interface IProps {
     inneholderBarnSomSkalSkjermes?: boolean;
 }
 
-const UtenlandskPeriodeBeløpTabellRadEndre: FC<IProps> = ({
+const UtenlandskPeriodeBeløpTabellRadEndre = ({
     skjema,
     tilgjengeligeBarn,
     status,
@@ -65,7 +65,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre: FC<IProps> = ({
     toggleForm,
     slettUtenlandskPeriodeBeløp,
     inneholderBarnSomSkalSkjermes,
-}) => {
+}: IProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
 
     const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;

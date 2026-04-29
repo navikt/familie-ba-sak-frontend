@@ -1,4 +1,4 @@
-import type { ReactNode, FC } from 'react';
+import type { ReactNode } from 'react';
 
 import styled from 'styled-components';
 
@@ -22,12 +22,12 @@ interface IProps {
     Legend?: ReactNode;
 }
 
-const MålformVelger: FC<IProps> = ({
+const MålformVelger = ({
     målformFelt,
     visFeilmeldinger,
     erLesevisning,
     Legend = <Heading size={'medium'} level={'2'} children={'Målform'} />,
-}) => {
+}: IProps) => {
     const radioOnChange = (målform: Målform) => {
         målformFelt.validerOgSettFelt(målform);
     };

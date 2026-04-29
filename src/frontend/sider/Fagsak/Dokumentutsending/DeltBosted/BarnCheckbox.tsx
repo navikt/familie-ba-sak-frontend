@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -49,12 +47,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const BarnCheckbox: FC<IProps> = ({
-    barn,
-    barnMedDeltBostedFelt,
-    avtalerOmDeltBostedPerBarnFelt,
-    visFeilmeldinger,
-}) => {
+const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (

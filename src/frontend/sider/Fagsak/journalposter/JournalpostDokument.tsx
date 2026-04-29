@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
@@ -24,7 +22,7 @@ interface IProps {
     tilgangsstyrtJournalpost: ITilgangsstyrtJournalpost;
 }
 
-export const JournalpostDokument: FC<IProps> = ({ dokument, hentForhåndsvisning, tilgangsstyrtJournalpost }) => {
+export const JournalpostDokument = ({ dokument, hentForhåndsvisning, tilgangsstyrtJournalpost }: IProps) => {
     const { journalpost, journalpostTilgang } = tilgangsstyrtJournalpost;
 
     const hentPdfDokument = (dokumentId: string | undefined) => {

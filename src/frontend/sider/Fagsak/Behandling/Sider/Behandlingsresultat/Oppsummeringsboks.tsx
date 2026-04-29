@@ -1,4 +1,4 @@
-import { type FunctionComponent, type PropsWithChildren, useEffect, useState } from 'react';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -39,7 +39,7 @@ const UtbetalingsbeløpStack = styled(VStack)`
     padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
 `;
 
-const UtbetalingsbeløpRad: FunctionComponent<PropsWithChildren> = ({ children }) => (
+const UtbetalingsbeløpRad = ({ children }: PropsWithChildren) => (
     <HGrid columns="1fr 8rem 5rem" gap={'space-8'}>
         {children}
     </HGrid>
@@ -104,13 +104,13 @@ const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) =>
     return eøsPeriodeStatus.every(eøsPeriode => eøsPeriode.status === EøsPeriodeStatus.OK);
 };
 
-const Oppsummeringsboks: FunctionComponent<IProps> = ({
+const Oppsummeringsboks = ({
     utbetalingsperiode,
     aktivEtikett,
     kompetanser,
     utbetaltAnnetLandBeløp,
     valutakurser,
-}) => {
+}: IProps) => {
     const { request } = useHttp();
     const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();

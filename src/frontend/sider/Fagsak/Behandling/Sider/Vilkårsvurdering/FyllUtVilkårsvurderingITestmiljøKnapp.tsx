@@ -1,5 +1,3 @@
-import type { FunctionComponent } from 'react';
-
 import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -11,7 +9,7 @@ interface IProps {
     behandlingId: number;
 }
 
-export const FyllUtVilkårsvurderingITestmiljøKnapp: FunctionComponent<IProps> = ({ behandlingId }) => {
+export const FyllUtVilkårsvurderingITestmiljøKnapp = ({ behandlingId }: IProps) => {
     const { request } = useHttp();
 
     const fyllUtVilkårsvurdering = () => {

@@ -1,5 +1,3 @@
-import type { FunctionComponent } from 'react';
-
 import { Button, Fieldset, HStack, Select, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -11,7 +9,7 @@ import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/Dato
 import type { IPar } from '../../typer/common';
 import type { IsoDatoString } from '../../utils/dato';
 
-const FilterSkjema: FunctionComponent = () => {
+const FilterSkjema = () => {
     const { hentOppgaver, oppgaver, oppgaveFelter, settVerdiPåOppgaveFelt, tilbakestillOppgaveFelter, validerSkjema } =
         useOppgavebenkContext();
 

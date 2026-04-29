@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect } from 'react';
 
 import { useLocation } from 'react-router';
@@ -29,7 +28,7 @@ const HentSakerButton = styled(Button)`
     margin-bottom: auto;
 `;
 
-export const Infotrygd: FC = () => {
+export const Infotrygd = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
 
     const location = useLocation();

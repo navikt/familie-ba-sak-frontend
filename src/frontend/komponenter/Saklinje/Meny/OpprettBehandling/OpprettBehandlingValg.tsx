@@ -1,4 +1,4 @@
-import type { FC, ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -93,13 +93,13 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
     value: BehandlingÅrsak | '';
 }
 
-const OpprettBehandlingValg: FC<IProps> = ({
+const OpprettBehandlingValg = ({
     skjema,
     minimalFagsak,
     erLesevisning = false,
     manuellJournalfør = false,
     bruker = undefined,
-}) => {
+}: IProps) => {
     const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak

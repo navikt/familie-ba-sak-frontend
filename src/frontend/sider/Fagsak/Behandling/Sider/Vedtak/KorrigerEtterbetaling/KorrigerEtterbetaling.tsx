@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import { DocPencilIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
@@ -13,7 +11,7 @@ interface IKorrigerEtterbetaling {
     erLesevisning: boolean;
 }
 
-const KorrigerEtterbetaling: FC<IKorrigerEtterbetaling> = ({ korrigertEtterbetaling }) => {
+const KorrigerEtterbetaling = ({ korrigertEtterbetaling }: IKorrigerEtterbetaling) => {
     const { åpneModal } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
     return (

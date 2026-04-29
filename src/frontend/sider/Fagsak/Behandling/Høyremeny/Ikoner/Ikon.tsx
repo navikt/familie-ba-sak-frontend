@@ -1,4 +1,4 @@
-import type { FunctionComponent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export interface IIkonProps {
     color?: string;
@@ -8,7 +8,7 @@ export interface IIkonProps {
     children?: ReactNode | ReactNode[];
 }
 
-const Ikon: FunctionComponent<IIkonProps> = ({ children, width = 16, height = 16, viewBox = 24 }) => {
+const Ikon = ({ children, width = 16, height = 16, viewBox = 24 }: IIkonProps) => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox={`0 0 ${viewBox} ${viewBox}`}>
             {children}

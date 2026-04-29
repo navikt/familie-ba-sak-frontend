@@ -1,8 +1,6 @@
-import type { FC } from 'react';
-
 import { BodyShort, Modal } from '@navikt/ds-react';
 
-const UgyldigSesjon: FC = () => {
+const UgyldigSesjon = () => {
     return (
         <Modal header={{ heading: 'Ugyldig sesjon', size: 'small', closeButton: false }} width={'small'}>
             <Modal.Body>

@@ -1,5 +1,3 @@
-import type { FC } from 'react';
-
 import styled from 'styled-components';
 
 import {
@@ -45,7 +43,7 @@ const InfoIkon = styled(InformationSquareFillIcon)`
     min-width: 1.5rem;
 `;
 
-const StatusIkon: FC<IProps> = ({ status, title }) => {
+const StatusIkon = ({ status, title }: IProps) => {
     switch (status) {
         case Status.OK:
             return <OkIkon title={title} />;

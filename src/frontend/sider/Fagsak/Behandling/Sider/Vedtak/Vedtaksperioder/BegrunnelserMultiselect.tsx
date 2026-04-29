@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
@@ -28,7 +27,7 @@ const GroupLabel = styled.div`
     color: black;
 `;
 
-const BegrunnelserMultiselect: FC<IProps> = ({ vedtaksperiodetype }) => {
+const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 

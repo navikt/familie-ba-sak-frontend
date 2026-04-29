@@ -1,4 +1,4 @@
-import type { FunctionComponent, ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { useEffect } from 'react';
 
 import styled from 'styled-components';
@@ -58,14 +58,14 @@ interface IEndretUtbetalingAndelSkjemaProps {
     slettEndretUtbetaling: () => void;
 }
 
-const EndretUtbetalingAndelSkjema: FunctionComponent<IEndretUtbetalingAndelSkjemaProps> = ({
+const EndretUtbetalingAndelSkjema = ({
     åpenBehandling,
     lukkSkjema,
     skjema,
     settFelterTilLagredeVerdier,
     oppdaterEndretUtbetaling,
     slettEndretUtbetaling,
-}) => {
+}: IEndretUtbetalingAndelSkjemaProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 

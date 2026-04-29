@@ -1,8 +1,8 @@
-import type { FC, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { HStack } from '@navikt/ds-react';
 
-const Knapperekke: FC<PropsWithChildren> = ({ children }) => {
+const Knapperekke = ({ children }: PropsWithChildren) => {
     return (
         <HStack marginBlock="space-16 space-0" justify="space-between">
             {children}
