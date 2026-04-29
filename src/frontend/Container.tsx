@@ -7,6 +7,7 @@ import { useHttp } from '@navikt/familie-http';
 
 import Styles from './Container.module.css';
 import { useAppContext } from './context/AppContext';
+import { useAuthContext } from './context/AuthContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import { FeilmeldingModal } from './komponenter/Modal/fagsak/FeilmeldingModal';
@@ -22,7 +23,8 @@ import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 
 export function Container() {
-    const { autentisert, appInfoModal } = useAppContext();
+    const { autentisert } = useAuthContext();
+    const { appInfoModal } = useAppContext();
     const { systemetLaster } = useHttp();
 
     return (
