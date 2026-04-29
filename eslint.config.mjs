@@ -98,10 +98,14 @@ export default [
                     types: {
                         'React.FC':
                             'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
+                        FC: 'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
                         'React.FunctionComponent':
+                            'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
+                        FunctionComponent:
                             'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
                         'React.VFC':
                             'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
+                        VFC: 'Annotate the props on the parameter instead: (const X = ({ X, Y }: Props) => ...).',
                     },
                 },
             ],
