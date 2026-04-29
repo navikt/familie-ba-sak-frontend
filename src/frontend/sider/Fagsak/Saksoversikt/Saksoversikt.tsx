@@ -12,9 +12,8 @@ import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKna
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
-import type { IBehandling } from '../../../typer/behandling';
 import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
-import { behandlingKategori, BehandlingKategori, behandlingUnderkategori } from '../../../typer/behandlingstema';
+import { BehandlingKategori } from '../../../typer/behandlingstema';
 import { FagsakStatus } from '../../../typer/fagsak';
 import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
 import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
@@ -137,13 +136,3 @@ export function Saksoversikt() {
         </Box>
     );
 }
-
-export const sakstype = (behandling?: IBehandling) => {
-    if (!behandling) {
-        return 'Ikke satt';
-    }
-
-    return `${behandling?.kategori ? behandlingKategori[behandling?.kategori] : behandling?.kategori}, ${
-        behandling?.underkategori ? behandlingUnderkategori[behandling?.underkategori] : behandling?.underkategori
-    }`;
-};

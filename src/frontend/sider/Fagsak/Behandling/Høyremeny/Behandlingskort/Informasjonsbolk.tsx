@@ -3,22 +3,20 @@ import * as React from 'react';
 import { BodyShort, HGrid } from '@navikt/ds-react';
 import { TextNeutral } from '@navikt/ds-tokens/dist/tokens';
 
-interface IProps {
+interface Props {
     label: string;
     tekst: string;
     tekstHover?: string;
     tekstFarge?: string;
 }
 
-const Informasjonsbolk: React.FC<IProps> = ({ label, tekst, tekstHover, tekstFarge }) => {
+export function Informasjonsbolk({ label, tekst, tekstHover, tekstFarge }: Props) {
     return (
-        <HGrid columns={2}>
+        <HGrid columns={'1.25fr 1fr'} gap={'space-8'} align={'center'}>
             <BodyShort>{label}</BodyShort>
-            <BodyShort weight="semibold" style={{ color: tekstFarge ?? TextNeutral }} title={tekstHover}>
+            <BodyShort weight={'semibold'} style={{ color: tekstFarge ?? TextNeutral }} title={tekstHover}>
                 {tekst}
             </BodyShort>
         </HGrid>
     );
-};
-
-export default Informasjonsbolk;
+}

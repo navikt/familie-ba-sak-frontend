@@ -411,7 +411,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     <Button
                         variant={'secondary'}
                         id={'forhandsvis-vedtaksbrev'}
-                        size={'medium'}
+                        size={'small'}
                         disabled={skjemaErLåst}
                         onClick={() => {
                             if (kanSendeSkjema()) {
@@ -428,7 +428,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 )}
                 <Button
                     variant={'primary'}
-                    size={'medium'}
+                    size={'small'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {

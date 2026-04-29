@@ -48,7 +48,7 @@ export function Høyremeny() {
                     onClick={() => settErÅpen(prev => !prev)}
                 />
                 <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                    <VStack width={'25rem'}>
+                    <VStack width={'clamp(20rem, 20vw, 25rem)'}>
                         <Behandlingskort />
                         <Tabs value={tab} onChange={tab => settTab(tab as Tab)} iconPosition={'top'}>
                             <Tabvelger />
