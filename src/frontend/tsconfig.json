@@ -8,8 +8,7 @@
       "DOM.Iterable",
       "ESNext"
     ],
-    /* TODO: bytt til react-jsx*/
-    "jsx": "react",
+    "jsx": "react-jsx",
 
     /* Emit */
     "noEmit": true,
