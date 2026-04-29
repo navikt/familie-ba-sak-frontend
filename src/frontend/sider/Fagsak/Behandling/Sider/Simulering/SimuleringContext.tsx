@@ -100,7 +100,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     }, [åpenBehandling]);
 
     useEffect(() => {
-        if (erFeilutbetaling) {
+        if (erFeilutbetaling || avregningsperioder.length > 0) {
             request<undefined, boolean>({
                 method: 'GET',
                 url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
