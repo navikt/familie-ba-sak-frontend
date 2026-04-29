@@ -27,6 +27,9 @@ interface Props extends React.PropsWithChildren {
 }
 
 interface BehandlingContextValue {
+    /**
+     * @Deprecated - Erstattes av {@link useErLesevisning}.
+     */
     vurderErLesevisning: (sjekkTilgangTilEnhet?: boolean, skalIgnorereOmEnhetErMidlertidig?: boolean) => boolean;
     leggTilBesøktSide: (besøktSide: SideId) => void;
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
@@ -122,6 +125,9 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         return behandling?.steg;
     };
 
+    /**
+     * @Deprecated - Erstattes av {@link useErLesevisning}.
+     */
     const vurderErLesevisning = (sjekkTilgangTilEnhet = true, skalIgnorereOmEnhetErMidlertidig = false): boolean => {
         const åpenBehandlingData = behandling;
         if (

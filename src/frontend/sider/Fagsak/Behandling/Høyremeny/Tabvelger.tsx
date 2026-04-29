@@ -8,14 +8,15 @@ import IkonTotrinnskontroll from './Ikoner/IkonTotrinnskontroll';
 import { Tab } from './TabContextProvider';
 import styles from './Tabvelger.module.css';
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
+import { useBehandling } from '../../../../hooks/useBehandling';
+import { useErLesevisning } from '../../../../hooks/useErLesevisning';
 import { Behandlingstype } from '../../../../typer/behandling';
-import { useBehandlingContext } from '../context/BehandlingContext';
 
 export function Tabvelger() {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
     const skalViseTotrinnskontroll = useSkalViseTotrinnskontroll();
 
-    const erLesevisning = vurderErLesevisning();
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
