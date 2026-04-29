@@ -86,7 +86,12 @@ export function Personlinje({ bruker, fagsak }: Props) {
                             {fagsakeier.navn} ({fagsakeier.alder} år)
                         </BodyShort>
                         <Divider />
-                        <FalskIdentitet harFalskIdentitet={fagsakeier.harFalskIdentitet} />
+                        {fagsakeier.harFalskIdentitet && (
+                            <HStack align={'center'} gap={'space-12 space-16'}>
+                                <FalskIdentitet erHeading={false} />
+                                <Divider />
+                            </HStack>
+                        )}
                         <HStack align={'center'} gap={'space-4'}>
                             {fagsakeier.ident}
                             <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />

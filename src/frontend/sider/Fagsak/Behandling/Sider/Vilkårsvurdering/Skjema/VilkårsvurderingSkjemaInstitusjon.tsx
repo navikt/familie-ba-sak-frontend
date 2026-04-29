@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, Bleed, Box, HStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
 import { useSamhandlerRequest } from '../../../../../../komponenter/Samhandler/useSamhandler';
 import { PersonType } from '../../../../../../typer/person';
@@ -21,7 +21,7 @@ interface IProps {
 }
 
 const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ visFeilmeldinger }) => {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
@@ -58,7 +58,7 @@ const VilkårsvurderingSkjemaInstitusjon: React.FunctionComponent<IProps> = ({ v
                 </>
             )}
             <HStack paddingBlock={'space-56 space-32'} justify={'space-between'} className={styles.personLinje}>
-                <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
+                <PersonInformasjon person={personResultat.person} />
             </HStack>
             <Box paddingInline={'space-56 space-0'}>
                 {personResultat.person.registerhistorikk ? (
