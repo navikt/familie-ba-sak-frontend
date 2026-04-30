@@ -28,7 +28,7 @@
       "@context/*": ["./context/*"],
       "@hooks/*": ["./hooks/*"],
       "@ikoner/*": ["./ikoner/*"],
-      "@komponeter/*": ["./komponeter/*"],
+      "@komponenter/*": ["./komponenter/*"],
       "@public/*": ["./public/*"],
       "@sider/*": ["./sider/*"],
       "@testutils/*": ["./testutils/*"],
