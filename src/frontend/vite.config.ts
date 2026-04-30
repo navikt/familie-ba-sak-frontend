@@ -4,6 +4,7 @@ import process from 'process';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => {
     try {
@@ -22,6 +23,7 @@ export default defineConfig(({ mode }) => {
             },
             plugins: [
                 reactPlugin(),
+                tsconfigPaths(),
                 mode === 'prod' || mode === 'preprod' ? sentryPlugin() : undefined, // Sentry må være siste plugin
             ],
         };
