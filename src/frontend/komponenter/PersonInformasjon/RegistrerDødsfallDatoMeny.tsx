@@ -4,6 +4,7 @@ import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 
 import { RegistrerDødsfallDatoModal } from './RegistrerDødsfallDatoModal';
+import { Skjermstørrelse, useSkjermstørrelse } from '../../hooks/useSkjermstørrelse';
 import type { IGrunnlagPerson } from '../../typer/person';
 
 interface IRegistrerDødsfallDato {
@@ -11,6 +12,8 @@ interface IRegistrerDødsfallDato {
 }
 
 const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
+    const skjermsstørrelse = useSkjermstørrelse();
+
     const [visModal, settVisModal] = useState<boolean>(false);
 
     return (
@@ -21,6 +24,7 @@ const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
                         aria-label="Åpne valgmeny"
                         icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
                         variant="tertiary"
+                        size={skjermsstørrelse > Skjermstørrelse['2XL'] ? 'medium' : 'small'}
                     />
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
