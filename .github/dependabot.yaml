@@ -85,6 +85,7 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/plugin-react"
+          - "vite-tsconfig-paths"
       express:
         patterns:
           - "express"
