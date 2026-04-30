@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import React, { useState } from 'react';
+import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -68,7 +68,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const VilkårTabellRadEndre: React.FC<IProps> = ({
+const VilkårTabellRadEndre = ({
     person,
     vilkårFraConfig,
     vilkårResultat,
@@ -79,7 +79,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
     settEkspandertVilkår,
     settFokusPåKnapp,
     lesevisning,
-}) => {
+}: IProps) => {
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
@@ -212,7 +212,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             redigerbartVilkår.verdi.vurderesEtter ? redigerbartVilkår.verdi.vurderesEtter : undefined
                         }
                         label={'Vurderes etter'}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
                             settRedigerbartVilkår({
                                 ...redigerbartVilkår,
                                 verdi: {
@@ -326,7 +326,7 @@ const VilkårTabellRadEndre: React.FC<IProps> = ({
                             ? redigerbartVilkår.verdi.begrunnelse.feilmelding
                             : ''
                     }
-                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                    onChange={(event: FocusEvent<HTMLTextAreaElement>) => {
                         validerOgSettRedigerbartVilkår({
                             ...redigerbartVilkår,
                             verdi: {

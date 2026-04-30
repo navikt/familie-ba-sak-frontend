@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -15,7 +15,7 @@ const StyledButton = styled(Button)`
     align-self: start;
 `;
 
-const SammensattKontrollsak: React.FC = () => {
+const SammensattKontrollsak = () => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { sammensattKontrollsak, opprettEllerOppdaterSammensattKontrollsak, feilmelding } =
         useSammensattKontrollsakContext();

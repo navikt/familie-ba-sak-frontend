@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 
 interface Props {

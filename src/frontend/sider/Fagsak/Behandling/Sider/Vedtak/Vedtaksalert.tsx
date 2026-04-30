@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Alert } from '@navikt/ds-react';
 
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../../typer/behandling';
@@ -8,7 +6,7 @@ interface Props {
     åpenBehandling: IBehandling;
 }
 
-export const Vedtaksalert: React.FunctionComponent<Props> = ({ åpenBehandling }) => {
+export const Vedtaksalert = ({ åpenBehandling }: Props) => {
     if (åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD) {
         return <Alert variant="info">Du er inne på en migreringsbehandling og det sendes ingen vedtaksbrev.</Alert>;
     }

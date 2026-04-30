@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 
 import styled from 'styled-components';
 
@@ -22,7 +22,7 @@ interface VedtaksperioderProps {
     åpenBehandling: IBehandling;
 }
 
-const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling }) => {
+const Vedtaksperioder = ({ åpenBehandling }: VedtaksperioderProps) => {
     const { vedtaksperioder } = useVedtaksperioderContext();
 
     const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(
@@ -54,11 +54,15 @@ const Vedtaksperioder: React.FC<VedtaksperioderProps> = ({ åpenBehandling }) =>
     );
 };
 
-const GrupperteVedtaksperioder: React.FC<{
+const GrupperteVedtaksperioder = ({
+    vedtaksperioderMedBegrunnelser,
+    overskrift,
+    åpenBehandling,
+}: {
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
     åpenBehandling: IBehandling;
-}> = ({ vedtaksperioderMedBegrunnelser, overskrift, åpenBehandling }) => {
+}) => {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
         return <></>;
     }

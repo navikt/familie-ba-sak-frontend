@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useNavigate } from 'react-router';
 
 import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';

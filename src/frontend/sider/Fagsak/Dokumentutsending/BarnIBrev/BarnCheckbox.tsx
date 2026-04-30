@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -46,7 +44,7 @@ interface IProps {
     barnIBrevFelt: Felt<IBarnMedOpplysninger[]>;
 }
 
-const BarnCheckbox: React.FC<IProps> = ({ barn, barnIBrevFelt }) => {
+const BarnCheckbox = ({ barn, barnIBrevFelt }: IProps) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (

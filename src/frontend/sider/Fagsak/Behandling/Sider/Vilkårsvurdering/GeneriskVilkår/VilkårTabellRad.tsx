@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
@@ -71,13 +71,7 @@ const StyledPersonIcon = styled(PersonIcon)`
     min-width: 1.5rem;
 `;
 
-const VilkårTabellRad: React.FC<IProps> = ({
-    person,
-    vilkårFraConfig,
-    vilkårResultat,
-    visFeilmeldinger,
-    settFokusPåKnapp,
-}) => {
+const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilmeldinger, settFokusPåKnapp }: IProps) => {
     const { vurderErLesevisning, behandling, aktivSettPåVent } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 

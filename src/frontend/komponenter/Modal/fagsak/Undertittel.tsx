@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { BodyShort } from '@navikt/ds-react';
 
 import type { IBaseFagsak } from '../../../typer/fagsak';

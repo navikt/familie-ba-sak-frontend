@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useContext, useState, useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useState, useMemo } from 'react';
 
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
 

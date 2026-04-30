@@ -1,5 +1,4 @@
 import { Component, type PropsWithChildren, type ReactNode } from 'react';
-import React from 'react';
 
 import * as Sentry from '@sentry/browser';
 

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren, SetStateAction, Dispatch } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
@@ -16,7 +17,7 @@ import type {
     IRestSammensattKontrollsak,
 } from '../../../../../../typer/sammensatt-kontrollsak';
 
-interface ISammensattKontrollsakProps extends React.PropsWithChildren {
+interface ISammensattKontrollsakProps extends PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
@@ -26,7 +27,7 @@ interface SammensattKontrollsakContextValue {
     feilmelding: string | undefined;
     sammensattKontrollsak: IRestSammensattKontrollsak | undefined;
     erSammensattKontrollsak: boolean;
-    settErSammensattKontrollsak: React.Dispatch<React.SetStateAction<boolean>>;
+    settErSammensattKontrollsak: Dispatch<SetStateAction<boolean>>;
     skalViseSammensattKontrollsakMenyValg: () => boolean;
 }
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import classNames from 'classnames';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 

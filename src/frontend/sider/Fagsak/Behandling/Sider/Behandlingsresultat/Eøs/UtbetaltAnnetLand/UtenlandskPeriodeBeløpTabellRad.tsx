@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 
 import { Table } from '@navikt/ds-react';
 
@@ -19,7 +19,7 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({ utenlandskPeriodeBeløp, åpenBehandling, visFeilmeldinger }) => {
+const UtenlandskPeriodeBeløpRad = ({ utenlandskPeriodeBeløp, åpenBehandling, visFeilmeldinger }: IProps) => {
     const barn: OptionType[] = utenlandskPeriodeBeløp.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
@@ -39,14 +39,14 @@ const UtenlandskPeriodeBeløpRad: React.FC<IProps> = ({ utenlandskPeriodeBeløp,
         barnIUtenlandskPeriodeBeløp: barn,
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (åpenBehandling) {
             nullstillSkjema();
             settErUtenlandskPeriodeBeløpEkspandert(false);
         }
     }, [åpenBehandling]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (visFeilmeldinger && erUtenlandskPeriodeBeløpEkspandert) {
             kanSendeSkjema();
         }

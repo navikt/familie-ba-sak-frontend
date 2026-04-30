@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Dokumentvelger } from './Dokumentvelger';
 import KanSøkeFritekst from './KanSøkeFritekst';
 import { useDokumentutsendingContext } from '../DokumentutsendingContext';

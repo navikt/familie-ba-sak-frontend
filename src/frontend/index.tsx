@@ -1,6 +1,5 @@
-import React from 'react';
+import { StrictMode } from 'react';
 
-import axe from '@axe-core/react';
 import * as Sentry from '@sentry/browser';
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
@@ -25,13 +24,16 @@ if (!erLokal()) {
 }
 
 if (erLokal()) {
-    axe(React, ReactDOM, 1000);
+    (async () => {
+        const [{ default: axe }, { default: React }] = await Promise.all([import('@axe-core/react'), import('react')]);
+        axe(React, ReactDOM, 1000);
+    })();
 }
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
 root.render(
-    <React.StrictMode>
+    <StrictMode>
         <App />
-    </React.StrictMode>
+    </StrictMode>
 );

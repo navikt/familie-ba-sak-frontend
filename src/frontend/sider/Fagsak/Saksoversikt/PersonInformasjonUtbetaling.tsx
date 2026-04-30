@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { BodyShort, CopyButton, HStack } from '@navikt/ds-react';
 
 import { useBruker } from '../../../hooks/useBruker';

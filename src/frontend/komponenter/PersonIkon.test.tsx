@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { describe, test, expect } from 'vitest';
 
 import { kjønnType } from '@navikt/familie-typer';

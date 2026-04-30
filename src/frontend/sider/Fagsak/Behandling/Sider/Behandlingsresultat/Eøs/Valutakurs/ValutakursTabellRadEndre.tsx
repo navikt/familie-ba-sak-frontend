@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { ReactNode, ChangeEvent } from 'react';
 
 import styled from 'styled-components';
 
@@ -59,7 +59,7 @@ interface IProps {
     inneholderBarnSomSkalSkjermes?: boolean;
 }
 
-const ValutakursTabellRadEndre: React.FC<IProps> = ({
+const ValutakursTabellRadEndre = ({
     vurderingsform,
     skjema,
     tilgjengeligeBarn,
@@ -71,7 +71,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
     erManuellInputAvKurs,
     åpenBehandling,
     inneholderBarnSomSkalSkjermes,
-}) => {
+}: IProps) => {
     const { vurderErLesevisning } = useBehandlingContext();
 
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
@@ -83,7 +83,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
         !!inneholderBarnSomSkalSkjermes ||
         (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
-    const visKursGruppeFeilmelding = (): React.ReactNode => {
+    const visKursGruppeFeilmelding = (): ReactNode => {
         if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
             return skjema.felter.valutakode.feilmelding;
         } else if (skjema.felter.valutakursdato?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -167,7 +167,7 @@ const ValutakursTabellRadEndre: React.FC<IProps> = ({
                             label={'Valutakurs'}
                             readOnly={erLesevisning || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
                             }
                         />

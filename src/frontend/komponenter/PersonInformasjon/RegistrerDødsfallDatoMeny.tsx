@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
@@ -10,8 +10,8 @@ interface IRegistrerDødsfallDato {
     person: IGrunnlagPerson;
 }
 
-const RegistrerDødsfallDatoMeny: React.FC<IRegistrerDødsfallDato> = ({ person }) => {
-    const [visModal, settVisModal] = React.useState<boolean>(false);
+const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
+    const [visModal, settVisModal] = useState<boolean>(false);
 
     return (
         <>

@@ -1,4 +1,5 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -25,7 +26,7 @@ import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
 import { erAdresseBeskyttet } from '../../utils/validators';
 import { PersonIkon } from '../PersonIkon';
 
-function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
+function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): ReactNode {
     return (
         <PersonIkon
             fagsakType={fagsakDeltager.fagsakType}
@@ -39,12 +40,12 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
     );
 }
 
-const FagsakDeltagerSøk: React.FC = () => {
+const FagsakDeltagerSøk = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
     const { skalObfuskereData } = useAppContext();
 
-    const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
+    const [fagsakDeltagere, settFagsakDeltagere] = useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
 
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 

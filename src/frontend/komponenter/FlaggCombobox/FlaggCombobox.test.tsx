@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { fireEvent } from '@testing-library/dom';
 import { vi, beforeAll, afterAll } from 'vitest';

@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { describe, expect } from 'vitest';
 

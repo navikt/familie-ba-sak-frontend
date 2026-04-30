@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
@@ -26,7 +26,7 @@ const StyledModal = styled(Modal)`
 /**
  * @Deprecated - Erstattes av {@link ForhåndsvisPdfModal}.
  */
-const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, onRequestOpen, pdfdata }) => {
+const PdfVisningModal = ({ onRequestClose, onRequestOpen, pdfdata }: IPdfVisningModalProps) => {
     useEffect(() => {
         if (onRequestOpen) {
             onRequestOpen();
@@ -54,7 +54,7 @@ const IframePdfVisning = styled.iframe`
     width: 100%;
 `;
 
-const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
+const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
     switch (pdfdata.status) {
         case RessursStatus.HENTER:
             return (

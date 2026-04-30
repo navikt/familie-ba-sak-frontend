@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Route, Routes } from 'react-router';
 import { describe, expect, test } from 'vitest';

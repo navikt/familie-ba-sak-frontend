@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useId, type KeyboardEvent, useLayoutEffect, useMemo } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
@@ -254,7 +254,7 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         }
     }
 
-    function handleOnKeyDownPressed(event: KeyboardEvent<HTMLInputElement>) {
+    function handleOnKeyDownPressed(event: React.KeyboardEvent<HTMLInputElement>) {
         if (readOnly) {
             return;
         }
@@ -315,7 +315,7 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         }
     }
 
-    function handleOnChipRemoved(event: React.MouseEvent<HTMLButtonElement>, valToRemove: T) {
+    function handleOnChipRemoved(event: React.MouseEvent, valToRemove: T) {
         if (!props.isMulti || readOnly) {
             return;
         }

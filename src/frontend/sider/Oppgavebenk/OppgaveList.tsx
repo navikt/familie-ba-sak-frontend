@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
@@ -46,7 +44,7 @@ const StyledColumnHeader = styled(Table.ColumnHeader)`
     white-space: nowrap;
 `;
 
-const OppgaveList: React.FunctionComponent = () => {
+const OppgaveList = () => {
     const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgavebenkContext();
 
     const oppgaverPåDenneSiden = sorterteOppgaverader.slice((side - 1) * oppgaveSideLimit, side * oppgaveSideLimit);

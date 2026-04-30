@@ -1,4 +1,5 @@
-import React, { type Ref, useMemo } from 'react';
+import type { Ref } from 'react';
+import { useMemo } from 'react';
 
 import { VALUTAKODE_TIL_LABEL, VALUTAKODE_TIL_REGIONKODE, type Valutakode } from './valuta';
 import { FlaggCombobox } from '../FlaggCombobox';

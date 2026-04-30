@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ActionMenu } from '@navikt/ds-react';
 
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';

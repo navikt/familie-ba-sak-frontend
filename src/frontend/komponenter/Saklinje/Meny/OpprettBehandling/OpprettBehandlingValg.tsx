@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
@@ -93,13 +93,13 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
     value: BehandlingÅrsak | '';
 }
 
-const OpprettBehandlingValg: React.FC<IProps> = ({
+const OpprettBehandlingValg = ({
     skjema,
     minimalFagsak,
     erLesevisning = false,
     manuellJournalfør = false,
     bruker = undefined,
-}) => {
+}: IProps) => {
     const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
@@ -152,7 +152,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 readOnly={erLesevisning}
                 name={'Behandling'}
                 label={'Velg type behandling'}
-                onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
+                onChange={(event: ChangeEvent<BehandlingstypeSelect>): void => {
                     behandlingstype.onChange(event.target.value);
                 }}
             >
@@ -210,14 +210,13 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                 )}
             </Select>
-
             {behandlingsårsak.erSynlig && (
                 <Select
                     {...behandlingsårsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     readOnly={erLesevisning}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
-                    onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
+                    onChange={(event: ChangeEvent<BehandlingÅrsakSelect>): void => {
                         behandlingsårsak.onChange(event.target.value);
                     }}
                 >
@@ -238,7 +237,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     })}
                 </Select>
             )}
-
             {erHelmanuellMigrering && erOpprettBehandlingSkjema(skjema) && skjema.felter.valgteBarn?.erSynlig && (
                 <UNSAFE_Combobox
                     label={'Legg til juridiske barn for migrering'}

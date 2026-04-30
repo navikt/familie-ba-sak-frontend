@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { Table } from '@navikt/ds-react';
@@ -43,12 +41,7 @@ const TabellHeader = styled(Table.HeaderCell)`
     }
 `;
 
-const AnnenVurderingTabell: React.FC<IProps> = ({
-    person,
-    annenVurderingConfig,
-    andreVurderinger,
-    visFeilmeldinger,
-}) => {
+const AnnenVurderingTabell = ({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }: IProps) => {
     return (
         <Table>
             <Table.Header>

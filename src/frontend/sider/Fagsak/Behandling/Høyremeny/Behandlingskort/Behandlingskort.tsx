@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { BodyShort, Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { TextDangerSubtle, TextInfoSubtle, TextNeutral, TextSuccessSubtle } from '@navikt/ds-tokens/dist/tokens';
 import type { AkselColoredBorderToken } from '@navikt/ds-tokens/types';

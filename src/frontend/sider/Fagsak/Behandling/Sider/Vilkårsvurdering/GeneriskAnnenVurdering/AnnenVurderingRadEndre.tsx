@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type { FocusEvent } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -35,7 +36,7 @@ const Knapperad = styled.div`
     margin: 1rem 0;
 `;
 
-const AnnenVurderingRadEndre: React.FC<IProps> = ({
+const AnnenVurderingRadEndre = ({
     person,
     annenVurderingConfig,
     visFeilmeldinger,
@@ -43,7 +44,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
     redigerbartAnnenVurdering,
     settRedigerbartAnnenVurdering,
     settEkspandertAnnenVurdering,
-}) => {
+}: IProps) => {
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
 
     const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
@@ -192,7 +193,7 @@ const AnnenVurderingRadEndre: React.FC<IProps> = ({
                             ? redigerbartAnnenVurdering.verdi.begrunnelse.feilmelding
                             : ''
                     }
-                    onChange={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                    onChange={(event: FocusEvent<HTMLTextAreaElement>) => {
                         validerOgSettRedigerbartAnnenVurdering({
                             ...redigerbartAnnenVurdering,
                             verdi: {

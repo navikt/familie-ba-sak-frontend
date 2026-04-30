@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { VStack } from '@navikt/ds-react';
@@ -19,7 +17,7 @@ const Container = styled.article`
     }
 `;
 
-const OppgavebenkInnhold: React.FunctionComponent = () => {
+const OppgavebenkInnhold = () => {
     return (
         <Container>
             <VStack gap="space-16">
@@ -30,7 +28,7 @@ const OppgavebenkInnhold: React.FunctionComponent = () => {
     );
 };
 
-export const Oppgavebenk: React.FC = () => {
+export const Oppgavebenk = () => {
     return (
         <OppgavebenkProvider>
             <OppgavebenkInnhold />

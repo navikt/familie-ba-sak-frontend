@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
@@ -28,7 +26,7 @@ const StyledAlert = styled(Alert)`
     margin-bottom: 2rem;
 `;
 
-const Simulering: React.FunctionComponent<ISimuleringProps> = ({ åpenBehandling }) => {
+const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
     const {
         hentSkjemadata,
         onSubmit,

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 
 import { ArrowUndoIcon, CalculatorIcon, ChevronDownIcon, StarsEuIcon, TasklistStartIcon } from '@navikt/aksel-icons';
@@ -40,7 +39,7 @@ export function Vedtaksmeny() {
 
     const fagsakType = fagsak.fagsakType;
 
-    const [visKorrigerVedtakModal, settVisKorrigerVedtakModal] = React.useState<boolean>(false);
+    const [visKorrigerVedtakModal, settVisKorrigerVedtakModal] = useState<boolean>(false);
     const [visEndreEndringstidspunktModal, settVisEndreEndringstidspunktModal] = useState(false);
 
     return (

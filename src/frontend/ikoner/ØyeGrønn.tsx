@@ -1,12 +1,10 @@
-import * as React from 'react';
-
 interface IØyeGrønn {
     className?: string;
     height?: number;
     width?: number;
 }
 
-const ØyeGrønn: React.FunctionComponent<IØyeGrønn> = ({ className, height, width }) => {
+const ØyeGrønn = ({ className, height, width }: IØyeGrønn) => {
     return (
         <svg
             aria-labelledby={'Øye grønn'}

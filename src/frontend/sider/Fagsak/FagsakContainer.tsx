@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Navigate, Route, Routes } from 'react-router';
 
 import { Alert, Box, HStack, Loader } from '@navikt/ds-react';

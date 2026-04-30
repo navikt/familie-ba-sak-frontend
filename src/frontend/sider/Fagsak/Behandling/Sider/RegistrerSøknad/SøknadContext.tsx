@@ -1,4 +1,5 @@
-import React, { createContext, useContext } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -22,7 +23,7 @@ import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-interface Props extends React.PropsWithChildren {
+interface Props extends PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
@@ -59,7 +60,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     const fagsak = useFagsak();
     const navigate = useNavigate();
 
-    const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
+    const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
@@ -93,7 +94,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         skjemanavn: 'Registrer søknad',
     });
 
-    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
+    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
 
     const tilbakestillSøknad = () => {
         nullstillSkjema();
@@ -127,7 +128,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         settSøknadErLastetFraBackend(false);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         tilbakestillSøknad();
     }, [bruker]);
 

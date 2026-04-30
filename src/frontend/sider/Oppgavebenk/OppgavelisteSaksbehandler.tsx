@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { BodyShort, Button, HGrid } from '@navikt/ds-react';
 
@@ -14,7 +14,7 @@ interface IOppgavelisteSaksbehandler {
     saksbehandler: Saksbehandler;
 }
 
-const OppgavelisteSaksbehandler: React.FunctionComponent<IOppgavelisteSaksbehandler> = ({ oppgave, saksbehandler }) => {
+const OppgavelisteSaksbehandler = ({ oppgave, saksbehandler }: IOppgavelisteSaksbehandler) => {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgavebenkContext();
     const { sjekkTilgang } = useAppContext();
     const oppgaveRef = useRef<IOppgave | null>(null);

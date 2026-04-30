@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
 
 import { useLocation } from 'react-router';
 
@@ -22,7 +23,7 @@ import { useFagsakContext } from '../../FagsakContext';
 import type { ITrinn, SideId } from '../Sider/sider';
 import { hentTrinnForBehandling, KontrollertStatus } from '../Sider/sider';
 
-interface Props extends React.PropsWithChildren {
+interface Props extends PropsWithChildren {
     behandling: IBehandling;
 }
 
@@ -73,7 +74,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const saksbehandler = useSaksbehandler();
 
     const location = useLocation();
-    const [trinnPåBehandling, settTrinnPåBehandling] = React.useState<{ [sideId: string]: ITrinn }>({});
+    const [trinnPåBehandling, settTrinnPåBehandling] = useState<{ [sideId: string]: ITrinn }>({});
 
     useEffect(() => {
         const siderPåBehandling = hentTrinnForBehandling(behandling);

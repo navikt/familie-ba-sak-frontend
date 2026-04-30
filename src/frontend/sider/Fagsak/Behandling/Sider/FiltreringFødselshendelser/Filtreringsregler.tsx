@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useNavigate } from 'react-router';
 
 import { BodyShort, List } from '@navikt/ds-react';
@@ -15,7 +13,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
+const Filtreringsregler = ({ åpenBehandling }: IProps) => {
     const fagsakId = useFagsakId();
     const navigate = useNavigate();
 

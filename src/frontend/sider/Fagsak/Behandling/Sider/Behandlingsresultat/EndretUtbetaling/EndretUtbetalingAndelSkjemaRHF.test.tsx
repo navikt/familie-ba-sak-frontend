@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import { type DefaultValues, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';

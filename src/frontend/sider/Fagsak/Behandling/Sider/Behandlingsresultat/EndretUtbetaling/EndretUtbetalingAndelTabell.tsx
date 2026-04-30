@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import { Heading, Table } from '@navikt/ds-react';
@@ -19,9 +17,7 @@ const EndredePerioderContainer = styled.div`
     margin-top: 6rem;
 `;
 
-const EndretUtbetalingAndelTabell: React.FunctionComponent<IEndretUtbetalingAndelTabellProps> = ({
-    åpenBehandling,
-}) => {
+const EndretUtbetalingAndelTabell = ({ åpenBehandling }: IEndretUtbetalingAndelTabellProps) => {
     const toggles = useFeatureToggles();
 
     const endretUtbetalingAndeler = åpenBehandling.endretUtbetalingAndeler;

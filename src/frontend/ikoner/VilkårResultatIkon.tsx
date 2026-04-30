@@ -1,5 +1,3 @@
-import React from 'react';
-
 import StatusIkon, { Status } from './StatusIkon';
 import type { ResultatBegrunnelse } from '../typer/vilkår';
 import { Resultat } from '../typer/vilkår';
@@ -11,7 +9,7 @@ interface IVilkårResultatIkon {
     resultatBegrunnelse?: ResultatBegrunnelse | null;
 }
 
-const VilkårResultatIkon: React.FC<IVilkårResultatIkon> = ({ resultat, resultatBegrunnelse }) => {
+const VilkårResultatIkon = ({ resultat, resultatBegrunnelse }: IVilkårResultatIkon) => {
     if (resultatBegrunnelse && resultat === Resultat.OPPFYLT) {
         return <StatusIkon status={Status.INFO} />;
     }

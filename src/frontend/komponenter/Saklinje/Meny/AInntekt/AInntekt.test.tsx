@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { delay, http, HttpResponse } from 'msw';
 import { afterEach, beforeEach, describe, expect, type MockInstance, vi } from 'vitest';

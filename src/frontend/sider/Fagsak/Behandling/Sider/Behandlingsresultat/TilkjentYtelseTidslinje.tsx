@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
 
@@ -68,7 +66,7 @@ interface IProps {
     fagsakType?: FagsakType;
 }
 
-const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinjePersoner, fagsakType }) => {
+const TilkjentYtelseTidslinje = ({ grunnlagPersoner, tidslinjePersoner, fagsakType }: IProps) => {
     const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
         useTidslinjeContext();
     const tidslinjeRader = genererRader(fagsakType, tidslinjePersoner);

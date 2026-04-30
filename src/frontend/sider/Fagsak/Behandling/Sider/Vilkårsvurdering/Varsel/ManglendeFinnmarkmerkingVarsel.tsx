@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, BodyLong, Heading, Table, VStack } from '@navikt/ds-react';
 
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';

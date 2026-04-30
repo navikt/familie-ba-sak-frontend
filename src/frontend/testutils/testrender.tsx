@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren } from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render as rtlRender, type RenderOptions, screen as rtlScreen } from '@testing-library/react';
@@ -61,7 +61,7 @@ export function TestProviders({
     );
 }
 
-export function render(ui: React.ReactNode, options?: RenderOptions) {
+export function render(ui: ReactNode, options?: RenderOptions) {
     return {
         user: userEvent.setup(),
         screen: rtlScreen,

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ActionMenu } from '@navikt/ds-react';
 
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';

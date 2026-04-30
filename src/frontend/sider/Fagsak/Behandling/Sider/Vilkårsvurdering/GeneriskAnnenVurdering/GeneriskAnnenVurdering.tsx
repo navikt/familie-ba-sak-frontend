@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -24,12 +24,7 @@ const Container = styled.div`
     }
 `;
 
-const GeneriskAnnenVurdering: React.FC<IProps> = ({
-    person,
-    annenVurderingConfig,
-    andreVurderinger,
-    visFeilmeldinger,
-}) => {
+const GeneriskAnnenVurdering = ({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }: IProps) => {
     const [visFeilmeldingerForAnnenVurdering] = useState(false);
     const [feilmelding] = useState('');
 

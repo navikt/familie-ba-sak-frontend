@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Fieldset, HStack, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
@@ -105,7 +105,7 @@ export function KompetanseTabellRadEndre({
                     readOnly={lesevisning}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(event.target.value as KompetanseAktivitet)
                     }
                 >
@@ -126,7 +126,7 @@ export function KompetanseTabellRadEndre({
                     readOnly={lesevisning}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         );

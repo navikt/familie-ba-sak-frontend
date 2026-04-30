@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { Alert, BodyShort, Box, Button, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';

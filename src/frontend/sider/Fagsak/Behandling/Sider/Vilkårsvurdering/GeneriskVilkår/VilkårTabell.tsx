@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { Table } from '@navikt/ds-react';
@@ -47,13 +45,7 @@ const TabellHeader = styled(Table.HeaderCell)`
     }
 `;
 
-const VilkårTabell: React.FC<IProps> = ({
-    person,
-    vilkårFraConfig,
-    vilkårResultater,
-    visFeilmeldinger,
-    settFokusPåKnapp,
-}) => {
+const VilkårTabell = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, settFokusPåKnapp }: IProps) => {
     return (
         <Table>
             <Table.Header>

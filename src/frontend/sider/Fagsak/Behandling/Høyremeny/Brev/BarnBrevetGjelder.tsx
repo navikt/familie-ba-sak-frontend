@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { differenceInMilliseconds } from 'date-fns';
 
 import { Alert, Checkbox, CheckboxGroup } from '@navikt/ds-react';

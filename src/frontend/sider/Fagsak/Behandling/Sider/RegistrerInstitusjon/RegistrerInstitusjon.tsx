@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -14,7 +12,7 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const RegistrerInstitusjon: React.FC<IProps> = ({ åpenBehandling }) => {
+const RegistrerInstitusjon = ({ åpenBehandling }: IProps) => {
     const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
     const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandlingContext();

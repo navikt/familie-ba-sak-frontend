@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useMemo } from 'react';
 
 import { useFormContext } from 'react-hook-form';

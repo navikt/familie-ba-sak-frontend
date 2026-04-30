@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { type MutationKey, useMutationState } from '@tanstack/react-query';
 import styled from 'styled-components';
 

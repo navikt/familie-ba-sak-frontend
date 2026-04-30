@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { Alert } from '@navikt/ds-react';
@@ -17,7 +15,7 @@ const DokumentDataAlert = styled(Alert)`
     width: 100%;
 `;
 
-export const DokumentPanel: React.FC = () => {
+export const DokumentPanel = () => {
     const { hentetDokument } = useManuellJournalføringContext();
     return (
         <DokumentDiv>

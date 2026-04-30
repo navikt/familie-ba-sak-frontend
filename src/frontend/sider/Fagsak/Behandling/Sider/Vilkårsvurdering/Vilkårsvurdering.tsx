@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 
@@ -43,7 +43,7 @@ export function Vilkårsvurdering() {
 
     const erLesevisning = vurderErLesevisning();
 
-    const [visFeilmeldinger, settVisFeilmeldinger] = React.useState(false);
+    const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
 
     const navigate = useNavigate();
 

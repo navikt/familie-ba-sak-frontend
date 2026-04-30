@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
@@ -10,7 +8,7 @@ interface Props {
     korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-const KorrigerVedtak: React.FC<Props> = ({ åpneModal, korrigertVedtak }) => {
+const KorrigerVedtak = ({ åpneModal, korrigertVedtak }: Props) => {
     return (
         <ActionMenu.Item onSelect={åpneModal}>
             <ExclamationmarkTriangleIcon fontSize={'1.4rem'} />

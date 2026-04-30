@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 
 import { useLocation } from 'react-router';
@@ -35,9 +34,7 @@ interface BrevmottakereAlertFagsakProps extends Props {
     brevmottakere: SkjemaBrevmottaker[];
 }
 
-export const BrevmottakereAlert: React.FC<
-    BrevmottakereAlertBehandlingProps | BrevmottakereAlertFagsakProps
-> = props => {
+export const BrevmottakereAlert = (props: BrevmottakereAlertBehandlingProps | BrevmottakereAlertFagsakProps) => {
     const { brevmottakere, className, bruker } = props;
 
     const location = useLocation();

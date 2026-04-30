@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
@@ -20,13 +18,13 @@ interface Props {
     årISimuleringen: number[];
 }
 
-export const Årsvelger: React.FC<Props> = ({
+export const Årsvelger = ({
     settIndexFramvistÅr,
     indexFramvistÅr,
     erISisteÅrAvPerioden,
     aktueltÅr,
     årISimuleringen,
-}) => (
+}: Props) => (
     <FlexColumn>
         <TidslinjeNavigering
             naviger={retning =>

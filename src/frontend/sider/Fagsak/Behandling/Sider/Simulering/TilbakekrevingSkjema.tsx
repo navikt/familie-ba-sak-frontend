@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { ExternalLinkIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
     Alert,
@@ -40,11 +38,15 @@ import { målform } from '../../../../../typer/søknad';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-const TilbakekrevingSkjema: React.FC<{
+const TilbakekrevingSkjema = ({
+    søkerMålform,
+    harÅpenTilbakekrevingRessurs,
+    åpenBehandling,
+}: {
     søkerMålform: Målform;
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
     åpenBehandling: IBehandling;
-}> = ({ søkerMålform, harÅpenTilbakekrevingRessurs, åpenBehandling }) => {
+}) => {
     const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimuleringContext();
 

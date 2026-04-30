@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import { Heading, Loader, VStack } from '@navikt/ds-react';
