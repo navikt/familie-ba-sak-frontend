@@ -3,7 +3,16 @@ import type { ReactNode, ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, HGrid, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    Fieldset,
+    HGrid,
+    InlineMessage,
+    Select,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -103,11 +112,11 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
             hideLegend
         >
             <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="space-24">
-                <Alert variant="info" inline>
+                <InlineMessage status="info">
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
                     </UtbetaltBeløpText>
-                </Alert>
+                </InlineMessage>
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}

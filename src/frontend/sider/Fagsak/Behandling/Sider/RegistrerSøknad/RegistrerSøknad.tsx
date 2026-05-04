@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, ErrorSummary, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Annet } from './Annet';
@@ -57,12 +57,14 @@ export const RegistrerSøknad = () => {
                 {søknadErLastetFraBackend && !erLesevisning && (
                     <>
                         <br />
-                        <Alert
-                            variant="warning"
-                            children={
-                                'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
-                            }
-                        />
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Søknad registrert</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.
+                            </LocalAlert.Content>
+                        </LocalAlert>
                         <br />
                     </>
                 )}
@@ -77,7 +79,11 @@ export const RegistrerSøknad = () => {
                 <Annet />
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">

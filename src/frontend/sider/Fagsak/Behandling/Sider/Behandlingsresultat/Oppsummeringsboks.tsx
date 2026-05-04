@@ -3,7 +3,7 @@ import { type PropsWithChildren, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -30,10 +30,6 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { dateTilFormatertString, Datoformat } from '../../../../../utils/dato';
 import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '../../../../../utils/formatter';
 import { useBehandlingContext } from '../../context/BehandlingContext';
-
-const AlertWithBottomMargin = styled(Alert)`
-    margin-bottom: 1.5rem;
-`;
 
 const UtbetalingsbeløpStack = styled(VStack)`
     padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
@@ -202,7 +198,15 @@ const Oppsummeringsboks = ({
                     }}
                 />
             </HGrid>
-            {restFeil && <AlertWithBottomMargin variant="error">{restFeil}</AlertWithBottomMargin>}
+            {restFeil && (
+                <Box marginBlock={'space-0 space-24'}>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{restFeil}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
+            )}
             {utbetalingsperiode === undefined ? (
                 <BodyShort spacing>Ingen utbetalinger</BodyShort>
             ) : (
@@ -238,7 +242,9 @@ const Oppsummeringsboks = ({
                                     <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
                                     {!personSkalSkjermesForBruker &&
                                     !utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
-                                        <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
+                                        <InlineMessage size={'small'} status={'warning'}>
+                                            Må beregnes
+                                        </InlineMessage>
                                     ) : (
                                         <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
                                     )}

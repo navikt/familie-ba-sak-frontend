@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
+import { LocalAlert } from '@navikt/ds-react';
 
 import type { IToast } from './typer';
 import { useAppContext } from '../../context/AppContext';
@@ -48,7 +48,11 @@ const Toast = ({ toastId, toast }: { toastId: string; toast: IToast }) => {
 
     return (
         <Container ref={toastRef}>
-            <Alert variant={toast.alertType}>{toast.tekst}</Alert>
+            <LocalAlert status={toast.alertType}>
+                <LocalAlert.Header>
+                    <LocalAlert.Title>{toast.tekst}</LocalAlert.Title>
+                </LocalAlert.Header>
+            </LocalAlert>
         </Container>
     );
 };

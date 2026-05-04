@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, InlineMessage } from '@navikt/ds-react';
 import { FontWeightBold } from '@navikt/ds-tokens/dist/tokens';
 import _CountryData from '@navikt/land-verktoy';
 
@@ -80,9 +80,9 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
             </DefinitionList>
 
             {mottaker.landkode !== 'NO' && (
-                <Alert variant="info" inline>
+                <InlineMessage status={'info'}>
                     Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
-                </Alert>
+                </InlineMessage>
             )}
         </StyledDiv>
     );

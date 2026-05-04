@@ -8,8 +8,16 @@ import { useNavigate, useParams } from 'react-router';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeiloppsummeringFeil, Felt, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { hentDataFraRessurs, type IDokumentInfo, Journalstatus, type Ressurs } from '@navikt/familie-typer';
-import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
+import {
+    byggFeiletRessurs,
+    byggHenterRessurs,
+    byggTomRessurs,
+    hentDataFraRessurs,
+    type IDokumentInfo,
+    Journalstatus,
+    type Ressurs,
+    RessursStatus,
+} from '@navikt/familie-typer';
 
 import { useKlageApi } from '../../api/useKlageApi';
 import useDokument from '../../hooks/useDokument';
@@ -33,8 +41,11 @@ import type {
     TilknyttetBehandling,
 } from '../../typer/manuell-journalføring';
 import { JournalpostKanal } from '../../typer/manuell-journalføring';
-import { type IRestLukkOppgaveOgKnyttJournalpost, finnBehandlingstemaFraOppgave } from '../../typer/oppgave';
-import { OppgavetypeFilter } from '../../typer/oppgave';
+import {
+    finnBehandlingstemaFraOppgave,
+    type IRestLukkOppgaveOgKnyttJournalpost,
+    OppgavetypeFilter,
+} from '../../typer/oppgave';
 import type { IPersonInfo } from '../../typer/person';
 import { Adressebeskyttelsegradering } from '../../typer/person';
 import type { ISamhandlerInfo } from '../../typer/samhandler';
