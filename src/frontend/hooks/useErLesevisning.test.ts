@@ -3,26 +3,32 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useBehandling } from './useBehandling';
 import { useErLesevisning } from './useErLesevisning';
+import { useFagsak } from './useFagsak';
 import { useSaksbehandler } from './useSaksbehandler';
 import { lagBehandling } from '../testutils/testdata/behandlingTestdata';
+import { lagFagsak } from '../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
 import { BehandlingStatus, BehandlingSteg, BehandlingÅrsak } from '../typer/behandling';
 import { harTilgangTilEnhet } from '../typer/enhet';
+import { FagsakStatus } from '../typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
 
 vi.mock('./useBehandling');
 vi.mock('./useSaksbehandler');
+vi.mock('./useFagsak');
 vi.mock('../typer/enhet');
 
 const mockUseBehandling = vi.mocked(useBehandling);
 const mockUseSaksbehandler = vi.mocked(useSaksbehandler);
 const mockHarTilgangTilEnhet = vi.mocked(harTilgangTilEnhet);
+const mockUseFagsak = vi.mocked(useFagsak);
 
 beforeEach(() => {
     vi.resetAllMocks();
     mockUseBehandling.mockReturnValue(lagBehandling());
     mockUseSaksbehandler.mockReturnValue(lagSaksbehandler());
     mockHarTilgangTilEnhet.mockReturnValue(true);
+    mockUseFagsak.mockReturnValue(lagFagsak());
 });
 
 describe('useErLesevisning', () => {
@@ -144,5 +150,13 @@ describe('useErLesevisning', () => {
         const { result } = renderHook(() => useErLesevisning());
 
         expect(result.current).toBe(false);
+    });
+
+    it('returnerer true når fagsaken er låst', () => {
+        mockUseFagsak.mockReturnValue(lagFagsak({ status: FagsakStatus.LÅST }));
+
+        const { result } = renderHook(() => useErLesevisning());
+
+        expect(result.current).toBe(true);
     });
 });
