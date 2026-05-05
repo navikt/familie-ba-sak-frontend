@@ -59,7 +59,6 @@ export const StyledVStack = styled(VStack)<{ $lesevisning: boolean; $vilkårResu
             return TextInfoSubtle;
         }};
     padding-left: 2rem;
-    margin-left: -3rem;
 `;
 
 const Knapperad = styled.div`

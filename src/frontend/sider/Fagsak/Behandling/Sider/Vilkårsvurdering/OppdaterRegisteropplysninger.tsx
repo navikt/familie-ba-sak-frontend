@@ -35,7 +35,7 @@ export function OppdaterRegisteropplysninger() {
 
     return (
         <VStack gap={'space-8'}>
-            <HStack align={'center'} gap={'space-8'}>
+            <HStack align={'center'} gap={'space-8'} wrap={false}>
                 <Detail textColor={'subtle'}>{formaterTidspunkt(registeropplysningerHentetTidpsunkt)}</Detail>
                 {!erLesevisning && (
                     <Button

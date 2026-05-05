@@ -6,11 +6,11 @@ import { useFagsak } from '../../hooks/useFagsak';
 import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '../../typer/person';
 import { formaterIdent, hentAlder } from '../../utils/formatter';
-import DødsfallTag from '../DødsfallTag';
-import { PersonIkon } from '../PersonIkon';
-import styles from './PersonInformasjon.module.css';
 import { erAdresseBeskyttet } from '../../utils/validators';
+import DødsfallTag from '../DødsfallTag';
 import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
+import { PersonIkon } from '../PersonIkon';
+import Styles from './PersonInformasjon.module.css';
 
 function hentAdresseBeskyttelseGradering(bruker: IPersonInfo, personIdent: string): boolean | undefined {
     const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(rel => rel.personIdent === personIdent);
@@ -44,9 +44,7 @@ export function PersonInformasjon({ person }: Props) {
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
-
     const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(bruker, person.personIdent);
-    const erEgenAnsatt = bruker.erEgenAnsatt;
 
     const erLesevisning = vurderErLesevisning();
 
@@ -58,29 +56,35 @@ export function PersonInformasjon({ person }: Props) {
                 erBarn={alder < 18}
                 størrelse={'m'}
                 erAdresseBeskyttet={erAdresseBeskyttet}
-                erEgenAnsatt={erEgenAnsatt}
+                erEgenAnsatt={bruker.erEgenAnsatt}
             />
-            <HStack gap={'space-16'} align={'center'} wrap={false}>
-                <Heading level={'2'} size={'medium'} title={navnOgAlder} className={styles.headingUtenOverflow}>
-                    {navnOgAlder}
-                </Heading>
-                <Skillelinje erHeading={true} />
+            <HStack gap={'space-16'} align={'center'} wrap={true}>
+                <HStack gap={'space-16'} align={'center'} wrap={false}>
+                    <Heading level={'2'} size={'medium'} title={navnOgAlder} className={Styles.headingUtenOverflow}>
+                        {navnOgAlder}
+                    </Heading>
+                    <Skillelinje erHeading={true} />
+                </HStack>
                 {person.harFalskIdentitet && (
                     <HStack gap={'space-16'} align={'center'}>
                         <FalskIdentitet erHeading={true} />
                         <Skillelinje erHeading={true} />
                     </HStack>
                 )}
-                <HStack gap={'space-4'} align={'center'} wrap={false}>
-                    <Heading level={'2'} size={'medium'} as={'span'}>
-                        {formattertIdent}
-                    </Heading>
-                    <CopyButton size={'small'} copyText={person.personIdent} />
+                <HStack gap={'space-16'} align={'center'} wrap={false}>
+                    <HStack gap={'space-4'} align={'center'} wrap={false}>
+                        <Heading level={'2'} size={'medium'} as={'span'}>
+                            {formattertIdent}
+                        </Heading>
+                        <CopyButton size={'small'} copyText={person.personIdent} />
+                    </HStack>
+                    <Skillelinje erHeading={true} />
                 </HStack>
-                <Skillelinje erHeading={true} />
-                <Heading level={'2'} size={'medium'} as={'span'}>{`${personTypeMap[person.type]} `}</Heading>
-                {person.dødsfallDato?.length && <DødsfallTag dødsfallDato={person.dødsfallDato} />}
-                {!person.dødsfallDato?.length && !erLesevisning && <RegistrerDødsfallDatoMeny person={person} />}
+                <HStack gap={'space-8'} align={'center'} wrap={false}>
+                    <Heading level={'2'} size={'medium'} as={'span'}>{`${personTypeMap[person.type]} `}</Heading>
+                    {person.dødsfallDato?.length && <DødsfallTag dødsfallDato={person.dødsfallDato} />}
+                    {!person.dødsfallDato?.length && !erLesevisning && <RegistrerDødsfallDatoMeny person={person} />}
+                </HStack>
             </HStack>
         </HStack>
     );
