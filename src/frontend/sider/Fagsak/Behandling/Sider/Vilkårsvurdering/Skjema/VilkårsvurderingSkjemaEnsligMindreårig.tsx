@@ -1,4 +1,4 @@
-import { Alert, Box, HStack } from '@navikt/ds-react';
+import { Box, HStack, LocalAlert } from '@navikt/ds-react';
 
 import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
 import { PersonType } from '../../../../../../typer/person';
@@ -45,7 +45,11 @@ const VilkårsvurderingSkjemaEnsligMindreårig = ({ visFeilmeldinger }: IProps) 
                         fødselsdato={personResultat.person.fødselsdato}
                     />
                 ) : (
-                    <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Klarte ikke hente registeropplysninger</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {opplysningsplikt && (
                     <GeneriskAnnenVurdering
@@ -81,7 +85,11 @@ const VilkårsvurderingSkjemaEnsligMindreårig = ({ visFeilmeldinger }: IProps) 
             </Box>
         </>
     ) : (
-        <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
+        <LocalAlert status="error">
+            <LocalAlert.Header>
+                <LocalAlert.Title>Finner ingen vilkår på behandlingen</LocalAlert.Title>
+            </LocalAlert.Header>
+        </LocalAlert>
     );
 };
 

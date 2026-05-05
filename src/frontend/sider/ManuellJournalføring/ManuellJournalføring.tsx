@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
+import { GlobalAlert } from '@navikt/ds-react';
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import { DokumentPanel } from './Dokument/DokumentPanel';
@@ -26,12 +26,17 @@ const ManuellJournalføringContent = () => {
                 <>
                     <Personlinje bruker={skjema.felter.bruker.verdi} fagsak={minimalFagsak} />
 
-                    {dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT && (
+                    {viserAlert && (
                         <>
-                            <Alert
-                                variant="warning"
-                                children={`Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede journalført.`}
-                            />
+                            <GlobalAlert status="warning">
+                                <GlobalAlert.Header>
+                                    <GlobalAlert.Title>
+                                        Journalposten har status{' '}
+                                        {dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede
+                                        journalført.
+                                    </GlobalAlert.Title>
+                                </GlobalAlert.Header>
+                            </GlobalAlert>
                             <br />
                         </>
                     )}
@@ -42,17 +47,26 @@ const ManuellJournalføringContent = () => {
                     </ToKolonnerDiv>
                 </>
             );
+
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <Alert variant="error" children={dataForManuellJournalføring.frontendFeilmelding} />;
+            return (
+                <GlobalAlert status="error">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>{dataForManuellJournalføring.frontendFeilmelding}</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
+            );
         case RessursStatus.IKKE_TILGANG:
             return (
-                <Alert
-                    variant="error"
-                    children={
-                        'Kan ikke vise journalføringsoppgave. Personer relatert til journalpost har adressebeskyttelse. Krever ekstra tilganger.'
-                    }
-                />
+                <GlobalAlert status="error">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>
+                            Kan ikke vise journalføringsoppgave. Personer relatert til journalpost har
+                            adressebeskyttelse. Krever ekstra tilganger.
+                        </GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
             );
         default:
             return <div />;

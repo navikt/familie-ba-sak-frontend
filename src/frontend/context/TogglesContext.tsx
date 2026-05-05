@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
-import { Alert, BodyShort, ErrorMessage } from '@navikt/ds-react';
+import { GlobalAlert } from '@navikt/ds-react';
 
 import { useHentFeatureToggles } from '../hooks/useHentFeatureToggles';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
@@ -26,10 +26,12 @@ export function FeatureTogglesProvider({ featureToggles, children }: Props) {
 
     if (error) {
         return (
-            <Alert variant={'error'}>
-                <BodyShort>Feil oppstod under lasting av toggles</BodyShort>
-                <ErrorMessage>{error.message}</ErrorMessage>
-            </Alert>
+            <GlobalAlert status={'error'}>
+                <GlobalAlert.Header>
+                    <GlobalAlert.Title>Feil oppstod under lasting av toggles</GlobalAlert.Title>
+                </GlobalAlert.Header>
+                <GlobalAlert.Content>{error.message}</GlobalAlert.Content>
+            </GlobalAlert>
         );
     }
 

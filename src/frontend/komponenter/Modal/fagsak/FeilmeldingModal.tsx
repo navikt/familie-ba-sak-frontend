@@ -1,4 +1,4 @@
-import { Alert, Modal } from '@navikt/ds-react';
+import { LocalAlert, Modal } from '@navikt/ds-react';
 
 import { ModalType } from '../../../context/ModalContext';
 import { useModal } from '../../../hooks/useModal';
@@ -18,7 +18,11 @@ export function FeilmeldingModal() {
         >
             {erModalÅpen && (
                 <Modal.Body>
-                    <Alert variant="error">{feilmelding}</Alert>
+                    <LocalAlert status={'error'}>
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{feilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 </Modal.Body>
             )}
         </Modal>

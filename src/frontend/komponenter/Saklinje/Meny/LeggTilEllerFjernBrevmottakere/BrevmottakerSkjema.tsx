@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, InlineMessage, Select, TextField } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -133,9 +133,9 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                             }}
                         />
                         {skjema.felter.land.verdi !== 'NO' && (
-                            <Alert variant="info">
+                            <InlineMessage status="info">
                                 Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
-                            </Alert>
+                            </InlineMessage>
                         )}
 
                         <PostnummerOgStedContainer>

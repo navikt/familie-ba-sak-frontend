@@ -1,4 +1,4 @@
-import { Alert, Button, Modal, Skeleton, VStack } from '@navikt/ds-react';
+import { Button, LocalAlert, Modal, Skeleton, VStack } from '@navikt/ds-react';
 
 import { FagsakerProvider } from './context/FagsakerContext';
 import {
@@ -83,8 +83,20 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
             <>
                 <Modal.Body>
                     <VStack gap={'space-16'}>
-                        {personError && <Alert variant={'error'}>{personError.message}</Alert>}
-                        {fagsakerError && <Alert variant={'error'}>{fagsakerError.message}</Alert>}
+                        {personError && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{personError.message}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        )}
+                        {fagsakerError && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{fagsakerError.message}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        )}
                     </VStack>
                 </Modal.Body>
                 <Modal.Footer>
@@ -121,13 +133,16 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                         />
                     )}
                     {onSubmitFeilmelding && (
-                        <Alert
-                            variant={'error'}
-                            closeButton={true}
-                            onClose={() => opprettFagsakForm.clearErrors(OpprettFagsakServerErrors.onSubmitError.id)}
-                        >
-                            {onSubmitFeilmelding}
-                        </Alert>
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>{onSubmitFeilmelding}</LocalAlert.Title>
+                                <LocalAlert.CloseButton
+                                    onClick={() =>
+                                        opprettFagsakForm.clearErrors(OpprettFagsakServerErrors.onSubmitError.id)
+                                    }
+                                />
+                            </LocalAlert.Header>
+                        </LocalAlert>
                     )}
                 </VStack>
             </Modal.Body>

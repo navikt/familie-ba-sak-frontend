@@ -12,8 +12,7 @@ import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } f
 
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
-import { type IOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
-import { mapIOppgaverTilOppgaveRad } from './utils';
+import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, sorterEtterNøkkel, Sorteringsnøkkel } from './utils';
 import { useFagsakApi } from '../../api/useFagsakApi';
 import { useAppContext } from '../../context/AppContext';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
@@ -25,7 +24,7 @@ import { BehandlingstypeFilter, EnhetFilter, OppgavetypeFilter, SaksbehandlerFil
 import { erIsoStringGyldig } from '../../utils/dato';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-import { Sorteringsrekkefølge, hentSortState, hentNesteSorteringsrekkefølge } from '../../utils/tabell';
+import { hentNesteSorteringsrekkefølge, hentSortState, Sorteringsrekkefølge } from '../../utils/tabell';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 

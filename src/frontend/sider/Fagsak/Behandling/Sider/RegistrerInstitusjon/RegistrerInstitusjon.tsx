@@ -1,4 +1,4 @@
-import { Alert } from '@navikt/ds-react';
+import { LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useInstitusjon } from './useInstitusjon';
@@ -36,9 +36,19 @@ const RegistrerInstitusjon = ({ åpenBehandling }: IProps) => {
             )}
             {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 samhandlerRessurs.status === RessursStatus.FEILET) && (
-                <Alert children={samhandlerRessurs.frontendFeilmelding} variant={'error'} />
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>{samhandlerRessurs.frontendFeilmelding}</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             )}
-            {submitFeilmelding && <Alert variant="error" children={submitFeilmelding} />}
+            {submitFeilmelding && (
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>{submitFeilmelding}</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
+            )}
         </Skjemasteg>
     );
 };

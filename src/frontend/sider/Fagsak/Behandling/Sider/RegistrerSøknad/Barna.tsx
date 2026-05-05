@@ -1,6 +1,7 @@
 import { differenceInMilliseconds } from 'date-fns';
 
-import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } from '@navikt/ds-react';
 
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
@@ -88,7 +89,11 @@ export const Barna = () => {
 
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
                     <VStack marginBlock={'space-0 space-20'}>
-                        <Alert variant="info" children={'Folkeregisteret har ikke registrerte barn på denne søkeren'} />
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                Folkeregisteret har ikke registrerte barn på denne søkeren
+                            </InfoCard.Message>
+                        </InfoCard>
                     </VStack>
                 )}
             </CheckboxGroup>

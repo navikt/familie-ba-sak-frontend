@@ -1,7 +1,7 @@
 import { isBefore, subDays } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Modal, Textarea } from '@navikt/ds-react';
+import { Box, Button, Fieldset, LocalAlert, Modal, Textarea } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -12,10 +12,6 @@ import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling'
 import { dagensDato } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Datovelger from '../../../Datovelger/Datovelger';
-
-const StyledAlert = styled(Alert)`
-    margin-top: 1.5rem;
-`;
 
 const StyledFieldset = styled(Fieldset)`
     && > div:not(:last-child):not(:empty) {
@@ -108,10 +104,16 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
                     )}
                 </StyledFieldset>
                 {søknadMottattDatoErMerEnn360DagerSiden && (
-                    <StyledAlert variant={'warning'}>
-                        Er mottatt dato riktig? <br />
-                        Det er mer enn 360 dager siden denne datoen.
-                    </StyledAlert>
+                    <Box marginBlock={'space-24 space-0'}>
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Er mottatt dato riktig? <br />
+                                    Det er mer enn 360 dager siden denne datoen.
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                        </LocalAlert>
+                    </Box>
                 )}
             </Modal.Body>
             <Modal.Footer>

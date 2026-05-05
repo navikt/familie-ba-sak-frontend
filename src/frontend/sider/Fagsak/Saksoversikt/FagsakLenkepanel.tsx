@@ -1,7 +1,8 @@
 import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Box, HStack, Link, LinkCard, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, HStack, InfoCard, Link, LinkCard, VStack } from '@navikt/ds-react';
 import { FontSizeHeadingMedium, FontSizeXlarge } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
@@ -20,11 +21,6 @@ const HeaderTekst = styled(BodyShort)`
 
 const BodyTekst = styled(BodyShort)`
     font-size: ${FontSizeHeadingMedium};
-`;
-
-const StyledAlert = styled(Alert)`
-    width: ${SaksoversiktPanelBredde};
-    margin-top: var(--ax-space-64);
 `;
 
 function Innholdstabell() {
@@ -52,11 +48,35 @@ function FagsakTypeLabel() {
     const { fagsak } = useFagsakContext();
     switch (fagsak.fagsakType) {
         case FagsakType.INSTITUSJON:
-            return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en institusjonssak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-            return <StyledAlert variant={'info'}>Dette er en enslig mindreårig-sak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en enslig mindreårig-sak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         case FagsakType.SKJERMET_BARN:
-            return <StyledAlert variant={'info'}>Dette er en skjermet barn-sak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en skjermet barn-sak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         default:
             return null;
     }

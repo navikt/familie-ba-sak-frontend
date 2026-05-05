@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { Alert, Heading, Table, Tooltip } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Heading, InfoCard, LocalAlert, Table, Tooltip } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
@@ -12,15 +13,11 @@ import {
     type GjelderFilter,
     gjelderFilter,
     oppgaveTypeFilter,
-    PrioritetFilter,
     type OppgavetypeFilter,
+    PrioritetFilter,
 } from '../../typer/oppgave';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
-
-const StyledAlert = styled(Alert)`
-    margin-top: 1rem;
-`;
 
 const HeaderMedPaginering = styled.div`
     margin-top: 1rem;
@@ -154,14 +151,32 @@ const OppgaveList = () => {
             </Table>
 
             {oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length === 0 && (
-                <StyledAlert variant="warning">Ingen oppgaver</StyledAlert>
+                <Box marginBlock={'space-16 space-0'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Ingen oppgaver</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
             {(oppgaver.status === RessursStatus.FEILET ||
                 oppgaver.status === RessursStatus.FUNKSJONELL_FEIL ||
                 oppgaver.status === RessursStatus.IKKE_TILGANG) && (
-                <StyledAlert variant="error">{oppgaver.frontendFeilmelding}</StyledAlert>
+                <Box marginBlock={'space-16 space-0'}>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{oppgaver.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
-            {oppgaver.status === RessursStatus.HENTER && <StyledAlert variant="info">Henter...</StyledAlert>}
+            {oppgaver.status === RessursStatus.HENTER && (
+                <Box marginBlock={'space-16 space-0'}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>Henter...</InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            )}
         </section>
     );
 };

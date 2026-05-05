@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, ErrorSummary, Label, LocalAlert } from '@navikt/ds-react';
 import { byggDataRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
@@ -44,10 +44,6 @@ const EndretUtbetalingAndel = styled.div`
 
 const StyledEditIkon = styled(PencilIcon)`
     font-size: 1.5rem;
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-bottom: 1rem;
 `;
 
 const StyledErrorSummary = styled(ErrorSummary)`
@@ -156,16 +152,21 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
-                <StyledAlert variant={'warning'}>
-                    Du har perioder som kan føre til etterbetaling utover tre måneder for person{' '}
-                    {slåSammenListeTilStreng(
-                        personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
-                    )}
-                    .
-                </StyledAlert>
+                <Box marginBlock={'space-0 space-16'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Du har perioder som kan føre til etterbetaling utover tre måneder for person{' '}
+                                {slåSammenListeTilStreng(
+                                    personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
+                                )}
+                                .
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
             {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />}
-
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}

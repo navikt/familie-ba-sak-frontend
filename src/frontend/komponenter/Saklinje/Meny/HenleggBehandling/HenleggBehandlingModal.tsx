@@ -1,6 +1,7 @@
 import { FormProvider } from 'react-hook-form';
 
-import { Alert, BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Button, Fieldset, InfoCard, Modal, VStack } from '@navikt/ds-react';
 
 import { BegrunnelseFelt } from './BegrunnelseFelt';
 import { ForhåndsvisBrevLenke } from './ForhåndsvisBrevLenke';
@@ -48,13 +49,13 @@ function Innhold() {
         <>
             <Modal.Body>
                 <VStack gap={'space-16'}>
-                    <Alert variant={'info'}>
-                        <BodyLong>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                             Skriv en begrunnelse som forklarer hvorfor behandlingen henlegges. Dette kan gi andre
                             saksbehandlere bedre grunnlag hvis de gjenopptar saken, og kan gjøre det lettere for teamet
                             å feilsøke.
-                        </BodyLong>
-                    </Alert>
+                        </InfoCard.Message>
+                    </InfoCard>
                     <FormProvider {...form}>
                         <form id={HENLEGG_BEHANDLING_FORM_ID} onSubmit={handleSubmit(onSubmit)}>
                             <Fieldset legend={'Henlegg behandling'} hideLegend={true} error={submitError}>

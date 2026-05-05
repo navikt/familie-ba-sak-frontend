@@ -1,5 +1,5 @@
-import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, ConfirmationPanel, Heading, VStack } from '@navikt/ds-react';
+import { ArrowUndoIcon, InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, ConfirmationPanel, Heading, InfoCard, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 
 import AvregningAlert from './AvregningAlert';
@@ -50,13 +50,17 @@ export const TilbakekrevingsvedtakMotregning = ({
                     <Heading size="medium" level="2">
                         Tilbakekreving - ulovfestet motregning
                     </Heading>
-
                     {erBehandlingSattPåVentMedÅrsakAvventerSamtykke && (
-                        <Alert variant="info">
-                            Saken venter på samtykke fra bruker for ulovfestet motregning. Hvis bruker har gitt samtykke
-                            før det har gått {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager, kan saken tas av
-                            vent manuelt.
-                        </Alert>
+                        <InfoCard data-color="info">
+                            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                                <InfoCard.Title>Samtykke for ulovfestet motregning</InfoCard.Title>
+                            </InfoCard.Header>
+                            <InfoCard.Content>
+                                Saken venter på samtykke fra bruker for ulovfestet motregning. Hvis bruker har gitt
+                                samtykke før det har gått {dagerFristForAvventerSamtykkeUlovfestetMotregning} dager, kan
+                                saken tas av vent manuelt.
+                            </InfoCard.Content>
+                        </InfoCard>
                     )}
 
                     {!tilbakekrevingsvedtakMotregning.samtykke && !erLesevisning && (
@@ -65,13 +69,14 @@ export const TilbakekrevingsvedtakMotregning = ({
                             oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
                         />
                     )}
-
                     {tilbakekrevingsvedtakMotregning.samtykke && (
                         <VStack gap="space-16">
-                            <Alert variant="info">
-                                Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
-                                saksbehandlingen.
-                            </Alert>
+                            <InfoCard data-color="info">
+                                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                    Du må ha kjennskap til regelverk for tilbakekreving for å kunne fortsette
+                                    saksbehandlingen.
+                                </InfoCard.Message>
+                            </InfoCard>
 
                             <ConfirmationPanel
                                 checked={tilbakekrevingsvedtakMotregning.heleBeløpetSkalKrevesTilbake}

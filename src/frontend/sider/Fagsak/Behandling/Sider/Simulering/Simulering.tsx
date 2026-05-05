@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
-import { Alert, BodyShort, Box, List } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, GlobalAlert, InfoCard, List, LocalAlert } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { MigreringAlerts } from './MigreringAlerts';
@@ -21,10 +21,6 @@ import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/da
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
 }
-
-const StyledAlert = styled(Alert)`
-    margin-bottom: 2rem;
-`;
 
 const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
     const {
@@ -109,9 +105,13 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
         >
             {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
                 simuleringsresultat.data.perioder.length === 0 ? (
-                    <StyledAlert variant="info">
-                        Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
-                    </StyledAlert>
+                    <Box marginBlock={'space-0 space-32'}>
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                Det er ingen etterbetaling, feilutbetaling eller neste utbetaling
+                            </InfoCard.Message>
+                        </InfoCard>
+                    </Box>
                 ) : (
                     <>
                         <SimuleringPanel simulering={simuleringsresultat.data} />
@@ -133,41 +133,45 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
 
                         {harOverlappendePerioderMedAndreFagsakerOgSkalStanses && (
                             <Box marginBlock="space-40 space-0" maxWidth="40rem">
-                                <Alert variant="warning">
-                                    <BodyShort spacing>
-                                        En annen fagsak tilknyttet personen inneholder en feilutbetaling eller
-                                        etterbetaling.
-                                        <br />
-                                        <br />
-                                        Dersom det er en feilutbetaling må den behandles ferdig før du fullfører denne
-                                        behandlingen. Det er for å hindre at beløpene motregnes.
-                                        <br />
-                                        <br />
-                                        Dersom det er en etterbetaling må du vente til den er utbetalt før du fullfører
-                                        denne behandlingen. Det er for å hindre at etterbetalingen hentes inn i denne
-                                        fagsaken.
-                                    </BodyShort>
-                                    <BodyShort spacing>
-                                        Fagsak med feilutbetaling eller etterbetaling:{' '}
-                                        {overlappendePerioderMedAndreFagsaker.map(
-                                            overlappendePeriode => overlappendePeriode.fagsaker
-                                        )}
-                                    </BodyShort>
-                                    <BodyShort>Perioder med overlapp:</BodyShort>
-                                    <List as="ul">
-                                        {overlappendePerioderMedAndreFagsaker.map(periode => (
-                                            <List.Item>
-                                                {`${isoStringTilFormatertString({
-                                                    isoString: periode.fom,
-                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
-                                                })} - ${isoStringTilFormatertString({
-                                                    isoString: periode.tom,
-                                                    tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
-                                                })}`}
-                                            </List.Item>
-                                        ))}
-                                    </List>
-                                </Alert>
+                                <LocalAlert status="warning">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            En annen fagsak tilknyttet personen inneholder en feilutbetaling eller
+                                            etterbetaling.
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        <BodyShort spacing>
+                                            Dersom det er en feilutbetaling må den behandles ferdig før du fullfører
+                                            denne behandlingen. Det er for å hindre at beløpene motregnes.
+                                            <br />
+                                            <br />
+                                            Dersom det er en etterbetaling må du vente til den er utbetalt før du
+                                            fullfører denne behandlingen. Det er for å hindre at etterbetalingen hentes
+                                            inn i denne fagsaken.
+                                        </BodyShort>
+                                        <BodyShort spacing>
+                                            Fagsak med feilutbetaling eller etterbetaling:{' '}
+                                            {overlappendePerioderMedAndreFagsaker.map(
+                                                overlappendePeriode => overlappendePeriode.fagsaker
+                                            )}
+                                        </BodyShort>
+                                        <BodyShort>Perioder med overlapp:</BodyShort>
+                                        <List as="ul">
+                                            {overlappendePerioderMedAndreFagsaker.map(periode => (
+                                                <List.Item>
+                                                    {`${isoStringTilFormatertString({
+                                                        isoString: periode.fom,
+                                                        tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                    })} - ${isoStringTilFormatertString({
+                                                        isoString: periode.tom,
+                                                        tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
+                                                    })}`}
+                                                </List.Item>
+                                            ))}
+                                        </List>
+                                    </LocalAlert.Content>
+                                </LocalAlert>
                             </Box>
                         )}
                         {erAvregning && (
@@ -188,16 +192,31 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
                     </>
                 )
             ) : (
-                <Alert variant="info">Det har skjedd en feil: {simuleringsresultat?.frontendFeilmelding}</Alert>
+                <Box marginBlock={'space-0 space-32'}>
+                    <GlobalAlert status={'error'}>
+                        <GlobalAlert.Header>
+                            <GlobalAlert.Title>Det har skjedd en feil</GlobalAlert.Title>
+                        </GlobalAlert.Header>
+                        <GlobalAlert.Content>{simuleringsresultat?.frontendFeilmelding}</GlobalAlert.Content>
+                    </GlobalAlert>
+                </Box>
             )}
 
             {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
                 tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                <StyledAlert variant="error">
-                    Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget:{' '}
-                    {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
-                </StyledAlert>
+                <Box marginBlock={'space-32'}>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
             )}
         </Skjemasteg>
     );
