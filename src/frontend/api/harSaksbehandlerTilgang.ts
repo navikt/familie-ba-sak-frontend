@@ -1,6 +1,7 @@
+import type { IRestTilgang } from '@typer/person';
+
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
-import type { IRestTilgang } from '../typer/person';
 import { RessursResolver } from '../utils/ressursResolver';
 
 export interface HarSaksbehandlerTilgangPayload {

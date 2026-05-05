@@ -1,9 +1,8 @@
+import { harSaksbehandlerTilgang, type HarSaksbehandlerTilgangPayload } from '@api/harSaksbehandlerTilgang';
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import type { IRestTilgang } from '@typer/person';
 
 import { useHttp } from '@navikt/familie-http';
-
-import { harSaksbehandlerTilgang, type HarSaksbehandlerTilgangPayload } from '../api/harSaksbehandlerTilgang';
-import type { IRestTilgang } from '../typer/person';
 
 type Options = Omit<UseMutationOptions<IRestTilgang, DefaultError, HarSaksbehandlerTilgangPayload>, 'mutationFn'>;
 
