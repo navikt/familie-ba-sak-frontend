@@ -1,7 +1,9 @@
 import { useBehandling } from './useBehandling';
+import { useFagsak } from './useFagsak';
 import { useSaksbehandler } from './useSaksbehandler';
 import { BehandlingStatus, BehandlingSteg, BehandlingÅrsak, hentStegNummer } from '../typer/behandling';
 import { harTilgangTilEnhet } from '../typer/enhet';
+import { FagsakStatus } from '../typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
 
 const ÅRSAKER_ÅPEN_FOR_ALLE = new Set([BehandlingÅrsak.TEKNISK_ENDRING, BehandlingÅrsak.KORREKSJON_VEDTAKSBREV]);
@@ -17,6 +19,11 @@ export function useErLesevisning({
 }: Parameters = {}) {
     const saksbehandler = useSaksbehandler();
     const behandling = useBehandling();
+    const fagsak = useFagsak();
+
+    if (fagsak.status === FagsakStatus.LÅST) {
+        return true;
+    }
 
     const behandlendeEnhetId = behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId;
     const erBehandlingenAvsluttet = behandling.status === BehandlingStatus.AVSLUTTET;

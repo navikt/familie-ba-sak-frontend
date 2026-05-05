@@ -9,7 +9,8 @@ import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import { FagsakType } from '../../../typer/fagsak';
+import { FagsakStatus, FagsakType } from '../../../typer/fagsak';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { useFagsakContext } from '../FagsakContext';
 
@@ -30,6 +31,7 @@ function Innholdstabell() {
         fagsak.løpendeKategori &&
         fagsak.løpendeUnderkategori &&
         tilBehandlingstema(fagsak.løpendeKategori, fagsak.løpendeUnderkategori);
+    const fagsakErLåst = fagsak.status === FagsakStatus.LÅST;
     return (
         <HStack gap="space-80">
             <div>
@@ -40,6 +42,17 @@ function Innholdstabell() {
                 <HeaderTekst spacing>Status</HeaderTekst>
                 <BodyTekst weight="semibold">{hentFagsakStatusVisning(fagsak)}</BodyTekst>
             </div>
+            {fagsakErLåst && fagsak.låstTidspunkt && (
+                <div>
+                    <HeaderTekst spacing>Låst dato</HeaderTekst>
+                    <BodyTekst weight="semibold">
+                        {isoStringTilFormatertString({
+                            isoString: fagsak.låstTidspunkt,
+                            tilFormat: Datoformat.DATO,
+                        })}
+                    </BodyTekst>
+                </div>
+            )}
         </HStack>
     );
 }

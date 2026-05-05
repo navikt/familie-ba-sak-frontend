@@ -12,6 +12,7 @@ import { lagPerson } from '../../testutils/testdata/personTestdata';
 import { lagSaksbehandler } from '../../testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '../../testutils/testrender';
 import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakStatus } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import type { Saksbehandler } from '../../typer/saksbehandler';
 
@@ -99,6 +100,15 @@ describe('Fagsaklinje', () => {
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Dokumenter' })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Meny' })).not.toBeInTheDocument();
+    });
+
+    test('skal ikke vise meny hvis fagsaken er låst', async () => {
+        const { screen } = render(<Fagsaklinje />, {
+            wrapper: props => <Wrapper {...props} fagsak={lagFagsak({ status: FagsakStatus.LÅST })} />,
+        });
+
+        expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Meny' })).not.toBeInTheDocument();
     });
 });

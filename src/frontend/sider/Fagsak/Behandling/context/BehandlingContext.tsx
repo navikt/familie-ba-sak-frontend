@@ -13,7 +13,7 @@ import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import type { BehandlingSteg, IBehandling, ISettPåVent } from '../../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
-import { FagsakType } from '../../../../typer/fagsak';
+import { FagsakStatus, FagsakType } from '../../../../typer/fagsak';
 import { PersonType } from '../../../../typer/person';
 import { Målform } from '../../../../typer/søknad';
 import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
@@ -130,6 +130,9 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
      * @Deprecated - Erstattes av {@link useErLesevisning}.
      */
     const vurderErLesevisning = (sjekkTilgangTilEnhet = true, skalIgnorereOmEnhetErMidlertidig = false): boolean => {
+        if (fagsak.status === FagsakStatus.LÅST) {
+            return true;
+        }
         const åpenBehandlingData = behandling;
         if (
             åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_VENT ||
