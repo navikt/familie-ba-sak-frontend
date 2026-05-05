@@ -27,7 +27,7 @@ jobs:
     uses: navikt/familie-baks-gha-workflows/.github/workflows/deploy-with-tag.yaml@main # ratchet:exclude
     with:
       image-name: ${{ inputs.image-name }}
-      image-tag: ${{ inputs.image }}
+      image-tag: ${{ inputs.image-tag }}
       cluster: ${{ inputs.environment }}-gcp
       resource: .nais/app-${{ inputs.environment }}.yaml
     secrets: inherit
