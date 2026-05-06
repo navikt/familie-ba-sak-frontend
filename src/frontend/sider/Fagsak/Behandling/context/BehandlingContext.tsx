@@ -10,7 +10,7 @@ import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '../../../../hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import type { BehandlingSteg, IBehandling, ISettPåVent } from '../../../../typer/behandling';
+import type { BehandlingSteg, IBehandling } from '../../../../typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 import { harTilgangTilEnhet } from '../../../../typer/enhet';
 import { FagsakStatus, FagsakType } from '../../../../typer/fagsak';
@@ -48,7 +48,6 @@ interface BehandlingContextValue {
         erSammensattKontrollsak: boolean
     ) => void;
     erMigreringsbehandling: boolean;
-    aktivSettPåVent?: ISettPåVent | undefined;
     gjelderInstitusjon: boolean;
     samhandlerOrgnr: string | undefined;
     gjelderEnsligMindreårig: boolean;
@@ -200,7 +199,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 behandlingresultatNesteOnClick,
                 sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
-                aktivSettPåVent: behandling?.aktivSettPåVent,
                 gjelderInstitusjon,
                 samhandlerOrgnr,
                 gjelderEnsligMindreårig,

@@ -11,6 +11,8 @@ import { BehandlingSteg } from '../../../../typer/behandling';
 import { behandlingErEtterSteg } from '../../../../utils/steg';
 import { useBehandlingContext } from '../context/BehandlingContext';
 
+export const MAX_SKJEMASTEG_BREDDE = '1440px';
+
 interface IProps extends PropsWithChildren {
     className?: string;
     forrigeKnappTittel?: string;

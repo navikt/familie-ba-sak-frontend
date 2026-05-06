@@ -13,7 +13,8 @@
 
 .menylenke {
     text-decoration: none;
-    padding: var(--ax-space-6) var(--ax-space-8);
+    padding-inline: clamp(var(--ax-space-4), var(--ax-space-20), var(--ax-space-48));
+    padding-block: var(--ax-space-6);
     border-left: 5px solid transparent;
     user-select: text;
 }
