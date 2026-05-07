@@ -1,5 +1,16 @@
 import { useEffect } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { useOppdaterBehandlingsresultat } from '@hooks/useOppdaterBehandlingsresultat';
+import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetalingAndel';
+import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
+import { BehandlingResultat, type IBehandling } from '@typer/behandling';
+import { BehandlingSteg, Behandlingstype } from '@typer/behandling';
+import { type IRestKompetanse, type IRestUtenlandskPeriodeBeløp, type IRestValutakurs } from '@typer/eøsPerioder';
+import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
+import { periodeOverlapperMedValgtDato } from '@utils/dato';
+import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
@@ -19,20 +30,6 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import { useFagsak } from '../../../../../hooks/useFagsak';
-import { useOppdaterBehandlingsresultat } from '../../../../../hooks/useOppdaterBehandlingsresultat';
-import { useOpprettEndretUtbetalingAndel } from '../../../../../hooks/useOpprettEndretUtbetalingAndel';
-import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
-import { BehandlingResultat, type IBehandling } from '../../../../../typer/behandling';
-import { BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
-import {
-    type IRestKompetanse,
-    type IRestUtenlandskPeriodeBeløp,
-    type IRestValutakurs,
-} from '../../../../../typer/eøsPerioder';
-import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
-import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
-import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -55,10 +52,11 @@ interface IBehandlingsresultatProps {
 }
 
 const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => {
-    const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const fagsak = useFagsak();
     const navigate = useNavigate();
+    const erLesevisning = useErLesevisning();
 
     const {
         visFeilmeldinger,
@@ -105,8 +103,6 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
         erValutakurserGyldige,
         hentValutakurserMedFeil,
     } = useEøs(åpenBehandling);
-
-    const erLesevisning = vurderErLesevisning();
 
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
