@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IGrunnlagPerson } from '@typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '@typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import deepEqual from 'deep-equal';
 import styled from 'styled-components';
 
@@ -10,10 +14,6 @@ import type { FeltState } from '@navikt/familie-skjema';
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
-import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import type { IAnnenVurdering, IAnnenVurderingConfig } from '../../../../../../typer/vilkår';
-import { Resultat, resultatVisningsnavn } from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -53,10 +53,10 @@ const StyledPersonIcon = styled(PersonIcon)`
 `;
 
 const AnnenVurderingTabellRad = ({ person, annenVurderingConfig, visFeilmeldinger, annenVurdering }: IProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = useErLesevisning();
 
     const [ekspandertAnnenVurdering, settEkspandertAnnenVurdering] = useState(
-        vurderErLesevisning() || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
+        erLesevisning || annenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT
     );
     const [redigerbartAnnenVurdering, settRedigerbartAnnenVurdering] =
         useState<FeltState<IAnnenVurdering>>(annenVurdering);

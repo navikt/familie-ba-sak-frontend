@@ -1,18 +1,17 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
 import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
 
 import { BehandlingstemaSelect } from './BehandlingstemaSelect';
 import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 
 interface Props {
     lukkModal: () => void;
 }
 
 export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const { form, onSubmit } = useEndreBehandlingstemaSkjema({ lukkModal });
 

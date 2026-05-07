@@ -1,3 +1,9 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsakId } from '@hooks/useFagsakId';
+import { BehandlingSteg, type IBehandling } from '@typer/behandling';
+import type { ITilbakekreving } from '@typer/simulering';
+import { hentSøkersMålform } from '@utils/behandling';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useNavigate } from 'react-router';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
@@ -7,16 +13,11 @@ import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { MigreringAlerts } from './MigreringAlerts';
 import { useSimuleringContext } from './SimuleringContext';
 import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useFagsakId } from '../../../../../hooks/useFagsakId';
-import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
-import type { ITilbakekreving } from '../../../../../typer/simulering';
-import { hentSøkersMålform } from '../../../../../utils/behandling';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 
 interface ISimuleringProps {
     åpenBehandling: IBehandling;
@@ -39,12 +40,11 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
 
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
+    const { settÅpenBehandling } = useBehandlingContext();
 
     const fagsakId = useFagsakId();
+    const erLesevisning = useErLesevisning();
     const navigate = useNavigate();
-
-    const erLesevisning = vurderErLesevisning();
 
     const harOverlappendePerioderMedAndreFagsakerOgSkalStanses =
         !behandlingErEndreMigreringsdato &&

@@ -1,10 +1,12 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { Behandlingstype } from '@typer/behandling';
+import { FagsakType } from '@typer/fagsak';
+
 import { ActionMenu } from '@navikt/ds-react';
 
 import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { Behandlingstype } from '../../../../typer/behandling';
-import { FagsakType } from '../../../../typer/fagsak';
 
 function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) {
     if (erLesevisning) {
@@ -26,8 +28,9 @@ interface Props {
 }
 
 export function LeggTilEllerFjernBrevmottakerePåBehandling({ åpneModal }: Props) {
-    const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     const erInstitusjonssak = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const erRelevantBehandlingstype = relevanteBehandlingstype.includes(behandling.type);
@@ -36,7 +39,6 @@ export function LeggTilEllerFjernBrevmottakerePåBehandling({ åpneModal }: Prop
         return null;
     }
 
-    const erLesevisning = vurderErLesevisning();
     const harBrevmottaker = behandling.brevmottakere.length > 0;
 
     if (erLesevisning && !harBrevmottaker) {

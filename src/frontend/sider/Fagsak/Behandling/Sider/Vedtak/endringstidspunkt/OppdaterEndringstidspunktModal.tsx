@@ -1,5 +1,9 @@
 import { useId } from 'react';
 
+import { useBehandlingId } from '@hooks/useBehandlingId';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useHentEndringstidspunkt } from '@hooks/useHentEndringstidspunkt';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { FormProvider } from 'react-hook-form';
 
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
@@ -18,9 +22,6 @@ import {
 
 import { EndringstidspunktFelt } from './EndringstidspunktFelt';
 import { useEndringstidspunktForm } from './useEndringstidspunktForm';
-import { useHentEndringstidspunkt } from '../../../../../../hooks/useHentEndringstidspunkt';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const FALLBACK_ERROR_MESSAGE =
     'Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt brukerstøtte.';
@@ -34,14 +35,15 @@ interface Props {
 }
 
 export function OppdaterEndringstidspunktModal({ lukkModal }: Props) {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const behandlingId = useBehandlingId();
+    const erLesevisning = useErLesevisning();
     const hentetEndringstidspunktId = useId();
 
     const {
         data: endringstidspunkt,
         isPending: hentEndringstidspunktIsPending,
         error: hentEndringstidspunktError,
-    } = useHentEndringstidspunkt(behandling.behandlingId);
+    } = useHentEndringstidspunkt(behandlingId);
 
     const { form, onSubmit } = useEndringstidspunktForm({ lukkModal });
 
@@ -49,8 +51,6 @@ export function OppdaterEndringstidspunktModal({ lukkModal }: Props) {
         handleSubmit,
         formState: { errors, isSubmitting },
     } = form;
-
-    const erLesevisning = vurderErLesevisning();
 
     return (
         <Modal
