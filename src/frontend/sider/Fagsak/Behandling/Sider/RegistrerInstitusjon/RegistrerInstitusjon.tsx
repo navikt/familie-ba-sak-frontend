@@ -15,7 +15,7 @@ interface IProps {
 const RegistrerInstitusjon = ({ åpenBehandling }: IProps) => {
     const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(åpenBehandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
-    const { behandlingsstegSubmitressurs, vurderErLesevisning } = useBehandlingContext();
+    const { vurderErLesevisning } = useBehandlingContext();
     const erLesevisning = vurderErLesevisning();
 
     if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
@@ -28,7 +28,7 @@ const RegistrerInstitusjon = ({ åpenBehandling }: IProps) => {
             tittel={'Info om institusjon'}
             nesteOnClick={onSubmitMottaker}
             nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            senderInn={false}
             steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
         >
             {samhandlerRessurs.status === RessursStatus.SUKSESS && (

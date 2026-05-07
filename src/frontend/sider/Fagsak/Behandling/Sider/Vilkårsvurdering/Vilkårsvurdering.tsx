@@ -3,17 +3,18 @@ import { useState } from 'react';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
-import { annenVurderingConfig, type IAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
+import { type IAnnenVurdering, type IVilkårResultat } from '@typer/vilkår';
+import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { useNavigate } from 'react-router';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
@@ -29,7 +30,8 @@ import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 
 export function Vilkårsvurdering() {
-    const { behandling, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
+
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
         useVilkårsvurderingContext();
 
@@ -40,14 +42,23 @@ export function Vilkårsvurdering() {
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
 
+    const {
+        mutate: oppdaterVilkårsvurdering,
+        isPending: oppdaterVilkårsvurderingIsPending,
+        error: oppdaterVilkårsvurderingError,
+    } = useOppdaterVilkårsvurdering({
+        onSuccess: behandling => {
+            settÅpenBehandling(byggSuksessRessurs(behandling));
+            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
+        },
+    });
+
     const uregistrerteBarn =
         behandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
 
     if (vilkårsvurdering.length === 0) {
         return <div>Finner ingen vilkår på behandlingen.</div>;
     }
-
-    const skjemaFeilmelding = hentFrontendFeilmelding(behandlingsstegSubmitressurs);
 
     return (
         <Skjemasteg
@@ -66,13 +77,13 @@ export function Vilkårsvurdering() {
                 if (erLesevisning) {
                     navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
                 } else if (erVilkårsvurderingenGyldig()) {
-                    vilkårsvurderingNesteOnClick();
+                    oppdaterVilkårsvurdering({ behandlingId: behandling.behandlingId });
                 } else {
                     settVisFeilmeldinger(true);
                 }
             }}
             maxWidthStyle={MAX_SKJEMASTEG_BREDDE}
-            senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
+            senderInn={oppdaterVilkårsvurderingIsPending}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
             <>
@@ -137,8 +148,8 @@ export function Vilkårsvurdering() {
                         ))}
                     </ErrorSummary>
                 )}
-                {skjemaFeilmelding !== '' && skjemaFeilmelding !== undefined && (
-                    <ErrorMessage>{skjemaFeilmelding}</ErrorMessage>
+                {oppdaterVilkårsvurderingError && (
+                    <ErrorMessage>{oppdaterVilkårsvurderingError.message ?? 'En ukjent feil oppstod.'}</ErrorMessage>
                 )}
                 <ManglendeSvalbardmerkingVarsel />
                 <ManglendeFinnmarkmerkingVarsel />
