@@ -1,7 +1,7 @@
+import type { IRestKorrigertVedtak } from '@typer/vedtak';
+
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
-
-import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
 
 interface Props {
     åpneModal: () => void;
