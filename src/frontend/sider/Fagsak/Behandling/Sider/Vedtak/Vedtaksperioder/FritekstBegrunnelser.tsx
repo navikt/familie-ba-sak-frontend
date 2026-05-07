@@ -1,5 +1,11 @@
 import type { ChangeEvent } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { utledSøkersMålform } from '@typer/behandling';
+import { målform } from '@typer/søknad';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -9,10 +15,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import { målform } from '../../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const FritekstContainer = styled.div`
     padding: 1rem;
@@ -67,8 +69,9 @@ const ItalicText = styled(BodyLong)`
 `;
 
 const FritekstBegrunnelser = () => {
-    const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+
     const {
         skjema,
         leggTilFritekst,
@@ -143,7 +146,7 @@ const FritekstBegrunnelser = () => {
                     </ItalicText>
                 </StyledHelpText>
                 <StyledTag variant="neutral" size="small">
-                    Skriv {målform[søkersMålform].toLowerCase()}
+                    Skriv {målform[utledSøkersMålform(behandling)].toLowerCase()}
                 </StyledTag>
             </InfoBoks>
             <Fieldset

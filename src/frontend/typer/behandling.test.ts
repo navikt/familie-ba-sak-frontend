@@ -1,4 +1,7 @@
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagGrunnlagPerson } from '@testutils/testdata/personTestdata';
+import { PersonType } from '@typer/person';
+import { Målform } from '@typer/søknad';
 import { describe, expect } from 'vitest';
 
 import {
@@ -7,6 +10,7 @@ import {
     kanLeggeTilUtvidetVilkår,
     MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
     sjekkErBehandleneEnhetMidlertidig,
+    utledSøkersMålform,
 } from './behandling';
 
 describe('behandling', () => {
@@ -116,6 +120,32 @@ describe('behandling', () => {
 
             // Assert
             expect(result).toBe(false);
+        });
+    });
+
+    describe('utledSøkersMålform', () => {
+        test('skal finne søkers målform', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                personer: [lagGrunnlagPerson({ type: PersonType.SØKER, målform: Målform.NN })],
+            });
+
+            // Act
+            const målform = utledSøkersMålform(behandling);
+
+            // Assert
+            expect(målform).toBe(Målform.NN);
+        });
+
+        test('skal falle tilbake til NB målform hvis man ikke finner søker', () => {
+            // Arrange
+            const behandling = lagBehandling({ personer: [] });
+
+            // Act
+            const målform = utledSøkersMålform(behandling);
+
+            // Assert
+            expect(målform).toBe(Målform.NB);
         });
     });
 });

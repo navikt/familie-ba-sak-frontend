@@ -1,6 +1,15 @@
 import type { PropsWithChildren } from 'react';
 import { useState, createContext, useContext, useEffect } from 'react';
 
+import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import type { BehandlingSteg, IBehandling } from '@typer/behandling';
+import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { harTilgangTilEnhet } from '@typer/enhet';
+import { FagsakStatus, FagsakType } from '@typer/fagsak';
+import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
+import { hentSideHref } from '@utils/miljø';
 import { useLocation } from 'react-router';
 
 import { type Ressurs } from '@navikt/familie-typer';
@@ -8,17 +17,6 @@ import { type Ressurs } from '@navikt/familie-typer';
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 import useBehandlingssteg from './useBehandlingssteg';
 import { saksbehandlerHarKunLesevisning } from './utils';
-import { useNavigerAutomatiskTilSideForBehandlingssteg } from '../../../../hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import type { BehandlingSteg, IBehandling } from '../../../../typer/behandling';
-import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import { harTilgangTilEnhet } from '../../../../typer/enhet';
-import { FagsakStatus, FagsakType } from '../../../../typer/fagsak';
-import { PersonType } from '../../../../typer/person';
-import { Målform } from '../../../../typer/søknad';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../typer/vedtaksperiode';
-import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../../../utils/behandling';
-import { hentSideHref } from '../../../../utils/miljø';
 import { useFagsakContext } from '../../FagsakContext';
 import type { ITrinn, SideId } from '../Sider/sider';
 import { hentTrinnForBehandling, KontrollertStatus } from '../Sider/sider';
@@ -34,7 +32,6 @@ interface BehandlingContextValue {
     vurderErLesevisning: (sjekkTilgangTilEnhet?: boolean, skalIgnorereOmEnhetErMidlertidig?: boolean) => boolean;
     leggTilBesøktSide: (besøktSide: SideId) => void;
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
-    søkersMålform: Målform;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
     behandlingsstegSubmitressurs: Ressurs<IBehandling>;
@@ -166,9 +163,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         );
     };
 
-    const søkersMålform: Målform =
-        behandling.personer.find(person => person.type === PersonType.SØKER)?.målform ?? Målform.NB;
-
     const kanBeslutteVedtak =
         behandling.status === BehandlingStatus.FATTER_VEDTAK &&
         BehandlerRolle.BESLUTTER === saksbehandler.rolle &&
@@ -191,7 +185,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 vurderErLesevisning,
                 leggTilBesøktSide,
                 settIkkeKontrollerteSiderTilManglerKontroll,
-                søkersMålform,
                 trinnPåBehandling,
                 behandling: behandling,
                 behandlingsstegSubmitressurs,

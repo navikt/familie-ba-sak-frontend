@@ -9,10 +9,10 @@ import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } f
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
-import type { IGrunnlagPerson } from './person';
+import { type IGrunnlagPerson, PersonType } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
-import type { ISøknadDTO } from './søknad';
+import { type ISøknadDTO, Målform } from './søknad';
 import type {
     Behandlingsstatus,
     TilbakekrevingsbehandlingResultat,
@@ -471,4 +471,9 @@ export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
         behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO ||
         behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK
     );
+}
+
+export function utledSøkersMålform(behandling: IBehandling) {
+    const søker = behandling.personer.find(person => person.type === PersonType.SØKER);
+    return søker?.målform ?? Målform.NB;
 }
