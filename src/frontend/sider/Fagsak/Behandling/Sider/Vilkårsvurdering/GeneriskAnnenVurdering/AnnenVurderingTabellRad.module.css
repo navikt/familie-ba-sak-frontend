@@ -1,0 +1,10 @@
+.beskrivelse {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ikon {
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+}
