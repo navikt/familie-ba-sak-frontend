@@ -1,116 +1,87 @@
-import { useState } from 'react';
+import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
+import { useKorrigerVedtak } from '@hooks/useKorrigerVedtak';
+import type { IRestKorrigertVedtak } from '@typer/vedtak';
+import { dateTilIsoDatoString } from '@utils/dato';
+import { useForm } from 'react-hook-form';
 
-import type { FeltState } from '@navikt/familie-skjema';
-import { ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestKorrigertVedtak } from '../../../../../../typer/vedtak';
-import { dateTilIsoDatoString, validerGyldigDato } from '../../../../../../utils/dato';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
-interface IProps {
+export enum KorrigerVedtakFelt {
+    VEDTAKSDATO = 'vedtaksdato',
+    BEGRUNNELSE = 'begrunnelse',
+}
+
+export interface KorrigerVedtakFormValues {
+    [KorrigerVedtakFelt.VEDTAKSDATO]: Date | null;
+    [KorrigerVedtakFelt.BEGRUNNELSE]: string;
+}
+
+type TransformedKorrigerVedtakFormValues = {
+    [KorrigerVedtakFelt.VEDTAKSDATO]: Date;
+    [KorrigerVedtakFelt.BEGRUNNELSE]: string;
+};
+
+interface Props {
     lukkModal: () => void;
     behandlingId: number;
     korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkModal }: IProps) => {
+export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkModal }: Props) => {
     const { settÅpenBehandling } = useBehandlingContext();
-    const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
+    const { mutateAsync: korrigerVedtak } = useKorrigerVedtak();
+    const { mutateAsync: angreKorrigertVedtak } = useAngreKorrigertVedtak();
 
     const opprinneligVedtaksdato = korrigertVedtak ? new Date(korrigertVedtak.vedtaksdato) : undefined;
 
-    const {
-        skjema,
-        valideringErOk,
-        kanSendeSkjema,
-        settVisfeilmeldinger,
-        onSubmit,
-        nullstillSkjema,
-        settSubmitRessurs,
-    } = useSkjema<
-        {
-            vedtaksdato: Date | undefined;
-            begrunnelse: string;
+    const form = useForm<KorrigerVedtakFormValues, unknown, TransformedKorrigerVedtakFormValues>({
+        defaultValues: {
+            [KorrigerVedtakFelt.VEDTAKSDATO]: opprinneligVedtaksdato, // TODO: sjekk om denne er riktig som defaultvalue
+            [KorrigerVedtakFelt.BEGRUNNELSE]: '',
         },
-        IBehandling
-    >({
-        felter: {
-            vedtaksdato: useFelt<Date | undefined>({
-                verdi: opprinneligVedtaksdato,
-                valideringsfunksjon: validerGyldigDato,
-            }),
-            begrunnelse: useFelt<string>({
-                verdi: korrigertVedtak?.begrunnelse || '',
-                valideringsfunksjon: (felt: FeltState<string>): FeltState<string> => ok(felt),
-            }),
-        },
-        skjemanavn: 'korriger-vedtak-skjema',
     });
 
-    const korrigertVedtakURL = `/familie-ba-sak/api/korrigertvedtak/behandling/${behandlingId}`;
+    const { setError } = form;
 
-    const lagreKorrigertVedtak = () => {
-        if (kanSendeSkjema()) {
-            settVisfeilmeldinger(false);
-            settSubmitRessurs(byggHenterRessurs());
-            onSubmit<IRestKorrigertVedtak>(
-                {
-                    method: 'POST',
-                    data: {
-                        vedtaksdato: dateTilIsoDatoString(skjema.felter.vedtaksdato.verdi),
-                        begrunnelse: skjema.felter.begrunnelse.verdi,
-                    },
-                    url: korrigertVedtakURL,
-                },
-                (response: Ressurs<IBehandling>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settRestFeil(undefined);
-                        lukkModal();
-                        nullstillSkjema();
-                        settÅpenBehandling(response);
-                    }
-                },
-                (error: Ressurs<IBehandling>) => {
-                    if (error.status === RessursStatus.FEILET || error.status === RessursStatus.FUNKSJONELL_FEIL) {
-                        settRestFeil(error.frontendFeilmelding);
-                    } else {
-                        settRestFeil('Teknisk feil ved lagring av korrigert vedtak');
-                    }
-                }
-            );
-        } else {
-            settVisfeilmeldinger(true);
-        }
+    const onKorrigerVedtak = async (values: TransformedKorrigerVedtakFormValues) => {
+        const { vedtaksdato, begrunnelse } = values;
+
+        const korrigerVedtakParameters = {
+            vedtaksdato: dateTilIsoDatoString(vedtaksdato),
+            begrunnelse,
+            behandlingId,
+        };
+
+        return korrigerVedtak(korrigerVedtakParameters)
+            .then(behandling => {
+                settÅpenBehandling(byggSuksessRessurs(behandling));
+                lukkModal();
+            })
+            .catch((e: unknown) => {
+                setError('root', {
+                    message: e instanceof Error ? e.message : 'Teknisk feil ved lagring av korrigert vedtak.',
+                });
+            });
     };
 
-    const angreKorrigering = () => {
-        onSubmit(
-            {
-                method: 'PATCH',
-                url: korrigertVedtakURL,
-            },
-            (response: Ressurs<IBehandling>) => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    settRestFeil(undefined);
-                    lukkModal();
-                    nullstillSkjema();
-                    settÅpenBehandling(response);
-                }
-            },
-            () => {
-                settRestFeil('Teknisk feil ved fjerning av korrigert vedtak');
-            }
-        );
+    const onAngreKorrigertVedtak = async () => {
+        return angreKorrigertVedtak(behandlingId)
+            .then(behandling => {
+                settÅpenBehandling(byggSuksessRessurs(behandling));
+                lukkModal();
+            })
+            .catch((e: unknown) => {
+                setError('root', {
+                    message: e instanceof Error ? e.message : 'Teknisk feil ved fjerning av korrigert vedtak.',
+                });
+            });
     };
 
     return {
-        skjema,
-        valideringErOk,
-        lagreKorrigertVedtak,
-        restFeil,
-        angreKorrigering,
+        form,
+        onKorrigerVedtak,
+        onAngreKorrigertVedtak,
     };
 };
