@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IGrunnlagPerson } from '@typer/person';
+import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
+import { Resultat, resultatVisningsnavn } from '@typer/vilkår';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+import { alleRegelverk } from '@utils/vilkår';
 import deepEqual from 'deep-equal';
-import styled from 'styled-components';
 
 import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
-import { BodyShort, Table, Tooltip } from '@navikt/ds-react';
+import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårFeilmeldingId } from './VilkårTabell';
+import Styles from './VilkårTabellRad.module.css';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
 import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
-import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
-import { Resultat, resultatVisningsnavn } from '../../../../../../typer/vilkår';
-import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { alleRegelverk } from '../../../../../../utils/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
-interface IProps {
+interface Props {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: FeltState<IVilkårResultat>;
@@ -25,55 +26,15 @@ interface IProps {
     settFokusPåKnapp: () => void;
 }
 
-const BeskrivelseCelle = styled(BodyShort)`
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 20rem;
-`;
-
-const VurderingCelle = styled.div`
-    display: flex;
-    svg {
-        margin-right: 1rem;
-    }
-`;
-
-const FlexDiv = styled.div`
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    > div:nth-child(n + 2) {
-        padding-left: 0.5rem;
-    }
-`;
-
-const StyledTooltip = styled(Tooltip)`
-    padding-top: 8px;
-    padding-bottom: 8px;
-    max-width: 500px;
-    text-align: left;
-`;
-
-const StyledCogIcon = styled(CogIcon)`
-    font-size: 1.5rem;
-    min-width: 1.5rem;
-`;
-
-const StyledCogRotationIcon = styled(CogRotationIcon)`
-    font-size: 1.5rem;
-    min-width: 1.5rem;
-`;
-
-const StyledPersonIcon = styled(PersonIcon)`
-    font-size: 1.5rem;
-    min-width: 1.5rem;
-`;
-
-const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilmeldinger, settFokusPåKnapp }: IProps) => {
-    const { vurderErLesevisning, behandling, aktivSettPåVent } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+export function VilkårTabellRad({
+    person,
+    vilkårFraConfig,
+    vilkårResultat,
+    visFeilmeldinger,
+    settFokusPåKnapp,
+}: Props) {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
     const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
@@ -82,6 +43,8 @@ const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilme
 
     const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(vilkårResultat);
+
+    const aktivSettPåVent = behandling.aktivSettPåVent;
 
     useEffect(() => {
         settEkspandertVilkår(hentInitiellEkspandering());
@@ -101,7 +64,7 @@ const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilme
     return (
         <Table.ExpandableRow
             open={ekspandertVilkår}
-            togglePlacement="right"
+            togglePlacement={'right'}
             onOpenChange={() => toggleForm(true)}
             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
             content={
@@ -120,8 +83,8 @@ const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilme
                 />
             }
         >
-            <Table.DataCell>
-                <VurderingCelle>
+            <Table.DataCell className={Styles.celle}>
+                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
                     <VilkårResultatIkon
                         resultat={vilkårResultatVerdi}
                         resultatBegrunnelse={vilkårResultatbegrunnelse}
@@ -131,51 +94,51 @@ const VilkårTabellRad = ({ person, vilkårFraConfig, vilkårResultat, visFeilme
                             ? resultatVisningsnavn[vilkårResultatbegrunnelse]
                             : resultatVisningsnavn[vilkårResultatVerdi]}
                     </BodyShort>
-                </VurderingCelle>
+                </HStack>
             </Table.DataCell>
-            <Table.DataCell>
+            <Table.DataCell className={Styles.celle}>
                 <BodyShort>
                     {periodeErTom ? '-' : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
                 </BodyShort>
             </Table.DataCell>
-            <Table.DataCell>
+            <Table.DataCell className={Styles.celle}>
                 {vilkårResultat.verdi.begrunnelse.verdi && (
-                    <StyledTooltip content={vilkårResultat.verdi.begrunnelse.verdi}>
-                        <BeskrivelseCelle children={vilkårResultat.verdi.begrunnelse.verdi} />
-                    </StyledTooltip>
+                    <Tooltip content={vilkårResultat.verdi.begrunnelse.verdi} className={Styles.tooltip}>
+                        <BodyShort className={Styles.beskrivelse}>{vilkårResultat.verdi.begrunnelse.verdi}</BodyShort>
+                    </Tooltip>
                 )}
             </Table.DataCell>
-            <Table.DataCell>
-                {redigerbartVilkår.verdi.vurderesEtter ? (
-                    <FlexDiv>
-                        {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
-                        <div>{alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst}</div>
-                    </FlexDiv>
-                ) : (
-                    <FlexDiv>
-                        <StyledCogIcon title={'Generell vurdering'} />
-                        <div>Generell vurdering</div>
-                    </FlexDiv>
-                )}
-            </Table.DataCell>
-            <Table.DataCell>
-                <FlexDiv>
-                    {vilkårResultat.verdi.erAutomatiskVurdert ? (
-                        <StyledCogRotationIcon title={'Automatisk Vurdering'} />
+            <Table.DataCell className={Styles.celle}>
+                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
+                    {redigerbartVilkår.verdi.vurderesEtter ? (
+                        <>
+                            {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
+                            <BodyShort>{alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst}</BodyShort>
+                        </>
                     ) : (
-                        <StyledPersonIcon title={'Manuell vurdering'} />
+                        <>
+                            <CogIcon title={'Generell vurdering'} className={Styles.ikon} />
+                            <BodyShort>Generell vurdering</BodyShort>
+                        </>
                     )}
-                    <div>
+                </HStack>
+            </Table.DataCell>
+            <Table.DataCell className={Styles.celle}>
+                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
+                    {vilkårResultat.verdi.erAutomatiskVurdert ? (
+                        <CogRotationIcon title={'Automatisk Vurdering'} className={Styles.ikon} />
+                    ) : (
+                        <PersonIcon title={'Manuell vurdering'} className={Styles.ikon} />
+                    )}
+                    <BodyShort>
                         {vilkårResultat.verdi.erVurdert
                             ? vilkårResultat.verdi.behandlingId === behandling.behandlingId
                                 ? 'Vurdert i denne behandlingen'
                                 : 'Vurdert i tidligere behandling'
                             : ''}
-                    </div>
-                </FlexDiv>
+                    </BodyShort>
+                </HStack>
             </Table.DataCell>
         </Table.ExpandableRow>
     );
-};
-
-export default VilkårTabellRad;
+}

@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import { annenVurderingConfig, type IAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { erProd } from '@utils/miljø';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { useNavigate } from 'react-router';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
@@ -15,38 +24,21 @@ import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysn
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
-import { useFeatureToggles } from '../../../../../hooks/useFeatureToggles';
-import { BehandlingSteg, BehandlingÅrsak } from '../../../../../typer/behandling';
-import { FeatureToggle } from '../../../../../typer/featureToggles';
-import {
-    annenVurderingConfig,
-    type IAnnenVurdering,
-    type IVilkårResultat,
-    vilkårConfig,
-} from '../../../../../typer/vilkår';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
-import { erProd } from '../../../../../utils/miljø';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
-import Skjemasteg from '../Skjemasteg';
+import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
 import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
-import { useFagsakContext } from '../../../FagsakContext';
 
 export function Vilkårsvurdering() {
-    const toggles = useFeatureToggles();
-
-    const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } =
-        useBehandlingContext();
-
+    const { behandling, vilkårsvurderingNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
     const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
         useVilkårsvurderingContext();
 
-    const erLesevisning = vurderErLesevisning();
+    const fagsak = useFagsak();
+    const erLesevisning = useErLesevisning();
+    const navigate = useNavigate();
+    const toggles = useFeatureToggles();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
-
-    const navigate = useNavigate();
 
     const uregistrerteBarn =
         behandling.søknadsgrunnlag?.barnaMedOpplysninger.filter(barn => !barn.erFolkeregistrert) ?? [];
@@ -79,7 +71,7 @@ export function Vilkårsvurdering() {
                     settVisFeilmeldinger(true);
                 }
             }}
-            maxWidthStyle={'80rem'}
+            maxWidthStyle={MAX_SKJEMASTEG_BREDDE}
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >

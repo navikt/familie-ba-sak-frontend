@@ -10,9 +10,9 @@ import { PersonType } from '@typer/person';
 import { annenVurderingConfig, harPersonIkkeVurdertVilkår, vilkårConfig, VilkårType } from '@typer/vilkår';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 import { EkspanderVilkårsvurderingProvider } from './EkspanderVilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
@@ -34,6 +34,8 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
     const toggles = useFeatureToggles();
     const skjermstørrelse = useSkjermstørrelse();
     const erLesevisning = useErLesevisning();
+
+    const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
 
     const leggTilVilkårUtvidet = (personIdent: string) => {
         const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);
@@ -116,7 +118,8 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                                     </HStack>
                                 ) : (
                                     <>
-                                        <HStack
+                                        <Stack
+                                            direction={erStorSkjerm ? 'row' : 'column'}
                                             gap={'space-8'}
                                             justify={'space-between'}
                                             wrap={true}
@@ -127,7 +130,7 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                                                 {ekspandert && skalKunneLeggeTilUtvidetBarnetrygdVilkår && (
                                                     <Button
                                                         variant={'tertiary'}
-                                                        size={skjermstørrelse > Skjermstørrelse.XL ? 'medium' : 'small'}
+                                                        size={erStorSkjerm ? 'medium' : 'small'}
                                                         onClick={() => leggTilVilkårUtvidet(personResultat.personIdent)}
                                                         icon={
                                                             <PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />
@@ -138,7 +141,7 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                                                 )}
                                                 <Button
                                                     variant={'tertiary'}
-                                                    size={skjermstørrelse > Skjermstørrelse.XL ? 'medium' : 'small'}
+                                                    size={erStorSkjerm ? 'medium' : 'small'}
                                                     onClick={ekspander}
                                                     icon={
                                                         ekspandert ? (
@@ -152,15 +155,9 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
                                                     {ekspandert ? 'Skjul vilkårsvurdering' : 'Vis vilkårsvurdering'}
                                                 </Button>
                                             </HStack>
-                                        </HStack>
+                                        </Stack>
                                         <Activity mode={ekspandert ? 'visible' : 'hidden'}>
-                                            <Box
-                                                paddingInline={
-                                                    skjermstørrelse > Skjermstørrelse.XL
-                                                        ? 'space-56 space-0'
-                                                        : 'space-0'
-                                                }
-                                            >
+                                            <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
                                                 {personResultat.person.registerhistorikk ? (
                                                     <Registeropplysninger
                                                         registerHistorikk={personResultat.person.registerhistorikk}
