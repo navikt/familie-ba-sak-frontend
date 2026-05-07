@@ -1,13 +1,15 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Behandlingstype } from '@typer/behandling';
+import { BehandlingKategori } from '@typer/behandlingstema';
+import { FagsakType } from '@typer/fagsak';
+import { vedtakHarFortsattUtbetaling } from '@utils/vedtakUtils';
+
 import { ArrowUndoIcon, CalculatorIcon, ChevronDownIcon, StarsEuIcon, TasklistStartIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button, Stack } from '@navikt/ds-react';
 
 import Styles from './Vedtaksmeny.module.css';
-import { Behandlingstype } from '../../../../../../typer/behandling';
-import { BehandlingKategori } from '../../../../../../typer/behandlingstema';
-import { FagsakType } from '../../../../../../typer/fagsak';
-import { vedtakHarFortsattUtbetaling } from '../../../../../../utils/vedtakUtils';
 import { useFagsakContext } from '../../../../FagsakContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import EndreEndringstidspunkt from '../endringstidspunkt/EndreEndringstidspunkt';
@@ -15,13 +17,13 @@ import { OppdaterEndringstidspunktModal } from '../endringstidspunkt/OppdaterEnd
 import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import KorrigerEtterbetaling from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from '../KorrigerVedtakModal/KorrigerVedtak';
-import KorrigerVedtakModal from '../KorrigerVedtakModal/KorrigerVedtakModal';
+import { KorrigerVedtakModal } from '../KorrigerVedtakModal/KorrigerVedtakModal';
 import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
 
 export function Vedtaksmeny() {
     const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling } = useBehandlingContext();
     const { erFeilutbetaltValutaTabellSynlig, visFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig, visRefusjonEøsTabell } = useRefusjonEøsTabellContext();
 
@@ -33,7 +35,7 @@ export function Vedtaksmeny() {
         sammensattKontrollsak,
     } = useSammensattKontrollsakContext();
 
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
 
