@@ -8,6 +8,9 @@ import {
 } from 'react';
 import { createContext, useState } from 'react';
 
+import type { IToast, ToastTyper } from '@komponenter/Toast/typer';
+import type { IPersonInfo, IRestTilgang } from '@typer/person';
+import { adressebeskyttelsestyper } from '@typer/person';
 import type { AxiosRequestConfig } from 'axios';
 
 import { BodyShort, Button, HStack } from '@navikt/ds-react';
@@ -15,13 +18,7 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useFeatureToggles } from '../hooks/useFeatureToggles';
-import { useSaksbehandler } from '../hooks/useSaksbehandler';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
-import type { IToast, ToastTyper } from '../komponenter/Toast/typer';
-import { FeatureToggle } from '../typer/featureToggles';
-import type { IPersonInfo, IRestTilgang } from '../typer/person';
-import { adressebeskyttelsestyper } from '../typer/person';
 
 export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;
@@ -65,19 +62,15 @@ interface AppContextValue {
     sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
     toasts: { [toastId: string]: IToast };
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
-    skalObfuskereData: boolean;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const AppProvider = (props: PropsWithChildren) => {
     const { request } = useHttp();
-    const toggles = useFeatureToggles();
 
     const [appInfoModal, settAppInfoModal] = useState<IModal>(initalState);
     const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
-
-    const saksbehandler = useSaksbehandler();
 
     const lukkModal = () => {
         settAppInfoModal(initalState);
@@ -122,8 +115,6 @@ const AppProvider = (props: PropsWithChildren) => {
         });
     };
 
-    const skalObfuskereData = toggles[FeatureToggle.skalObfuskereData] && !saksbehandler.harSkrivetilgang;
-
     return (
         <AppContext.Provider
             value={{
@@ -137,7 +128,6 @@ const AppProvider = (props: PropsWithChildren) => {
                 sjekkTilgang,
                 toasts,
                 hentPerson,
-                skalObfuskereData,
             }}
         >
             {props.children}
