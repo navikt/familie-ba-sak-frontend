@@ -1,0 +1,26 @@
+.table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+.table,
+.table * {
+    box-sizing: border-box;
+}
+
+.col1 {
+    width: 36%;
+}
+
+.col2 {
+    width: 34%;
+}
+
+.col3 {
+    width: 26%;
+}
+
+.col4 {
+    width: 4%;
+}
