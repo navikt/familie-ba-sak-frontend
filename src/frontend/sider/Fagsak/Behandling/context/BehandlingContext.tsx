@@ -3,6 +3,7 @@ import { useState, createContext, useContext, useEffect } from 'react';
 
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { saksbehandlerHarKunLesevisning } from '@sider/Fagsak/Behandling/context/utils';
 import type { BehandlingSteg, IBehandling } from '@typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { harTilgangTilEnhet } from '@typer/enhet';
