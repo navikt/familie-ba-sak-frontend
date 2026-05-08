@@ -46,7 +46,6 @@ interface BehandlingContextValue {
     ) => void;
     erMigreringsbehandling: boolean;
     gjelderInstitusjon: boolean;
-    samhandlerOrgnr: string | undefined;
     gjelderEnsligMindreårig: boolean;
     gjelderSkjermetBarn: boolean;
     settÅpenBehandling: (behandling: Ressurs<IBehandling>) => void;
@@ -177,8 +176,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
     const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
 
-    const samhandlerOrgnr = gjelderInstitusjon ? fagsak.institusjon?.orgNummer : undefined;
-
     return (
         <BehandlingContext.Provider
             value={{
@@ -193,7 +190,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 sendTilBeslutterNesteOnClick,
                 erMigreringsbehandling,
                 gjelderInstitusjon,
-                samhandlerOrgnr,
                 gjelderEnsligMindreårig,
                 gjelderSkjermetBarn,
                 settÅpenBehandling: settBehandlingRessurs,

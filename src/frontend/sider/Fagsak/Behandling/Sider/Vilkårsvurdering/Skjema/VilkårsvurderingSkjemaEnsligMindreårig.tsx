@@ -1,33 +1,43 @@
+import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
+import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonType } from '@typer/person';
+import type { IPersonResultat } from '@typer/vilkår';
+import { annenVurderingConfig, AnnenVurderingType, vilkårConfigEnsligMindreårig, VilkårType } from '@typer/vilkår';
+
 import { Box, HStack, LocalAlert } from '@navikt/ds-react';
 
-import { PersonInformasjon } from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import { PersonType } from '../../../../../../typer/person';
-import type { IPersonResultat } from '../../../../../../typer/vilkår';
-import {
-    annenVurderingConfig,
-    AnnenVurderingType,
-    vilkårConfigEnsligMindreårig,
-    VilkårType,
-} from '../../../../../../typer/vilkår';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface IProps {
+interface Props {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaEnsligMindreårig = ({ visFeilmeldinger }: IProps) => {
+export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: Props) {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
-    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
+    const skjermstørrelse = useSkjermstørrelse();
 
+    const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
+    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
-    return personResultat ? (
+
+    if (!personResultat) {
+        return (
+            <LocalAlert status={'error'}>
+                <LocalAlert.Header>
+                    <LocalAlert.Title>Finner ingen vilkår på behandlingen</LocalAlert.Title>
+                </LocalAlert.Header>
+            </LocalAlert>
+        );
+    }
+
+    return (
         <>
             <HStack
                 wrap={false}
@@ -37,15 +47,14 @@ const VilkårsvurderingSkjemaEnsligMindreårig = ({ visFeilmeldinger }: IProps) 
             >
                 <PersonInformasjon person={personResultat.person} />
             </HStack>
-
-            <Box paddingInline={'space-56 space-0'}>
+            <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
                 {personResultat.person.registerhistorikk ? (
                     <Registeropplysninger
                         registerHistorikk={personResultat.person.registerhistorikk}
                         fødselsdato={personResultat.person.fødselsdato}
                     />
                 ) : (
-                    <LocalAlert status="warning">
+                    <LocalAlert status={'warning'}>
                         <LocalAlert.Header>
                             <LocalAlert.Title>Klarte ikke hente registeropplysninger</LocalAlert.Title>
                         </LocalAlert.Header>
@@ -84,13 +93,5 @@ const VilkårsvurderingSkjemaEnsligMindreårig = ({ visFeilmeldinger }: IProps) 
                 })}
             </Box>
         </>
-    ) : (
-        <LocalAlert status="error">
-            <LocalAlert.Header>
-                <LocalAlert.Title>Finner ingen vilkår på behandlingen</LocalAlert.Title>
-            </LocalAlert.Header>
-        </LocalAlert>
     );
-};
-
-export default VilkårsvurderingSkjemaEnsligMindreårig;
+}

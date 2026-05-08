@@ -19,7 +19,7 @@ import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderi
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 import { OppdaterRegisteropplysninger } from './OppdaterRegisteropplysninger';
-import VilkårsvurderingSkjema from './Skjema/VilkårsvurderingSkjema';
+import { VilkårsvurderingSkjema } from './Skjema/VilkårsvurderingSkjema';
 import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';

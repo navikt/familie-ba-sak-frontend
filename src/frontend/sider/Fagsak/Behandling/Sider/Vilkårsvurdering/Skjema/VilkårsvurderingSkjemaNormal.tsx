@@ -23,11 +23,11 @@ import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
-interface IVilkårsvurderingSkjemaNormal {
+interface Props {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingSkjemaNormal) => {
+export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
@@ -226,6 +226,4 @@ const VilkårsvurderingSkjemaNormal = ({ visFeilmeldinger }: IVilkårsvurderingS
             })}
         </>
     );
-};
-
-export default VilkårsvurderingSkjemaNormal;
+}
