@@ -1,29 +1,28 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+
 import { Table } from '@navikt/ds-react';
 
 import { FeilutbetaltValutaForm } from './form/FeilutbetaltValutaForm';
 import { Type } from './form/useFeilutbetaltValutaForm';
 import { SlettFeilutbetaltValuta } from './SlettFeilutbetaltValuta';
 import { useSlettFeilutbetaltValutaIsPending } from './useSlettFeilutbetaltValutaIsPending';
-import type { IRestFeilutbetaltValuta } from '../../../../../../typer/eøs-feilutbetalt-valuta';
-import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface Props {
     feilutbetaltValuta: IRestFeilutbetaltValuta;
 }
 
 export function FeilutbetaltValutaRad({ feilutbetaltValuta }: Props) {
-    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = useErLesevisning();
 
     const slettFeilutbetaltValutaIsPending = useSlettFeilutbetaltValutaIsPending({
         feilutbetaltValutaId: feilutbetaltValuta.id,
     });
 
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
-
-    const readOnly = vurderErLesevisning() || slettFeilutbetaltValutaIsPending;
 
     return (
         <Table.ExpandableRow
@@ -35,7 +34,7 @@ export function FeilutbetaltValutaRad({ feilutbetaltValuta }: Props) {
                     type={Type.OPPDATER}
                     feilutbetaltValuta={feilutbetaltValuta}
                     skjulForm={() => settErRadEkspandert(false)}
-                    readOnly={readOnly}
+                    readOnly={erLesevisning || slettFeilutbetaltValutaIsPending}
                 />
             }
         >

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
 import styled from 'styled-components';
 
 import { Button, ErrorMessage, LocalAlert, Textarea, VStack } from '@navikt/ds-react';
 
 import { useSammensattKontrollsakContext } from './SammensattKontrollsakContext';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const StyledVStack = styled(VStack)`
     margin-bottom: var(--ax-space-24);
@@ -16,15 +16,14 @@ const StyledButton = styled(Button)`
 `;
 
 const SammensattKontrollsak = () => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { sammensattKontrollsak, opprettEllerOppdaterSammensattKontrollsak, feilmelding } =
         useSammensattKontrollsakContext();
+
+    const erLesevisning = useErLesevisning();
 
     const [fritekst, settFritekst] = useState<string>(sammensattKontrollsak?.fritekst ?? '');
 
     const fritekstErEndret = fritekst !== (sammensattKontrollsak?.fritekst ?? '');
-
-    const erLesevisning = vurderErLesevisning();
 
     return (
         <StyledVStack gap="space-20">

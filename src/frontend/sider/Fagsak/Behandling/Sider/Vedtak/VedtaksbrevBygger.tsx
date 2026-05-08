@@ -1,3 +1,17 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import {
+    BehandlerRolle,
+    BehandlingResultat,
+    BehandlingStatus,
+    BehandlingSteg,
+    BehandlingÅrsak,
+    hentStegNummer,
+    type IBehandling,
+} from '@typer/behandling';
+import type { IPersonInfo } from '@typer/person';
+
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Button, InfoCard } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -11,20 +25,7 @@ import { useSammensattKontrollsakContext } from './SammensattKontrollsak/Sammens
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
 import useDokument from '../../../../../hooks/useDokument';
-import { useSaksbehandler } from '../../../../../hooks/useSaksbehandler';
-import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
-import {
-    BehandlerRolle,
-    BehandlingResultat,
-    BehandlingStatus,
-    BehandlingSteg,
-    BehandlingÅrsak,
-    hentStegNummer,
-    type IBehandling,
-} from '../../../../../typer/behandling';
-import type { IPersonInfo } from '../../../../../typer/person';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
 interface Props {
@@ -33,7 +34,6 @@ interface Props {
 }
 
 export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
 
@@ -45,8 +45,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
     const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
     const saksbehandler = useSaksbehandler();
-
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const automatiskBehandlingMedFortsattInnvilgetSomResultat =
         åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && åpenBehandling.skalBehandlesAutomatisk;

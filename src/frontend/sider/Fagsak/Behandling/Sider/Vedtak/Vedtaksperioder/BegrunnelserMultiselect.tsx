@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useHentGenererteBrevbegrunnelser } from '@hooks/useHentGenererteBrevbegrunnelser';
+import { useOppdaterStandardbegrunnelserMutationState } from '@hooks/useOppdaterStandardbegrunnelserMutationState';
+import { useOppdaterVedtaksperioderMedFriteksterMutationState } from '@hooks/useOppdaterVedtaksperioderMedFriteksterMutationState';
+import type { OptionType } from '@typer/common';
+import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '@typer/vedtak';
+import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '@typer/vedtak';
+import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '@utils/vedtakUtils';
 import styled from 'styled-components';
 
 import { BodyShort, Label } from '@navikt/ds-react';
-import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 
 import { mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
-import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
-import { useOppdaterStandardbegrunnelserMutationState } from '../../../../../../hooks/useOppdaterStandardbegrunnelserMutationState';
-import { useOppdaterVedtaksperioderMedFriteksterMutationState } from '../../../../../../hooks/useOppdaterVedtaksperioderMedFriteksterMutationState';
-import type { OptionType } from '../../../../../../typer/common';
-import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '../../../../../../typer/vedtak';
-import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
-import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '../../../../../../utils/vedtakUtils';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 
 interface IProps {
@@ -28,8 +28,8 @@ const GroupLabel = styled.div`
 `;
 
 const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const skalIkkeEditeres = vurderErLesevisning() || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
+    const erLesevisning = useErLesevisning();
+    const skalIkkeEditeres = erLesevisning || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
 
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
     const { id, onChangeBegrunnelse, grupperteBegrunnelser, vedtaksperiodeMedBegrunnelser } =

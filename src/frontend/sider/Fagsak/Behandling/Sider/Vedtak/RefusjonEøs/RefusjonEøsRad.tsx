@@ -1,27 +1,26 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+
 import { Table } from '@navikt/ds-react';
 
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';
 import { SlettRefusjonEøs } from './SlettRefusjonEøs';
 import { useSlettRefusjonEøsIsPending } from './useSlettRefusjonEøsIsPending';
-import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
-import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface Props {
     refusjonEøs: IRestRefusjonEøs;
 }
 
 export function RefusjonEøsRad({ refusjonEøs }: Props) {
-    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = useErLesevisning();
 
     const slettRefusjonEøsIsPending = useSlettRefusjonEøsIsPending({ refusjonEøsId: refusjonEøs.id });
 
     const [erRadEkspandert, settErRadEkspandert] = useState<boolean>(false);
-
-    const readOnly = vurderErLesevisning() || slettRefusjonEøsIsPending;
 
     return (
         <Table.ExpandableRow
@@ -33,7 +32,7 @@ export function RefusjonEøsRad({ refusjonEøs }: Props) {
                     type={Type.OPPDATER}
                     refusjonEøs={refusjonEøs}
                     skjulForm={() => settErRadEkspandert(false)}
-                    readOnly={readOnly}
+                    readOnly={erLesevisning || slettRefusjonEøsIsPending}
                 />
             }
         >

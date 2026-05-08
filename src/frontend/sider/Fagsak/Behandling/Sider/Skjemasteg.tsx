@@ -1,15 +1,15 @@
 import type { ReactNode, PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAlert';
+import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
+import { BehandlingSteg } from '@typer/behandling';
+import { behandlingErEtterSteg } from '@utils/steg';
 import styled from 'styled-components';
 
 import { Box, Button, ErrorMessage, Heading, VStack } from '@navikt/ds-react';
-
-import { BehandlingPåVentAlert } from '../../../../komponenter/Alert/BehandlingPåVentAlert';
-import { MidlertidigEnhetAlert } from '../../../../komponenter/Alert/MidlertidigEnhetAlert';
-import { BehandlingSteg } from '../../../../typer/behandling';
-import { behandlingErEtterSteg } from '../../../../utils/steg';
-import { useBehandlingContext } from '../context/BehandlingContext';
 
 export const MAX_SKJEMASTEG_BREDDE = '1440px';
 
@@ -59,7 +59,8 @@ const Skjemasteg = ({
     skalViseForrigeKnapp = true,
     feilmelding = '',
 }: IProps) => {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     useEffect(() => {
         const skjema = document.getElementById('skjemasteg');
@@ -94,7 +95,7 @@ const Skjemasteg = ({
                     {children}
                     {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
                     <Navigering>
-                        {nesteOnClick && skalViseNesteKnapp && (!vurderErLesevisning() || kanGåVidereILesevisning) && (
+                        {nesteOnClick && skalViseNesteKnapp && (!erLesevisning || kanGåVidereILesevisning) && (
                             <Button
                                 variant={'primary'}
                                 onClick={onNesteClicked}
