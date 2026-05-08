@@ -1,12 +1,12 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+
 import { Heading, Textarea, VStack } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const Annet = () => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { skjema } = useSøknadContext();
-    const lesevisning = vurderErLesevisning();
+    const lesevisning = useErLesevisning();
 
     return (
         <VStack marginBlock={'space-32'}>

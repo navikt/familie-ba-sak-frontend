@@ -1,5 +1,24 @@
 import type { ChangeEvent } from 'react';
 
+import { ModalType } from '@context/ModalContext';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useModal } from '@hooks/useModal';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarBehandlingBrevPdf,
+} from '@hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
+import type { IBehandling } from '@typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
+import type { IPersonInfo } from '@typer/person';
+import { type IBarnMedOpplysninger, målform } from '@typer/søknad';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
+import { onOptionSelected } from '@utils/skjema';
+
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     Button,
@@ -30,26 +49,9 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
-import {
-    mutationKey,
-    useOpprettForhåndsvisbarBehandlingBrevPdf,
-} from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../komponenter/FlaggCombobox';
 import Knapperekke from '../../../../../komponenter/Knapperekke';
-import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
-import type { IBehandling } from '../../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
-import type { IPersonInfo } from '../../../../../typer/person';
-import { type IBarnMedOpplysninger, målform } from '../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { onOptionSelected } from '../../../../../utils/skjema';
 import DeltBostedSkjema from '../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
@@ -59,7 +61,7 @@ interface IProps {
 }
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     const {
@@ -88,7 +90,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
             onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
         });
 
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER || isOpprettForhåndsvisbarBrevPdfPending;
@@ -353,7 +355,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 visFeilmeldinger={skjema.visFeilmeldinger}
                                 settVisFeilmeldinger={settVisfeilmeldinger}
                                 manuelleBrevmottakere={brevmottakere}
-                                vurderErLesevisning={vurderErLesevisning}
+                                vurderErLesevisning={() => erLesevisning}
                             />
                             {!erLesevisning && <LeggTilBarnKnapp />}
                         </>

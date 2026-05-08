@@ -1,3 +1,17 @@
+import { ModalType } from '@context/ModalContext';
+import { useBruker } from '@hooks/useBruker';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useModal } from '@hooks/useModal';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf,
+} from '@hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
+import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import type { IBehandling } from '@typer/behandling';
+import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '@typer/simulering';
+import type { Målform } from '@typer/søknad';
+import { målform } from '@typer/søknad';
+
 import { ExternalLinkIcon, FileTextIcon } from '@navikt/aksel-icons';
 import {
     BodyLong,
@@ -19,24 +33,11 @@ import {
     Textarea,
     VStack,
 } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 
 import { useSimuleringContext } from './SimuleringContext';
 import styles from './TilbakekrevingSkjema.module.css';
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
-import {
-    mutationKey,
-    useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf,
-} from '../../../../../hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
-import { BrevmottakereAlert } from '../../../../../komponenter/Brevmottaker/BrevmottakereAlert';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { Tilbakekrevingsvalg, visTilbakekrevingsvalg } from '../../../../../typer/simulering';
-import type { Målform } from '../../../../../typer/søknad';
-import { målform } from '../../../../../typer/søknad';
-import { useBrukerContext } from '../../../BrukerContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const TilbakekrevingSkjema = ({
     søkerMålform,
@@ -47,7 +48,6 @@ const TilbakekrevingSkjema = ({
     harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
     åpenBehandling: IBehandling;
 }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { tilbakekrevingSkjema, hentFeilTilOppsummering, maksLengdeTekst } = useSimuleringContext();
 
     const { åpneModal: åpneForhåndsvisOpprettingAvPdfModal } = useModal(ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF);
@@ -57,11 +57,11 @@ const TilbakekrevingSkjema = ({
             onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
         });
 
-    const { bruker } = useBrukerContext();
+    const bruker = useBruker();
+    const erLesevisning = useErLesevisning();
 
     const { fritekstVarsel, begrunnelse, tilbakekrevingsvalg } = tilbakekrevingSkjema.felter;
     const brevmottakere = åpenBehandling.brevmottakere ?? [];
-    const erLesevisning = vurderErLesevisning();
 
     const radioOnChange = (tilbakekrevingsalternativ: Tilbakekrevingsvalg) => {
         tilbakekrevingSkjema.felter.tilbakekrevingsvalg.validerOgSettFelt(tilbakekrevingsalternativ);

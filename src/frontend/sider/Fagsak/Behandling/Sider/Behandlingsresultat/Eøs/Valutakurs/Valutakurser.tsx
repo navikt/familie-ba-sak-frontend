@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
+import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import styled from 'styled-components';
 
 import {
@@ -19,13 +23,6 @@ import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
-import { useSaksbehandler } from '../../../../../../../hooks/useSaksbehandler';
-import {
-    Behandlingstype,
-    type IBehandling,
-    VurderingsstrategiForValutakurser,
-} from '../../../../../../../typer/behandling';
-import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const ValutakurserContainer = styled.div`
@@ -66,17 +63,16 @@ interface IProps {
 }
 
 const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }: IProps) => {
-    const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { settÅpenBehandling } = useBehandlingContext();
     const { request } = useHttp();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
         useState(false);
 
     const saksbehandler = useSaksbehandler();
+    const erLesevisning = useErLesevisning();
 
     const kanOverstyreAutomatiskeValutakurser =
         åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && saksbehandler.harSuperbrukertilgang;
-
-    const erLesevisning = vurderErLesevisning();
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null

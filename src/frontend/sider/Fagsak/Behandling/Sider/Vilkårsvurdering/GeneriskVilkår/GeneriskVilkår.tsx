@@ -1,5 +1,13 @@
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { BehandlingSteg, type IBehandling } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IGrunnlagPerson } from '@typer/person';
+import { PersonType } from '@typer/person';
+import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
+import { Resultat, VilkårType } from '@typer/vilkår';
 import styled from 'styled-components';
 
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -10,13 +18,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
-import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
-import { BehandlingSteg, type IBehandling } from '../../../../../../typer/behandling';
-import { FeatureToggle } from '../../../../../../typer/featureToggles';
-import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import { PersonType } from '../../../../../../typer/person';
-import type { IVilkårConfig, IVilkårResultat } from '../../../../../../typer/vilkår';
-import { Resultat, VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
@@ -37,10 +38,11 @@ const Container = styled.div`
 `;
 
 const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
-    const toggles = useFeatureToggles();
-    const { behandling, vurderErLesevisning, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
+
+    const toggles = useFeatureToggles();
+    const erLesevisning = useErLesevisning();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
     const [feilmelding, settFeilmelding] = useState('');

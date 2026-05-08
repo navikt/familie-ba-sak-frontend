@@ -1,6 +1,11 @@
 import type { FocusEvent } from 'react';
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IBehandling } from '@typer/behandling';
+import type { IGrunnlagPerson } from '@typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig, IPersonResultat } from '@typer/vilkår';
+import { Resultat, resultater } from '@typer/vilkår';
 import styled from 'styled-components';
 
 import { Button, Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
@@ -10,10 +15,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { annenVurderingBegrunnelseFeilmeldingId, annenVurderingResultatFeilmeldingId } from './AnnenVurderingTabell';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import type { IAnnenVurdering, IAnnenVurderingConfig, IPersonResultat } from '../../../../../../typer/vilkår';
-import { Resultat, resultater } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 import { validerAnnenVurdering } from '../validering';
@@ -46,9 +47,9 @@ const AnnenVurderingRadEndre = ({
     settEkspandertAnnenVurdering,
 }: IProps) => {
     const { vilkårsvurdering, putAnnenVurdering, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
+    const { settÅpenBehandling } = useBehandlingContext();
 
-    const { vurderErLesevisning, settÅpenBehandling } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
 

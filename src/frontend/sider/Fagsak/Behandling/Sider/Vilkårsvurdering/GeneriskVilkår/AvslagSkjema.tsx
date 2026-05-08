@@ -1,3 +1,6 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { VedtakBegrunnelse } from '@typer/vedtak';
+import type { IVilkårResultat } from '@typer/vilkår';
 import classNames from 'classnames';
 
 import { BodyShort, Checkbox, Fieldset, VStack } from '@navikt/ds-react';
@@ -5,9 +8,6 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
-import type { VedtakBegrunnelse } from '../../../../../../typer/vedtak';
-import type { IVilkårResultat } from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
@@ -22,8 +22,7 @@ const AvslagSkjema = ({
     visFeilmeldinger,
     settVisFeilmeldingerForEttVilkår,
 }: IProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     return (
         <Fieldset

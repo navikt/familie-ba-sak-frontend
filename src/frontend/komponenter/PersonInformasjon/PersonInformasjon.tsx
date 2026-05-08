@@ -1,12 +1,13 @@
+import { useBruker } from '@hooks/useBruker';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '@typer/person';
+import { formaterIdent, hentAlder } from '@utils/formatter';
+import { erAdresseBeskyttet } from '@utils/validators';
+
 import { BodyShort, CopyButton, Heading, HStack } from '@navikt/ds-react';
 
 import RegistrerDødsfallDatoMeny from './RegistrerDødsfallDatoMeny';
-import { useBruker } from '../../hooks/useBruker';
-import { useFagsak } from '../../hooks/useFagsak';
-import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '../../typer/person';
-import { formaterIdent, hentAlder } from '../../utils/formatter';
-import { erAdresseBeskyttet } from '../../utils/validators';
 import DødsfallTag from '../DødsfallTag';
 import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
 import { PersonIkon } from '../PersonIkon';
@@ -39,14 +40,12 @@ interface Props {
 export function PersonInformasjon({ person }: Props) {
     const fagsak = useFagsak();
     const bruker = useBruker();
-    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = useErLesevisning();
 
     const alder = hentAlder(person.fødselsdato);
     const navnOgAlder = `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
     const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(bruker, person.personIdent);
-
-    const erLesevisning = vurderErLesevisning();
 
     return (
         <HStack gap={'space-24'} wrap={false} align={'center'}>
