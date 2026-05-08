@@ -24,8 +24,9 @@ export function PersonInformasjonUtbetaling({ person }: Props) {
     const fagsak = useFagsak();
     const bruker = useBruker();
 
+    const personSkalSkjermesForBruker = person.skjermesForBruker;
     const alder = hentAlder(person.fødselsdato);
-    const navnOgAlder = `${person.navn} (${alder} år)`;
+    const navnOgAlder = personSkalSkjermesForBruker ? person.navn : `${person.navn} (${alder} år)`;
     const formattertIdent = formaterIdent(person.personIdent);
 
     const erAdresseBeskyttet = hentAdresseBeskyttelseGradering(bruker, person.personIdent);
@@ -42,11 +43,15 @@ export function PersonInformasjonUtbetaling({ person }: Props) {
             <BodyShort className={'navn'} title={navnOgAlder}>
                 {navnOgAlder}
             </BodyShort>
-            <BodyShort>|</BodyShort>
-            <HStack gap={'space-4'} wrap={false} align={'center'}>
-                <BodyShort>{formattertIdent}</BodyShort>
-                <CopyButton size={'small'} copyText={person.personIdent} />
-            </HStack>
+            {!personSkalSkjermesForBruker && (
+                <>
+                    <BodyShort>|</BodyShort>
+                    <HStack gap={'space-4'} wrap={false} align={'center'}>
+                        <BodyShort>{formattertIdent}</BodyShort>
+                        <CopyButton size={'small'} copyText={person.personIdent} />
+                    </HStack>
+                </>
+            )}
             <BodyShort>|</BodyShort>
             <BodyShort>{`${personTypeMap[person.type]}`}</BodyShort>
         </HStack>

@@ -22,8 +22,14 @@ interface IPersonUtbetalingProps {
 }
 
 const PersonUtbetaling = ({ utbetalingsperiodeDetaljer }: IPersonUtbetalingProps) => {
-    const genererTekstForOrdinær = (fødselsdato: string) =>
-        hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
+    const genererTekstForOrdinær = (utbetalingsperiodeDetalj: IUtbetalingsperiodeDetalj) => {
+        if (utbetalingsperiodeDetalj.person.skjermesForBruker) {
+            return ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn;
+        }
+        return hentAlder(utbetalingsperiodeDetalj.person.fødselsdato) < 6
+            ? 'Ordinær (under 6 år)'
+            : 'Ordinær (fra 6 år)';
+    };
 
     return (
         <section>
@@ -34,7 +40,7 @@ const PersonUtbetaling = ({ utbetalingsperiodeDetaljer }: IPersonUtbetalingProps
                         <Ytelselinje justify="space-between" key={utbetalingsperiodeDetalj.person.personIdent}>
                             <BodyShort>
                                 {utbetalingsperiodeDetalj.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
-                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj.person.fødselsdato)
+                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj)
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </BodyShort>
                             <BodyShort>{formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}</BodyShort>
