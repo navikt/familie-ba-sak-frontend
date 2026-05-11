@@ -34,11 +34,11 @@ export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkMod
     const { mutateAsync: korrigerVedtak } = useKorrigerVedtak();
     const { mutateAsync: angreKorrigertVedtak } = useAngreKorrigertVedtak();
 
-    const opprinneligVedtaksdato = korrigertVedtak ? new Date(korrigertVedtak.vedtaksdato) : undefined;
+    const opprinneligVedtaksdato = korrigertVedtak ? new Date(korrigertVedtak.vedtaksdato) : null;
 
     const form = useForm<KorrigerVedtakFormValues, unknown, TransformedKorrigerVedtakFormValues>({
-        defaultValues: {
-            [KorrigerVedtakFelt.VEDTAKSDATO]: opprinneligVedtaksdato, // TODO: sjekk om denne er riktig som defaultvalue
+        values: {
+            [KorrigerVedtakFelt.VEDTAKSDATO]: opprinneligVedtaksdato,
             [KorrigerVedtakFelt.BEGRUNNELSE]: '',
         },
     });

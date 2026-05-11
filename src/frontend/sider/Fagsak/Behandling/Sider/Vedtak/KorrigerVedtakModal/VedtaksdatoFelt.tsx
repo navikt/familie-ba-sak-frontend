@@ -28,6 +28,7 @@ export function VedtaksdatoFelt({ erLesevisning }: Props) {
         onDateChange: field.onChange,
         toDate: startOfDay(new Date()),
         required: true,
+        defaultSelected: field.value ?? undefined,
     });
 
     return (
