@@ -1,3 +1,8 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { type IBehandling, SettPåVentÅrsak } from '@typer/behandling';
+import type { IAvregningsperiode } from '@typer/simulering';
+import type { TilbakekrevingsvedtakMotregningDTO } from '@typer/tilbakekrevingsvedtakMotregning';
+
 import { ArrowUndoIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ConfirmationPanel, Heading, InfoCard, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -8,10 +13,6 @@ import {
     dagerFristForAvventerSamtykkeUlovfestetMotregning,
     useTilbakekrevingsvedtakMotregning,
 } from './useTilbakekrevingsvedtakMotregning';
-import { type IBehandling, SettPåVentÅrsak } from '../../../../../../typer/behandling';
-import type { IAvregningsperiode } from '../../../../../../typer/simulering';
-import type { TilbakekrevingsvedtakMotregningDTO } from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface TilbakekrevingsvedtakMotregningProps {
     åpenBehandling: IBehandling;
@@ -29,9 +30,7 @@ export const TilbakekrevingsvedtakMotregning = ({
     const { slettTilbakekrevingsvedtakMotregning, oppdaterTilbakekrevingsvedtakMotregning } =
         useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
-    const { vurderErLesevisning } = useBehandlingContext();
-
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const erBehandlingSattPåVentMedÅrsakAvventerSamtykke =
         åpenBehandling.aktivSettPåVent?.årsak === SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;

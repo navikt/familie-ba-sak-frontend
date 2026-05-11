@@ -1,5 +1,25 @@
 import { type PropsWithChildren, useEffect, useState } from 'react';
 
+import { useAppContext } from '@context/AppContext';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
+import { Skillelinje } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import type { IBehandling } from '@typer/behandling';
+import { Behandlingstype } from '@typer/behandling';
+import { ytelsetype } from '@typer/beregning';
+import type {
+    IEøsPeriodeStatus,
+    IRestEøsPeriode,
+    IRestKompetanse,
+    IRestUtenlandskPeriodeBeløp,
+    IRestValutakurs,
+} from '@typer/eøsPerioder';
+import { EøsPeriodeStatus, KompetanseResultat } from '@typer/eøsPerioder';
+import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
+import { dateTilFormatertString, Datoformat } from '@utils/dato';
+import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
 import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
@@ -10,25 +30,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
-import { useAppContext } from '../../../../../context/AppContext';
-import { FalskIdentitet } from '../../../../../komponenter/FalskIdentitet/FalskIdentitet';
-import { Skillelinje } from '../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
-import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { Behandlingstype } from '../../../../../typer/behandling';
-import { ytelsetype } from '../../../../../typer/beregning';
-import type {
-    IEøsPeriodeStatus,
-    IRestEøsPeriode,
-    IRestKompetanse,
-    IRestUtenlandskPeriodeBeløp,
-    IRestValutakurs,
-} from '../../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus, KompetanseResultat } from '../../../../../typer/eøsPerioder';
-import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
-import { dateTilFormatertString, Datoformat } from '../../../../../utils/dato';
-import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '../../../../../utils/formatter';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const UtbetalingsbeløpStack = styled(VStack)`
@@ -108,10 +109,11 @@ const Oppsummeringsboks = ({
     valutakurser,
 }: IProps) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useAppContext();
     const { settAktivEtikett } = useTidslinjeContext();
+
+    const erLesevisning = useErLesevisning();
 
     const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);

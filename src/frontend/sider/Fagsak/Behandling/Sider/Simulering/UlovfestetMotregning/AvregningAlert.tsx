@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IAvregningsperiode } from '@typer/simulering';
+import { erProd } from '@utils/miljø';
+
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, CopyButton, Link, List, LocalAlert } from '@navikt/ds-react';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { utledTekstTilModia } from './modiaStandardtekst';
 import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
-import type { IAvregningsperiode } from '../../../../../../typer/simulering';
-import { erProd } from '../../../../../../utils/miljø';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface AvregningAlertProps {
     avregningsperioder: IAvregningsperiode[];
@@ -16,9 +18,10 @@ interface AvregningAlertProps {
 }
 
 const AvregningAlert = ({ avregningsperioder, harÅpenTilbakekrevingRessurs }: AvregningAlertProps) => {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+
     const [visModal, settVisModal] = useState(false);
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
 
     const modiaPersonoversiktUrl = erProd()
         ? 'https://modiapersonoversikt.intern.nav.no'

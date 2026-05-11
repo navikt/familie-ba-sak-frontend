@@ -1,3 +1,10 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import type { IBehandling } from '@typer/behandling';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
 
@@ -5,11 +12,6 @@ import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';
 import { RefusjonEøsRad } from './RefusjonEøsRad';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IMinimalFagsak } from '../../../../../../typer/fagsak';
-import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { useFagsakContext } from '../../../../FagsakContext';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { summerTotalBeløpForPerioder } from '../utils';
 import { SlettRefusjonEøsError } from './SlettRefusjonEøsError';
 
@@ -37,12 +39,12 @@ function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandli
 }
 
 export function RefusjonEøsTabell() {
-    const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const { erLeggTilRefusjonEøsFormÅpen, visLeggTilRefusjonEøsForm, skjulLeggTilRefusjonEøsForm } =
         useRefusjonEøsTabellContext();
 
-    const erLesevisning = vurderErLesevisning();
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     return (
         <Stack direction={'column'} gap={'space-20'} marginBlock={'space-48 space-48'}>
