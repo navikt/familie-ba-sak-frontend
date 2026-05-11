@@ -21,7 +21,7 @@ export function BegrunnelseFelt({ erLesevisning }: Props) {
             {...register(KorrigerVedtakFelt.BEGRUNNELSE)}
             label={'Begrunnelse (valgfri)'}
             description={'Begrunn hva som er gjort feil i tidligere vedtak'}
-            error={errors.form?.message} // TODO: riktig error som vises her?
+            error={errors.form?.message}
             readOnly={isSubmitting || erLesevisning}
         />
     );
