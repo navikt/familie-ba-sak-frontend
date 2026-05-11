@@ -54,6 +54,12 @@ function utledSøker(fagsak?: IMinimalFagsak, søkerData?: IPersonInfo) {
     return undefined;
 }
 
+export const utledAdressebeskyttelseGradering = (
+    fagsakType?: FagsakType,
+    bruker?: IPersonInfo,
+    søkerData?: IPersonInfo
+) => (fagsakType === FagsakType.SKJERMET_BARN ? bruker : søkerData)?.adressebeskyttelseGradering;
+
 interface Props {
     bruker?: IPersonInfo;
     fagsak?: IMinimalFagsak;
@@ -76,7 +82,9 @@ export function Personlinje({ bruker, fagsak }: Props) {
                         fagsakType={fagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
                         erBarn={fagsakeier.alder < 18}
-                        erAdresseBeskyttet={erAdresseBeskyttet(søkerData?.adressebeskyttelseGradering)}
+                        erAdresseBeskyttet={erAdresseBeskyttet(
+                            utledAdressebeskyttelseGradering(fagsak?.fagsakType, bruker, søkerData)
+                        )}
                         erEgenAnsatt={fagsakeier.erEgenAnsatt}
                     />
                     <HStack align={'center'} gap={'space-12 space-16'}>
