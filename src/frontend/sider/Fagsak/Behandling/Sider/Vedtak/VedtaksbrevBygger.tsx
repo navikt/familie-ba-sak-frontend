@@ -23,7 +23,7 @@ import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellC
 import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
-import Vedtaksperioder from './Vedtaksperioder/Vedtaksperioder';
+import { Vedtaksperioder } from './Vedtaksperioder/Vedtaksperioder';
 import useDokument from '../../../../../hooks/useDokument';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
@@ -159,7 +159,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                             <SammensattKontrollsak />
                         ) : (
                             <>
-                                <Vedtaksperioder åpenBehandling={åpenBehandling} />
+                                <Vedtaksperioder />
                                 {erFeilutbetaltValutaTabellSynlig && <FeilutbetaltValutaTabell />}
                                 {erRefusjonEøsTabellSynlig && <RefusjonEøsTabell />}
                             </>

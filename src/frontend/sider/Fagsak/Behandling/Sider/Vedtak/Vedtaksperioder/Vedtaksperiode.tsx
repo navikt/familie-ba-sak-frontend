@@ -1,25 +1,17 @@
-import { BodyShort, ErrorMessage, Label } from '@navikt/ds-react';
+import { GenererteBrevbegrunnelser } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/GenererteBrevbegrunnelser';
+import { Standardbegrunnelse, VedtakBegrunnelseType } from '@typer/vedtak';
+import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 
-import BegrunnelserMultiselect from './BegrunnelserMultiselect';
-import EkspanderbarVedtaksperiode from './EkspanderbarVedtaksperiode';
-import FritekstBegrunnelser from './FritekstBegrunnelser';
-import Utbetalingsresultat from './Utbetalingsresultat';
+import { VStack } from '@navikt/ds-react';
+
+import { BegrunnelserMultiselect } from './BegrunnelserMultiselect';
+import { EkspanderbarVedtaksperiode } from './EkspanderbarVedtaksperiode';
+import { FritekstBegrunnelser } from './FritekstBegrunnelser';
+import { Utbetalingsresultat } from './Utbetalingsresultat';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
-import { useHentGenererteBrevbegrunnelser } from '../../../../../../hooks/useHentGenererteBrevbegrunnelser';
-import { Standardbegrunnelse, VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../../../../typer/vedtaksperiode';
 
-interface IProps {
-    vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;
-}
-
-const Vedtaksperiode = ({ vedtaksperiodeMedBegrunnelser }: IProps) => {
-    const { erPanelEkspandert, onPanelClose } = useVedtaksperiodeContext();
-
-    const { data: genererteBrevbegrunnelser, error: genererteBrevbegrunnelserError } = useHentGenererteBrevbegrunnelser(
-        { vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id }
-    );
+export function Vedtaksperiode() {
+    const { vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
 
     const ugyldigeReduksjonsteksterForÅTriggeFritekst = [
         Standardbegrunnelse.REDUKSJON_SATSENDRING,
@@ -53,36 +45,17 @@ const Vedtaksperiode = ({ vedtaksperiodeMedBegrunnelser }: IProps) => {
         ).length > 0;
 
     return (
-        <EkspanderbarVedtaksperiode
-            vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-            åpen={erPanelEkspandert}
-            onClick={() => onPanelClose(true)}
-        >
-            <Utbetalingsresultat
-                utbetalingsperiodeDetaljer={vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer}
-            />
-            {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && (
-                <BegrunnelserMultiselect vedtaksperiodetype={vedtaksperiodeMedBegrunnelser.type} />
-            )}
-            {genererteBrevbegrunnelserError ? (
-                <ErrorMessage>{genererteBrevbegrunnelserError.message}</ErrorMessage>
-            ) : (
-                genererteBrevbegrunnelser &&
-                genererteBrevbegrunnelser.length > 0 && (
-                    <>
-                        <Label>Begrunnelse(r)</Label>
-                        <ul>
-                            {genererteBrevbegrunnelser.map((begrunnelse: string, index: number) => (
-                                <li key={`begrunnelse-${index}`}>
-                                    <BodyShort children={begrunnelse} />
-                                </li>
-                            ))}
-                        </ul>
-                    </>
-                )
-            )}
-            {visFritekster() && <FritekstBegrunnelser />}
+        <EkspanderbarVedtaksperiode>
+            <VStack gap={'space-20'}>
+                {vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.length !== 0 && <Utbetalingsresultat />}
+                {vedtaksperiodeMedBegrunnelser.type !== Vedtaksperiodetype.AVSLAG && <BegrunnelserMultiselect />}
+                <GenererteBrevbegrunnelser />
+                {visFritekster() && (
+                    <div>
+                        <FritekstBegrunnelser />
+                    </div>
+                )}
+            </VStack>
         </EkspanderbarVedtaksperiode>
     );
-};
-export default Vedtaksperiode;
+}

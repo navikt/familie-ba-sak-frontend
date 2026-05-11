@@ -1,41 +1,19 @@
-import styled from 'styled-components';
+import { useVedtaksperiodeContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperiodeContext';
+import { formaterIdent, formaterBeløp, sorterUtbetaling } from '@utils/formatter';
 
-import { BodyShort, Label } from '@navikt/ds-react';
+import { BodyShort, HStack, Label, VStack } from '@navikt/ds-react';
 
-import type { IUtbetalingsperiodeDetalj } from '../../../../../../typer/vedtaksperiode';
-import { formaterIdent, formaterBeløp, sorterUtbetaling } from '../../../../../../utils/formatter';
-
-interface IProps {
-    utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
-}
-
-const UtbetalingsperiodeDetalj = styled.div`
-    display: flex;
-    flex-direction: row;
-
-    p + p {
-        margin-left: 1.5rem;
-    }
-`;
-
-const Utbetalingsresultat = ({ utbetalingsperiodeDetaljer }: IProps) => {
-    if (utbetalingsperiodeDetaljer.length === 0) return null;
-
+export function Utbetalingsresultat() {
+    const { vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
     return (
-        <div style={{ marginBottom: '1rem' }}>
+        <VStack gap={'space-4'}>
             <Label>Resultat</Label>
-
-            {utbetalingsperiodeDetaljer
-                .sort(sorterUtbetaling)
-                .map((detalj: IUtbetalingsperiodeDetalj, index: number) => (
-                    <UtbetalingsperiodeDetalj key={`${index}_${detalj.person.fødselsdato}`}>
-                        <BodyShort title={detalj.person.navn}>{formaterIdent(detalj.person.personIdent)}</BodyShort>
-
-                        <BodyShort>{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
-                    </UtbetalingsperiodeDetalj>
-                ))}
-        </div>
+            {vedtaksperiodeMedBegrunnelser.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map((detalj, index) => (
+                <HStack key={`${index}_${detalj.person.fødselsdato}`} gap={'space-28'}>
+                    <BodyShort title={detalj.person.navn}>{formaterIdent(detalj.person.personIdent)}</BodyShort>
+                    <BodyShort>{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
+                </HStack>
+            ))}
+        </VStack>
     );
-};
-
-export default Utbetalingsresultat;
+}
