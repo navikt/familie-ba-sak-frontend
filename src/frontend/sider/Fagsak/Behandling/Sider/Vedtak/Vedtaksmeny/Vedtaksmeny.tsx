@@ -1,11 +1,5 @@
 import { useState } from 'react';
 
-import { useErLesevisning } from '@hooks/useErLesevisning';
-import { Behandlingstype } from '@typer/behandling';
-import { BehandlingKategori } from '@typer/behandlingstema';
-import { FagsakType } from '@typer/fagsak';
-import { vedtakHarFortsattUtbetaling } from '@utils/vedtakUtils';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
@@ -18,8 +12,6 @@ import { ArrowUndoIcon, CalculatorIcon, ChevronDownIcon, StarsEuIcon, TasklistSt
 import { ActionMenu, Button, Stack } from '@navikt/ds-react';
 
 import Styles from './Vedtaksmeny.module.css';
-import { useFagsakContext } from '../../../../FagsakContext';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import EndreEndringstidspunkt from '../endringstidspunkt/EndreEndringstidspunkt';
 import { OppdaterEndringstidspunktModal } from '../endringstidspunkt/OppdaterEndringstidspunktModal';
 import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
@@ -30,8 +22,6 @@ import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabell
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
 
 export function Vedtaksmeny() {
-    const { fagsak } = useFagsakContext();
-    const { behandling } = useBehandlingContext();
     const { erFeilutbetaltValutaTabellSynlig, visFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig, visRefusjonEøsTabell } = useRefusjonEøsTabellContext();
 
@@ -43,7 +33,6 @@ export function Vedtaksmeny() {
         sammensattKontrollsak,
     } = useSammensattKontrollsakContext();
 
-    const erLesevisning = useErLesevisning();
     const fagsak = useFagsak();
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
