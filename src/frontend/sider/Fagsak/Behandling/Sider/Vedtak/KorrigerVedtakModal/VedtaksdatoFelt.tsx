@@ -2,7 +2,6 @@ import {
     KorrigerVedtakFelt,
     type KorrigerVedtakFormValues,
 } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/useKorrigerVedtakSkjema';
-import { validerGyldigDato } from '@utils/dato';
 import { startOfDay } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -22,8 +21,8 @@ export function VedtaksdatoFelt({ erLesevisning }: Props) {
     } = useController({
         name: KorrigerVedtakFelt.VEDTAKSDATO,
         control,
-        rules: { required: 'Du må velge en gyldig dato.', validate: validerGyldigDato },
-    }); // TODO: validering
+        rules: { required: 'Du må velge en gyldig dato.' },
+    });
 
     const { datepickerProps, inputProps } = useDatepicker({
         onDateChange: field.onChange,
@@ -36,6 +35,7 @@ export function VedtaksdatoFelt({ erLesevisning }: Props) {
             <DatePicker.Input
                 {...inputProps}
                 label={'Vedtaksdato'}
+                placeholder={'DD.MM.ÅÅÅÅ'}
                 readOnly={isSubmitting || erLesevisning}
                 error={error?.message}
             />

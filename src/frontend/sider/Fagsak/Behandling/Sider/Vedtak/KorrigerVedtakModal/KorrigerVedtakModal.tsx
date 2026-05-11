@@ -2,16 +2,11 @@ import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerV
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/VedtaksdatoFelt';
 import type { IRestKorrigertVedtak } from '@typer/vedtak';
 import { FormProvider } from 'react-hook-form';
-import styled from 'styled-components';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal } from '@navikt/ds-react';
 
 import { useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';
-
-const AngreKnapp = styled(Button)`
-    margin: 0.5rem 0;
-`; //TODO: fix
 
 interface IProps {
     lukkModal: () => void;
@@ -74,7 +69,7 @@ export function KorrigerVedtakModal({ lukkModal, korrigertVedtak, behandlingId, 
                                     Avbryt
                                 </Button>
                                 {visAngreKnapp && (
-                                    <AngreKnapp
+                                    <Button
                                         size={'small'}
                                         onClick={handleSubmit(onAngreKorrigertVedtak)}
                                         variant={'tertiary'}
@@ -83,7 +78,7 @@ export function KorrigerVedtakModal({ lukkModal, korrigertVedtak, behandlingId, 
                                         icon={<ArrowUndoIcon />}
                                     >
                                         Fjern korrigering
-                                    </AngreKnapp>
+                                    </Button>
                                 )}
                             </>
                         )}
