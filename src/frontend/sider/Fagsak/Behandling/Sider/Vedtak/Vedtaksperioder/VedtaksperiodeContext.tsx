@@ -87,7 +87,6 @@ export function VedtaksperiodeProvider({ vedtaksperiodeMedBegrunnelser, children
                     HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
                     vedtaksperioderMedBegrunnelser
                 );
-                onPanelClose(false);
             },
         }
     );
