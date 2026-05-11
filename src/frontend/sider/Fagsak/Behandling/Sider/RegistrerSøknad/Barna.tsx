@@ -1,3 +1,9 @@
+import { useBruker } from '@hooks/useBruker';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IForelderBarnRelasjonMaskert } from '@typer/person';
+import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { isoStringTilDate } from '@utils/dato';
 import { differenceInMilliseconds } from 'date-fns';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
@@ -6,19 +12,14 @@ import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } fr
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
-import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
-import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
-import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../../utils/dato';
-import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const Barna = () => {
-    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
-        useBehandlingContext();
-    const lesevisning = vurderErLesevisning();
-    const { bruker } = useBrukerContext();
+    const { gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } = useBehandlingContext();
     const { skjema } = useSøknadContext();
+
+    const bruker = useBruker();
+    const erLesevisning = useErLesevisning();
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -72,7 +73,7 @@ export const Barna = () => {
             <CheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 legend={
-                    !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
+                    !erLesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>

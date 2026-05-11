@@ -1,5 +1,13 @@
 import type { ReactNode, ChangeEvent } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '@komponenter/FlaggCombobox';
+import type { IBehandling } from '@typer/behandling';
+import { VurderingsstrategiForValutakurser } from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '@typer/eøsPerioder';
+import { onOptionSelected } from '@utils/skjema';
+
 import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     Box,
@@ -19,13 +27,6 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
-import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '../../../../../../../komponenter/FlaggCombobox';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import { VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../../../../utils/skjema';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
@@ -67,14 +68,14 @@ const ValutakursTabellRadEndre = ({
     åpenBehandling,
     inneholderBarnSomSkalSkjermes,
 }: IProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
+    const erLesevisning = useErLesevisning();
 
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
         åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
-    const erLesevisning =
-        vurderErLesevisning(true) ||
+    const erRedigeringDeaktivert =
+        erLesevisning ||
         !!inneholderBarnSomSkalSkjermes ||
         (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
@@ -106,7 +107,7 @@ const ValutakursTabellRadEndre = ({
 
     return (
         <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend={'Valutakurs skjema'} hideLegend>
-            <EøsPeriodeSkjemaContainer $lesevisning={erLesevisning} $status={status} gap="space-24">
+            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={status} gap="space-24">
                 {erValutakursVurdertAutomatisk && (
                     <HStack wrap={false} align={'center'} gap={'space-16'}>
                         <CogRotationIcon title="Automatisk registrert valutakurs" fontSize="1.5rem" />
@@ -125,7 +126,7 @@ const ValutakursTabellRadEndre = ({
                     options={tilgjengeligeBarn}
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
-                    readOnly={erLesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
@@ -133,10 +134,10 @@ const ValutakursTabellRadEndre = ({
                     periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={erLesevisning}
+                    lesevisning={erRedigeringDeaktivert}
                 />
                 <Fieldset
-                    className={erLesevisning ? 'lesevisning' : ''}
+                    className={erRedigeringDeaktivert ? 'lesevisning' : ''}
                     errorId={valutakursValutaFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
@@ -147,7 +148,7 @@ const ValutakursTabellRadEndre = ({
                             felt={skjema.felter.valutakursdato}
                             label={'Valutakursdato'}
                             visFeilmeldinger={false}
-                            readOnly={erLesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             disableWeekends
                             kanKunVelgeFortid
                         />
@@ -160,7 +161,7 @@ const ValutakursTabellRadEndre = ({
                         />
                         <TextField
                             label={'Valutakurs'}
-                            readOnly={erLesevisning || !erManuellInputAvKurs}
+                            readOnly={erRedigeringDeaktivert || !erManuellInputAvKurs}
                             value={skjema.felter.kurs?.verdi}
                             onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.kurs?.validerOgSettFelt(event.target.value)
@@ -187,7 +188,7 @@ const ValutakursTabellRadEndre = ({
                     )}
                 </Fieldset>
 
-                {!erLesevisning && (
+                {!erRedigeringDeaktivert && (
                     <Knapperad>
                         <div>
                             <Button
@@ -208,7 +209,7 @@ const ValutakursTabellRadEndre = ({
                             </Button>
                         </div>
 
-                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !erLesevisning && (
+                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !erRedigeringDeaktivert && (
                             <Button
                                 variant={'tertiary'}
                                 onClick={() => slettValutakurs()}

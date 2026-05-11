@@ -1,5 +1,23 @@
 import type { ReactNode, ChangeEvent } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import {
+    type Valutakode,
+    ValutaCombobox,
+    EØS_VALUTAKODER,
+    RegionCombobox,
+    type Regionkode,
+    EØS_LAND_REGIONKODER,
+} from '@komponenter/FlaggCombobox';
+import type { IBehandling } from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import type { IUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
+import {
+    EøsPeriodeStatus,
+    UtenlandskPeriodeBeløpIntervall,
+    utenlandskPeriodeBeløpIntervaller,
+} from '@typer/eøsPerioder';
+import { onOptionSelected } from '@utils/skjema';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -17,24 +35,6 @@ import type { ISkjema } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import {
-    type Valutakode,
-    ValutaCombobox,
-    EØS_VALUTAKODER,
-    RegionCombobox,
-    type Regionkode,
-    EØS_LAND_REGIONKODER,
-} from '../../../../../../../komponenter/FlaggCombobox';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
-import {
-    EøsPeriodeStatus,
-    UtenlandskPeriodeBeløpIntervall,
-    utenlandskPeriodeBeløpIntervaller,
-} from '../../../../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../../../../utils/skjema';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
@@ -75,9 +75,8 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
     slettUtenlandskPeriodeBeløp,
     inneholderBarnSomSkalSkjermes,
 }: IProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-
-    const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
+    const erLesevisning = useErLesevisning();
+    const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
 
     const visUtbetaltBeløpGruppeFeilmelding = (): ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -111,7 +110,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="space-24">
+            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={status} gap="space-24">
                 <InlineMessage status="info">
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
@@ -123,7 +122,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                     options={tilgjengeligeBarn}
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
@@ -131,10 +130,10 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                     periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erRedigeringDeaktivert}
                 />
                 <Fieldset
-                    className={lesevisning ? 'lesevisning' : ''}
+                    className={erRedigeringDeaktivert ? 'lesevisning' : ''}
                     errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
                     legend={'Utbetalt i det andre landet'}
@@ -143,7 +142,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                     <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
                         <TextField
                             label={'Beløp per barn'}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             value={skjema.felter.beløp?.verdi}
                             onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.beløp?.validerOgSettFelt(event.target.value)
@@ -161,12 +160,12 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                                     skjema.felter.valutakode?.nullstill();
                                 }
                             }}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             error={skjema.felter.valutakode?.feilmelding?.toString()}
                         />
                         <Select
                             label={'Intervall'}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             value={skjema.felter.intervall?.verdi || undefined}
                             onChange={event =>
                                 skjema.felter.intervall?.validerOgSettFelt(
@@ -198,7 +197,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                                 skjema.felter.utbetalingsland.nullstill();
                             }
                         }}
-                        readOnly={lesevisning}
+                        readOnly={erRedigeringDeaktivert}
                         error={
                             skjema.visFeilmeldinger &&
                             skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
@@ -208,7 +207,7 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                     />
                 </Fieldset>
 
-                {!lesevisning && (
+                {!erRedigeringDeaktivert && (
                     <Knapperad>
                         <div>
                             <Button

@@ -1,3 +1,7 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BehandlingSteg, hentStegNummer } from '@typer/behandling';
 import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
@@ -5,17 +9,15 @@ import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { BegrunnelseField } from './BegrunnelseField';
 import { useEndreBehandlendeEnhetForm } from './useEndreBehandlendeEnhetForm';
 import { VelgNyEnhetField } from './VelgNyEnhetField';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { BehandlingSteg, hentStegNummer } from '../../../../typer/behandling';
 
 interface Props {
     lukkModal: () => void;
 }
 
 export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const saksbehandler = useSaksbehandler();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning({ sjekkTilgangTilEnhet: false });
 
     const { form, onSubmit } = useEndreBehandlendeEnhetForm({ lukkModal });
 
@@ -24,20 +26,10 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
         formState: { isSubmitting, errors },
     } = form;
 
-    function erLesevisningPåBehandling() {
-        const steg = behandling.steg;
-        if (
-            steg &&
-            hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK) &&
-            saksbehandler.navIdent !== behandling.totrinnskontroll?.saksbehandlerId
-        ) {
-            return false;
-        } else {
-            return vurderErLesevisning(false, true);
-        }
-    }
-
-    const erLesevisning = erLesevisningPåBehandling();
+    const erStegBeslutteVedtak = hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+    const erIkkeTotrinnskontrollSaksbehandler = saksbehandler.navIdent !== behandling.totrinnskontroll?.saksbehandlerId;
+    const skalOverstyreLesevisning = erStegBeslutteVedtak && erIkkeTotrinnskontrollSaksbehandler;
+    const erRedigeringDeaktivert = erLesevisning && !skalOverstyreLesevisning;
 
     return (
         <Modal
@@ -52,32 +44,24 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
                     <Modal.Body>
                         <Fieldset error={errors.root?.message} legend={'Endre enhet'} hideLegend={true}>
                             <VStack gap={'space-20'}>
-                                <VelgNyEnhetField readOnly={erLesevisning} />
-                                <BegrunnelseField readOnly={erLesevisning} />
+                                <VelgNyEnhetField readOnly={erRedigeringDeaktivert} />
+                                <BegrunnelseField readOnly={erRedigeringDeaktivert} />
                             </VStack>
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
-                        {!erLesevisning && (
-                            <>
-                                <Button type={'submit'} variant={'primary'} size={'small'} loading={isSubmitting}>
-                                    Bekreft
-                                </Button>
-                                <Button
-                                    variant={'secondary'}
-                                    size={'small'}
-                                    onClick={lukkModal}
-                                    disabled={isSubmitting}
-                                >
-                                    Avbryt
-                                </Button>
-                            </>
-                        )}
-                        {erLesevisning && (
-                            <Button size={'small'} variant={'secondary'} onClick={lukkModal}>
-                                Avbryt
-                            </Button>
-                        )}
+                        <Button
+                            type={'submit'}
+                            variant={'primary'}
+                            size={'small'}
+                            loading={isSubmitting}
+                            disabled={erRedigeringDeaktivert}
+                        >
+                            Bekreft
+                        </Button>
+                        <Button variant={'secondary'} size={'small'} onClick={lukkModal} disabled={isSubmitting}>
+                            Avbryt
+                        </Button>
                     </Modal.Footer>
                 </form>
             </FormProvider>
