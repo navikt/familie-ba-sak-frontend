@@ -1,12 +1,12 @@
-import React from 'react';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
-import { useOppdaterRegisteropplysninger } from '../../../../../hooks/useOppdaterRegisteropplysninger';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const FALLBACK_MESSAGE =
@@ -24,8 +24,10 @@ function formaterTidspunkt(registeropplysningerHentetTidpsunkt: string | undefin
 }
 
 export function OppdaterRegisteropplysninger() {
-    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
+
+    const erLesevisning = useErLesevisning();
 
     const { mutate, isPending, error } = useOppdaterRegisteropplysninger({
         onSuccess: behandling => settÅpenBehandling(byggSuksessRessurs(behandling)),
@@ -33,11 +35,9 @@ export function OppdaterRegisteropplysninger() {
 
     const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
 
-    const erLesevisning = vurderErLesevisning();
-
     return (
         <VStack gap={'space-8'}>
-            <HStack align={'center'} gap={'space-8'}>
+            <HStack align={'center'} gap={'space-8'} wrap={false}>
                 <Detail textColor={'subtle'}>{formaterTidspunkt(registeropplysningerHentetTidpsunkt)}</Detail>
                 {!erLesevisning && (
                     <Button

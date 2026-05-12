@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { PropsWithChildren, SetStateAction, Dispatch } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -17,7 +18,7 @@ import type {
     VilkårType,
 } from '../../../../../typer/vilkår';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps extends PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
@@ -29,10 +30,10 @@ export enum VilkårSubmit {
 }
 
 interface VilkårsvurderingContextValue {
-    settVilkårsvurdering: React.Dispatch<React.SetStateAction<IPersonResultat[]>>;
+    settVilkårsvurdering: Dispatch<SetStateAction<IPersonResultat[]>>;
     vilkårsvurdering: IPersonResultat[];
     vilkårSubmit: VilkårSubmit;
-    settVilkårSubmit: React.Dispatch<React.SetStateAction<VilkårSubmit>>;
+    settVilkårSubmit: Dispatch<SetStateAction<VilkårSubmit>>;
     putVilkår: (
         vilkårsvurderingForPerson: IPersonResultat,
         redigerbartVilkår: FeltState<IVilkårResultat>
@@ -45,17 +46,17 @@ interface VilkårsvurderingContextValue {
     hentAndreVurderingerMedFeil: () => IAnnenVurdering[];
 }
 
-const VilkårsvurderingContext = React.createContext<VilkårsvurderingContextValue | undefined>(undefined);
+const VilkårsvurderingContext = createContext<VilkårsvurderingContextValue | undefined>(undefined);
 
 export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps) => {
     const { request } = useHttp();
-    const [vilkårSubmit, settVilkårSubmit] = React.useState(VilkårSubmit.NONE);
+    const [vilkårSubmit, settVilkårSubmit] = useState(VilkårSubmit.NONE);
 
-    const [vilkårsvurdering, settVilkårsvurdering] = React.useState<IPersonResultat[]>(
+    const [vilkårsvurdering, settVilkårsvurdering] = useState<IPersonResultat[]>(
         åpenBehandling ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer) : []
     );
 
-    React.useEffect(() => {
+    useEffect(() => {
         settVilkårsvurdering(
             åpenBehandling
                 ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer)
@@ -206,7 +207,7 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
 };
 
 export const useVilkårsvurderingContext = () => {
-    const context = React.useContext(VilkårsvurderingContext);
+    const context = useContext(VilkårsvurderingContext);
 
     if (context === undefined) {
         throw new Error('useVilkårsvurderingContext må brukes innenfor en VilkårsvurderingProvider');

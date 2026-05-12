@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, CopyButton, Heading } from '@navikt/ds-react';
@@ -39,7 +37,7 @@ const FlexBox = styled.div`
     gap: 0.25rem;
 `;
 
-const SamhandlerInformasjon: React.FunctionComponent<IProps> = ({ samhandler, somOverskrift = false }) => {
+const SamhandlerInformasjon = ({ samhandler, somOverskrift = false }: IProps) => {
     const navn = samhandler.navn;
     const formattertOrgNummer = formaterIdent(samhandler.orgNummer);
     return (

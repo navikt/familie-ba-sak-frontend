@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
     BriefcaseIcon,
     CalendarIcon,
@@ -26,7 +24,7 @@ interface IRegisteropplysningerProps {
     fødselsdato: string;
 }
 
-const Registeropplysninger: React.FC<IRegisteropplysningerProps> = ({ registerHistorikk, fødselsdato }) => {
+const Registeropplysninger = ({ registerHistorikk, fødselsdato }: IRegisteropplysningerProps) => {
     const personErDød = registerHistorikk.dødsboadresse.length > 0;
     const toggles = useFeatureToggles();
 

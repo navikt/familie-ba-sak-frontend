@@ -1,8 +1,7 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { Alert, Heading } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Heading, InfoCard } from '@navikt/ds-react';
 
 import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
@@ -33,17 +32,19 @@ const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
         return saksnrA - saksnrB;
     });
 
-export const Infotrygdtabeller: React.FC<InfotrygdtabellerProps> = ({ ident, saker, minimalFagsak }) => {
+export const Infotrygdtabeller = ({ ident, saker, minimalFagsak }: InfotrygdtabellerProps) => {
     return (
         <>
             {minimalFagsak?.migreringsdato !== null && (
-                <Alert
-                    variant="info"
-                    children={`Saken ble migrert fra Infotrygd ${isoStringTilFormatertString({
-                        isoString: minimalFagsak?.migreringsdato,
-                        tilFormat: Datoformat.DATO_FORKORTTET,
-                    })}`}
-                />
+                <InfoCard data-color="info">
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        Saken ble migrert fra Infotrygd $
+                        {isoStringTilFormatertString({
+                            isoString: minimalFagsak?.migreringsdato,
+                            tilFormat: Datoformat.DATO_FORKORTTET,
+                        })}
+                    </InfoCard.Message>
+                </InfoCard>
             )}
             <SakerTekst size={'small'} level={'2'}>
                 {ident ? `Saker for ${ident}` : 'Saker'}

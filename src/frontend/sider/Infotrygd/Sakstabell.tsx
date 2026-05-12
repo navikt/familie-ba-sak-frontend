@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
@@ -10,7 +8,7 @@ const IngenSakerTekst = styled(BodyShort)`
     margin: 1rem;
 `;
 
-export const Sakstabell: React.FC<{ saker: IInfotrygdSak[] }> = ({ saker }) => {
+export const Sakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
     return (
         <>
             <Table>

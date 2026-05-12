@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -11,7 +9,7 @@ interface IProps {
     behandlingId: number;
 }
 
-export const FyllUtVilkårsvurderingITestmiljøKnapp: React.FunctionComponent<IProps> = ({ behandlingId }) => {
+export const FyllUtVilkårsvurderingITestmiljøKnapp = ({ behandlingId }: IProps) => {
     const { request } = useHttp();
 
     const fyllUtVilkårsvurdering = () => {
@@ -30,5 +28,9 @@ export const FyllUtVilkårsvurderingITestmiljøKnapp: React.FunctionComponent<IP
         });
     };
 
-    return <Button onClick={fyllUtVilkårsvurdering}>Fyll ut vilkårsvurdering</Button>;
+    return (
+        <Button size={'small'} onClick={fyllUtVilkårsvurdering}>
+            Fyll ut vilkårsvurdering
+        </Button>
+    );
 };

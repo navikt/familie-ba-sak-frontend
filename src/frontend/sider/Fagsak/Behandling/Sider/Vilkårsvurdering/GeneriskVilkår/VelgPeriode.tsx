@@ -1,5 +1,8 @@
-import React from 'react';
-
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IVilkårResultat } from '@typer/vilkår';
+import { Resultat } from '@typer/vilkår';
+import type { IsoDatoString } from '@utils/dato';
+import { dagensDato, nyIsoDatoPeriode } from '@utils/dato';
 import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
 
@@ -9,11 +12,6 @@ import type { FeltState } from '@navikt/familie-skjema';
 
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import DatovelgerForGammelSkjemaløsning from '../../../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
-import type { IVilkårResultat } from '../../../../../../typer/vilkår';
-import { Resultat } from '../../../../../../typer/vilkår';
-import type { IsoDatoString } from '../../../../../../utils/dato';
-import { dagensDato, nyIsoDatoPeriode } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
@@ -37,9 +35,8 @@ const FlexDiv = styled.div`
     gap: 1.125rem;
 `;
 
-const VelgPeriode: React.FC<IProps> = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+const VelgPeriode = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }: IProps) => {
+    const erLesevisning = useErLesevisning();
 
     return (
         <Fieldset

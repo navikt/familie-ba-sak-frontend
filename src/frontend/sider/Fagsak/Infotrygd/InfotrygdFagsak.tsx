@@ -1,6 +1,6 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
-import { Alert, BodyShort, Box, Heading, HStack, Loader } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, HStack, Loader, LocalAlert } from '@navikt/ds-react';
 
 import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
 import type { IMinimalFagsak } from '../../../typer/fagsak';
@@ -10,7 +10,7 @@ interface InfotrygdFagsakProps {
     minimalFagsak: IMinimalFagsak;
 }
 
-const InnholdContainer = ({ children }: { children: React.ReactNode }) => (
+const InnholdContainer = ({ children }: { children: ReactNode }) => (
     <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
         {children}
     </Box>
@@ -33,7 +33,11 @@ export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
     if (error) {
         return (
             <InnholdContainer>
-                <Alert variant="error">En feil har oppstått ved henting av saker</Alert>
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>En feil har oppstått ved henting av saker</LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             </InnholdContainer>
         );
     }

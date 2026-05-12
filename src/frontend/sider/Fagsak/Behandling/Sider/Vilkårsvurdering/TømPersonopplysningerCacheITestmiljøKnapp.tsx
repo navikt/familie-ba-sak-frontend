@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Button } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 
@@ -20,5 +18,9 @@ export const TømPersonopplysningerCacheITestmiljøKnapp = () => {
         }).catch(() => alert('Klarte ikke å tømme personopplysninger-cache'));
     };
 
-    return <Button onClick={tømCache}>Tøm personopplysninger-cache</Button>;
+    return (
+        <Button size={'small'} onClick={tømCache}>
+            Tøm personopplysninger-cache
+        </Button>
+    );
 };

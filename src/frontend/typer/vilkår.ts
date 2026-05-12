@@ -1,10 +1,11 @@
+import type { IIsoDatoPeriode, IsoDatoString } from '@utils/dato';
+
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';
 import { PersonType } from './person';
 import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import type { IIsoDatoPeriode, IsoDatoString } from '../utils/dato';
 
 export enum Resultat {
     IKKE_OPPFYLT = 'IKKE_OPPFYLT',
@@ -56,6 +57,11 @@ export interface IPersonResultat {
     andreVurderinger: FeltState<IAnnenVurdering>[];
     person: IGrunnlagPerson;
 }
+
+export function harPersonIkkeVurdertVilkår(personResultat: IPersonResultat) {
+    return personResultat.vilkårResultater.some(vr => vr.verdi.resultat.verdi === Resultat.IKKE_VURDERT);
+}
+
 export interface IAnnenVurdering {
     id: number;
     begrunnelse: FeltState<string>;

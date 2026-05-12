@@ -9,6 +9,7 @@ export enum FagsakStatus {
     OPPRETTET = 'OPPRETTET',
     LØPENDE = 'LØPENDE',
     AVSLUTTET = 'AVSLUTTET',
+    LÅST = 'LÅST',
 }
 
 export enum FagsakType {
@@ -31,6 +32,8 @@ export interface IBaseFagsak {
     løpendeUnderkategori?: BehandlingUnderkategori;
     fagsakType: FagsakType;
     institusjon?: IInstitusjon;
+    finnesStrengtFortroligPersonIFagsak: boolean;
+    låstTidspunkt?: string;
 }
 
 export function sjekkHarNormalFagsak(fagsaker: IBaseFagsak[] | undefined): boolean {
@@ -71,6 +74,8 @@ export const mapMinimalFagsakTilBaseFagsak = (it: IMinimalFagsak): IBaseFagsak =
     løpendeUnderkategori: it.løpendeUnderkategori,
     fagsakType: it.fagsakType,
     institusjon: it.institusjon,
+    finnesStrengtFortroligPersonIFagsak: it.finnesStrengtFortroligPersonIFagsak,
+    låstTidspunkt: it.låstTidspunkt,
 });
 
 export const fagsakStatus: INøkkelPar = {
@@ -85,5 +90,9 @@ export const fagsakStatus: INøkkelPar = {
     AVSLUTTET: {
         id: 'AVSLUTTET',
         navn: 'Avsluttet',
+    },
+    LÅST: {
+        id: 'LÅST',
+        navn: 'Låst',
     },
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { createContext, type PropsWithChildren, useContext, useState } from 'react';
 
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';

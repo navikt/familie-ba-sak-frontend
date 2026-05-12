@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Box, HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -8,7 +6,7 @@ import type { IOppgave } from '../../typer/oppgave';
 
 const beregnAntallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
 
-const OppgavelisteNavigator: React.FunctionComponent = () => {
+const OppgavelisteNavigator = () => {
     const { oppgaver, side, settSide } = useOppgavebenkContext();
 
     if (oppgaver.status !== RessursStatus.SUKSESS) {

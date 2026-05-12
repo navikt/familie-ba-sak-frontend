@@ -1,16 +1,14 @@
-import React from 'react';
-
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
+import { type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
+import { mapEøsPeriodeStatusTilStatus } from '@utils/eøs';
+import { lagPersonLabel } from '@utils/formatter';
 import styled from 'styled-components';
 
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
-import { type IBehandling, VurderingsstrategiForValutakurser } from '../../../../../../../typer/behandling';
-import { type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
-import { mapEøsPeriodeStatusTilStatus } from '../../../../../../../utils/eøs';
-import { lagPersonLabel } from '../../../../../../../utils/formatter';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const BlåPencilIcon = styled(PencilWritingIcon)`
     min-width: 1.5rem;
@@ -35,9 +33,8 @@ interface StatusProps {
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
 }
 
-const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiForValutakurser }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+const PeriodeStatus = ({ valutakurs, vurderingsstrategiForValutakurser }: StatusProps) => {
+    const erLesevisning = useErLesevisning();
 
     if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
         if (!erLesevisning && vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
@@ -56,7 +53,7 @@ const PeriodeStatus: React.FC<StatusProps> = ({ valutakurs, vurderingsstrategiFo
     }
 };
 
-export const StatusOgBarnValutakurs: React.FC<Props> = ({ valutakurs, åpenBehandling }) => (
+export const StatusOgBarnValutakurs = ({ valutakurs, åpenBehandling }: Props) => (
     <HStack wrap={false} align="center" gap="space-16">
         <PeriodeStatus
             valutakurs={valutakurs}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 

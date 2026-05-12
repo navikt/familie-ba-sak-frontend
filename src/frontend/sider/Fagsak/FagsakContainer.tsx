@@ -1,21 +1,19 @@
-import React from 'react';
-
 import { Navigate, Route, Routes } from 'react-router';
-import styled from 'styled-components';
 
-import { Alert, HStack, Loader } from '@navikt/ds-react';
+import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 
 import { BehandlingContainer } from './Behandling/BehandlingContainer';
 import { HentOgSettBehandlingProvider } from './Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from './BrukerContext';
 import { Dokumentutsending } from './Dokumentutsending/Dokumentutsending';
 import { DokumentutsendingProvider } from './Dokumentutsending/DokumentutsendingContext';
+import Styles from './FagsakContainer.module.css';
 import { FagsakProvider } from './FagsakContext';
 import { InfotrygdFagsak } from './Infotrygd/InfotrygdFagsak';
 import { JournalpostListe } from './journalposter/JournalpostListe';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
 import { Saksoversikt } from './Saksoversikt/Saksoversikt';
-import { useFagsakId } from '../../hooks/useFagsakId';
+import { useFagsakIdParam } from '../../hooks/useFagsakIdParam';
 import { useHentFagsak } from '../../hooks/useHentFagsak';
 import { useHentPerson } from '../../hooks/useHentPerson';
 import { useScrollTilAnker } from '../../hooks/useScrollTilAnker';
@@ -24,15 +22,10 @@ import { Personlinje } from '../../komponenter/Personlinje/Personlinje';
 import { Fagsaklinje } from '../../komponenter/Saklinje/Fagsaklinje';
 import { FagsakType } from '../../typer/fagsak';
 
-const HovedInnhold = styled.div`
-    height: calc(100vh - 3rem);
-    overflow: auto;
-`;
-
 export function FagsakContainer() {
-    const fagsakId = useFagsakId();
+    const fagsakIdParam = useFagsakIdParam();
 
-    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakId);
+    const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakIdParam);
 
     const ident = fagsak?.fagsakType === FagsakType.SKJERMET_BARN ? fagsak?.fagsakeier : fagsak?.søkerFødselsnummer;
 
@@ -51,7 +44,16 @@ export function FagsakContainer() {
     }
 
     if (fagsakError) {
-        return <Alert variant={'error'}>Feil oppstod ved innlasting av fagsak: {fagsakError.message}</Alert>;
+        return (
+            <Box margin={'space-8'}>
+                <GlobalAlert status={'error'}>
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Feil oppstod ved innlasting av fagsak</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                    <GlobalAlert.Content>{fagsakError.message}</GlobalAlert.Content>
+                </GlobalAlert>
+            </Box>
+        );
     }
 
     if (isPendingBruker) {
@@ -64,14 +66,23 @@ export function FagsakContainer() {
     }
 
     if (brukerError) {
-        return <Alert variant={'error'}>Feil oppstod ved innlasting av bruker: {brukerError.message}</Alert>;
+        return (
+            <Box padding={'space-8'}>
+                <GlobalAlert status={'error'}>
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Feil oppstod ved innlasting av bruker</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                    <GlobalAlert.Content>{brukerError.message}</GlobalAlert.Content>
+                </GlobalAlert>
+            </Box>
+        );
     }
 
     return (
-        <FagsakProvider fagsak={fagsak}>
-            <BrukerProvider bruker={bruker}>
-                <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
-                    <HovedInnhold>
+        <Box className={Styles.container}>
+            <FagsakProvider fagsak={fagsak}>
+                <BrukerProvider bruker={bruker}>
+                    <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
                         <Personlinje bruker={bruker} fagsak={fagsak} />
                         <Routes>
                             <Route
@@ -129,9 +140,9 @@ export function FagsakContainer() {
                                 }
                             />
                         </Routes>
-                    </HovedInnhold>
-                </ManuelleBrevmottakerePåFagsakProvider>
-            </BrukerProvider>
-        </FagsakProvider>
+                    </ManuelleBrevmottakerePåFagsakProvider>
+                </BrukerProvider>
+            </FagsakProvider>
+        </Box>
     );
 }

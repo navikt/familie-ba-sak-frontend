@@ -1,16 +1,16 @@
-import React from 'react';
-
 import { Link as ReactRouterLink } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, BodyShort, Box, HStack, Link, LinkCard, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, HStack, InfoCard, Link, LinkCard, VStack } from '@navikt/ds-react';
 import { FontSizeHeadingMedium, FontSizeXlarge } from '@navikt/ds-tokens/dist/tokens';
 
 import type { VisningBehandling } from './visningBehandling';
 import { BehandlingStatus } from '../../../typer/behandling';
 import type { IBehandlingstema } from '../../../typer/behandlingstema';
 import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import { FagsakType } from '../../../typer/fagsak';
+import { FagsakStatus, FagsakType } from '../../../typer/fagsak';
+import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { useFagsakContext } from '../FagsakContext';
 
@@ -24,11 +24,6 @@ const BodyTekst = styled(BodyShort)`
     font-size: ${FontSizeHeadingMedium};
 `;
 
-const StyledAlert = styled(Alert)`
-    width: ${SaksoversiktPanelBredde};
-    margin-top: var(--ax-space-64);
-`;
-
 function Innholdstabell() {
     const { fagsak } = useFagsakContext();
 
@@ -36,6 +31,7 @@ function Innholdstabell() {
         fagsak.løpendeKategori &&
         fagsak.løpendeUnderkategori &&
         tilBehandlingstema(fagsak.løpendeKategori, fagsak.løpendeUnderkategori);
+    const fagsakErLåst = fagsak.status === FagsakStatus.LÅST;
     return (
         <HStack gap="space-80">
             <div>
@@ -46,6 +42,17 @@ function Innholdstabell() {
                 <HeaderTekst spacing>Status</HeaderTekst>
                 <BodyTekst weight="semibold">{hentFagsakStatusVisning(fagsak)}</BodyTekst>
             </div>
+            {fagsakErLåst && fagsak.låstTidspunkt && (
+                <div>
+                    <HeaderTekst spacing>Låst dato</HeaderTekst>
+                    <BodyTekst weight="semibold">
+                        {isoStringTilFormatertString({
+                            isoString: fagsak.låstTidspunkt,
+                            tilFormat: Datoformat.DATO,
+                        })}
+                    </BodyTekst>
+                </div>
+            )}
         </HStack>
     );
 }
@@ -54,11 +61,35 @@ function FagsakTypeLabel() {
     const { fagsak } = useFagsakContext();
     switch (fagsak.fagsakType) {
         case FagsakType.INSTITUSJON:
-            return <StyledAlert variant={'info'}>Dette er en institusjonssak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en institusjonssak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         case FagsakType.BARN_ENSLIG_MINDREÅRIG:
-            return <StyledAlert variant={'info'}>Dette er en enslig mindreårig-sak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en enslig mindreårig-sak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         case FagsakType.SKJERMET_BARN:
-            return <StyledAlert variant={'info'}>Dette er en skjermet barn-sak</StyledAlert>;
+            return (
+                <Box marginBlock={'space-64 space-0'} maxWidth={SaksoversiktPanelBredde}>
+                    <InfoCard data-color="info">
+                        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette er en skjermet barn-sak
+                        </InfoCard.Message>
+                    </InfoCard>
+                </Box>
+            );
         default:
             return null;
     }

@@ -47,6 +47,7 @@ updates:
         patterns:
           - "@tanstack/react-query"
           - "@tanstack/react-query-devtools"
+          - "@tanstack/react-virtual"
       sentry:
         patterns:
           - "@sentry/browser"
@@ -57,9 +58,8 @@ updates:
           - "@testing-library/jest-dom"
           - "@testing-library/react"
           - "@testing-library/user-event"
-      landvelger:
+      landverktoy:
         patterns:
-          - "@navikt/landvelger"
           - "@navikt/land-verktoy"
           - "@navikt/flagg-ikoner"
       linting:
@@ -85,6 +85,7 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/plugin-react"
+          - "vite-tsconfig-paths"
       express:
         patterns:
           - "express"

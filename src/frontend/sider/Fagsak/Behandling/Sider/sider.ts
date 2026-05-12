@@ -19,6 +19,7 @@ export interface IUnderside {
     ident: string;
     antallAksjonspunkter: () => number;
     hash: string;
+    skjermesForBruker?: boolean;
 }
 
 export interface ITrinn extends ISide {
@@ -85,6 +86,7 @@ export const sider: Record<SideId, ISide> = {
                     navn: personResultat.person.navn,
                     ident: personResultat.person.personIdent,
                     hash: `${index}_${personResultat.person.fødselsdato}`,
+                    skjermesForBruker: personResultat.person.skjermesForBruker,
                     antallAksjonspunkter: () =>
                         personResultat.vilkårResultater.filter((vilkårResultat: FeltState<IVilkårResultat>) => {
                             return vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT;

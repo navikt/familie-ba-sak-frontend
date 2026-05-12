@@ -1,16 +1,15 @@
-import * as React from 'react';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { behandlingUnderkategori, BehandlingUnderkategori } from '@typer/behandlingstema';
 
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 
 import { useSøknadContext } from './SøknadContext';
 import styles from './SøknadType.module.css';
-import { behandlingUnderkategori, BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const SøknadType: React.FunctionComponent = () => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+export const SøknadType = () => {
     const { skjema } = useSøknadContext();
+
+    const erLesevisning = useErLesevisning();
 
     const radioOnChange = (underKategori: BehandlingUnderkategori) => {
         skjema.felter.underkategori.validerOgSettFelt(underKategori);

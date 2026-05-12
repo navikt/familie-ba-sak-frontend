@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import {
@@ -22,30 +20,30 @@ export enum Status {
 }
 
 const OkIkon = styled(CheckmarkCircleFillIcon)`
-    color: var(--ax-border-success);
+    color: var(--ax-text-success-subtle);
     font-size: 1.5rem;
     min-width: 1.5rem;
 `;
 
 const FeilIkon = styled(XMarkOctagonFillIcon)`
-    color: var(--ax-border-danger);
+    color: var(--ax-text-danger-subtle);
     font-size: 1.5rem;
     min-width: 1.5rem;
 `;
 
 const AdvarselIkon = styled(ExclamationmarkTriangleFillIcon)`
-    color: var(--ax-border-warning);
+    color: var(--ax-text-warning-subtle);
     font-size: 1.5rem;
     min-width: 1.5rem;
 `;
 
 const InfoIkon = styled(InformationSquareFillIcon)`
-    color: var(--ax-border-info);
+    color: var(--ax-text-info-subtle);
     font-size: 1.5rem;
     min-width: 1.5rem;
 `;
 
-const StatusIkon: React.FC<IProps> = ({ status, title }) => {
+const StatusIkon = ({ status, title }: IProps) => {
     switch (status) {
         case Status.OK:
             return <OkIkon title={title} />;

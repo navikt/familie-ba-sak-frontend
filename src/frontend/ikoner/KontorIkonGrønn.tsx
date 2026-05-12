@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 import { Buildings3Icon } from '@navikt/aksel-icons';
@@ -27,12 +25,7 @@ const IkonSirkel = styled.span<{
     color: white;
 `;
 
-const KontorIkonGrønn: React.FunctionComponent<IKontorIkonGrønn> = ({
-    className,
-    height = '24',
-    width = '24',
-    color = Success500,
-}) => {
+const KontorIkonGrønn = ({ className, height = '24', width = '24', color = Success500 }: IKontorIkonGrønn) => {
     return (
         <IkonSirkel $height={height} $width={width} $color={color}>
             <Buildings3Icon height={height === '24' ? 20 : 28} width={width === '24' ? 20 : 28} className={className} />

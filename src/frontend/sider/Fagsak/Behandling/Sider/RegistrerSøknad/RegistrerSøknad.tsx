@@ -1,6 +1,13 @@
-import * as React from 'react';
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { BehandlingSteg } from '@typer/behandling';
+import { sjekkGjelderInstitusjon } from '@typer/fagsak';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
 
-import { Alert, BodyShort, Button, ErrorSummary, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Annet } from './Annet';
@@ -8,20 +15,14 @@ import { Barna } from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { useSøknadContext } from './SøknadContext';
 import { SøknadType } from './SøknadType';
-import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../../../komponenter/MålformVelger';
-import { BehandlingSteg } from '../../../../../typer/behandling';
-import { sjekkGjelderInstitusjon } from '../../../../../typer/fagsak';
-import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { useFagsakContext } from '../../../FagsakContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import styles from './RegistrerSøknad.module.css';
 
-export const RegistrerSøknad: React.FC = () => {
-    const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+export const RegistrerSøknad = () => {
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     const {
         hentFeilTilOppsummering,
@@ -32,7 +33,6 @@ export const RegistrerSøknad: React.FC = () => {
         visBekreftModal,
     } = useSøknadContext();
 
-    const erLesevisning = vurderErLesevisning();
     const gjelderInstitusjon = sjekkGjelderInstitusjon(fagsak);
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
@@ -59,12 +59,14 @@ export const RegistrerSøknad: React.FC = () => {
                 {søknadErLastetFraBackend && !erLesevisning && (
                     <>
                         <br />
-                        <Alert
-                            variant="warning"
-                            children={
-                                'En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.'
-                            }
-                        />
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Søknad registrert</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.
+                            </LocalAlert.Content>
+                        </LocalAlert>
                         <br />
                     </>
                 )}
@@ -79,7 +81,11 @@ export const RegistrerSøknad: React.FC = () => {
                 <Annet />
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
                     skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <Alert variant="error">{skjema.submitRessurs.frontendFeilmelding}</Alert>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">

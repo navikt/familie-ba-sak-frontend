@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 

@@ -1,25 +1,25 @@
-import * as React from 'react';
-
+import { useBruker } from '@hooks/useBruker';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IForelderBarnRelasjonMaskert } from '@typer/person';
+import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { isoStringTilDate } from '@utils/dato';
 import { differenceInMilliseconds } from 'date-fns';
 
-import { Alert, BodyShort, CheckboxGroup, Heading, HStack, Label, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } from '@navikt/ds-react';
 
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
-import type { IForelderBarnRelasjonMaskert } from '../../../../../typer/person';
-import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '../../../../../typer/person';
-import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../../utils/dato';
-import { useBrukerContext } from '../../../BrukerContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-export const Barna: React.FunctionComponent = () => {
-    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
-        useBehandlingContext();
-    const lesevisning = vurderErLesevisning();
-    const { bruker } = useBrukerContext();
+export const Barna = () => {
+    const { gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } = useBehandlingContext();
     const { skjema } = useSøknadContext();
+
+    const bruker = useBruker();
+    const erLesevisning = useErLesevisning();
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
@@ -73,7 +73,7 @@ export const Barna: React.FunctionComponent = () => {
             <CheckboxGroup
                 {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                 legend={
-                    !lesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
+                    !erLesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
                     ) : (
                         <Label>Barn det er søkt om</Label>
@@ -90,7 +90,11 @@ export const Barna: React.FunctionComponent = () => {
 
                 {sorterteBarnMedOpplysninger.length === 0 && maskerteRelasjoner.length === 0 && (
                     <VStack marginBlock={'space-0 space-20'}>
-                        <Alert variant="info" children={'Folkeregisteret har ikke registrerte barn på denne søkeren'} />
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                Folkeregisteret har ikke registrerte barn på denne søkeren
+                            </InfoCard.Message>
+                        </InfoCard>
                     </VStack>
                 )}
             </CheckboxGroup>

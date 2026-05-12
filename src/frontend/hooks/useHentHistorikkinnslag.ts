@@ -1,12 +1,11 @@
+import { hentHistorikkinnslag, type HistorikkinnslagDto } from '@api/hentHistorikkinnslag';
+import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { BehandlerRolle } from '@typer/behandling';
+import { LoggType } from '@typer/logg';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 import { useHttp } from '@navikt/familie-http';
-
-import { hentHistorikkinnslag, type HistorikkinnslagDto } from '../api/hentHistorikkinnslag';
-import { useAppContext } from '../context/AppContext';
-import type { BehandlerRolle } from '../typer/behandling';
-import { LoggType } from '../typer/logg';
-import { Datoformat, isoStringTilFormatertString } from '../utils/dato';
 
 export interface Historikkinnslag {
     id: string;
@@ -28,7 +27,7 @@ type Options = Omit<
 
 export function useHentHistorikkinnslag(behandlingId: number, options?: Options) {
     const { request } = useHttp();
-    const { skalObfuskereData } = useAppContext();
+    const skalObfuskereData = useSkalObfuskereData();
     return useQuery({
         queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandlingId),
         queryFn: () => hentHistorikkinnslag(request, behandlingId),

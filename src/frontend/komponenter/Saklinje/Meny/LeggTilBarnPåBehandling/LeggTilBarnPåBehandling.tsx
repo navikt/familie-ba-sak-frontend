@@ -1,9 +1,8 @@
-import React from 'react';
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 
 import { ActionMenu } from '@navikt/ds-react';
-
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
 
 const relevanteBehandlingsårsaker = [
     BehandlingÅrsak.NYE_OPPLYSNINGER,
@@ -19,8 +18,8 @@ interface Props {
 }
 
 export function LeggTilBarnPBehandling({ åpneModal }: Props) {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
     const erRelevantBehandlingsårsak = relevanteBehandlingsårsaker.includes(behandling.årsak);
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
     const skalViseLeggTilBarn = !erLesevisning && (erRelevantBehandlingsårsak || erMigreringFraInfotrygd);

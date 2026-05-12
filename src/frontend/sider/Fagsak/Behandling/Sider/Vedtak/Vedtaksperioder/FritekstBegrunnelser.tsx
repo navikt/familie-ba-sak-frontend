@@ -1,5 +1,11 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { utledSøkersMålform } from '@typer/behandling';
+import { målform } from '@typer/søknad';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -9,10 +15,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import { målform } from '../../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../../utils/ressursUtils';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const FritekstContainer = styled.div`
     padding: 1rem;
@@ -66,9 +68,10 @@ const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
-const FritekstBegrunnelser: React.FC = () => {
-    const { vurderErLesevisning, søkersMålform } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+const FritekstBegrunnelser = () => {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+
     const {
         skjema,
         leggTilFritekst,
@@ -81,7 +84,7 @@ const FritekstBegrunnelser: React.FC = () => {
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
-    const onChangeFritekst = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
+    const onChangeFritekst = (event: ChangeEvent<HTMLTextAreaElement>, fritekstId: number) =>
         skjema.felter.fritekster.validerOgSettFelt([
             ...skjema.felter.fritekster.verdi.map(mapFritekst => {
                 if (mapFritekst.verdi.id === fritekstId) {
@@ -143,7 +146,7 @@ const FritekstBegrunnelser: React.FC = () => {
                     </ItalicText>
                 </StyledHelpText>
                 <StyledTag variant="neutral" size="small">
-                    Skriv {målform[søkersMålform].toLowerCase()}
+                    Skriv {målform[utledSøkersMålform(behandling)].toLowerCase()}
                 </StyledTag>
             </InfoBoks>
             <Fieldset
@@ -172,7 +175,7 @@ const FritekstBegrunnelser: React.FC = () => {
                                     resize
                                     value={fritekst.verdi.tekst}
                                     maxLength={makslengdeFritekst}
-                                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                         onChangeFritekst(event, fritekstId)
                                     }
                                     error={skjema.visFeilmeldinger && fritekst.feilmelding}

@@ -1,3 +1,6 @@
+import type { IRestBrevmottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { IsoDatoString } from '@utils/dato';
+
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
@@ -6,10 +9,10 @@ import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } f
 import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
-import type { IGrunnlagPerson } from './person';
+import { type IGrunnlagPerson, PersonType } from './person';
 import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
-import type { ISøknadDTO } from './søknad';
+import { type ISøknadDTO, Målform } from './søknad';
 import type {
     Behandlingsstatus,
     TilbakekrevingsbehandlingResultat,
@@ -21,8 +24,6 @@ import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
 import type { IRestKorrigertEtterbetaling, IRestKorrigertVedtak, IVedtakForBehandling } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
-import type { IRestBrevmottaker } from '../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IsoDatoString } from '../utils/dato';
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
@@ -459,4 +460,20 @@ export const settPåVentÅrsaker: Record<SettPåVentÅrsak, string> = {
 
 export function sjekkErBehandleneEnhetMidlertidig(behandling: IBehandling) {
     return behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
+}
+
+export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
+    return (
+        behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
+        behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
+        behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
+        behandling.årsak === BehandlingÅrsak.KLAGE ||
+        behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO ||
+        behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK
+    );
+}
+
+export function utledSøkersMålform(behandling: IBehandling) {
+    const søker = behandling.personer.find(person => person.type === PersonType.SØKER);
+    return søker?.målform ?? Målform.NB;
 }

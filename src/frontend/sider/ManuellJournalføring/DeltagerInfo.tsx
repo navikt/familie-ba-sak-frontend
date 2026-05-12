@@ -1,15 +1,15 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
 import styled from 'styled-components';
 
 import { BodyShort, Heading } from '@navikt/ds-react';
 
 interface DeltagerProps {
-    ikon: React.ReactNode;
+    ikon: ReactNode;
     navn: string;
     ident: string;
     undertittel: string;
-    children?: React.ReactNode | React.ReactNode[];
+    children?: ReactNode | ReactNode[];
 }
 
 const HSplit = styled.div`
@@ -21,7 +21,7 @@ const MarginedDiv = styled.div`
     margin-right: 1rem;
 `;
 
-export const DeltagerInfo: React.FC<DeltagerProps> = ({ ikon, navn, undertittel, ident }) => {
+export const DeltagerInfo = ({ ikon, navn, undertittel, ident }: DeltagerProps) => {
     return (
         <div>
             <HSplit>

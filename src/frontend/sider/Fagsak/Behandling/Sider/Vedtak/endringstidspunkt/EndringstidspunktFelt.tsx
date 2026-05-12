@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useRef } from 'react';
 
 import { format, parseISO, startOfToday } from 'date-fns';
@@ -56,7 +55,7 @@ export function EndringstidspunktFelt({ readOnly }: Props) {
     const { datepickerProps, inputProps } = useDatepicker({
         defaultSelected: value ? parseISO(value) : undefined,
         onDateChange: dato => {
-            clearErrors();
+            clearErrors('root');
             onChange(
                 dateTilFormatertString({
                     date: dato,

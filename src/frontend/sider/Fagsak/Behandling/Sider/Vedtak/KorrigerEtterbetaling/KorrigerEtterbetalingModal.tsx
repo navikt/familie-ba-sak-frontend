@@ -1,16 +1,26 @@
-import React from 'react';
+import { ModalType } from '@context/ModalContext';
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useModal } from '@hooks/useModal';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Fieldset, HStack, Modal, Select, Spacer, Textarea, TextField, VStack } from '@navikt/ds-react';
+import {
+    Button,
+    Fieldset,
+    HStack,
+    InlineMessage,
+    Modal,
+    Select,
+    Spacer,
+    Textarea,
+    TextField,
+    VStack,
+} from '@navikt/ds-react';
 
 import { useKorrigerEtterbetalingForm, årsaker } from './useKorrigerEtterbetalingForm';
 import { erEtterbetalingsbeløpGyldig, erÅrsakForKorrigeringGyldig } from './validering';
-import { ModalType } from '../../../../../../context/ModalContext';
-import { useModal } from '../../../../../../hooks/useModal';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 export function KorrigerEtterbetalingModal() {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
     const {
         form,
         korrigerEtterbetaling,
@@ -19,10 +29,11 @@ export function KorrigerEtterbetalingModal() {
         angreKorrigertEtterbetalingPending,
     } = useKorrigerEtterbetalingForm();
 
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
     const { lukkModal, erModalÅpen, bredde, tittel } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
     const korrigertEtterbetaling = behandling.korrigertEtterbetaling;
-    const erLesevisning = vurderErLesevisning();
 
     function handleLukkModal() {
         form.reset();
@@ -68,13 +79,13 @@ export function KorrigerEtterbetalingModal() {
                             />
                             {!erLesevisning && (
                                 <>
-                                    <Alert variant="info" inline>
+                                    <InlineMessage status="info">
                                         Husk å sende korrigeringsmelding til NØS
-                                    </Alert>
+                                    </InlineMessage>
                                     {form.formState.errors.root?.message && (
-                                        <Alert variant="error" inline>
+                                        <InlineMessage status="error">
                                             {form.formState.errors.root.message}
-                                        </Alert>
+                                        </InlineMessage>
                                     )}
                                 </>
                             )}

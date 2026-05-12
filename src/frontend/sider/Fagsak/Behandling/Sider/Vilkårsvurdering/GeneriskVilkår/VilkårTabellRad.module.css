@@ -1,0 +1,23 @@
+.celle {
+    word-break: keep-all;
+    white-space: normal;
+}
+
+.beskrivelse {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 20rem;
+}
+
+.tooltip {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    max-width: 500px;
+    text-align: left;
+}
+
+.ikon {
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+}

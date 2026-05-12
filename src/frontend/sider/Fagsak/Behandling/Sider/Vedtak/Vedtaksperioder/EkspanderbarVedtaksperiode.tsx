@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react';
-import React from 'react';
 
 import { endOfMonth, isAfter } from 'date-fns';
 import styled from 'styled-components';
@@ -48,12 +47,12 @@ interface EkspanderbarVedtaksperiodeProps extends PropsWithChildren {
 const slutterSenereEnnInneværendeMåned = (tom?: string) =>
     isAfter(isoStringTilDateMedFallback({ isoString: tom, fallbackDate: tidenesEnde }), endOfMonth(dagensDato));
 
-const EkspanderbarVedtaksperiode: React.FC<EkspanderbarVedtaksperiodeProps> = ({
+const EkspanderbarVedtaksperiode = ({
     vedtaksperiodeMedBegrunnelser,
     åpen,
     onClick,
     children,
-}) => {
+}: EkspanderbarVedtaksperiodeProps) => {
     const periode = {
         fom: vedtaksperiodeMedBegrunnelser.fom,
         tom: vedtaksperiodeMedBegrunnelser.tom,

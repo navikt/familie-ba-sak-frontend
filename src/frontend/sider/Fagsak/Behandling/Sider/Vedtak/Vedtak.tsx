@@ -1,9 +1,8 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { AlleBegrunnelserProvider } from './AlleBegrunnelserContext';
@@ -13,7 +12,7 @@ import { useSammensattKontrollsakContext } from './SammensattKontrollsak/Sammens
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingStatus, BehandlingSteg, Behandlingstype } from '../../../../../typer/behandling';
 import type { IPersonInfo } from '../../../../../typer/person';
@@ -36,12 +35,7 @@ const StyledSkjemaSteg = styled(Skjemasteg)`
     }
 `;
 
-export const BehandlingKorrigertAlert = styled(Alert)`
-    margin-bottom: 1.5rem;
-`;
-
-const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
+const Vedtak = ({ åpenBehandling, bruker }: IVedtakProps) => {
     const { vurderErLesevisning, sendTilBeslutterNesteOnClick, behandlingsstegSubmitressurs } = useBehandlingContext();
 
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
@@ -50,15 +44,15 @@ const Vedtak: React.FunctionComponent<IVedtakProps> = ({ åpenBehandling, bruker
 
     const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
 
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
-    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(behandlingId);
+    const fagsakId = useFagsakId();
+
+    const { data: vedtaksperioderMedBegrunnelser } = useHentVedtaksperioder(åpenBehandling.behandlingId);
 
     const erLesevisning = vurderErLesevisning();
 
     const navigate = useNavigate();
 
-    const [visModal, settVisModal] = React.useState<boolean>(false);
+    const [visModal, settVisModal] = useState<boolean>(false);
 
     const visSubmitKnapp = !erLesevisning && åpenBehandling?.status === BehandlingStatus.UTREDES;
 

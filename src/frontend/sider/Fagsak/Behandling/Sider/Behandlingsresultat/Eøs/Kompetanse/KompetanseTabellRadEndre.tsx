@@ -1,15 +1,10 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Fieldset, HStack, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
-import type { Country } from '@navikt/land-verktoy';
-
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import type { IKompetanse, KompetanseAktivitet } from '../../../../../../../typer/eøsPerioder';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
+import type { IBehandling } from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import type { IKompetanse, KompetanseAktivitet } from '@typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
     EøsPeriodeStatus,
@@ -17,11 +12,16 @@ import {
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,
-} from '../../../../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../../../../utils/skjema';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+} from '@typer/eøsPerioder';
+import { onOptionSelected } from '@utils/skjema';
+
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, HStack, InlineMessage, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
-import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
     `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${
@@ -35,6 +35,7 @@ interface Props {
     toggleForm: (visAlert: boolean) => void;
     slettKompetanse: () => void;
     erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
+    inneholderBarnSomSkalSkjermes?: boolean;
 }
 
 export function KompetanseTabellRadEndre({
@@ -44,9 +45,10 @@ export function KompetanseTabellRadEndre({
     toggleForm,
     slettKompetanse,
     erAnnenForelderOmfattetAvNorskLovgivning,
+    inneholderBarnSomSkalSkjermes,
 }: Props) {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const lesevisning = vurderErLesevisning(true);
+    const erLesevisning = useErLesevisning();
+    const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
 
     const visSubmitFeilmelding = () => {
         if (
@@ -84,7 +86,7 @@ export function KompetanseTabellRadEndre({
                     options={tilgjengeligeBarn}
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
@@ -92,19 +94,19 @@ export function KompetanseTabellRadEndre({
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erRedigeringDeaktivert}
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
-                    <Alert variant="info" inline>
+                    <InlineMessage status="info">
                         Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett i perioden
-                    </Alert>
+                    </InlineMessage>
                 )}
                 <Select
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                         skjema.felter.søkersAktivitet.validerOgSettFelt(event.target.value as KompetanseAktivitet)
                     }
                 >
@@ -122,10 +124,10 @@ export function KompetanseTabellRadEndre({
                 <Select
                     className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
                         skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
                             event.target.value as KompetanseAktivitet
                         );
@@ -143,76 +145,70 @@ export function KompetanseTabellRadEndre({
                     })}
                 </Select>
                 {skjema.felter.annenForeldersAktivitet.verdi === AnnenForelderAktivitet.IKKE_AKTUELT && (
-                    <Alert variant="info" size="small" inline>
+                    <InlineMessage status="info" size="small">
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
-                    </Alert>
+                    </InlineMessage>
                 )}
-                <FamilieLandvelger
-                    erLesevisning={lesevisning}
-                    id={'søkersAktivitetsland'}
+                <RegionCombobox
                     label={'Søkers aktivitetsland'}
-                    kunEøs
-                    medFlag
-                    size="medium"
-                    kanNullstilles
-                    value={skjema.felter.søkersAktivitetsland.verdi}
-                    onChange={(value: Country) => {
-                        const nyVerdi = value ? value.value : undefined;
-                        skjema.felter.søkersAktivitetsland.validerOgSettFelt(nyVerdi);
+                    value={skjema.felter.søkersAktivitetsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.søkersAktivitetsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.søkersAktivitetsland.nullstill();
+                        }
                     }}
-                    feil={
+                    readOnly={erRedigeringDeaktivert}
+                    error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
-                    utenMargin
                 />
-                <FamilieLandvelger
-                    erLesevisning={lesevisning}
-                    id={'annenForeldersAktivitetsland'}
+                <RegionCombobox
                     label={'Annen forelders aktivitetsland'}
-                    kunEøs
-                    medFlag
-                    size="medium"
-                    kanNullstilles
-                    value={skjema.felter.annenForeldersAktivitetsland.verdi}
-                    onChange={(value: Country) => {
-                        const nyVerdi = value ? value.value : undefined;
-                        skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(nyVerdi);
+                    value={skjema.felter.annenForeldersAktivitetsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.annenForeldersAktivitetsland.nullstill();
+                        }
                     }}
-                    feil={
+                    readOnly={erRedigeringDeaktivert}
+                    error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
                             : ''
                     }
-                    utenMargin
                 />
-                <FamilieLandvelger
-                    erLesevisning={lesevisning}
-                    id={'bostedadresse'}
+                <RegionCombobox
                     label={'Barnets bostedsland'}
-                    kunEøs
-                    medFlag
-                    size="medium"
-                    kanNullstilles
-                    value={skjema.felter.barnetsBostedsland?.verdi}
-                    onChange={(value: Country) => {
-                        const nyVerdi = value ? value.value : undefined;
-                        skjema.felter.barnetsBostedsland.validerOgSettFelt(nyVerdi);
+                    value={skjema.felter.barnetsBostedsland.verdi as Regionkode}
+                    options={EØS_LAND_REGIONKODER}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.barnetsBostedsland.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.barnetsBostedsland.nullstill();
+                        }
                     }}
-                    feil={
+                    readOnly={erRedigeringDeaktivert}
+                    error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.barnetsBostedsland?.feilmelding?.toString()
+                            ? skjema.felter.barnetsBostedsland.feilmelding?.toString()
                             : ''
                     }
-                    utenMargin
                 />
                 <Select
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Kompetanse'}
                     value={skjema.felter.resultat.verdi || ''}
                     onChange={event => {
@@ -241,21 +237,21 @@ export function KompetanseTabellRadEndre({
                 </Select>
                 {toPrimærland && (
                     <Box marginBlock={'space-2 space-2'}>
-                        <Alert variant={'warning'} size={'small'} inline={true}>
+                        <InlineMessage status={'warning'} size={'small'}>
                             Norge og annen forelders aktivitetsland er primærland. Saksbehandler må manuelt vurdere om
                             Norge skal utbetale barnetrygden.
-                        </Alert>
+                        </InlineMessage>
                     </Box>
                 )}
                 {nasjonalRettDifferanseberegningMedUlikeAktivitetsland && (
                     <Box marginBlock={'space-2 space-2'}>
-                        <Alert variant={'warning'} size={'small'} inline={true}>
+                        <InlineMessage status={'warning'} size={'small'}>
                             To andre EØS-land er primærland. Saksbehandler må manuelt beregne hvilket av EØS-landene som
                             utbetaler den høyeste barnetrygden og som Norge skal differanseberegne mot.
-                        </Alert>
+                        </InlineMessage>
                     </Box>
                 )}
-                {!lesevisning && (
+                {!erRedigeringDeaktivert && (
                     <HStack justify={'space-between'} marginBlock={'space-12 space-0'}>
                         <div>
                             <Button

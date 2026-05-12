@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
@@ -23,6 +21,7 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
                 .map(personMedAndeler => personMedAndeler.personIdent)
                 .includes(person.personIdent)
         )
+        .filter(person => !person.skjermesForBruker)
         .map(person => ({
             value: person.personIdent,
             label: lagPersonLabel(person.personIdent, behandling.personer),

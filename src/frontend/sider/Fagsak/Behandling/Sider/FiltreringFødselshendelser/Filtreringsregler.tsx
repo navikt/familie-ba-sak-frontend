@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { useNavigate } from 'react-router';
 
 import { BodyShort, List } from '@navikt/ds-react';
 
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
+import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
 import type { IBehandling } from '../../../../../typer/behandling';
 import { BehandlingSteg } from '../../../../../typer/behandling';
@@ -15,8 +13,8 @@ interface IProps {
     åpenBehandling: IBehandling;
 }
 
-const Filtreringsregler: React.FC<IProps> = ({ åpenBehandling }) => {
-    const { fagsakId } = useSakOgBehandlingParams();
+const Filtreringsregler = ({ åpenBehandling }: IProps) => {
+    const fagsakId = useFagsakId();
     const navigate = useNavigate();
 
     return (

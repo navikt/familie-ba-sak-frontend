@@ -1,13 +1,12 @@
-import React from 'react';
-
 import { Link as ReactRouterLink, useLocation } from 'react-router';
 
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 
 import { Fagsakmeny } from './Meny/Fagsakmeny';
-import { useAppContext } from '../../context/AppContext';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
+import { FagsakStatus } from '../../typer/fagsak';
 
 function lagAktivFaneStyle(fanenavn: string, pathname: string) {
     const urlSplit = pathname.split('/');
@@ -16,9 +15,9 @@ function lagAktivFaneStyle(fanenavn: string, pathname: string) {
 }
 
 export function Fagsaklinje() {
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
     const { fagsak } = useFagsakContext();
     const { pathname } = useLocation();
+    const saksbehandler = useSaksbehandler();
 
     return (
         <Box borderWidth={'0 0 1 0'} borderColor={'neutral-subtle'}>
@@ -55,7 +54,7 @@ export function Fagsaklinje() {
                         Dokumenter
                     </Button>
                 </HStack>
-                {harInnloggetSaksbehandlerSkrivetilgang() && <Fagsakmeny />}
+                {saksbehandler.harSkrivetilgang && fagsak.status !== FagsakStatus.LÅST && <Fagsakmeny />}
             </HStack>
         </Box>
     );

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { FormProvider } from 'react-hook-form';
 
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';

@@ -1,11 +1,9 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort, HStack } from '@navikt/ds-react';
 import { Space16, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
-import PersonInformasjon from '../../../komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonInformasjonUtbetaling } from './PersonInformasjonUtbetaling';
 import { YtelseType, ytelsetype } from '../../../typer/beregning';
 import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
 import { formaterBeløp, hentAlder } from '../../../utils/formatter';
@@ -23,20 +21,26 @@ interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
 }
 
-const PersonUtbetaling: React.FC<IPersonUtbetalingProps> = ({ utbetalingsperiodeDetaljer }) => {
-    const genererTekstForOrdinær = (fødselsdato: string) =>
-        hentAlder(fødselsdato) < 6 ? 'Ordinær (under 6 år)' : 'Ordinær (fra 6 år)';
+const PersonUtbetaling = ({ utbetalingsperiodeDetaljer }: IPersonUtbetalingProps) => {
+    const genererTekstForOrdinær = (utbetalingsperiodeDetalj: IUtbetalingsperiodeDetalj) => {
+        if (utbetalingsperiodeDetalj.person.skjermesForBruker) {
+            return ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn;
+        }
+        return hentAlder(utbetalingsperiodeDetalj.person.fødselsdato) < 6
+            ? 'Ordinær (under 6 år)'
+            : 'Ordinær (fra 6 år)';
+    };
 
     return (
         <section>
-            <PersonInformasjon person={utbetalingsperiodeDetaljer[0].person} erLesevisning={false} />
+            <PersonInformasjonUtbetaling person={utbetalingsperiodeDetaljer[0].person} />
             <Ytelser>
                 {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
                     return (
                         <Ytelselinje justify="space-between" key={utbetalingsperiodeDetalj.person.personIdent}>
                             <BodyShort>
                                 {utbetalingsperiodeDetalj.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
-                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj.person.fødselsdato)
+                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj)
                                     : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
                             </BodyShort>
                             <BodyShort>{formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}</BodyShort>

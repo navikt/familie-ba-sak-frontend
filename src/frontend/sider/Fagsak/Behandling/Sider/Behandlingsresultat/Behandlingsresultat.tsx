@@ -1,11 +1,10 @@
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Alert, Button, ErrorMessage, ErrorSummary, Label } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, ErrorSummary, Label, LocalAlert } from '@navikt/ds-react';
 import { byggDataRessurs, RessursStatus } from '@navikt/familie-typer';
 
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
@@ -20,7 +19,7 @@ import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 import { useBehandlingsresultat } from './useBehandlingsresultat';
-import { useFagsakId } from '../../../../../hooks/useFagsakId';
+import { useFagsak } from '../../../../../hooks/useFagsak';
 import { useOpprettEndretUtbetalingAndel } from '../../../../../hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import type { IBehandling } from '../../../../../typer/behandling';
@@ -34,7 +33,6 @@ import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '../../../../../utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '../../../../../utils/formatter';
 import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -48,10 +46,6 @@ const StyledEditIkon = styled(PencilIcon)`
     font-size: 1.5rem;
 `;
 
-const StyledAlert = styled(Alert)`
-    margin-bottom: 1rem;
-`;
-
 const StyledErrorSummary = styled(ErrorSummary)`
     margin-top: 5rem;
 `;
@@ -60,11 +54,11 @@ interface IBehandlingsresultatProps {
     åpenBehandling: IBehandling;
 }
 
-const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = ({ åpenBehandling }) => {
-    const navigate = useNavigate();
-    const fagsakId = useFagsakId();
-    const { fagsak } = useFagsakContext();
+const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => {
     const { settÅpenBehandling } = useBehandlingContext();
+
+    const fagsak = useFagsak();
+    const navigate = useNavigate();
 
     const {
         visFeilmeldinger,
@@ -143,10 +137,10 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             senderInn={behandlingsstegSubmitressurs.status === RessursStatus.HENTER}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
-            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
+            forrigeOnClick={() => navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
             nesteOnClick={() => {
                 if (erLesevisning) {
-                    navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/simulering`);
+                    navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {
@@ -158,16 +152,21 @@ const Behandlingsresultat: React.FunctionComponent<IBehandlingsresultatProps> = 
             steg={BehandlingSteg.BEHANDLINGSRESULTAT}
         >
             {personerMedUgyldigEtterbetalingsperiode.length > 0 && (
-                <StyledAlert variant={'warning'}>
-                    Du har perioder som kan føre til etterbetaling utover tre måneder for person{' '}
-                    {slåSammenListeTilStreng(
-                        personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
-                    )}
-                    .
-                </StyledAlert>
+                <Box marginBlock={'space-0 space-16'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                Du har perioder som kan føre til etterbetaling utover tre måneder for person{' '}
+                                {slåSammenListeTilStreng(
+                                    personerMedUgyldigEtterbetalingsperiode.map(ident => formaterIdent(ident))
+                                )}
+                                .
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
             {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />}
-
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { VStack } from '@navikt/ds-react';

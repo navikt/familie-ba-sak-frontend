@@ -1,11 +1,12 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ISkjema } from '@navikt/familie-skjema';
 
+import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useAppContext } from '../../../../context/AppContext';
 import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
 import type { IBehandling } from '../../../../typer/behandling';
@@ -18,8 +19,7 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../typer/common';
-import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
-import { FagsakStatus } from '../../../../typer/fagsak';
+import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { FeatureToggle } from '../../../../typer/featureToggles';
 import { Klagebehandlingstype } from '../../../../typer/klage';
 import type { IPersonInfo } from '../../../../typer/person';
@@ -28,7 +28,6 @@ import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekreving
 import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../utils/fagsak';
 import { hentAlder } from '../../../../utils/formatter';
 import { onOptionSelected } from '../../../../utils/skjema';
-import { BehandlingstemaSelect } from '../../../BehandlingstemaSelect';
 
 const erOpprettBehandlingSkjema = (
     skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>
@@ -94,14 +93,14 @@ interface BehandlingÅrsakSelect extends HTMLSelectElement {
     value: BehandlingÅrsak | '';
 }
 
-const OpprettBehandlingValg: React.FC<IProps> = ({
+const OpprettBehandlingValg = ({
     skjema,
     minimalFagsak,
     erLesevisning = false,
     manuellJournalfør = false,
     bruker = undefined,
-}) => {
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
+}: IProps) => {
+    const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
@@ -115,8 +114,8 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
         ? false
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
-    const kanOppretteTekniskEndring = kanOppretteBehandling && harInnloggetSaksbehandlerSuperbrukerTilgang();
-    const kanManueltKorrigereMedVedtaksbrev = harInnloggetSaksbehandlerSuperbrukerTilgang() ?? false;
+    const kanOppretteTekniskEndring = kanOppretteBehandling && saksbehandler.harSuperbrukertilgang;
+    const kanManueltKorrigereMedVedtaksbrev = saksbehandler.harSuperbrukertilgang ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -132,6 +131,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
 
     const kanOppretteKlagebehandling =
         minimalFagsak !== undefined &&
+        !minimalFagsak.finnesStrengtFortroligPersonIFagsak &&
         (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
             toggles[FeatureToggle.skalKunneBehandleBaInstitusjonFagsaker]);
 
@@ -152,7 +152,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 readOnly={erLesevisning}
                 name={'Behandling'}
                 label={'Velg type behandling'}
-                onChange={(event: React.ChangeEvent<BehandlingstypeSelect>): void => {
+                onChange={(event: ChangeEvent<BehandlingstypeSelect>): void => {
                     behandlingstype.onChange(event.target.value);
                 }}
             >
@@ -210,14 +210,13 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     </option>
                 )}
             </Select>
-
             {behandlingsårsak.erSynlig && (
                 <Select
                     {...behandlingsårsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     readOnly={erLesevisning}
                     name={'Behandlingsårsak'}
                     label={'Velg årsak'}
-                    onChange={(event: React.ChangeEvent<BehandlingÅrsakSelect>): void => {
+                    onChange={(event: ChangeEvent<BehandlingÅrsakSelect>): void => {
                         behandlingsårsak.onChange(event.target.value);
                     }}
                 >
@@ -238,7 +237,6 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                     })}
                 </Select>
             )}
-
             {erHelmanuellMigrering && erOpprettBehandlingSkjema(skjema) && skjema.felter.valgteBarn?.erSynlig && (
                 <UNSAFE_Combobox
                     label={'Legg til juridiske barn for migrering'}
@@ -253,7 +251,7 @@ const OpprettBehandlingValg: React.FC<IProps> = ({
                 />
             )}
             {behandlingstema.erSynlig && (
-                <BehandlingstemaSelect
+                <OpprettBehandlingBehandlingstemaSelect
                     behandlingstema={behandlingstema}
                     fagsakType={minimalFagsak?.fagsakType}
                     erLesevisning={erLesevisning}

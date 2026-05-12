@@ -1,5 +1,14 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 
+import { ModalType } from '@context/ModalContext';
+import { useModal } from '@hooks/useModal';
+import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
+import { PersonIkon } from '@komponenter/PersonIkon';
+import { FagsakDeltagerRolle, type IFagsakDeltager, type ISøkParam } from '@typer/fagsakdeltager';
+import { erLokal } from '@utils/miljø';
+import { obfuskerFagsakDeltager } from '@utils/obfuskerData';
+import { erAdresseBeskyttet } from '@utils/validators';
 import { useNavigate } from 'react-router';
 
 import type { ISøkeresultat } from '@navikt/familie-header';
@@ -16,16 +25,7 @@ import {
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 
-import { useAppContext } from '../../context/AppContext';
-import { ModalType } from '../../context/ModalContext';
-import { useModal } from '../../hooks/useModal';
-import { FagsakDeltagerRolle, type IFagsakDeltager, type ISøkParam } from '../../typer/fagsakdeltager';
-import { erLokal } from '../../utils/miljø';
-import { obfuskerFagsakDeltager } from '../../utils/obfuskerData';
-import { erAdresseBeskyttet } from '../../utils/validators';
-import { PersonIkon } from '../PersonIkon';
-
-function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactNode {
+function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): ReactNode {
     return (
         <PersonIkon
             fagsakType={fagsakDeltager.fagsakType}
@@ -39,12 +39,12 @@ function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): React.ReactN
     );
 }
 
-const FagsakDeltagerSøk: React.FC = () => {
+const FagsakDeltagerSøk = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
-    const { skalObfuskereData } = useAppContext();
+    const skalObfuskereData = useSkalObfuskereData();
 
-    const [fagsakDeltagere, settFagsakDeltagere] = React.useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
+    const [fagsakDeltagere, settFagsakDeltagere] = useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
 
     const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
 

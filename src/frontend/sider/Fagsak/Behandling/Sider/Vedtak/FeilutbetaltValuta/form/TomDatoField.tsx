@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import { endOfMonth, format, isBefore, startOfToday } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';

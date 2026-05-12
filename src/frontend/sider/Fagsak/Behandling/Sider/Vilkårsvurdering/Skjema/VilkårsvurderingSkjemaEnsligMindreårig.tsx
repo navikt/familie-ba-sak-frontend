@@ -1,37 +1,43 @@
-import React from 'react';
+import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
+import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { PersonType } from '@typer/person';
+import type { IPersonResultat } from '@typer/vilkår';
+import { annenVurderingConfig, AnnenVurderingType, vilkårConfigEnsligMindreårig, VilkårType } from '@typer/vilkår';
 
-import { Alert, Box, HStack } from '@navikt/ds-react';
+import { Box, HStack, LocalAlert } from '@navikt/ds-react';
 
-import PersonInformasjon from '../../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import { PersonType } from '../../../../../../typer/person';
-import type { IPersonResultat } from '../../../../../../typer/vilkår';
-import {
-    annenVurderingConfig,
-    AnnenVurderingType,
-    vilkårConfigEnsligMindreårig,
-    VilkårType,
-} from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface IProps {
+interface Props {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
+export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: Props) {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
-    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
+    const skjermstørrelse = useSkjermstørrelse();
 
+    const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
+    const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
     const opplysningsplikt = personResultat?.andreVurderinger.find(
         value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
-    return personResultat ? (
+
+    if (!personResultat) {
+        return (
+            <LocalAlert status={'error'}>
+                <LocalAlert.Header>
+                    <LocalAlert.Title>Finner ingen vilkår på behandlingen</LocalAlert.Title>
+                </LocalAlert.Header>
+            </LocalAlert>
+        );
+    }
+
+    return (
         <>
             <HStack
                 wrap={false}
@@ -39,17 +45,20 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                 paddingBlock={'space-32 space-0'}
                 className={styles.personLinje}
             >
-                <PersonInformasjon person={personResultat.person} somOverskrift erLesevisning={vurderErLesevisning()} />
+                <PersonInformasjon person={personResultat.person} />
             </HStack>
-
-            <Box paddingInline={'space-56 space-0'}>
+            <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
                 {personResultat.person.registerhistorikk ? (
                     <Registeropplysninger
                         registerHistorikk={personResultat.person.registerhistorikk}
                         fødselsdato={personResultat.person.fødselsdato}
                     />
                 ) : (
-                    <Alert variant="warning" children={'Klarte ikke hente registeropplysninger'} />
+                    <LocalAlert status={'warning'}>
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Klarte ikke hente registeropplysninger</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
                 )}
                 {opplysningsplikt && (
                     <GeneriskAnnenVurdering
@@ -84,9 +93,5 @@ const VilkårsvurderingSkjemaEnsligMindreårig: React.FC<IProps> = ({ visFeilmel
                 })}
             </Box>
         </>
-    ) : (
-        <Alert variant="error" children={'Finner ingen vilkår på behandlingen'} />
     );
-};
-
-export default VilkårsvurderingSkjemaEnsligMindreårig;
+}

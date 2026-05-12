@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
+import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '@typer/samhandler';
+import { obfuskerSamhandler } from '@utils/obfuskerData';
 import type { AxiosError } from 'axios';
 
 import type { FamilieRequestConfig } from '@navikt/familie-http';
@@ -7,15 +10,11 @@ import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../context/AppContext';
-import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '../../typer/samhandler';
-import { obfuskerSamhandler } from '../../utils/obfuskerData';
-
 export const useSamhandlerRequest = (erIEnBehandling: boolean) => {
     const { request } = useHttp();
     const [samhandlerRessurs, settSamhandlerRessurs] = useState<Ressurs<ISamhandlerInfo>>(byggTomRessurs());
 
-    const { skalObfuskereData } = useAppContext();
+    const skalObfuskereData = useSkalObfuskereData();
 
     const hentOgSettSamhandler = (behandlingIdEllerOrgnr: string | number) => {
         settSamhandlerRessurs(byggHenterRessurs<ISamhandlerInfo>());

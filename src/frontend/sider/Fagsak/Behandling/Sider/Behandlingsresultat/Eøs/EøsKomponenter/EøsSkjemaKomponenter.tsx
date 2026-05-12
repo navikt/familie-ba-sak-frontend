@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { CogRotationIcon } from '@navikt/aksel-icons';

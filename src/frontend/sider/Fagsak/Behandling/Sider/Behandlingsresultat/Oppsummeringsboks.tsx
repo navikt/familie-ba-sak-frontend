@@ -1,46 +1,42 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-
-import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Box, Button, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import type { Etikett } from '@navikt/familie-tidslinje';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
-import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
-import { useAppContext } from '../../../../../context/AppContext';
-import { FalskIdentitet } from '../../../../../komponenter/FalskIdentitet/FalskIdentitet';
-import { Skillelinje } from '../../../../../komponenter/PersonInformasjon/PersonInformasjon';
-import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
-import { AlertType, ToastTyper } from '../../../../../komponenter/Toast/typer';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { Behandlingstype } from '../../../../../typer/behandling';
-import { ytelsetype } from '../../../../../typer/beregning';
+import { useAppContext } from '@context/AppContext';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
+import { Skillelinje } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import type { IBehandling } from '@typer/behandling';
+import { Behandlingstype } from '@typer/behandling';
+import { ytelsetype } from '@typer/beregning';
 import type {
     IEøsPeriodeStatus,
     IRestEøsPeriode,
     IRestKompetanse,
     IRestUtenlandskPeriodeBeløp,
     IRestValutakurs,
-} from '../../../../../typer/eøsPerioder';
-import { EøsPeriodeStatus, KompetanseResultat } from '../../../../../typer/eøsPerioder';
-import type { Utbetalingsperiode } from '../../../../../typer/vedtaksperiode';
-import { dateTilFormatertString, Datoformat } from '../../../../../utils/dato';
-import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '../../../../../utils/formatter';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+} from '@typer/eøsPerioder';
+import { EøsPeriodeStatus, KompetanseResultat } from '@typer/eøsPerioder';
+import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
+import { dateTilFormatertString, Datoformat } from '@utils/dato';
+import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
+import styled from 'styled-components';
 
-const AlertWithBottomMargin = styled(Alert)`
-    margin-bottom: 1.5rem;
-`;
+import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+import type { Etikett } from '@navikt/familie-tidslinje';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
+
+import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
+import { useBehandlingContext } from '../../context/BehandlingContext';
 
 const UtbetalingsbeløpStack = styled(VStack)`
     padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
 `;
 
-const UtbetalingsbeløpRad: React.FC<React.PropsWithChildren> = ({ children }) => (
+const UtbetalingsbeløpRad = ({ children }: PropsWithChildren) => (
     <HGrid columns="1fr 8rem 5rem" gap={'space-8'}>
         {children}
     </HGrid>
@@ -105,20 +101,21 @@ const erAllePerioderUtfyltForBarn = (eøsPeriodeStatus: IEøsPeriodeStatus[]) =>
     return eøsPeriodeStatus.every(eøsPeriode => eøsPeriode.status === EøsPeriodeStatus.OK);
 };
 
-const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
+const Oppsummeringsboks = ({
     utbetalingsperiode,
     aktivEtikett,
     kompetanser,
     utbetaltAnnetLandBeløp,
     valutakurser,
-}) => {
+}: IProps) => {
     const { request } = useHttp();
-    const { settÅpenBehandling, behandling, vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useAppContext();
     const { settAktivEtikett } = useTidslinjeContext();
 
-    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = React.useState(new Map<string, boolean>());
+    const erLesevisning = useErLesevisning();
+
+    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
     const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
@@ -179,7 +176,7 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
         });
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         setUtbetalingsBeløpStatusMap(
             finnUtbetalingsBeløpStatusMap(utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser)
         );
@@ -203,7 +200,15 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                     }}
                 />
             </HGrid>
-            {restFeil && <AlertWithBottomMargin variant="error">{restFeil}</AlertWithBottomMargin>}
+            {restFeil && (
+                <Box marginBlock={'space-0 space-24'}>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{restFeil}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
+            )}
             {utbetalingsperiode === undefined ? (
                 <BodyShort spacing>Ingen utbetalinger</BodyShort>
             ) : (
@@ -214,24 +219,40 @@ const Oppsummeringsboks: React.FunctionComponent<IProps> = ({
                             <BodyShort>Sats</BodyShort>
                             <BodyShort align="end">Beløp</BodyShort>
                         </UtbetalingsbeløpRad>
-                        {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => (
-                            <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
-                                <HStack gap={'space-4'}>
-                                    <BodyShort>
-                                        {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
-                                    </BodyShort>
-                                    <Skillelinje />
-                                    <FalskIdentitet harFalskIdentitet={detalj.person.harFalskIdentitet} />
-                                    <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
-                                </HStack>
-                                <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
-                                {utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
-                                    <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
-                                ) : (
-                                    <Alert variant="warning" children={'Må beregnes'} size={'small'} inline />
-                                )}
-                            </UtbetalingsbeløpRad>
-                        ))}
+                        {utbetalingsperiode.utbetalingsperiodeDetaljer.sort(sorterUtbetaling).map(detalj => {
+                            const personSkalSkjermesForBruker = detalj.person.skjermesForBruker;
+
+                            return (
+                                <UtbetalingsbeløpRad key={detalj.person.navn + detalj.ytelseType}>
+                                    {personSkalSkjermesForBruker ? (
+                                        <BodyShort>{detalj.person.navn}</BodyShort>
+                                    ) : (
+                                        <HStack gap={'space-4'}>
+                                            <BodyShort>
+                                                {`${detalj.person.navn} (${hentAlderSomString(detalj.person.fødselsdato)})`}
+                                            </BodyShort>
+                                            <Skillelinje />
+                                            {detalj.person.harFalskIdentitet && (
+                                                <HStack gap={'space-4'}>
+                                                    <FalskIdentitet />
+                                                    <Skillelinje />
+                                                </HStack>
+                                            )}
+                                            <BodyShort>{formaterIdent(detalj.person.personIdent)}</BodyShort>
+                                        </HStack>
+                                    )}
+                                    <BodyShort>{ytelsetype[detalj.ytelseType].navn}</BodyShort>
+                                    {!personSkalSkjermesForBruker &&
+                                    !utbetalingsBeløpStatusMap.get(detalj.person.personIdent) ? (
+                                        <InlineMessage size={'small'} status={'warning'}>
+                                            Må beregnes
+                                        </InlineMessage>
+                                    ) : (
+                                        <BodyShort align="end">{formaterBeløp(detalj.utbetaltPerMnd)}</BodyShort>
+                                    )}
+                                </UtbetalingsbeløpRad>
+                            );
+                        })}
                         <TotaltUtbetaltRad columns="1fr 5rem">
                             <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
                             <BodyShort weight="semibold" align="end">

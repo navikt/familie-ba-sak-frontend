@@ -1,5 +1,14 @@
-import React, { createContext, useContext } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 
+import { useBruker } from '@hooks/useBruker';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import type { IBehandling } from '@typer/behandling';
+import { BehandlingUnderkategori } from '@typer/behandlingstema';
+import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '@typer/person';
+import type { IBarnMedOpplysninger, IBarnMedOpplysningerBackend, IRestRegistrerSøknad, Målform } from '@typer/søknad';
+import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
 import { useNavigate } from 'react-router';
 
 import type { Avhengigheter, FeiloppsummeringFeil, ISkjema } from '@navikt/familie-skjema';
@@ -8,22 +17,9 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
-import useSakOgBehandlingParams from '../../../../../hooks/useSakOgBehandlingParams';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingUnderkategori } from '../../../../../typer/behandlingstema';
-import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '../../../../../typer/person';
-import type {
-    IBarnMedOpplysninger,
-    IBarnMedOpplysningerBackend,
-    IRestRegistrerSøknad,
-    Målform,
-} from '../../../../../typer/søknad';
-import { hentBarnMedLøpendeUtbetaling } from '../../../../../utils/fagsak';
-import { useBrukerContext } from '../../../BrukerContext';
-import { useFagsakContext } from '../../../FagsakContext';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-interface Props extends React.PropsWithChildren {
+interface Props extends PropsWithChildren {
     åpenBehandling: IBehandling;
 }
 
@@ -47,18 +43,15 @@ interface SøknadContextValue {
 const SøknadContext = createContext<SøknadContextValue | undefined>(undefined);
 
 export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
-    const {
-        vurderErLesevisning,
-        settÅpenBehandling,
-        gjelderInstitusjon,
-        gjelderEnsligMindreårig,
-        gjelderSkjermetBarn,
-    } = useBehandlingContext();
-    const { fagsakId } = useSakOgBehandlingParams();
+    const { settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
+        useBehandlingContext();
+
+    const fagsak = useFagsak();
+    const bruker = useBruker();
+    const erLesevisning = useErLesevisning();
     const navigate = useNavigate();
-    const { fagsak } = useFagsakContext();
-    const { bruker } = useBrukerContext();
-    const [visBekreftModal, settVisBekreftModal] = React.useState<boolean>(false);
+
+    const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
@@ -92,7 +85,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         skjemanavn: 'Registrer søknad',
     });
 
-    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = React.useState(false);
+    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
 
     const tilbakestillSøknad = () => {
         nullstillSkjema();
@@ -126,7 +119,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         settSøknadErLastetFraBackend(false);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         tilbakestillSøknad();
     }, [bruker]);
 
@@ -154,8 +147,8 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     }, [åpenBehandling.behandlingId, åpenBehandling.søknadsgrunnlag]);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
-        if (vurderErLesevisning()) {
-            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+        if (erLesevisning) {
+            navigate(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
         } else {
             onSubmit<IRestRegistrerSøknad>(
                 {
@@ -183,7 +176,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(response);
-                        navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+                        navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
                     }
                 },
                 (errorResponse: Ressurs<IBehandling>) => {

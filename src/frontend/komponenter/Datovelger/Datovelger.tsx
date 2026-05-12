@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 
 import { addDays, format, subDays } from 'date-fns';
@@ -87,7 +86,7 @@ const Datovelger = ({
         },
     });
 
-    const [forrigeFeltVerdi, settForrigeFeltVerdi] = React.useState<Date | undefined>();
+    const [forrigeFeltVerdi, settForrigeFeltVerdi] = useState<Date | undefined>();
 
     // Oppdaterer verdien til datovelgeren hvis feltet har endret seg uten at det er datovelgeren som har trigget endringen
     if (felt.verdi != forrigeFeltVerdi) {

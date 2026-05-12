@@ -29,6 +29,14 @@ export const identValidator = (identFelt: FeltState<string>): FeltState<string> 
     return validerIdent(identFelt);
 };
 
+export const sjekkEr11Tall = (verdi: string): boolean => {
+    return /^\d{11}$/.test(verdi.replace(' ', ''));
+};
+
+export const sjekkErGyldigIdent = (verdi: string): boolean => {
+    return idnr(verdi).status === 'valid';
+};
+
 const harFyltInnOrgnr = (felt: FeltState<string>): FeltState<string> => {
     return /^\d{9}$/.test(felt.verdi.replace(' ', '')) ? ok(felt) : feil(felt, 'Orgnummer har ikke 9 tall');
 };

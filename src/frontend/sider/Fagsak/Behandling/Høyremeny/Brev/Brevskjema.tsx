@@ -1,4 +1,23 @@
-import * as React from 'react';
+import type { ChangeEvent } from 'react';
+
+import { ModalType } from '@context/ModalContext';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useModal } from '@hooks/useModal';
+import {
+    mutationKey,
+    useOpprettForhåndsvisbarBehandlingBrevPdf,
+} from '@hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
+import type { IBehandling } from '@typer/behandling';
+import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
+import type { IPersonInfo } from '@typer/person';
+import { type IBarnMedOpplysninger, målform } from '@typer/søknad';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
+import { onOptionSelected } from '@utils/skjema';
 
 import { FileTextIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -17,7 +36,6 @@ import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { Country } from '@navikt/land-verktoy';
 
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import styles from './Brevskjema.module.css';
@@ -31,28 +49,11 @@ import {
     opplysningsdokumenterTilInstitusjon,
 } from './typer';
 import { useBrevModul } from './useBrevModul';
-import { ModalType } from '../../../../../context/ModalContext';
-import { useModal } from '../../../../../hooks/useModal';
-import {
-    mutationKey,
-    useOpprettForhåndsvisbarBehandlingBrevPdf,
-} from '../../../../../hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../komponenter/Knapperekke';
-import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import { useSamhandlerRequest } from '../../../../../komponenter/Samhandler/useSamhandler';
-import type { IBehandling } from '../../../../../typer/behandling';
-import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
-import type { IPersonInfo } from '../../../../../typer/person';
-import { type IBarnMedOpplysninger, målform } from '../../../../../typer/søknad';
-import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { onOptionSelected } from '../../../../../utils/skjema';
 import DeltBostedSkjema from '../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
-import { FamilieMultiLandvelger } from '../../Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 
 interface IProps {
     onSubmitSuccess: () => void;
@@ -60,7 +61,7 @@ interface IProps {
 }
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     const {
@@ -89,7 +90,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
             onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
         });
 
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER || isOpprettForhåndsvisbarBrevPdfPending;
@@ -116,7 +117,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
         : opplysningsdokumenter.map(leggTilValuePåOption);
 
-    const onChangeFritekstKulepunkt = (event: React.ChangeEvent<HTMLTextAreaElement>, fritekstKulepunktId: number) =>
+    const onChangeFritekstKulepunkt = (event: ChangeEvent<HTMLTextAreaElement>, fritekstKulepunktId: number) =>
         skjema.felter.fritekstKulepunkter.validerOgSettFelt([
             ...skjema.felter.fritekstKulepunkter.verdi.map(fritekstKulepunkt => {
                 if (fritekstKulepunkt.verdi.id === fritekstKulepunktId) {
@@ -171,7 +172,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 </Tag>
                             </HStack>
                         }
-                        onChange={(event: React.ChangeEvent<BrevtypeSelect>): void => {
+                        onChange={(event: ChangeEvent<BrevtypeSelect>): void => {
                             skjema.felter.brevmal.onChange(event.target.value);
                             skjema.felter.dokumenter.nullstill();
                         }}
@@ -231,7 +232,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                                         value={fritekst.verdi.tekst}
                                                         maxLength={makslengdeFritekstHvertKulepunkt}
                                                         description={hjelpetekst}
-                                                        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                                             onChangeFritekstKulepunkt(event, fritekstId)
                                                         }
                                                         error={skjema.visFeilmeldinger && fritekst.feilmelding}
@@ -295,7 +296,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                             className={styles.textarea}
                                             value={skjema.felter.fritekstAvsnitt.verdi}
                                             maxLength={maksLengdeFritekstAvsnitt}
-                                            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+                                            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                                 skjema.felter.fritekstAvsnitt.validerOgSettFelt(event.target.value)
                                             }
                                             error={
@@ -354,7 +355,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 visFeilmeldinger={skjema.visFeilmeldinger}
                                 settVisFeilmeldinger={settVisfeilmeldinger}
                                 manuelleBrevmottakere={brevmottakere}
-                                vurderErLesevisning={vurderErLesevisning}
+                                vurderErLesevisning={() => erLesevisning}
                             />
                             {!erLesevisning && <LeggTilBarnKnapp />}
                         </>
@@ -382,26 +383,28 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                             Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
                         ].includes(skjema.felter.brevmal.verdi) && (
-                            <FamilieMultiLandvelger
-                                erLesevisning={false}
-                                id={'mottakerlandSED'}
-                                label={'SED er sendt til'}
-                                kunEøs
-                                eksluderLand={['NO']}
-                                medFlag
-                                size="medium"
-                                kanNullstilles
-                                value={skjema.felter.mottakerlandSed?.verdi}
-                                onChange={(value: Country[]) => {
-                                    skjema.felter.mottakerlandSed.validerOgSettFelt(value.map(land => land.value));
-                                }}
-                                feil={
-                                    skjema.visFeilmeldinger &&
-                                    skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
-                                        ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
-                                        : ''
-                                }
-                            />
+                            <>
+                                <RegionCombobox
+                                    label={'SED er sendt til'}
+                                    value={(skjema.felter.mottakerlandSed?.verdi ?? []) as Regionkode[]}
+                                    options={EØS_LAND_REGIONKODER}
+                                    onChange={value => {
+                                        if (value) {
+                                            skjema.felter.mottakerlandSed.validerOgSettFelt(value);
+                                        } else {
+                                            skjema.felter.mottakerlandSed.nullstill();
+                                        }
+                                    }}
+                                    readOnly={false}
+                                    error={
+                                        skjema.visFeilmeldinger &&
+                                        skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
+                                            ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
+                                            : ''
+                                    }
+                                    isMulti={true}
+                                />
+                            </>
                         )}
                 </VStack>
             </Fieldset>
@@ -410,7 +413,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     <Button
                         variant={'secondary'}
                         id={'forhandsvis-vedtaksbrev'}
-                        size={'medium'}
+                        size={'small'}
                         disabled={skjemaErLåst}
                         onClick={() => {
                             if (kanSendeSkjema()) {
@@ -427,7 +430,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 )}
                 <Button
                     variant={'primary'}
-                    size={'medium'}
+                    size={'small'}
                     loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                     disabled={skjemaErLåst}
                     onClick={() => {

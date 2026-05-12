@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Modal } from '@navikt/ds-react';
 
 import type { IModal } from '../../context/AppContext';

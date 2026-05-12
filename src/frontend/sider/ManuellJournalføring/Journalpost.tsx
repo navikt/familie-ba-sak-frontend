@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { BodyShort, Box, ExpansionCard, UNSAFE_Combobox } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -7,7 +5,7 @@ import { useManuellJournalføringContext } from './ManuellJournalføringContext'
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 
-const EndreJournalpost: React.FC = () => {
+const EndreJournalpost = () => {
     const { skjema, erLesevisning } = useManuellJournalføringContext();
     const navInputProps = skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger);
 
@@ -35,7 +33,7 @@ const EndreJournalpost: React.FC = () => {
     );
 };
 
-const Journalpost: React.FC = () => {
+const Journalpost = () => {
     const { dataForManuellJournalføring, skjema } = useManuellJournalføringContext();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS

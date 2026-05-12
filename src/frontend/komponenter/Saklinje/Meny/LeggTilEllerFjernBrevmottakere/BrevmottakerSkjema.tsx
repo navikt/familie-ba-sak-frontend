@@ -1,16 +1,16 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 
-import { Alert, Button, Fieldset, Select, TextField } from '@navikt/ds-react';
+import { Button, Fieldset, InlineMessage, Select, TextField } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { FamilieLandvelger } from '../../../../sider/Fagsak/Behandling/Sider/Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
+import { ALLE_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../FlaggCombobox';
 import { ModalKnapperad } from '../../../Modal/ModalKnapperad';
 
 const PostnummerOgStedContainer = styled.div`
@@ -71,7 +71,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                     {...skjema.felter.mottaker.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                     readOnly={erLesevisning}
                     label="Mottaker"
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                    onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
                         skjema.felter.mottaker.validerOgSettFelt(event.target.value as Mottaker);
                     }}
                 >
@@ -90,27 +90,30 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         skjema.felter.navn.validerOgSettFelt(event.target.value);
                     }}
                 />
-
-                <FamilieLandvelger
-                    id={'land'}
-                    value={skjema.felter.land.verdi !== '' ? skjema.felter.land.verdi : undefined}
+                <RegionCombobox
                     label={'Land'}
-                    medFlag
-                    utenMargin
-                    eksluderLand={
-                        skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE ? ['NO', 'XU'] : ['XU']
-                    }
-                    feil={
+                    value={(skjema.felter.land.verdi !== '' ? skjema.felter.land.verdi : undefined) as Regionkode}
+                    options={ALLE_LAND_REGIONKODER.filter(regionkode => {
+                        if (skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE) {
+                            return regionkode !== 'NO' && regionkode !== 'XU';
+                        }
+                        return regionkode !== 'XU';
+                    })}
+                    onChange={value => {
+                        if (value) {
+                            skjema.felter.land.validerOgSettFelt(value);
+                        } else {
+                            skjema.felter.land.nullstill();
+                        }
+                    }}
+                    readOnly={erLesevisning}
+                    error={
                         skjema.visFeilmeldinger && skjema.felter.land.valideringsstatus === Valideringsstatus.FEIL
                             ? skjema.felter.land.feilmelding?.toString()
                             : ''
                     }
-                    erLesevisning={erLesevisning}
-                    onChange={land => {
-                        skjema.felter.land.validerOgSettFelt(land.value);
-                    }}
+                    dropdownPlacement={skjema.felter.land.verdi ? 'bottom' : 'top'}
                 />
-
                 {skjema.felter.land.verdi && (
                     <>
                         <TextField
@@ -130,9 +133,9 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                             }}
                         />
                         {skjema.felter.land.verdi !== 'NO' && (
-                            <Alert variant="info">
+                            <InlineMessage status="info">
                                 Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
-                            </Alert>
+                            </InlineMessage>
                         )}
 
                         <PostnummerOgStedContainer>

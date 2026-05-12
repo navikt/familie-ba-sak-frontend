@@ -1,10 +1,9 @@
-import * as React from 'react';
 import { useState } from 'react';
 
 import { isAfter } from 'date-fns';
 import styled from 'styled-components';
 
-import { Alert, Heading, Switch, Table } from '@navikt/ds-react';
+import { Box, Heading, LocalAlert, Switch, Table } from '@navikt/ds-react';
 import {
     BgNeutralSoft,
     FontWeightBold,
@@ -27,10 +26,6 @@ import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../..
 
 const IkkeFullBreddeTabell = styled(Table)`
     width: unset;
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-bottom: 1rem;
 `;
 
 const ManuellPosteringRad = styled(Table.Row)`
@@ -73,7 +68,7 @@ interface ISimuleringProps {
     simulering: ISimuleringDTO;
 }
 
-const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulering }) => {
+const SimuleringTabell = ({ simulering }: ISimuleringProps) => {
     const {
         fomDatoNestePeriode,
         fom,
@@ -122,10 +117,18 @@ const SimuleringTabell: React.FunctionComponent<ISimuleringProps> = ({ simulerin
     return (
         <>
             {erManuellPosteringSamtidigSomResultatIkkeErNull && (
-                <StyledAlert variant={'warning'}>
-                    Det finnes manuelle posteringer på den forrige behandlingen. Du må mest sannsynlig sende en oppgave
-                    til NØS og be dem gjøre manuelle posteringer tilsvarende de manuelle posteringene i tabellen.
-                </StyledAlert>
+                <Box marginBlock={'space-0 space-16'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Ingen manuelle posteringer</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Det finnes manuelle posteringer på den forrige behandlingen. Du må mest sannsynlig sende en
+                            oppgave til NØS og be dem gjøre manuelle posteringer tilsvarende de manuelle posteringene i
+                            tabellen.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                </Box>
             )}
             <Heading size={'small'} level={'2'} spacing>
                 Simuleringsresultat for{' '}

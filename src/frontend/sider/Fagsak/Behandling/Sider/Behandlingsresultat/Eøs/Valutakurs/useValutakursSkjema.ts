@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { isBefore } from 'date-fns';
 
@@ -65,8 +65,8 @@ interface IProps {
 }
 
 const useValutakursSkjema = ({ barnIValutakurs, valutakurs }: IProps) => {
-    const [erValutakursEkspandert, settErValutakursEkspandert] = React.useState<boolean>(false);
-    const [sletterValutakurs, settSletterValutakurs] = React.useState<boolean>(false);
+    const [erValutakursEkspandert, settErValutakursEkspandert] = useState<boolean>(false);
+    const [sletterValutakurs, settSletterValutakurs] = useState<boolean>(false);
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const initelFom = useFelt<string>({ verdi: valutakurs.fom });
     const { request } = useHttp();

@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useContext } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext } from 'react';
 
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
 

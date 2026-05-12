@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import { differenceInMilliseconds } from 'date-fns';
 import { Link as ReactRouterLink } from 'react-router';

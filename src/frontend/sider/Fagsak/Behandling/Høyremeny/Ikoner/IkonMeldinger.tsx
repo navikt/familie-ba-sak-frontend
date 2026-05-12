@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type { IIkonProps } from './Ikon';
 import Ikon from './Ikon';
 

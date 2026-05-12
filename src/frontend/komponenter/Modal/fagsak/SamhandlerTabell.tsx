@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { TrashFillIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Table } from '@navikt/ds-react';
 

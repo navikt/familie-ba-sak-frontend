@@ -1,11 +1,11 @@
-import React from 'react';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
-import { useSlettRefusjonEøs } from '../../../../../../hooks/useSlettRefusjonEøs';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
-    const { behandling, settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { erLeggTilRefusjonEøsFormÅpen, skjulRefusjonEøsTabell } = useRefusjonEøsTabellContext();
 
     const { mutate, isPending } = useSlettRefusjonEøs({
@@ -26,7 +26,7 @@ export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
         },
     });
 
-    const erLesevisning = vurderErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     if (erLesevisning) {
         return null;

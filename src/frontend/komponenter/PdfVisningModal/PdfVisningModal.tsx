@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Modal, Loader, Alert, Heading, VStack, HStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Heading, HStack, Loader, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;
@@ -16,6 +16,7 @@ const StyledModal = styled(Modal)`
     width: 80%;
     height: 80%;
     overflow: hidden;
+
     section {
         height: 100%;
         width: 90%;
@@ -26,7 +27,7 @@ const StyledModal = styled(Modal)`
 /**
  * @Deprecated - Erstattes av {@link ForhåndsvisPdfModal}.
  */
-const PdfVisningModal: React.FC<IPdfVisningModalProps> = ({ onRequestClose, onRequestOpen, pdfdata }) => {
+const PdfVisningModal = ({ onRequestClose, onRequestOpen, pdfdata }: IPdfVisningModalProps) => {
     useEffect(() => {
         if (onRequestOpen) {
             onRequestOpen();
@@ -54,7 +55,7 @@ const IframePdfVisning = styled.iframe`
     width: 100%;
 `;
 
-const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
+const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
     switch (pdfdata.status) {
         case RessursStatus.HENTER:
             return (
@@ -71,11 +72,13 @@ const Dokument: React.FC<{ pdfdata: Ressurs<string> }> = ({ pdfdata }) => {
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:
             return (
-                <Alert
-                    variant="error"
-                    className={'pdfvisning-modal__document--feil'}
-                    children={pdfdata.frontendFeilmelding}
-                />
+                <div>
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{pdfdata.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </div>
             );
         default:
             return null;

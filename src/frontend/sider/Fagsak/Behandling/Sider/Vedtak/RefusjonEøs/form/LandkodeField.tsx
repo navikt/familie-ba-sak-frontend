@@ -1,18 +1,14 @@
-import React, { useId } from 'react';
-
 import { useController, useFormContext } from 'react-hook-form';
 
 import Styles from './LandkodeField.module.css';
 import { Fields, type FormValues } from './useRefusjonEøsForm';
-import { FamilieLandvelger } from '../../../Behandlingsresultat/Eøs/EøsKomponenter/FamilieLandvelger';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../../../komponenter/FlaggCombobox';
 
 interface Props {
     readOnly?: boolean;
 }
 
 export function LandkodeField({ readOnly = false }: Props) {
-    const id = useId();
-
     const { control } = useFormContext<FormValues>();
 
     const {
@@ -26,15 +22,13 @@ export function LandkodeField({ readOnly = false }: Props) {
     });
 
     return (
-        <FamilieLandvelger
-            id={`refusjon-eøs-form${id}`}
+        <RegionCombobox
             label={'EØS-land'}
-            kunEøs={true}
-            eksluderLand={['NO']}
-            value={value}
-            onChange={value => onChange(value.value)}
-            erLesevisning={readOnly || isSubmitting}
-            feil={error?.message}
+            value={value as Regionkode}
+            options={EØS_LAND_REGIONKODER.filter(regionkode => regionkode !== 'NO')}
+            onChange={value => onChange(value)}
+            readOnly={readOnly || isSubmitting}
+            error={error?.message}
             className={Styles.landvelger}
         />
     );

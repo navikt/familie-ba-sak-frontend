@@ -1,4 +1,5 @@
-import React, { createContext, type PropsWithChildren, useCallback, useContext, useReducer } from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useReducer } from 'react';
 
 import type { MutationKey } from '@tanstack/react-query';
 
@@ -27,7 +28,7 @@ export enum ModalType {
 export interface Args {
     [ModalType.HENLEGG_BEHANDLING_VEIVALG]: { årsak: HenleggÅrsak };
     [ModalType.OPPRETT_FAGSAK]: { ident: string };
-    [ModalType.FEILMELDING]: { feilmelding: string | React.ReactNode };
+    [ModalType.FEILMELDING]: { feilmelding: string | ReactNode };
     [ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF]: { mutationKey: MutationKey };
 }
 

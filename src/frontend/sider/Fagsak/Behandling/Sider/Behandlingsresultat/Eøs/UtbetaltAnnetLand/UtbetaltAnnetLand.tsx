@@ -1,8 +1,6 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
-import { Alert, Heading, Table } from '@navikt/ds-react';
+import { Heading, LocalAlert, Table } from '@navikt/ds-react';
 
 import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
 import type { IBehandling } from '../../../../../../../typer/behandling';
@@ -24,12 +22,15 @@ const TabellHeader = styled(Table.HeaderCell)`
     &:nth-of-type(2) {
         width: 11rem;
     }
+
     &:nth-of-type(3) {
         width: 9.5rem;
     }
+
     &:nth-of-type(4) {
         width: 11rem;
     }
+
     &:nth-of-type(5) {
         width: 2.25rem;
     }
@@ -42,23 +43,25 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const UtbetaltAnnetLand: React.FC<IProps> = ({
+const UtbetaltAnnetLand = ({
     utbetaltAnnetLandBeløp,
     erUtbetaltAnnetLandBeløpGyldige,
     åpenBehandling,
     visFeilmeldinger,
-}) => {
+}: IProps) => {
     return (
         <UtenlandskPeriodeBeløperContainer>
             <Heading spacing size="medium" level="3">
                 Utbetalt i det andre landet
             </Heading>
             {!erUtbetaltAnnetLandBeløpGyldige() && (
-                <Alert
-                    variant={'warning'}
-                    fullWidth
-                    children={'I periodene Norge er sekundærland må beløpene fra det andre medlemslandet registreres'}
-                />
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            I periodene Norge er sekundærland må beløpene fra det andre medlemslandet registreres
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                </LocalAlert>
             )}
             <StyledTable>
                 <Table.Header>

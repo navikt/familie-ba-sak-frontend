@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { FileTextIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Fieldset, Heading, Label, Loader, Select } from '@navikt/ds-react';
+import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, Heading, InfoCard, Label, Loader, LocalAlert, Select } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
@@ -17,8 +18,8 @@ import {
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useAppContext } from '../../../context/AppContext';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
+import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
 import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
@@ -41,10 +42,6 @@ const StyledFieldset = styled(Fieldset)`
 
 const ÅrsakSkjema = styled.div`
     margin-bottom: 2rem;
-`;
-
-const StyledAlert = styled(Alert)`
-    margin: 1rem 0;
 `;
 
 const Handlinger = styled.div`
@@ -86,7 +83,8 @@ export function DokumentutsendingSkjema() {
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
     } = useDokumentutsendingContext();
-    const { harInnloggetSaksbehandlerSkrivetilgang } = useAppContext();
+
+    const saksbehandler = useSaksbehandler();
     const toggles = useFeatureToggles();
 
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
@@ -124,35 +122,76 @@ export function DokumentutsendingSkjema() {
                     case Distribusjonskanal.INGEN_DISTRIBUSJON:
                     case Distribusjonskanal.UKJENT:
                         return (
-                            <StyledAlert
-                                variant={'warning'}
-                                children={'Brevet kan ikke sendes fordi mottaker har ukjent adresse'}
-                            />
+                            <Box marginBlock={'space-16'}>
+                                <LocalAlert status="warning">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            Brevet kan ikke sendes fordi mottaker har ukjent adresse
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                </LocalAlert>
+                            </Box>
                         );
                     case Distribusjonskanal.DITT_NAV:
                     case Distribusjonskanal.DPVT:
                     case Distribusjonskanal.SDP:
-                        return <StyledAlert variant={'info'} children={'Brevet sendes digitalt'} />;
+                        return (
+                            <Box marginBlock={'space-16'}>
+                                <InfoCard data-color="info">
+                                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                        Brevet sendes digitalt
+                                    </InfoCard.Message>
+                                </InfoCard>
+                            </Box>
+                        );
                     default:
-                        return <StyledAlert variant={'info'} children={'Brevet sendes per post'} />;
+                        return (
+                            <Box marginBlock={'space-16'}>
+                                <InfoCard data-color="info">
+                                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                        Brevet sendes per post
+                                    </InfoCard.Message>
+                                </InfoCard>
+                            </Box>
+                        );
                 }
             case RessursStatus.FEILET:
             case RessursStatus.FUNKSJONELL_FEIL:
             case RessursStatus.IKKE_TILGANG:
-                return <StyledAlert variant={'error'} children={distribusjonskanal.frontendFeilmelding} />;
+                return (
+                    <Box marginBlock={'space-16'}>
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>{distribusjonskanal.frontendFeilmelding}</LocalAlert.Title>
+                            </LocalAlert.Header>
+                        </LocalAlert>
+                    </Box>
+                );
             case RessursStatus.IKKE_HENTET:
             case RessursStatus.HENTER:
                 return (
-                    <StyledAlert variant={'info'}>
-                        <Loader title="Laster" />
-                    </StyledAlert>
+                    <Box marginBlock={'space-16'}>
+                        <InfoCard data-color="info">
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                <Loader title="Laster" />
+                            </InfoCard.Message>
+                        </InfoCard>
+                    </Box>
                 );
             default:
-                return <StyledAlert variant={'error'} children={'Ukjent feil ved henting av distribusjonskanal'} />;
+                return (
+                    <Box marginBlock={'space-16'}>
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Ukjent feil ved henting av distribusjonskanal</LocalAlert.Title>
+                            </LocalAlert.Header>
+                        </LocalAlert>
+                    </Box>
+                );
         }
     };
 
-    const erLesevisning = !harInnloggetSaksbehandlerSkrivetilgang();
+    const erLesevisning = !saksbehandler.harSkrivetilgang;
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
         if (skjema.felter.årsak.verdi === DokumentÅrsakPerson.DELT_BOSTED) {
@@ -184,7 +223,6 @@ export function DokumentutsendingSkjema() {
             <Container>
                 <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
                 {!brukerHarUtenlandskAdresse && distribusjonskanalInfo()}
-
                 {manuelleBrevmottakerePåFagsak.length > 0 && (
                     <StyledBrevmottakereAlert
                         erPåBehandling={false}
@@ -192,7 +230,6 @@ export function DokumentutsendingSkjema() {
                         bruker={bruker}
                     />
                 )}
-
                 <StyledFieldset
                     error={hentSkjemaFeilmelding()}
                     errorPropagation={false}
@@ -203,7 +240,7 @@ export function DokumentutsendingSkjema() {
                         {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                         label={'Velg årsak'}
                         value={skjema.felter.årsak.verdi || ''}
-                        onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                        onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
                             skjema.felter.årsak.onChange(event.target.value as DokumentÅrsakPerson);
                         }}
                         size={'medium'}
@@ -231,7 +268,6 @@ export function DokumentutsendingSkjema() {
                                 );
                             })}
                     </Select>
-
                     <ÅrsakSkjema>
                         {skjema.felter.årsak.verdi === DokumentÅrsakPerson.DELT_BOSTED && (
                             <>
@@ -241,7 +277,7 @@ export function DokumentutsendingSkjema() {
                                     visFeilmeldinger={skjema.visFeilmeldinger}
                                     settVisFeilmeldinger={settVisfeilmeldinger}
                                     manuelleBrevmottakere={manuelleBrevmottakerePåFagsak}
-                                    vurderErLesevisning={() => !harInnloggetSaksbehandlerSkrivetilgang()}
+                                    vurderErLesevisning={() => !saksbehandler.harSkrivetilgang}
                                 />
                                 {!erLesevisning && <LeggTilBarnKnapp />}
                             </>
@@ -266,21 +302,22 @@ export function DokumentutsendingSkjema() {
                             </Box>
                         )}
                     </ÅrsakSkjema>
-
                     <MålformVelger
                         målformFelt={skjema.felter.målform}
                         visFeilmeldinger={skjema.visFeilmeldinger}
                         erLesevisning={false}
                         Legend={<Label children={'Målform'} />}
                     />
-
                     {skjema.felter.årsak.verdi && visForhåndsvisningBeskjed() && (
-                        <StyledAlert variant="info">
-                            Du har gjort endringer i brevet som ikke er forhåndsvist
-                        </StyledAlert>
+                        <Box marginBlock={'space-16'}>
+                            <InfoCard data-color="info">
+                                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                    Du har gjort endringer i brevet som ikke er forhåndsvist
+                                </InfoCard.Message>
+                            </InfoCard>
+                        </Box>
                     )}
                 </StyledFieldset>
-
                 <Handlinger>
                     <div>
                         <SendBrevKnapp

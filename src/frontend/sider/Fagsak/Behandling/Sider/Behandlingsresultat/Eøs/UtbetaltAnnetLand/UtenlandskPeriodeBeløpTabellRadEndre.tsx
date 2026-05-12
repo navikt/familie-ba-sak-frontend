@@ -1,35 +1,45 @@
-import * as React from 'react';
+import type { ReactNode, ChangeEvent } from 'react';
 
-import styled from 'styled-components';
-
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyShort, Button, Fieldset, HStack, Select, TextField, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
-import type { Country, Currency } from '@navikt/land-verktoy';
-
-import { EØS_CURRENCY, Valutavelger } from '../../../../../../../komponenter/Valutavelger/Valutavelger';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import type { IUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import {
+    type Valutakode,
+    ValutaCombobox,
+    EØS_VALUTAKODER,
+    RegionCombobox,
+    type Regionkode,
+    EØS_LAND_REGIONKODER,
+} from '@komponenter/FlaggCombobox';
+import type { IBehandling } from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import type { IUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
 import {
     EøsPeriodeStatus,
     UtenlandskPeriodeBeløpIntervall,
     utenlandskPeriodeBeløpIntervaller,
-} from '../../../../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../../../../utils/skjema';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+} from '@typer/eøsPerioder';
+import { onOptionSelected } from '@utils/skjema';
+import styled from 'styled-components';
+
+import { TrashIcon } from '@navikt/aksel-icons';
+import {
+    BodyShort,
+    Button,
+    Fieldset,
+    HGrid,
+    InlineMessage,
+    Select,
+    TextField,
+    UNSAFE_Combobox,
+} from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
-import { FamilieLandvelger } from '../EøsKomponenter/FamilieLandvelger';
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
-`;
-
-const StyledTextField = styled(TextField)`
-    width: 9rem;
 `;
 
 const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
@@ -53,20 +63,22 @@ interface IProps {
     sendInnSkjema: () => void;
     toggleForm: (visAlert: boolean) => void;
     slettUtenlandskPeriodeBeløp: () => void;
+    inneholderBarnSomSkalSkjermes?: boolean;
 }
 
-const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
+const UtenlandskPeriodeBeløpTabellRadEndre = ({
     skjema,
     tilgjengeligeBarn,
     status,
     sendInnSkjema,
     toggleForm,
     slettUtenlandskPeriodeBeløp,
-}) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const lesevisning = vurderErLesevisning(true);
+    inneholderBarnSomSkalSkjermes,
+}: IProps) => {
+    const erLesevisning = useErLesevisning();
+    const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
 
-    const visUtbetaltBeløpGruppeFeilmelding = (): React.ReactNode => {
+    const visUtbetaltBeløpGruppeFeilmelding = (): ReactNode => {
         if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
             return skjema.felter.beløp.feilmelding;
         } else if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
@@ -98,19 +110,19 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
             legend={'Utenlandsk periodebeløp'}
             hideLegend
         >
-            <EøsPeriodeSkjemaContainer $lesevisning={lesevisning} $status={status} gap="space-24">
-                <Alert variant="info" inline>
+            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={status} gap="space-24">
+                <InlineMessage status="info">
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
                     </UtbetaltBeløpText>
-                </Alert>
+                </InlineMessage>
                 <UNSAFE_Combobox
                     isMultiSelect
                     label={'Barn'}
                     options={tilgjengeligeBarn}
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
@@ -118,42 +130,42 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                     periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erRedigeringDeaktivert}
                 />
                 <Fieldset
-                    className={lesevisning ? 'lesevisning' : ''}
+                    className={erRedigeringDeaktivert ? 'lesevisning' : ''}
                     errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
                     error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
                     legend={'Utbetalt i det andre landet'}
                     size={'medium'}
                 >
-                    <HStack gap={'space-32'} wrap={false} justify={'start'} align={'start'}>
-                        <StyledTextField
+                    <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
+                        <TextField
                             label={'Beløp per barn'}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             value={skjema.felter.beløp?.verdi}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 skjema.felter.beløp?.validerOgSettFelt(event.target.value)
                             }
                             size={'medium'}
                         />
-                        <Valutavelger
+                        <ValutaCombobox
                             label={'Valuta'}
-                            value={skjema.felter.valutakode?.verdi}
-                            options={EØS_CURRENCY}
-                            onChange={(value: Currency) => {
+                            value={skjema.felter.valutakode?.verdi as Valutakode}
+                            options={EØS_VALUTAKODER}
+                            onChange={value => {
                                 if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value.value);
+                                    skjema.felter.valutakode?.validerOgSettFelt(value);
                                 } else {
                                     skjema.felter.valutakode?.nullstill();
                                 }
                             }}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             error={skjema.felter.valutakode?.feilmelding?.toString()}
                         />
                         <Select
                             label={'Intervall'}
-                            readOnly={lesevisning}
+                            readOnly={erRedigeringDeaktivert}
                             value={skjema.felter.intervall?.verdi || undefined}
                             onChange={event =>
                                 skjema.felter.intervall?.validerOgSettFelt(
@@ -173,31 +185,29 @@ const UtenlandskPeriodeBeløpTabellRadEndre: React.FC<IProps> = ({
                                 );
                             })}
                         </Select>
-                    </HStack>
-                    <FamilieLandvelger
-                        erLesevisning={lesevisning}
-                        id={'utbetalingsland'}
+                    </HGrid>
+                    <RegionCombobox
                         label={'Utbetalingsland'}
-                        kunEøs
-                        medFlag
-                        size="medium"
-                        kanNullstilles
-                        value={skjema.felter.utbetalingsland.verdi}
-                        onChange={(value: Country) => {
-                            const nyVerdi = value ? value.value : undefined;
-                            skjema.felter.utbetalingsland.validerOgSettFelt(nyVerdi);
+                        value={skjema.felter.utbetalingsland.verdi as Regionkode}
+                        options={EØS_LAND_REGIONKODER}
+                        onChange={value => {
+                            if (value) {
+                                skjema.felter.utbetalingsland.validerOgSettFelt(value);
+                            } else {
+                                skjema.felter.utbetalingsland.nullstill();
+                            }
                         }}
-                        feil={
+                        readOnly={erRedigeringDeaktivert}
+                        error={
                             skjema.visFeilmeldinger &&
                             skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
                                 ? skjema.felter.utbetalingsland.feilmelding?.toString()
                                 : ''
                         }
-                        utenMargin
                     />
                 </Fieldset>
 
-                {!lesevisning && (
+                {!erRedigeringDeaktivert && (
                     <Knapperad>
                         <div>
                             <Button

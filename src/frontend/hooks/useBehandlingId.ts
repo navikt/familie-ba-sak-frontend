@@ -1,7 +1,6 @@
-import { useParams } from 'react-router';
+import { useBehandling } from './useBehandling';
 
 export function useBehandlingId() {
-    const { behandlingId } = useParams();
-    const erTall = behandlingId !== undefined && !isNaN(Number(behandlingId));
-    return erTall ? behandlingId : undefined;
+    const behandling = useBehandling();
+    return behandling.behandlingId;
 }

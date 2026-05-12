@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import { within } from '@testing-library/dom';
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';

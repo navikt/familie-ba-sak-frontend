@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { BodyShort } from '@navikt/ds-react';
@@ -44,7 +42,7 @@ interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe: React.FC<IDokumentInfoStripeProps> = ({ valgt, journalpostId, dokument }) => {
+export const DokumentInfoStripe = ({ valgt, journalpostId, dokument }: IDokumentInfoStripeProps) => {
     return (
         <DokumentInfoStripeContainer>
             <StyledDokumentIkonDiv>

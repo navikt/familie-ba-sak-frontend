@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { InformationSquareFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, HStack, Loader, VStack } from '@navikt/ds-react';
 

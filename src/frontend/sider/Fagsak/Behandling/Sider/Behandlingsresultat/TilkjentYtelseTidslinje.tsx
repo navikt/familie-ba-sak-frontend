@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
 
@@ -21,6 +19,10 @@ const TidslinjeHeader = styled.div`
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 1rem;
+`;
+
+const StyledBodyShort = styled(BodyShort)`
+    padding-right: 0.5rem;
 `;
 
 const TidslinjeControls = styled.div`
@@ -64,7 +66,7 @@ interface IProps {
     fagsakType?: FagsakType;
 }
 
-const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinjePersoner, fagsakType }) => {
+const TilkjentYtelseTidslinje = ({ grunnlagPersoner, tidslinjePersoner, fagsakType }: IProps) => {
     const { genererFormatertÅrstall, genererRader, aktivEtikett, aktivtTidslinjeVindu, naviger } =
         useTidslinjeContext();
     const tidslinjeRader = genererRader(fagsakType, tidslinjePersoner);
@@ -84,9 +86,9 @@ const TilkjentYtelseTidslinje: React.FC<IProps> = ({ grunnlagPersoner, tidslinje
                 <TidslinjeLabels>
                     {grunnlagPersoner.map((person, index) => {
                         return (
-                            <BodyShort key={index} title={person.navn}>
+                            <StyledBodyShort key={index} title={person.navn}>
                                 {formaterIdent(person.personIdent)}
-                            </BodyShort>
+                            </StyledBodyShort>
                         );
                     })}
                 </TidslinjeLabels>

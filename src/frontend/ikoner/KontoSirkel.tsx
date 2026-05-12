@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 interface IKontoSirkel {
@@ -9,7 +7,7 @@ interface IKontoSirkel {
     width?: number;
 }
 
-export const KontoSirkel: React.FC<IKontoSirkel> = ({ className, filled = false, width = 48, height = 48 }) => {
+export const KontoSirkel = ({ className, filled = false, width = 48, height = 48 }: IKontoSirkel) => {
     return filled ? (
         <StyledSvg
             aria-labelledby={'kontosirkel'}

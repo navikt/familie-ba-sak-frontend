@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 
 import { endOfMonth, isBefore, isSameDay, startOfMonth } from 'date-fns';

@@ -1,13 +1,12 @@
-import React from 'react';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
+import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '@typer/vedtak';
+import type { Regelverk, VilkårType } from '@typer/vilkår';
+import type { IIsoDatoPeriode } from '@utils/dato';
 
 import { ErrorMessage, LocalAlert, Stack, UNSAFE_Combobox } from '@navikt/ds-react';
 
 import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
-import { useHentAlleBegrunnelser } from '../../../../../../hooks/useHentAlleBegrunnelser';
-import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '../../../../../../typer/vedtak';
-import type { Regelverk, VilkårType } from '../../../../../../typer/vilkår';
-import type { IIsoDatoPeriode } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
@@ -23,10 +22,10 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect: React.FC<IProps> = ({ vilkårType, begrunnelser, onChange, regelverk }) => {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+const AvslagBegrunnelseMultiselect = ({ vilkårType, begrunnelser, onChange, regelverk }: IProps) => {
     const { vilkårSubmit } = useVilkårsvurderingContext();
+
+    const erLesevisning = useErLesevisning();
 
     const {
         data: alleBegrunnelser,

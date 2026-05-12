@@ -1,0 +1,38 @@
+.wrapper {
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.table,
+.table * {
+    box-sizing: border-box;
+}
+
+.col1 {
+    width: 17%;
+}
+
+.col2 {
+    width: 20%;
+}
+
+.col3 {
+    width: 18%;
+}
+
+.col4 {
+    width: 20%;
+}
+
+.col5 {
+    width: 20%;
+}
+
+.col6 {
+    width: 5%;
+}

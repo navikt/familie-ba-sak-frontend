@@ -1,7 +1,6 @@
-import { useParams } from 'react-router';
+import { useFagsak } from './useFagsak';
 
-export function useFagsakId(): number | undefined {
-    const { fagsakId } = useParams();
-    const erTall = fagsakId !== undefined && !isNaN(Number(fagsakId));
-    return erTall ? Number(fagsakId) : undefined;
+export function useFagsakId() {
+    const fagsak = useFagsak();
+    return fagsak.id;
 }

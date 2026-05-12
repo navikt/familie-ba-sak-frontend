@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { isValid, parseISO } from 'date-fns';
 import { useController } from 'react-hook-form';
 

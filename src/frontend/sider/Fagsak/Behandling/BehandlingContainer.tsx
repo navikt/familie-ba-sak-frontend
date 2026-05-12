@@ -1,46 +1,18 @@
-import React from 'react';
-
-import styled from 'styled-components';
-
-import { Alert } from '@navikt/ds-react';
-import { BorderNeutral } from '@navikt/ds-tokens/dist/tokens';
+import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import Styles from './BehandlingContainer.module.css';
 import { BehandlingRouter } from './BehandlingRouter';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
+import { TabContextProvider } from './Høyremeny/TabContextProvider';
+import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
 import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 import { Venstremeny } from './Venstremeny/Venstremeny';
 import { Behandlingslinje } from '../../../komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '../../../komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-
-const FlexContainer = styled.div`
-    display: flex;
-`;
-
-const VenstremenyContainer = styled.div`
-    min-width: 1rem;
-    border-right: 1px solid ${BorderNeutral};
-    overflow-x: hidden;
-    overflow-y: scroll;
-    height: calc(100vh - 146px);
-`;
-
-const HovedinnholdContainer = styled.div`
-    height: calc(100vh - 146px);
-    flex: 1;
-    overflow: auto;
-`;
-
-const HøyremenyContainer = styled.div`
-    min-width: 1rem;
-    border-left: 1px solid ${BorderNeutral};
-    overflow-x: hidden;
-    overflow-y: scroll;
-    height: calc(100vh - 146px);
-`;
 
 export function BehandlingContainer() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
@@ -52,25 +24,43 @@ export function BehandlingContainer() {
                     <HenleggBehandlingModal />
                     <HenleggBehandlingVeivalgModal />
                     <KorrigerEtterbetalingModal />
-                    <Behandlingslinje />
-                    <FlexContainer>
-                        <VenstremenyContainer>
-                            <Venstremeny />
-                        </VenstremenyContainer>
-                        <HovedinnholdContainer>
-                            <BehandlingRouter />
-                        </HovedinnholdContainer>
-                        <HøyremenyContainer>
-                            <Høyremeny />
-                        </HøyremenyContainer>
-                    </FlexContainer>
+                    <VStack className={Styles.skrollbarStack}>
+                        <Behandlingslinje />
+                        <HStack className={Styles.skrollbarStack}>
+                            <Box className={Styles.venstreKolonne}>
+                                <Venstremeny />
+                            </Box>
+                            <Box className={Styles.midtreKolonne}>
+                                <BehandlingRouter />
+                            </Box>
+                            <Box className={Styles.høyreKolonne}>
+                                <TotrinnskontrollModalContextProvider>
+                                    <TabContextProvider>
+                                        <Høyremeny />
+                                    </TabContextProvider>
+                                </TotrinnskontrollModalContextProvider>
+                            </Box>
+                        </HStack>
+                    </VStack>
                 </BehandlingProvider>
             );
         case RessursStatus.IKKE_TILGANG:
-            return <Alert variant="warning" children={`Du har ikke tilgang til å se denne behandlingen.`} />;
+            return (
+                <GlobalAlert status="warning">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
+            );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return <Alert children={behandlingRessurs.frontendFeilmelding} variant="error" />;
+            return (
+                <GlobalAlert status="error">
+                    <GlobalAlert.Header>
+                        <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
+                    </GlobalAlert.Header>
+                </GlobalAlert>
+            );
         default:
             return <div />;
     }

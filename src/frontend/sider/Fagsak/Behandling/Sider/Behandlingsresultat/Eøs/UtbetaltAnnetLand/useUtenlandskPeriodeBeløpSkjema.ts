@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 
 import { useHttp } from '@navikt/familie-http';
 import type { FeltState } from '@navikt/familie-skjema';
@@ -55,7 +55,7 @@ interface IProps {
 }
 
 const useUtenlandskPeriodeBeløpSkjema = ({ barnIUtenlandskPeriodeBeløp, utenlandskPeriodeBeløp }: IProps) => {
-    const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] = React.useState<boolean>(false);
+    const [erUtenlandskPeriodeBeløpEkspandert, settErUtenlandskPeriodeBeløpEkspandert] = useState<boolean>(false);
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const initelFom = useFelt<string>({ verdi: utenlandskPeriodeBeløp.fom });
     const { request } = useHttp();

@@ -1,11 +1,10 @@
+import { hentFagsak } from '@api/hentFagsak';
+import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { useQuery } from '@tanstack/react-query';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import { PersonType } from '@typer/person';
 
 import { useHttp } from '@navikt/familie-http';
-
-import { hentFagsak } from '../api/hentFagsak';
-import { useAppContext } from '../context/AppContext';
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { PersonType } from '../typer/person';
 
 // TODO : Refactor so it does not mutate fagsak object, but return a new object instead
 function obfuskerFagsak(fagsak: IMinimalFagsak) {
@@ -29,7 +28,7 @@ export const HentFagsakQueryKeyFactory = {
 
 export function useHentFagsak(fagsakId: number | undefined) {
     const { request } = useHttp();
-    const { skalObfuskereData } = useAppContext();
+    const skalObfuskereData = useSkalObfuskereData();
     return useQuery({
         queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId),
         queryFn: () => {

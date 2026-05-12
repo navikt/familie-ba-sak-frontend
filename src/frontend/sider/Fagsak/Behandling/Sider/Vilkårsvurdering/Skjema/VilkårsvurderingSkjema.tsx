@@ -1,31 +1,30 @@
-import React from 'react';
+import { useFagsak } from '@hooks/useFagsak';
+import { FagsakType } from '@typer/fagsak';
 
-import VilkårsvurderingSkjemaEnsligMindreårig from './VilkårsvurderingSkjemaEnsligMindreårig';
-import VilkårsvurderingSkjemaInstitusjon from './VilkårsvurderingSkjemaInstitusjon';
-import VilkårsvurderingSkjemaNormal from './VilkårsvurderingSkjemaNormal';
-import { FagsakType } from '../../../../../../typer/fagsak';
-import { useFagsakContext } from '../../../../FagsakContext';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { VilkårsvurderingSkjemaEnsligMindreårig } from './VilkårsvurderingSkjemaEnsligMindreårig';
+import { VilkårsvurderingSkjemaInstitusjon } from './VilkårsvurderingSkjemaInstitusjon';
+import { VilkårsvurderingSkjemaNormal } from './VilkårsvurderingSkjemaNormal';
 
-interface IProps {
+interface Props {
     visFeilmeldinger: boolean;
 }
 
-const VilkårsvurderingSkjema: React.FC<IProps> = ({ visFeilmeldinger }) => {
-    const { fagsak } = useFagsakContext();
+export function VilkårsvurderingSkjema({ visFeilmeldinger }: Props) {
+    const fagsak = useFagsak();
 
-    const { samhandlerOrgnr } = useBehandlingContext();
+    const samhandlerOrgnr = fagsak.institusjon?.orgNummer;
 
     if (fagsak.fagsakType === FagsakType.NORMAL || fagsak.fagsakType === FagsakType.SKJERMET_BARN) {
         return <VilkårsvurderingSkjemaNormal visFeilmeldinger={visFeilmeldinger} />;
     }
+
     if (fagsak.fagsakType === FagsakType.INSTITUSJON && samhandlerOrgnr) {
         return <VilkårsvurderingSkjemaInstitusjon visFeilmeldinger={visFeilmeldinger} />;
     }
+
     if (fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
         return <VilkårsvurderingSkjemaEnsligMindreårig visFeilmeldinger={visFeilmeldinger} />;
     }
-    return null;
-};
 
-export default VilkårsvurderingSkjema;
+    return null;
+}

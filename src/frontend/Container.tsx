@@ -1,9 +1,11 @@
-import React from 'react';
-
+import classNames from 'classnames';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
-import styled from 'styled-components';
 
+import { useHttp } from '@navikt/familie-http';
+
+import Styles from './Container.module.css';
 import { useAppContext } from './context/AppContext';
+import { useAuthContext } from './context/AuthContext';
 import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
 import AppInfoModal from './komponenter/Modal/AppInfoModal';
 import { FeilmeldingModal } from './komponenter/Modal/fagsak/FeilmeldingModal';
@@ -18,22 +20,10 @@ import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalf
 import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from './sider/Samhandler/Samhandler';
 
-const Main = styled.main<{ $systemetLaster: boolean }>`
-    position: fixed;
-    width: 100%;
-    height: 100%;
-
-    ${props => {
-        if (props.$systemetLaster)
-            return `
-                filter: blur(12px);
-                -webkit-filter: blur(12px);
-        `;
-    }};
-`;
-
-const Container: React.FC = () => {
-    const { autentisert, systemetLaster, innloggetSaksbehandler, appInfoModal } = useAppContext();
+export function Container() {
+    const { autentisert } = useAuthContext();
+    const { appInfoModal } = useAppContext();
+    const { systemetLaster } = useHttp();
 
     return (
         <Router>
@@ -42,14 +32,11 @@ const Container: React.FC = () => {
                 <>
                     {systemetLaster() && <SystemetLaster />}
                     <Toasts />
-                    <Main $systemetLaster={systemetLaster()}>
+                    <main className={classNames(Styles.main, { [Styles.systemLaster]: systemetLaster() })}>
                         <OpprettFagsakModal />
                         <FeilmeldingModal />
                         <ForhåndsvisOpprettingAvPdfModal />
-                        <HeaderMedSøk
-                            brukerNavn={innloggetSaksbehandler?.displayName}
-                            brukerEnhet={innloggetSaksbehandler?.enhet}
-                        />
+                        <HeaderMedSøk />
                         <Routes>
                             <Route path="/fagsak/:fagsakId/*" element={<FagsakContainer />} />
                             <Route path="/oppgaver/journalfor/:oppgaveId" element={<ManuellJournalføring />} />
@@ -58,13 +45,11 @@ const Container: React.FC = () => {
                             <Route path="/oppgaver" element={<Oppgavebenk />} />
                             <Route path="/" element={<Navigate to="/oppgaver" />} />
                         </Routes>
-                    </Main>
+                    </main>
                 </>
             ) : (
                 <UgyldigSesjon />
             )}
         </Router>
     );
-};
-
-export default Container;
+}

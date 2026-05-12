@@ -1,16 +1,17 @@
-import type { PropsWithChildren } from 'react';
-import * as React from 'react';
+import type { ReactNode, PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAlert';
+import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
+import { BehandlingSteg } from '@typer/behandling';
+import { behandlingErEtterSteg } from '@utils/steg';
 import styled from 'styled-components';
 
 import { Box, Button, ErrorMessage, Heading, VStack } from '@navikt/ds-react';
 
-import { BehandlingPåVentAlert } from '../../../../komponenter/Alert/BehandlingPåVentAlert';
-import { MidlertidigEnhetAlert } from '../../../../komponenter/Alert/MidlertidigEnhetAlert';
-import { BehandlingSteg } from '../../../../typer/behandling';
-import { behandlingErEtterSteg } from '../../../../utils/steg';
-import { useBehandlingContext } from '../context/BehandlingContext';
+export const MAX_SKJEMASTEG_BREDDE = '1440px';
 
 interface IProps extends PropsWithChildren {
     className?: string;
@@ -19,7 +20,7 @@ interface IProps extends PropsWithChildren {
     nesteKnappTittel?: string;
     nesteOnClick?: () => void;
     senderInn: boolean;
-    tittel: string | React.ReactNode;
+    tittel: string | ReactNode;
     maxWidthStyle?: string;
     skalDisableNesteKnapp?: boolean;
     skalViseNesteKnapp?: boolean;
@@ -43,7 +44,7 @@ const Navigering = styled.div`
     }
 `;
 
-const Skjemasteg: React.FunctionComponent<IProps> = ({
+const Skjemasteg = ({
     children,
     className,
     forrigeKnappTittel = 'Forrige steg',
@@ -57,8 +58,9 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
     skalDisableNesteKnapp = false,
     skalViseForrigeKnapp = true,
     feilmelding = '',
-}) => {
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+}: IProps) => {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     useEffect(() => {
         const skjema = document.getElementById('skjemasteg');
@@ -93,7 +95,7 @@ const Skjemasteg: React.FunctionComponent<IProps> = ({
                     {children}
                     {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
                     <Navigering>
-                        {nesteOnClick && skalViseNesteKnapp && (!vurderErLesevisning() || kanGåVidereILesevisning) && (
+                        {nesteOnClick && skalViseNesteKnapp && (!erLesevisning || kanGåVidereILesevisning) && (
                             <Button
                                 variant={'primary'}
                                 onClick={onNesteClicked}

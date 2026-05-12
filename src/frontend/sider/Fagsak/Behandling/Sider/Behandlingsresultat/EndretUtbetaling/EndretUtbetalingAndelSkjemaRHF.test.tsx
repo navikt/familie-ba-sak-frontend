@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import { type DefaultValues, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';
@@ -143,7 +142,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
         const feilmelding = await screen.findByText(/Dette er en feilmelding/);
         expect(feilmelding).toBeInTheDocument();
 
-        const lukkButton = screen.getByLabelText('Lukk');
+        const lukkButton = screen.getByTitle('Lukk');
         await user.click(lukkButton);
 
         expect(feilmelding).not.toBeInTheDocument();

@@ -1,20 +1,28 @@
-import * as React from 'react';
 import { useState } from 'react';
 
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
+import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import styled from 'styled-components';
 
-import { Alert, BodyLong, Button, Heading, HStack, Modal, Spacer, Switch, Table, VStack } from '@navikt/ds-react';
+import {
+    BodyLong,
+    Box,
+    Button,
+    Heading,
+    HStack,
+    LocalAlert,
+    Modal,
+    Spacer,
+    Switch,
+    Table,
+    VStack,
+} from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
-import { useAppContext } from '../../../../../../../context/AppContext';
-import {
-    Behandlingstype,
-    type IBehandling,
-    VurderingsstrategiForValutakurser,
-} from '../../../../../../../typer/behandling';
-import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '../../../../../../../typer/eøsPerioder';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 
 const ValutakurserContainer = styled.div`
@@ -27,10 +35,6 @@ const StyledTable = styled(Table)`
     & fieldset.skjemagruppe {
         margin-bottom: 1.5rem;
     }
-`;
-
-const StyledAlert = styled(Alert)`
-    margin-top: 1rem;
 `;
 
 const StyledHeaderCell = styled(Table.HeaderCell)`
@@ -58,16 +62,17 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }) => {
-    const { harInnloggetSaksbehandlerSuperbrukerTilgang } = useAppContext();
-    const { settÅpenBehandling, vurderErLesevisning } = useBehandlingContext();
+const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }: IProps) => {
+    const { settÅpenBehandling } = useBehandlingContext();
     const { request } = useHttp();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
         useState(false);
-    const kanOverstyreAutomatiskeValutakurser =
-        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && harInnloggetSaksbehandlerSuperbrukerTilgang();
 
-    const erLesevisning = vurderErLesevisning();
+    const saksbehandler = useSaksbehandler();
+    const erLesevisning = useErLesevisning();
+
+    const kanOverstyreAutomatiskeValutakurser =
+        åpenBehandling.type == Behandlingstype.TEKNISK_ENDRING && saksbehandler.harSuperbrukertilgang;
 
     const hentNesteVurderingsstrategi = (
         vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null
@@ -147,11 +152,15 @@ const Valutakurser: React.FC<IProps> = ({ valutakurser, erValutakurserGyldige, �
                 </VStack>
             </HStack>
             {!erValutakurserGyldige() && (
-                <StyledAlert
-                    variant={'warning'}
-                    fullWidth
-                    children={'For perioder som skal differanseberegnes, må valutakursdato registeres'}
-                />
+                <Box marginBlock={'space-16 space-0'}>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>
+                                For perioder som skal differanseberegnes, må valutakursdato registeres
+                            </LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </Box>
             )}
             <StyledTable>
                 <Table.Header>

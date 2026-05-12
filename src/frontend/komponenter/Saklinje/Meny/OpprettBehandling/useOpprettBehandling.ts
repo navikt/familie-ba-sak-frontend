@@ -7,11 +7,11 @@ import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../context/AppContext';
 import { HentBarnetrygdbehandlingerQueryKeyFactory } from '../../../../hooks/useHentBarnetrygdbehandlinger';
 import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
 import { HentKlagebehandlingerQueryKeyFactory } from '../../../../hooks/useHentKlagebehandlinger';
 import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '../../../../hooks/useHentTilbakekrevingsbehandlinger';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { useBrukerContext } from '../../../../sider/Fagsak/BrukerContext';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
 import type { IBehandling, IRestNyBehandling } from '../../../../typer/behandling';
@@ -42,7 +42,8 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
 const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprettTilbakekrevingSuccess: () => void) => {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
-    const { innloggetSaksbehandler } = useAppContext();
+
+    const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -235,7 +236,7 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
                     underkategori: behandlingstema.verdi?.underkategori ?? null,
                     behandlingType: behandlingstype.verdi as Behandlingstype,
                     behandlingÅrsak: behandlingsårsak.verdi as BehandlingÅrsak,
-                    navIdent: innloggetSaksbehandler?.navIdent,
+                    navIdent: saksbehandler.navIdent,
                     nyMigreringsdato: erMigreringFraInfoTrygd
                         ? dateTilIsoDatoStringEllerUndefined(migreringsdato.verdi)
                         : undefined,

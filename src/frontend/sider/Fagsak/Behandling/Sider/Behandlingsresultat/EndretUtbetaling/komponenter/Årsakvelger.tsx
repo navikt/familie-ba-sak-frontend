@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -25,7 +25,7 @@ export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
                 fieldState: { error },
                 formState: { isSubmitting },
             }) => {
-                const håndterEndring = (event: React.ChangeEvent<HTMLSelectElement>) => {
+                const håndterEndring = (event: ChangeEvent<HTMLSelectElement>) => {
                     onChange(event);
                     if (
                         event.target.value === IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER ||

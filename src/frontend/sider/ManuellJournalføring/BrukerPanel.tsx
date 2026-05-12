@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
 import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
-import { Alert, Button, ExpansionCard, Heading, ReadMore, Select, TextField } from '@navikt/ds-react';
+import { Box, Button, ExpansionCard, Heading, InlineMessage, ReadMore, Select, TextField } from '@navikt/ds-react';
 import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -44,11 +45,7 @@ const ToppMargin = styled.div`
     margin-top: 2rem;
 `;
 
-const StyledAlert = styled(Alert)`
-    margin-top: 2rem;
-`;
-
-export const BrukerPanel: React.FC = () => {
+export const BrukerPanel = () => {
     const {
         skjema,
         endreBrukerOgSettNormalFagsak,
@@ -176,7 +173,7 @@ export const BrukerPanel: React.FC = () => {
                                 <StyledSelect
                                     label="Fagsaktype"
                                     size="small"
-                                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                                         oppdaterFagsaktype(event.target.value as FagsakType)
                                     }
                                     value={skjema.felter.fagsakType.verdi}
@@ -189,7 +186,7 @@ export const BrukerPanel: React.FC = () => {
                                     <StyledSelect
                                         label="Institusjon"
                                         size="small"
-                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                                        onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                                             settValgtInstitusjon(event.target.value)
                                         }
                                         value={valgtInstitusjon}
@@ -225,21 +222,23 @@ export const BrukerPanel: React.FC = () => {
                             </ReadMore>
                         )}
                         {valgtInstitusjon === 'ny-institusjon' && (
-                            <StyledAlert variant="warning" inline>
-                                <Heading size="xsmall" level="3">
-                                    Institusjonssak på bruker må opprettes
-                                </Heading>
-                                For å journalføre dokumentet, må ny fagsak av typen institusjon opprettes via
-                                saksbehandlerløsningen. Når fagsaken er tilknyttet godkjent institusjon, kan dokumentet
-                                journalføres.
-                            </StyledAlert>
+                            <Box marginBlock={'space-32 space-0'}>
+                                <InlineMessage status="warning">
+                                    <Heading size="xsmall" level="3">
+                                        Institusjonssak på bruker må opprettes
+                                    </Heading>
+                                    For å journalføre dokumentet, må ny fagsak av typen institusjon opprettes via
+                                    saksbehandlerløsningen. Når fagsaken er tilknyttet godkjent institusjon, kan
+                                    dokumentet journalføres.
+                                </InlineMessage>
+                            </Box>
                         )}
                     </>
                 )}
                 {samhandlerFeilmelding && (
-                    <StyledAlert variant="warning" inline>
-                        {samhandlerFeilmelding}
-                    </StyledAlert>
+                    <Box marginBlock={'space-32 space-0'}>
+                        <InlineMessage status="warning">{samhandlerFeilmelding}</InlineMessage>
+                    </Box>
                 )}
                 {skjema.felter.samhandler.verdi !== undefined && (
                     <ToppMargin>

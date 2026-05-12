@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { startOfDay } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 

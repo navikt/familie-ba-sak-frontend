@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 
@@ -56,6 +54,12 @@ function utledSøker(fagsak?: IMinimalFagsak, søkerData?: IPersonInfo) {
     return undefined;
 }
 
+export const utledAdressebeskyttelseGradering = (
+    fagsakType?: FagsakType,
+    bruker?: IPersonInfo,
+    søkerData?: IPersonInfo
+) => (fagsakType === FagsakType.SKJERMET_BARN ? bruker : søkerData)?.adressebeskyttelseGradering;
+
 interface Props {
     bruker?: IPersonInfo;
     fagsak?: IMinimalFagsak;
@@ -78,7 +82,9 @@ export function Personlinje({ bruker, fagsak }: Props) {
                         fagsakType={fagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
                         erBarn={fagsakeier.alder < 18}
-                        erAdresseBeskyttet={erAdresseBeskyttet(søkerData?.adressebeskyttelseGradering)}
+                        erAdresseBeskyttet={erAdresseBeskyttet(
+                            utledAdressebeskyttelseGradering(fagsak?.fagsakType, bruker, søkerData)
+                        )}
                         erEgenAnsatt={fagsakeier.erEgenAnsatt}
                     />
                     <HStack align={'center'} gap={'space-12 space-16'}>
@@ -86,7 +92,12 @@ export function Personlinje({ bruker, fagsak }: Props) {
                             {fagsakeier.navn} ({fagsakeier.alder} år)
                         </BodyShort>
                         <Divider />
-                        <FalskIdentitet harFalskIdentitet={fagsakeier.harFalskIdentitet} />
+                        {fagsakeier.harFalskIdentitet && (
+                            <HStack align={'center'} gap={'space-12 space-16'}>
+                                <FalskIdentitet erHeading={false} />
+                                <Divider />
+                            </HStack>
+                        )}
                         <HStack align={'center'} gap={'space-4'}>
                             {fagsakeier.ident}
                             <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />

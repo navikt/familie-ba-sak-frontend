@@ -1,9 +1,7 @@
-import React, { type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Route, Routes } from 'react-router';
 import { describe, expect, test } from 'vitest';
-
-import type { ISaksbehandler } from '@navikt/familie-typer';
 
 import { Fagsaklinje } from './Fagsaklinje';
 import { BrukerProvider } from '../../sider/Fagsak/BrukerContext';
@@ -14,10 +12,12 @@ import { lagPerson } from '../../testutils/testdata/personTestdata';
 import { lagSaksbehandler } from '../../testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '../../testutils/testrender';
 import type { IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakStatus } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
+import type { Saksbehandler } from '../../typer/saksbehandler';
 
 interface WrapperProps extends PropsWithChildren {
-    saksbehandler?: ISaksbehandler;
+    saksbehandler?: Saksbehandler;
     fagsak?: IMinimalFagsak;
     bruker?: IPersonInfo;
 }
@@ -100,6 +100,15 @@ describe('Fagsaklinje', () => {
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Dokumenter' })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Meny' })).not.toBeInTheDocument();
+    });
+
+    test('skal ikke vise meny hvis fagsaken er låst', async () => {
+        const { screen } = render(<Fagsaklinje />, {
+            wrapper: props => <Wrapper {...props} fagsak={lagFagsak({ status: FagsakStatus.LÅST })} />,
+        });
+
+        expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Meny' })).not.toBeInTheDocument();
     });
 });

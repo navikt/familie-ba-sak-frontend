@@ -1,11 +1,11 @@
-import React from 'react';
+import type { UIEvent } from 'react';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { HStack, Link } from '@navikt/ds-react';
 
 interface Props {
     label: string;
-    onClick: (event: React.UIEvent) => void;
+    onClick: (event: UIEvent) => void;
 }
 
 export function ExternalLink({ label, onClick }: Props) {
