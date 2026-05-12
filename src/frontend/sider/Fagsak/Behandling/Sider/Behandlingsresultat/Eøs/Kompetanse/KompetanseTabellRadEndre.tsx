@@ -1,15 +1,10 @@
 import type { ChangeEvent } from 'react';
 
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, Fieldset, HStack, InlineMessage, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
-
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../../../komponenter/FlaggCombobox';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import type { IKompetanse, KompetanseAktivitet } from '../../../../../../../typer/eøsPerioder';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
+import type { IBehandling } from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import type { IKompetanse, KompetanseAktivitet } from '@typer/eøsPerioder';
 import {
     AnnenForelderAktivitet,
     EøsPeriodeStatus,
@@ -17,9 +12,15 @@ import {
     KompetanseResultat,
     kompetanseResultater,
     SøkersAktivitet,
-} from '../../../../../../../typer/eøsPerioder';
-import { onOptionSelected } from '../../../../../../../utils/skjema';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+} from '@typer/eøsPerioder';
+import { onOptionSelected } from '@utils/skjema';
+
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, HStack, InlineMessage, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import { RessursStatus } from '@navikt/familie-typer';
+
 import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
 
 const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
@@ -46,8 +47,8 @@ export function KompetanseTabellRadEndre({
     erAnnenForelderOmfattetAvNorskLovgivning,
     inneholderBarnSomSkalSkjermes,
 }: Props) {
-    const { vurderErLesevisning } = useBehandlingContext();
-    const lesevisning = vurderErLesevisning(true) || !!inneholderBarnSomSkalSkjermes;
+    const erLesevisning = useErLesevisning();
+    const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
 
     const visSubmitFeilmelding = () => {
         if (
@@ -85,7 +86,7 @@ export function KompetanseTabellRadEndre({
                     options={tilgjengeligeBarn}
                     selectedOptions={skjema.felter.barnIdenter.verdi}
                     onToggleSelected={onBarnSelected}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
                 />
                 <EøsPeriodeSkjema
@@ -93,7 +94,7 @@ export function KompetanseTabellRadEndre({
                     periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
                     initielFom={skjema.felter.initielFom}
                     visFeilmeldinger={skjema.visFeilmeldinger}
-                    lesevisning={lesevisning}
+                    lesevisning={erRedigeringDeaktivert}
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
                     <InlineMessage status="info">
@@ -102,7 +103,7 @@ export function KompetanseTabellRadEndre({
                 )}
                 <Select
                     {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Søkers aktivitet'}
                     value={skjema.felter.søkersAktivitet.verdi || ''}
                     onChange={(event: ChangeEvent<HTMLSelectElement>) =>
@@ -123,7 +124,7 @@ export function KompetanseTabellRadEndre({
                 <Select
                     className="unset-margin-bottom"
                     {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Annen forelders aktivitet'}
                     value={skjema.felter.annenForeldersAktivitet.verdi || ''}
                     onChange={(event: ChangeEvent<HTMLSelectElement>) => {
@@ -159,7 +160,7 @@ export function KompetanseTabellRadEndre({
                             skjema.felter.søkersAktivitetsland.nullstill();
                         }
                     }}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
@@ -178,7 +179,7 @@ export function KompetanseTabellRadEndre({
                             skjema.felter.annenForeldersAktivitetsland.nullstill();
                         }
                     }}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
@@ -197,7 +198,7 @@ export function KompetanseTabellRadEndre({
                             skjema.felter.barnetsBostedsland.nullstill();
                         }
                     }}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     error={
                         skjema.visFeilmeldinger &&
                         skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
@@ -207,7 +208,7 @@ export function KompetanseTabellRadEndre({
                 />
                 <Select
                     {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={lesevisning}
+                    readOnly={erRedigeringDeaktivert}
                     label={'Kompetanse'}
                     value={skjema.felter.resultat.verdi || ''}
                     onChange={event => {
@@ -250,7 +251,7 @@ export function KompetanseTabellRadEndre({
                         </InlineMessage>
                     </Box>
                 )}
-                {!lesevisning && (
+                {!erRedigeringDeaktivert && (
                     <HStack justify={'space-between'} marginBlock={'space-12 space-0'}>
                         <div>
                             <Button

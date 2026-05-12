@@ -1,3 +1,7 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useOppdatererEndretUtbetalingAndelIsPending } from '@hooks/useOppdatererEndretUtbetalingAndelIsPending';
+import { useSletterEndretUtbetalingAndelIsPending } from '@hooks/useSletterEndretUtbetalingAndelIsPending';
+import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { LocalAlert, VStack } from '@navikt/ds-react';
@@ -12,10 +16,6 @@ import { SøknadstidspunktDatovelger } from './komponenter/SøknadstidspunktDato
 import { Utbetalingvelger } from './komponenter/Utbetalingvelger';
 import { Årsakvelger } from './komponenter/Årsakvelger';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
-import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
-import { useSletterEndretUtbetalingAndelIsPending } from '../../../../../../hooks/useSletterEndretUtbetalingAndelIsPending';
-import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface EndretUtbetalingAndelSkjemaProps {
     form: UseFormReturn<EndretUtbetalingAndelFormValues>;
@@ -24,13 +24,18 @@ interface EndretUtbetalingAndelSkjemaProps {
 }
 
 export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
-    const { vurderErLesevisning } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
+
+    const erLesevisning = useErLesevisning();
 
     const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
-    const erLesevisning = vurderErLesevisning() || endretUtbetalingAndel.inneholderBarnSomSkalSkjermes;
-    const låsFelter = erLesevisning || sletterEndretUtbetalingAndel || oppdatererEndretUtbetalingAndel;
+
+    const låsFelter =
+        erLesevisning ||
+        endretUtbetalingAndel.inneholderBarnSomSkalSkjermes ||
+        sletterEndretUtbetalingAndel ||
+        oppdatererEndretUtbetalingAndel;
 
     const {
         watch,

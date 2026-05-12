@@ -1,3 +1,12 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { BehandlingSteg } from '@typer/behandling';
+import { sjekkGjelderInstitusjon } from '@typer/fagsak';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+
 import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -6,20 +15,14 @@ import { Barna } from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { useSøknadContext } from './SøknadContext';
 import { SøknadType } from './SøknadType';
-import { LeggTilBarnModal } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '../../../../../komponenter/MålformVelger';
-import { BehandlingSteg } from '../../../../../typer/behandling';
-import { sjekkGjelderInstitusjon } from '../../../../../typer/fagsak';
-import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { useFagsakContext } from '../../../FagsakContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import styles from './RegistrerSøknad.module.css';
 
 export const RegistrerSøknad = () => {
-    const { fagsak } = useFagsakContext();
-    const { behandling, vurderErLesevisning } = useBehandlingContext();
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     const {
         hentFeilTilOppsummering,
@@ -30,7 +33,6 @@ export const RegistrerSøknad = () => {
         visBekreftModal,
     } = useSøknadContext();
 
-    const erLesevisning = vurderErLesevisning();
     const gjelderInstitusjon = sjekkGjelderInstitusjon(fagsak);
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
