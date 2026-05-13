@@ -4,6 +4,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { useOppdaterVedtaksperiodeMedBegrunnelserIsPending } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelserIsPending';
 import { useOppdaterVedtaksperiodeMedFritekster } from '@hooks/useOppdaterVedtaksperiodeMedFritekster';
 import { useQueryClient } from '@tanstack/react-query';
 import { type IBehandling, utledSøkersMålform } from '@typer/behandling';
@@ -42,6 +43,9 @@ export function Fritekstbegrunnelser() {
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
     const fieldsetId = useId();
+    const oppdaterVedtaksperiodeMedBegrunnelserIsPending = useOppdaterVedtaksperiodeMedBegrunnelserIsPending(
+        vedtaksperiodeMedBegrunnelser.id
+    );
 
     const {
         mutate: oppdaterVedtaksperiodeMedFritekster,
@@ -119,6 +123,7 @@ export function Fritekstbegrunnelser() {
                                 size={'small'}
                                 onClick={onLeggTilFritekst}
                                 icon={<PlusCircleIcon />}
+                                disabled={oppdaterVedtaksperiodeMedBegrunnelserIsPending}
                             >
                                 Legg til fritekst
                             </Button>
@@ -161,7 +166,10 @@ export function Fritekstbegrunnelser() {
                                         onChange={event => onChangeFritekst(event, fritekstId)}
                                         error={skjema.visFeilmeldinger && fritekst.feilmelding}
                                         maxLength={MAKS_LENGDE_FRITEKST}
-                                        readOnly={oppdaterVedtaksperiodeMedFriteksterIsPending}
+                                        readOnly={
+                                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
+                                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
+                                        }
                                         /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                         autoFocus={true}
                                         hideLabel={true}
@@ -176,7 +184,10 @@ export function Fritekstbegrunnelser() {
                                         className={classNames({
                                             [Styles.slettFritekstKnapp]: !oppdaterVedtaksperiodeMedFriteksterIsPending,
                                         })}
-                                        disabled={oppdaterVedtaksperiodeMedFriteksterIsPending}
+                                        disabled={
+                                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
+                                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
+                                        }
                                     >
                                         Fjern
                                     </Button>
@@ -193,7 +204,10 @@ export function Fritekstbegrunnelser() {
                         size={'small'}
                         onClick={onLeggTilFritekst}
                         icon={<PlusCircleIcon />}
-                        disabled={oppdaterVedtaksperiodeMedFriteksterIsPending}
+                        disabled={
+                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
+                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
+                        }
                     >
                         Legg til fritekst
                     </Button>
@@ -206,6 +220,7 @@ export function Fritekstbegrunnelser() {
                         size={'small'}
                         onClick={onOppdaterVedtaksperiodeMedFritekster}
                         loading={oppdaterVedtaksperiodeMedFriteksterIsPending}
+                        disabled={oppdaterVedtaksperiodeMedBegrunnelserIsPending}
                     >
                         Lagre
                     </Button>
@@ -213,7 +228,10 @@ export function Fritekstbegrunnelser() {
                         variant={'tertiary'}
                         size={'small'}
                         onClick={onAvbryt}
-                        disabled={oppdaterVedtaksperiodeMedFriteksterIsPending}
+                        disabled={
+                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
+                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
+                        }
                     >
                         Avbryt
                     </Button>
