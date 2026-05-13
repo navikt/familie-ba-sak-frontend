@@ -6,7 +6,7 @@ import { useSøknadContext } from './SøknadContext';
 
 export const Annet = () => {
     const { skjema } = useSøknadContext();
-    const lesevisning = useErLesevisning();
+    const erLesevisning = useErLesevisning();
 
     return (
         <VStack marginBlock={'space-32'}>
@@ -14,8 +14,8 @@ export const Annet = () => {
             <br />
             <Textarea
                 {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
-                readOnly={lesevisning}
-                label={!lesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
+                readOnly={erLesevisning}
+                label={!erLesevisning && 'Ved endring av opplysningene er begrunnelse obligatorisk'}
                 maxLength={2000}
             />
         </VStack>
