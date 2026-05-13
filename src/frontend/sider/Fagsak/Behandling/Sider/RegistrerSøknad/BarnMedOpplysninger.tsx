@@ -1,3 +1,6 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { formaterIdent, hentAlderSomString } from '@utils/formatter';
 import classNames from 'classnames';
 
 import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
@@ -5,8 +8,6 @@ import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
 import styles from './BarnMedOpplysninger.module.css';
 import { useSøknadContext } from './SøknadContext';
 import Slett from '../../../../../ikoner/Slett';
-import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { formaterIdent, hentAlderSomString } from '../../../../../utils/formatter';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface IProps {
@@ -15,9 +16,10 @@ interface IProps {
 
 export const BarnMedOpplysninger = ({ barn }: IProps) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknadContext();
-    const { vurderErLesevisning, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
-        useBehandlingContext();
-    const erLesevisning = vurderErLesevisning();
+    const { gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } = useBehandlingContext();
+
+    const erLesevisning = useErLesevisning();
+
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
 
     const navnOgIdentTekst = `${barn.navn ?? 'Navn ukjent'} (${hentAlderSomString(

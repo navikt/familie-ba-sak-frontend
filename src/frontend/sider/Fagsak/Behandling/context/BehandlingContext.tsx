@@ -3,12 +3,9 @@ import { useState, createContext, useContext, useEffect } from 'react';
 
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { saksbehandlerHarKunLesevisning } from '@sider/Fagsak/Behandling/context/utils';
-import type { BehandlingSteg, IBehandling } from '@typer/behandling';
-import { BehandlerRolle, BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
-import { harTilgangTilEnhet } from '@typer/enhet';
-import { FagsakStatus, FagsakType } from '@typer/fagsak';
-import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
+import type { IBehandling } from '@typer/behandling';
+import { BehandlerRolle, BehandlingStatus, Behandlingstype } from '@typer/behandling';
+import { FagsakType } from '@typer/fagsak';
 import { hentSideHref } from '@utils/miljø';
 import { useLocation } from 'react-router';
 
@@ -24,10 +21,6 @@ interface Props extends PropsWithChildren {
 }
 
 interface BehandlingContextValue {
-    /**
-     * @Deprecated - Erstattes av {@link useErLesevisning}.
-     */
-    vurderErLesevisning: (sjekkTilgangTilEnhet?: boolean, skalIgnorereOmEnhetErMidlertidig?: boolean) => boolean;
     leggTilBesøktSide: (besøktSide: SideId) => void;
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
     trinnPåBehandling: { [sideId: string]: ITrinn };
@@ -98,61 +91,12 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         );
     };
 
-    const hentStegPåÅpenBehandling = (): BehandlingSteg | undefined => {
-        return behandling?.steg;
-    };
-
-    /**
-     * @Deprecated - Erstattes av {@link useErLesevisning}.
-     */
-    const vurderErLesevisning = (sjekkTilgangTilEnhet = true, skalIgnorereOmEnhetErMidlertidig = false): boolean => {
-        if (fagsak.status === FagsakStatus.LÅST) {
-            return true;
-        }
-        const åpenBehandlingData = behandling;
-        if (
-            åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_VENT ||
-            åpenBehandlingData?.status === BehandlingStatus.SATT_PÅ_MASKINELL_VENT
-        ) {
-            return true;
-        }
-        if (erBehandleneEnhetMidlertidig && !skalIgnorereOmEnhetErMidlertidig) {
-            return true;
-        }
-
-        const behandlingsårsak = åpenBehandlingData?.årsak;
-        const behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak =
-            behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING ||
-            behandlingsårsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV;
-
-        const saksbehandlerHarTilgangTilEnhet =
-            behandlingsårsakErÅpenForAlleMedTilgangTilÅOppretteÅrsak ||
-            saksbehandler.harSuperbrukertilgang ||
-            harTilgangTilEnhet(
-                åpenBehandlingData?.arbeidsfordelingPåBehandling.behandlendeEnhetId ?? '',
-                saksbehandler.groups
-            );
-
-        const steg = hentStegPåÅpenBehandling();
-
-        return saksbehandlerHarKunLesevisning(
-            saksbehandler.harSkrivetilgang,
-            saksbehandlerHarTilgangTilEnhet,
-            steg,
-            sjekkTilgangTilEnhet
-        );
-    };
-
     const kanBeslutteVedtak =
         behandling.status === BehandlingStatus.FATTER_VEDTAK &&
         BehandlerRolle.BESLUTTER === saksbehandler.rolle &&
         saksbehandler.email !== behandling.endretAv;
 
     const erMigreringsbehandling = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-
-    const erBehandleneEnhetMidlertidig =
-        behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
-
     const gjelderInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
     const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
@@ -160,7 +104,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     return (
         <BehandlingContext.Provider
             value={{
-                vurderErLesevisning,
                 leggTilBesøktSide,
                 settIkkeKontrollerteSiderTilManglerKontroll,
                 trinnPåBehandling,
