@@ -1,8 +1,9 @@
-import { låsOppFagsak, type LåsOppFagsakPayload } from '@api/låsOppFagsak';
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-import type { IMinimalFagsak } from '@typer/fagsak';
 
 import { useHttp } from '@navikt/familie-http';
+
+import { låsOppFagsak, type LåsOppFagsakPayload } from '../api/låsOppFagsak';
+import type { IMinimalFagsak } from '../typer/fagsak';
 
 interface Parameters extends LåsOppFagsakPayload {
     fagsakId: number;
