@@ -23,6 +23,7 @@ export enum ModalType {
     FEILMELDING = 'FEILMELDING',
     KORRIGER_ETTERBETALING = 'KORRIGER_ETTERBETALING',
     FORHÅNDSVIS_OPPRETTING_AV_PDF = 'FORHÅNDSVIS_OPPRETTING_AV_PDF',
+    LAAS_OPP_FAGSAK = 'LAAS_OPP_FAGSAK',
 }
 
 export interface Args {
@@ -76,6 +77,11 @@ const initialState: State = {
         tittel: 'Korriger etterbetaling',
         åpen: false,
         bredde: '35rem',
+    },
+    [ModalType.LAAS_OPP_FAGSAK]: {
+        tittel: 'Lås opp fagsak',
+        åpen: false,
+        bredde: '37rem',
     },
 };
 
