@@ -89,8 +89,12 @@ function BegrunnelseFelt() {
         control,
         rules: {
             validate: verdi => {
-                if (verdi.trim().length < 5) {
+                const trimmed = verdi.trim();
+                if (trimmed.length < 5) {
                     return 'Skriv en begrunnelse med minst 5 tegn.';
+                }
+                if (trimmed.length > 4000) {
+                    return 'Begrunnelsen kan ikke være lengre enn 4000 tegn.';
                 }
             },
         },
@@ -104,7 +108,6 @@ function BegrunnelseFelt() {
             onBlur={field.onBlur}
             onChange={field.onChange}
             error={fieldState.error?.message}
-            readOnly={formState.isSubmitting}
             disabled={formState.isSubmitting}
         />
     );

@@ -2,7 +2,10 @@ import { ModalType } from '@context/ModalContext';
 import { useLåsOppFagsak } from '@hooks/useLåsOppFagsak';
 import { useModal } from '@hooks/useModal';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
+
+import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
 
 export const LåsOppFagsakServerErrors: Record<
     'onSubmitError',
@@ -31,6 +34,7 @@ export function useLåsOppFagsakForm() {
     const { fagsak } = useFagsakContext();
     const { lukkModal } = useModal(ModalType.LAAS_OPP_FAGSAK);
     const { mutateAsync } = useLåsOppFagsak();
+    const queryClient = useQueryClient();
 
     const form = useForm<LåsOppFagsakFormValues>({
         defaultValues: {
@@ -45,7 +49,9 @@ export function useLåsOppFagsakForm() {
         return mutateAsync({ fagsakId: fagsak.id, begrunnelse: begrunnelse.trim() })
             .then(() => {
                 lukkModal();
-                window.location.reload();
+                queryClient.invalidateQueries({
+                    queryKey: HentFagsakQueryKeyFactory.fagsak(fagsak.id),
+                });
             })
             .catch(error =>
                 setError(LåsOppFagsakServerErrors.onSubmitError.id, {
