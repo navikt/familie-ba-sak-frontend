@@ -19,25 +19,29 @@ import { mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 
-interface IProps {
-    vedtaksperiodetype: Vedtaksperiodetype;
-}
-
 const GroupLabel = styled.div`
     color: black;
 `;
 
-const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
-    const erLesevisning = useErLesevisning();
-    const skalIkkeEditeres = erLesevisning || vedtaksperiodetype === Vedtaksperiodetype.AVSLAG;
+const enkeltverdierSomKanSettesAutomatisk = [
+    'Standardbegrunnelse$INNVILGET_SATSENDRING',
+    Standardbegrunnelse.REDUKSJON_SATSENDRING,
+    Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
+    Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
+];
 
+export function BegrunnelserMultiselect() {
+    const { vedtaksperiodeMedBegrunnelser, onChangeBegrunnelse, grupperteBegrunnelser } = useVedtaksperiodeContext();
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
-    const { id, onChangeBegrunnelse, grupperteBegrunnelser, vedtaksperiodeMedBegrunnelser } =
-        useVedtaksperiodeContext();
-    const { data: genererteBrevbegrunnelser } = useHentGenererteBrevbegrunnelser({
-        vedtaksperiodeId: vedtaksperiodeMedBegrunnelser.id,
-    });
+
+    const {
+        data: genererteBrevbegrunnelser,
+        isPending: genererteBrevbegrunnelserIsPending,
+        error: genererteBrevbegrunnelserError,
+    } = useHentGenererteBrevbegrunnelser(vedtaksperiodeMedBegrunnelser.id);
+
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
+
     const oppdaterStandardbegrunnelserMutation = useOppdaterStandardbegrunnelserMutationState(
         vedtaksperiodeMedBegrunnelser.id
     );
@@ -45,36 +49,30 @@ const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
         vedtaksperiodeMedBegrunnelser.id
     );
 
+    const erLesevisning = useErLesevisning();
+
+    const skalIkkeEditeres = erLesevisning || vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG;
+
     const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
-    const enkeltverdierSomKanSettesAutomatisk = [
-        'Standardbegrunnelse$INNVILGET_SATSENDRING',
-        Standardbegrunnelse.REDUKSJON_SATSENDRING,
-        Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
-        Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
-    ];
 
     useEffect(() => {
         settStandardbegrunnelser(mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser));
     }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelser]);
 
     useEffect(() => {
-        if (!skalAutomatiskUtfylle.current) {
+        if (!skalAutomatiskUtfylle.current || genererteBrevbegrunnelser === undefined) {
             return;
         }
-        if (genererteBrevbegrunnelser !== undefined) {
-            const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
-            if (
-                genererteBrevbegrunnelser.length === 0 &&
-                valgmuligheter.length === 1 &&
-                enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
-            ) {
-                onChangeBegrunnelse({
-                    action: 'select-option',
-                    option: valgmuligheter[0],
-                });
-            }
-        } else {
-            return;
+        const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
+        if (
+            genererteBrevbegrunnelser.length === 0 &&
+            valgmuligheter.length === 1 &&
+            enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
+        ) {
+            onChangeBegrunnelse({
+                action: 'select-option',
+                option: valgmuligheter[0],
+            });
         }
         skalAutomatiskUtfylle.current = false;
     }, [genererteBrevbegrunnelser, grupperteBegrunnelser]);
@@ -111,18 +109,25 @@ const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
 
     return (
         <FamilieReactSelect
-            id={`${id}`}
+            id={`${vedtaksperiodeMedBegrunnelser.id}`}
             value={standardbegrunnelser}
             propSelectStyles={propSelectStyles}
             placeholder={'Velg begrunnelse(r)'}
+            isLoading={
+                oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
+                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
+                genererteBrevbegrunnelserIsPending
+            }
             isDisabled={
                 skalIkkeEditeres ||
                 oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
-                oppdaterStandardbegrunnelserMutation?.status === 'pending'
+                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
+                genererteBrevbegrunnelserIsPending
             }
             feil={
                 oppdaterVedtaksperioderMedFriteksterMutation?.error?.message ??
-                oppdaterStandardbegrunnelserMutation?.error?.message
+                oppdaterStandardbegrunnelserMutation?.error?.message ??
+                genererteBrevbegrunnelserError?.message
             }
             label="Velg standardtekst i brev"
             creatable={false}
@@ -159,6 +164,4 @@ const BegrunnelserMultiselect = ({ vedtaksperiodetype }: IProps) => {
             options={grupperteBegrunnelser}
         />
     );
-};
-
-export default BegrunnelserMultiselect;
+}

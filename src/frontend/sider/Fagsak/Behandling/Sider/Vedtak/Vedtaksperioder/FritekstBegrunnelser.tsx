@@ -68,10 +68,7 @@ const ItalicText = styled(BodyLong)`
     font-style: italic;
 `;
 
-const FritekstBegrunnelser = () => {
-    const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
-
+export function FritekstBegrunnelser() {
     const {
         skjema,
         leggTilFritekst,
@@ -81,6 +78,9 @@ const FritekstBegrunnelser = () => {
         putVedtaksperiodeMedFritekster,
         vedtaksperiodeMedBegrunnelser,
     } = useVedtaksperiodeContext();
+
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
     const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= maksAntallKulepunkter;
 
@@ -238,6 +238,4 @@ const FritekstBegrunnelser = () => {
             )}
         </FritekstContainer>
     );
-};
-
-export default FritekstBegrunnelser;
+}
