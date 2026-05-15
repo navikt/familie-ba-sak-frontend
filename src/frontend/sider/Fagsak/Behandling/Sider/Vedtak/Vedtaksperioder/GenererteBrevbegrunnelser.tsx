@@ -50,7 +50,7 @@ export function GenererteBrevbegrunnelser() {
         <VStack gap={'space-0'}>
             <Label>Begrunnelse(r)</Label>
             <ul>
-                {(genererteBrevbegrunnelser ?? []).map((begrunnelse, index) => (
+                {genererteBrevbegrunnelser.map((begrunnelse, index) => (
                     <li key={`begrunnelse-${index}`}>
                         <BodyShort>{begrunnelse}</BodyShort>
                     </li>
