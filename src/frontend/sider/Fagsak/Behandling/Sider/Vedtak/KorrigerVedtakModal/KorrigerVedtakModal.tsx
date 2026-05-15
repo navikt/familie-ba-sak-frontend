@@ -57,12 +57,7 @@ export function KorrigerVedtakModal({ lukkModal, korrigertVedtak, behandlingId, 
                     <Modal.Footer>
                         {!erLesevisning && (
                             <>
-                                <Button
-                                    type={'submit'}
-                                    variant={'primary'}
-                                    loading={isSubmitting}
-                                    disabled={isSubmitting}
-                                >
+                                <Button type={'submit'} variant={'primary'} loading={isSubmitting}>
                                     {korrigertVedtak ? 'Oppdater' : 'Legg til'}
                                 </Button>
                                 <Button onClick={lukkModal} variant={'tertiary'}>
@@ -74,7 +69,6 @@ export function KorrigerVedtakModal({ lukkModal, korrigertVedtak, behandlingId, 
                                         onClick={handleSubmit(onAngreKorrigertVedtak)}
                                         variant={'tertiary'}
                                         loading={isSubmitting}
-                                        disabled={isSubmitting}
                                         icon={<ArrowUndoIcon />}
                                     >
                                         Fjern korrigering

@@ -15,7 +15,7 @@ export function VedtaksdatoFelt({ erLesevisning }: Props) {
     const { control } = useFormContext<KorrigerVedtakFormValues>();
 
     const {
-        field,
+        field: { value, onChange },
         fieldState: { error },
         formState: { isSubmitting },
     } = useController({
@@ -25,10 +25,10 @@ export function VedtaksdatoFelt({ erLesevisning }: Props) {
     });
 
     const { datepickerProps, inputProps } = useDatepicker({
-        onDateChange: field.onChange,
+        onDateChange: onChange,
         toDate: startOfDay(new Date()),
         required: true,
-        defaultSelected: field.value ?? undefined,
+        defaultSelected: value ?? undefined,
     });
 
     return (

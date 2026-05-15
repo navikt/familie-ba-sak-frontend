@@ -2,7 +2,7 @@ import {
     KorrigerVedtakFelt,
     type KorrigerVedtakFormValues,
 } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/useKorrigerVedtakSkjema';
-import { useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { Textarea } from '@navikt/ds-react';
 
@@ -11,17 +11,24 @@ interface Props {
 }
 
 export function BegrunnelseFelt({ erLesevisning }: Props) {
+    const { control } = useFormContext<KorrigerVedtakFormValues>();
+
     const {
-        register,
-        formState: { isSubmitting, errors },
-    } = useFormContext<KorrigerVedtakFormValues>();
+        field: { value, onChange },
+        fieldState: { error },
+        formState: { isSubmitting },
+    } = useController({
+        name: KorrigerVedtakFelt.BEGRUNNELSE,
+        control,
+    });
 
     return (
         <Textarea
-            {...register(KorrigerVedtakFelt.BEGRUNNELSE)}
             label={'Begrunnelse (valgfri)'}
             description={'Begrunn hva som er gjort feil i tidligere vedtak'}
-            error={errors.form?.message}
+            value={value}
+            onChange={onChange}
+            error={error?.message}
             readOnly={isSubmitting || erLesevisning}
         />
     );
