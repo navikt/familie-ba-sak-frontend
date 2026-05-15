@@ -1,8 +1,9 @@
+import type { IsoDatoString } from '@utils/dato';
+
 import { ytelsetype, YtelseType } from './beregning';
 import type { IGrunnlagPerson } from './person';
 import type { IEndretUtbetalingAndelÅrsak } from './utbetalingAndel';
-import type { VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
-import type { IsoDatoString } from '../utils/dato';
+import { Standardbegrunnelse, type VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';
 
 export interface IVedtaksperiodeMedBegrunnelser {
     id: number;
@@ -121,3 +122,33 @@ export const hentVedtaksperiodeTittel = (vedtaksperiodeMedBegrunnelser: IVedtaks
             return '';
     }
 };
+
+export function skalViseFritekstbegrunnelser(vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser) {
+    const ugyldigeReduksjonstekster = [
+        Standardbegrunnelse.REDUKSJON_SATSENDRING,
+        Standardbegrunnelse.REDUKSJON_UNDER_6_ÅR,
+        Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
+    ];
+
+    const ugyldigeVedtaksperiodetyper = [Vedtaksperiodetype.UTBETALING, Vedtaksperiodetype.ENDRET_UTBETALING];
+
+    const harTillattVedtaksperiodetype = !ugyldigeVedtaksperiodetyper.includes(vedtaksperiodeMedBegrunnelser.type);
+
+    const harEtterbetaling3År = vedtaksperiodeMedBegrunnelser.begrunnelser.some(
+        begrunnelse =>
+            (begrunnelse.standardbegrunnelse as Standardbegrunnelse) ===
+            Standardbegrunnelse.ETTER_ENDRET_UTBETALING_ETTERBETALING
+    );
+
+    const harFritekststøtte = vedtaksperiodeMedBegrunnelser.begrunnelser.some(
+        begrunnelse => begrunnelse.støtterFritekst
+    );
+
+    const harGyldigReduksjonsbegrunnelse = vedtaksperiodeMedBegrunnelser.begrunnelser.some(
+        begrunnelse =>
+            begrunnelse.vedtakBegrunnelseType === VedtakBegrunnelseType.REDUKSJON &&
+            !ugyldigeReduksjonstekster.includes(begrunnelse.standardbegrunnelse as Standardbegrunnelse)
+    );
+
+    return harTillattVedtaksperiodetype || harEtterbetaling3År || harFritekststøtte || harGyldigReduksjonsbegrunnelse;
+}
