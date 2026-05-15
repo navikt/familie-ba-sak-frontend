@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { useFagsak } from '@hooks/useFagsak';
+import { FagsakStatus } from '@typer/fagsak';
+
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 
@@ -13,11 +16,9 @@ import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingMod
 import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
 import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
-import { useFagsakContext } from '../../../sider/Fagsak/FagsakContext';
-import { FagsakStatus } from '../../../typer/fagsak';
 
 export function Fagsakmeny() {
-    const { fagsak } = useFagsakContext();
+    const fagsak = useFagsak();
     const fagsakErLåst = fagsak.status === FagsakStatus.LÅST;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);

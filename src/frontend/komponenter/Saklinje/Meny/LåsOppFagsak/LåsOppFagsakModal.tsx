@@ -9,7 +9,6 @@ import {
     LAAS_OPP_FAGSAK_FORM_ID,
     LåsOppFagsakFormFields,
     type LåsOppFagsakFormValues,
-    LåsOppFagsakServerErrors,
     useLåsOppFagsakForm,
 } from './useLåsOppFagsakForm';
 
@@ -34,11 +33,8 @@ function Innhold() {
 
     const {
         handleSubmit,
-        formState: { errors },
+        formState: { isSubmitting, errors },
     } = form;
-
-    const submitError = LåsOppFagsakServerErrors.onSubmitError.lookup(errors);
-
     return (
         <>
             <Modal.Body>
@@ -51,7 +47,7 @@ function Innhold() {
                     </InfoCard>
                     <FormProvider {...form}>
                         <form id={LAAS_OPP_FAGSAK_FORM_ID} onSubmit={handleSubmit(onSubmit)}>
-                            <Fieldset legend={'Lås opp fagsak'} hideLegend={true} error={submitError}>
+                            <Fieldset legend={'Lås opp fagsak'} hideLegend={true} error={errors?.root?.message}>
                                 <BegrunnelseFelt />
                             </Fieldset>
                         </form>
@@ -64,16 +60,11 @@ function Innhold() {
                     variant={'primary'}
                     size={'small'}
                     type={'submit'}
-                    loading={form.formState.isSubmitting}
+                    loading={isSubmitting}
                 >
                     Bekreft
                 </Button>
-                <Button
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => lukkModal()}
-                    disabled={form.formState.isSubmitting}
-                >
+                <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()} disabled={isSubmitting}>
                     Avbryt
                 </Button>
             </Modal.Footer>
@@ -84,7 +75,11 @@ function Innhold() {
 function BegrunnelseFelt() {
     const { control } = useFormContext<LåsOppFagsakFormValues>();
 
-    const { field, fieldState, formState } = useController({
+    const {
+        field: { value, onBlur, onChange },
+        fieldState: { error },
+        formState: { isSubmitting },
+    } = useController({
         name: LåsOppFagsakFormFields.BEGRUNNELSE,
         control,
         rules: {
@@ -104,11 +99,11 @@ function BegrunnelseFelt() {
         <Textarea
             label={'Begrunnelse'}
             maxLength={4000}
-            value={field.value}
-            onBlur={field.onBlur}
-            onChange={field.onChange}
-            error={fieldState.error?.message}
-            disabled={formState.isSubmitting}
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            error={error?.message}
+            disabled={isSubmitting}
         />
     );
 }
