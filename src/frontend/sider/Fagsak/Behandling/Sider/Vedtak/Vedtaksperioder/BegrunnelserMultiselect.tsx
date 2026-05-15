@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useHentGenererteBrevbegrunnelser } from '@hooks/useHentGenererteBrevbegrunnelser';
-import { useOppdaterStandardbegrunnelserMutationState } from '@hooks/useOppdaterStandardbegrunnelserMutationState';
-import { useOppdaterVedtaksperioderMedFriteksterMutationState } from '@hooks/useOppdaterVedtaksperioderMedFriteksterMutationState';
+import { useOppdaterVedtaksperiodeMedBegrunnelserMutationState } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelserMutationState';
+import { useOppdaterVedtaksperiodeMedFriteksterMutationState } from '@hooks/useOppdaterVedtaksperiodeMedFriteksterMutationState';
 import type { OptionType } from '@typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '@typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '@typer/vedtak';
@@ -42,10 +42,10 @@ export function BegrunnelserMultiselect() {
 
     const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
 
-    const oppdaterStandardbegrunnelserMutation = useOppdaterStandardbegrunnelserMutationState(
+    const oppdaterVedtaksperiodeMedBegrunnelserMutationState = useOppdaterVedtaksperiodeMedBegrunnelserMutationState(
         vedtaksperiodeMedBegrunnelser.id
     );
-    const oppdaterVedtaksperioderMedFriteksterMutation = useOppdaterVedtaksperioderMedFriteksterMutationState(
+    const oppdaterVedtaksperiodeMedFriteksterMutation = useOppdaterVedtaksperiodeMedFriteksterMutationState(
         vedtaksperiodeMedBegrunnelser.id
     );
 
@@ -114,19 +114,19 @@ export function BegrunnelserMultiselect() {
             propSelectStyles={propSelectStyles}
             placeholder={'Velg begrunnelse(r)'}
             isLoading={
-                oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
-                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
+                oppdaterVedtaksperiodeMedFriteksterMutation?.status === 'pending' ||
+                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.status === 'pending' ||
                 genererteBrevbegrunnelserIsPending
             }
             isDisabled={
                 skalIkkeEditeres ||
-                oppdaterVedtaksperioderMedFriteksterMutation?.status === 'pending' ||
-                oppdaterStandardbegrunnelserMutation?.status === 'pending' ||
+                oppdaterVedtaksperiodeMedFriteksterMutation?.status === 'pending' ||
+                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.status === 'pending' ||
                 genererteBrevbegrunnelserIsPending
             }
             feil={
-                oppdaterVedtaksperioderMedFriteksterMutation?.error?.message ??
-                oppdaterStandardbegrunnelserMutation?.error?.message ??
+                oppdaterVedtaksperiodeMedFriteksterMutation?.error?.message ??
+                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.error?.message ??
                 genererteBrevbegrunnelserError?.message
             }
             label="Velg standardtekst i brev"
