@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useBehandling } from '@hooks/useBehandling';
 import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
-import { useOppdaterStandardbegrunnelser } from '@hooks/useOppdaterStandardbegrunnelser';
+import { useOppdaterVedtaksperiodeMedBegrunnelser } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelser';
 import { MAKS_LENGDE_FRITEKST } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/Fritekstbegrunnelser';
 import { useQueryClient } from '@tanstack/react-query';
 import { Behandlingstype } from '@typer/behandling';
@@ -56,17 +56,22 @@ export function VedtaksperiodeProvider({ vedtaksperiodeMedBegrunnelser, children
             vedtaksperiodeMedBegrunnelser.fritekster.length === 0
     );
 
-    const { mutate: oppdaterStandardbegrunnelser } = useOppdaterStandardbegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
-        onSuccess: async vedtaksperioderMedBegrunnelser => {
-            await queryClient.invalidateQueries({
-                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
-            });
-            queryClient.setQueryData(
-                HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-                vedtaksperioderMedBegrunnelser
-            );
-        },
-    });
+    const { mutate: oppdaterVedtaksperiodeMedBegrunnelser } = useOppdaterVedtaksperiodeMedBegrunnelser(
+        vedtaksperiodeMedBegrunnelser.id,
+        {
+            onSuccess: async vedtaksperioderMedBegrunnelser => {
+                await queryClient.invalidateQueries({
+                    queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
+                        vedtaksperiodeMedBegrunnelser.id
+                    ),
+                });
+                queryClient.setQueryData(
+                    HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
+                    vedtaksperioderMedBegrunnelser
+                );
+            },
+        }
+    );
 
     const periode = useFelt<IIsoDatoPeriode>({
         verdi: {
@@ -119,7 +124,7 @@ export function VedtaksperiodeProvider({ vedtaksperiodeMedBegrunnelser, children
         switch (action.action) {
             case 'select-option':
                 if (action.option) {
-                    oppdaterStandardbegrunnelser({
+                    oppdaterVedtaksperiodeMedBegrunnelser({
                         standardbegrunnelser: [
                             ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
                                 begrunnelse => begrunnelse.standardbegrunnelse
@@ -132,7 +137,7 @@ export function VedtaksperiodeProvider({ vedtaksperiodeMedBegrunnelser, children
             case 'pop-value':
             case 'remove-value':
                 if (action.removedValue) {
-                    oppdaterStandardbegrunnelser({
+                    oppdaterVedtaksperiodeMedBegrunnelser({
                         standardbegrunnelser: [
                             ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
                                 persistertBegrunnelse =>
@@ -145,7 +150,7 @@ export function VedtaksperiodeProvider({ vedtaksperiodeMedBegrunnelser, children
 
                 break;
             case 'clear':
-                oppdaterStandardbegrunnelser({
+                oppdaterVedtaksperiodeMedBegrunnelser({
                     standardbegrunnelser: [],
                 });
                 break;

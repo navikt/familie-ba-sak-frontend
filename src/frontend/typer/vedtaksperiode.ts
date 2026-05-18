@@ -22,10 +22,6 @@ export interface IRestVedtaksbegrunnelse {
     støtterFritekst: boolean;
 }
 
-export interface IRestPutVedtaksperiodeMedFritekster {
-    fritekster: string[];
-}
-
 export enum Vedtaksperiodetype {
     UTBETALING = 'UTBETALING',
     UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING = 'UTBETALING_MED_REDUKSJON_FRA_SIST_IVERKSATTE_BEHANDLING',
