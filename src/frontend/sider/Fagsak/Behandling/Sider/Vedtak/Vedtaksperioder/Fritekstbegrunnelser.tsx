@@ -1,17 +1,16 @@
-import { type ChangeEvent, useId } from 'react';
+import { useId } from 'react';
 
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOppdaterVedtaksperiodeMedBegrunnelserIsPending } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelserIsPending';
-import { useOppdaterVedtaksperiodeMedFritekster } from '@hooks/useOppdaterVedtaksperiodeMedFritekster';
-import { useQueryClient } from '@tanstack/react-query';
-import { type IBehandling, utledSøkersMålform } from '@typer/behandling';
+import {
+    Field,
+    useFritekstbegrunnelserForm,
+} from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/useFritekstbegrunnelserForm';
+import { utledSøkersMålform } from '@typer/behandling';
 import { målform } from '@typer/søknad';
-import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '@utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import classNames from 'classnames';
+import { FormProvider } from 'react-hook-form';
 
 import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -34,94 +33,51 @@ import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 
 export const MAKS_LENGDE_FRITEKST = 350;
 const MAKS_ANTALL_KULEPUNKT = 3;
-const KLARSPRÅK_URL = 'https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Spr%C3%A5k.aspx';
+const KLARSPRÅK_URL = 'https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx';
 
 export function Fritekstbegrunnelser() {
-    const { skjema, kanSendeSkjema, onPanelClose, vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
+    const { vedtaksperiodeMedBegrunnelser, onPanelClose } = useVedtaksperiodeContext();
 
-    const queryClient = useQueryClient();
-    const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
     const fieldsetId = useId();
+
     const oppdaterVedtaksperiodeMedBegrunnelserIsPending = useOppdaterVedtaksperiodeMedBegrunnelserIsPending(
         vedtaksperiodeMedBegrunnelser.id
     );
 
     const {
-        mutate: oppdaterVedtaksperiodeMedFritekster,
-        isPending: oppdaterVedtaksperiodeMedFriteksterIsPending,
-        error: oppdaterVedtaksperiodeMedFriteksterError,
-    } = useOppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelser.id, {
-        onSuccess: async vedtaksperioderMedBegrunnelser => {
-            await queryClient.invalidateQueries({
-                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
-            });
-            queryClient.setQueryData(
-                HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-                vedtaksperioderMedBegrunnelser
-            );
-            onPanelClose(false); // TODO : Kan vi fjerne denne? Sjekk med funskjonelle
-        },
-    });
+        form,
+        fields,
+        onSubmit,
+        submittedFieldsRef,
+        leggTilFritekstbegrunnelse,
+        slettFritekstbegrunnelse,
+        validerBegrunnelse,
+    } = useFritekstbegrunnelserForm();
 
-    function onChangeFritekst(event: ChangeEvent<HTMLTextAreaElement>, fritekstId: number) {
-        return skjema.felter.fritekster.validerOgSettFelt([
-            ...skjema.felter.fritekster.verdi.map(mapFritekst => {
-                if (mapFritekst.verdi.id === fritekstId) {
-                    return mapFritekst.valider({
-                        ...mapFritekst,
-                        verdi: {
-                            ...mapFritekst.verdi,
-                            tekst: event.target.value,
-                        },
-                    });
-                } else {
-                    return mapFritekst;
-                }
-            }),
-        ]);
-    }
-
-    function onOppdaterVedtaksperiodeMedFritekster() {
-        if (!kanSendeSkjema()) {
-            return;
-        }
-        const fritekster = skjema.felter.fritekster.verdi.map(fritekst => fritekst.verdi.tekst);
-        oppdaterVedtaksperiodeMedFritekster({ fritekster });
-    }
-
-    function onSlettFritekst(fritekstId: number) {
-        skjema.felter.fritekster.validerOgSettFelt([
-            ...skjema.felter.fritekster.verdi.filter(mapFritekst => mapFritekst.verdi.id !== fritekstId),
-        ]);
-    }
-
-    function onLeggTilFritekst() {
-        skjema.felter.fritekster.validerOgSettFelt([
-            ...skjema.felter.fritekster.verdi,
-            lagInitiellFritekst(
-                '',
-                genererIdBasertPåAndreFritekstKulepunkter(skjema.felter.fritekster),
-                MAKS_LENGDE_FRITEKST
-            ),
-        ]);
-    }
+    const {
+        handleSubmit,
+        register,
+        formState: { isSubmitting, errors },
+        reset,
+    } = form;
 
     function onAvbryt() {
         onPanelClose(false);
+        reset();
     }
 
-    if (!vedtaksperiodeMedBegrunnelser.fritekster.length && !skjema.felter.fritekster.verdi.length) {
+    if (!vedtaksperiodeMedBegrunnelser.fritekster.length && !fields.length) {
         return (
             <>
                 {!erLesevisning && (
                     <VStack gap={'space-8'}>
-                        <FritekstHeader behandling={behandling} />
+                        <FritekstHeader />
                         <div>
                             <Button
                                 variant={'tertiary'}
                                 size={'small'}
-                                onClick={onLeggTilFritekst}
+                                onClick={leggTilFritekstbegrunnelse}
                                 icon={<PlusCircleIcon />}
                                 disabled={oppdaterVedtaksperiodeMedBegrunnelserIsPending}
                             >
@@ -134,114 +90,114 @@ export function Fritekstbegrunnelser() {
         );
     }
 
-    const erMaksAntallKulepunkter = skjema.felter.fritekster.verdi.length >= MAKS_ANTALL_KULEPUNKT;
-
-    return (
-        <VStack gap={'space-8'}>
-            <FritekstHeader behandling={behandling} htmlFor={fieldsetId} />
-            <Fieldset
-                id={fieldsetId}
-                legend={'Fritekst til kulepunkt i brev'}
-                hideLegend={true}
-                error={
-                    (skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)) ??
-                    oppdaterVedtaksperiodeMedFriteksterError?.message
-                }
-            >
-                {erLesevisning ? (
+    if (erLesevisning) {
+        return (
+            <VStack gap={'space-8'}>
+                <FritekstHeader htmlFor={fieldsetId} />
+                <Fieldset id={fieldsetId} legend={'Fritekst til kulepunkt i brev'} hideLegend={true}>
                     <ul>
-                        {skjema.felter.fritekster.verdi.map(fritekst => (
-                            <li>{fritekst.verdi.tekst}</li>
+                        {fields.map(field => (
+                            <li>{field.value}</li>
                         ))}
                     </ul>
-                ) : (
-                    <VStack gap={'space-16'}>
-                        {skjema.felter.fritekster.verdi.map(fritekst => {
-                            const fritekstId = fritekst.verdi.id;
-                            return (
-                                <HGrid columns={'5fr 1fr'} align={'center'}>
-                                    <Textarea
-                                        label={`Kulepunkt ${fritekstId}`}
-                                        value={fritekst.verdi.tekst}
-                                        onChange={event => onChangeFritekst(event, fritekstId)}
-                                        error={skjema.visFeilmeldinger && fritekst.feilmelding}
-                                        maxLength={MAKS_LENGDE_FRITEKST}
-                                        readOnly={
-                                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
-                                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
-                                        }
-                                        /* eslint-disable-next-line jsx-a11y/no-autofocus */
-                                        autoFocus={true}
-                                        hideLabel={true}
-                                        resize={true}
-                                    />
-                                    <Button
-                                        aria-label={'Fjern fritekst'}
-                                        variant={'tertiary'}
-                                        size={'small'}
-                                        onClick={() => onSlettFritekst(fritekstId)}
-                                        icon={<TrashIcon />}
-                                        className={classNames({
-                                            [Styles.slettFritekstKnapp]: !oppdaterVedtaksperiodeMedFriteksterIsPending,
-                                        })}
-                                        disabled={
-                                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
-                                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
-                                        }
-                                    >
-                                        Fjern
-                                    </Button>
-                                </HGrid>
-                            );
-                        })}
-                    </VStack>
-                )}
-            </Fieldset>
-            {!erMaksAntallKulepunkter && !erLesevisning && (
-                <div>
-                    <Button
-                        variant={'tertiary'}
-                        size={'small'}
-                        onClick={onLeggTilFritekst}
-                        icon={<PlusCircleIcon />}
-                        disabled={
-                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
-                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
-                        }
+                </Fieldset>
+            </VStack>
+        );
+    }
+
+    const erMaksAntallKulepunkter = fields.length >= MAKS_ANTALL_KULEPUNKT;
+
+    return (
+        <FormProvider {...form}>
+            <form
+                onSubmit={event => {
+                    submittedFieldsRef.current = new Set(fields.map(field => field.id));
+                    handleSubmit(onSubmit)(event);
+                }}
+            >
+                <VStack gap={'space-8'}>
+                    <FritekstHeader htmlFor={fieldsetId} />
+                    <Fieldset
+                        id={fieldsetId}
+                        legend={'Fritekst til kulepunkt i brev'}
+                        hideLegend={true}
+                        error={errors.root?.message}
                     >
-                        Legg til fritekst
-                    </Button>
-                </div>
-            )}
-            {!erLesevisning && (
-                <HStack align={'center'} justify={'space-between'} paddingBlock={'space-8 space-0'}>
-                    <Button
-                        variant={'primary'}
-                        size={'small'}
-                        onClick={onOppdaterVedtaksperiodeMedFritekster}
-                        loading={oppdaterVedtaksperiodeMedFriteksterIsPending}
-                        disabled={oppdaterVedtaksperiodeMedBegrunnelserIsPending}
-                    >
-                        Lagre
-                    </Button>
-                    <Button
-                        variant={'tertiary'}
-                        size={'small'}
-                        onClick={onAvbryt}
-                        disabled={
-                            oppdaterVedtaksperiodeMedFriteksterIsPending ||
-                            oppdaterVedtaksperiodeMedBegrunnelserIsPending
-                        }
-                    >
-                        Avbryt
-                    </Button>
-                </HStack>
-            )}
-        </VStack>
+                        <VStack gap={'space-16'}>
+                            {fields.map((field, index) => {
+                                return (
+                                    <HGrid columns={'5fr 1fr'} align={'center'} key={field.id}>
+                                        <Textarea
+                                            {...register(`${Field.FRITEKSTBEGRUNNELSER}.${index}.value`, {
+                                                validate: value => validerBegrunnelse(field.id, value),
+                                            })}
+                                            label={`Kulepunkt ${field.id}`}
+                                            maxLength={MAKS_LENGDE_FRITEKST}
+                                            error={errors.fritekstbegrunnelser?.[index]?.value?.message}
+                                            readOnly={isSubmitting || oppdaterVedtaksperiodeMedBegrunnelserIsPending}
+                                            hideLabel={true}
+                                            resize={true}
+                                        />
+                                        <Button
+                                            type={'button'}
+                                            aria-label={'Fjern fritekst'}
+                                            variant={'tertiary'}
+                                            size={'small'}
+                                            onClick={() => slettFritekstbegrunnelse(index)}
+                                            icon={<TrashIcon />}
+                                            className={classNames({ [Styles.slettFritekstKnapp]: !isSubmitting })}
+                                            disabled={isSubmitting || oppdaterVedtaksperiodeMedBegrunnelserIsPending}
+                                        >
+                                            Fjern
+                                        </Button>
+                                    </HGrid>
+                                );
+                            })}
+                        </VStack>
+                    </Fieldset>
+                    {!erMaksAntallKulepunkter && (
+                        <div>
+                            <Button
+                                type={'button'}
+                                variant={'tertiary'}
+                                size={'small'}
+                                onClick={leggTilFritekstbegrunnelse}
+                                icon={<PlusCircleIcon />}
+                                disabled={isSubmitting || oppdaterVedtaksperiodeMedBegrunnelserIsPending}
+                            >
+                                Legg til fritekst
+                            </Button>
+                        </div>
+                    )}
+                    <HStack align={'center'} justify={'space-between'} paddingBlock={'space-8 space-0'}>
+                        <Button
+                            type={'submit'}
+                            variant={'primary'}
+                            size={'small'}
+                            loading={isSubmitting}
+                            disabled={oppdaterVedtaksperiodeMedBegrunnelserIsPending}
+                        >
+                            Lagre
+                        </Button>
+                        <Button
+                            type={'button'}
+                            variant={'tertiary'}
+                            size={'small'}
+                            onClick={onAvbryt}
+                            disabled={isSubmitting || oppdaterVedtaksperiodeMedBegrunnelserIsPending}
+                        >
+                            Avbryt
+                        </Button>
+                    </HStack>
+                </VStack>
+            </form>
+        </FormProvider>
     );
 }
 
-function FritekstHeader({ behandling, htmlFor }: { behandling: IBehandling; htmlFor?: string }) {
+function FritekstHeader({ htmlFor }: { htmlFor?: string }) {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
     return (
         <HStack gap={'space-8'} align={'center'} justify={'space-between'}>
             <HStack gap={'space-8'} align={'center'} justify={'center'} wrap={false}>
@@ -265,9 +221,11 @@ function FritekstHeader({ behandling, htmlFor }: { behandling: IBehandling; html
                     </BodyLong>
                 </HelpText>
             </HStack>
-            <Tag variant={'outline'} data-color={'neutral'} size={'small'}>
-                Skriv {målform[utledSøkersMålform(behandling)].toLowerCase()}
-            </Tag>
+            {!erLesevisning && (
+                <Tag variant={'outline'} data-color={'neutral'} size={'small'}>
+                    Skriv {målform[utledSøkersMålform(behandling)].toLowerCase()}
+                </Tag>
+            )}
         </HStack>
     );
 }
