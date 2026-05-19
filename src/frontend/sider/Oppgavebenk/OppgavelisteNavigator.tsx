@@ -1,33 +1,59 @@
-import { Box, HStack, Pagination } from '@navikt/ds-react';
+import type { IOppgave } from '@typer/oppgave';
+
+import { BodyLong, Box, Heading, HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
-import type { IOppgave } from '../../typer/oppgave';
 
-const beregnAntallSider = (oppgaver: IOppgave[]): number => Math.ceil(oppgaver.length / oppgaveSideLimit);
+function beregnAntallSider(oppgaver: IOppgave[]): number {
+    return Math.ceil(oppgaver.length / oppgaveSideLimit);
+}
 
-const OppgavelisteNavigator = () => {
+export function OppgavelisteNavigator() {
     const { oppgaver, side, settSide } = useOppgavebenkContext();
 
     if (oppgaver.status !== RessursStatus.SUKSESS) {
-        return null;
+        return (
+            <HStack align={'center'} justify={'space-between'} marginBlock={'space-12'}>
+                <Heading size={'medium'} level={'1'}>
+                    Oppgaveliste
+                </Heading>
+            </HStack>
+        );
     }
+
     const antallSider = beregnAntallSider(oppgaver.data.oppgaver);
 
+    if (antallSider <= 0) {
+        return (
+            <HStack align={'center'} justify={'space-between'} marginBlock={'space-12'}>
+                <Heading size={'medium'} level={'1'}>
+                    Oppgaveliste
+                </Heading>
+            </HStack>
+        );
+    }
+
     return (
-        <HStack align="center" justify="space-between" wrap={false}>
-            |
-            <Box paddingInline="space-16">
-                Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
-                {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
-                {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
+        <HStack align={'center'} justify={'space-between'} marginBlock={'space-12'} wrap={false}>
+            <Heading size={'medium'} level={'1'}>
+                Oppgaveliste
+            </Heading>
+            <Box marginInline={'space-128 space-0'}>
+                <BodyLong>
+                    Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
+                    {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
+                    {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
+                </BodyLong>
             </Box>
-            |
-            <Box paddingInline="space-16 space-0">
-                <Pagination size="small" page={side} count={antallSider} onPageChange={settSide} />
-            </Box>
+            <Pagination
+                size={'small'}
+                page={side}
+                count={antallSider}
+                onPageChange={settSide}
+                siblingCount={1}
+                boundaryCount={1}
+            />
         </HStack>
     );
-};
-
-export default OppgavelisteNavigator;
+}

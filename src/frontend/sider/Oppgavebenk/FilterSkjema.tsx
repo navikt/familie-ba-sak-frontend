@@ -1,19 +1,26 @@
-import { Button, Fieldset, HStack, Select, VStack } from '@navikt/ds-react';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import type { IPar } from '@typer/common';
+import type { IsoDatoString } from '@utils/dato';
+
+import { Box, Button, Fieldset, HStack, Select } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
-import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
-import type { IPar } from '../../typer/common';
-import type { IsoDatoString } from '../../utils/dato';
 
-const FilterSkjema = () => {
+export function FilterSkjema() {
     const { hentOppgaver, oppgaver, oppgaveFelter, settVerdiPåOppgaveFelt, tilbakestillOppgaveFelter, validerSkjema } =
         useOppgavebenkContext();
 
     const saksbehandler = useSaksbehandler();
+
+    function onHentOppgaver() {
+        if (validerSkjema()) {
+            hentOppgaver();
+        }
+    }
 
     function tilOppgaveFeltKomponent(oppgaveFelt: IOppgaveFelt) {
         switch (oppgaveFelt.filter?.type) {
@@ -32,7 +39,7 @@ const FilterSkjema = () => {
                 );
             case 'select':
                 return (
-                    <div>
+                    <Box as={'div'}>
                         <Select
                             label={oppgaveFelt.label}
                             onChange={event => settVerdiPåOppgaveFelt(oppgaveFelt, event.target.value)}
@@ -64,7 +71,7 @@ const FilterSkjema = () => {
                                         );
                                     })}
                         </Select>
-                    </div>
+                    </Box>
                 );
             default:
                 return null;
@@ -72,33 +79,30 @@ const FilterSkjema = () => {
     }
 
     return (
-        <Fieldset legend="Oppgavebenken filterskjema" hideLegend>
-            <VStack gap="space-16">
-                <HStack gap="space-24">
-                    {Object.values(oppgaveFelter)
-                        .filter((oppgaveFelt: IOppgaveFelt) => oppgaveFelt.filter)
-                        .map(tilOppgaveFeltKomponent)}
-                </HStack>
-
-                <HStack gap="space-8">
+        <Fieldset legend={'Oppgavebenken filterskjema'} hideLegend={true}>
+            <HStack justify={'start'} align={'start'} gap={'space-16'}>
+                {Object.values(oppgaveFelter)
+                    .filter(oppgaveFelt => oppgaveFelt.filter)
+                    .map(tilOppgaveFeltKomponent)}
+                <HStack
+                    justify={'start'}
+                    align={'center'}
+                    gap={'space-16'}
+                    wrap={false}
+                    marginBlock={'space-32 space-0'}
+                >
                     <Button
-                        variant="primary"
-                        onClick={() => {
-                            if (validerSkjema()) hentOppgaver();
-                        }}
+                        variant={'primary'}
+                        onClick={onHentOppgaver}
                         loading={oppgaver.status === RessursStatus.HENTER}
-                        disabled={oppgaver.status === RessursStatus.HENTER}
-                        children={'Hent oppgaver'}
-                    />
-                    <Button
-                        onClick={tilbakestillOppgaveFelter}
-                        variant="secondary"
-                        children={'Tilbakestill filtrering'}
-                    />
+                    >
+                        Hent oppgaver
+                    </Button>
+                    <Button variant="secondary" onClick={tilbakestillOppgaveFelter}>
+                        Tilbakestill filtrering
+                    </Button>
                 </HStack>
-            </VStack>
+            </HStack>
         </Fieldset>
     );
-};
-
-export default FilterSkjema;
+}

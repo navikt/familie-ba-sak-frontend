@@ -1,20 +1,21 @@
 import { useEffect, useRef } from 'react';
 
+import { useAppContext } from '@context/AppContext';
+import type { IOppgave } from '@typer/oppgave';
+import { OppgavetypeFilter } from '@typer/oppgave';
+import type { Saksbehandler } from '@typer/saksbehandler';
+import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
+
 import { BodyShort, Button, HGrid } from '@navikt/ds-react';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
-import { useAppContext } from '../../context/AppContext';
-import type { IOppgave } from '../../typer/oppgave';
-import { OppgavetypeFilter } from '../../typer/oppgave';
-import type { Saksbehandler } from '../../typer/saksbehandler';
-import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
 
 interface IOppgavelisteSaksbehandler {
     oppgave: IOppgave;
     saksbehandler: Saksbehandler;
 }
 
-const OppgavelisteSaksbehandler = ({ oppgave, saksbehandler }: IOppgavelisteSaksbehandler) => {
+export function OppgavelisteSaksbehandler({ oppgave, saksbehandler }: IOppgavelisteSaksbehandler) {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgavebenkContext();
     const { sjekkTilgang } = useAppContext();
     const oppgaveRef = useRef<IOppgave | null>(null);
@@ -39,41 +40,38 @@ const OppgavelisteSaksbehandler = ({ oppgave, saksbehandler }: IOppgavelisteSaks
                 OppgavetypeFilter[oppgave.oppgavetype as keyof typeof OppgavetypeFilter] === type
         ) !== undefined;
 
-    return oppgave.tilordnetRessurs ? (
-        <HGrid columns={2} gap={'space-24'} align="center">
-            <BodyShort>{oppgave.tilordnetRessurs}</BodyShort>
-            {oppgaveTypeErStøttet && (
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    key={'tilbakestill'}
-                    onClick={() => {
-                        tilbakestillFordelingPåOppgave(oppgave);
-                    }}
-                    children={'Tilbakestill'}
-                />
-            )}
-        </HGrid>
-    ) : (
-        <HGrid columns={2} gap={'space-24'} align="center">
+    function onTilbakestillFordelingPåOppgave() {
+        tilbakestillFordelingPåOppgave(oppgave);
+    }
+
+    async function onFordelOppgave() {
+        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+            fordelOppgave(oppgave, saksbehandler.navIdent);
+        }
+    }
+
+    if (oppgave.tilordnetRessurs) {
+        return (
+            <HGrid columns={2} align={'center'} gap={'space-8'}>
+                <BodyShort>{oppgave.tilordnetRessurs}</BodyShort>
+                {oppgaveTypeErStøttet && (
+                    <Button variant={'tertiary'} size={'small'} onClick={onTilbakestillFordelingPåOppgave}>
+                        Tilbakestill
+                    </Button>
+                )}
+            </HGrid>
+        );
+    }
+
+    return (
+        <HGrid columns={2} align={'center'} gap={'space-8'}>
             <BodyShort>Ikke tildelt</BodyShort>
             {oppgaveTypeErStøttet && (
-                <Button
-                    variant="secondary"
-                    size="small"
-                    key={'plukk'}
-                    onClick={async () => {
-                        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-
-                        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
-                            fordelOppgave(oppgave, saksbehandler.navIdent);
-                        }
-                    }}
-                    children={'Tildel meg'}
-                />
+                <Button variant={'secondary'} size={'small'} onClick={onFordelOppgave}>
+                    Tildel meg
+                </Button>
             )}
         </HGrid>
     );
-};
-
-export default OppgavelisteSaksbehandler;
+}

@@ -1,0 +1,24 @@
+.beskrivelse {
+    max-width: 15rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.tooltip {
+    max-width: 30rem;
+}
+
+.tableWrapper {
+    overflow-x: visible;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table,
+.table * {
+    box-sizing: border-box;
+}

@@ -1,37 +1,19 @@
-import styled from 'styled-components';
+import { Box, VStack } from '@navikt/ds-react';
 
-import { VStack } from '@navikt/ds-react';
-
+import Styles from './Oppgavebenk.module.css';
 import { OppgavebenkProvider } from './OppgavebenkContext';
-import OppgaveHeader from './OppgaveHeader';
-import OppgaveList from './OppgaveList';
+import { OppgaveHeader } from './OppgaveHeader';
+import { OppgaveList } from './OppgaveList';
 
-const Container = styled.article`
-    padding: 0.5rem;
-    height: ${`calc(100vh - 30px - 1.1rem)`};
-    width: 100vw;
-    overflow: scroll;
-
-    & hr {
-        margin-top: 2rem;
-    }
-`;
-
-const OppgavebenkInnhold = () => {
-    return (
-        <Container>
-            <VStack gap="space-16">
-                <OppgaveHeader />
-                <OppgaveList />
-            </VStack>
-        </Container>
-    );
-};
-
-export const Oppgavebenk = () => {
+export function Oppgavebenk() {
     return (
         <OppgavebenkProvider>
-            <OppgavebenkInnhold />
+            <Box as={'div'} className={Styles.container}>
+                <VStack gap={'space-16'}>
+                    <OppgaveHeader />
+                    <OppgaveList />
+                </VStack>
+            </Box>
         </OppgavebenkProvider>
     );
-};
+}
