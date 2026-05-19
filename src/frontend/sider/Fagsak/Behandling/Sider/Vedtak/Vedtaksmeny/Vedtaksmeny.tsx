@@ -17,7 +17,7 @@ import { OppdaterEndringstidspunktModal } from '../endringstidspunkt/OppdaterEnd
 import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import KorrigerEtterbetaling from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
 import KorrigerVedtak from '../KorrigerVedtakModal/KorrigerVedtak';
-import KorrigerVedtakModal from '../KorrigerVedtakModal/KorrigerVedtakModal';
+import { KorrigerVedtakModal } from '../KorrigerVedtakModal/KorrigerVedtakModal';
 import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
 
@@ -46,14 +46,7 @@ export function Vedtaksmeny() {
 
     return (
         <Stack width={'100%'} justify={'end'} align={'center'}>
-            {visKorrigerVedtakModal && (
-                <KorrigerVedtakModal
-                    behandlingId={behandling.behandlingId}
-                    korrigertVedtak={behandling.korrigertVedtak}
-                    erLesevisning={erLesevisning}
-                    lukkModal={() => settVisKorrigerVedtakModal(false)}
-                />
-            )}
+            {visKorrigerVedtakModal && <KorrigerVedtakModal lukkModal={() => settVisKorrigerVedtakModal(false)} />}
             {visEndreEndringstidspunktModal && (
                 <OppdaterEndringstidspunktModal lukkModal={() => settVisEndreEndringstidspunktModal(false)} />
             )}
