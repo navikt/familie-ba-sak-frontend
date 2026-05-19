@@ -1,7 +1,7 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import type { AlleBegrunnelser } from '@typer/vilkår';
+import { RessursResolver } from '@utils/ressursResolver';
 
-import type { AlleBegrunnelser } from '../typer/vilkår';
-import { RessursResolver } from '../utils/ressursResolver';
+import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
 export async function hentAlleBegrunnelser(request: FamilieRequest): Promise<AlleBegrunnelser> {
     const ressurs = await request<void, AlleBegrunnelser>({

@@ -50,11 +50,13 @@ export function GenererteBrevbegrunnelser() {
         <VStack gap={'space-0'}>
             <Label>Begrunnelse(r)</Label>
             <ul>
-                {genererteBrevbegrunnelser.map((begrunnelse, index) => (
-                    <li key={`begrunnelse-${index}`}>
-                        <BodyShort>{begrunnelse}</BodyShort>
-                    </li>
-                ))}
+                {genererteBrevbegrunnelser
+                    .toSorted((b1, b2) => b1.localeCompare(b2))
+                    .map((begrunnelse, index) => (
+                        <li key={`begrunnelse-${index}`}>
+                            <BodyShort>{begrunnelse}</BodyShort>
+                        </li>
+                    ))}
             </ul>
         </VStack>
     );

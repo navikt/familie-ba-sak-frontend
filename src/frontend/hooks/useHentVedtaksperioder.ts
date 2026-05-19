@@ -1,8 +1,7 @@
+import { hentVedtaksperioder } from '@api/hentVedtaksperioder';
 import { useQuery } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
-
-import { hentVedtaksperioder } from '../api/hentVedtaksperioder';
 
 export const HentVedtaksperioderQueryKeyFactory = {
     behandling: (behandlingId: number) => ['vedtaksperioder', behandlingId],
