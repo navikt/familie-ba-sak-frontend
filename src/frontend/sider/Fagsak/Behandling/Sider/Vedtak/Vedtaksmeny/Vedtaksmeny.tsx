@@ -46,14 +46,7 @@ export function Vedtaksmeny() {
 
     return (
         <Stack width={'100%'} justify={'end'} align={'center'}>
-            {visKorrigerVedtakModal && (
-                <KorrigerVedtakModal
-                    behandlingId={behandling.behandlingId}
-                    korrigertVedtak={behandling.korrigertVedtak}
-                    erLesevisning={erLesevisning}
-                    lukkModal={() => settVisKorrigerVedtakModal(false)}
-                />
-            )}
+            {visKorrigerVedtakModal && <KorrigerVedtakModal lukkModal={() => settVisKorrigerVedtakModal(false)} />}
             {visEndreEndringstidspunktModal && (
                 <OppdaterEndringstidspunktModal lukkModal={() => settVisEndreEndringstidspunktModal(false)} />
             )}

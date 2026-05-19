@@ -1,6 +1,7 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
 import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/BegrunnelseFelt';
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/VedtaksdatoFelt';
-import type { IRestKorrigertVedtak } from '@typer/vedtak';
 import { FormProvider } from 'react-hook-form';
 
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
@@ -8,19 +9,17 @@ import { BodyLong, Button, Fieldset, Modal } from '@navikt/ds-react';
 
 import { useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';
 
-interface IProps {
+interface Props {
     lukkModal: () => void;
-    korrigertVedtak?: IRestKorrigertVedtak;
-    behandlingId: number;
-    erLesevisning: boolean;
 }
 
-export function KorrigerVedtakModal({ lukkModal, korrigertVedtak, behandlingId, erLesevisning }: IProps) {
-    const { form, onKorrigerVedtak, onAngreKorrigertVedtak } = useKorrigerVedtakSkjema({
-        lukkModal,
-        korrigertVedtak,
-        behandlingId,
-    });
+export function KorrigerVedtakModal({ lukkModal }: Props) {
+    const behandling = useBehandling();
+    const korrigertVedtak = behandling.korrigertVedtak;
+
+    const erLesevisning = useErLesevisning();
+
+    const { form, onKorrigerVedtak, onAngreKorrigertVedtak } = useKorrigerVedtakSkjema({ lukkModal });
 
     const {
         handleSubmit,

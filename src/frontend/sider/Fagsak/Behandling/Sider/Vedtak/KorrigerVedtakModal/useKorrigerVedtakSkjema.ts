@@ -1,6 +1,5 @@
 import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
 import { useKorrigerVedtak } from '@hooks/useKorrigerVedtak';
-import type { IRestKorrigertVedtak } from '@typer/vedtak';
 import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 
@@ -25,12 +24,12 @@ type TransformedKorrigerVedtakFormValues = {
 
 interface Props {
     lukkModal: () => void;
-    behandlingId: number;
-    korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkModal }: Props) => {
-    const { settÅpenBehandling } = useBehandlingContext();
+export const useKorrigerVedtakSkjema = ({ lukkModal }: Props) => {
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const korrigertVedtak = behandling.korrigertVedtak;
+
     const { mutateAsync: korrigerVedtak } = useKorrigerVedtak();
     const { mutateAsync: angreKorrigertVedtak } = useAngreKorrigertVedtak();
 
@@ -51,7 +50,7 @@ export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkMod
         const korrigerVedtakParameters = {
             vedtaksdato,
             begrunnelse,
-            behandlingId,
+            behandlingId: behandling.behandlingId,
         };
 
         return korrigerVedtak(korrigerVedtakParameters)
@@ -67,7 +66,7 @@ export const useKorrigerVedtakSkjema = ({ behandlingId, korrigertVedtak, lukkMod
     };
 
     const onAngreKorrigertVedtak = async () => {
-        return angreKorrigertVedtak(behandlingId)
+        return angreKorrigertVedtak(behandling.behandlingId)
             .then(behandling => {
                 settÅpenBehandling(byggSuksessRessurs(behandling));
                 lukkModal();
