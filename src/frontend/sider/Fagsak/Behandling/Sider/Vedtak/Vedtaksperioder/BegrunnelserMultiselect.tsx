@@ -1,27 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useHentGenererteBrevbegrunnelser } from '@hooks/useHentGenererteBrevbegrunnelser';
-import { useOppdaterVedtaksperiodeMedBegrunnelserMutationState } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelserMutationState';
-import { useOppdaterVedtaksperiodeMedFriteksterMutationState } from '@hooks/useOppdaterVedtaksperiodeMedFriteksterMutationState';
+import {
+    HentGenererteBrevbegrunnelserQueryKeyFactory,
+    useHentGenererteBrevbegrunnelser,
+} from '@hooks/useHentGenererteBrevbegrunnelser';
+import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { useOppdaterVedtaksperiodeMedBegrunnelser } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelser';
+import { useOppdaterVedtaksperiodeMedFriteksterIsPending } from '@hooks/useOppdaterVedtaksperiodeMedFriteksterIsPending';
+import { useQueryClient } from '@tanstack/react-query';
 import type { OptionType } from '@typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '@typer/vedtak';
 import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '@typer/vedtak';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '@utils/vedtakUtils';
-import styled from 'styled-components';
 
-import { BodyShort, Label } from '@navikt/ds-react';
-import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { BodyShort, Box, Label } from '@navikt/ds-react';
 import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
+import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
-import { mapBegrunnelserTilSelectOptions } from './utils';
+import { grupperBegrunnelser, mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
-
-const GroupLabel = styled.div`
-    color: black;
-`;
+import Styles from './BegrunnelserMultiselect.module.css';
 
 const enkeltverdierSomKanSettesAutomatisk = [
     'Standardbegrunnelse$INNVILGET_SATSENDRING',
@@ -31,8 +33,15 @@ const enkeltverdierSomKanSettesAutomatisk = [
 ];
 
 export function BegrunnelserMultiselect() {
-    const { vedtaksperiodeMedBegrunnelser, onChangeBegrunnelse, grupperteBegrunnelser } = useVedtaksperiodeContext();
+    const { vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
+
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
+    const erLesevisning = useErLesevisning();
+    const oppdaterVedtaksperioderMedFriteksterIsPending = useOppdaterVedtaksperiodeMedFriteksterIsPending(
+        vedtaksperiodeMedBegrunnelser.id
+    );
 
     const {
         data: genererteBrevbegrunnelser,
@@ -40,42 +49,81 @@ export function BegrunnelserMultiselect() {
         error: genererteBrevbegrunnelserError,
     } = useHentGenererteBrevbegrunnelser(vedtaksperiodeMedBegrunnelser.id);
 
-    const [standardbegrunnelser, settStandardbegrunnelser] = useState<OptionType[]>([]);
-
-    const oppdaterVedtaksperiodeMedBegrunnelserMutationState = useOppdaterVedtaksperiodeMedBegrunnelserMutationState(
-        vedtaksperiodeMedBegrunnelser.id
-    );
-    const oppdaterVedtaksperiodeMedFriteksterMutation = useOppdaterVedtaksperiodeMedFriteksterMutationState(
-        vedtaksperiodeMedBegrunnelser.id
-    );
-
-    const erLesevisning = useErLesevisning();
+    const {
+        mutate: oppdaterVedtaksperiodeMedBegrunnelser,
+        isPending: oppdaterVedtaksperiodeMedBegrunnelserIsPending,
+        error: oppdaterVedtaksperiodeMedBegrunnelserError,
+    } = useOppdaterVedtaksperiodeMedBegrunnelser(vedtaksperiodeMedBegrunnelser.id, {
+        onSuccess: async vedtaksperioderMedBegrunnelser => {
+            await queryClient.invalidateQueries({
+                queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(vedtaksperiodeMedBegrunnelser.id),
+            });
+            queryClient.setQueryData(
+                HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
+                vedtaksperioderMedBegrunnelser
+            );
+        },
+    });
 
     const skalIkkeEditeres = erLesevisning || vedtaksperiodeMedBegrunnelser.type === Vedtaksperiodetype.AVSLAG;
+    const grupperteBegrunnelser = grupperBegrunnelser(vedtaksperiodeMedBegrunnelser, alleBegrunnelser);
 
-    const skalAutomatiskUtfylle = useRef(!skalIkkeEditeres);
-
-    useEffect(() => {
-        settStandardbegrunnelser(mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser));
-    }, [vedtaksperiodeMedBegrunnelser, alleBegrunnelser]);
+    const skalAutomatiskUtfylles = useRef(!skalIkkeEditeres);
 
     useEffect(() => {
-        if (!skalAutomatiskUtfylle.current || genererteBrevbegrunnelser === undefined) {
+        if (!skalAutomatiskUtfylles.current || genererteBrevbegrunnelser === undefined) {
             return;
         }
+        skalAutomatiskUtfylles.current = false;
+        const harIngenGenererteBrevbegrunnelser = genererteBrevbegrunnelser.length === 0;
         const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
-        if (
-            genererteBrevbegrunnelser.length === 0 &&
-            valgmuligheter.length === 1 &&
-            enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value)
-        ) {
+        const harKunEnValgmulighet = valgmuligheter.length === 1;
+        const harValgmulighetSomKanAutovelges = enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value);
+        if (harIngenGenererteBrevbegrunnelser && harKunEnValgmulighet && harValgmulighetSomKanAutovelges) {
             onChangeBegrunnelse({
                 action: 'select-option',
                 option: valgmuligheter[0],
             });
         }
-        skalAutomatiskUtfylle.current = false;
     }, [genererteBrevbegrunnelser, grupperteBegrunnelser]);
+
+    function onChangeBegrunnelse(action: ActionMeta<OptionType>) {
+        switch (action.action) {
+            case 'select-option':
+                if (action.option) {
+                    oppdaterVedtaksperiodeMedBegrunnelser({
+                        standardbegrunnelser: [
+                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
+                                begrunnelse => begrunnelse.standardbegrunnelse
+                            ),
+                            action.option?.value as VedtakBegrunnelse,
+                        ],
+                    });
+                }
+                break;
+            case 'pop-value':
+            case 'remove-value':
+                if (action.removedValue) {
+                    oppdaterVedtaksperiodeMedBegrunnelser({
+                        standardbegrunnelser: [
+                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
+                                persistertBegrunnelse =>
+                                    persistertBegrunnelse.standardbegrunnelse !==
+                                    (action.removedValue?.value as VedtakBegrunnelse)
+                            ),
+                        ].map(begrunnelse => begrunnelse.standardbegrunnelse),
+                    });
+                }
+                break;
+            case 'clear':
+                oppdaterVedtaksperiodeMedBegrunnelser({
+                    standardbegrunnelser: [],
+                });
+                break;
+            default:
+                throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
+        }
+    }
 
     const propSelectStyles: StylesConfig<OptionType, boolean, GroupBase<OptionType>> = {
         container: (provided, props) =>
@@ -110,38 +158,31 @@ export function BegrunnelserMultiselect() {
     return (
         <FamilieReactSelect
             id={`${vedtaksperiodeMedBegrunnelser.id}`}
-            value={standardbegrunnelser}
-            propSelectStyles={propSelectStyles}
+            label={'Velg standardtekst i brev'}
             placeholder={'Velg begrunnelse(r)'}
+            value={mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser)}
+            propSelectStyles={propSelectStyles}
             isLoading={
-                oppdaterVedtaksperiodeMedFriteksterMutation?.status === 'pending' ||
-                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.status === 'pending' ||
+                oppdaterVedtaksperioderMedFriteksterIsPending ||
+                oppdaterVedtaksperiodeMedBegrunnelserIsPending ||
                 genererteBrevbegrunnelserIsPending
             }
             isDisabled={
                 skalIkkeEditeres ||
-                oppdaterVedtaksperiodeMedFriteksterMutation?.status === 'pending' ||
-                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.status === 'pending' ||
+                oppdaterVedtaksperioderMedFriteksterIsPending ||
+                oppdaterVedtaksperiodeMedBegrunnelserIsPending ||
                 genererteBrevbegrunnelserIsPending
             }
-            feil={
-                oppdaterVedtaksperiodeMedFriteksterMutation?.error?.message ??
-                oppdaterVedtaksperiodeMedBegrunnelserMutationState?.error?.message ??
-                genererteBrevbegrunnelserError?.message
-            }
-            label="Velg standardtekst i brev"
+            feil={oppdaterVedtaksperiodeMedBegrunnelserError?.message ?? genererteBrevbegrunnelserError?.message}
             creatable={false}
             erLesevisning={skalIkkeEditeres}
             isMulti={true}
-            onChange={(_, action: ActionMeta<OptionType>) => {
-                onChangeBegrunnelse(action);
-            }}
+            onChange={(_, action: ActionMeta<OptionType>) => onChangeBegrunnelse(action)}
             formatOptionLabel={(option: OptionType, formatOptionLabelMeta: FormatOptionLabelMeta<OptionType>) => {
                 const vedtakBegrunnelseType = finnVedtakBegrunnelseType(
                     alleBegrunnelser,
                     option.value as VedtakBegrunnelse
                 );
-
                 if (formatOptionLabelMeta.context === 'value') {
                     const type = vedtakBegrunnelseTyper[vedtakBegrunnelseType as VedtakBegrunnelseType];
                     return (
@@ -155,10 +196,10 @@ export function BegrunnelserMultiselect() {
             }}
             formatGroupLabel={(group: GroupBase<OptionType>) => {
                 return (
-                    <GroupLabel>
-                        <Label>{group.label}</Label>
+                    <Box>
+                        <Label className={Styles.label}>{group.label}</Label>
                         <hr />
-                    </GroupLabel>
+                    </Box>
                 );
             }}
             options={grupperteBegrunnelser}

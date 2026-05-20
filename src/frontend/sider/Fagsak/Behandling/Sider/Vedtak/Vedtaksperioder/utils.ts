@@ -1,21 +1,16 @@
-import { addMonths, isBefore, startOfMonth } from 'date-fns';
-
-import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
-
-import { BehandlingStatus } from '../../../../../../typer/behandling';
+import { BehandlingStatus } from '@typer/behandling';
 import {
     type IRestVedtakBegrunnelseTilknyttetVilkår,
     type VedtakBegrunnelse,
     VedtakBegrunnelseType,
     vedtakBegrunnelseTyper,
-} from '../../../../../../typer/vedtak';
-import {
-    type IRestVedtaksbegrunnelse,
-    type IVedtaksperiodeMedBegrunnelser,
-    Vedtaksperiodetype,
-} from '../../../../../../typer/vedtaksperiode';
-import type { AlleBegrunnelser } from '../../../../../../typer/vilkår';
-import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../../utils/dato';
+} from '@typer/vedtak';
+import { type IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import type { AlleBegrunnelser } from '@typer/vilkår';
+import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from '@utils/dato';
+import { addMonths, isBefore, startOfMonth } from 'date-fns';
+
+import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
 
 const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser
@@ -110,10 +105,12 @@ export const mapBegrunnelserTilSelectOptions = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser,
     alleBegrunnelser: AlleBegrunnelser
 ): OptionType[] => {
-    return vedtaksperiodeMedBegrunnelser.begrunnelser.map((begrunnelse: IRestVedtaksbegrunnelse) => ({
-        value: begrunnelse.standardbegrunnelse.toString(),
-        label: hentLabelForOption(begrunnelse.vedtakBegrunnelseType, begrunnelse.standardbegrunnelse, alleBegrunnelser),
-    }));
+    return vedtaksperiodeMedBegrunnelser.begrunnelser
+        .map(({ standardbegrunnelse, vedtakBegrunnelseType }) => ({
+            value: standardbegrunnelse.toString(),
+            label: hentLabelForOption(vedtakBegrunnelseType, standardbegrunnelse, alleBegrunnelser),
+        }))
+        .toSorted((o1, o2) => o1.label.localeCompare(o2.label));
 };
 
 const hentLabelForOption = (
