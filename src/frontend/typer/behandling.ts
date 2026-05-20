@@ -1,7 +1,7 @@
 import type { IRestBrevmottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { IsoDatoString } from '@utils/dato';
 
-import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
+import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
 import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
@@ -476,4 +476,13 @@ export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
 export function utledSøkersMålform(behandling: IBehandling) {
     const søker = behandling.personer.find(person => person.type === PersonType.SØKER);
     return søker?.målform ?? Målform.NB;
+}
+
+export function erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna(behandling: IBehandling) {
+    const erEøs = behandling.kategori === BehandlingKategori.EØS;
+    const erFørstegangsbehandling = behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
+    const erRevurdering = behandling.type === Behandlingstype.REVURDERING;
+    const erSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
+    // TODO : Legg inn sjekk om revurdering søknad gjelder nytt barn
+    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad));
 }
