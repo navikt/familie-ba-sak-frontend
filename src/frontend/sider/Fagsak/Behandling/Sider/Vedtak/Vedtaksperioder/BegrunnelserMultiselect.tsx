@@ -78,8 +78,9 @@ export function BegrunnelserMultiselect() {
         const harIngenGenererteBrevbegrunnelser = genererteBrevbegrunnelser.length === 0;
         const valgmuligheter = grupperteBegrunnelser.flatMap(gruppe => gruppe.options);
         const harKunEnValgmulighet = valgmuligheter.length === 1;
-        const harValgmulighetSomKanAutovelges = enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value);
-        if (harIngenGenererteBrevbegrunnelser && harKunEnValgmulighet && harValgmulighetSomKanAutovelges) {
+        const harValgmulighetSomKanAutovelges =
+            harKunEnValgmulighet && enkeltverdierSomKanSettesAutomatisk.includes(valgmuligheter[0].value);
+        if (harIngenGenererteBrevbegrunnelser && harValgmulighetSomKanAutovelges) {
             onChangeBegrunnelse({
                 action: 'select-option',
                 option: valgmuligheter[0],
