@@ -1,8 +1,6 @@
-import { Valideringsstatus } from '@navikt/familie-skjema';
-
-import type { INøkkelPar, IPar } from '../../typer/common';
-import { hentPar } from '../../typer/common';
-import { harTilgangTilEnhet } from '../../typer/enhet';
+import type { INøkkelPar, IPar } from '@typer/common';
+import { hentPar } from '@typer/common';
+import { harTilgangTilEnhet } from '@typer/enhet';
 import {
     BehandlingstypeFilter,
     behandlingstypeFilter,
@@ -14,8 +12,10 @@ import {
     oppgaveTypeFilter,
     SaksbehandlerFilter,
     saksbehandlerFilter,
-} from '../../typer/oppgave';
-import type { Saksbehandler } from '../../typer/saksbehandler';
+} from '@typer/oppgave';
+import type { Saksbehandler } from '@typer/saksbehandler';
+
+import { Valideringsstatus } from '@navikt/familie-skjema';
 
 enum FeltSortOrder {
     NONE = 'NONE',

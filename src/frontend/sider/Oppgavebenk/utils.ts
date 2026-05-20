@@ -1,8 +1,8 @@
-import type { IPar } from '../../typer/common';
-import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '../../typer/oppgave';
-import { behandlingstypeFilter, enhetFilter } from '../../typer/oppgave';
-import type { Saksbehandler } from '../../typer/saksbehandler';
-import { hentFnrFraOppgaveIdenter } from '../../utils/oppgave';
+import type { IPar } from '@typer/common';
+import type { BehandlingstypeFilter, EnhetFilter, IOppgave, IOppgaveIdent } from '@typer/oppgave';
+import { behandlingstypeFilter, enhetFilter } from '@typer/oppgave';
+import type { Saksbehandler } from '@typer/saksbehandler';
+import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
 
 export enum Sorteringsnøkkel {
     OPPRETTET_TIDSPUNKT = 'opprettetTidspunkt',
