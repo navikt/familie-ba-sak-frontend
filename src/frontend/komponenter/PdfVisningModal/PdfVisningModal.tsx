@@ -1,28 +1,16 @@
 import { useEffect } from 'react';
 
-import styled from 'styled-components';
-
 import { Heading, HStack, Loader, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+
+import styles from './PdfVisningModal.module.css';
 
 interface IPdfVisningModalProps {
     onRequestClose: () => void;
     onRequestOpen?: () => void;
     pdfdata: Ressurs<string>;
 }
-
-const StyledModal = styled(Modal)`
-    width: 80%;
-    height: 80%;
-    overflow: hidden;
-
-    section {
-        height: 100%;
-        width: 90%;
-        margin: 0 auto;
-    }
-`;
 
 /**
  * @Deprecated - Erstattes av {@link ForhåndsvisPdfModal}.
@@ -35,8 +23,8 @@ const PdfVisningModal = ({ onRequestClose, onRequestOpen, pdfdata }: IPdfVisning
     }, []);
 
     return (
-        <StyledModal
-            className={'pdfvisning-modal'}
+        <Modal
+            className={styles.modal}
             open
             onClose={onRequestClose}
             aria-label={'pdfvisning'}
@@ -45,15 +33,9 @@ const PdfVisningModal = ({ onRequestClose, onRequestOpen, pdfdata }: IPdfVisning
             portal
         >
             <Dokument pdfdata={pdfdata} />
-        </StyledModal>
+        </Modal>
     );
 };
-
-const IframePdfVisning = styled.iframe`
-    margin: 0 auto;
-    height: 100%;
-    width: 100%;
-`;
 
 const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
     switch (pdfdata.status) {
@@ -67,7 +49,7 @@ const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
                 </HStack>
             );
         case RessursStatus.SUKSESS:
-            return <IframePdfVisning title={'Dokument'} src={pdfdata.data} tabIndex={0} />;
+            return <iframe className={styles.iframe} title={'Dokument'} src={pdfdata.data} />;
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
         case RessursStatus.IKKE_TILGANG:

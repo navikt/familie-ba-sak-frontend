@@ -1,21 +1,15 @@
 import { useState } from 'react';
 
-import styled from 'styled-components';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { settPåVentÅrsaker } from '@typer/behandling';
+import type { IBehandling } from '@typer/behandling';
+import { defaultFunksjonellFeil } from '@typer/feilmeldinger';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
-
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import type { IBehandling } from '../../../../typer/behandling';
-import { settPåVentÅrsaker } from '../../../../typer/behandling';
-import { defaultFunksjonellFeil } from '../../../../typer/feilmeldinger';
-import { Datoformat, isoStringTilFormatertString } from '../../../../utils/dato';
-
-const StyledBodyShort = styled(BodyShort)`
-    padding-bottom: 1rem;
-`;
 
 interface Props {
     lukkModal: () => void;
@@ -58,15 +52,16 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                     {behandling?.aktivSettPåVent &&
                         ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
                 </BodyShort>
-                <StyledBodyShort>
+                <BodyShort>
                     {`Frist: ${isoStringTilFormatertString({
                         isoString: behandling?.aktivSettPåVent?.frist,
                         tilFormat: Datoformat.DATO,
                     })}. `}
                     Gå via meny for å endre årsak og frist på ventende behandling.
-                </StyledBodyShort>
-
-                <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
+                </BodyShort>
+                <Box marginBlock={'space-16 space-0'}>
+                    <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
+                </Box>
 
                 {submitRessurs.status === RessursStatus.FEILET && (
                     <Box paddingBlock={'space-0 space-16'}>

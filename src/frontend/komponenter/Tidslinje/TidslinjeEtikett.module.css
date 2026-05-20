@@ -1,0 +1,47 @@
+.etikettKnapp {
+    padding: 3px 3px 3px 3px;
+    width: 90%;
+    text-align: left;
+    cursor: pointer;
+
+    > span {
+        text-decoration: underline;
+        font-weight: normal;
+        color: var(--ax-text-accent);
+    }
+
+    &:focus,
+    &:active {
+        background-color: var(--ax-bg-neutral-strong-pressed);
+
+        > span {
+            font-weight: bold;
+            color: #fff;
+        }
+    }
+
+    &:hover {
+        > span {
+            text-decoration: none;
+        }
+    }
+
+    &:disabled {
+        cursor: default;
+
+        > span {
+            text-decoration: none;
+            color: var(--ax-text-neutral-subtle);
+        }
+    }
+}
+
+.valgt {
+    > span {
+        padding: 3px 3px 3px 5px;
+        border-left: 1px solid var(--ax-border-neutral-subtle);
+        text-decoration: none;
+        font-weight: bold;
+        color: var(--ax-text-neutral);
+    }
+}

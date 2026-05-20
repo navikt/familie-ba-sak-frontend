@@ -1,7 +1,6 @@
 import { isBefore, subDays } from 'date-fns';
-import styled from 'styled-components';
 
-import { Box, Button, Fieldset, LocalAlert, Modal, Textarea } from '@navikt/ds-react';
+import { Box, Button, Fieldset, LocalAlert, Modal, Textarea, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -12,12 +11,6 @@ import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling'
 import { dagensDato } from '../../../../utils/dato';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Datovelger from '../../../Datovelger/Datovelger';
-
-const StyledFieldset = styled(Fieldset)`
-    && > div:not(:last-child):not(:empty) {
-        margin-bottom: 1rem;
-    }
-`;
 
 interface Props {
     lukkModal: () => void;
@@ -58,51 +51,61 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
             }}
         >
             <Modal.Body>
-                <StyledFieldset
+                <Fieldset
                     error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
                     legend={'Opprett ny behandling'}
                     hideLegend
                 >
-                    <OpprettBehandlingValg skjema={opprettBehandlingSkjema} minimalFagsak={fagsak} bruker={bruker} />
-                    {opprettBehandlingSkjema.felter.behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                        opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                    <VStack gap={'space-16'}>
+                        <OpprettBehandlingValg
+                            skjema={opprettBehandlingSkjema}
+                            minimalFagsak={fagsak}
+                            bruker={bruker}
+                        />
+                        {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
+                            Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+                            opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
+                                <Datovelger
+                                    felt={opprettBehandlingSkjema.felter.migreringsdato}
+                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                    label={'Ny migreringsdato'}
+                                    maksDatoAvgrensning={maksdatoForMigrering}
+                                />
+                            )}
+                        {opprettBehandlingSkjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.TEKNISK_ENDRING &&
+                            opprettBehandlingSkjema.felter.begrunnelse?.erSynlig && (
+                                <Textarea
+                                    label={'Begrunnelse for opprettelse av teknisk endring'}
+                                    onChange={(event): void => {
+                                        opprettBehandlingSkjema.felter.begrunnelse.validerOgSettFelt(
+                                            event.target.value
+                                        );
+                                    }}
+                                    error={
+                                        opprettBehandlingSkjema.felter.begrunnelse.valideringsstatus ==
+                                            Valideringsstatus.FEIL &&
+                                        opprettBehandlingSkjema.felter.begrunnelse.feilmelding
+                                    }
+                                />
+                            )}
+                        {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
                             <Datovelger
-                                felt={opprettBehandlingSkjema.felter.migreringsdato}
+                                felt={opprettBehandlingSkjema.felter.søknadMottattDato}
                                 visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                label={'Ny migreringsdato'}
-                                maksDatoAvgrensning={maksdatoForMigrering}
+                                label={'Mottatt dato'}
+                                kanKunVelgeFortid
                             />
                         )}
-                    {opprettBehandlingSkjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.TEKNISK_ENDRING &&
-                        opprettBehandlingSkjema.felter.begrunnelse?.erSynlig && (
-                            <Textarea
-                                label={'Begrunnelse for opprettelse av teknisk endring'}
-                                onChange={(event): void => {
-                                    opprettBehandlingSkjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
-                                }}
-                                error={
-                                    opprettBehandlingSkjema.felter.begrunnelse.valideringsstatus ==
-                                        Valideringsstatus.FEIL && opprettBehandlingSkjema.felter.begrunnelse.feilmelding
-                                }
+                        {opprettBehandlingSkjema.felter.klageMottattDato?.erSynlig && (
+                            <Datovelger
+                                felt={opprettBehandlingSkjema.felter.klageMottattDato}
+                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
+                                label={'Klage mottatt'}
+                                kanKunVelgeFortid
                             />
                         )}
-                    {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                        <Datovelger
-                            felt={opprettBehandlingSkjema.felter.søknadMottattDato}
-                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                            label={'Mottatt dato'}
-                            kanKunVelgeFortid
-                        />
-                    )}
-                    {opprettBehandlingSkjema.felter.klageMottattDato?.erSynlig && (
-                        <Datovelger
-                            felt={opprettBehandlingSkjema.felter.klageMottattDato}
-                            visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                            label={'Klage mottatt'}
-                            kanKunVelgeFortid
-                        />
-                    )}
-                </StyledFieldset>
+                    </VStack>
+                </Fieldset>
                 {søknadMottattDatoErMerEnn360DagerSiden && (
                     <Box marginBlock={'space-24 space-0'}>
                         <LocalAlert status="warning">
