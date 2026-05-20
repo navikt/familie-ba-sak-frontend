@@ -2,6 +2,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BehandlingSteg, hentStegNummer } from '@typer/behandling';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
 import { FormProvider } from 'react-hook-form';
 
 import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
@@ -26,9 +27,12 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
         formState: { isSubmitting, errors },
     } = form;
 
+    const erBehandlendeEnhetMidlertidig =
+        behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;
     const erStegBeslutteVedtak = hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
     const erIkkeTotrinnskontrollSaksbehandler = saksbehandler.navIdent !== behandling.totrinnskontroll?.saksbehandlerId;
-    const skalOverstyreLesevisning = erStegBeslutteVedtak && erIkkeTotrinnskontrollSaksbehandler;
+    const skalOverstyreLesevisning =
+        erBehandlendeEnhetMidlertidig || (erStegBeslutteVedtak && erIkkeTotrinnskontrollSaksbehandler);
     const erRedigeringDeaktivert = erLesevisning && !skalOverstyreLesevisning;
 
     return (
