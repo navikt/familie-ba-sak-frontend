@@ -17,7 +17,7 @@ interface Props {
 export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
     const saksbehandler = useSaksbehandler();
     const behandling = useBehandling();
-    const erLesevisning = useErLesevisning({ sjekkTilgangTilEnhet: false });
+    const erLesevisning = useErLesevisning({ sjekkTilgangTilEnhet: false, skalIgnorereOmEnhetErMidlertidig: true });
 
     const { form, onSubmit } = useEndreBehandlendeEnhetForm({ lukkModal });
 
