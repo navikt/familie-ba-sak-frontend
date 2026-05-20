@@ -1,19 +1,9 @@
 import type { ReactNode } from 'react';
 
-import styled from 'styled-components';
-
-import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Box, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import { Målform, målform } from '../typer/søknad';
-
-const StyledRadioGroup = styled(RadioGroup)`
-    margin: 2rem 0;
-`;
-
-const StyledRadio = styled(Radio)`
-    padding-left: 1rem;
-`;
 
 interface IProps {
     målformFelt: Felt<Målform | undefined>;
@@ -33,30 +23,34 @@ const MålformVelger = ({
     };
 
     return (
-        <StyledRadioGroup
-            {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
-            readOnly={erLesevisning}
-            value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
-            legend={Legend}
-        >
-            <StyledRadio
-                value={målform[Målform.NB]}
-                name={'registrer-søknad-målform'}
-                checked={målformFelt.verdi === Målform.NB}
-                onChange={() => radioOnChange(Målform.NB)}
-                id={'målform-nb'}
+        <Box marginBlock={'space-32'}>
+            <RadioGroup
+                {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
+                readOnly={erLesevisning}
+                value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
+                legend={Legend}
             >
-                {målform[Målform.NB]}
-            </StyledRadio>
-            <StyledRadio
-                value={målform[Målform.NN]}
-                name={'registrer-søknad-målform'}
-                checked={målformFelt.verdi === Målform.NN}
-                onChange={() => radioOnChange(Målform.NN)}
-            >
-                {målform[Målform.NN]}
-            </StyledRadio>
-        </StyledRadioGroup>
+                <Box paddingInline={'space-16 space-0'}>
+                    <Radio
+                        value={målform[Målform.NB]}
+                        name={'registrer-søknad-målform'}
+                        checked={målformFelt.verdi === Målform.NB}
+                        onChange={() => radioOnChange(Målform.NB)}
+                        id={'målform-nb'}
+                    >
+                        {målform[Målform.NB]}
+                    </Radio>
+                    <Radio
+                        value={målform[Målform.NN]}
+                        name={'registrer-søknad-målform'}
+                        checked={målformFelt.verdi === Målform.NN}
+                        onChange={() => radioOnChange(Målform.NN)}
+                    >
+                        {målform[Målform.NN]}
+                    </Radio>
+                </Box>
+            </RadioGroup>
+        </Box>
     );
 };
 
