@@ -20,7 +20,7 @@ import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValut
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
 import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
-import SammensattKontrollsak from './SammensattKontrollsak/SammensattKontrollsak';
+import { SammensattKontrollsak } from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { Vedtaksperioder } from './Vedtaksperioder/Vedtaksperioder';
@@ -40,7 +40,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
     const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
 
-    const { erSammensattKontrollsak } = useSammensattKontrollsakContext();
+    const { sammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
 
@@ -155,7 +155,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                     </Box>
                 ) : (
                     <>
-                        {erSammensattKontrollsak ? (
+                        {sammensattKontrollsak ? (
                             <SammensattKontrollsak />
                         ) : (
                             <>

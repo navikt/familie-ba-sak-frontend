@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
+import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
 import { hentSideHref } from '@utils/miljø';
 import { Route, Routes, useLocation } from 'react-router';
 
@@ -16,11 +17,7 @@ import type { SideId } from './Sider/sider';
 import { sider } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
-import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
-import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
-import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 import { Vilkårsvurdering } from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 
@@ -80,15 +77,9 @@ export function BehandlingRouter() {
                 path="/vedtak"
                 element={
                     <SimuleringProvider>
-                        <FeilutbetaltValutaTabellProvider>
-                            <RefusjonEøsTabellProvider>
-                                <SammensattKontrollsakProvider>
-                                    <VedtaksperioderProvider>
-                                        <Vedtak />
-                                    </VedtaksperioderProvider>
-                                </SammensattKontrollsakProvider>
-                            </RefusjonEøsTabellProvider>
-                        </FeilutbetaltValutaTabellProvider>
+                        <VedtakContainer>
+                            <Vedtak />
+                        </VedtakContainer>
                     </SimuleringProvider>
                 }
             />
