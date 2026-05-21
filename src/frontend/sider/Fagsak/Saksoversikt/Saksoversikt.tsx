@@ -128,12 +128,12 @@ export function Saksoversikt() {
             <VStack gap="space-56">
                 <FagsakLenkepanel />
                 {fagsak.status === FagsakStatus.LØPENDE && (
-                    <>
+                    <VStack>
                         <Heading size="medium" level="2" spacing>
                             Løpende månedlig utbetaling
                         </Heading>
                         {løpendeMånedligUtbetaling()}
-                    </>
+                    </VStack>
                 )}
                 <Behandlinger />
             </VStack>
