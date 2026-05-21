@@ -91,6 +91,7 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
                         vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
                         utdypendeVilkårsvurderinger: redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
                         begrunnelseForManuellKontroll: redigerbartVilkår.verdi.begrunnelseForManuellKontroll,
+                        erOpprinneligPreutfyltIBehandling: redigerbartVilkår.verdi.erOpprinneligPreutfyltIBehandling,
                     },
                 ],
                 andreVurderinger: [],
