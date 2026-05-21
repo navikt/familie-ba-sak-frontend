@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
@@ -25,6 +25,9 @@ import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 import Styles from './BegrunnelserMultiselect.module.css';
 
+const FRITEKST_FEILMELDING =
+    'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg til en ny begrunnelse eller fjern friteksten(e).';
+
 const enkeltverdierSomKanSettesAutomatisk = [
     'Standardbegrunnelse$INNVILGET_SATSENDRING',
     Standardbegrunnelse.REDUKSJON_SATSENDRING,
@@ -32,8 +35,18 @@ const enkeltverdierSomKanSettesAutomatisk = [
     Standardbegrunnelse.REDUKSJON_UNDER_18_ÅR,
 ];
 
-export function BegrunnelserMultiselect() {
+export interface StandardbegrunnelserHandlinger {
+    tilbakestillKombinertFritekstfeilmelding: () => void;
+}
+
+interface Props {
+    imperativeRef: Ref<StandardbegrunnelserHandlinger>;
+    onSubmitSuccessful: () => void;
+}
+
+export function BegrunnelserMultiselect({ imperativeRef, onSubmitSuccessful }: Props) {
     const { vedtaksperiodeMedBegrunnelser } = useVedtaksperiodeContext();
+
     const { alleBegrunnelser } = useAlleBegrunnelserContext();
 
     const queryClient = useQueryClient();
@@ -42,6 +55,12 @@ export function BegrunnelserMultiselect() {
     const oppdaterVedtaksperioderMedFriteksterIsPending = useOppdaterVedtaksperiodeMedFriteksterIsPending(
         vedtaksperiodeMedBegrunnelser.id
     );
+
+    const [felmelding, settFelmelding] = useState<string | undefined>(undefined);
+
+    useImperativeHandle(imperativeRef, () => ({
+        tilbakestillKombinertFritekstfeilmelding: () => settFelmelding(undefined),
+    }));
 
     const {
         data: genererteBrevbegrunnelser,
@@ -62,6 +81,7 @@ export function BegrunnelserMultiselect() {
                 HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
                 vedtaksperioderMedBegrunnelser
             );
+            onSubmitSuccessful();
         },
     });
 
@@ -92,6 +112,7 @@ export function BegrunnelserMultiselect() {
         switch (action.action) {
             case 'select-option':
                 if (action.option) {
+                    settFelmelding(undefined);
                     oppdaterVedtaksperiodeMedBegrunnelser({
                         standardbegrunnelser: [
                             ...vedtaksperiodeMedBegrunnelser.begrunnelser.map(
@@ -105,21 +126,28 @@ export function BegrunnelserMultiselect() {
             case 'pop-value':
             case 'remove-value':
                 if (action.removedValue) {
-                    oppdaterVedtaksperiodeMedBegrunnelser({
-                        standardbegrunnelser: [
-                            ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
-                                persistertBegrunnelse =>
-                                    persistertBegrunnelse.standardbegrunnelse !==
-                                    (action.removedValue?.value as VedtakBegrunnelse)
-                            ),
-                        ].map(begrunnelse => begrunnelse.standardbegrunnelse),
-                    });
+                    const standardbegrunnelser = [
+                        ...vedtaksperiodeMedBegrunnelser.begrunnelser.filter(
+                            persistertBegrunnelse =>
+                                persistertBegrunnelse.standardbegrunnelse !==
+                                (action.removedValue?.value as VedtakBegrunnelse)
+                        ),
+                    ].map(begrunnelse => begrunnelse.standardbegrunnelse);
+                    if (standardbegrunnelser.length === 0 && vedtaksperiodeMedBegrunnelser.fritekster.length > 0) {
+                        settFelmelding(FRITEKST_FEILMELDING);
+                    } else {
+                        oppdaterVedtaksperiodeMedBegrunnelser({ standardbegrunnelser });
+                        settFelmelding(undefined);
+                    }
                 }
                 break;
             case 'clear':
-                oppdaterVedtaksperiodeMedBegrunnelser({
-                    standardbegrunnelser: [],
-                });
+                if (vedtaksperiodeMedBegrunnelser.fritekster.length > 0) {
+                    settFelmelding(FRITEKST_FEILMELDING);
+                } else {
+                    oppdaterVedtaksperiodeMedBegrunnelser({ standardbegrunnelser: [] });
+                    settFelmelding(undefined);
+                }
                 break;
             default:
                 throw new Error('Ukjent action ved onChange på vedtakbegrunnelser');
@@ -174,7 +202,11 @@ export function BegrunnelserMultiselect() {
                 oppdaterVedtaksperiodeMedBegrunnelserIsPending ||
                 genererteBrevbegrunnelserIsPending
             }
-            feil={oppdaterVedtaksperiodeMedBegrunnelserError?.message ?? genererteBrevbegrunnelserError?.message}
+            feil={
+                felmelding ??
+                oppdaterVedtaksperiodeMedBegrunnelserError?.message ??
+                genererteBrevbegrunnelserError?.message
+            }
             creatable={false}
             erLesevisning={skalIkkeEditeres}
             isMulti={true}
