@@ -4,7 +4,13 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
-import { BehandlingSteg, type IBehandling, kanLeggeTilUtvidetVilkår } from '@typer/behandling';
+import { UtfyllVilkårForBarnaAutomatisk } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/UtfyllVilkårForBarnaAutomatisk';
+import {
+    BehandlingSteg,
+    erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna,
+    type IBehandling,
+    kanLeggeTilUtvidetVilkår,
+} from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import { annenVurderingConfig, harPersonIkkeVurdertVilkår, vilkårConfig, VilkårType } from '@typer/vilkår';
@@ -86,6 +92,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 </LocalAlert>
             )}
             {vilkårsvurdering.map((personResultat, index) => {
+                const erSøker = personResultat.person.type === PersonType.SØKER;
                 const andreVurderinger = personResultat.andreVurderinger;
                 const harUtvidet = personResultat.vilkårResultater.find(
                     vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
@@ -93,10 +100,10 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 const personSkalSkjermesForBruker = personResultat.person.skjermesForBruker;
 
                 const skalKunneLeggeTilUtvidetBarnetrygdVilkår =
-                    !erLesevisning &&
-                    personResultat.person.type === PersonType.SØKER &&
-                    !harUtvidet &&
-                    kanLeggeTilUtvidetVilkår(behandling);
+                    !erLesevisning && erSøker && !harUtvidet && kanLeggeTilUtvidetVilkår(behandling);
+
+                const skalViseUtfyllVilkårForBarnaAutomatisk =
+                    erSøker && erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna(behandling);
 
                 return (
                     <EkspanderVilkårsvurderingProvider
@@ -215,6 +222,9 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                                 visFeilmeldinger={visFeilmeldinger}
                                                             />
                                                         ))}
+                                                {skalViseUtfyllVilkårForBarnaAutomatisk && (
+                                                    <UtfyllVilkårForBarnaAutomatisk />
+                                                )}
                                             </Box>
                                         </Activity>
                                     </>
