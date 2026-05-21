@@ -16,7 +16,7 @@ import EndreEndringstidspunkt from '../endringstidspunkt/EndreEndringstidspunkt'
 import { OppdaterEndringstidspunktModal } from '../endringstidspunkt/OppdaterEndringstidspunktModal';
 import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import KorrigerEtterbetaling from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
-import KorrigerVedtak from '../KorrigerVedtakModal/KorrigerVedtak';
+import { KorrigerVedtak } from '../KorrigerVedtakModal/KorrigerVedtak';
 import { KorrigerVedtakModal } from '../KorrigerVedtakModal/KorrigerVedtakModal';
 import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
@@ -62,10 +62,7 @@ export function Vedtaksmeny() {
                         korrigertEtterbetaling={behandling.korrigertEtterbetaling}
                         behandlingId={behandling.behandlingId}
                     />
-                    <KorrigerVedtak
-                        åpneModal={() => settVisKorrigerVedtakModal(true)}
-                        korrigertVedtak={behandling.korrigertVedtak}
-                    />
+                    <KorrigerVedtak åpneModal={() => settVisKorrigerVedtakModal(true)} />
                     <EndreEndringstidspunkt åpneModal={() => settVisEndreEndringstidspunktModal(true)} />
                     {behandling.type === Behandlingstype.REVURDERING &&
                         behandling.kategori === BehandlingKategori.EØS &&

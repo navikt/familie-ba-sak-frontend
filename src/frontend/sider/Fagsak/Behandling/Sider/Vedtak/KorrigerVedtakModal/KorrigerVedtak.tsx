@@ -1,20 +1,18 @@
-import type { IRestKorrigertVedtak } from '@typer/vedtak';
+import { useBehandling } from '@hooks/useBehandling';
 
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
 interface Props {
     åpneModal: () => void;
-    korrigertVedtak?: IRestKorrigertVedtak;
 }
 
-const KorrigerVedtak = ({ åpneModal, korrigertVedtak }: Props) => {
+export function KorrigerVedtak({ åpneModal }: Props) {
+    const behandling = useBehandling();
     return (
         <ActionMenu.Item onSelect={åpneModal}>
             <ExclamationmarkTriangleIcon fontSize={'1.4rem'} />
-            {korrigertVedtak ? <>Vis korrigert vedtak</> : <>Korriger vedtak</>}
+            {behandling.korrigertVedtak ? <>Vis korrigert vedtak</> : <>Korriger vedtak</>}
         </ActionMenu.Item>
     );
-};
-
-export default KorrigerVedtak;
+}
