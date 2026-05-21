@@ -1,26 +1,15 @@
-import { differenceInMilliseconds } from 'date-fns';
-
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-
-import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
-import { BehandlingSteg, type IBehandling } from '../../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../../typer/person';
-import { PersonTypeVisningsRangering } from '../../../../../typer/person';
+import { BehandlingSteg, type IBehandling } from '@typer/behandling';
+import type { IGrunnlagPerson } from '@typer/person';
+import { PersonTypeVisningsRangering } from '@typer/person';
 import {
     type IPersonResultat,
     type IRestPersonResultat,
     type IRestVilkårResultat,
     type IVilkårResultat,
     Resultat,
-} from '../../../../../typer/vilkår';
-import type { IIsoDatoPeriode } from '../../../../../utils/dato';
-import {
-    isoStringTilDate,
-    isoStringTilDateMedFallback,
-    nyIsoDatoPeriode,
-    tidenesEnde,
-} from '../../../../../utils/dato';
+} from '@typer/vilkår';
+import type { IIsoDatoPeriode } from '@utils/dato';
+import { isoStringTilDate, isoStringTilDateMedFallback, nyIsoDatoPeriode, tidenesEnde } from '@utils/dato';
 import {
     erAvslagBegrunnelserGyldig,
     erBegrunnelseGyldig,
@@ -29,7 +18,13 @@ import {
     erUtdypendeVilkårsvurderingerGyldig,
     ikkeValider,
     lagInitiellFelt,
-} from '../../../../../utils/validators';
+} from '@utils/validators';
+import { differenceInMilliseconds } from 'date-fns';
+
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { FeltState } from '@navikt/familie-skjema';
+
+import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
 const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     if (!periodeA.fom && !periodeA.tom) {
@@ -122,6 +117,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                                         erUtdypendeVilkårsvurderingerGyldig
                                     ),
                                     begrunnelseForManuellKontroll: vilkårResultat.begrunnelseForManuellKontroll,
+                                    erOpprinneligPreutfyltIBehandling: vilkårResultat.erOpprinneligPreutfyltIBehandling,
                                 },
                                 validerVilkår
                             )
@@ -184,6 +180,7 @@ export const utledVilkårSomMåKontrolleresPerPerson = (
         }
 
         const vilkårSomMåKontrolleres = personResultat.vilkårResultater
+            .filter(v => v.verdi.erOpprinneligPreutfyltIBehandling === behandling.behandlingId)
             .map(v => v.verdi.begrunnelseForManuellKontroll)
             .filter(bfmk => bfmk !== null);
 
