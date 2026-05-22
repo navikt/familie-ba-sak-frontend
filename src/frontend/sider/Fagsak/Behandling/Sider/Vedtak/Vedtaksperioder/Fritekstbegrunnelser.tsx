@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { type Ref, useId, useImperativeHandle } from 'react';
 
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
@@ -35,7 +35,16 @@ export const MAKS_LENGDE_FRITEKST = 350;
 const MAKS_ANTALL_KULEPUNKT = 3;
 const KLARSPRÅK_URL = 'https://navno.sharepoint.com/sites/intranett-kommunikasjon/SitePages/Språk.aspx';
 
-export function Fritekstbegrunnelser() {
+export interface FritekstbegrunnelserHandlinger {
+    tilbakestillKombinertFritekstfeilmelding: () => void;
+}
+
+interface Props {
+    imperativeRef: Ref<FritekstbegrunnelserHandlinger>;
+    onSubmitSuccessful: () => void;
+}
+
+export function Fritekstbegrunnelser({ imperativeRef, onSubmitSuccessful }: Props) {
     const { vedtaksperiodeMedBegrunnelser, onPanelClose } = useVedtaksperiodeContext();
 
     const erLesevisning = useErLesevisning();
@@ -53,14 +62,19 @@ export function Fritekstbegrunnelser() {
         leggTilFritekstbegrunnelse,
         slettFritekstbegrunnelse,
         validerBegrunnelse,
-    } = useFritekstbegrunnelserForm();
+    } = useFritekstbegrunnelserForm({ onSubmitSuccessful });
 
     const {
         handleSubmit,
         register,
         formState: { isSubmitting, errors },
         reset,
+        clearErrors,
     } = form;
+
+    useImperativeHandle(imperativeRef, () => ({
+        tilbakestillKombinertFritekstfeilmelding: () => clearErrors('root.kombinerteBegrunnelserFeilmelding'),
+    }));
 
     function onAvbryt() {
         onPanelClose(false);
@@ -121,7 +135,7 @@ export function Fritekstbegrunnelser() {
                         id={fieldsetId}
                         legend={'Fritekst til kulepunkt i brev'}
                         hideLegend={true}
-                        error={errors.root?.message}
+                        error={errors.root?.message ?? errors.root?.kombinerteBegrunnelserFeilmelding?.message}
                     >
                         <VStack gap={'space-16'}>
                             {fields.map((field, index) => {
