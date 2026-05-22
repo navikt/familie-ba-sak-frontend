@@ -129,7 +129,7 @@ export function Saksoversikt() {
                 <FagsakLenkepanel />
                 {fagsak.status === FagsakStatus.LØPENDE && (
                     <VStack>
-                        <Heading size="medium" level="2" spacing>
+                        <Heading size="medium" level="2">
                             Løpende månedlig utbetaling
                         </Heading>
                         {løpendeMånedligUtbetaling()}
