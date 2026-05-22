@@ -13,6 +13,9 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 const NY_FRITEKSTBEGRUNNELSE = { value: '' };
 
+const FRITEKST_FEILMELDING =
+    'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg til en ny begrunnelse eller fjern friteksten(e).';
+
 interface Fritekstbegrunnelse {
     value: string;
 }
@@ -25,7 +28,11 @@ export interface FormValues {
     [Field.FRITEKSTBEGRUNNELSER]: Fritekstbegrunnelse[];
 }
 
-export function useFritekstbegrunnelserForm() {
+interface Props {
+    onSubmitSuccessful: () => void;
+}
+
+export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
     const { vedtaksperiodeMedBegrunnelser, settErSkjemaendringer } = useVedtaksperiodeContext();
 
     const queryClient = useQueryClient();
@@ -74,6 +81,7 @@ export function useFritekstbegrunnelserForm() {
                     HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
                     vedtaksperioderMedBegrunnelser
                 );
+                onSubmitSuccessful();
             },
             onError: error => setError('root', { message: error.message ?? 'En ukjent feil oppstod.' }),
         }
@@ -107,6 +115,10 @@ export function useFritekstbegrunnelserForm() {
     }
 
     function onSubmit({ fritekstbegrunnelser }: FormValues) {
+        if (vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0) {
+            setError('root.kombinerteBegrunnelserFeilmelding', { message: FRITEKST_FEILMELDING });
+            return;
+        }
         const fritekster = fritekstbegrunnelser.map(fritekstbegrunnelse => fritekstbegrunnelse.value);
         return oppdaterVedtaksperiodeMedFritekster({ fritekster });
     }
