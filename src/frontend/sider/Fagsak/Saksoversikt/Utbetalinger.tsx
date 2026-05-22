@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { BorderNeutralStrong, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
+import { BorderNeutralStrong, Space24, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import PersonUtbetaling from './PersonUtbetaling';
@@ -11,7 +11,7 @@ import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
 
 const LøpendeUtbetalinger = styled(VStack)`
     max-width: ${SaksoversiktPanelBredde};
-    margin-top: ${Space32};
+    margin-top: ${Space24};
 `;
 
 const Totallinje = styled(HStack)`
