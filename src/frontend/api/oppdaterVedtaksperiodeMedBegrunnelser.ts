@@ -16,7 +16,7 @@ export async function oppdaterVedtaksperiodeMedBegrunnelser(
 ) {
     const ressurs = await request<Payload, IVedtaksperiodeMedBegrunnelser[]>({
         method: 'PUT',
-        url: `/familie-ba-sak/api/vedtaksperioder/standardbegrunnelser/${vedtaksperiodeMedBegrunnelserId}`,
+        url: `/familie-ba-sak/api/vedtaksperioder/begrunnelser/${vedtaksperiodeMedBegrunnelserId}`,
         data: payload,
     });
     return RessursResolver.resolveToPromise(ressurs);
