@@ -14,7 +14,7 @@ interface Parameters {
     refusjonEøsId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'> & {
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'> & {
     refusjonEøsId: number;
 };
 

@@ -10,7 +10,7 @@ interface Parameters {
     payload: OpprettRefusjonEøsPayload;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOpprettRefusjonEøs(options: Options = {}) {
     const { request } = useHttp();

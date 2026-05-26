@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 /**
  * Kun brukt for manuell testing. Kjekt for å f.eks. simulere et tregt nettverkskall.
  *

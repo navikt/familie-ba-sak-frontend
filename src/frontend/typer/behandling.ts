@@ -326,14 +326,6 @@ export interface IArbeidsfordelingPåBehandling {
     manueltOverstyrt: boolean;
 }
 
-export interface IOpprettBehandlingData {
-    behandlingType: Behandlingstype;
-    behandlingÅrsak: BehandlingÅrsak;
-    kategori: BehandlingKategori;
-    navIdent?: string;
-    underkategori: BehandlingUnderkategori;
-}
-
 export const behandlerRoller: INøkkelPar = {
     SYSTEM: { id: 'SYSTEM', navn: 'System' },
     VEILEDER: { id: 'VEILEDER', navn: 'Veileder' },

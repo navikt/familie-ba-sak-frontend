@@ -37,19 +37,6 @@ export const sjekkErGyldigIdent = (verdi: string): boolean => {
     return idnr(verdi).status === 'valid';
 };
 
-const harFyltInnOrgnr = (felt: FeltState<string>): FeltState<string> => {
-    return /^\d{9}$/.test(felt.verdi.replace(' ', '')) ? ok(felt) : feil(felt, 'Orgnummer har ikke 9 tall');
-};
-
-export const orgnummerValidator = (orgnummerFelt: FeltState<string>): FeltState<string> => {
-    const validated = harFyltInnOrgnr(orgnummerFelt);
-    if (validated.valideringsstatus !== Valideringsstatus.OK) {
-        return validated;
-    }
-
-    return ok(orgnummerFelt);
-};
-
 const finnesDatoEtterFødselsdatoPluss18 = (person: IGrunnlagPerson, fom: Date, tom?: Date) => {
     const fødselsdatoPluss18 = addYears(isoStringTilDate(person.fødselsdato), 18);
     return (

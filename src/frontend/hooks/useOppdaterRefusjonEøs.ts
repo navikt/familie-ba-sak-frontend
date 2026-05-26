@@ -11,7 +11,7 @@ interface Parameters {
     payload: OppdaterRefusjonEøsPayload;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOppdaterRefusjonEøs(options: Options = {}) {
     const { request } = useHttp();
