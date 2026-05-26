@@ -1,3 +1,7 @@
+import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
+import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { dagensDato } from '@utils/dato';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { isBefore, subDays } from 'date-fns';
 
 import { Box, Button, Fieldset, LocalAlert, Modal, Textarea, VStack } from '@navikt/ds-react';
@@ -6,10 +10,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import OpprettBehandlingValg from './OpprettBehandlingValg';
 import useOpprettBehandling from './useOpprettBehandling';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import { dagensDato } from '../../../../utils/dato';
-import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import Datovelger from '../../../Datovelger/Datovelger';
 
 interface Props {

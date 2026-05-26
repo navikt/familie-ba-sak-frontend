@@ -1,29 +1,28 @@
 import { useEffect } from 'react';
 
+import { HentBarnetrygdbehandlingerQueryKeyFactory } from '@hooks/useHentBarnetrygdbehandlinger';
+import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
+import { HentKlagebehandlingerQueryKeyFactory } from '@hooks/useHentKlagebehandlinger';
+import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '@hooks/useHentTilbakekrevingsbehandlinger';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { useBrukerContext } from '@sider/Fagsak/BrukerContext';
+import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { useQueryClient } from '@tanstack/react-query';
+import type { IBehandling, IRestNyBehandling } from '@typer/behandling';
+import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import type { IBehandlingstema } from '@typer/behandlingstema';
+import { behandlingstemaer } from '@typer/behandlingstema';
+import type { OptionType } from '@typer/common';
+import { FagsakType } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
+import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import type { IsoDatoString } from '@utils/dato';
+import { dateTilIsoDatoString, dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '@utils/dato';
 import { useNavigate } from 'react-router';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
-
-import { HentBarnetrygdbehandlingerQueryKeyFactory } from '../../../../hooks/useHentBarnetrygdbehandlinger';
-import { HentFagsakQueryKeyFactory } from '../../../../hooks/useHentFagsak';
-import { HentKlagebehandlingerQueryKeyFactory } from '../../../../hooks/useHentKlagebehandlinger';
-import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '../../../../hooks/useHentTilbakekrevingsbehandlinger';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import { useBrukerContext } from '../../../../sider/Fagsak/BrukerContext';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import type { IBehandling, IRestNyBehandling } from '../../../../typer/behandling';
-import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '../../../../typer/behandling';
-import type { IBehandlingstema } from '../../../../typer/behandlingstema';
-import { behandlingstemaer } from '../../../../typer/behandlingstema';
-import type { OptionType } from '../../../../typer/common';
-import { FagsakType } from '../../../../typer/fagsak';
-import { Klagebehandlingstype } from '../../../../typer/klage';
-import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekrevingsbehandling';
-import type { IsoDatoString } from '../../../../utils/dato';
-import { dateTilIsoDatoString, dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../../../../utils/dato';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
