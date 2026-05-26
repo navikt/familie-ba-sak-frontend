@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { useFagsakApi } from '@api/useFagsakApi';
-import { useAppContext } from '@context/AppContext';
+import { useToastContext } from '@context/ToastContext';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import type { IMinimalFagsak } from '@typer/fagsak';
@@ -52,7 +52,7 @@ interface OppgavebenkContextValue {
 const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(undefined);
 
 export const OppgavebenkProvider = (props: PropsWithChildren) => {
-    const { settToast } = useAppContext();
+    const { settToast } = useToastContext();
     const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const { request } = useHttp();

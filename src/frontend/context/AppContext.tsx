@@ -1,14 +1,6 @@
-import {
-    type Dispatch,
-    type JSX,
-    type PropsWithChildren,
-    type ReactNode,
-    type SetStateAction,
-    useContext,
-} from 'react';
+import { type JSX, type PropsWithChildren, type ReactNode, useContext } from 'react';
 import { createContext, useState } from 'react';
 
-import type { IToast, ToastTyper } from '@komponenter/Toast/typer';
 import type { IPersonInfo, IRestTilgang } from '@typer/person';
 import { adressebeskyttelsestyper } from '@typer/person';
 import type { AxiosRequestConfig } from 'axios';
@@ -57,10 +49,7 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
 
 interface AppContextValue {
     appInfoModal: IModal;
-    settToast: (toastId: ToastTyper, toast: IToast) => void;
-    settToasts: Dispatch<SetStateAction<{ [toastId: string]: IToast }>>;
     sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
-    toasts: { [toastId: string]: IToast };
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
 }
 
@@ -70,7 +59,6 @@ const AppProvider = (props: PropsWithChildren) => {
     const { request } = useHttp();
 
     const [appInfoModal, settAppInfoModal] = useState<IModal>(initalState);
-    const [toasts, settToasts] = useState<{ [toastId: string]: IToast }>({});
 
     const lukkModal = () => {
         settAppInfoModal(initalState);
@@ -119,14 +107,7 @@ const AppProvider = (props: PropsWithChildren) => {
         <AppContext.Provider
             value={{
                 appInfoModal,
-                settToast: (toastId: ToastTyper, toast: IToast) =>
-                    settToasts({
-                        ...toasts,
-                        [toastId]: toast,
-                    }),
-                settToasts,
                 sjekkTilgang,
-                toasts,
                 hentPerson,
             }}
         >
