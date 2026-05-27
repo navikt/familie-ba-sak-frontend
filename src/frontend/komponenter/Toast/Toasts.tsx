@@ -1,9 +1,10 @@
+import { useToastContext } from '@context/ToastContext';
+
 import Toast from './Toast';
 import styles from './Toasts.module.css';
-import { useAppContext } from '../../context/AppContext';
 
 const Toasts = () => {
-    const { toasts } = useAppContext();
+    const { toasts } = useToastContext();
 
     return (
         <div className={styles.container}>

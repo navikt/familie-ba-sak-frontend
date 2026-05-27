@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useAppContext } from '@context/AppContext';
+import { useToastContext } from '@context/ToastContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import type { IOppgave } from '@typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '@typer/oppgave';
@@ -16,7 +17,7 @@ interface IOppgaveDirektelenke {
 }
 
 export function OppgaveDirektelenke({ oppgave }: IOppgaveDirektelenke) {
-    const { settToast } = useAppContext();
+    const { settToast } = useToastContext();
     const { gåTilFagsakEllerVisFeilmelding } = useOppgavebenkContext();
     const { sjekkTilgang } = useAppContext();
     const [laster, settLaster] = useState<boolean>(false);

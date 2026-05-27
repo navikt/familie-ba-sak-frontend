@@ -1,14 +1,13 @@
+import { settAktivBrukerIModiaContext } from '@api/settAktivBrukerIModiaContext';
+import { useToastContext } from '@context/ToastContext';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { useMutation } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
 
-import { settAktivBrukerIModiaContext } from '../api/settAktivBrukerIModiaContext';
-import { useAppContext } from '../context/AppContext';
-import { AlertType, ToastTyper } from '../komponenter/Toast/typer';
-
 export function useSettAktivBrukerIModiaContext() {
     const { request } = useHttp();
-    const { settToast } = useAppContext();
+    const { settToast } = useToastContext();
     return useMutation({
         mutationFn: (personIdent: string) => settAktivBrukerIModiaContext(request, personIdent),
         onError: () => {

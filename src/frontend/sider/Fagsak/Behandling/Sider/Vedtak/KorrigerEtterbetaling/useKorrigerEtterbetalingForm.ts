@@ -1,15 +1,15 @@
+import { ModalType } from '@context/ModalContext';
+import { useToastContext } from '@context/ToastContext';
+import { useAngreKorrigertEtterbetaling } from '@hooks/useAngreKorrigertEtterbetaling';
+import { useKorrigerEtterbetaling } from '@hooks/useKorrigerEtterbetaling';
+import { useModal } from '@hooks/useModal';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import type { OptionType } from '@typer/common';
+import { KorrigertEtterbetalingÅrsak } from '@typer/vedtak';
 import { useForm } from 'react-hook-form';
 
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useAppContext } from '../../../../../../context/AppContext';
-import { ModalType } from '../../../../../../context/ModalContext';
-import { useAngreKorrigertEtterbetaling } from '../../../../../../hooks/useAngreKorrigertEtterbetaling';
-import { useKorrigerEtterbetaling } from '../../../../../../hooks/useKorrigerEtterbetaling';
-import { useModal } from '../../../../../../hooks/useModal';
-import { AlertType, ToastTyper } from '../../../../../../komponenter/Toast/typer';
-import type { OptionType } from '../../../../../../typer/common';
-import { KorrigertEtterbetalingÅrsak } from '../../../../../../typer/vedtak';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 interface KorrigerEtterbetalingFormValues {
@@ -45,7 +45,7 @@ export function useKorrigerEtterbetalingForm() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const korrigertEtterbetaling = behandling.korrigertEtterbetaling;
 
-    const { settToast } = useAppContext();
+    const { settToast } = useToastContext();
 
     const { mutateAsync: korrigerEtterbetalingAsync } = useKorrigerEtterbetaling();
 

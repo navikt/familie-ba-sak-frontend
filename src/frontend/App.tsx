@@ -6,6 +6,7 @@ import { AuthContextProvider } from '@context/AuthContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ModalProvider } from '@context/ModalContext';
 import { SaksbehandlerProvider } from '@context/SaksbehandlerContext';
+import { ToastProvider } from '@context/ToastContext';
 import { FeatureTogglesProvider } from '@context/TogglesContext';
 import { useStartUmami } from '@hooks/useStartUmami';
 import { ErrorBoundary, ErrorBoundaryMedSaksbehandler } from '@komponenter/ErrorBoundary/ErrorBoundary';
@@ -37,7 +38,9 @@ export function App() {
                                 <FeatureTogglesProvider>
                                     <AppProvider>
                                         <ModalProvider>
-                                            <Container />
+                                            <ToastProvider>
+                                                <Container />
+                                            </ToastProvider>
                                         </ModalProvider>
                                     </AppProvider>
                                 </FeatureTogglesProvider>

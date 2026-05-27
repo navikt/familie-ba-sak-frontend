@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useEffect, useState } from 'react';
 
-import { useAppContext } from '@context/AppContext';
+import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
 import { Skillelinje } from '@komponenter/PersonInformasjon/PersonInformasjon';
@@ -110,7 +110,7 @@ const Oppsummeringsboks = ({
 }: IProps) => {
     const { request } = useHttp();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { settToast } = useAppContext();
+    const { settToast } = useToastContext();
     const { settAktivEtikett } = useTidslinjeContext();
 
     const erLesevisning = useErLesevisning();
