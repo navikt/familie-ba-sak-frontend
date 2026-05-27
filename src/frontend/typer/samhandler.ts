@@ -1,7 +1,3 @@
-export interface ISøkSamhandlerInfoRequest {
-    navn: string;
-}
-
 export interface ISamhandlerInfoRequest {
     orgnr: string;
 }

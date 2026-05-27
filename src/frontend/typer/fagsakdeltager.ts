@@ -8,24 +8,6 @@ export enum FagsakDeltagerRolle {
     Ukjent = 'UKJENT',
 }
 
-export const fagsakdeltagerRoller: Record<FagsakDeltagerRolle, Record<kjønnType, string>> = {
-    BARN: {
-        MANN: 'BARN',
-        KVINNE: 'BARN',
-        UKJENT: 'BARN',
-    },
-    FORELDER: {
-        MANN: 'FAR',
-        KVINNE: 'MOR',
-        UKJENT: 'FORELDER',
-    },
-    UKJENT: {
-        MANN: '',
-        KVINNE: '',
-        UKJENT: '',
-    },
-};
-
 export interface IFagsakDeltager {
     navn?: string;
     ident: string;

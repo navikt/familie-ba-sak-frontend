@@ -14,7 +14,7 @@ interface Parameters {
     feilutbetaltValutaId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'> & {
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'> & {
     feilutbetaltValutaId: number;
 };
 

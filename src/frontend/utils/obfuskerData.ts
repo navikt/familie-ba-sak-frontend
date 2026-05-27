@@ -2,9 +2,8 @@ import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import type { IBehandling } from '../typer/behandling';
-import type { IMinimalFagsak } from '../typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
-import { ForelderBarnRelasjonRolle, type IGrunnlagPerson, type IPersonInfo, PersonType } from '../typer/person';
+import { type IGrunnlagPerson, PersonType } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
 
 export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
@@ -66,39 +65,6 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
                 brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' ');
             brevmottaker.adresselinje1 = 'Mottakerveien 1';
             brevmottaker.adresselinje2 = undefined;
-        });
-    }
-};
-
-export const obfuskerPersonInfo = (personInfo: Ressurs<IPersonInfo>) => {
-    if (personInfo.status === RessursStatus.SUKSESS) {
-        personInfo.data.navn = 'Søker Søkersen';
-        personInfo.data.bostedsadresse = {
-            adresse: 'Adresseveien 1',
-            postnummer: '0001',
-        };
-        let indeks = 1;
-        personInfo.data.forelderBarnRelasjon?.sort(sammenlignFødselsdato).forEach(person => {
-            if (person.relasjonRolle === ForelderBarnRelasjonRolle.BARN) {
-                person.navn = '[' + indeks++ + '] Barn Barnesen';
-            } else {
-                person.navn = 'Søker Søkersen';
-            }
-        });
-    }
-};
-
-export const obfuskerFagsak = (fagsak: Ressurs<IMinimalFagsak>) => {
-    if (fagsak.status === RessursStatus.SUKSESS) {
-        fagsak.data.gjeldendeUtbetalingsperioder?.forEach(gup => {
-            let indeks = 1;
-            gup.utbetalingsperiodeDetaljer?.sort(sammenlignFødselsdato).forEach(upd => {
-                if (upd.person.type === PersonType.SØKER) {
-                    upd.person.navn = 'Søker Søkersen';
-                } else {
-                    upd.person.navn = '[' + indeks++ + '] Barn Barnesen';
-                }
-            });
         });
     }
 };

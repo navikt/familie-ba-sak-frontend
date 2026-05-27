@@ -9,7 +9,7 @@ interface Parameters {
     endringstidspunkt: string;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters, unknown>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOppdaterEndringstidspunkt(behandlingId: number, options?: Options) {
     const { request } = useHttp();
