@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
-import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
+import { useBehandlingId } from '@hooks/useBehandlingId';
+import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
+import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 
-import { useHentVedtaksperioder } from '../../../../../../hooks/useHentVedtaksperioder';
-import type { IVedtaksperiodeMedBegrunnelser } from '../../../../../../typer/vedtaksperiode';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
 
 interface VedtaksperioderContext {
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[];
@@ -18,8 +18,8 @@ interface Props extends PropsWithChildren {
 }
 
 export function VedtaksperioderProvider({ children }: Props) {
-    const { behandling } = useBehandlingContext();
-    const behandlingId = behandling.behandlingId;
+    const behandlingId = useBehandlingId();
+
     const { data, isPending, error } = useHentVedtaksperioder(behandlingId);
 
     if (isPending) {

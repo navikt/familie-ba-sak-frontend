@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
-import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
+import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
+import type { AlleBegrunnelser } from '@typer/vilkår';
 
-import { useHentAlleBegrunnelser } from '../../../../../hooks/useHentAlleBegrunnelser';
-import type { AlleBegrunnelser } from '../../../../../typer/vilkår';
+import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
 
 interface AlleBegrunnelserContext {
     alleBegrunnelser: AlleBegrunnelser;

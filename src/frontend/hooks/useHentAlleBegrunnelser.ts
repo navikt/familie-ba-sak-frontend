@@ -1,8 +1,7 @@
+import { hentAlleBegrunnelser } from '@api/hentAlleBegrunnelser';
 import { useQuery } from '@tanstack/react-query';
 
 import { useHttp } from '@navikt/familie-http';
-
-import { hentAlleBegrunnelser } from '../api/hentAlleBegrunnelser';
 
 export const HentAlleBegrunnelserQueryKeyFactory = {
     alleBegrunnelser: () => ['alleBegrunnelser'],

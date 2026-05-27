@@ -1,76 +1,73 @@
-import { Fragment } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { partition } from '@utils/commons';
-import styled from 'styled-components';
 
-import { Heading } from '@navikt/ds-react';
+import { Heading, VStack } from '@navikt/ds-react';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
 import { Vedtaksperiode } from './Vedtaksperiode';
 import { VedtaksperiodeProvider } from './VedtaksperiodeContext';
 import { useVedtaksperioderContext } from './VedtaksperioderContext';
 
-const StyledHeading = styled(Heading)`
-    display: flex;
-    margin-top: 1rem;
-`;
-
 export function Vedtaksperioder() {
     const { vedtaksperioder } = useVedtaksperioderContext();
 
     const behandling = useBehandling();
 
-    const vedtaksperioderSomSkalvises = filtrerOgSorterPerioderMedBegrunnelseBehov(vedtaksperioder, behandling.status);
+    const vedtaksperioderSomSkalVises = filtrerOgSorterPerioderMedBegrunnelseBehov(vedtaksperioder, behandling.status);
 
-    const avslagOgResterende = partition(
-        vedtaksperiode =>
-            vedtaksperiode.type === Vedtaksperiodetype.AVSLAG && !vedtaksperiode.fom && !vedtaksperiode.tom,
-        vedtaksperioderSomSkalvises
-    );
+    const [avslagsbegrunnelser, begrunnelser] = partition(vedtaksperiode => {
+        const erAvslag = vedtaksperiode.type === Vedtaksperiodetype.AVSLAG;
+        const harIngenFom = !vedtaksperiode.fom;
+        const harIngenTom = !vedtaksperiode.tom;
+        return erAvslag && harIngenFom && harIngenTom;
+    }, vedtaksperioderSomSkalVises);
 
-    return vedtaksperioderSomSkalvises.length > 0 ? (
-        <>
+    if (vedtaksperioderSomSkalVises.length <= 0) {
+        return null;
+    }
+
+    return (
+        <VStack gap={'space-32'} marginBlock={'space-32'}>
             <GrupperteVedtaksperioder
-                vedtaksperioderMedBegrunnelser={avslagOgResterende[1]}
+                vedtaksperioderMedBegrunnelser={begrunnelser}
                 overskrift={'Begrunnelser i vedtaksbrev'}
             />
             <GrupperteVedtaksperioder
-                vedtaksperioderMedBegrunnelser={avslagOgResterende[0]}
+                vedtaksperioderMedBegrunnelser={avslagsbegrunnelser}
                 overskrift={'Generelle avslagsbegrunnelser'}
             />
-        </>
-    ) : (
-        <Fragment />
+        </VStack>
     );
 }
 
-const GrupperteVedtaksperioder = ({
+function GrupperteVedtaksperioder({
     vedtaksperioderMedBegrunnelser,
     overskrift,
 }: {
     vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[];
     overskrift: string;
-}) => {
+}) {
     if (vedtaksperioderMedBegrunnelser.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (
-        <>
-            <StyledHeading level="2" size="small" spacing>
+        <VStack gap={'space-0'}>
+            <Heading level={'2'} size={'small'} spacing={true}>
                 {overskrift}
-            </StyledHeading>
-            {vedtaksperioderMedBegrunnelser.map(vedtaksperiodeMedBegrunnelser => (
-                <VedtaksperiodeProvider
-                    key={vedtaksperiodeMedBegrunnelser.id}
-                    vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
-                >
-                    <Vedtaksperiode />
-                </VedtaksperiodeProvider>
-            ))}
-        </>
+            </Heading>
+            <VStack gap={'space-20'}>
+                {vedtaksperioderMedBegrunnelser.map(vedtaksperiodeMedBegrunnelser => (
+                    <VedtaksperiodeProvider
+                        key={vedtaksperiodeMedBegrunnelser.id}
+                        vedtaksperiodeMedBegrunnelser={vedtaksperiodeMedBegrunnelser}
+                    >
+                        <Vedtaksperiode />
+                    </VedtaksperiodeProvider>
+                ))}
+            </VStack>
+        </VStack>
     );
-};
+}
