@@ -4,7 +4,6 @@ import path from 'path';
 
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
-import expressStaticGzip from 'express-static-gzip';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { IApp } from '@navikt/familie-backend';
@@ -27,7 +26,7 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
     });
 
     if (!erLokal()) {
-        app.use('/assets', expressStaticGzip(path.join(process.cwd(), frontendPath, 'assets'), {}));
+        app.use('/assets', express.static(path.join(process.cwd(), frontendPath, 'assets')));
         app.use('/favicon.svg', express.static(path.join(process.cwd(), frontendPath, 'favicon.svg'), {}));
     }
 
