@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { useAppContext } from '@context/AppContext';
-import { useToastContext } from '@context/ToastContext';
-import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import { useVisManglerTilgangModal } from '@context/ManglerTilgangModalContext';
+import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
+import { useSjekkSaksbehandlertilgangTilIdent } from '@hooks/useSjekkSaksbehandlertilgangTilIdent';
 import type { IOppgave } from '@typer/oppgave';
 import { oppgaveTypeFilter, OppgavetypeFilter } from '@typer/oppgave';
 import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
@@ -12,24 +12,35 @@ import { Button } from '@navikt/ds-react';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 
-interface IOppgaveDirektelenke {
+interface Props {
     oppgave: IOppgave;
 }
 
-export function OppgaveDirektelenke({ oppgave }: IOppgaveDirektelenke) {
-    const { settToast } = useToastContext();
+export function OppgaveDirektelenke({ oppgave }: Props) {
     const { gåTilFagsakEllerVisFeilmelding } = useOppgavebenkContext();
-    const { sjekkTilgang } = useAppContext();
-    const [laster, settLaster] = useState<boolean>(false);
-    const navigate = useNavigate();
-    const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
 
-    async function visTilgangsmodalEllerSendVidere(oppgave: IOppgave) {
+    const visTekniskFeilModal = useVisTekniskFeilModal();
+    const visManglerTilgangModal = useVisManglerTilgangModal();
+
+    const navigate = useNavigate();
+
+    const [laster, settLaster] = useState(false);
+
+    const { mutateAsync: sjekkSaksbehandlertilgangTilIdent } = useSjekkSaksbehandlertilgangTilIdent();
+
+    async function navigerTilJournalføring() {
         settLaster(true);
-        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (brukerident) {
-            if (await sjekkTilgang(brukerident, false)) {
-                navigate(`/oppgaver/journalfor/${oppgave.id}`);
+        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (brukerIdent) {
+            try {
+                const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
+                if (tilgangsreusltat.saksbehandlerHarTilgang) {
+                    navigate(`/oppgaver/journalfor/${oppgave.id}`);
+                } else {
+                    visManglerTilgangModal(tilgangsreusltat);
+                }
+            } catch (error) {
+                visTekniskFeilModal(error);
             }
         } else {
             navigate(`/oppgaver/journalfor/${oppgave.id}`);
@@ -37,43 +48,39 @@ export function OppgaveDirektelenke({ oppgave }: IOppgaveDirektelenke) {
         settLaster(false);
     }
 
-    async function sjekkTilgangOgGåTilBehandling(oppgave: IOppgave) {
+    async function navigerTilFagsak() {
         settLaster(true);
-        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (brukerident) {
-            if (await sjekkTilgang(brukerident, false)) {
-                await gåTilFagsakEllerVisFeilmelding(brukerident);
+        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (brukerIdent) {
+            try {
+                const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
+                if (tilgangsreusltat.saksbehandlerHarTilgang) {
+                    await gåTilFagsakEllerVisFeilmelding(brukerIdent);
+                } else {
+                    visManglerTilgangModal(tilgangsreusltat);
+                }
+            } catch (error) {
+                visTekniskFeilModal(error);
             }
         } else {
-            settToast(ToastTyper.MANGLER_TILGANG, {
-                alertType: AlertType.WARNING,
-                tekst: 'Mangler tilgang',
-            });
+            visManglerTilgangModal();
         }
         settLaster(false);
     }
 
+    const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
+
     switch (oppgavetype) {
         case OppgavetypeFilter.JFR:
             return (
-                <Button
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => visTilgangsmodalEllerSendVidere(oppgave)}
-                    loading={laster}
-                >
+                <Button variant={'tertiary'} size={'small'} onClick={navigerTilJournalføring} loading={laster}>
                     Se oppgave
                 </Button>
             );
         case OppgavetypeFilter.BEH_SED:
             if (oppgavetype === OppgavetypeFilter.BEH_SED) {
                 return (
-                    <Button
-                        variant={'tertiary'}
-                        size={'small'}
-                        onClick={() => visTilgangsmodalEllerSendVidere(oppgave)}
-                        loading={laster}
-                    >
+                    <Button variant={'tertiary'} size={'small'} onClick={navigerTilJournalføring} loading={laster}>
                         Gå til oppgave
                     </Button>
                 );
@@ -86,12 +93,7 @@ export function OppgaveDirektelenke({ oppgave }: IOppgaveDirektelenke) {
         case OppgavetypeFilter.VURD_LIVS:
         case OppgavetypeFilter.FREM:
             return (
-                <Button
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => sjekkTilgangOgGåTilBehandling(oppgave)}
-                    loading={laster}
-                >
+                <Button variant={'tertiary'} size={'small'} onClick={navigerTilFagsak} loading={laster}>
                     Gå til fagsak
                 </Button>
             );

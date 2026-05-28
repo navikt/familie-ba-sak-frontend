@@ -8,7 +8,6 @@ import type { AxiosRequestConfig } from 'axios';
 import { BodyShort, Button, HStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
 
@@ -49,7 +48,6 @@ const tilgangModal = (data: IRestTilgang, lukkModal: () => void) => ({
 
 interface AppContextValue {
     appInfoModal: IModal;
-    sjekkTilgang: (brukerIdent: string, visSystemetLaster?: boolean) => Promise<boolean>;
     hentPerson: (brukerIdent: string) => Promise<Ressurs<IPersonInfo>>;
 }
 
@@ -87,27 +85,10 @@ const AppProvider = (props: PropsWithChildren) => {
         });
     };
 
-    const sjekkTilgang = async (brukerIdent: string, visSystemetLaster = true): Promise<boolean> => {
-        return request<{ brukerIdent: string }, IRestTilgang>({
-            method: 'POST',
-            url: '/familie-ba-sak/api/tilgang',
-            data: { brukerIdent },
-            påvirkerSystemLaster: visSystemetLaster,
-        }).then((ressurs: Ressurs<IRestTilgang>) => {
-            if (ressurs.status === RessursStatus.SUKSESS) {
-                settAppInfoModal(tilgangModal(ressurs.data, lukkModal));
-                return ressurs.data.saksbehandlerHarTilgang;
-            } else {
-                return false;
-            }
-        });
-    };
-
     return (
         <AppContext.Provider
             value={{
                 appInfoModal,
-                sjekkTilgang,
                 hentPerson,
             }}
         >

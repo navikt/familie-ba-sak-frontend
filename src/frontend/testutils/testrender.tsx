@@ -3,8 +3,10 @@ import type { ReactNode, PropsWithChildren } from 'react';
 import { AppProvider } from '@context/AppContext';
 import { AuthContextProvider } from '@context/AuthContext';
 import { HttpContextProvider } from '@context/HttpContext';
+import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
 import { ModalProvider } from '@context/ModalContext';
 import { SaksbehandlerProvider } from '@context/SaksbehandlerContext';
+import { TekniskFeilModalProvider } from '@context/TekniskFeilModalContext';
 import { ToastProvider } from '@context/ToastContext';
 import { FeatureTogglesProvider } from '@context/TogglesContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -44,23 +46,27 @@ export function TestProviders({
     children,
 }: Props) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <SaksbehandlerProvider saksbehandler={saksbehandler}>
-                <AuthContextProvider>
-                    <HttpContextProvider fjernRessursSomLasterTimeout={fjernRessursSomLasterTimeout}>
-                        <FeatureTogglesProvider featureToggles={featureToggles}>
-                            <AppProvider>
-                                <ModalProvider>
-                                    <ToastProvider>
-                                        <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-                                    </ToastProvider>
-                                </ModalProvider>
-                            </AppProvider>
-                        </FeatureTogglesProvider>
-                    </HttpContextProvider>
-                </AuthContextProvider>
-            </SaksbehandlerProvider>
-        </QueryClientProvider>
+        <TekniskFeilModalProvider>
+            <ManglerTilgangModalProvider>
+                <QueryClientProvider client={queryClient}>
+                    <SaksbehandlerProvider saksbehandler={saksbehandler}>
+                        <AuthContextProvider>
+                            <HttpContextProvider fjernRessursSomLasterTimeout={fjernRessursSomLasterTimeout}>
+                                <FeatureTogglesProvider featureToggles={featureToggles}>
+                                    <AppProvider>
+                                        <ModalProvider>
+                                            <ToastProvider>
+                                                <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+                                            </ToastProvider>
+                                        </ModalProvider>
+                                    </AppProvider>
+                                </FeatureTogglesProvider>
+                            </HttpContextProvider>
+                        </AuthContextProvider>
+                    </SaksbehandlerProvider>
+                </QueryClientProvider>
+            </ManglerTilgangModalProvider>
+        </TekniskFeilModalProvider>
     );
 }
 
