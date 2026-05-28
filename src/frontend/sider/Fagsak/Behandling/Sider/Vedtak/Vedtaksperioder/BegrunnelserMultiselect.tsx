@@ -20,10 +20,10 @@ import { BodyShort, Box, Label } from '@navikt/ds-react';
 import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
 
+import Styles from './BegrunnelserMultiselect.module.css';
 import { grupperBegrunnelser, mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
 import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
-import Styles from './BegrunnelserMultiselect.module.css';
 
 const FRITEKST_FEILMELDING =
     'Fritekst kan kun brukes i kombinasjon med en eller flere begrunnelser. Legg til en ny begrunnelse eller fjern friteksten(e).';
@@ -164,6 +164,10 @@ export function BegrunnelserMultiselect({ imperativeRef, onSubmitSuccessful }: P
             Object.assign({}, provided, {
                 textTransform: 'none',
             }),
+        menuPortal: provided =>
+            Object.assign({}, provided, {
+                zIndex: 9999,
+            }),
         multiValue: (provided, props) => {
             const currentOption = props.data;
             const vedtakBegrunnelseType: VedtakBegrunnelseType | undefined = finnVedtakBegrunnelseType(
@@ -191,6 +195,7 @@ export function BegrunnelserMultiselect({ imperativeRef, onSubmitSuccessful }: P
             placeholder={'Velg begrunnelse(r)'}
             value={mapBegrunnelserTilSelectOptions(vedtaksperiodeMedBegrunnelser, alleBegrunnelser)}
             propSelectStyles={propSelectStyles}
+            menuPortalTarget={document.body}
             isLoading={
                 oppdaterVedtaksperioderMedFriteksterIsPending ||
                 oppdaterVedtaksperiodeMedBegrunnelserIsPending ||
