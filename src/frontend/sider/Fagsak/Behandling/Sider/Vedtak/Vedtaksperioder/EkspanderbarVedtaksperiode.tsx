@@ -49,7 +49,7 @@ export function EkspanderbarVedtaksperiode({ children }: PropsWithChildren) {
                     </HGrid>
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
-            <ExpansionCard.Content style={{ overflow: 'visible' }}>{children}</ExpansionCard.Content>
+            <ExpansionCard.Content>{children}</ExpansionCard.Content>
         </ExpansionCard>
     );
 }
