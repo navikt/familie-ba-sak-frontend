@@ -56,7 +56,7 @@ export function FagsaktypeFelt({ readOnly }: Props) {
             if (option.value === FagsakType.SKJERMET_BARN) {
                 const aktuellGruppe = erProd() ? SKJERMET_BARN_GRUPPE.PROD : SKJERMET_BARN_GRUPPE.DEV;
                 const harTilgang = saksbehandler.groups.some(group => group === aktuellGruppe);
-                return harTilgang && toggles[FeatureToggle.tillattBehandlingAvSkjermetBarn];
+                return harTilgang && toggles[FeatureToggle.tillattOpprettingAvSkjermetBarnFagsak];
             }
             return true;
         })
