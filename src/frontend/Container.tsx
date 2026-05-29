@@ -1,33 +1,29 @@
+import { useAuthContext } from '@context/AuthContext';
+import { HeaderMedSøk } from '@komponenter/HeaderMedSøk/HeaderMedSøk';
+import { FeilmeldingModal } from '@komponenter/Modal/fagsak/FeilmeldingModal';
+import { OpprettFagsakModal } from '@komponenter/Modal/fagsak/OpprettFagsakModal';
+import { ForhåndsvisOpprettingAvPdfModal } from '@komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
+import { FagsakContainer } from '@sider/Fagsak/FagsakContainer';
+import { Infotrygd } from '@sider/Infotrygd/Infotrygd';
+import { Oppgavebenk } from '@sider/Oppgavebenk/Oppgavebenk';
+import { Samhandler } from '@sider/Samhandler/Samhandler';
 import classNames from 'classnames';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
 
 import { useHttp } from '@navikt/familie-http';
 
 import Styles from './Container.module.css';
-import { useAppContext } from './context/AppContext';
-import { useAuthContext } from './context/AuthContext';
-import { HeaderMedSøk } from './komponenter/HeaderMedSøk/HeaderMedSøk';
-import AppInfoModal from './komponenter/Modal/AppInfoModal';
-import { FeilmeldingModal } from './komponenter/Modal/fagsak/FeilmeldingModal';
-import { OpprettFagsakModal } from './komponenter/Modal/fagsak/OpprettFagsakModal';
 import UgyldigSesjon from './komponenter/Modal/SesjonUtløpt';
-import { ForhåndsvisOpprettingAvPdfModal } from './komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
 import Toasts from './komponenter/Toast/Toasts';
-import { FagsakContainer } from './sider/Fagsak/FagsakContainer';
-import { Infotrygd } from './sider/Infotrygd/Infotrygd';
 import ManuellJournalføring from './sider/ManuellJournalføring/ManuellJournalføring';
-import { Oppgavebenk } from './sider/Oppgavebenk/Oppgavebenk';
-import { Samhandler } from './sider/Samhandler/Samhandler';
 
 export function Container() {
     const { autentisert } = useAuthContext();
-    const { appInfoModal } = useAppContext();
     const { systemetLaster } = useHttp();
 
     return (
         <Router>
-            {appInfoModal.visModal && <AppInfoModal modal={appInfoModal} />}
             {autentisert ? (
                 <>
                     {systemetLaster() && <SystemetLaster />}

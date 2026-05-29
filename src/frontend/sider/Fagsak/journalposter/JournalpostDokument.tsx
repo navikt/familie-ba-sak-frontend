@@ -1,3 +1,5 @@
+import type { FamilieAxiosRequestConfig } from '@hooks/useDokument';
+import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
 import styled from 'styled-components';
 
 import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
@@ -5,8 +7,6 @@ import { BodyShort, HStack, Link } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 
 import { EllipsisBodyShort, Vedleggsliste } from './JournalpostListe';
-import type { FamilieAxiosRequestConfig } from '../../../context/AppContext';
-import type { ITilgangsstyrtJournalpost } from '../../../typer/journalpost';
 
 const ListeElement = styled.li`
     margin-bottom: 1rem;

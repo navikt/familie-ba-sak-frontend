@@ -1,3 +1,9 @@
+import { ModalType } from '@context/ModalContext';
+import { useHentFagsaker } from '@hooks/useHentFagsaker';
+import { useHentPersonEnkel } from '@hooks/useHentPersonEnkel';
+import { useModal } from '@hooks/useModal';
+import { FagsakType } from '@typer/fagsak';
+
 import { Button, LocalAlert, Modal, Skeleton, VStack } from '@navikt/ds-react';
 
 import { FagsakerProvider } from './context/FagsakerContext';
@@ -13,11 +19,6 @@ import { useSamhandlerForm } from './hooks/useSamhandlerForm';
 import { PersonDetaljer } from './PersonDetaljer';
 import { SamhandlerTabell } from './SamhandlerTabell';
 import { Undertittel } from './Undertittel';
-import { ModalType } from '../../../context/ModalContext';
-import { useHentFagsaker } from '../../../hooks/useHentFagsaker';
-import { useHentPersonEnkel } from '../../../hooks/useHentPersonEnkel';
-import { useModal } from '../../../hooks/useModal';
-import { FagsakType } from '../../../typer/fagsak';
 
 interface Props {
     personIdent: string;
@@ -26,19 +27,9 @@ interface Props {
 export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     const { lukkModal } = useModal(ModalType.OPPRETT_FAGSAK);
 
-    const {
-        data: person,
-        isPending: erPersonPending,
-        isError: erPersonError,
-        error: personError,
-    } = useHentPersonEnkel({ personIdent });
+    const { data: person, isPending: personIsPending, error: personError } = useHentPersonEnkel({ personIdent });
 
-    const {
-        data: fagsaker,
-        isPending: erFagsakerPending,
-        isError: erFagsakerError,
-        error: fagsakerError,
-    } = useHentFagsaker({ personIdent });
+    const { data: fagsaker, isPending: fagaskerIsPending, error: fagsakerError } = useHentFagsaker({ personIdent });
 
     const { form: opprettFagsakForm, onSubmit: onSubmitOpprettFagsakForm } = useOpprettFagsakForm({
         personIdent: person?.personIdent,
@@ -56,7 +47,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
 
     const onSubmitFeilmelding = OpprettFagsakServerErrors.onSubmitError.lookup(opprettFagsakForm.formState.errors);
 
-    if (erPersonPending || erFagsakerPending) {
+    if (personIsPending || fagaskerIsPending) {
         return (
             <>
                 <Modal.Body>
@@ -78,7 +69,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
         );
     }
 
-    if (erPersonError || erFagsakerError) {
+    if (personError || fagsakerError) {
         return (
             <>
                 <Modal.Body>
