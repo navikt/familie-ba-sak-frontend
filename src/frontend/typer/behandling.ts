@@ -470,7 +470,7 @@ export function utledSøkersMålform(behandling: IBehandling) {
     return søker?.målform ?? Målform.NB;
 }
 
-export function erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna(behandling: IBehandling) {
+export function erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling: IBehandling) {
     const erEøs = behandling.kategori === BehandlingKategori.EØS;
     const erFørstegangsbehandling = behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
     const erRevurdering = behandling.type === Behandlingstype.REVURDERING;
