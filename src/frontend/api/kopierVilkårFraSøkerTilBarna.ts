@@ -4,7 +4,7 @@ import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
 import { RessursResolver } from '../utils/ressursResolver';
 
-export async function utfyllVilkårForBarnaAutomatisk(request: FamilieRequest, behandlingId: number) {
+export async function kopierVilkårFraSøkerTilBarna(request: FamilieRequest, behandlingId: number) {
     const ressurs = await request<null, IBehandling>({
         method: 'POST',
         url: `/familie-ba-sak/api/vilkaarsvurdering/${behandlingId}/automatisk-fyll-ut-barnas-vilkaar`,

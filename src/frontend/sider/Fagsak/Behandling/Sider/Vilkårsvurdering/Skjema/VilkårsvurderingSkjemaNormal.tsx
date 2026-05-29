@@ -4,10 +4,10 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
-import { UtfyllVilkårForBarnaAutomatisk } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/UtfyllVilkårForBarnaAutomatisk';
+import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
     BehandlingSteg,
-    erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna,
+    erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
     type IBehandling,
     kanLeggeTilUtvidetVilkår,
 } from '@typer/behandling';
@@ -102,8 +102,8 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 const skalKunneLeggeTilUtvidetBarnetrygdVilkår =
                     !erLesevisning && erSøker && !harUtvidet && kanLeggeTilUtvidetVilkår(behandling);
 
-                const skalViseUtfyllVilkårForBarnaAutomatisk =
-                    erSøker && erRiktigBehandlingForAutomatiskUtfyllingAvVilkårForBarna(behandling);
+                const skalViseKopierVilkårFraSøkerTilBarna =
+                    erSøker && erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
 
                 return (
                     <EkspanderVilkårsvurderingProvider
@@ -222,8 +222,8 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                                 visFeilmeldinger={visFeilmeldinger}
                                                             />
                                                         ))}
-                                                {skalViseUtfyllVilkårForBarnaAutomatisk && (
-                                                    <UtfyllVilkårForBarnaAutomatisk />
+                                                {skalViseKopierVilkårFraSøkerTilBarna && (
+                                                    <KopierVilkårFraSøkerTilBarna />
                                                 )}
                                             </Box>
                                         </Activity>

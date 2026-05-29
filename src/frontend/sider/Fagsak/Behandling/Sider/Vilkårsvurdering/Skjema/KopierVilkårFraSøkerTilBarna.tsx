@@ -1,20 +1,21 @@
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import { useUtfyllVilkårForBarnaAutomatisk } from '@hooks/useUtfyllVilkårForBarnaAutomatisk';
+import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { FeatureToggle } from '@typer/featureToggles';
 
+import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-export function UtfyllVilkårForBarnaAutomatisk() {
+export function KopierVilkårFraSøkerTilBarna() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const toggles = useFeatureToggles();
 
     const {
-        mutate: utfyllVilkårForBarnaAutomatisk,
-        isPending: utfyllVilkårForBarnaAutomatiskIsPending,
-        error: utfyllVilkårForBarnaAutomatiskError,
-    } = useUtfyllVilkårForBarnaAutomatisk({
+        mutate: kopierVilkårFraSøkerTilBarna,
+        isPending: kopierVilkårFraSøkerTilBarnaIsPending,
+        error: kopierVilkårFraSøkerTilBarnaError,
+    } = useKopierVilkårFraSøkerTilBarna({
         onSuccess: behandling => settÅpenBehandling(byggSuksessRessurs(behandling)),
     });
 
@@ -24,22 +25,23 @@ export function UtfyllVilkårForBarnaAutomatisk() {
 
     return (
         <VStack gap={'space-8'} marginBlock={'space-48 space-0'} width={'fit-content'}>
-            {utfyllVilkårForBarnaAutomatiskError && (
+            {kopierVilkårFraSøkerTilBarnaError && (
                 <LocalAlert status={'error'} size={'small'}>
                     <LocalAlert.Header>
                         <LocalAlert.Title>
-                            {utfyllVilkårForBarnaAutomatiskError?.message ?? 'En ukjent feil oppstod.'}
+                            {kopierVilkårFraSøkerTilBarnaError?.message ?? 'En ukjent feil oppstod.'}
                         </LocalAlert.Title>
                     </LocalAlert.Header>
                 </LocalAlert>
             )}
             <div>
                 <Button
-                    variant={'primary'}
-                    onClick={() => utfyllVilkårForBarnaAutomatisk({ behandlingId: behandling.behandlingId })}
-                    loading={utfyllVilkårForBarnaAutomatiskIsPending}
+                    variant={'secondary'}
+                    icon={<FilesIcon title="a11y-title" fontSize="1.5rem" />}
+                    onClick={() => kopierVilkårFraSøkerTilBarna({ behandlingId: behandling.behandlingId })}
+                    loading={kopierVilkårFraSøkerTilBarnaIsPending}
                 >
-                    Fyll ut vilkår for barna automatisk
+                    Kopier vilkår fra søker til barna
                 </Button>
             </div>
         </VStack>
