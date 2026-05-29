@@ -1,11 +1,13 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
+import { useHentSaksbehandler } from '@hooks/useHentSaksbehandler';
+import { useSyncSentryUser } from '@hooks/useSyncSentryUser';
+import type { Saksbehandler } from '@typer/saksbehandler';
+
 import { Box, GlobalAlert } from '@navikt/ds-react';
 
-import { useHentSaksbehandler } from '../hooks/useHentSaksbehandler';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
-import type { Saksbehandler } from '../typer/saksbehandler';
 
 interface Context {
     saksbehandler: Saksbehandler;
@@ -19,6 +21,8 @@ interface Props extends PropsWithChildren {
 
 export function SaksbehandlerProvider({ saksbehandler, children }: Props) {
     const { data, isPending, error } = useHentSaksbehandler({ initialData: saksbehandler });
+
+    useSyncSentryUser({ saksbehandler: data });
 
     if (isPending) {
         return <SystemetLaster />;
