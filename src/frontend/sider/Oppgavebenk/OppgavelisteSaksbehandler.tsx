@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 
-import { useAppContext } from '@context/AppContext';
+import { useVisManglerTilgangModal } from '@context/ManglerTilgangModalContext';
+import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
+import { useSjekkSaksbehandlertilgangTilIdent } from '@hooks/useSjekkSaksbehandlertilgangTilIdent';
 import type { IOppgave } from '@typer/oppgave';
 import { OppgavetypeFilter } from '@typer/oppgave';
 import type { Saksbehandler } from '@typer/saksbehandler';
@@ -10,14 +12,19 @@ import { BodyShort, Button, HGrid } from '@navikt/ds-react';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 
-interface IOppgavelisteSaksbehandler {
+interface Props {
     oppgave: IOppgave;
     saksbehandler: Saksbehandler;
 }
 
-export function OppgavelisteSaksbehandler({ oppgave, saksbehandler }: IOppgavelisteSaksbehandler) {
+export function OppgavelisteSaksbehandler({ oppgave, saksbehandler }: Props) {
     const { fordelOppgave, tilbakestillFordelingPåOppgave } = useOppgavebenkContext();
-    const { sjekkTilgang } = useAppContext();
+
+    const visTekniskFeilModal = useVisTekniskFeilModal();
+    const visManglerTilgangModal = useVisManglerTilgangModal();
+
+    const { mutateAsync: sjekkSaksbehandlertilgangTilIdent } = useSjekkSaksbehandlertilgangTilIdent({});
+
     const oppgaveRef = useRef<IOppgave | null>(null);
 
     useEffect(() => {
@@ -45,8 +52,19 @@ export function OppgavelisteSaksbehandler({ oppgave, saksbehandler }: IOppgaveli
     }
 
     async function onFordelOppgave() {
-        const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (!brukerident || (brukerident && (await sjekkTilgang(brukerident)))) {
+        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+        if (brukerIdent) {
+            try {
+                const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
+                if (tilgangsreusltat.saksbehandlerHarTilgang) {
+                    fordelOppgave(oppgave, saksbehandler.navIdent);
+                } else {
+                    visManglerTilgangModal(tilgangsreusltat);
+                }
+            } catch (error) {
+                visTekniskFeilModal(error);
+            }
+        } else {
             fordelOppgave(oppgave, saksbehandler.navIdent);
         }
     }
