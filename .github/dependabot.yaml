@@ -71,7 +71,6 @@ updates:
           - "eslint-plugin-jsx-a11y"
           - "eslint-plugin-prettier"
           - "eslint-plugin-react-hooks"
-          - "@types/eslint-plugin-jsx-a11y"
           - "globals"
           - "typescript-eslint"
           - "prettier"
@@ -85,28 +84,14 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/plugin-react"
-          - "vite-tsconfig-paths"
       express:
         patterns:
           - "express"
           - "@types/express"
-          - "express-static-gzip"
-      classnames:
-        patterns:
-          - "classnames"
-          - "@types/classnames"
       deep_equal:
         patterns:
           - "deep-equal"
           - "@types/deep-equal"
-      react_router:
-        patterns:
-          - "react-router"
-          - "@types/react-router"
-      uuid:
-        patterns:
-          - "uuid"
-          - "@types/uuid"
       types:
         patterns:
           - "@types/*"
