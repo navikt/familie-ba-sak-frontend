@@ -95,17 +95,17 @@ export function Behandlingsmeny() {
                     </ActionMenu.Group>
                     <ActionMenu.Divider />
                     <ActionMenu.Group className={Styles.group} aria-label={'Behandling'}>
-                        <HenleggBehandling />
-                        <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
                         <EndreBehandlingstema åpneModal={() => settVisEndreBehandlingstemaModal(true)} />
-                        <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                         <SettEllerOppdaterVenting åpneModal={() => settVisBehandlingPåVentModal(true)} />
                         <TaBehandlingAvVent åpneModal={() => settVisTaBehandlingAvVentModal(true)} />
+                        <HenleggBehandling />
+                        <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
+                        <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
                         <LeggTilEllerFjernBrevmottakerePåBehandling
                             åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}
                         />
                         <AInntekt />
-                        <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
+                        <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                     </ActionMenu.Group>
                 </ActionMenu.Content>
             </ActionMenu>
