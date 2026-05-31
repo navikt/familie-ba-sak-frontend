@@ -9,6 +9,8 @@ import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet/EndreBehandlendeE
 import { EndreBehandlendeEnhetModal } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetModal';
 import { EndreBehandlingstema } from './EndreBehandling/EndreBehandlingstema';
 import { EndreBehandlingstemaModal } from './EndreBehandling/EndreBehandlingstemaModal';
+import { EndreSøknadstidspunkt } from './EndreSøknadstidspunkt/EndreSøknadstidspunkt';
+import { EndreSøknadstidspunktModal } from './EndreSøknadstidspunkt/EndreSøknadstidspunktModal';
 import { HenleggBehandling } from './HenleggBehandling/HenleggBehandling';
 import { SettBehandlingPåVentModal } from './LeggBehandlingPåVent/SettBehandlingPåVentModal';
 import { SettEllerOppdaterVenting } from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
@@ -41,6 +43,7 @@ export function Behandlingsmeny() {
     const [visBehandlingPåVentModal, settVisBehandlingPåVentModal] = useState(erBehandlingPåVent);
     const [visTaBehandlingAvVentModal, settVisTaBehandlingAvVentModal] = useState(false);
     const [visLeggTilBrevmottakerPåBehandlingModal, settVisLeggTilBrevmottakerPåBehandlingModal] = useState(false);
+    const [visEndreSøknadstidspunktModal, settVisEndreSøknadstidspunktModal] = useState(false);
 
     return (
         <>
@@ -75,6 +78,9 @@ export function Behandlingsmeny() {
                     lukkModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(false)}
                 />
             )}
+            {visEndreSøknadstidspunktModal && (
+                <EndreSøknadstidspunktModal lukkModal={() => settVisEndreSøknadstidspunktModal(false)} />
+            )}
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button variant={'secondary'} size={'small'} iconPosition={'right'} icon={<ChevronDownIcon />}>
@@ -99,6 +105,7 @@ export function Behandlingsmeny() {
                             åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}
                         />
                         <AInntekt />
+                        <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
                     </ActionMenu.Group>
                 </ActionMenu.Content>
             </ActionMenu>
