@@ -1,11 +1,11 @@
+import { useHentSaksbehandler } from '@hooks/useHentSaksbehandler';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
+import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
+import type { Saksbehandler } from '@typer/saksbehandler';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { SaksbehandlerProvider, useSaksbehandlerContext } from './SaksbehandlerContext';
-import { useHentSaksbehandler } from '../hooks/useHentSaksbehandler';
-import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
-import type { Saksbehandler } from '../typer/saksbehandler';
 
 vi.mock('../hooks/useHentSaksbehandler', () => ({
     useHentSaksbehandler: vi.fn(),
