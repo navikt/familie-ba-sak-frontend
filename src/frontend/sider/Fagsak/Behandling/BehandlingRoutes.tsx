@@ -1,6 +1,8 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
 import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
+import { VilkårResultatPanelerProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
+import { VilkårsvurderingPanelerProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingPanelerContext';
 import type { RouteObject } from 'react-router';
 
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
@@ -35,7 +37,11 @@ export const behandlingRoutes: RouteObject[] = [
         path: 'vilkaarsvurdering',
         element: (
             <VilkårsvurderingProvider>
-                <Vilkårsvurdering />
+                <VilkårsvurderingPanelerProvider>
+                    <VilkårResultatPanelerProvider>
+                        <Vilkårsvurdering />
+                    </VilkårResultatPanelerProvider>
+                </VilkårsvurderingPanelerProvider>
             </VilkårsvurderingProvider>
         ),
     },

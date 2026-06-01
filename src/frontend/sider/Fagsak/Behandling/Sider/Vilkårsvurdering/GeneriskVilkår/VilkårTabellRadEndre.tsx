@@ -1,6 +1,7 @@
 import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
+import { useVilkårResultatPanel } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -42,7 +43,6 @@ interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     toggleForm: (visAlert: boolean) => void;
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
-    settEkspandertVilkår: (ekspandertVilkår: boolean) => void;
     settFokusPåKnapp: () => void;
 }
 
@@ -75,13 +75,13 @@ const VilkårTabellRadEndre = ({
     toggleForm,
     redigerbartVilkår,
     settRedigerbartVilkår,
-    settEkspandertVilkår,
     settFokusPåKnapp,
     lesevisning,
 }: IProps) => {
-    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
-
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
+    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
+    const { lukkVilkårResultat } = useVilkårResultatPanel(vilkårResultat.verdi.id);
+
     const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -145,7 +145,7 @@ const VilkårTabellRadEndre = ({
                 if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEttVilkår(false);
                     settÅpenBehandling(oppdatertBehandling);
-                    settEkspandertVilkår(false);
+                    lukkVilkårResultat();
                 } else if (
                     oppdatertBehandling.status === RessursStatus.FEILET ||
                     oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
