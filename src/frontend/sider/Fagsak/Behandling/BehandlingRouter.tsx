@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 
+import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
+import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
+import { hentSideHref } from '@utils/miljø';
 import { Route, Routes, useLocation } from 'react-router';
 
 import { useFagsakContext } from '../FagsakContext';
@@ -14,15 +17,12 @@ import { sider } from './Sider/sider';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
+import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
+import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 import { Vilkårsvurdering } from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
-import { useTrackTidsbrukPåSide } from '../../../hooks/useTrackTidsbrukPåSide';
-import { TidslinjeProvider } from '../../../komponenter/Tidslinje/TidslinjeContext';
-import { hentSideHref } from '../../../utils/miljø';
-import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
-import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 
 export function BehandlingRouter() {
     const { fagsak } = useFagsakContext();
@@ -46,16 +46,16 @@ export function BehandlingRouter() {
             <Route
                 path="/registrer-soknad"
                 element={
-                    <SøknadProvider åpenBehandling={behandling}>
+                    <SøknadProvider>
                         <RegistrerSøknad />
                     </SøknadProvider>
                 }
             />
-            <Route path="/filtreringsregler" element={<Filtreringsregler åpenBehandling={behandling} />} />
+            <Route path="/filtreringsregler" element={<Filtreringsregler />} />
             <Route
                 path="/vilkaarsvurdering"
                 element={
-                    <VilkårsvurderingProvider åpenBehandling={behandling}>
+                    <VilkårsvurderingProvider>
                         <Vilkårsvurdering />
                     </VilkårsvurderingProvider>
                 }
@@ -64,25 +64,25 @@ export function BehandlingRouter() {
                 path="/tilkjent-ytelse"
                 element={
                     <TidslinjeProvider>
-                        <Behandlingsresultat åpenBehandling={behandling} />
+                        <Behandlingsresultat />
                     </TidslinjeProvider>
                 }
             />
             <Route
                 path="/simulering"
                 element={
-                    <SimuleringProvider åpenBehandling={behandling}>
-                        <Simulering åpenBehandling={behandling} />
+                    <SimuleringProvider>
+                        <Simulering />
                     </SimuleringProvider>
                 }
             />
             <Route
                 path="/vedtak"
                 element={
-                    <SimuleringProvider åpenBehandling={behandling}>
+                    <SimuleringProvider>
                         <FeilutbetaltValutaTabellProvider>
                             <RefusjonEøsTabellProvider>
-                                <SammensattKontrollsakProvider åpenBehandling={behandling}>
+                                <SammensattKontrollsakProvider>
                                     <VedtaksperioderProvider>
                                         <Vedtak />
                                     </VedtaksperioderProvider>

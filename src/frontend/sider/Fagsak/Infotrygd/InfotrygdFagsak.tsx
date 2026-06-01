@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react';
 
+import { useFagsak } from '@hooks/useFagsak';
+
 import { BodyShort, Box, Heading, HStack, Loader, LocalAlert } from '@navikt/ds-react';
 
 import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
-
-interface InfotrygdFagsakProps {
-    minimalFagsak: IMinimalFagsak;
-}
 
 const InnholdContainer = ({ children }: { children: ReactNode }) => (
     <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
@@ -16,8 +13,10 @@ const InnholdContainer = ({ children }: { children: ReactNode }) => (
     </Box>
 );
 
-export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
-    const { data, isPending, error } = useHentInfotrygdSaker(minimalFagsak.søkerFødselsnummer);
+export const InfotrygdFagsak = () => {
+    const fagsak = useFagsak();
+
+    const { data, isPending, error } = useHentInfotrygdSaker(fagsak.søkerFødselsnummer);
 
     if (isPending) {
         return (
@@ -45,11 +44,7 @@ export const InfotrygdFagsak = ({ minimalFagsak }: InfotrygdFagsakProps) => {
     return (
         <InnholdContainer>
             <Heading size="large" level="1" children="Infotrygd" />
-            <Infotrygdtabeller
-                ident={minimalFagsak.søkerFødselsnummer}
-                saker={data.saker}
-                minimalFagsak={minimalFagsak}
-            />
+            <Infotrygdtabeller ident={fagsak.søkerFødselsnummer} saker={data.saker} minimalFagsak={fagsak} />
         </InnholdContainer>
     );
 };

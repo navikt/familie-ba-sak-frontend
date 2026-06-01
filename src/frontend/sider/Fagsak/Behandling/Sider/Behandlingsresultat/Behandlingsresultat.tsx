@@ -47,12 +47,8 @@ const StyledErrorSummary = styled(ErrorSummary)`
     margin-top: 5rem;
 `;
 
-interface IBehandlingsresultatProps {
-    åpenBehandling: IBehandling;
-}
-
-const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => {
-    const { settÅpenBehandling } = useBehandlingContext();
+const Behandlingsresultat = () => {
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const fagsak = useFagsak();
     const navigate = useNavigate();
@@ -63,7 +59,7 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
         settVisFeilmeldinger,
         hentPersonerMedUgyldigEtterbetalingsperiode,
         personerMedUgyldigEtterbetalingsperiode,
-    } = useBehandlingsresultat(åpenBehandling);
+    } = useBehandlingsresultat(behandling);
 
     const {
         mutate: oppdaterBehandlingsresultat,
@@ -102,11 +98,11 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
         valutakurser,
         erValutakurserGyldige,
         hentValutakurserMedFeil,
-    } = useEøs(åpenBehandling);
+    } = useEøs(behandling);
 
     useEffect(() => {
         hentPersonerMedUgyldigEtterbetalingsperiode();
-    }, [åpenBehandling]);
+    }, [behandling]);
 
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
@@ -123,20 +119,20 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
     };
 
     const grunnlagPersoner = filterOgSorterGrunnlagPersonerMedAndeler(
-        åpenBehandling.personer,
-        åpenBehandling.personerMedAndelerTilkjentYtelse
+        behandling.personer,
+        behandling.personerMedAndelerTilkjentYtelse
     );
 
     const tidslinjePersoner = filterOgSorterAndelPersonerIGrunnlag(
         grunnlagPersoner,
-        åpenBehandling.personerMedAndelerTilkjentYtelse
+        behandling.personerMedAndelerTilkjentYtelse
     );
 
-    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
-    const harKompetanser = åpenBehandling.kompetanser?.length > 0;
-    const harUtenlandskeBeløper = åpenBehandling.utenlandskePeriodebeløp?.length > 0;
-    const harValutakurser = åpenBehandling.utenlandskePeriodebeløp?.length > 0;
+    const harKompetanser = behandling.kompetanser?.length > 0;
+    const harUtenlandskeBeløper = behandling.utenlandskePeriodebeløp?.length > 0;
+    const harValutakurser = behandling.utenlandskePeriodebeløp?.length > 0;
 
     const harEøs = harKompetanser || harUtenlandskeBeløper || harValutakurser;
 
@@ -145,14 +141,14 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
             senderInn={oppdaterBehandlingsresultatIsPending}
             tittel="Behandlingsresultat"
             className="behandlingsresultat"
-            forrigeOnClick={() => navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`)}
+            forrigeOnClick={() => navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`)}
             nesteOnClick={() => {
                 if (erLesevisning) {
-                    navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/simulering`);
+                    navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/simulering`);
                 } else if (harEøs && !erEøsInformasjonGyldig()) {
                     settVisFeilmeldinger(true);
                 } else {
-                    oppdaterBehandlingsresultat({ behandlingId: åpenBehandling.behandlingId });
+                    oppdaterBehandlingsresultat({ behandlingId: behandling.behandlingId });
                 }
             }}
             maxWidthStyle={'80rem'}
@@ -174,7 +170,7 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
                     </LocalAlert>
                 </Box>
             )}
-            {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={åpenBehandling.behandlingId} />}
+            {erMigreringFraInfotrygd && <MigreringInfoboks behandlingId={behandling.behandlingId} />}
             <TilkjentYtelseTidslinje
                 grunnlagPersoner={grunnlagPersoner}
                 tidslinjePersoner={tidslinjePersoner}
@@ -199,21 +195,21 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
-                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(åpenBehandling.utbetalingsperioder)}
+                    utbetalingsperiode={finnUtbetalingsperiodeForAktivEtikett(behandling.utbetalingsperioder)}
                     aktivEtikett={aktivEtikett}
                     kompetanser={kompetanser}
                     utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
                     valutakurser={valutakurser}
                 />
             )}
-            {åpenBehandling.endretUtbetalingAndeler.length > 0 && (
-                <EndretUtbetalingAndelTabell åpenBehandling={åpenBehandling} />
+            {behandling.endretUtbetalingAndeler.length > 0 && (
+                <EndretUtbetalingAndelTabell åpenBehandling={behandling} />
             )}
             {harKompetanser && (
                 <KompetanseSkjema
                     kompetanser={kompetanser}
                     visFeilmeldinger={visFeilmeldinger}
-                    åpenBehandling={åpenBehandling}
+                    åpenBehandling={behandling}
                 />
             )}
             {harUtenlandskeBeløper && (
@@ -221,7 +217,7 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
                     utbetaltAnnetLandBeløp={utbetaltAnnetLandBeløp}
                     erUtbetaltAnnetLandBeløpGyldige={erUtbetaltAnnetLandBeløpGyldige}
                     visFeilmeldinger={visFeilmeldinger}
-                    åpenBehandling={åpenBehandling}
+                    åpenBehandling={behandling}
                 />
             )}
             {harValutakurser && (
@@ -229,7 +225,7 @@ const Behandlingsresultat = ({ åpenBehandling }: IBehandlingsresultatProps) => 
                     valutakurser={valutakurser}
                     erValutakurserGyldige={erValutakurserGyldige}
                     visFeilmeldinger={visFeilmeldinger}
-                    åpenBehandling={åpenBehandling}
+                    åpenBehandling={behandling}
                 />
             )}
             {visFeilmeldinger && !erEøsInformasjonGyldig() && (

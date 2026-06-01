@@ -19,10 +19,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-interface Props extends PropsWithChildren {
-    åpenBehandling: IBehandling;
-}
-
 interface SøknadSkjema {
     underkategori: BehandlingUnderkategori;
     barnaMedOpplysninger: IBarnMedOpplysninger[];
@@ -42,8 +38,8 @@ interface SøknadContextValue {
 
 const SøknadContext = createContext<SøknadContextValue | undefined>(undefined);
 
-export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
-    const { settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
+export const SøknadProvider = ({ children }: PropsWithChildren) => {
+    const { behandling, settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
         useBehandlingContext();
 
     const fagsak = useFagsak();
@@ -59,7 +55,7 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
         felter: {
             underkategori: useFelt<BehandlingUnderkategori>({
                 verdi:
-                    åpenBehandling.underkategori === BehandlingUnderkategori.UTVIDET
+                    behandling.underkategori === BehandlingUnderkategori.UTVIDET
                         ? BehandlingUnderkategori.UTVIDET
                         : BehandlingUnderkategori.ORDINÆR,
             }),
@@ -124,10 +120,10 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
     }, [bruker]);
 
     useDeepEffect(() => {
-        if (åpenBehandling.søknadsgrunnlag) {
+        if (behandling.søknadsgrunnlag) {
             settSøknadErLastetFraBackend(true);
             skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                åpenBehandling.søknadsgrunnlag.barnaMedOpplysninger.map(
+                behandling.søknadsgrunnlag.barnaMedOpplysninger.map(
                     (barnMedOpplysninger: IBarnMedOpplysningerBackend) => ({
                         ...barnMedOpplysninger,
                         merket: barnMedOpplysninger.inkludertISøknaden,
@@ -135,20 +131,20 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                 )
             );
 
-            skjema.felter.målform.validerOgSettFelt(åpenBehandling.søknadsgrunnlag.søkerMedOpplysninger.målform);
-            skjema.felter.underkategori.validerOgSettFelt(åpenBehandling.søknadsgrunnlag.underkategori);
+            skjema.felter.målform.validerOgSettFelt(behandling.søknadsgrunnlag.søkerMedOpplysninger.målform);
+            skjema.felter.underkategori.validerOgSettFelt(behandling.søknadsgrunnlag.underkategori);
             skjema.felter.endringAvOpplysningerBegrunnelse.validerOgSettFelt(
-                åpenBehandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse
+                behandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse
             );
         } else {
             // Ny behandling er lastet som ikke har fullført søknad-steget.
             tilbakestillSøknad();
         }
-    }, [åpenBehandling.behandlingId, åpenBehandling.søknadsgrunnlag]);
+    }, [behandling.behandlingId, behandling.søknadsgrunnlag]);
 
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
         if (erLesevisning) {
-            navigate(`/fagsak/${fagsak.id}/${åpenBehandling?.behandlingId}/vilkaarsvurdering`);
+            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
         } else {
             onSubmit<IRestRegistrerSøknad>(
                 {
@@ -171,12 +167,12 @@ export const SøknadProvider = ({ åpenBehandling, children }: Props) => {
                         },
                         bekreftEndringerViaFrontend,
                     },
-                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/registrer-søknad`,
+                    url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/registrer-søknad`,
                 },
                 (response: Ressurs<IBehandling>) => {
                     if (response.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(response);
-                        navigate(`/fagsak/${fagsak.id}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+                        navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
                     }
                 },
                 (errorResponse: Ressurs<IBehandling>) => {
