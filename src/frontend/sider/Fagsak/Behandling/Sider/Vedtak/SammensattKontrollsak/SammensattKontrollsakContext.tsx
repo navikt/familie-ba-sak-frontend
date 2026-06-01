@@ -1,25 +1,14 @@
 import type { PropsWithChildren, SetStateAction, Dispatch } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { Behandlingstype, erBehandlingAvslått, erBehandlingFortsattInnvilget } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IRestOpprettSammensattKontrollsak, IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
+
 import { useHttp } from '@navikt/familie-http';
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
-
-import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
-import {
-    Behandlingstype,
-    erBehandlingAvslått,
-    erBehandlingFortsattInnvilget,
-    type IBehandling,
-} from '../../../../../../typer/behandling';
-import { FeatureToggle } from '../../../../../../typer/featureToggles';
-import type {
-    IRestOpprettSammensattKontrollsak,
-    IRestSammensattKontrollsak,
-} from '../../../../../../typer/sammensatt-kontrollsak';
-
-interface ISammensattKontrollsakProps extends PropsWithChildren {
-    åpenBehandling: IBehandling;
-}
 
 interface SammensattKontrollsakContextValue {
     opprettEllerOppdaterSammensattKontrollsak: (fritekst: string) => void;
@@ -33,8 +22,8 @@ interface SammensattKontrollsakContextValue {
 
 const SammensattKontrollsakContext = createContext<SammensattKontrollsakContextValue | undefined>(undefined);
 
-export const SammensattKontrollsakProvider = ({ åpenBehandling, children }: ISammensattKontrollsakProps) => {
-    const { behandlingId, resultat, type } = åpenBehandling;
+export const SammensattKontrollsakProvider = ({ children }: PropsWithChildren) => {
+    const { behandlingId, resultat, type } = useBehandling();
     const { request } = useHttp();
     const toggles = useFeatureToggles();
     const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
@@ -43,7 +32,7 @@ export const SammensattKontrollsakProvider = ({ åpenBehandling, children }: ISa
 
     useEffect(() => {
         hentSammensattKontrollsak();
-    }, [åpenBehandling.behandlingId]);
+    }, [behandlingId]);
 
     const skalViseSammensattKontrollsakMenyValg = (): boolean => {
         if (!toggles[FeatureToggle.kanOppretteOgEndreSammensatteKontrollsaker]) {
