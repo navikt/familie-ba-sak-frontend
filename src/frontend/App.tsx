@@ -1,7 +1,6 @@
 import '@navikt/ds-css';
 import './index.css';
 
-import { AppProvider } from '@context/AppContext';
 import { AuthContextProvider } from '@context/AuthContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
@@ -40,13 +39,11 @@ export function App() {
                                 <AuthContextProvider>
                                     <HttpContextProvider>
                                         <FeatureTogglesProvider>
-                                            <AppProvider>
-                                                <ModalProvider>
-                                                    <ToastProvider>
-                                                        <Container />
-                                                    </ToastProvider>
-                                                </ModalProvider>
-                                            </AppProvider>
+                                            <ModalProvider>
+                                                <ToastProvider>
+                                                    <Container />
+                                                </ToastProvider>
+                                            </ModalProvider>
                                         </FeatureTogglesProvider>
                                     </HttpContextProvider>
                                 </AuthContextProvider>
