@@ -1,3 +1,4 @@
+import { apiClient } from '@api/client/apiClient';
 import * as Sentry from '@sentry/browser';
 
 const environment = window.location.hostname;
@@ -9,6 +10,21 @@ export function initSentry() {
             environment,
             integrations: [Sentry.browserTracingIntegration()],
             tracesSampleRate: 0.2,
+        });
+
+        apiClient.addResponseInterceptor({
+            onRejected: error => {
+                Sentry.captureException(error, {
+                    extra: {
+                        response: {
+                            callId: error.response?.headers['nav-call-id'],
+                            status: error.response?.status,
+                            statusText: error.response?.statusText,
+                        },
+                    },
+                });
+                return Promise.reject(error);
+            },
         });
     } catch (e) {
         console.error('Sentry feilet ved initialisering', e);
