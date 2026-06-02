@@ -1036,10 +1036,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.5/f048cb47ad2f6b83720c058383fe95802b024718#f048cb47ad2f6b83720c058383fe95802b024718"
   integrity sha512-oZPfF95H6k/Tz/cK4IQirTRXy4Vz0aSUtHWZAaDa1CVd7+8ifj1Aw8KLV6pPvlHaPirrek1sFsK5GNnad6h3qA==
 
-"@navikt/flagg-ikoner@13.2.3":
-  version "13.2.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/13.2.3/84d97a0ca066fa5a5c28bd296c8e1f1033d19717#84d97a0ca066fa5a5c28bd296c8e1f1033d19717"
-  integrity sha512-NyFrUl2xUclols40UAnqEx5tGL65CITFMCwV9EAzilPj39Yy4vBlD+VL+qDpXenYovcGZRBp0vruokKtEWodVw==
+"@navikt/flagg-ikoner@13.2.4":
+  version "13.2.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/13.2.4/41c3e7dc94cf0a7639cc37a405fe4ad833c217e6#41c3e7dc94cf0a7639cc37a405fe4ad833c217e6"
+  integrity sha512-5UmSKm1cbG785TmHUAuP67F/WyD2VixGqZvuwqyNLE+QtFpbgMJyCE1s/Urt5yt3qMESz+vSwzpE8a4oZiY/Lw==
   dependencies:
     svg-country-flags "1.2.10"
     uuid "14.0.0"
@@ -1054,10 +1054,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.1/37ed0feb23a7525139ad5512684ff6b0977112c6#37ed0feb23a7525139ad5512684ff6b0977112c6"
   integrity sha512-R6x3MBFC0E/B7oTs+P2jAP+ym7+d6cwSpDsLeMja9IwPpJq3HV/OClFBVWm9fJZPmXfumKRMGy6gqsQPj90ftg==
 
-"@navikt/land-verktoy@13.2.3":
-  version "13.2.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/13.2.3/8b8f6cd6ef4afbd8e6c889439ba13b0b3e30467d#8b8f6cd6ef4afbd8e6c889439ba13b0b3e30467d"
-  integrity sha512-Yu4qGS+hAVZ7jqDcJvtsj2qo8Cpc71u2qDJXNHUWQCpzljfWqPj1imIa+0RWgeLVQFwGUs3mWp14Oy2xz6O6mA==
+"@navikt/land-verktoy@13.2.4":
+  version "13.2.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/13.2.4/ff79d2e17c60fdbedc7880650259336504018e32#ff79d2e17c60fdbedc7880650259336504018e32"
+  integrity sha512-xK7AEF2hu+A3Pq/4zdJNb44E8yipVZRL8aWFw0iGUipPzs661G/qQJdHU2Uzz82SqKVkHNWdXoTRoMRN0yK3Hg==
   dependencies:
     "@piotrgorecki/i18n-currency-name" "1.3.0"
     country-data-list "1.6.2"
@@ -1184,10 +1184,10 @@
   resolved "https://registry.yarnpkg.com/@piotrgorecki/i18n-currency-name/-/i18n-currency-name-1.3.0.tgz#c7d6b9f6df705bf4f2516f1d25c455af14d7c167"
   integrity sha512-Txbw0UmGgyvkZEFzjycmh7hEwYeRftILvx4G72PrMBHoS18PGnPODWbZvw7bi+KoV+buMezEHy8ezojc0f7YvQ==
 
-"@pkgr/core@^0.2.9":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
-  integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
+"@pkgr/core@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.3.6.tgz#3569708bd4be4d8870ba32bf1c456dac81600d97"
+  integrity sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==
 
 "@redis/bloom@5.12.1":
   version "5.12.1"
@@ -1571,17 +1571,17 @@
   dependencies:
     "@tanstack/query-core" "5.100.14"
 
-"@tanstack/react-virtual@3.13.25":
-  version "3.13.25"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.25.tgz#7d45278405450362ac3693664c0751992d25aa45"
-  integrity sha512-bmNoqMu6gcAW9JGrKVB0Q1tN1i5RONZF8r1fW0bbE4Oyf3DwEGnzzQJ2OW+Ozg1P4s8PyugkHg2ULZoFQN+cqw==
+"@tanstack/react-virtual@3.13.26":
+  version "3.13.26"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.26.tgz#1a0be9837ddc09c06868f9138fb792ab29fedc30"
+  integrity sha512-DosdgjOxCLahkn0o+ilmZYwEjo1glfMGuRT/j3PQ18yr5XqA8N/BCaL9IJ3B5TRl+nnzyK2IOFgAILwzN3a9xQ==
   dependencies:
-    "@tanstack/virtual-core" "3.15.0"
+    "@tanstack/virtual-core" "3.16.0"
 
-"@tanstack/virtual-core@3.15.0":
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.15.0.tgz#05f2511f564bb82d245718bc7df6691a69aeed17"
-  integrity sha512-0AwPGx0I8QxPYjAxShT/+z+ZOe9u8mW5rsXvivCTjRfRmz9a43+3mRyi4wwlyoUqOC56q/jatKa0Bh9M99BEHQ==
+"@tanstack/virtual-core@3.16.0":
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.16.0.tgz#987bd975c1a486a38ff33eb0634f70436305570f"
+  integrity sha512-Er2N7q3WOiH6y2JLxsxNX+u2/sLqSsL0bxFgDjuiPiA7vKhZRm+IzcS17vRee3GNXr64UsesA5CAp9yTiIYw9A==
 
 "@testing-library/dom@10.4.1":
   version "10.4.1"
@@ -2744,10 +2744,10 @@ date-fns@4.3.0, date-fns@^4.0.0:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-4.3.0.tgz#95663b78f2be5ce664eb6606d94582acc39c77ba"
   integrity sha512-OYcL+3N/jyWbYdFGqoMAhytDgxP9pbYPUUiRCOgn4Fewaadk9l/Wam4Avciiyp2BgkpfQyBV9B+ehnVJych+eQ==
 
-dayjs@1.11.20:
-  version "1.11.20"
-  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.20.tgz#88d919fd639dc991415da5f4cb6f1b6650811938"
-  integrity sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==
+dayjs@1.11.21:
+  version "1.11.21"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.21.tgz#57f87562e62de76f3c704bd2b8d522fc33068eb2"
+  integrity sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==
 
 debug@4, debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4, debug@^4.3.5, debug@^4.4.0, debug@^4.4.3:
   version "4.4.3"
@@ -3382,13 +3382,13 @@ eslint-plugin-jsx-a11y@6.10.2:
     safe-regex-test "^1.0.3"
     string.prototype.includes "^2.0.1"
 
-eslint-plugin-prettier@5.5.5:
-  version "5.5.5"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-5.5.5.tgz#9eae11593faa108859c26f9a9c367d619a0769c0"
-  integrity sha512-hscXkbqUZ2sPithAuLm5MXL+Wph+U7wHngPBv9OMWwlP8iaflyxpjTYZkmdgB4/vPIhemRlBEoLrH7UC1n7aUw==
+eslint-plugin-prettier@5.5.6:
+  version "5.5.6"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-5.5.6.tgz#363ebe4d769bce157ccdd8129ce3efd91dc62564"
+  integrity sha512-ifetmTcxWfz+4qRW3pH/ujdTq2jQIj59AxJMIN26K5avYgU8dxycUETQonWiW+wPrYXA0j3Try0l1CnwVQtDqQ==
   dependencies:
     prettier-linter-helpers "^1.0.1"
-    synckit "^0.11.12"
+    synckit "^0.11.13"
 
 eslint-plugin-react-hooks@7.1.1:
   version "7.1.1"
@@ -6360,12 +6360,12 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-synckit@^0.11.12:
-  version "0.11.12"
-  resolved "https://registry.yarnpkg.com/synckit/-/synckit-0.11.12.tgz#abe74124264fbc00a48011b0d98bdc1cffb64a7b"
-  integrity sha512-Bh7QjT8/SuKUIfObSXNHNSK6WHo6J1tHCqJsuaFDP7gP0fkzSfTxI8y85JrppZ0h8l0maIgc2tfuZQ6/t3GtnQ==
+synckit@^0.11.13:
+  version "0.11.13"
+  resolved "https://registry.yarnpkg.com/synckit/-/synckit-0.11.13.tgz#062a5ea57d81befc35892f8254de5c567e97c80a"
+  integrity sha512-eNRKgb3z66Yp3D2CixVujOUvXLFUTij/zVnV8KRyvFdQwpz7I5DS8UfRkTeLzb64u+dkzDSdelE24izu+zSSUg==
   dependencies:
-    "@pkgr/core" "^0.2.9"
+    "@pkgr/core" "^0.3.6"
 
 tabbable@^6.0.0:
   version "6.2.0"
