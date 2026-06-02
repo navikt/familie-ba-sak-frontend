@@ -1,3 +1,5 @@
+import { useBehandlingIdParam } from '@hooks/useBehandlingIdParam';
+import { NotFound } from '@komponenter/Error/NotFound';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
@@ -17,6 +19,12 @@ import { Venstremeny } from './Venstremeny/Venstremeny';
 
 export function BehandlingContainer() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
+
+    const behandlingIdParam = useBehandlingIdParam();
+
+    if (!behandlingIdParam) {
+        return <NotFound />;
+    }
 
     switch (behandlingRessurs.status) {
         case RessursStatus.SUKSESS:

@@ -1,3 +1,4 @@
+import { NotFound } from '@komponenter/Error/NotFound';
 import { RouteError } from '@komponenter/Error/RouteError';
 import { FagsakContainer } from '@sider/Fagsak/FagsakContainer';
 import { fagsakRoutes } from '@sider/Fagsak/FagsakRoutes';
@@ -40,6 +41,10 @@ export const appRoutes = createBrowserRouter([
             {
                 path: 'samhandler',
                 element: <Samhandler />,
+            },
+            {
+                path: '*',
+                element: <NotFound />,
             },
         ],
     },

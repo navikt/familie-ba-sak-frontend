@@ -10,6 +10,9 @@ import { showSentryReportDialog } from '../../sentry';
 
 function captureSentryException(error: unknown) {
     if (isRouteErrorResponse(error)) {
+        if (error.status === 404) {
+            return undefined;
+        }
         const routerError = new Error(`Route error ${error.status}: ${error.statusText}`);
         return Sentry.captureException(routerError, {
             tags: { type: 'route-error' },

@@ -3,6 +3,7 @@ import { useHentFagsak } from '@hooks/useHentFagsak';
 import { useHentPerson } from '@hooks/useHentPerson';
 import { useScrollTilAnker } from '@hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '@hooks/useSyncModiaContext';
+import { NotFound } from '@komponenter/Error/NotFound';
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
 import { FagsakType } from '@typer/fagsak';
 import { Outlet } from 'react-router';
@@ -25,6 +26,10 @@ export function FagsakContainer() {
 
     useScrollTilAnker();
     useSyncModiaContext(bruker);
+
+    if (!fagsakIdParam) {
+        return <NotFound />;
+    }
 
     if (isPendingFagsak) {
         return (

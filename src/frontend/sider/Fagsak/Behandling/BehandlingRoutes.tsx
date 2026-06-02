@@ -1,3 +1,4 @@
+import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
 import type { RouteObject } from 'react-router';
 
@@ -72,5 +73,9 @@ export const behandlingRoutes: RouteObject[] = [
                 </FeilutbetaltValutaTabellProvider>
             </SimuleringProvider>
         ),
+    },
+    {
+        path: '*',
+        element: <NotFound />,
     },
 ];

@@ -8,6 +8,8 @@ import { ForhåndsvisOpprettingAvPdfModal } from '@komponenter/PdfVisningModal/F
 import classNames from 'classnames';
 import { Outlet } from 'react-router';
 
+import { Box } from '@navikt/ds-react';
+
 import Styles from './AppContainer.module.css';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';
 import Toasts from './komponenter/Toast/Toasts';
@@ -18,21 +20,23 @@ export function AppContainer() {
 
     if (!autentisert) {
         return (
-            <main>
+            <main className={Styles.main}>
                 <UgyldigSesjon />
             </main>
         );
     }
 
     return (
-        <main className={classNames(Styles.main, { [Styles.systemLaster]: visSystemetLaster })}>
-            <Toasts />
+        <main className={Styles.main}>
             {visSystemetLaster && <SystemetLaster />}
-            <OpprettFagsakModal />
-            <FeilmeldingModal />
-            <ForhåndsvisOpprettingAvPdfModal />
-            <HeaderMedSøk />
-            <Outlet />
+            <Box as={'div'} className={classNames({ [Styles.systemLaster]: visSystemetLaster })}>
+                <Toasts />
+                <OpprettFagsakModal />
+                <FeilmeldingModal />
+                <ForhåndsvisOpprettingAvPdfModal />
+                <HeaderMedSøk />
+                <Outlet />
+            </Box>
         </main>
     );
 }

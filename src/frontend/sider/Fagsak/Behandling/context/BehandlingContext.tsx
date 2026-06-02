@@ -50,12 +50,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     useTrackTidsbrukPåSide(fagsak, behandling);
 
     useEffect(() => {
-        if (sidevisning) {
-            leggTilBesøktSide(Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId);
-        }
-    }, [sidevisning]);
-
-    useEffect(() => {
         const siderPåBehandling = hentTrinnForBehandling(behandling);
 
         const sideHref = hentSideHref(location.pathname);
@@ -110,6 +104,12 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const gjelderInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
     const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
     const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
+
+    useEffect(() => {
+        if (sidevisning) {
+            leggTilBesøktSide(Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId);
+        }
+    }, [sidevisning]);
 
     return (
         <BehandlingContext.Provider
