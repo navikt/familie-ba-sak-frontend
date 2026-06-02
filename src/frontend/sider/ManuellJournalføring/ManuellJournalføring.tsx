@@ -1,20 +1,13 @@
-import styled from 'styled-components';
+import { Personlinje } from '@komponenter/Personlinje/Personlinje';
+import classNames from 'classnames';
 
 import { GlobalAlert } from '@navikt/ds-react';
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
 
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
+import styles from './ManuellJournalføring.module.css';
 import { ManuellJournalføringProvider, useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { Personlinje } from '../../komponenter/Personlinje/Personlinje';
-import { fagsakHeaderHøydeRem } from '../../typer/styling';
-
-const ToKolonnerDiv = styled.div<{ $viserAlert?: boolean }>`
-    display: grid;
-    grid-template-columns: 40rem 1fr;
-    grid-template-rows: 1fr;
-    height: calc(100vh - ${props => (props.$viserAlert ? fagsakHeaderHøydeRem + 5.25 : fagsakHeaderHøydeRem)}rem);
-`;
 
 const ManuellJournalføringContent = () => {
     const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalføringContext();
@@ -41,10 +34,10 @@ const ManuellJournalføringContent = () => {
                         </>
                     )}
 
-                    <ToKolonnerDiv $viserAlert={viserAlert}>
+                    <div className={classNames(styles.toKolonner, { [styles.withAlert]: viserAlert })}>
                         <JournalpostSkjema />
                         <DokumentPanel />
-                    </ToKolonnerDiv>
+                    </div>
                 </>
             );
 

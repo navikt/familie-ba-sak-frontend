@@ -1,0 +1,14 @@
+.definitionList {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 10rem 20rem;
+    margin-left: 1rem;
+
+    dt {
+        font-weight: var(--ax-font-weight-bold);
+    }
+
+    dd {
+        margin-left: 0;
+    }
+}
