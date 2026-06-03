@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
                 global: 'window',
             },
             server: {
+                hmr: {
+                    port: 24678,
+                },
                 port: 8000,
             },
             resolve: {
