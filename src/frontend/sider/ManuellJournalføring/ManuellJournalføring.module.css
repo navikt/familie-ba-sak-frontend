@@ -1,0 +1,10 @@
+.toKolonner {
+    display: grid;
+    grid-template-columns: 40rem 1fr;
+    grid-template-rows: 1fr;
+    height: calc(100vh - 6rem);
+}
+
+.withAlert {
+    height: calc(100vh - 11.25rem);
+}

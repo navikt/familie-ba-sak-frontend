@@ -1,10 +1,12 @@
 import { useState } from 'react';
 
+import { FagsakType } from '@typer/fagsak';
+import type { OppgavetypeFilter } from '@typer/oppgave';
+import { oppgaveTypeFilter } from '@typer/oppgave';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, ErrorSummary, Heading, LocalAlert } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, ErrorSummary, Heading, LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { AvsenderPanel } from './AvsenderPanel';
@@ -14,18 +16,6 @@ import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import Knapperekke from '../../komponenter/Knapperekke';
-import { FagsakType } from '../../typer/fagsak';
-import type { OppgavetypeFilter } from '../../typer/oppgave';
-import { oppgaveTypeFilter } from '../../typer/oppgave';
-
-const Container = styled.div`
-    padding: 2rem;
-    overflow-y: scroll;
-`;
-
-const StyledSectionDiv = styled.div`
-    margin-top: 2.5rem;
-`;
 
 export const JournalpostSkjema = () => {
     const {
@@ -52,7 +42,7 @@ export const JournalpostSkjema = () => {
     };
 
     return (
-        <Container>
+        <Box padding={'space-32'} overflowY={'scroll'}>
             {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
                 <Heading spacing size="medium" level="2">
                     {
@@ -63,18 +53,18 @@ export const JournalpostSkjema = () => {
                 </Heading>
             )}
             <Journalpost />
-            <StyledSectionDiv>
+            <Box marginBlock={'space-40 space-0'}>
                 <Heading size={'small'} level={'2'} children={'Dokumenter'} />
                 <Dokumenter />
-            </StyledSectionDiv>
-            <StyledSectionDiv>
+            </Box>
+            <Box marginBlock={'space-40 space-0'}>
                 <Heading size={'small'} level={'2'} children={'Bruker og avsender'} />
                 <BrukerPanel />
                 <br />
                 <AvsenderPanel />
-            </StyledSectionDiv>
+            </Box>
 
-            <StyledSectionDiv>
+            <Box marginBlock={'space-40 space-0'}>
                 {kanKnytteJournalpostTilBehandling() && <KnyttJournalpostTilBehandling />}
                 <br />
                 {(skjema.submitRessurs.status === RessursStatus.FEILET ||
@@ -93,7 +83,7 @@ export const JournalpostSkjema = () => {
                         ))}
                     </ErrorSummary>
                 )}
-            </StyledSectionDiv>
+            </Box>
 
             <Knapperekke>
                 <Button
@@ -129,6 +119,6 @@ export const JournalpostSkjema = () => {
                 )}
             </Knapperekke>
             {valideringsfeilmelding && <ErrorMessage>{valideringsfeilmelding}</ErrorMessage>}
-        </Container>
+        </Box>
     );
 };

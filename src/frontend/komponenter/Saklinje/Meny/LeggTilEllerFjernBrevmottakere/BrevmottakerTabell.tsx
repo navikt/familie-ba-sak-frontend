@@ -1,38 +1,12 @@
-import styled from 'styled-components';
-
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading, InlineMessage } from '@navikt/ds-react';
-import { FontWeightBold } from '@navikt/ds-tokens/dist/tokens';
+import { Box, Button, Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import _CountryData from '@navikt/land-verktoy';
 
+import styles from './BrevmottakerTabell.module.css';
 import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
 
 const CountryData = (_CountryData as unknown as { default?: typeof _CountryData }).default ?? _CountryData;
-
-const FlexDiv = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const StyledDiv = styled.div`
-    margin-top: 2.5rem;
-`;
-
-const DefinitionList = styled.dl`
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: 10rem 20rem;
-    margin-left: 1rem;
-
-    dt {
-        font-weight: ${FontWeightBold};
-    }
-
-    dd {
-        margin-left: 0;
-    }
-`;
 
 interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     mottaker: T;
@@ -48,8 +22,8 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (
-        <StyledDiv>
-            <FlexDiv>
+        <Box marginBlock={'space-40 space-0'}>
+            <HStack justify={'space-between'}>
                 <Heading size="medium" children={mottakerVisningsnavn[mottaker.type]} />
                 {!erLesevisning && (
                     <Button
@@ -63,8 +37,8 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         {'Fjern'}
                     </Button>
                 )}
-            </FlexDiv>
-            <DefinitionList>
+            </HStack>
+            <dl className={styles.definitionList}>
                 <dt>Navn</dt>
                 <dd>{mottaker.navn}</dd>
                 <dt>Land</dt>
@@ -77,14 +51,14 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                 <dd>{mottaker.postnummer || '-'}</dd>
                 <dt>Poststed</dt>
                 <dd>{mottaker.poststed || '-'}</dd>
-            </DefinitionList>
+            </dl>
 
             {mottaker.landkode !== 'NO' && (
                 <InlineMessage status={'info'}>
                     Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.
                 </InlineMessage>
             )}
-        </StyledDiv>
+        </Box>
     );
 };
 

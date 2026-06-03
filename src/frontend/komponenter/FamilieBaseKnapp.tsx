@@ -1,19 +1,8 @@
-import styled from 'styled-components';
+import type { ButtonHTMLAttributes } from 'react';
 
-import { BorderFocus } from '@navikt/ds-tokens/dist/tokens';
+import styles from './FamilieBaseKnapp.module.css';
 
-const FamilieBaseKnapp = styled.button`
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-
-    :focus {
-        box-shadow: 0 0 0 3px ${BorderFocus};
-    }
-`;
-
+const FamilieBaseKnapp = ({ children }: ButtonHTMLAttributes<HTMLButtonElement>) => (
+    <button className={styles.familieBaseKnapp}>{children}</button>
+);
 export default FamilieBaseKnapp;
