@@ -7,6 +7,7 @@ import { Box, Button, Fieldset, HGrid, HStack, InlineMessage, Select, TextField,
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
+import styles from './BrevmottakerSkjema.module.css';
 import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 import { ALLE_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../FlaggCombobox';
@@ -116,8 +117,9 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                 </InlineMessage>
                             )}
 
-                            <HGrid gap={'space-16'} columns={'8rem 1fr'}>
+                            <HGrid gap={'space-16'} columns={'10rem 1fr'}>
                                 <TextField
+                                    className={styles.postInput}
                                     {...skjema.felter.postnummer.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                                     readOnly={erLesevisning}
                                     disabled={skjema.felter.land.verdi !== 'NO'}
@@ -127,6 +129,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                                     }}
                                 />
                                 <TextField
+                                    className={styles.postInput}
                                     {...skjema.felter.poststed.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
                                     readOnly={erLesevisning}
                                     disabled={skjema.felter.land.verdi !== 'NO'}
