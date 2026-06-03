@@ -1,8 +1,8 @@
+import { hentPersonEnkel } from '@api/hentPersonEnkel';
 import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { IPersonInfo } from '@typer/person';
 
-import { useAppContext } from '../context/AppContext';
-import type { IPersonInfo } from '../typer/person';
-import { RessursResolver } from '../utils/ressursResolver';
+import { useHttp } from '@navikt/familie-http';
 
 export const HentPersonEnkelQueryKeyFactory = {
     personEnkel: (personIdent: string) => ['person_enkel', personIdent],
@@ -13,17 +13,11 @@ type Parameters = Omit<UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>, 
 };
 
 export function useHentPersonEnkel({ personIdent, ...rest }: Parameters) {
-    const { hentPerson } = useAppContext();
+    const { request } = useHttp();
     return useQuery({
         queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(personIdent),
-        queryFn: async () => {
-            // TODO : Flytt "hentPerson" metoden fra AppContext til api mappen og omdøp den til "hentPersonEnkel",
-            //  men må skrive om hvordan "AppInfoModal" fungerer først. Da burde man også tillate å sende inn "gcTime"
-            //  og "påvirkerSystemLaster" som parameter.
-            const ressurs = await hentPerson(personIdent);
-            return RessursResolver.resolveToPromise(ressurs);
-        },
-        gcTime: 0, // deaktiver cache da "påvirkerSystemLaster" er false.
+        queryFn: () => hentPersonEnkel(request, personIdent),
+        gcTime: 0,
         ...rest,
     });
 }

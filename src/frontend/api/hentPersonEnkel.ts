@@ -1,14 +1,15 @@
+import { adressebeskyttelsestyper, type IPersonInfo } from '@typer/person';
+
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { adressebeskyttelsestyper, type IPersonInfo } from '../typer/person';
 import { RessursResolver } from '../utils/ressursResolver';
 
 interface RequestParams {
     ident: string;
 }
 
-export async function hentPersonEnkel(request: FamilieRequest, ident: string, påvirkerSystemLaster: boolean = true) {
+export async function hentPersonEnkel(request: FamilieRequest, ident: string, påvirkerSystemLaster: boolean = false) {
     const ressurs = await request<RequestParams, IPersonInfo>({
         method: 'POST',
         url: '/familie-ba-sak/api/person/enkel',

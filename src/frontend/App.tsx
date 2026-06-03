@@ -1,7 +1,6 @@
 import '@navikt/ds-css';
 import './index.css';
 
-import { AppProvider } from '@context/AppContext';
 import { AuthContextProvider } from '@context/AuthContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
@@ -11,7 +10,7 @@ import { TekniskFeilModalProvider } from '@context/TekniskFeilModalContext';
 import { ToastProvider } from '@context/ToastContext';
 import { FeatureTogglesProvider } from '@context/TogglesContext';
 import { useStartUmami } from '@hooks/useStartUmami';
-import { ErrorBoundary, ErrorBoundaryMedSaksbehandler } from '@komponenter/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from '@komponenter/ErrorBoundary/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { erProd } from '@utils/miljø';
@@ -36,21 +35,17 @@ export function App() {
                     <QueryClientProvider client={queryClient}>
                         {!erProd() && <ReactQueryDevtools position={'right'} initialIsOpen={false} />}
                         <SaksbehandlerProvider>
-                            <ErrorBoundaryMedSaksbehandler>
-                                <AuthContextProvider>
-                                    <HttpContextProvider>
-                                        <FeatureTogglesProvider>
-                                            <AppProvider>
-                                                <ModalProvider>
-                                                    <ToastProvider>
-                                                        <Container />
-                                                    </ToastProvider>
-                                                </ModalProvider>
-                                            </AppProvider>
-                                        </FeatureTogglesProvider>
-                                    </HttpContextProvider>
-                                </AuthContextProvider>
-                            </ErrorBoundaryMedSaksbehandler>
+                            <AuthContextProvider>
+                                <HttpContextProvider>
+                                    <FeatureTogglesProvider>
+                                        <ModalProvider>
+                                            <ToastProvider>
+                                                <Container />
+                                            </ToastProvider>
+                                        </ModalProvider>
+                                    </FeatureTogglesProvider>
+                                </HttpContextProvider>
+                            </AuthContextProvider>
                         </SaksbehandlerProvider>
                     </QueryClientProvider>
                 </ManglerTilgangModalProvider>

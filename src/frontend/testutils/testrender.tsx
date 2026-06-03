@@ -1,6 +1,5 @@
 import type { ReactNode, PropsWithChildren } from 'react';
 
-import { AppProvider } from '@context/AppContext';
 import { AuthContextProvider } from '@context/AuthContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
@@ -53,13 +52,11 @@ export function TestProviders({
                         <AuthContextProvider>
                             <HttpContextProvider fjernRessursSomLasterTimeout={fjernRessursSomLasterTimeout}>
                                 <FeatureTogglesProvider featureToggles={featureToggles}>
-                                    <AppProvider>
-                                        <ModalProvider>
-                                            <ToastProvider>
-                                                <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
-                                            </ToastProvider>
-                                        </ModalProvider>
-                                    </AppProvider>
+                                    <ModalProvider>
+                                        <ToastProvider>
+                                            <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+                                        </ToastProvider>
+                                    </ModalProvider>
                                 </FeatureTogglesProvider>
                             </HttpContextProvider>
                         </AuthContextProvider>

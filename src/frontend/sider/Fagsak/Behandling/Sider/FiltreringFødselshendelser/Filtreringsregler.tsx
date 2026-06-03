@@ -1,20 +1,17 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useFagsakId } from '@hooks/useFagsakId';
+import { BehandlingSteg } from '@typer/behandling';
+import { Filtreringsregel, filtreringsregler } from '@typer/fødselshendelser';
 import { useNavigate } from 'react-router';
 
 import { BodyShort, List } from '@navikt/ds-react';
 
-import { useFagsakId } from '../../../../../hooks/useFagsakId';
 import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingSteg } from '../../../../../typer/behandling';
-import { Filtreringsregel, filtreringsregler } from '../../../../../typer/fødselshendelser';
 import Skjemasteg from '../Skjemasteg';
 
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
-const Filtreringsregler = ({ åpenBehandling }: IProps) => {
+const Filtreringsregler = () => {
     const fagsakId = useFagsakId();
+    const behandling = useBehandling();
     const navigate = useNavigate();
 
     return (
@@ -22,7 +19,7 @@ const Filtreringsregler = ({ åpenBehandling }: IProps) => {
             skalViseForrigeKnapp={false}
             tittel={'Filtreringsregler'}
             nesteOnClick={() => {
-                navigate(`/fagsak/${fagsakId}/${åpenBehandling.behandlingId}/vilkaarsvurdering`);
+                navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vilkaarsvurdering`);
             }}
             maxWidthStyle={'80rem'}
             senderInn={false}
@@ -30,7 +27,7 @@ const Filtreringsregler = ({ åpenBehandling }: IProps) => {
         >
             <List>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {
-                    const fødselshendelsefiltreringResultat = åpenBehandling.fødselshendelsefiltreringResultater.find(
+                    const fødselshendelsefiltreringResultat = behandling.fødselshendelsefiltreringResultater.find(
                         it => it.filtreringsregel === filtreringsregel
                     );
 

@@ -1,6 +1,20 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useFagsakId } from '@hooks/useFagsakId';
+import type { IBehandling } from '@typer/behandling';
+import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { PersonType } from '@typer/person';
+import type {
+    IAvregningsperiode,
+    IOverlappendePeriodeMedAndreFagsaker,
+    ISimuleringDTO,
+    ISimuleringPeriode,
+    ITilbakekreving,
+} from '@typer/simulering';
+import { Tilbakekrevingsvalg } from '@typer/simulering';
+import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '@utils/dato';
 import { isAfter, isBefore } from 'date-fns';
 
 import { type FamilieRequestConfig, useHttp } from '@navikt/familie-http';
@@ -8,24 +22,6 @@ import type { Avhengigheter, FeiloppsummeringFeil, ISkjema } from '@navikt/famil
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
-
-import { useFagsakId } from '../../../../../hooks/useFagsakId';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { Behandlingstype, BehandlingÅrsak } from '../../../../../typer/behandling';
-import { PersonType } from '../../../../../typer/person';
-import type {
-    IAvregningsperiode,
-    IOverlappendePeriodeMedAndreFagsaker,
-    ISimuleringDTO,
-    ISimuleringPeriode,
-    ITilbakekreving,
-} from '../../../../../typer/simulering';
-import { Tilbakekrevingsvalg } from '../../../../../typer/simulering';
-import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '../../../../../utils/dato';
-
-interface IProps extends PropsWithChildren {
-    åpenBehandling: IBehandling;
-}
 
 interface Tilbakekrevingsskjema {
     tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
@@ -58,10 +54,11 @@ interface SimuleringContextValue {
 
 const SimuleringContext = createContext<SimuleringContextValue | undefined>(undefined);
 
-export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
+export const SimuleringProvider = ({ children }: PropsWithChildren) => {
     const { request } = useHttp();
 
     const fagsakId = useFagsakId();
+    const behandling = useBehandling();
 
     const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
         status: RessursStatus.HENTER,
@@ -71,8 +68,8 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         status: RessursStatus.HENTER,
     });
 
-    const vedtak = åpenBehandling.vedtak;
-    const personerMedAndelerTilkjentYtelse = åpenBehandling.personerMedAndelerTilkjentYtelse;
+    const vedtak = behandling.vedtak;
+    const personerMedAndelerTilkjentYtelse = behandling.personerMedAndelerTilkjentYtelse;
     const maksLengdeTekst = 1500;
     const maksgrenseForAvvikIBeløpVedMigrering = 100;
     const mars2023 = '2023-03-01';
@@ -80,7 +77,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     useEffect(() => {
         request<IBehandling, ISimuleringDTO>({
             method: 'GET',
-            url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/simulering`,
+            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/simulering`,
             påvirkerSystemLaster: true,
         }).then(response =>
             response.status === RessursStatus.SUKSESS
@@ -98,7 +95,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
                   })
                 : settSimuleringresultat(response)
         );
-    }, [åpenBehandling]);
+    }, [behandling]);
 
     useEffect(() => {
         if (erFeilutbetaling || avregningsperioder.length > 0) {
@@ -130,7 +127,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
     const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
     const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
 
-    const erMigreringFraInfotrygd = åpenBehandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterutbetaling;
 
@@ -147,7 +144,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
         );
 
     const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
-        const antallBarn = åpenBehandling.personer.filter(person => person.type === PersonType.BARN).length;
+        const antallBarn = behandling.personer.filter(person => person.type === PersonType.BARN).length;
         return perioderesultater.every(beløp => Math.abs(beløp) <= antallBarn);
     };
 
@@ -166,10 +163,10 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
 
     const behandlingErMigreringMedManuellePosteringer = erMigreringFraInfotrygd && behandlingHarManuellePosteringer;
 
-    const behandlingErEndreMigreringsdato = åpenBehandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
+    const behandlingErEndreMigreringsdato = behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
 
     const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
-        verdi: åpenBehandling.tilbakekreving?.valg,
+        verdi: behandling.tilbakekreving?.valg,
         avhengigheter: {
             erMigreringFraInfotrygdMedAvvik,
             erFeilutbetaling,
@@ -185,7 +182,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
                 : ok(felt),
     });
     const fritekstVarsel = useFelt<string>({
-        verdi: åpenBehandling.tilbakekreving?.varsel ?? '',
+        verdi: behandling.tilbakekreving?.varsel ?? '',
         avhengigheter: {
             tilbakekreving: tilbakekrevingsvalg,
             erFeilutbetaling,
@@ -204,7 +201,7 @@ export const SimuleringProvider = ({ åpenBehandling, children }: IProps) => {
             avhengigheter?.tilbakekreving?.verdi === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
     });
     const begrunnelse = useFelt<string>({
-        verdi: åpenBehandling.tilbakekreving?.begrunnelse ?? '',
+        verdi: behandling.tilbakekreving?.begrunnelse ?? '',
         avhengigheter: {
             erFeilutbetaling,
             maksLengdeTekst: maksLengdeTekst,

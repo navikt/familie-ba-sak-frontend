@@ -19,11 +19,7 @@ import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 
-interface ISimuleringProps {
-    åpenBehandling: IBehandling;
-}
-
-const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
+const Simulering = () => {
     const {
         hentSkjemadata,
         onSubmit,
@@ -40,7 +36,7 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
 
-    const { settÅpenBehandling } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const fagsakId = useFagsakId();
     const erLesevisning = useErLesevisning();
@@ -52,18 +48,18 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
 
     const nesteOnClick = () => {
         if (erLesevisning) {
-            navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
+            navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
         } else {
             onSubmit<ITilbakekreving | undefined>(
                 {
                     data: hentSkjemadata(),
                     method: 'POST',
-                    url: `/familie-ba-sak/api/behandlinger/${åpenBehandling.behandlingId}/steg/tilbakekreving`,
+                    url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/tilbakekreving`,
                 },
                 (ressurs: Ressurs<IBehandling>) => {
                     if (ressurs.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(ressurs);
-                        navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/vedtak`);
+                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
                     }
                 }
             );
@@ -71,7 +67,7 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
     };
 
     const forrigeOnClick = () => {
-        navigate(`/fagsak/${fagsakId}/${åpenBehandling?.behandlingId}/tilkjent-ytelse`);
+        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
     };
 
     if (
@@ -83,7 +79,7 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
 
     const erAvregning = avregningsperioder.length > 0;
 
-    const tilbakekrevingsvedtakMotregning = åpenBehandling.tilbakekrevingsvedtakMotregning;
+    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
 
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 
@@ -176,7 +172,7 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
                         )}
                         {erAvregning && (
                             <TilbakekrevingsvedtakMotregning
-                                åpenBehandling={åpenBehandling}
+                                åpenBehandling={behandling}
                                 tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning}
                                 avregningsperioder={avregningsperioder}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
@@ -184,9 +180,9 @@ const Simulering = ({ åpenBehandling }: ISimuleringProps) => {
                         )}
                         {skalViseTilbakekrevingSkjema && (
                             <TilbakekrevingSkjema
-                                søkerMålform={hentSøkersMålform(åpenBehandling)}
+                                søkerMålform={hentSøkersMålform(behandling)}
                                 harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                åpenBehandling={åpenBehandling}
+                                åpenBehandling={behandling}
                             />
                         )}
                     </>

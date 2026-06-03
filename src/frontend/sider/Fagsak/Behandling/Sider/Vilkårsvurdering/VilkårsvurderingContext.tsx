@@ -1,13 +1,8 @@
 import type { PropsWithChildren, SetStateAction, Dispatch } from 'react';
 import { createContext, useState, useEffect, useContext } from 'react';
 
-import { useHttp } from '@navikt/familie-http';
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-
-import { mapFraRestVilkårsvurderingTilUi } from './utils';
-import type { IBehandling } from '../../../../../typer/behandling';
+import { useBehandling } from '@hooks/useBehandling';
+import type { IBehandling } from '@typer/behandling';
 import type {
     IAnnenVurdering,
     IPersonResultat,
@@ -16,11 +11,14 @@ import type {
     IRestPersonResultat,
     IVilkårResultat,
     VilkårType,
-} from '../../../../../typer/vilkår';
+} from '@typer/vilkår';
 
-interface IProps extends PropsWithChildren {
-    åpenBehandling: IBehandling;
-}
+import { useHttp } from '@navikt/familie-http';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+
+import { mapFraRestVilkårsvurderingTilUi } from './utils';
 
 export enum VilkårSubmit {
     PUT,
@@ -48,28 +46,27 @@ interface VilkårsvurderingContextValue {
 
 const VilkårsvurderingContext = createContext<VilkårsvurderingContextValue | undefined>(undefined);
 
-export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps) => {
+export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
     const { request } = useHttp();
+
+    const behandling = useBehandling();
+
     const [vilkårSubmit, settVilkårSubmit] = useState(VilkårSubmit.NONE);
 
     const [vilkårsvurdering, settVilkårsvurdering] = useState<IPersonResultat[]>(
-        åpenBehandling ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer) : []
+        mapFraRestVilkårsvurderingTilUi(behandling.personResultater, behandling.personer)
     );
 
     useEffect(() => {
-        settVilkårsvurdering(
-            åpenBehandling
-                ? mapFraRestVilkårsvurderingTilUi(åpenBehandling.personResultater, åpenBehandling.personer)
-                : []
-        );
-    }, [åpenBehandling]);
+        settVilkårsvurdering(mapFraRestVilkårsvurderingTilUi(behandling.personResultater, behandling.personer));
+    }, [behandling]);
 
     const putVilkår = (vilkårsvurderingForPerson: IPersonResultat, redigerbartVilkår: FeltState<IVilkårResultat>) => {
         settVilkårSubmit(VilkårSubmit.PUT);
 
         return request<IRestPersonResultat, IBehandling>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${redigerbartVilkår.verdi.id}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/${redigerbartVilkår.verdi.id}`,
             data: {
                 personIdent: vilkårsvurderingForPerson.personIdent,
                 vilkårResultater: [
@@ -104,7 +101,7 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
 
         return request<IRestAnnenVurdering, IBehandling>({
             method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
             data: {
                 id: redigerbartAnnenVurdering.verdi.id,
                 begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
@@ -123,7 +120,7 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
 
         return request<string, IBehandling>({
             method: 'DELETE',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}/${vilkårId}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/${vilkårId}`,
             data: personIdent,
         });
     };
@@ -133,7 +130,7 @@ export const VilkårsvurderingProvider = ({ åpenBehandling, children }: IProps)
 
         return request<IRestNyttVilkår, IBehandling>({
             method: 'POST',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${åpenBehandling?.behandlingId}`,
+            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}`,
             data: { personIdent, vilkårType },
         });
     };
