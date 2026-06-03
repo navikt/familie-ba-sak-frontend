@@ -12,9 +12,11 @@ import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAnde
 
 interface SkjemaKnapperProps {
     lukkSkjema: () => void;
+    // Automatisk genererte andeler kan ikke endres, kun slettes – da vises kun «Fjern periode».
+    kunVisSlett?: boolean;
 }
 
-export const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
+export const SkjemaKnapper = ({ lukkSkjema, kunVisSlett = false }: SkjemaKnapperProps) => {
     const { settÅpenBehandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const { reset, setError } = useFormContext<EndretUtbetalingAndelFormValues>();
@@ -44,20 +46,28 @@ export const SkjemaKnapper = ({ lukkSkjema }: SkjemaKnapperProps) => {
 
     return (
         <HStack justify="space-between">
-            <HStack gap="space-8">
-                <Button
-                    size="small"
-                    variant="secondary"
-                    type="submit"
-                    loading={oppdatererEndretUtbetalingAndel}
-                    disabled={skalDisableKnapper}
-                >
-                    Bekreft
-                </Button>
-                <Button variant="tertiary" size="small" type="button" onClick={avbryt} disabled={skalDisableKnapper}>
-                    Avbryt
-                </Button>
-            </HStack>
+            {!kunVisSlett && (
+                <HStack gap="space-8">
+                    <Button
+                        size="small"
+                        variant="secondary"
+                        type="submit"
+                        loading={oppdatererEndretUtbetalingAndel}
+                        disabled={skalDisableKnapper}
+                    >
+                        Bekreft
+                    </Button>
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        type="button"
+                        onClick={avbryt}
+                        disabled={skalDisableKnapper}
+                    >
+                        Avbryt
+                    </Button>
+                </HStack>
+            )}
             <Button
                 variant={'tertiary'}
                 size={'small'}

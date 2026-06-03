@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 
@@ -25,14 +30,16 @@ import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingMod
 import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
 import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
-import { useBehandlingContext } from '../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { sjekkErBehandleneEnhetMidlertidig } from '../../../typer/behandling';
 
 export function Behandlingsmeny() {
     const { behandling } = useBehandlingContext();
+    const toggles = useFeatureToggles();
 
     const erBehandleneEnhetMidlertidig = sjekkErBehandleneEnhetMidlertidig(behandling);
     const erBehandlingPåVent = !!behandling.aktivSettPåVent;
+
+    const kanEndreSøknadstidspunkt =
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
@@ -78,7 +85,7 @@ export function Behandlingsmeny() {
                     lukkModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(false)}
                 />
             )}
-            {visEndreSøknadstidspunktModal && (
+            {kanEndreSøknadstidspunkt && visEndreSøknadstidspunktModal && (
                 <EndreSøknadstidspunktModal lukkModal={() => settVisEndreSøknadstidspunktModal(false)} />
             )}
             <ActionMenu>
@@ -99,7 +106,9 @@ export function Behandlingsmeny() {
                         <SettEllerOppdaterVenting åpneModal={() => settVisBehandlingPåVentModal(true)} />
                         <TaBehandlingAvVent åpneModal={() => settVisTaBehandlingAvVentModal(true)} />
                         <HenleggBehandling />
-                        <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
+                        {kanEndreSøknadstidspunkt && (
+                            <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
+                        )}
                         <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
                         <LeggTilEllerFjernBrevmottakerePåBehandling
                             åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}

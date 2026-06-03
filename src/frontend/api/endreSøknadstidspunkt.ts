@@ -1,24 +1,23 @@
 import type { IBehandling } from '@typer/behandling';
+import { RessursResolver } from '@utils/ressursResolver';
 
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
-import type { IRegistrertSøknadstidspunktDto } from './hentRegistrertSøknadstidspunkt';
-import { RessursResolver } from '../utils/ressursResolver';
+import { type IRegistrertSøknadstidspunktPåPersonDto } from './hentRegistrertSøknadstidspunktPåPerson';
 
 export interface EndreSøknadstidspunktPayload {
-    søknadstidspunktPerPerson: IRegistrertSøknadstidspunktDto[];
+    søknadstidspunktPerPerson: IRegistrertSøknadstidspunktPåPersonDto[];
 }
 
-export const endreSøknadstidspunkt = async (
+export async function endreSøknadstidspunkt(
     request: FamilieRequest,
-    behandlingId: number,
-    payload: EndreSøknadstidspunktPayload
-) => {
+    payload: EndreSøknadstidspunktPayload,
+    behandlingId: number
+) {
     const ressurs = await request<EndreSøknadstidspunktPayload, IBehandling>({
         data: payload,
         method: 'PUT',
-        url: `/familie-ba-sak/api/registrert-soknadstidspunkt/behandling/${behandlingId}`,
+        url: `/familie-ba-sak/api/registrert-soknadstidspunkt-paa-person/behandling/${behandlingId}`,
     });
-
     return RessursResolver.resolveToPromise(ressurs);
-};
+}

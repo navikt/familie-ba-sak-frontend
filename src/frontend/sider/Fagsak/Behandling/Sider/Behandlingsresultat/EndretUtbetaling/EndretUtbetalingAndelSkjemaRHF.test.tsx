@@ -107,6 +107,50 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
         expect(screen.queryByRole('button', { name: 'Fjern periode' })).not.toBeInTheDocument();
     });
 
+    test('skal kun tillate sletting (ikke endring) for automatisk genererte andeler når toggle er på', () => {
+        function CustomWrapper({ children }: { children: ReactNode }) {
+            return (
+                <Wrapper
+                    endretUtbetalingAndel={{
+                        ...defaultEndretUtbetalingAndel,
+                        årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+                        erAutomatiskGenerert: true,
+                    }}
+                >
+                    {children}
+                </Wrapper>
+            );
+        }
+
+        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
+
+        expect(screen.getByLabelText(/Årsak/)).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Fjern periode' })).toBeInTheDocument();
+    });
+
+    test('skal la manuelt opprettet etterbetaling-andel være redigerbar selv om årsak er etterbetaling', () => {
+        function CustomWrapper({ children }: { children: ReactNode }) {
+            return (
+                <Wrapper
+                    endretUtbetalingAndel={{
+                        ...defaultEndretUtbetalingAndel,
+                        årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+                        erAutomatiskGenerert: false,
+                    }}
+                >
+                    {children}
+                </Wrapper>
+            );
+        }
+
+        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
+
+        expect(screen.getByRole('button', { name: 'Bekreft' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Fjern periode' })).toBeInTheDocument();
+    });
+
     test('skal vise feilmelding når det er root error', async () => {
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });

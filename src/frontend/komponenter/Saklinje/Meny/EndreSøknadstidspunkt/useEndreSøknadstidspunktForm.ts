@@ -1,9 +1,8 @@
-import type { IRegistrertSøknadstidspunktDto } from '@api/hentRegistrertSøknadstidspunkt';
+import type { IRegistrertSøknadstidspunktPåPersonDto } from '@api/hentRegistrertSøknadstidspunktPåPerson';
 import { useEndreSøknadstidspunkt } from '@hooks/useEndreSøknadstidspunkt';
-import { HentRegistrertSøknadstidspunktQueryKeyFactory } from '@hooks/useHentRegistrertSøknadstidspunkt';
+import { HentRegistrertSøknadstidspunktPåPersonQueryKeyFactory } from '@hooks/useHentRegistrertSøknadstidspunktPåPerson';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
-import { PersonType } from '@typer/person';
 import { dateTilIsoDatoString, isoStringTilDateEllerUndefined } from '@utils/dato';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -22,34 +21,46 @@ export interface EndreSøknadstidspunktFormValues {
 
 interface Props {
     lukkModal: () => void;
-    søknadstidspunkter: IRegistrertSøknadstidspunktDto[];
+    søknadstidspunkter: IRegistrertSøknadstidspunktPåPersonDto[];
 }
 
-export const useEndreSøknadstidspunktForm = ({ lukkModal, søknadstidspunkter }: Props) => {
+export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { mutateAsync: endreSøknadstidspunkt } = useEndreSøknadstidspunkt();
     const queryClient = useQueryClient();
 
-    // Forhåndsutfyll med persistert søknadstidspunkt for personen hvis det finnes,
-    // ellers behandlingens søknad mottatt-dato som default, ellers tomt.
-    const utledSøknadstidspunkt = (personIdent: string): Date | null => {
-        const persistertSøknadstidspunkt = søknadstidspunkter.find(
-            person => person.personIdent === personIdent
-        )?.søknadstidspunkt;
-
-        return isoStringTilDateEllerUndefined(persistertSøknadstidspunkt ?? behandling.søknadMottattDato) ?? null;
-    };
+    const { mutateAsync: endreSøknadstidspunkt } = useEndreSøknadstidspunkt({
+        onSuccess: async oppdatertBehandling => {
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            await queryClient.invalidateQueries({
+                queryKey: HentRegistrertSøknadstidspunktPåPersonQueryKeyFactory.registrertSøknadstidspunkt(
+                    behandling.behandlingId
+                ),
+            });
+            lukkModal();
+        },
+        onError: error => {
+            setError('root', { message: error.message ?? 'Teknisk feil ved endring av søknadstidspunkt.' });
+        },
+    });
 
     const form = useForm<EndreSøknadstidspunktFormValues>({
         defaultValues: {
-            personer: behandling.personer
-                .filter(person => person.type !== PersonType.SØKER)
-                .map(person => ({
-                    personIdent: person.personIdent,
-                    navn: person.navn,
-                    fødselsdato: person.fødselsdato,
-                    søknadstidspunkt: utledSøknadstidspunkt(person.personIdent),
-                })),
+            personer: søknadstidspunkter
+                .map(({ personIdent, søknadstidspunkt }): SøknadstidspunktFeltValues | undefined => {
+                    const person = behandling.personer.find(p => p.personIdent === personIdent);
+
+                    if (person === undefined) {
+                        return undefined;
+                    }
+
+                    return {
+                        personIdent,
+                        navn: person.navn,
+                        fødselsdato: person.fødselsdato,
+                        søknadstidspunkt: isoStringTilDateEllerUndefined(søknadstidspunkt) ?? null,
+                    };
+                })
+                .filter((person): person is SøknadstidspunktFeltValues => person !== undefined),
         },
     });
 
@@ -60,7 +71,7 @@ export const useEndreSøknadstidspunktForm = ({ lukkModal, søknadstidspunkter }
         name: 'personer',
     });
 
-    const onSubmit = async (values: EndreSøknadstidspunktFormValues) => {
+    function onSubmit(values: EndreSøknadstidspunktFormValues) {
         clearErrors('root');
 
         const personerMedDato = values.personer.filter(person => person.søknadstidspunkt !== null);
@@ -76,26 +87,8 @@ export const useEndreSøknadstidspunktForm = ({ lukkModal, søknadstidspunkter }
                 personIdent: person.personIdent,
                 søknadstidspunkt: dateTilIsoDatoString(person.søknadstidspunkt ?? undefined),
             })),
-        })
-            .then(async oppdatertBehandling => {
-                settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
-                await queryClient.invalidateQueries({
-                    queryKey: HentRegistrertSøknadstidspunktQueryKeyFactory.registrertSøknadstidspunkt(
-                        behandling.behandlingId
-                    ),
-                });
-                lukkModal();
-            })
-            .catch((e: unknown) =>
-                setError('root', {
-                    message: e instanceof Error ? e.message : 'Teknisk feil ved endring av søknadstidspunkt.',
-                })
-            );
-    };
+        });
+    }
 
-    return {
-        form,
-        fieldArray,
-        onSubmit,
-    };
-};
+    return { form, fieldArray, onSubmit };
+}
