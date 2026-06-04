@@ -1,6 +1,6 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { RouteError } from '@komponenter/Error/RouteError';
-import { FagsakContainer } from '@sider/Fagsak/FagsakContainer';
+import { Fagsak } from '@sider/Fagsak/Fagsak';
 import { fagsakRoutes } from '@sider/Fagsak/FagsakRoutes';
 import { Infotrygd } from '@sider/Infotrygd/Infotrygd';
 import ManuellJournalføring from '@sider/ManuellJournalføring/ManuellJournalføring';
@@ -22,7 +22,7 @@ export const appRoutes = createBrowserRouter([
             },
             {
                 path: 'fagsak/:fagsakId',
-                element: <FagsakContainer />,
+                element: <Fagsak />,
                 errorElement: <RouteError />,
                 children: fagsakRoutes,
             },

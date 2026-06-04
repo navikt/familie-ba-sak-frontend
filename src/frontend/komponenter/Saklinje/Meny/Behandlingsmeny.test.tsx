@@ -14,6 +14,7 @@ import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import {
+    BehandlingSteg,
     BehandlingÅrsak,
     type IBehandling,
     MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
@@ -51,7 +52,7 @@ function Wrapper({
     initialEntries = [{ pathname: '/fagsak/1/1/registrer-soknad' }],
     behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER }),
     fagsak = lagFagsak({ behandlinger: [lagVisningBehandling({ behandlingId: behandling?.behandlingId })] }),
-    featureToggles,
+    featureToggles = skruPåAlleToggles(),
     children,
 }: WrapperProps) {
     return (
@@ -132,7 +133,10 @@ describe('Behandlingsmeny', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
-                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                    behandling={lagBehandling({
+                        årsak: BehandlingÅrsak.SØKNAD,
+                        steg: BehandlingSteg.BEHANDLINGSRESULTAT,
+                    })}
                 />
             ),
         });
@@ -148,7 +152,10 @@ describe('Behandlingsmeny', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/1/vilkaarsvurdering' }]}
-                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                    behandling={lagBehandling({
+                        årsak: BehandlingÅrsak.SØKNAD,
+                        steg: BehandlingSteg.VILKÅRSVURDERING,
+                    })}
                 />
             ),
         });
@@ -164,7 +171,10 @@ describe('Behandlingsmeny', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
-                    behandling={lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER })}
+                    behandling={lagBehandling({
+                        årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+                        steg: BehandlingSteg.REGISTRERE_SØKNAD,
+                    })}
                 />
             ),
         });
@@ -190,7 +200,10 @@ describe('Behandlingsmeny', () => {
             wrapper: props => (
                 <Wrapper
                     {...props}
-                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                    behandling={lagBehandling({
+                        årsak: BehandlingÅrsak.SØKNAD,
+                        steg: BehandlingSteg.BEHANDLINGSRESULTAT,
+                    })}
                     featureToggles={togglesMedSøknadstidspunktAv}
                 />
             ),
@@ -207,7 +220,10 @@ describe('Behandlingsmeny', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
-                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                    behandling={lagBehandling({
+                        årsak: BehandlingÅrsak.SØKNAD,
+                        steg: BehandlingSteg.BEHANDLINGSRESULTAT,
+                    })}
                 />
             ),
         });

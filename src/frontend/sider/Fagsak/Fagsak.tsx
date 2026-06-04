@@ -11,11 +11,11 @@ import { Outlet } from 'react-router';
 import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 
 import { BrukerProvider } from './BrukerContext';
-import Styles from './FagsakContainer.module.css';
+import Styles from './Fagsak.module.css';
 import { FagsakProvider } from './FagsakContext';
 import { ManuelleBrevmottakerePåFagsakProvider } from './ManuelleBrevmottakerePåFagsakContext';
 
-export function FagsakContainer() {
+export function Fagsak() {
     const fagsakIdParam = useFagsakIdParam();
 
     const { data: fagsak, isPending: isPendingFagsak, error: fagsakError } = useHentFagsak(fagsakIdParam);

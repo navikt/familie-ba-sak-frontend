@@ -12,7 +12,7 @@ import { Outlet, useLocation } from 'react-router';
 import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Styles from './BehandlingContainer.module.css';
+import Styles from './Behandling.module.css';
 import { BehandlingProvider, useBehandlingContext } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
@@ -41,7 +41,7 @@ export function OutletContainer() {
     return <Outlet />;
 }
 
-export function BehandlingContainer() {
+export function Behandling() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     const behandlingIdParam = useBehandlingIdParam();
