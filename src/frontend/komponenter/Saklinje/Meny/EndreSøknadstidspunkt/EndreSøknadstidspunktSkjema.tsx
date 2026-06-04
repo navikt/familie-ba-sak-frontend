@@ -43,7 +43,6 @@ export const EndreSøknadstidspunktSkjema = ({ lukkModal, søknadstidspunkter }:
                                     fødselsdato={person.fødselsdato}
                                     personIdent={person.personIdent}
                                     erLesevisning={erLesevisning}
-                                    isSubmitting={isSubmitting}
                                 />
                             ))}
                         </VStack>

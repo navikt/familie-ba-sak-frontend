@@ -23,17 +23,9 @@ interface Props {
     fødselsdato: string;
     personIdent: string;
     erLesevisning: boolean;
-    isSubmitting: boolean;
 }
 
-export const PersonSøknadstidspunktFelt = ({
-    index,
-    navn,
-    fødselsdato,
-    personIdent,
-    erLesevisning,
-    isSubmitting,
-}: Props) => {
+export const PersonSøknadstidspunktFelt = ({ index, navn, fødselsdato, personIdent, erLesevisning }: Props) => {
     const { control, trigger } = useFormContext<EndreSøknadstidspunktFormValues>();
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
 
@@ -42,7 +34,7 @@ export const PersonSøknadstidspunktFelt = ({
     const {
         field: { value, onChange },
         fieldState: { error },
-        formState: { isSubmitted },
+        formState: { isSubmitted, isSubmitting },
     } = useController({
         name: feltnavn,
         control,

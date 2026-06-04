@@ -39,12 +39,12 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
             lukkModal();
         },
         onError: error => {
-            setError('root', { message: error.message ?? 'Teknisk feil ved endring av søknadstidspunkt.' });
+            setError('root', { message: `Teknisk feil ved endring av søknadstidspunkt: ${error.message}` });
         },
     });
 
     const form = useForm<EndreSøknadstidspunktFormValues>({
-        defaultValues: {
+        values: {
             personer: søknadstidspunkter
                 .map(({ personIdent, søknadstidspunkt }): SøknadstidspunktFeltValues | undefined => {
                     const person = behandling.personer.find(p => p.personIdent === personIdent);

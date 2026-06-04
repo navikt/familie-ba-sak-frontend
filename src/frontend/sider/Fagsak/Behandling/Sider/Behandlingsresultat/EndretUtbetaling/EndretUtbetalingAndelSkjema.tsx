@@ -100,7 +100,7 @@ const EndretUtbetalingAndelSkjema = ({
         if (hentFrontendFeilmelding(skjema.submitRessurs)?.includes('til og med dato')) {
             skjema.felter.tom.nullstill();
         }
-    }, [skjema.felter.tom, skjema.submitRessurs]);
+    }, [skjema.submitRessurs]);
 
     const tilgjengeligePersoner: ComboboxOption[] = åpenBehandling.personer
         .filter(person =>

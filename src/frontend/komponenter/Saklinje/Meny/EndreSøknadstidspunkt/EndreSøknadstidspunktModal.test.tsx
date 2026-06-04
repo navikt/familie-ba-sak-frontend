@@ -25,7 +25,7 @@ const { mockQuery, mockMutateAsync } = vi.hoisted(() => ({
     mockQuery: {
         data: [] as Array<{ personIdent: string; søknadstidspunkt: string }>,
         isPending: false,
-        isError: false,
+        error: null as Error | null,
     },
     mockMutateAsync: vi.fn(),
 }));
@@ -46,7 +46,7 @@ beforeEach(() => {
     // Kun barn det er framstilt krav for har en registrert rad – modalen viser ett felt per rad.
     mockQuery.data = [{ personIdent: barn.personIdent, søknadstidspunkt: '2025-01-15' }];
     mockQuery.isPending = false;
-    mockQuery.isError = false;
+    mockQuery.error = null;
     mockBehandling = lagBehandling({ personer: [barn], søknadMottattDato: undefined });
 });
 
@@ -56,16 +56,16 @@ describe('EndreSøknadstidspunktModal', () => {
 
         const { screen } = render(<EndreSøknadstidspunktModal lukkModal={vi.fn()} />);
 
-        expect(screen.getByTitle('Henter søknadstidspunkt')).toBeInTheDocument();
+        expect(screen.getByTitle('Laster søknadstidspunkt')).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
     });
 
-    test('viser feilmelding når henting feiler', () => {
-        mockQuery.isError = true;
+    test('viser feilmelding med detalj fra serveren når henting feiler', () => {
+        mockQuery.error = new Error('Personen finnes ikke');
 
         const { screen } = render(<EndreSøknadstidspunktModal lukkModal={vi.fn()} />);
 
-        expect(screen.getByText('Kunne ikke hente søknadstidspunkt.')).toBeInTheDocument();
+        expect(screen.getByText(/Kunne ikke hente søknadstidspunkt: Personen finnes ikke/)).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
     });
 

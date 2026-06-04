@@ -7,7 +7,7 @@ import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import type { IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
-import { dateTilIsoDatoString } from '@utils/dato/dato';
+import { dateTilIsoDatoString } from '@utils/dato';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { kjønnType } from '@navikt/familie-typer';
