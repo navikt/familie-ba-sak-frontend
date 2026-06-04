@@ -1,5 +1,6 @@
-import type { PropsWithChildren } from 'react';
-import { useContext, createContext, useState } from 'react';
+import { type PropsWithChildren, useEffect, useContext, createContext, useState } from 'react';
+
+import { apiClient } from '@api/client/apiClient';
 
 interface Context {
     autentisert: boolean;
@@ -10,6 +11,20 @@ const AuthContext = createContext<Context | undefined>(undefined);
 
 export function AuthContextProvider({ children }: PropsWithChildren) {
     const [autentisert, settAutentisert] = useState(true);
+
+    useEffect(() => {
+        const interceptorId = apiClient.addResponseInterceptor({
+            onRejected: error => {
+                if (error.response?.status === 401) {
+                    settAutentisert(false);
+                }
+                return Promise.reject(error);
+            },
+        });
+        return () => {
+            apiClient.removeResponseInterceptor(interceptorId);
+        };
+    }, []);
 
     return <AuthContext.Provider value={{ autentisert, settAutentisert }}>{children}</AuthContext.Provider>;
 }
