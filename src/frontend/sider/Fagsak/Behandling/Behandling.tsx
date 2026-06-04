@@ -8,7 +8,7 @@ import { Outlet } from 'react-router';
 import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import Styles from './BehandlingContainer.module.css';
+import Styles from './Behandling.module.css';
 import { BehandlingProvider } from './context/BehandlingContext';
 import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
@@ -17,7 +17,7 @@ import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontr
 import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 import { Venstremeny } from './Venstremeny/Venstremeny';
 
-export function BehandlingContainer() {
+export function Behandling() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     const behandlingIdParam = useBehandlingIdParam();
