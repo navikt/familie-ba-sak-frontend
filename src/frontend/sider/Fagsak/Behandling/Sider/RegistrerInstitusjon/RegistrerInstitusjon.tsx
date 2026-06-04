@@ -1,7 +1,8 @@
+import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { BehandlingSteg, type IBehandling } from '@typer/behandling';
+import { BehandlingSteg } from '@typer/behandling';
 
 import { LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -9,17 +10,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 import { useInstitusjon } from './useInstitusjon';
 import Skjemasteg from '../Skjemasteg';
 
-interface IProps {
-    åpenBehandling: IBehandling;
-}
-
-const RegistrerInstitusjon = ({ åpenBehandling }: IProps) => {
-    const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(åpenBehandling);
+const RegistrerInstitusjon = () => {
+    const behandling = useBehandling();
+    const { institusjon, onSubmitMottaker, submitFeilmelding } = useInstitusjon(behandling);
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
     const erLesevisning = useErLesevisning();
 
     if (institusjon && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
-        hentOgSettSamhandler(åpenBehandling.behandlingId);
+        hentOgSettSamhandler(behandling.behandlingId);
     }
 
     return (

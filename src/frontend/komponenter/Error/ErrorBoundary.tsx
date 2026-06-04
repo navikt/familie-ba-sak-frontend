@@ -1,56 +1,36 @@
-import { Component, type PropsWithChildren, type ReactNode } from 'react';
+import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
 
 import * as Sentry from '@sentry/browser';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 
+import { showSentryReportDialog } from '../../sentry';
+
 interface State {
     hasError: boolean;
     error?: Error;
+    sentryEventId?: string;
 }
 
 export class ErrorBoundary extends Component<PropsWithChildren, State> {
     public constructor(props: PropsWithChildren) {
         super(props);
         this.state = { hasError: false };
-        this.visSentryDialog = this.visSentryDialog.bind(this);
     }
 
     static getDerivedStateFromError(error: Error) {
         return { hasError: true, error };
     }
 
-    // eslint-disable-next-line
-    public componentDidCatch(error: any, info: any): void {
-        console.error(error, info);
-        if (Sentry.isEnabled()) {
-            Sentry.withScope(scope => {
-                scope.setExtras(info);
-                Sentry.captureException(error);
-            });
-        }
-    }
-
-    private visSentryDialog() {
-        if (!Sentry.isEnabled()) {
-            return;
-        }
-        const user = Sentry.getCurrentScope().getUser();
-        Sentry.showReportDialog({
-            title: 'En feil har oppstått i vedtaksløsningen',
-            subtitle: '',
-            subtitle2: 'Teamet har fått beskjed. Dersom du ønsker å hjelpe oss, si litt om hva som skjedde.',
-            user: {
-                name: user?.username ?? 'Ukjent navn',
-                email: user?.email ?? 'Ukjent e-post',
+    public componentDidCatch(error: Error, info: ErrorInfo): void {
+        const eventId = Sentry.captureException(error, {
+            tags: { type: 'error-boundary' },
+            extra: {
+                componentStack: info.componentStack,
             },
-            labelName: 'NAVN',
-            labelComments: 'HVA SKJEDDE?',
-            labelClose: 'Lukk',
-            labelSubmit: 'Send inn rapport',
-            successMessage: 'Rapport er innsendt',
         });
+        this.setState({ sentryEventId: eventId });
     }
 
     render(): ReactNode {
@@ -73,10 +53,13 @@ export class ErrorBoundary extends Component<PropsWithChildren, State> {
                                 <ErrorMessage>{this.state.error?.message}</ErrorMessage>
                             </VStack>
                         )}
-                        {Sentry.isEnabled() && (
+                        {Sentry.isEnabled() && this.state.sentryEventId && (
                             <HStack justify={'end'}>
                                 <div>
-                                    <Button variant={'tertiary'} onClick={this.visSentryDialog}>
+                                    <Button
+                                        variant={'tertiary'}
+                                        onClick={() => showSentryReportDialog(this.state.sentryEventId)}
+                                    >
                                         Gi en mer utfyllende beskjed
                                     </Button>
                                 </div>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { useLocation } from 'react-router';
-import styled from 'styled-components';
 
 import { InformationSquareIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, InfoCard, Modal } from '@navikt/ds-react';
@@ -9,16 +8,6 @@ import { Box, Button, Heading, InfoCard, Modal } from '@navikt/ds-react';
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
 import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-
-const StyledHeading = styled(Heading)`
-    margin: 1rem 0 0.75rem;
-`;
-const LeggTilKnapp = styled(Button)`
-    margin-top: 1rem;
-`;
-const LukkKnapp = styled(Button)`
-    margin-top: 2.5rem;
-`;
 
 interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lukkModal: () => void;
@@ -84,7 +73,11 @@ export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBre
                 ))}
                 {erSkjemaSynlig ? (
                     <>
-                        {brevmottakere.length === 1 && <StyledHeading size="medium">Ny mottaker</StyledHeading>}
+                        {brevmottakere.length === 1 && (
+                            <Box marginBlock={'space-16 space-12'}>
+                                <Heading size="medium">Ny mottaker</Heading>
+                            </Box>
+                        )}
                         <BrevmottakerSkjema
                             lukkModal={lukkModalOgSkjema}
                             brevmottakere={brevmottakere}
@@ -95,18 +88,20 @@ export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBre
                 ) : (
                     <>
                         {brevmottakere.length === 1 && !erLesevisning && (
-                            <LeggTilKnapp
-                                variant="tertiary"
-                                size="small"
-                                icon={<PlusCircleIcon />}
-                                onClick={() => settVisSkjemaNårDetErÉnBrevmottaker(true)}
-                            >
-                                Legg til ny mottaker
-                            </LeggTilKnapp>
+                            <Box marginBlock={'space-16 space-0'}>
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    icon={<PlusCircleIcon />}
+                                    onClick={() => settVisSkjemaNårDetErÉnBrevmottaker(true)}
+                                >
+                                    Legg til ny mottaker
+                                </Button>
+                            </Box>
                         )}
-                        <div>
-                            <LukkKnapp onClick={lukkModal}>Lukk vindu</LukkKnapp>
-                        </div>
+                        <Box marginBlock={'space-40 space-0'}>
+                            <Button onClick={lukkModal}>Lukk vindu</Button>
+                        </Box>
                     </>
                 )}
             </Modal.Body>
