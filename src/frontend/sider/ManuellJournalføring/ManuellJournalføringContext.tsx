@@ -1,6 +1,38 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { useKlageApi } from '@api/useKlageApi';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import type { IOpprettBehandlingSkjemaBase } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
+import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import type { IBehandlingstema } from '@typer/behandlingstema';
+import { behandlingstemaer } from '@typer/behandlingstema';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import { FagsakType } from '@typer/fagsak';
+import {
+    type Journalføringsbehandling,
+    opprettJournalføringsbehandlingFraBarnetrygdbehandling,
+    opprettJournalføringsbehandlingFraKlagebehandling,
+} from '@typer/journalføringsbehandling';
+import type { IKlagebehandling } from '@typer/klage';
+import { Klagebehandlingstype } from '@typer/klage';
+import type {
+    IDataForManuellJournalføring,
+    IRestJournalføring,
+    TilknyttetBehandling,
+} from '@typer/manuell-journalføring';
+import { JournalpostKanal } from '@typer/manuell-journalføring';
+import {
+    finnBehandlingstemaFraOppgave,
+    type IRestLukkOppgaveOgKnyttJournalpost,
+    OppgavetypeFilter,
+} from '@typer/oppgave';
+import type { IPersonInfo } from '@typer/person';
+import { Adressebeskyttelsegradering } from '@typer/person';
+import type { ISamhandlerInfo } from '@typer/samhandler';
+import type { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { isoStringTilDate } from '@utils/dato';
+import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import type { AxiosError } from 'axios';
 import { differenceInMilliseconds } from 'date-fns';
 import { useNavigate, useParams } from 'react-router';
@@ -19,39 +51,8 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { useKlageApi } from '../../api/useKlageApi';
+import { Path } from '../../AppRoutes';
 import useDokument from '../../hooks/useDokument';
-import { useSaksbehandler } from '../../hooks/useSaksbehandler';
-import type { IOpprettBehandlingSkjemaBase } from '../../komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
-import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
-import type { IBehandlingstema } from '../../typer/behandlingstema';
-import { behandlingstemaer } from '../../typer/behandlingstema';
-import type { IMinimalFagsak } from '../../typer/fagsak';
-import { FagsakType } from '../../typer/fagsak';
-import {
-    type Journalføringsbehandling,
-    opprettJournalføringsbehandlingFraBarnetrygdbehandling,
-    opprettJournalføringsbehandlingFraKlagebehandling,
-} from '../../typer/journalføringsbehandling';
-import type { IKlagebehandling } from '../../typer/klage';
-import { Klagebehandlingstype } from '../../typer/klage';
-import type {
-    IDataForManuellJournalføring,
-    IRestJournalføring,
-    TilknyttetBehandling,
-} from '../../typer/manuell-journalføring';
-import { JournalpostKanal } from '../../typer/manuell-journalføring';
-import {
-    finnBehandlingstemaFraOppgave,
-    type IRestLukkOppgaveOgKnyttJournalpost,
-    OppgavetypeFilter,
-} from '../../typer/oppgave';
-import type { IPersonInfo } from '../../typer/person';
-import { Adressebeskyttelsegradering } from '../../typer/person';
-import type { ISamhandlerInfo } from '../../typer/samhandler';
-import type { Tilbakekrevingsbehandlingstype } from '../../typer/tilbakekrevingsbehandling';
-import { isoStringTilDate } from '../../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak } from '../../utils/fagsak';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 
 export interface ManuellJournalføringSkjemaFelter extends IOpprettBehandlingSkjemaBase {
@@ -473,9 +474,9 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                 },
                 (fagsakId: Ressurs<string>) => {
                     if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                        navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
+                        navigate(Path.fagsak(fagsakId.data).saksoversikt);
                     } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                        navigate('/oppgaver');
+                        navigate(Path.oppgaver);
                     }
                 }
             );
@@ -499,7 +500,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                     },
                     (respons: Ressurs<string>) => {
                         if (respons.status === RessursStatus.SUKSESS) {
-                            navigate('/oppgaver');
+                            navigate(Path.oppgaver);
                         }
                     }
                 );
@@ -532,9 +533,9 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                     },
                     (fagsakId: Ressurs<string>) => {
                         if (fagsakId.status === RessursStatus.SUKSESS && fagsakId.data !== '') {
-                            navigate(`/fagsak/${fagsakId.data}/saksoversikt`);
+                            navigate(Path.fagsak(fagsakId.data).saksoversikt);
                         } else if (fagsakId.status === RessursStatus.SUKSESS) {
-                            navigate('/oppgaver');
+                            navigate(Path.oppgaver);
                         }
                     }
                 );

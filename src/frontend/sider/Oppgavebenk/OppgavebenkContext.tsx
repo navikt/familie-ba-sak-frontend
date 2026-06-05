@@ -25,6 +25,7 @@ import type { Ressurs } from '@navikt/familie-typer';
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
 import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, sorterEtterNøkkel, Sorteringsnøkkel } from './utils';
+import { Path } from '../../AppRoutes';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
@@ -193,15 +194,18 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         const fagsaker = await hentFagsakerForPerson(personident);
         if (fagsaker.status === RessursStatus.SUKSESS && fagsaker.data.length > 0) {
             if (fagsaker.data.length === 1) {
-                navigate(`/fagsak/${fagsaker.data[0].id}/saksoversikt`);
+                const fagsakId = fagsaker.data[0].id;
+                navigate(Path.fagsak(fagsakId).saksoversikt);
             } else {
                 const løpendeFagsaker = fagsaker.data.filter(fagsak => fagsak.status === FagsakStatus.LØPENDE);
                 const fagsakerUnderBehandling = fagsaker.data.filter(fagsak => fagsak.underBehandling);
 
                 if (løpendeFagsaker.length === 1) {
-                    navigate(`/fagsak/${løpendeFagsaker[0].id}/saksoversikt`);
+                    const fagsakId = løpendeFagsaker[0].id;
+                    navigate(Path.fagsak(fagsakId).saksoversikt);
                 } else if (fagsakerUnderBehandling.length === 1) {
-                    navigate(`/fagsak/${fagsakerUnderBehandling[0].id}/saksoversikt`);
+                    const fagsakId = fagsakerUnderBehandling[0].id;
+                    navigate(Path.fagsak(fagsakId).saksoversikt);
                 } else {
                     settToast(ToastTyper.FANT_IKKE_FAGSAK, {
                         alertType: AlertType.WARNING,
@@ -230,7 +234,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                         oppgavetypeFilter === OppgavetypeFilter.JFR ||
                         oppgavetypeFilter === OppgavetypeFilter.BEH_SED
                     ) {
-                        navigate(`/oppgaver/journalfor/${oppgave.id}`);
+                        navigate(Path.journalfør(oppgave.id));
                     } else {
                         if (oppgave.behandlingstype === BehandlingstypeFilter.ae0161) {
                             // tilbakekreving

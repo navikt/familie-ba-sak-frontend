@@ -10,6 +10,39 @@ import { createBrowserRouter, Navigate } from 'react-router';
 
 import { AppContainer } from './AppContainer';
 
+type Id = string | number;
+
+export const Path = {
+    root: '/',
+    oppgaver: '/oppgaver',
+    journalfør: (oppgaveId: Id) => `/oppgaver/journalfor/${oppgaveId}`,
+    infotrygd: '/infotrygd',
+    samhandler: '/samhandler',
+    fagsak: (fagsakId: Id) => {
+        const fagsakBase = `/fagsak/${fagsakId}`;
+        return {
+            root: fagsakBase,
+            saksoversikt: `${fagsakBase}/saksoversikt`,
+            dokumentutsending: `${fagsakBase}/dokumentutsending`,
+            dokumenter: `${fagsakBase}/dokumenter`,
+            infotrygd: `${fagsakBase}/infotrygd`,
+            behandling: (behandlingId: Id) => {
+                const behandlingBase = `/${fagsakBase}/${behandlingId}`;
+                return {
+                    root: behandlingBase,
+                    registrerInstitusjon: `${behandlingBase}/registrer-institusjon`,
+                    registrerSøknad: `${behandlingBase}/registrer-soknad`,
+                    filtreringsregler: `${behandlingBase}/filtreringsregler`,
+                    vilkårsvurdering: `${behandlingBase}/vilkaarsvurdering`,
+                    tilkjentYtelse: `${behandlingBase}/tilkjent-ytelse`,
+                    simulering: `${behandlingBase}/simulering`,
+                    vedtak: `${behandlingBase}/vedtak`,
+                } as const;
+            },
+        } as const;
+    },
+} as const;
+
 export const appRoutes = createBrowserRouter([
     {
         path: '/',
@@ -18,7 +51,7 @@ export const appRoutes = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to={'/oppgaver'} replace={true} />,
+                element: <Navigate to={Path.oppgaver} replace={true} />,
             },
             {
                 path: 'fagsak/:fagsakId',

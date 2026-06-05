@@ -15,6 +15,7 @@ import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
+import { Path } from '../../AppRoutes';
 import Knapperekke from '../../komponenter/Knapperekke';
 
 export const JournalpostSkjema = () => {
@@ -89,7 +90,7 @@ export const JournalpostSkjema = () => {
                 <Button
                     size="small"
                     variant={'secondary'}
-                    onClick={() => navigate(`/oppgaver`)}
+                    onClick={() => navigate(Path.oppgaver)}
                     disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
                     icon={erLesevisning() && <ChevronLeftIcon />}
                 >

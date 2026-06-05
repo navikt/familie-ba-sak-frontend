@@ -8,6 +8,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
+import { Path } from '../../../AppRoutes';
 import { useFagsakContext } from '../FagsakContext';
 
 const Container = styled.div`
@@ -40,7 +41,7 @@ export function Dokumentutsending() {
                                 key={'til saksoversikt'}
                                 size={'medium'}
                                 onClick={() => {
-                                    navigate(`/fagsak/${fagsak.id}/saksoversikt`);
+                                    navigate(Path.fagsak(fagsak.id).saksoversikt);
                                     settVisInnsendtBrevModal(false);
                                 }}
                                 children={'Se saksoversikt'}
@@ -50,7 +51,7 @@ export function Dokumentutsending() {
                                 key={'til oppgavebenken'}
                                 size={'medium'}
                                 onClick={() => {
-                                    navigate('/oppgaver');
+                                    navigate(Path.oppgaver);
                                 }}
                                 children={'Se oppgavebenk'}
                             />

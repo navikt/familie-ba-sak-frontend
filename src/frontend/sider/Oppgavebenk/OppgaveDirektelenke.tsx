@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import { Button } from '@navikt/ds-react';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
+import { Path } from '../../AppRoutes';
 
 interface Props {
     oppgave: IOppgave;
@@ -35,7 +36,7 @@ export function OppgaveDirektelenke({ oppgave }: Props) {
             try {
                 const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
                 if (tilgangsreusltat.saksbehandlerHarTilgang) {
-                    navigate(`/oppgaver/journalfor/${oppgave.id}`);
+                    navigate(Path.journalfør(oppgave.id));
                 } else {
                     visManglerTilgangModal(tilgangsreusltat);
                 }
@@ -43,7 +44,7 @@ export function OppgaveDirektelenke({ oppgave }: Props) {
                 visTekniskFeilModal(error);
             }
         } else {
-            navigate(`/oppgaver/journalfor/${oppgave.id}`);
+            navigate(Path.journalfør(oppgave.id));
         }
         settLaster(false);
     }
