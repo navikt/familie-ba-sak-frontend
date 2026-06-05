@@ -7,7 +7,7 @@ import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehand
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
 import { type SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
 import { hentSideHref } from '@utils/miljø';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 
 import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -28,6 +28,8 @@ import { Venstremeny } from './Venstremeny/Venstremeny';
  */
 export function OutletContainer() {
     const { leggTilBesøktSide } = useBehandlingContext();
+    const location = useLocation();
+
     const sidevisning = hentSideHref(location.pathname);
 
     useEffect(() => {
