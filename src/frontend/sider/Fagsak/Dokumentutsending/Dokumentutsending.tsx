@@ -1,3 +1,4 @@
+import { Path } from '@app/path';
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
 import { fagsakHeaderHøydeRem } from '@typer/styling';
 import { useNavigate } from 'react-router';
@@ -8,7 +9,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
-import { Path } from '../../../AppRoutes';
 import { useFagsakContext } from '../FagsakContext';
 
 const Container = styled.div`

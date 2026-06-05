@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { Path } from '@app/path';
 import { useFagsak } from '@hooks/useFagsak';
 import {
     erViPåUdefinertFagsakSide,
@@ -8,8 +9,6 @@ import {
 } from '@sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '@typer/behandling';
 import { useLocation, useNavigate } from 'react-router';
-
-import { Path } from '../AppRoutes';
 
 interface Props {
     behandling: IBehandling;
@@ -31,7 +30,7 @@ export function useNavigerAutomatiskTilSideForBehandlingssteg({ behandling }: Pr
             return;
         }
         if (erViPåUdefinertFagsakSide(pathname) || erViPåUlovligSteg(pathname, side)) {
-            const url = `${Path.fagsak(fagsak.id).behandling(fagsak.id)}/${side.href}`;
+            const url = `${Path.fagsak(fagsak.id).behandling(behandlingId).root}/${side.href}`;
             navigate(url, { replace: true });
         }
     }, [fagsak, behandling, pathname, navigate]);

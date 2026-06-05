@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Path } from '@app/path';
 import { FagsakType } from '@typer/fagsak';
 import type { OppgavetypeFilter } from '@typer/oppgave';
 import { oppgaveTypeFilter } from '@typer/oppgave';
@@ -15,7 +16,6 @@ import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { Path } from '../../AppRoutes';
 import Knapperekke from '../../komponenter/Knapperekke';
 
 export const JournalpostSkjema = () => {

@@ -1,3 +1,4 @@
+import { Path } from '@app/path';
 import { NotFound } from '@komponenter/Error/NotFound';
 import { RouteError } from '@komponenter/Error/RouteError';
 import { Fagsak } from '@sider/Fagsak/Fagsak';
@@ -9,39 +10,6 @@ import { Samhandler } from '@sider/Samhandler/Samhandler';
 import { createBrowserRouter, Navigate } from 'react-router';
 
 import { AppContainer } from './AppContainer';
-
-type Id = string | number;
-
-export const Path = {
-    root: '/',
-    oppgaver: '/oppgaver',
-    journalfør: (oppgaveId: Id) => `/oppgaver/journalfor/${oppgaveId}`,
-    infotrygd: '/infotrygd',
-    samhandler: '/samhandler',
-    fagsak: (fagsakId: Id) => {
-        const fagsakBase = `/fagsak/${fagsakId}`;
-        return {
-            root: fagsakBase,
-            saksoversikt: `${fagsakBase}/saksoversikt`,
-            dokumentutsending: `${fagsakBase}/dokumentutsending`,
-            dokumenter: `${fagsakBase}/dokumenter`,
-            infotrygd: `${fagsakBase}/infotrygd`,
-            behandling: (behandlingId: Id) => {
-                const behandlingBase = `/${fagsakBase}/${behandlingId}`;
-                return {
-                    root: behandlingBase,
-                    registrerInstitusjon: `${behandlingBase}/registrer-institusjon`,
-                    registrerSøknad: `${behandlingBase}/registrer-soknad`,
-                    filtreringsregler: `${behandlingBase}/filtreringsregler`,
-                    vilkårsvurdering: `${behandlingBase}/vilkaarsvurdering`,
-                    tilkjentYtelse: `${behandlingBase}/tilkjent-ytelse`,
-                    simulering: `${behandlingBase}/simulering`,
-                    vedtak: `${behandlingBase}/vedtak`,
-                } as const;
-            },
-        } as const;
-    },
-} as const;
 
 export const appRoutes = createBrowserRouter([
     {

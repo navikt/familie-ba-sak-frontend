@@ -24,6 +24,7 @@
       "@testing-library/jest-dom"
     ],
     "paths": {
+      "@app/*": ["./*"],
       "@api/*": ["./api/*"],
       "@context/*": ["./context/*"],
       "@hooks/*": ["./hooks/*"],

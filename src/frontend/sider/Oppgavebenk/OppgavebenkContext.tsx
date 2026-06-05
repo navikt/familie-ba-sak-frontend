@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { useFagsakApi } from '@api/useFagsakApi';
+import { Path } from '@app/path';
 import { useToastContext } from '@context/ToastContext';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
@@ -25,7 +26,6 @@ import type { Ressurs } from '@navikt/familie-typer';
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
 import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, sorterEtterNøkkel, Sorteringsnøkkel } from './utils';
-import { Path } from '../../AppRoutes';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 

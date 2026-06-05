@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useKlageApi } from '@api/useKlageApi';
+import { Path } from '@app/path';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import type { IOpprettBehandlingSkjemaBase } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
@@ -51,7 +52,6 @@ import {
     RessursStatus,
 } from '@navikt/familie-typer';
 
-import { Path } from '../../AppRoutes';
 import useDokument from '../../hooks/useDokument';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
 

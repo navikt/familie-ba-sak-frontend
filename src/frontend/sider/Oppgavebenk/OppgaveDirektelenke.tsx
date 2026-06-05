@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Path } from '@app/path';
 import { useVisManglerTilgangModal } from '@context/ManglerTilgangModalContext';
 import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
 import { useSjekkSaksbehandlertilgangTilIdent } from '@hooks/useSjekkSaksbehandlertilgangTilIdent';
@@ -11,7 +12,6 @@ import { useNavigate } from 'react-router';
 import { Button } from '@navikt/ds-react';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
-import { Path } from '../../AppRoutes';
 
 interface Props {
     oppgave: IOppgave;
