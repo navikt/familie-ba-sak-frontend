@@ -44,7 +44,7 @@ describe('ApiClient', () => {
                     http.get(`${BASE_URL}/api/test`, () => HttpResponse.json(lagFeilRessurs(status, 'Noe gikk galt')))
                 );
 
-                await expect(client.get({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+                await expect(client.get({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
             }
         );
     });
@@ -76,7 +76,7 @@ describe('ApiClient', () => {
                     http.post(`${BASE_URL}/api/test`, () => HttpResponse.json(lagFeilRessurs(status, 'Noe gikk galt')))
                 );
 
-                await expect(client.post({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+                await expect(client.post({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
             }
         );
     });
@@ -98,7 +98,7 @@ describe('ApiClient', () => {
                     http.put(`${BASE_URL}/api/test`, () => HttpResponse.json(lagFeilRessurs(status, 'Noe gikk galt')))
                 );
 
-                await expect(client.put({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+                await expect(client.put({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
             }
         );
     });
@@ -120,7 +120,7 @@ describe('ApiClient', () => {
                     http.patch(`${BASE_URL}/api/test`, () => HttpResponse.json(lagFeilRessurs(status, 'Noe gikk galt')))
                 );
 
-                await expect(client.patch({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+                await expect(client.patch({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
             }
         );
     });
@@ -142,7 +142,7 @@ describe('ApiClient', () => {
                     )
                 );
 
-                await expect(client.delete({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+                await expect(client.delete({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
             }
         );
     });
@@ -155,7 +155,7 @@ describe('ApiClient', () => {
                 )
             );
 
-            await expect(client.get({ url: '/api/test' })).rejects.toBe('Noe gikk galt (CallId: abc-123)');
+            await expect(client.get({ url: '/api/test' })).rejects.toThrow('Noe gikk galt (CallId: abc-123)');
         });
 
         test('utelater callId fra feilmeldingen når den er null', async () => {
@@ -165,7 +165,7 @@ describe('ApiClient', () => {
                 )
             );
 
-            await expect(client.get({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+            await expect(client.get({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
         });
 
         test('utelater callId fra feilmeldingen når den mangler i responsen', async () => {
@@ -173,7 +173,7 @@ describe('ApiClient', () => {
                 http.get(`${BASE_URL}/api/test`, () => HttpResponse.json(lagFeilRessurs('FEILET', 'Noe gikk galt')))
             );
 
-            await expect(client.get({ url: '/api/test' })).rejects.toBe('Noe gikk galt');
+            await expect(client.get({ url: '/api/test' })).rejects.toThrow('Noe gikk galt');
         });
     });
 

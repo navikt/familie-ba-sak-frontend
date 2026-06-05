@@ -85,16 +85,20 @@ export class ApiClient {
     }
 
     private resolveToPromise<T>(ressurs: Ressurs<T>): Promise<T> {
+        if (!Object.values(RessursStatus).includes(ressurs.status)) {
+            return Promise.reject(new Error(`Ukjent status: ${ressurs.status}`));
+        }
         switch (ressurs.status) {
             case RessursStatus.SUKSESS:
                 return Promise.resolve(ressurs.data);
             case RessursStatus.FEILET:
             case RessursStatus.FUNKSJONELL_FEIL:
             case RessursStatus.IKKE_TILGANG:
+                const frontendFeilmelding = ressurs.frontendFeilmelding?.trim() ?? undefined;
                 const frontendFeilmeldingMedEllerUtenCallId = ressurs.callId
-                    ? `${ressurs.frontendFeilmelding} (CallId: ${ressurs.callId})`
-                    : ressurs.frontendFeilmelding;
-                return Promise.reject(frontendFeilmeldingMedEllerUtenCallId);
+                    ? `${frontendFeilmelding} (CallId: ${ressurs.callId})`
+                    : frontendFeilmelding;
+                return Promise.reject(new Error(frontendFeilmeldingMedEllerUtenCallId));
         }
     }
 }
