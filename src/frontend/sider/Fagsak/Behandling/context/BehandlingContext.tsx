@@ -14,7 +14,7 @@ import { useLocation } from 'react-router';
 import { type Ressurs } from '@navikt/familie-typer';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
-import { type ITrinn, type SideId, sider } from '../Sider/sider';
+import { type ITrinn, type SideId } from '../Sider/sider';
 import { hentTrinnForBehandling, KontrollertStatus } from '../Sider/sider';
 
 interface Props extends PropsWithChildren {
@@ -22,6 +22,7 @@ interface Props extends PropsWithChildren {
 }
 
 interface BehandlingContextValue {
+    leggTilBesøktSide: (besøktSide: SideId) => void;
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
@@ -44,8 +45,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const location = useLocation();
 
     const [trinnPåBehandling, settTrinnPåBehandling] = useState<{ [sideId: string]: ITrinn }>({});
-
-    const sidevisning = hentSideHref(location.pathname);
 
     useTrackTidsbrukPåSide(fagsak, behandling);
 
@@ -105,15 +104,10 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
     const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
 
-    useEffect(() => {
-        if (sidevisning) {
-            leggTilBesøktSide(Object.entries(sider).find(([_, side]) => side.href === sidevisning)?.[0] as SideId);
-        }
-    }, [sidevisning]);
-
     return (
         <BehandlingContext.Provider
             value={{
+                leggTilBesøktSide,
                 settIkkeKontrollerteSiderTilManglerKontroll,
                 trinnPåBehandling,
                 behandling: behandling,
