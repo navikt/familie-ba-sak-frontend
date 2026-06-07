@@ -12,6 +12,7 @@ export interface IRestEndretUtbetalingAndel {
     årsak?: IEndretUtbetalingAndelÅrsak;
     erTilknyttetAndeler?: boolean;
     inneholderBarnSomSkalSkjermes?: boolean;
+    erAutomatiskGenerert?: boolean;
 }
 
 export enum IEndretUtbetalingAndelÅrsak {

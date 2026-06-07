@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
+import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import { useLocation } from 'react-router';
+
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 
@@ -9,6 +16,8 @@ import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet/EndreBehandlendeE
 import { EndreBehandlendeEnhetModal } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetModal';
 import { EndreBehandlingstema } from './EndreBehandling/EndreBehandlingstema';
 import { EndreBehandlingstemaModal } from './EndreBehandling/EndreBehandlingstemaModal';
+import { EndreSøknadstidspunkt } from './EndreSøknadstidspunkt/EndreSøknadstidspunkt';
+import { EndreSøknadstidspunktModal } from './EndreSøknadstidspunkt/EndreSøknadstidspunktModal';
 import { HenleggBehandling } from './HenleggBehandling/HenleggBehandling';
 import { SettBehandlingPåVentModal } from './LeggBehandlingPåVent/SettBehandlingPåVentModal';
 import { SettEllerOppdaterVenting } from './LeggBehandlingPåVent/SettEllerOppdaterVenting';
@@ -23,14 +32,20 @@ import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingMod
 import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
 import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
-import { useBehandlingContext } from '../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { sjekkErBehandleneEnhetMidlertidig } from '../../../typer/behandling';
 
 export function Behandlingsmeny() {
     const { behandling } = useBehandlingContext();
+    const toggles = useFeatureToggles();
+    const { pathname } = useLocation();
 
     const erBehandleneEnhetMidlertidig = sjekkErBehandleneEnhetMidlertidig(behandling);
     const erBehandlingPåVent = !!behandling.aktivSettPåVent;
+
+    const erPåBehandlingsresultatside = pathname.includes(sider[SideId.BEHANDLINGRESULTAT].href);
+    const kanEndreSøknadstidspunkt =
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] &&
+        behandling.årsak === BehandlingÅrsak.SØKNAD &&
+        erPåBehandlingsresultatside;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
@@ -41,6 +56,7 @@ export function Behandlingsmeny() {
     const [visBehandlingPåVentModal, settVisBehandlingPåVentModal] = useState(erBehandlingPåVent);
     const [visTaBehandlingAvVentModal, settVisTaBehandlingAvVentModal] = useState(false);
     const [visLeggTilBrevmottakerPåBehandlingModal, settVisLeggTilBrevmottakerPåBehandlingModal] = useState(false);
+    const [visEndreSøknadstidspunktModal, settVisEndreSøknadstidspunktModal] = useState(false);
 
     return (
         <>
@@ -75,6 +91,9 @@ export function Behandlingsmeny() {
                     lukkModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(false)}
                 />
             )}
+            {kanEndreSøknadstidspunkt && visEndreSøknadstidspunktModal && (
+                <EndreSøknadstidspunktModal lukkModal={() => settVisEndreSøknadstidspunktModal(false)} />
+            )}
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button variant={'secondary'} size={'small'} iconPosition={'right'} icon={<ChevronDownIcon />}>
@@ -89,16 +108,19 @@ export function Behandlingsmeny() {
                     </ActionMenu.Group>
                     <ActionMenu.Divider />
                     <ActionMenu.Group className={Styles.group} aria-label={'Behandling'}>
-                        <HenleggBehandling />
-                        <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
                         <EndreBehandlingstema åpneModal={() => settVisEndreBehandlingstemaModal(true)} />
-                        <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                         <SettEllerOppdaterVenting åpneModal={() => settVisBehandlingPåVentModal(true)} />
                         <TaBehandlingAvVent åpneModal={() => settVisTaBehandlingAvVentModal(true)} />
+                        <HenleggBehandling />
+                        {kanEndreSøknadstidspunkt && (
+                            <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
+                        )}
+                        <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
                         <LeggTilEllerFjernBrevmottakerePåBehandling
                             åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}
                         />
                         <AInntekt />
+                        <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                     </ActionMenu.Group>
                 </ActionMenu.Content>
             </ActionMenu>

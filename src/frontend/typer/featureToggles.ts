@@ -16,4 +16,5 @@ export enum FeatureToggle {
     skalKunneBehandleBaInstitusjonFagsaker = 'familie-klage.skal-kunne-behandle-ba-institusjon-fagsaker',
     preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',
     kanGenerereBarnasVilkar = 'familie-ba-sak.kan-generere-barnas-vilkar',
+    kanRegistrereSøknadstidspunkt = 'familie-ba-sak.kan-registrere-soknadstidspunkt',
 }

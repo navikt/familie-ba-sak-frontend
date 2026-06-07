@@ -53,6 +53,7 @@ interface IEndretUtbetalingAndelSkjemaProps {
     åpenBehandling: IBehandling;
     lukkSkjema: () => void;
     skjema: ISkjema<IEndretUtbetalingAndelSkjema, IBehandling>;
+    erAutomatiskGenerert: boolean;
     settFelterTilLagredeVerdier: () => void;
     oppdaterEndretUtbetaling: (onSuccess: () => void) => void;
     slettEndretUtbetaling: () => void;
@@ -62,11 +63,13 @@ const EndretUtbetalingAndelSkjema = ({
     åpenBehandling,
     lukkSkjema,
     skjema,
+    erAutomatiskGenerert,
     settFelterTilLagredeVerdier,
     oppdaterEndretUtbetaling,
     slettEndretUtbetaling,
 }: IEndretUtbetalingAndelSkjemaProps) => {
     const erLesevisning = useErLesevisning();
+    const felterErLåst = erLesevisning || erAutomatiskGenerert;
 
     const finnÅrTilbakeTilStønadFra = (): number => {
         return (
@@ -128,7 +131,7 @@ const EndretUtbetalingAndelSkjema = ({
                         options={tilgjengeligePersoner}
                         selectedOptions={skjema.felter.personer.verdi}
                         onToggleSelected={onPersonSelected}
-                        readOnly={erLesevisning}
+                        readOnly={felterErLåst}
                         error={skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger).error}
                     />
                 </Feltmargin>
@@ -149,7 +152,7 @@ const EndretUtbetalingAndelSkjema = ({
                                     skjema.felter.fom.validerOgSettFelt(dato);
                                 }
                             }}
-                            lesevisning={erLesevisning}
+                            lesevisning={felterErLåst}
                         />
                     </Feltmargin>
                     <MånedÅrVelger
@@ -165,7 +168,7 @@ const EndretUtbetalingAndelSkjema = ({
                                 skjema.felter.tom.validerOgSettFelt(dato);
                             }
                         }}
-                        lesevisning={erLesevisning}
+                        lesevisning={felterErLåst}
                     />
                 </Feltmargin>
 
@@ -177,7 +180,7 @@ const EndretUtbetalingAndelSkjema = ({
                         onChange={(event): void => {
                             skjema.felter.årsak.validerOgSettFelt(event.target.value as IEndretUtbetalingAndelÅrsak);
                         }}
-                        readOnly={erLesevisning}
+                        readOnly={felterErLåst}
                     >
                         <option value={undefined}>Velg årsak</option>
                         {årsaker.map(årsak => (
@@ -193,7 +196,7 @@ const EndretUtbetalingAndelSkjema = ({
                         legend={<Label>Utbetaling</Label>}
                         value={skjema.felter.utbetaling.verdi}
                         onChange={skjema.felter.utbetaling.validerOgSettFelt}
-                        readOnly={erLesevisning}
+                        readOnly={felterErLåst}
                     >
                         {Object.values(Utbetaling)
                             .filter(utbetaling =>
@@ -217,7 +220,7 @@ const EndretUtbetalingAndelSkjema = ({
                         felt={skjema.felter.søknadstidspunkt}
                         label={'Søknadstidspunkt'}
                         visFeilmeldinger={skjema.visFeilmeldinger}
-                        readOnly={erLesevisning}
+                        readOnly={felterErLåst}
                         kanKunVelgeFortid
                     />
                 </Feltmargin>
@@ -228,7 +231,7 @@ const EndretUtbetalingAndelSkjema = ({
                             felt={skjema.felter.avtaletidspunktDeltBosted}
                             label={'Avtale om delt bosted'}
                             visFeilmeldinger={skjema.visFeilmeldinger}
-                            readOnly={erLesevisning}
+                            readOnly={felterErLåst}
                         />
                     </Feltmargin>
                 )}
@@ -236,7 +239,7 @@ const EndretUtbetalingAndelSkjema = ({
                 <Feltmargin>
                     <StyledTextarea
                         {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
-                        readOnly={erLesevisning}
+                        readOnly={felterErLåst}
                         label={'Begrunnelse'}
                         resize
                         value={
@@ -252,34 +255,36 @@ const EndretUtbetalingAndelSkjema = ({
                 {!erLesevisning && (
                     <Knapperekke>
                         <KnapperekkeVenstre>
-                            <StyledFerdigKnapp
-                                size="small"
-                                variant="primary"
-                                onClick={() => oppdaterEndretUtbetaling(lukkSkjema)}
-                            >
-                                Bekreft
-                            </StyledFerdigKnapp>
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => {
-                                    settFelterTilLagredeVerdier();
-                                    lukkSkjema();
-                                }}
-                            >
-                                Avbryt
-                            </Button>
+                            {!erAutomatiskGenerert && (
+                                <>
+                                    <StyledFerdigKnapp
+                                        size="small"
+                                        variant="primary"
+                                        onClick={() => oppdaterEndretUtbetaling(lukkSkjema)}
+                                    >
+                                        Bekreft
+                                    </StyledFerdigKnapp>
+                                    <Button
+                                        variant="tertiary"
+                                        size="small"
+                                        onClick={() => {
+                                            settFelterTilLagredeVerdier();
+                                            lukkSkjema();
+                                        }}
+                                    >
+                                        Avbryt
+                                    </Button>
+                                </>
+                            )}
                         </KnapperekkeVenstre>
-                        {!erLesevisning ? (
-                            <Button
-                                variant={'tertiary'}
-                                size={'small'}
-                                onClick={slettEndretUtbetaling}
-                                icon={<TrashIcon />}
-                            >
-                                {'Fjern periode'}
-                            </Button>
-                        ) : null}
+                        <Button
+                            variant={'tertiary'}
+                            size={'small'}
+                            onClick={slettEndretUtbetaling}
+                            icon={<TrashIcon />}
+                        >
+                            {'Fjern periode'}
+                        </Button>
                     </Knapperekke>
                 )}
             </StyledFieldset>
