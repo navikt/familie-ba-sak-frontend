@@ -72,7 +72,7 @@ function Wrapper({
                                 }
                             />
                             <Route
-                                path={`/fagsak/:fagsakId/:behandlingId/registrer-soknad`}
+                                path={`/fagsak/:fagsakId/:behandlingId/:side`}
                                 element={
                                     <HentOgSettBehandlingProvider>
                                         <BehandlingProvider behandling={behandling}>
@@ -126,9 +126,15 @@ describe('Behandlingsmeny', () => {
         expect(screen.getByRole('menuitem', { name: 'A-Inntekt' })).toBeInTheDocument();
     });
 
-    test('skal vise "Endre søknadstidspunkt" i menyen for en søknadsbehandling når toggle er på', async () => {
+    test('skal vise "Endre søknadstidspunkt" i menyen for en søknadsbehandling på behandlingsresultat-siden når toggle er på', async () => {
         const { screen, user } = render(<Behandlingsmeny />, {
-            wrapper: props => <Wrapper {...props} behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })} />,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
+                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                />
+            ),
         });
 
         await user.click(screen.getByRole('button', { name: 'Meny' }));
@@ -136,10 +142,30 @@ describe('Behandlingsmeny', () => {
         expect(screen.getByRole('menuitem', { name: 'Endre søknadstidspunkt' })).toBeInTheDocument();
     });
 
+    test('skal ikke vise "Endre søknadstidspunkt" i menyen når man ikke er på behandlingsresultat-siden', async () => {
+        const { screen, user } = render(<Behandlingsmeny />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/1/vilkaarsvurdering' }]}
+                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                />
+            ),
+        });
+
+        await user.click(screen.getByRole('button', { name: 'Meny' }));
+
+        expect(screen.queryByRole('menuitem', { name: 'Endre søknadstidspunkt' })).not.toBeInTheDocument();
+    });
+
     test('skal ikke vise "Endre søknadstidspunkt" i menyen når behandlingen ikke er en søknad', async () => {
         const { screen, user } = render(<Behandlingsmeny />, {
             wrapper: props => (
-                <Wrapper {...props} behandling={lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER })} />
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
+                    behandling={lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER })}
+                />
             ),
         });
 
@@ -177,7 +203,13 @@ describe('Behandlingsmeny', () => {
 
     test('skal kunne åpne endre søknadstidspunkt modal', async () => {
         const { screen, user } = render(<Behandlingsmeny />, {
-            wrapper: props => <Wrapper {...props} behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })} />,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
+                    behandling={lagBehandling({ årsak: BehandlingÅrsak.SØKNAD })}
+                />
+            ),
         });
 
         await user.click(screen.getByRole('button', { name: 'Meny' }));

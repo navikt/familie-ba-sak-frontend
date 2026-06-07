@@ -2,8 +2,10 @@ import { useState } from 'react';
 
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
 import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
+import { useLocation } from 'react-router';
 
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
@@ -34,12 +36,16 @@ import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbre
 export function Behandlingsmeny() {
     const { behandling } = useBehandlingContext();
     const toggles = useFeatureToggles();
+    const { pathname } = useLocation();
 
     const erBehandleneEnhetMidlertidig = sjekkErBehandleneEnhetMidlertidig(behandling);
     const erBehandlingPåVent = !!behandling.aktivSettPåVent;
 
+    const erPåBehandlingsresultatside = pathname.includes(sider[SideId.BEHANDLINGRESULTAT].href);
     const kanEndreSøknadstidspunkt =
-        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && behandling.årsak === BehandlingÅrsak.SØKNAD;
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] &&
+        behandling.årsak === BehandlingÅrsak.SØKNAD &&
+        erPåBehandlingsresultatside;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
