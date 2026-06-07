@@ -1,10 +1,10 @@
 import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
 
-import { type IRegistrertSøknadstidspunktPåPersonDto } from './hentRegistrertSøknadstidspunktPåPerson';
+import { type RegistrertSøknadstidspunkt } from './hentRegistrerteSøknadstidspunkter';
 
 export interface EndreSøknadstidspunktPayload {
-    søknadstidspunktPerPerson: IRegistrertSøknadstidspunktPåPersonDto[];
+    søknadstidspunktPerPerson: RegistrertSøknadstidspunkt[];
 }
 
 export async function endreSøknadstidspunkt(payload: EndreSøknadstidspunktPayload, behandlingId: number) {

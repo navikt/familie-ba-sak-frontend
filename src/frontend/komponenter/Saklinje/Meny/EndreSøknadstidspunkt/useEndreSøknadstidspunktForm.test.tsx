@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import type { IRegistrertSøknadstidspunktPåPersonDto } from '@api/hentRegistrertSøknadstidspunktPåPerson';
+import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -78,7 +78,7 @@ beforeEach(() => {
     vi.clearAllMocks();
 });
 
-const renderForm = (søknadstidspunkter: IRegistrertSøknadstidspunktPåPersonDto[]) => {
+const renderForm = (søknadstidspunkter: RegistrertSøknadstidspunkt[]) => {
     const lukkModal = vi.fn();
     const queryClient = new QueryClient();
     const invalidateQueriesSpy = vi.spyOn(queryClient, 'invalidateQueries');
@@ -153,7 +153,7 @@ describe('useEndreSøknadstidspunktForm', () => {
         });
         expect(mockSettÅpenBehandling).toHaveBeenCalledTimes(1);
         expect(invalidateQueriesSpy).toHaveBeenCalledWith({
-            queryKey: ['registrert-soknadstidspunkt-paa-person', mockBehandling.behandlingId],
+            queryKey: ['registrerte-soknadstidspunkter', mockBehandling.behandlingId],
         });
         expect(lukkModal).toHaveBeenCalledTimes(1);
     });

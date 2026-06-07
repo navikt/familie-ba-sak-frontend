@@ -1,4 +1,4 @@
-import type { IRegistrertSøknadstidspunktPåPersonDto } from '@api/hentRegistrertSøknadstidspunktPåPerson';
+import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { FormProvider } from 'react-hook-form';
 
@@ -9,7 +9,7 @@ import { useEndreSøknadstidspunktForm } from './useEndreSøknadstidspunktForm';
 
 interface Props {
     lukkModal: () => void;
-    søknadstidspunkter: IRegistrertSøknadstidspunktPåPersonDto[];
+    søknadstidspunkter: RegistrertSøknadstidspunkt[];
 }
 
 export const EndreSøknadstidspunktSkjema = ({ lukkModal, søknadstidspunkter }: Props) => {

@@ -1,5 +1,5 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useHentRegistrertSøknadstidspunktPåPerson } from '@hooks/useHentRegistrertSøknadstidspunktPåPerson';
+import { useHentRegistrerteSøknadstidspunkter } from '@hooks/useHentRegistrerteSøknadstidspunkter';
 
 import { Alert, BodyShort, Button, Loader, Modal, VStack } from '@navikt/ds-react';
 
@@ -30,7 +30,7 @@ export const EndreSøknadstidspunktModal = ({ lukkModal }: Props) => {
         data: søknadstidspunkter,
         isPending: søknadstidspunkterIsPending,
         error: søknadstidspunkterError,
-    } = useHentRegistrertSøknadstidspunktPåPerson(behandling.behandlingId);
+    } = useHentRegistrerteSøknadstidspunkter(behandling.behandlingId);
 
     if (søknadstidspunkterIsPending) {
         return (

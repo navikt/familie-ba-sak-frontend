@@ -30,8 +30,8 @@ const { mockQuery, mockMutateAsync } = vi.hoisted(() => ({
     mockMutateAsync: vi.fn(),
 }));
 
-vi.mock('@hooks/useHentRegistrertSøknadstidspunktPåPerson', () => ({
-    useHentRegistrertSøknadstidspunktPåPerson: () => mockQuery,
+vi.mock('@hooks/useHentRegistrerteSøknadstidspunkter', () => ({
+    useHentRegistrerteSøknadstidspunkter: () => mockQuery,
 }));
 vi.mock('@hooks/useEndreSøknadstidspunkt', () => ({
     useEndreSøknadstidspunkt: () => ({ mutateAsync: mockMutateAsync }),
