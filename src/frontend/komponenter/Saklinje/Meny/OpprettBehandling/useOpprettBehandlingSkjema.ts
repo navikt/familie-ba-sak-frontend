@@ -4,11 +4,14 @@ import { HentBarnetrygdbehandlingerQueryKeyFactory } from '@hooks/useHentBarnetr
 import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
 import { HentKlagebehandlingerQueryKeyFactory } from '@hooks/useHentKlagebehandlinger';
 import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '@hooks/useHentTilbakekrevingsbehandlinger';
+import { useOpprettBehandling } from '@hooks/useOpprettBehandling';
+import { useOpprettKlagebehandling } from '@hooks/useOpprettKlagebehandling';
+import { useOpprettTilbakekreving } from '@hooks/useOpprettTilbakekreving';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useBrukerContext } from '@sider/Fagsak/BrukerContext';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IBehandling, IRestNyBehandling } from '@typer/behandling';
+import type { IBehandling } from '@typer/behandling';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import type { IBehandlingstema } from '@typer/behandlingstema';
 import { behandlingstemaer } from '@typer/behandlingstema';
@@ -16,13 +19,12 @@ import type { OptionType } from '@typer/common';
 import { FagsakType } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
-import type { IsoDatoString } from '@utils/dato';
 import { dateTilIsoDatoString, dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '@utils/dato';
 import { useNavigate } from 'react-router';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { byggTomRessurs, hentDataFraRessurs, RessursStatus } from '@navikt/familie-typer';
+import { byggTomRessurs } from '@navikt/familie-typer';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -38,13 +40,57 @@ export interface IOpprettBehandlingSkjemaFelter extends IOpprettBehandlingSkjema
     valgteBarn: OptionType[];
 }
 
-const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprettTilbakekrevingSuccess: () => void) => {
+interface Props {
+    fagsakId: number;
+    lukkModal: () => void;
+    onTilbakekrevingsbehandlingOpprettet: () => void;
+}
+
+export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevingsbehandlingOpprettet }: Props) {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
 
     const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+
+    const { mutate: opprettBehandling } = useOpprettBehandling({
+        onSuccess: behandling => {
+            queryClient.invalidateQueries({ queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId) });
+            queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) });
+
+            lukkModal();
+            nullstillSkjema();
+
+            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
+                navigate(
+                    behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
+                        ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                        : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                );
+            } else {
+                navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
+            }
+        },
+    });
+
+    const { mutate: opprettKlagebehandling } = useOpprettKlagebehandling({
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId) });
+            lukkModal();
+            nullstillSkjema();
+        },
+    });
+
+    const { mutate: opprettTilbakekreving } = useOpprettTilbakekreving({
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
+            });
+            nullstillSkjemaStatus();
+            onTilbakekrevingsbehandlingOpprettet();
+        },
+    });
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''>({
         verdi: '',
@@ -158,7 +204,7 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         },
     });
 
-    const { skjema, nullstillSkjema, kanSendeSkjema, onSubmit, settSubmitRessurs, valideringErOk } = useSkjema<
+    const { skjema, nullstillSkjema, kanSendeSkjema, settSubmitRessurs, valideringErOk } = useSkjema<
         IOpprettBehandlingSkjemaFelter,
         IBehandling
     >({
@@ -183,54 +229,21 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         }
     }, [behandlingstype.verdi]);
 
-    const opprettTilbakekreving = () => {
-        onSubmit<void>(
-            {
-                method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-tilbakekreving`,
-            },
-            response => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    queryClient.invalidateQueries({
-                        queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
-                    });
-                    nullstillSkjemaStatus();
-                    onOpprettTilbakekrevingSuccess();
-                }
-            }
-        );
-    };
-
-    const opprettKlagebehandling = () => {
-        onSubmit<{ klageMottattDato: IsoDatoString }>(
-            {
-                method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/opprett-klagebehandling`,
-                data: {
+    const onBekreft = () => {
+        if (kanSendeSkjema()) {
+            if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
+                opprettTilbakekreving({ fagsakId });
+            } else if (behandlingstype.verdi === Klagebehandlingstype.KLAGE) {
+                opprettKlagebehandling({
                     klageMottattDato: dateTilIsoDatoString(klageMottattDato.verdi),
-                },
-                påvirkerSystemLaster: true,
-            },
-            response => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    queryClient.invalidateQueries({
-                        queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId),
-                    });
-                    lukkModal();
-                    nullstillSkjema();
-                }
-            }
-        );
-    };
+                    fagsakId,
+                });
+            } else {
+                const erMigreringFraInfoTrygd = behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+                const erHelmanuellMigrering =
+                    erMigreringFraInfoTrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
-    const opprettBehandling = () => {
-        const erMigreringFraInfoTrygd = behandlingstype.verdi === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-        const erHelmanuellMigrering =
-            erMigreringFraInfoTrygd && behandlingsårsak.verdi === BehandlingÅrsak.HELMANUELL_MIGRERING;
-
-        onSubmit<IRestNyBehandling>(
-            {
-                data: {
+                const payload = {
                     kategori: behandlingstema.verdi?.kategori ?? null,
                     underkategori: behandlingstema.verdi?.underkategori ?? null,
                     behandlingType: behandlingstype.verdi as Behandlingstype,
@@ -243,47 +256,8 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
                     barnasIdenter: erHelmanuellMigrering ? valgteBarn.verdi.map(option => option.value) : undefined,
                     fagsakId: fagsakId,
                     begrunnelse: begrunnelse.verdi,
-                },
-                method: 'POST',
-                url: '/familie-ba-sak/api/behandlinger',
-            },
-            response => {
-                if (response.status === RessursStatus.SUKSESS) {
-                    queryClient.invalidateQueries({
-                        queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
-                    });
-
-                    queryClient.invalidateQueries({
-                        queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId),
-                    });
-
-                    lukkModal();
-                    nullstillSkjema();
-
-                    const behandling: IBehandling | undefined = hentDataFraRessurs(response);
-
-                    if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                        navigate(
-                            behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
-                                ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
-                                : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
-                        );
-                    } else {
-                        navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
-                    }
-                }
-            }
-        );
-    };
-
-    const onBekreft = () => {
-        if (kanSendeSkjema()) {
-            if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
-                opprettTilbakekreving();
-            } else if (behandlingstype.verdi === Klagebehandlingstype.KLAGE) {
-                opprettKlagebehandling();
-            } else {
-                opprettBehandling();
+                };
+                opprettBehandling(payload);
             }
         }
     };
@@ -303,6 +277,4 @@ const useOpprettBehandling = (fagsakId: number, lukkModal: () => void, onOpprett
         maksdatoForMigrering: MAKSDATO_FOR_MIGRERING,
         valideringErOk,
     };
-};
-
-export default useOpprettBehandling;
+}

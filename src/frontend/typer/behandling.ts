@@ -27,20 +27,6 @@ import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
-export interface IRestNyBehandling {
-    kategori: BehandlingKategori | null;
-    underkategori: BehandlingUnderkategori | null;
-    behandlingType: Behandlingstype;
-    journalpostID?: string;
-    behandlingÅrsak?: BehandlingÅrsak;
-    skalBehandlesAutomatisk?: boolean;
-    navIdent?: string;
-    barnasIdenter?: string[];
-    nyMigreringsdato?: IsoDatoString;
-    søknadMottattDato?: IsoDatoString;
-    fagsakId: number;
-}
-
 export enum HenleggÅrsak {
     SØKNAD_TRUKKET = 'SØKNAD_TRUKKET',
     FEILAKTIG_OPPRETTET = 'FEILAKTIG_OPPRETTET',

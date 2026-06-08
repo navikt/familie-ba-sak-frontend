@@ -9,7 +9,7 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import OpprettBehandlingValg from './OpprettBehandlingValg';
-import useOpprettBehandling from './useOpprettBehandling';
+import { useOpprettBehandlingSkjema } from './useOpprettBehandlingSkjema';
 import Datovelger from '../../../Datovelger/Datovelger';
 
 interface Props {
@@ -21,14 +21,7 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
     const { fagsak } = useFagsakContext();
 
     const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering } =
-        useOpprettBehandling(
-            fagsak.id,
-            () => lukkModal(),
-            () => {
-                lukkModal();
-                onTilbakekrevingsbehandlingOpprettet();
-            }
-        );
+        useOpprettBehandlingSkjema({ fagsakId: fagsak.id, lukkModal, onTilbakekrevingsbehandlingOpprettet });
 
     const lukkOpprettBehandlingModal = () => {
         nullstillSkjemaStatus();
