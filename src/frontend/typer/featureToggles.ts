@@ -12,7 +12,6 @@ export enum FeatureToggle {
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     tillattOpprettingAvSkjermetBarnFagsak = 'familie-ba-sak.tillatt-oppretting-av-skjermet-barn-fagsak',
     skalBrukeNyttSkjemaForEndretUtbetalingAndel = 'familie-ba-sak.endret-utbetaling-andel-skjema-rhf',
-    skalKunneBehandleBaInstitusjonFagsaker = 'familie-klage.skal-kunne-behandle-ba-institusjon-fagsaker',
     preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',
     kanGenerereBarnasVilkar = 'familie-ba-sak.kan-generere-barnas-vilkar',
     kanRegistrereSøknadstidspunkt = 'familie-ba-sak.kan-registrere-soknadstidspunkt',

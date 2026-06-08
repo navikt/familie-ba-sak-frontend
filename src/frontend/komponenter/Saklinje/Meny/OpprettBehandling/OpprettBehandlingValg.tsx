@@ -5,7 +5,6 @@ import type { ISkjema } from '@navikt/familie-skjema';
 
 import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
 import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
 import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
@@ -19,8 +18,7 @@ import {
     erBehandlingHenlagt,
 } from '../../../../typer/behandling';
 import type { ComboboxOption } from '../../../../typer/common';
-import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
-import { FeatureToggle } from '../../../../typer/featureToggles';
+import { FagsakStatus, type IMinimalFagsak } from '../../../../typer/fagsak';
 import { Klagebehandlingstype } from '../../../../typer/klage';
 import type { IPersonInfo } from '../../../../typer/person';
 import { ForelderBarnRelasjonRolle } from '../../../../typer/person';
@@ -101,7 +99,6 @@ const OpprettBehandlingValg = ({
     bruker = undefined,
 }: IProps) => {
     const saksbehandler = useSaksbehandler();
-    const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -130,10 +127,7 @@ const OpprettBehandlingValg = ({
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
 
     const kanOppretteKlagebehandling =
-        minimalFagsak !== undefined &&
-        !minimalFagsak.finnesStrengtFortroligPersonIFagsak &&
-        (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
-            toggles[FeatureToggle.skalKunneBehandleBaInstitusjonFagsaker]);
+        minimalFagsak !== undefined && !minimalFagsak.finnesStrengtFortroligPersonIFagsak;
 
     const barn =
         bruker?.forelderBarnRelasjon
