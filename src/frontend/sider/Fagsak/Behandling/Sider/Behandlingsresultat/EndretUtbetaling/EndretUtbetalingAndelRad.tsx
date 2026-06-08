@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import type { IBehandling } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IRestEndretUtbetalingAndel } from '@typer/utbetalingAndel';
+import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '@typer/utbetalingAndel';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '@utils/dato';
+import { lagPersonLabel } from '@utils/formatter';
 import styled from 'styled-components';
 
 import { BodyShort, Table } from '@navikt/ds-react';
@@ -7,11 +14,6 @@ import { BodyShort, Table } from '@navikt/ds-react';
 import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
 import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '../../../../../../typer/utbetalingAndel';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { lagPersonLabel } from '../../../../../../utils/formatter';
 
 interface IEndretUtbetalingAndelRadProps {
     lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -30,6 +32,11 @@ const EndretUtbetalingAndelRad = ({ lagretEndretUtbetalingAndel, åpenBehandling
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
         lagretEndretUtbetalingAndel.personIdenter.length === 0
     );
+
+    const toggles = useFeatureToggles();
+
+    const erAutomatiskGenerert =
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && !!lagretEndretUtbetalingAndel.erAutomatiskGenerert;
 
     const {
         skjema,
@@ -82,6 +89,7 @@ const EndretUtbetalingAndelRad = ({ lagretEndretUtbetalingAndel, åpenBehandling
                 <EndretUtbetalingAndelSkjema
                     skjema={skjema}
                     åpenBehandling={åpenBehandling}
+                    erAutomatiskGenerert={erAutomatiskGenerert}
                     lukkSkjema={() => {
                         settErSkjemaEkspandert(false);
                     }}

@@ -1,6 +1,8 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useOppdatererEndretUtbetalingAndelIsPending } from '@hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSletterEndretUtbetalingAndelIsPending } from '@hooks/useSletterEndretUtbetalingAndelIsPending';
+import { FeatureToggle } from '@typer/featureToggles';
 import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
@@ -27,12 +29,17 @@ export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: E
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
 
     const erLesevisning = useErLesevisning();
+    const toggles = useFeatureToggles();
 
     const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
 
+    const erAutomatiskGenerert =
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && !!endretUtbetalingAndel.erAutomatiskGenerert;
+
     const låsFelter =
         erLesevisning ||
+        erAutomatiskGenerert ||
         endretUtbetalingAndel.inneholderBarnSomSkalSkjermes ||
         sletterEndretUtbetalingAndel ||
         oppdatererEndretUtbetalingAndel;
@@ -66,7 +73,7 @@ export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: E
 
                     <Begrunnelse erLesevisning={låsFelter} />
 
-                    {!erLesevisning && <SkjemaKnapper lukkSkjema={lukkSkjema} />}
+                    {!erLesevisning && <SkjemaKnapper lukkSkjema={lukkSkjema} kunVisSlett={erAutomatiskGenerert} />}
 
                     {errors.root?.message && (
                         <LocalAlert status="error">

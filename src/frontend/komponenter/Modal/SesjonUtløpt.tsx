@@ -1,13 +1,19 @@
-import { BodyShort, Modal } from '@navikt/ds-react';
+import { BodyShort, Box, Modal } from '@navikt/ds-react';
 
-const UgyldigSesjon = () => {
+export function UgyldigSesjon() {
     return (
-        <Modal header={{ heading: 'Ugyldig sesjon', size: 'small', closeButton: false }} width={'small'}>
+        <Modal
+            open={true}
+            portal={true}
+            header={{ heading: 'Ugyldig sesjon', closeButton: false }}
+            width={'medium'}
+            onClose={() => {}}
+        >
             <Modal.Body>
-                <BodyShort>Prøv å last siden på nytt</BodyShort>
+                <Box marginBlock={'space-24'}>
+                    <BodyShort>Prøv å last siden inn på nytt.</BodyShort>
+                </Box>
             </Modal.Body>
         </Modal>
     );
-};
-
-export default UgyldigSesjon;
+}
