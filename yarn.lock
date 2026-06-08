@@ -982,10 +982,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.5/f048cb47ad2f6b83720c058383fe95802b024718#f048cb47ad2f6b83720c058383fe95802b024718"
   integrity sha512-oZPfF95H6k/Tz/cK4IQirTRXy4Vz0aSUtHWZAaDa1CVd7+8ifj1Aw8KLV6pPvlHaPirrek1sFsK5GNnad6h3qA==
 
-"@navikt/flagg-ikoner@13.2.4":
-  version "13.2.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/13.2.4/41c3e7dc94cf0a7639cc37a405fe4ad833c217e6#41c3e7dc94cf0a7639cc37a405fe4ad833c217e6"
-  integrity sha512-5UmSKm1cbG785TmHUAuP67F/WyD2VixGqZvuwqyNLE+QtFpbgMJyCE1s/Urt5yt3qMESz+vSwzpE8a4oZiY/Lw==
+"@navikt/flagg-ikoner@14.0.2":
+  version "14.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/flagg-ikoner/14.0.2/738da53f39c2bac533751d7e700d7c4404680b9c#738da53f39c2bac533751d7e700d7c4404680b9c"
+  integrity sha512-CoLF+eeookyIniANMQDjegRqyYjwXnewsKbunhrDXQUsm86BvG+oZbAmd9lWUeJFkTM7WzAFue8eVk122rpbIw==
   dependencies:
     svg-country-flags "1.2.10"
     uuid "14.0.0"
@@ -1000,13 +1000,13 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.1/37ed0feb23a7525139ad5512684ff6b0977112c6#37ed0feb23a7525139ad5512684ff6b0977112c6"
   integrity sha512-R6x3MBFC0E/B7oTs+P2jAP+ym7+d6cwSpDsLeMja9IwPpJq3HV/OClFBVWm9fJZPmXfumKRMGy6gqsQPj90ftg==
 
-"@navikt/land-verktoy@13.2.4":
-  version "13.2.4"
-  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/13.2.4/ff79d2e17c60fdbedc7880650259336504018e32#ff79d2e17c60fdbedc7880650259336504018e32"
-  integrity sha512-xK7AEF2hu+A3Pq/4zdJNb44E8yipVZRL8aWFw0iGUipPzs661G/qQJdHU2Uzz82SqKVkHNWdXoTRoMRN0yK3Hg==
+"@navikt/land-verktoy@14.0.2":
+  version "14.0.2"
+  resolved "https://npm.pkg.github.com/download/@navikt/land-verktoy/14.0.2/c1a87a2af49a9577a4030957c76493bd5fc6d39f#c1a87a2af49a9577a4030957c76493bd5fc6d39f"
+  integrity sha512-JIKTlKpnTpDKubsHoHU9d1VZtBymAfvJhS3UjU4oGtwr04C0J7FiHXmkOGO2QJEpKX1BBlvLh4CWCgCKrHnN1Q==
   dependencies:
     "@piotrgorecki/i18n-currency-name" "1.3.0"
-    country-data-list "1.6.2"
+    country-data-list "1.6.3"
     i18n-iso-countries "7.14.0"
 
 "@noble/ciphers@^1.3.0":
@@ -2476,10 +2476,10 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-country-data-list@1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/country-data-list/-/country-data-list-1.6.2.tgz#956f9b82724b5912443cb0c193b7c498315c9878"
-  integrity sha512-LHDqHrbM2ghasyf+DPOT4Womk5g6V1nRIe/KI+1kuHXIEB0k0vaCaNPDx/TxGKYAjzRe3ChqtTyV1yKY/orcfg==
+country-data-list@1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/country-data-list/-/country-data-list-1.6.3.tgz#26ffc82937dd9c847fd82b6118cdfb32c8d61140"
+  integrity sha512-lyJkUP9bKZW4BkoM4Z3fLvrOwsFQ7bxnnPoR+xtQKbpAyAn7p1xOmnFURJ/oXWuIzDHedqTvZSOLjoRs6ccE7w==
 
 cross-spawn@^7.0.3, cross-spawn@^7.0.6:
   version "7.0.6"
