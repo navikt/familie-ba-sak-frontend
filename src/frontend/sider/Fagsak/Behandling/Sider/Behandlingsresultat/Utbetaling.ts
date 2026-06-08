@@ -23,7 +23,7 @@ export function prosentTilUtbetaling(prosent?: number | null) {
     }
 }
 
-export function utbetalingTilProsentRHF(utbetaling: Utbetaling | null) {
+export function utbetalingTilProsent(utbetaling: Utbetaling | null) {
     switch (utbetaling) {
         case Utbetaling.FULL_UTBETALING:
             return 100;
@@ -51,7 +51,7 @@ export function utbetalingTilLabel(utbetaling?: Utbetaling) {
     }
 }
 
-export function erUtbetalingTillattForÅrsakRHF(årsak: IEndretUtbetalingAndelÅrsak | null, utbetaling: Utbetaling) {
+export function erUtbetalingTillattForÅrsak(årsak: IEndretUtbetalingAndelÅrsak | null, utbetaling: Utbetaling) {
     if (!årsak) return true;
 
     switch (utbetaling) {

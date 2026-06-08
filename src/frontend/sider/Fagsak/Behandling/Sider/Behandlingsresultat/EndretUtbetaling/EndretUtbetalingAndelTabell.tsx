@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Heading, Table } from '@navikt/ds-react';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelRadRHF } from './EndretUtbetalingAndelRadRHF';
+import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
 import type { IBehandling } from '../../../../../../typer/behandling';
 
 interface IEndretUtbetalingAndelTabellProps {
@@ -32,7 +32,7 @@ const EndretUtbetalingAndelTabell = ({ åpenBehandling }: IEndretUtbetalingAndel
             <Table.Body>
                 {åpenBehandling.endretUtbetalingAndeler.map(endretUtbetalingAndel => (
                     <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
-                        <EndretUtbetalingAndelRadRHF key={endretUtbetalingAndel.id} />
+                        <EndretUtbetalingAndelRad key={endretUtbetalingAndel.id} />
                     </EndretUtbetalingAndelProvider>
                 ))}
             </Table.Body>

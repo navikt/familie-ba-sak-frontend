@@ -17,7 +17,7 @@ import { SkjemaKnapper } from './komponenter/SkjemaKnapper';
 import { SøknadstidspunktDatovelger } from './komponenter/SøknadstidspunktDatovelger';
 import { Utbetalingvelger } from './komponenter/Utbetalingvelger';
 import { Årsakvelger } from './komponenter/Årsakvelger';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndel';
 
 interface EndretUtbetalingAndelSkjemaProps {
     form: UseFormReturn<EndretUtbetalingAndelFormValues>;
@@ -25,7 +25,7 @@ interface EndretUtbetalingAndelSkjemaProps {
     lukkSkjema: () => void;
 }
 
-export const EndretUtbetalingAndelSkjemaRHF = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
+export const EndretUtbetalingAndelSkjema = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
 
     const erLesevisning = useErLesevisning();

@@ -14,7 +14,7 @@ import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetal
 import { FagsakProvider } from '../../../../../FagsakContext';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../context/HentOgSettBehandlingContext';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 
 const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],

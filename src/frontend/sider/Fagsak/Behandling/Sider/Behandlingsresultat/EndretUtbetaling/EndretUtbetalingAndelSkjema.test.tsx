@@ -4,8 +4,8 @@ import { type DefaultValues, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelSkjemaRHF } from './EndretUtbetalingAndelSkjemaRHF';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndel';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';
@@ -67,10 +67,10 @@ function Wrapper({
 
 function FormWrapper() {
     const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-    return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
+    return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
 }
 
-describe('EndretUtbetalingAndelSkjemaRHF', () => {
+describe('EndretUtbetalingAndelSkjema', () => {
     test('skal vise alle skjemafelter', () => {
         const { screen } = render(<FormWrapper />, { wrapper: Wrapper });
 
@@ -157,7 +157,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
             const onSubmitMock = vi.fn(() => {
                 form.setError('root', { message: 'Dette er en feilmelding' });
             });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -175,7 +175,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
             const onSubmitMock = vi.fn(() => {
                 form.setError('root', { message: 'Dette er en feilmelding' });
             });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -200,7 +200,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
                     [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
                 },
             });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -216,7 +216,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
     test('skal vise AvtaletidspunktDeltBostedDatovelger når årsak endres til DELT_BOSTED', async () => {
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -234,7 +234,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -251,7 +251,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
 
         function FormWrapper() {
             const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={vi.fn()} lukkSkjema={lukkSkjema} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={lukkSkjema} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
@@ -271,7 +271,7 @@ describe('EndretUtbetalingAndelSkjemaRHF', () => {
                     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],
                 },
             });
-            return <EndretUtbetalingAndelSkjemaRHF form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
+            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
         }
 
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });

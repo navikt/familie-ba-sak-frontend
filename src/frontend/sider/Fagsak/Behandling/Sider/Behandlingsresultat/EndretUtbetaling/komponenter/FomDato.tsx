@@ -5,8 +5,8 @@ import { useController, useFormContext } from 'react-hook-form';
 import { MonthPicker, type MonthValidationT, useMonthpicker } from '@navikt/ds-react';
 
 import { dateTilFormatertString, Datoformat } from '../../../../../../../utils/dato';
-import type { EndretUtbetalingAndelFormValues, StandardFeltProps } from '../useEndretUtbetalingAndelRHF';
-import { EndretUtbetalingAndelFeltnavn } from '../useEndretUtbetalingAndelRHF';
+import type { EndretUtbetalingAndelFormValues, StandardFeltProps } from '../useEndretUtbetalingAndel';
+import { EndretUtbetalingAndelFeltnavn } from '../useEndretUtbetalingAndel';
 
 interface TomDatoProps extends StandardFeltProps {
     tidligsteDato: Date;

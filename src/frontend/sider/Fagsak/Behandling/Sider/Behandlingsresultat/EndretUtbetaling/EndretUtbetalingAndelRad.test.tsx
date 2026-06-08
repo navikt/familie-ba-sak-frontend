@@ -6,7 +6,7 @@ import { Table } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
 
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelRadRHF } from './EndretUtbetalingAndelRadRHF';
+import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';
@@ -84,9 +84,9 @@ function Wrapper({
     );
 }
 
-describe('EndretUtbetalingAndelRadRHF', () => {
+describe('EndretUtbetalingAndelRad', () => {
     test('skal vise oppsummering av endret utbetalingsandel', () => {
-        const { container } = render(<EndretUtbetalingAndelRadRHF />, { wrapper: Wrapper });
+        const { container } = render(<EndretUtbetalingAndelRad />, { wrapper: Wrapper });
 
         const oppsummering = container.querySelector('tbody > tr');
         const kolonner = oppsummering?.querySelectorAll('td');
@@ -99,7 +99,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
 
     describe('Personkolonne', () => {
         test('skal vise "Ikke satt" når personIdenter er tom', () => {
-            const { screen } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { screen } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -115,7 +115,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise flere personer når personIdenter inneholder flere identer', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -136,7 +136,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
 
     describe('Periodekolonne', () => {
         test('skal ikke vise periode når fom og tom er undefined', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -155,7 +155,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise periode når fom er satt og tom er undefined', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -174,7 +174,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise periode når fom og tom er satt', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -195,7 +195,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
 
     describe('Årsakkolonne', () => {
         test('skal ikke vise årsak når årsak er undefined', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -213,7 +213,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise årsak når årsak er satt', () => {
-            const { container } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { container } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -233,7 +233,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
 
     describe('Utbetalingkolonne', () => {
         test('skal vise "Ja - Full utbetaling" når prosent er 100', () => {
-            const { screen } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { screen } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -249,7 +249,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise "Ja - Delt utbetaling" når prosent er 50', () => {
-            const { screen } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { screen } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -265,7 +265,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal vise "Nei" når prosent er 0', () => {
-            const { screen } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { screen } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => (
                     <Wrapper
                         {...props}
@@ -283,7 +283,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
 
     describe('Åpne og lukke rad', () => {
         test('skal kunne ekspandere rad for å vise skjema', async () => {
-            const { screen, user } = render(<EndretUtbetalingAndelRadRHF />, { wrapper: Wrapper });
+            const { screen, user } = render(<EndretUtbetalingAndelRad />, { wrapper: Wrapper });
 
             const åpneRadKnapp = screen.getByRole('button', { name: /Vis mer/ });
             await user.click(åpneRadKnapp);
@@ -292,7 +292,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal lukke skjema når lukkeknapp klikkes', async () => {
-            const { screen, user } = render(<EndretUtbetalingAndelRadRHF />, { wrapper: Wrapper });
+            const { screen, user } = render(<EndretUtbetalingAndelRad />, { wrapper: Wrapper });
 
             const visMerKnapp = screen.getByRole('button', { name: /Vis mer/ });
             await user.click(visMerKnapp);
@@ -306,7 +306,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         test('skal vise alert når skjema har ulagrede endringer og bruker prøver å lukke', async () => {
             const alertSpy = vi.spyOn(window, 'alert');
 
-            const { screen, user } = render(<EndretUtbetalingAndelRadRHF />, { wrapper: Wrapper });
+            const { screen, user } = render(<EndretUtbetalingAndelRad />, { wrapper: Wrapper });
 
             const visMerKnapp = screen.getByRole('button', { name: /Vis mer/ });
             await user.click(visMerKnapp);
@@ -323,7 +323,7 @@ describe('EndretUtbetalingAndelRadRHF', () => {
         });
 
         test('skal starte med ekspandert skjema når personIdenter er tom liste', () => {
-            const { screen } = render(<EndretUtbetalingAndelRadRHF />, {
+            const { screen } = render(<EndretUtbetalingAndelRad />, {
                 wrapper: props => <Wrapper {...props} endretUtbetalingAndel={tomEndretUtbetalingAndel} />,
             });
 

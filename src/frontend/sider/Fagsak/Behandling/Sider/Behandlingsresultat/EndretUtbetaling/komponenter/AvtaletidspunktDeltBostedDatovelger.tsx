@@ -9,7 +9,7 @@ import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export const AvtaletidspunktDeltBostedDatovelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();

@@ -14,7 +14,7 @@ import {
 } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { prosentTilUtbetaling, type Utbetaling, utbetalingTilProsentRHF } from '../Utbetaling';
+import { prosentTilUtbetaling, type Utbetaling, utbetalingTilProsent } from '../Utbetaling';
 
 export interface StandardFeltProps {
     erLesevisning?: boolean;
@@ -42,10 +42,7 @@ export interface EndretUtbetalingAndelFormValues {
     [EndretUtbetalingAndelFeltnavn.BEGRUNNELSE]: string;
 }
 
-export const useEndretUtbetalingAndelRHF = (
-    endretUtbetalingAndel: IRestEndretUtbetalingAndel,
-    lukkSkjema: () => void
-) => {
+export const useEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbetalingAndel, lukkSkjema: () => void) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const personer = endretUtbetalingAndel.personIdenter.map(ident => ({
@@ -88,7 +85,7 @@ export const useEndretUtbetalingAndelRHF = (
         oppdaterEndretUtbetalingAndel({
             id: endretUtbetalingAndel.id,
             personIdenter: values.personer.map(person => person.value),
-            prosent: utbetalingTilProsentRHF(values.utbetaling) || undefined,
+            prosent: utbetalingTilProsent(values.utbetaling) || undefined,
             fom: values.fom ? dateTilIsoMånedStringEllerUndefined(values.fom) : undefined,
             tom: values.tom ? dateTilIsoMånedStringEllerUndefined(values.tom) : undefined,
             årsak: values.årsak || undefined,

@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
 
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelSkjemaRHF } from './EndretUtbetalingAndelSkjemaRHF';
-import { useEndretUtbetalingAndelRHF } from './useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
+import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
 import { erDefinert } from '../../../../../../utils/commons';
@@ -34,7 +34,7 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
     }
 };
 
-export const EndretUtbetalingAndelRadRHF = () => {
+export const EndretUtbetalingAndelRad = () => {
     const { behandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
@@ -43,7 +43,7 @@ export const EndretUtbetalingAndelRadRHF = () => {
 
     const lukkSkjema = () => settErSkjemaEkspandert(false);
 
-    const { form, onSubmit } = useEndretUtbetalingAndelRHF(endretUtbetalingAndel, lukkSkjema);
+    const { form, onSubmit } = useEndretUtbetalingAndel(endretUtbetalingAndel, lukkSkjema);
 
     const {
         reset,
@@ -65,7 +65,7 @@ export const EndretUtbetalingAndelRadRHF = () => {
             open={erSkjemaEkspandert}
             onOpenChange={toggleForm}
             content={
-                <EndretUtbetalingAndelSkjemaRHF
+                <EndretUtbetalingAndelSkjema
                     key={`${endretUtbetalingAndel}-${erSkjemaEkspandert ? 'ekspandert' : 'lukket'}`}
                     form={form}
                     onSubmit={onSubmit}

@@ -9,7 +9,7 @@ import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { behandling } = useBehandlingContext();
