@@ -1,9 +1,7 @@
 import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
@@ -41,7 +39,6 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
     const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
-    const toggles = useFeatureToggles();
     const erLesevisning = useErLesevisning();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -104,7 +101,6 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
     };
 
     const skalViseLyspære =
-        toggles[FeatureToggle.skalViseVarsellampeForManueltLagtTilBarn] &&
         behandling.steg == BehandlingSteg.VILKÅRSVURDERING &&
         vilkårResultater.some(vilkår => !!vilkår.verdi.begrunnelseForManuellKontroll);
 
