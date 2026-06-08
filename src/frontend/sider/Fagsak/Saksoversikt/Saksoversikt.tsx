@@ -1,3 +1,12 @@
+import { useFagsak } from '@hooks/useFagsak';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
+import { BehandlingStatus, erBehandlingHenlagt } from '@typer/behandling';
+import { BehandlingKategori } from '@typer/behandlingstema';
+import { FagsakStatus } from '@typer/fagsak';
+import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '@utils/dato';
+import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import { Link as ReactRouterLink } from 'react-router';
 
@@ -9,18 +18,10 @@ import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
-import { BehandlingStatus, erBehandlingHenlagt } from '../../../typer/behandling';
-import { BehandlingKategori } from '../../../typer/behandlingstema';
-import { FagsakStatus } from '../../../typer/fagsak';
-import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '../../../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak } from '../../../utils/fagsak';
-import { useFagsakContext } from '../FagsakContext';
 
 export function Saksoversikt() {
-    const { fagsak } = useFagsakContext();
     const saksbehandler = useSaksbehandler();
+    const fagsak = useFagsak();
 
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
         (behandling: VisningBehandling) =>
@@ -118,25 +119,26 @@ export function Saksoversikt() {
     };
 
     return (
-        <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
-            <Heading size="large" level="1" children="Saksoversikt" />
-
-            {saksbehandler.harSuperbrukertilgang && fagsak.løpendeKategori === BehandlingKategori.EØS && (
-                <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
-            )}
-
-            <VStack gap="space-56">
-                <FagsakLenkepanel />
-                {fagsak.status === FagsakStatus.LØPENDE && (
-                    <VStack>
-                        <Heading size="medium" level="2">
-                            Løpende månedlig utbetaling
-                        </Heading>
-                        {løpendeMånedligUtbetaling()}
-                    </VStack>
+        <>
+            <Fagsaklinje />
+            <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
+                <Heading size="large" level="1" children="Saksoversikt" />
+                {saksbehandler.harSuperbrukertilgang && fagsak.løpendeKategori === BehandlingKategori.EØS && (
+                    <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
                 )}
-                <Behandlinger />
-            </VStack>
-        </Box>
+                <VStack gap="space-56">
+                    <FagsakLenkepanel />
+                    {fagsak.status === FagsakStatus.LØPENDE && (
+                        <VStack>
+                            <Heading size="medium" level="2">
+                                Løpende månedlig utbetaling
+                            </Heading>
+                            {løpendeMånedligUtbetaling()}
+                        </VStack>
+                    )}
+                    <Behandlinger />
+                </VStack>
+            </Box>
+        </>
     );
 }
