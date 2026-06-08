@@ -3,12 +3,15 @@ import { useState } from 'react';
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { AngreSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/AngreSammensattKontrollsak';
+import { OpprettSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/OpprettSammensattKontrollsak';
+import { useSkalViseSammensattKontrollsakMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/useSkalViseSammensattKontrollsakMenyvalg';
 import { Behandlingstype } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
 import { vedtakHarFortsattUtbetaling } from '@utils/vedtakUtils';
 
-import { ArrowUndoIcon, CalculatorIcon, ChevronDownIcon, StarsEuIcon, TasklistStartIcon } from '@navikt/aksel-icons';
+import { CalculatorIcon, ChevronDownIcon, StarsEuIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button, Stack } from '@navikt/ds-react';
 
 import Styles from './Vedtaksmeny.module.css';
@@ -24,20 +27,12 @@ import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/Sammen
 export function Vedtaksmeny() {
     const { erFeilutbetaltValutaTabellSynlig, visFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig, visRefusjonEøsTabell } = useRefusjonEøsTabellContext();
-
-    const {
-        erSammensattKontrollsak,
-        settErSammensattKontrollsak,
-        skalViseSammensattKontrollsakMenyValg,
-        slettSammensattKontrollsak,
-        sammensattKontrollsak,
-    } = useSammensattKontrollsakContext();
+    const { sammensattKontrollsak } = useSammensattKontrollsakContext();
 
     const fagsak = useFagsak();
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
-
-    const visSammensattKontrollsakMenyValg = skalViseSammensattKontrollsakMenyValg();
+    const visSammensattKontrollsakMenyvalg = useSkalViseSammensattKontrollsakMenyvalg();
 
     const fagsakType = fagsak.fagsakType;
 
@@ -81,17 +76,11 @@ export function Vedtaksmeny() {
                                 Legg til refusjon EØS
                             </ActionMenu.Item>
                         )}
-                    {visSammensattKontrollsakMenyValg &&
-                        (sammensattKontrollsak || erSammensattKontrollsak ? (
-                            <ActionMenu.Item onSelect={slettSammensattKontrollsak}>
-                                <ArrowUndoIcon fontSize={'1.4rem'} />
-                                Angre sammensatt kontrollsak
-                            </ActionMenu.Item>
+                    {visSammensattKontrollsakMenyvalg &&
+                        (sammensattKontrollsak ? (
+                            <AngreSammensattKontrollsak sammensattKontrollsak={sammensattKontrollsak} />
                         ) : (
-                            <ActionMenu.Item onSelect={() => settErSammensattKontrollsak(true)}>
-                                <TasklistStartIcon fontSize={'1.4rem'} />
-                                Sammensatt kontrollsak
-                            </ActionMenu.Item>
+                            <OpprettSammensattKontrollsak />
                         ))}
                 </ActionMenu.Content>
             </ActionMenu>

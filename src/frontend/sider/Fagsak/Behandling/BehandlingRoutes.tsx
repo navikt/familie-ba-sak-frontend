@@ -1,5 +1,6 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
+import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
 import type { RouteObject } from 'react-router';
 
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
@@ -9,11 +10,7 @@ import { RegistrerSøknad } from './Sider/RegistrerSøknad/RegistrerSøknad';
 import { SøknadProvider } from './Sider/RegistrerSøknad/SøknadContext';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
-import { FeilutbetaltValutaTabellProvider } from './Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import { RefusjonEøsTabellProvider } from './Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
-import { SammensattKontrollsakProvider } from './Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
-import { VedtaksperioderProvider } from './Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 import { Vilkårsvurdering } from './Sider/Vilkårsvurdering/Vilkårsvurdering';
 import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 
@@ -62,15 +59,9 @@ export const behandlingRoutes: RouteObject[] = [
         path: 'vedtak',
         element: (
             <SimuleringProvider>
-                <FeilutbetaltValutaTabellProvider>
-                    <RefusjonEøsTabellProvider>
-                        <SammensattKontrollsakProvider>
-                            <VedtaksperioderProvider>
-                                <Vedtak />
-                            </VedtaksperioderProvider>
-                        </SammensattKontrollsakProvider>
-                    </RefusjonEøsTabellProvider>
-                </FeilutbetaltValutaTabellProvider>
+                <VedtakContainer>
+                    <Vedtak />
+                </VedtakContainer>
             </SimuleringProvider>
         ),
     },
