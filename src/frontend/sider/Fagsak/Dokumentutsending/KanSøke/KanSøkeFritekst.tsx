@@ -1,31 +1,13 @@
 import type { ChangeEvent } from 'react';
 
-import styled from 'styled-components';
-
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Textarea } from '@navikt/ds-react';
+import { Box, Button, Fieldset, HStack, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../utils/fritekstfelter';
 import { hentFrontendFeilmelding } from '../../../../utils/ressursUtils';
 import { useDokumentutsendingContext } from '../DokumentutsendingContext';
-
-const StyledFamilieFritekstFelt = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const TextareaBegrunnelseFritekst = styled(Textarea)`
-    display: flex;
-    margin-bottom: 0.5rem;
-    flex: auto;
-`;
-
-const SletteKnapp = styled(Button)`
-    margin-left: 0.5rem;
-    height: 2.75rem;
-`;
 
 const KanSøkeFritekst = ({
     erMaksAntallKulepunkter,
@@ -63,7 +45,7 @@ const KanSøkeFritekst = ({
         ]);
 
     return (
-        <>
+        <Box>
             <Fieldset
                 id={skjemaGruppeId}
                 error={skjema.visFeilmeldinger && hentFrontendFeilmelding(skjema.submitRessurs)}
@@ -73,23 +55,25 @@ const KanSøkeFritekst = ({
                     const fritekstId = fritekst.verdi.id;
 
                     return (
-                        <StyledFamilieFritekstFelt key={`fritekst-${fritekstId}`}>
-                            <TextareaBegrunnelseFritekst
-                                key={`fritekst-${fritekstId}`}
-                                id={`${fritekstId}`}
-                                className={'fritekst-textarea'}
-                                value={fritekst.verdi.tekst}
-                                label={`Kulepunkt ${fritekstId}`}
-                                hideLabel={true}
-                                maxLength={makslengdeFritekst}
-                                onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-                                    onChangeFritekst(event, fritekstId)
-                                }
-                                error={skjema.visFeilmeldinger && fritekst.feilmelding}
-                                /* eslint-disable-next-line jsx-a11y/no-autofocus */
-                                autoFocus
-                            />
-                            <SletteKnapp
+                        <HStack key={`fritekst-${fritekstId}`} align={'start'} gap={'space-8'}>
+                            <Box width={'80%'}>
+                                <Textarea
+                                    key={`fritekst-${fritekstId}`}
+                                    id={`${fritekstId}`}
+                                    className={'fritekst-textarea'}
+                                    value={fritekst.verdi.tekst}
+                                    label={`Kulepunkt ${fritekstId}`}
+                                    hideLabel={true}
+                                    maxLength={makslengdeFritekst}
+                                    onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+                                        onChangeFritekst(event, fritekstId)
+                                    }
+                                    error={skjema.visFeilmeldinger && fritekst.feilmelding}
+                                    /* eslint-disable-next-line jsx-a11y/no-autofocus */
+                                    autoFocus
+                                />
+                            </Box>
+                            <Button
                                 variant={'tertiary'}
                                 onClick={() => {
                                     friteksterFelt.validerOgSettFelt([
@@ -104,8 +88,8 @@ const KanSøkeFritekst = ({
                                 icon={<TrashIcon />}
                             >
                                 {'Fjern'}
-                            </SletteKnapp>
-                        </StyledFamilieFritekstFelt>
+                            </Button>
+                        </HStack>
                     );
                 })}
             </Fieldset>
@@ -120,7 +104,7 @@ const KanSøkeFritekst = ({
                     {'Legg til fritekst'}
                 </Button>
             )}
-        </>
+        </Box>
     );
 };
 
