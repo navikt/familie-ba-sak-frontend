@@ -1,7 +1,18 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import useDokument from '@hooks/useDokument';
+import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { transformerSkjemaData } from '@sider/Fagsak/Dokumentutsending/transformerSkjemaData';
+import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
+import { Distribusjonskanal } from '@typer/dokument';
+import { FagsakType } from '@typer/fagsak';
+import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
+import { useBarnIBrevFelter } from '@utils/barnIBrevFelter';
+import type { IsoDatoString } from '@utils/dato';
+import { useDeltBostedFelter } from '@utils/deltBostedSkjemaFelter';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import deepEqual from 'deep-equal';
 
 import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
@@ -9,17 +20,6 @@ import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { type DokumentÅrsak, DokumentÅrsakInstitusjon, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
-import useDokument from '../../../hooks/useDokument';
-import { Mottaker } from '../../../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IManueltBrevRequestPåFagsak } from '../../../typer/dokument';
-import { Distribusjonskanal } from '../../../typer/dokument';
-import { FagsakType } from '../../../typer/fagsak';
-import type { IBarnMedOpplysninger, Målform } from '../../../typer/søknad';
-import { useBarnIBrevFelter } from '../../../utils/barnIBrevFelter';
-import type { IsoDatoString } from '../../../utils/dato';
-import { useDeltBostedFelter } from '../../../utils/deltBostedSkjemaFelter';
-import type { IFritekstFelt } from '../../../utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '../../../utils/ressursUtils';
 import { useBrukerContext } from '../BrukerContext';
 import { useFagsakContext } from '../FagsakContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';

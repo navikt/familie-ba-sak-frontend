@@ -1,7 +1,14 @@
 import type { ChangeEvent } from 'react';
 import { useEffect } from 'react';
 
-import { DistribusjonskanalInfo } from '@sider/Fagsak/Dokumentutsending/DistribusjonskanalInfo';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import MålformVelger from '@komponenter/MålformVelger';
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
 
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack, InfoCard, Label, Select, VStack } from '@navikt/ds-react';
@@ -10,21 +17,14 @@ import { RessursStatus } from '@navikt/familie-typer';
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import { DistribusjonskanalInfo } from './DistribusjonskanalInfo';
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { dokumentÅrsak, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
-import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
-import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import MålformVelger from '../../../komponenter/MålformVelger';
-import { FeatureToggle } from '../../../typer/featureToggles';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 
 export function DokumentutsendingSkjema() {
     const { bruker } = useBrukerContext();
