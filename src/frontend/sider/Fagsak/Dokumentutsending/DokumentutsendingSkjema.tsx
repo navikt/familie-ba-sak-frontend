@@ -8,13 +8,9 @@ import { Box, Button, Fieldset, Heading, HStack, InfoCard, Label, Select, VStack
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
+import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import {
-    dokumentÅrsak,
-    type DokumentÅrsak,
-    DokumentÅrsakPerson,
-    useDokumentutsendingContext,
-} from './DokumentutsendingContext';
+import { dokumentÅrsak, DokumentÅrsakPerson, useDokumentutsendingContext } from './DokumentutsendingContext';
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
@@ -28,11 +24,6 @@ import { FeatureToggle } from '../../../typer/featureToggles';
 import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
-
-enum BarnIBrevÅrsak {
-    BARN_SØKT_FOR,
-    BARN_BOSATT_MED_SØKER,
-}
 
 export function DokumentutsendingSkjema() {
     const { bruker } = useBrukerContext();
@@ -59,26 +50,6 @@ export function DokumentutsendingSkjema() {
     const toggles = useFeatureToggles();
 
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
-
-    const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
-        switch (årsak) {
-            case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
-                return BarnIBrevÅrsak.BARN_SØKT_FOR;
-            case DokumentÅrsakPerson.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
-                return BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER;
-            default:
-                return undefined;
-        }
-    };
-
-    const barnIBrevÅrsakTilTittel: Record<BarnIBrevÅrsak, string> = {
-        [BarnIBrevÅrsak.BARN_SØKT_FOR]: 'Hvilke barn er søkt for?',
-        [BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER]: 'Hvilke barn er bosatt med søker?',
-    };
 
     const barnIBrevÅrsak = finnBarnIBrevÅrsak(skjema.felter.årsak.verdi);
 
