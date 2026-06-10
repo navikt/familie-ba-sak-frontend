@@ -2,12 +2,12 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import { Label, Radio, RadioGroup } from '@navikt/ds-react';
 
-import { erUtbetalingTillattForÅrsakRHF, Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
+import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, watch } = useFormContext<EndretUtbetalingAndelFormValues>();
@@ -33,7 +33,7 @@ export const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
                     error={error?.message}
                 >
                     {Object.values(Utbetaling)
-                        .filter(utbetaling => erUtbetalingTillattForÅrsakRHF(årsak, utbetaling))
+                        .filter(utbetaling => erUtbetalingTillattForÅrsak(årsak, utbetaling))
                         .map(utbetaling => (
                             <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling} ref={ref}>
                                 {utbetalingTilLabel(utbetaling)}

@@ -10,7 +10,7 @@ import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export const Årsakvelger = ({ erLesevisning }: StandardFeltProps) => {
     const { control, setValue } = useFormContext<EndretUtbetalingAndelFormValues>();

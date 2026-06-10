@@ -1,127 +1,101 @@
 import { useState } from 'react';
 
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import type { IBehandling } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
-import type { IRestEndretUtbetalingAndel } from '@typer/utbetalingAndel';
-import { IEndretUtbetalingAndelÅrsak, årsakTekst } from '@typer/utbetalingAndel';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '@utils/dato';
-import { lagPersonLabel } from '@utils/formatter';
 import styled from 'styled-components';
 
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, Table, VStack } from '@navikt/ds-react';
 
-import EndretUtbetalingAndelSkjema from './EndretUtbetalingAndelSkjema';
+import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
+import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
 import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
-
-interface IEndretUtbetalingAndelRadProps {
-    lagretEndretUtbetalingAndel: IRestEndretUtbetalingAndel;
-    åpenBehandling: IBehandling;
-}
+import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
+import { erDefinert } from '../../../../../../utils/commons';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
+import { lagPersonLabel } from '../../../../../../utils/formatter';
+import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const PersonCelle = styled.div`
     display: flex;
-
     svg {
         margin-right: 1rem;
     }
 `;
 
-const EndretUtbetalingAndelRad = ({ lagretEndretUtbetalingAndel, åpenBehandling }: IEndretUtbetalingAndelRadProps) => {
+const utbetalingsprosentTilTekst = (prosent: number): string => {
+    switch (prosent) {
+        case 100:
+            return 'Ja - Full utbetaling';
+        case 50:
+            return 'Ja - Delt utbetaling';
+        case 0:
+            return 'Nei';
+        default:
+            throw new Error(`Ukjent utbetalingsprosent: ${prosent}`);
+    }
+};
+
+export const EndretUtbetalingAndelRad = () => {
+    const { behandling } = useBehandlingContext();
+    const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
-        lagretEndretUtbetalingAndel.personIdenter.length === 0
+        endretUtbetalingAndel.personIdenter.length === 0
     );
 
-    const toggles = useFeatureToggles();
+    const lukkSkjema = () => settErSkjemaEkspandert(false);
 
-    const erAutomatiskGenerert =
-        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && !!lagretEndretUtbetalingAndel.erAutomatiskGenerert;
+    const { form, onSubmit } = useEndretUtbetalingAndel(endretUtbetalingAndel, lukkSkjema);
 
     const {
-        skjema,
-        skjemaHarEndringerSomIkkeErLagret,
-        settFelterTilLagredeVerdier,
-        oppdaterEndretUtbetaling,
-        slettEndretUtbetaling,
-    } = useEndretUtbetalingAndel(lagretEndretUtbetalingAndel, åpenBehandling);
+        reset,
+        formState: { isDirty },
+    } = form;
 
     const toggleForm = () => {
-        if (skjemaHarEndringerSomIkkeErLagret() && erSkjemaEkspandert) {
-            alert('Endretutbetalingsandelen har endringer som ikke er lagret!');
-        } else {
-            settErSkjemaEkspandert(!erSkjemaEkspandert);
+        if (erSkjemaEkspandert && isDirty) {
+            alert('Perioden med endret utbetaling har endringer som ikke er lagret!');
+            return;
         }
-    };
-
-    const fraProsentTilTekst = (prosent: number, årsak?: IEndretUtbetalingAndelÅrsak): string => {
-        switch (årsak) {
-            case IEndretUtbetalingAndelÅrsak.DELT_BOSTED:
-            case IEndretUtbetalingAndelÅrsak.ENDRE_MOTTAKER:
-            case IEndretUtbetalingAndelÅrsak.ALLEREDE_UTBETALT:
-            case IEndretUtbetalingAndelÅrsak.ETTERBETALING_3ÅR:
-            case IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND:
-                return fraProsentTilTekstDefault(prosent);
-            default:
-                throw new Error(`Ukjent årsak ${årsak}`);
-        }
-    };
-
-    const fraProsentTilTekstDefault = (prosent: number): string => {
-        switch (prosent) {
-            case 100:
-                return 'Ja - Full utbetaling';
-            case 50:
-                return 'Ja - Delt utbetaling';
-            case 0:
-                return 'Nei';
-            default:
-                throw new Error(`Ikke støttet prosent ${prosent} for delt bosted.`);
-        }
+        if (erSkjemaEkspandert) reset();
+        settErSkjemaEkspandert(prev => !prev);
     };
 
     return (
         <Table.ExpandableRow
             togglePlacement="right"
             open={erSkjemaEkspandert}
-            onOpenChange={() => toggleForm()}
+            onOpenChange={toggleForm}
             content={
                 <EndretUtbetalingAndelSkjema
-                    skjema={skjema}
-                    åpenBehandling={åpenBehandling}
-                    erAutomatiskGenerert={erAutomatiskGenerert}
-                    lukkSkjema={() => {
-                        settErSkjemaEkspandert(false);
-                    }}
-                    slettEndretUtbetaling={slettEndretUtbetaling}
-                    oppdaterEndretUtbetaling={oppdaterEndretUtbetaling}
-                    settFelterTilLagredeVerdier={settFelterTilLagredeVerdier}
+                    key={`${endretUtbetalingAndel}-${erSkjemaEkspandert ? 'ekspandert' : 'lukket'}`}
+                    form={form}
+                    onSubmit={onSubmit}
+                    lukkSkjema={lukkSkjema}
                 />
             }
         >
             <Table.DataCell>
                 <PersonCelle>
-                    <StatusIkon
-                        status={lagretEndretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL}
-                    />
-                    <BodyShort size={'small'}>
-                        {lagretEndretUtbetalingAndel.personIdenter.length > 0
-                            ? lagretEndretUtbetalingAndel.personIdenter.map(person => (
-                                  <BodyShort size="small" key={person}>
-                                      {lagPersonLabel(person, åpenBehandling.personer)}
-                                  </BodyShort>
-                              ))
-                            : 'Ikke satt'}
-                    </BodyShort>
+                    <StatusIkon status={endretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL} />
+                    {endretUtbetalingAndel.personIdenter.length > 0 ? (
+                        <VStack>
+                            {endretUtbetalingAndel.personIdenter.map(person => (
+                                <BodyShort size="small" key={person}>
+                                    {lagPersonLabel(person, behandling.personer)}
+                                </BodyShort>
+                            ))}
+                        </VStack>
+                    ) : (
+                        <BodyShort size="small">Ikke satt</BodyShort>
+                    )}
                 </PersonCelle>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {lagretEndretUtbetalingAndel.fom
+                    {endretUtbetalingAndel.fom
                         ? isoMånedPeriodeTilFormatertString({
                               periode: {
-                                  fom: lagretEndretUtbetalingAndel.fom,
-                                  tom: lagretEndretUtbetalingAndel.tom,
+                                  fom: endretUtbetalingAndel.fom,
+                                  tom: endretUtbetalingAndel.tom,
                               },
                               tilFormat: Datoformat.MÅNED_ÅR,
                           })
@@ -130,18 +104,16 @@ const EndretUtbetalingAndelRad = ({ lagretEndretUtbetalingAndel, åpenBehandling
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {lagretEndretUtbetalingAndel.årsak ? årsakTekst[lagretEndretUtbetalingAndel.årsak] : ''}
+                    {endretUtbetalingAndel.årsak ? årsakTekst[endretUtbetalingAndel.årsak] : ''}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>
-                    {typeof lagretEndretUtbetalingAndel.prosent === 'number' && lagretEndretUtbetalingAndel.årsak
-                        ? fraProsentTilTekst(lagretEndretUtbetalingAndel.prosent, lagretEndretUtbetalingAndel.årsak)
+                    {erDefinert(endretUtbetalingAndel.prosent)
+                        ? utbetalingsprosentTilTekst(endretUtbetalingAndel.prosent)
                         : ''}
                 </BodyShort>
             </Table.DataCell>
         </Table.ExpandableRow>
     );
 };
-
-export default EndretUtbetalingAndelRad;

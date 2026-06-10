@@ -1,295 +1,90 @@
-import type { ChangeEvent } from 'react';
-import { useEffect } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import type { IBehandling } from '@typer/behandling';
-import type { ComboboxOption } from '@typer/common';
-import type { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
-import { årsaker, årsakTekst } from '@typer/utbetalingAndel';
-import type { IsoMånedString } from '@utils/dato';
-import { lagPersonLabel } from '@utils/formatter';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import { onOptionSelected } from '@utils/skjema';
-import styled from 'styled-components';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useOppdatererEndretUtbetalingAndelIsPending } from '@hooks/useOppdatererEndretUtbetalingAndelIsPending';
+import { useSletterEndretUtbetalingAndelIsPending } from '@hooks/useSletterEndretUtbetalingAndelIsPending';
+import { FeatureToggle } from '@typer/featureToggles';
+import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
+import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Label, Radio, RadioGroup, Select, Textarea, UNSAFE_Combobox } from '@navikt/ds-react';
-import { BorderNeutral } from '@navikt/ds-tokens/dist/tokens';
-import type { ISkjema } from '@navikt/familie-skjema';
+import { LocalAlert, VStack } from '@navikt/ds-react';
 
-import { type IEndretUtbetalingAndelSkjema } from './useEndretUtbetalingAndel';
-import Datovelger from '../../../../../../komponenter/Datovelger/Datovelger';
-import Knapperekke from '../../../../../../komponenter/Knapperekke';
-import MånedÅrVelger from '../../../../../../komponenter/MånedÅrInput/MånedÅrVelger';
-import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../Utbetaling';
+import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
+import { AvtaletidspunktDeltBostedDatovelger } from './komponenter/AvtaletidspunktDeltBostedDatovelger';
+import { Begrunnelse } from './komponenter/Begrunnelse';
+import { Månedperiodevelger } from './komponenter/Månedperiodevelger';
+import { Personvelger } from './komponenter/Personvelger';
+import { SkjemaKnapper } from './komponenter/SkjemaKnapper';
+import { SøknadstidspunktDatovelger } from './komponenter/SøknadstidspunktDatovelger';
+import { Utbetalingvelger } from './komponenter/Utbetalingvelger';
+import { Årsakvelger } from './komponenter/Årsakvelger';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndel';
 
-const KnapperekkeVenstre = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-const StyledFieldset = styled(Fieldset)`
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    padding-left: 2rem;
-    margin-right: 2rem;
-    border-left: 0.0625rem solid ${BorderNeutral};
-    max-width: 30rem;
-`;
-
-const Feltmargin = styled.div`
-    margin-bottom: 1rem;
-`;
-
-const StyledFerdigKnapp = styled(Button)`
-    margin-right: 0.5rem;
-`;
-
-const StyledTextarea = styled(Textarea)`
-    min-height: 8rem;
-`;
-
-interface IEndretUtbetalingAndelSkjemaProps {
-    åpenBehandling: IBehandling;
+interface EndretUtbetalingAndelSkjemaProps {
+    form: UseFormReturn<EndretUtbetalingAndelFormValues>;
+    onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues>;
     lukkSkjema: () => void;
-    skjema: ISkjema<IEndretUtbetalingAndelSkjema, IBehandling>;
-    erAutomatiskGenerert: boolean;
-    settFelterTilLagredeVerdier: () => void;
-    oppdaterEndretUtbetaling: (onSuccess: () => void) => void;
-    slettEndretUtbetaling: () => void;
 }
 
-const EndretUtbetalingAndelSkjema = ({
-    åpenBehandling,
-    lukkSkjema,
-    skjema,
-    erAutomatiskGenerert,
-    settFelterTilLagredeVerdier,
-    oppdaterEndretUtbetaling,
-    slettEndretUtbetaling,
-}: IEndretUtbetalingAndelSkjemaProps) => {
+export const EndretUtbetalingAndelSkjema = ({ form, onSubmit, lukkSkjema }: EndretUtbetalingAndelSkjemaProps) => {
+    const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
+
     const erLesevisning = useErLesevisning();
-    const felterErLåst = erLesevisning || erAutomatiskGenerert;
+    const toggles = useFeatureToggles();
 
-    const finnÅrTilbakeTilStønadFra = (): number => {
-        return (
-            new Date().getFullYear() -
-            new Date(
-                Math.min(
-                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
-                        new Date(person.stønadFom).getTime()
-                    )
-                )
-            ).getFullYear()
-        );
-    };
+    const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
+    const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
 
-    const finnÅrFremTilStønadTom = (): number => {
-        return (
-            new Date(
-                Math.max(
-                    ...åpenBehandling.personerMedAndelerTilkjentYtelse.map(person =>
-                        new Date(person.stønadTom).getTime()
-                    )
-                )
-            ).getFullYear() - new Date().getFullYear()
-        );
-    };
+    const erAutomatiskGenerert =
+        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && !!endretUtbetalingAndel.erAutomatiskGenerert;
 
-    useEffect(() => {
-        if (hentFrontendFeilmelding(skjema.submitRessurs)?.includes('til og med dato')) {
-            skjema.felter.tom.nullstill();
-        }
-    }, [skjema.submitRessurs]);
+    const låsFelter =
+        erLesevisning ||
+        erAutomatiskGenerert ||
+        endretUtbetalingAndel.inneholderBarnSomSkalSkjermes ||
+        sletterEndretUtbetalingAndel ||
+        oppdatererEndretUtbetalingAndel;
 
-    const tilgjengeligePersoner: ComboboxOption[] = åpenBehandling.personer
-        .filter(person =>
-            åpenBehandling.personerMedAndelerTilkjentYtelse
-                .map(personMedAndeler => personMedAndeler.personIdent)
-                .includes(person.personIdent)
-        )
-        .map(person => ({
-            value: person.personIdent,
-            label: lagPersonLabel(person.personIdent, åpenBehandling.personer),
-        }));
+    const {
+        watch,
+        handleSubmit,
+        clearErrors,
+        formState: { errors },
+    } = form;
 
-    const onPersonSelected = (optionValue: string, isSelected: boolean) => {
-        onOptionSelected(optionValue, isSelected, skjema.felter.personer, tilgjengeligePersoner);
-    };
+    const årsak = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK);
 
     return (
-        <>
-            <StyledFieldset
-                error={hentFrontendFeilmelding(skjema.submitRessurs)}
-                legend="Skjema for å endre utbetalingsandel"
-                hideLegend
-            >
-                <Feltmargin>
-                    <UNSAFE_Combobox
-                        isMultiSelect
-                        label={'Velg hvem det gjelder'}
-                        options={tilgjengeligePersoner}
-                        selectedOptions={skjema.felter.personer.verdi}
-                        onToggleSelected={onPersonSelected}
-                        readOnly={felterErLåst}
-                        error={skjema.felter.personer.hentNavInputProps(skjema.visFeilmeldinger).error}
-                    />
-                </Feltmargin>
+        <FormProvider {...form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <VStack gap="space-16" maxWidth="30rem">
+                    <Personvelger erLesevisning={låsFelter} />
 
-                <Feltmargin>
-                    <Label>Fastsett periode</Label>
-                    <Feltmargin>
-                        <MånedÅrVelger
-                            {...skjema.felter.fom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                            label={'F.o.m'}
-                            value={skjema.felter.fom.verdi}
-                            antallÅrFrem={finnÅrFremTilStønadTom()}
-                            antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                            onEndret={(dato: IsoMånedString | undefined) => {
-                                if (dato === undefined) {
-                                    skjema.felter.fom.nullstill();
-                                } else {
-                                    skjema.felter.fom.validerOgSettFelt(dato);
-                                }
-                            }}
-                            lesevisning={felterErLåst}
-                        />
-                    </Feltmargin>
-                    <MånedÅrVelger
-                        {...skjema.felter.tom.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        label={'T.o.m (valgfri)'}
-                        value={skjema.felter.tom.verdi}
-                        antallÅrFrem={finnÅrFremTilStønadTom()}
-                        antallÅrTilbake={finnÅrTilbakeTilStønadFra()}
-                        onEndret={(dato: IsoMånedString | undefined) => {
-                            if (dato === undefined) {
-                                skjema.felter.tom.nullstill();
-                            } else {
-                                skjema.felter.tom.validerOgSettFelt(dato);
-                            }
-                        }}
-                        lesevisning={felterErLåst}
-                    />
-                </Feltmargin>
+                    <Årsakvelger erLesevisning={låsFelter} />
 
-                <Feltmargin>
-                    <Select
-                        {...skjema.felter.årsak.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
-                        value={skjema.felter.årsak.verdi ?? ''}
-                        label={'Årsak'}
-                        onChange={(event): void => {
-                            skjema.felter.årsak.validerOgSettFelt(event.target.value as IEndretUtbetalingAndelÅrsak);
-                        }}
-                        readOnly={felterErLåst}
-                    >
-                        <option value={undefined}>Velg årsak</option>
-                        {årsaker.map(årsak => (
-                            <option value={årsak.valueOf()} key={årsak.valueOf()}>
-                                {årsakTekst[årsak]}
-                            </option>
-                        ))}
-                    </Select>
-                </Feltmargin>
+                    <Månedperiodevelger erLesevisning={låsFelter} />
 
-                <Feltmargin>
-                    <RadioGroup
-                        legend={<Label>Utbetaling</Label>}
-                        value={skjema.felter.utbetaling.verdi}
-                        onChange={skjema.felter.utbetaling.validerOgSettFelt}
-                        readOnly={felterErLåst}
-                    >
-                        {Object.values(Utbetaling)
-                            .filter(utbetaling =>
-                                erUtbetalingTillattForÅrsak({
-                                    årsak: skjema.felter.årsak.verdi,
-                                    utbetaling,
-                                })
-                            )
-                            .map(utbetaling => {
-                                return (
-                                    <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling}>
-                                        {utbetalingTilLabel(utbetaling)}
-                                    </Radio>
-                                );
-                            })}
-                    </RadioGroup>
-                </Feltmargin>
+                    <Utbetalingvelger erLesevisning={låsFelter} />
 
-                <Feltmargin>
-                    <Datovelger
-                        felt={skjema.felter.søknadstidspunkt}
-                        label={'Søknadstidspunkt'}
-                        visFeilmeldinger={skjema.visFeilmeldinger}
-                        readOnly={felterErLåst}
-                        kanKunVelgeFortid
-                    />
-                </Feltmargin>
+                    <SøknadstidspunktDatovelger erLesevisning={låsFelter} />
 
-                {skjema.felter.avtaletidspunktDeltBosted.erSynlig && (
-                    <Feltmargin>
-                        <Datovelger
-                            felt={skjema.felter.avtaletidspunktDeltBosted}
-                            label={'Avtale om delt bosted'}
-                            visFeilmeldinger={skjema.visFeilmeldinger}
-                            readOnly={felterErLåst}
-                        />
-                    </Feltmargin>
-                )}
+                    {årsak === IEndretUtbetalingAndelÅrsak.DELT_BOSTED && (
+                        <AvtaletidspunktDeltBostedDatovelger erLesevisning={låsFelter} />
+                    )}
 
-                <Feltmargin>
-                    <StyledTextarea
-                        {...skjema.felter.begrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}
-                        readOnly={felterErLåst}
-                        label={'Begrunnelse'}
-                        resize
-                        value={
-                            skjema.felter.begrunnelse.verdi !== null && skjema.felter.begrunnelse.verdi !== undefined
-                                ? skjema.felter.begrunnelse.verdi
-                                : ''
-                        }
-                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                            skjema.felter.begrunnelse.validerOgSettFelt(event.target.value);
-                        }}
-                    />
-                </Feltmargin>
-                {!erLesevisning && (
-                    <Knapperekke>
-                        <KnapperekkeVenstre>
-                            {!erAutomatiskGenerert && (
-                                <>
-                                    <StyledFerdigKnapp
-                                        size="small"
-                                        variant="primary"
-                                        onClick={() => oppdaterEndretUtbetaling(lukkSkjema)}
-                                    >
-                                        Bekreft
-                                    </StyledFerdigKnapp>
-                                    <Button
-                                        variant="tertiary"
-                                        size="small"
-                                        onClick={() => {
-                                            settFelterTilLagredeVerdier();
-                                            lukkSkjema();
-                                        }}
-                                    >
-                                        Avbryt
-                                    </Button>
-                                </>
-                            )}
-                        </KnapperekkeVenstre>
-                        <Button
-                            variant={'tertiary'}
-                            size={'small'}
-                            onClick={slettEndretUtbetaling}
-                            icon={<TrashIcon />}
-                        >
-                            {'Fjern periode'}
-                        </Button>
-                    </Knapperekke>
-                )}
-            </StyledFieldset>
-        </>
+                    <Begrunnelse erLesevisning={låsFelter} />
+
+                    {!erLesevisning && <SkjemaKnapper lukkSkjema={lukkSkjema} kunVisSlett={erAutomatiskGenerert} />}
+
+                    {errors.root?.message && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>{errors.root?.message}</LocalAlert.Title>
+                                <LocalAlert.CloseButton onClick={() => clearErrors('root')} />
+                            </LocalAlert.Header>
+                        </LocalAlert>
+                    )}
+                </VStack>
+            </form>
+        </FormProvider>
     );
 };
-
-export default EndretUtbetalingAndelSkjema;

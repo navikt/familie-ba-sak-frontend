@@ -13,7 +13,7 @@ import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export function utledTidligsteOgSenesteDato(
     åpenBehandling: IBehandling,

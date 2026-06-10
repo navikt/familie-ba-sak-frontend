@@ -11,7 +11,7 @@ import { Button } from '@navikt/ds-react';
 import { Utbetalingvelger } from './Utbetalingvelger';
 import { Årsakvelger } from './Årsakvelger';
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 

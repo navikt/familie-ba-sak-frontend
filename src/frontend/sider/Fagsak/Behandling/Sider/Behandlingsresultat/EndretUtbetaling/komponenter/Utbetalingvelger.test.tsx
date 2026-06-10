@@ -9,7 +9,7 @@ import { Utbetalingvelger } from './Utbetalingvelger';
 import { render } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 
