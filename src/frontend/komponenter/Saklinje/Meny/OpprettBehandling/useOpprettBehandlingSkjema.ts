@@ -24,7 +24,12 @@ import { useNavigate } from 'react-router';
 
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import { byggTomRessurs } from '@navikt/familie-typer';
+import {
+    byggFunksjonellFeilRessurs,
+    byggHenterRessurs,
+    byggSuksessRessurs,
+    byggTomRessurs,
+} from '@navikt/familie-typer';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -53,44 +58,6 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
     const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-
-    const { mutate: opprettBehandling } = useOpprettBehandling({
-        onSuccess: behandling => {
-            queryClient.invalidateQueries({ queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId) });
-            queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) });
-
-            lukkModal();
-            nullstillSkjema();
-
-            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
-                navigate(
-                    behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
-                        ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
-                        : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
-                );
-            } else {
-                navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
-            }
-        },
-    });
-
-    const { mutate: opprettKlagebehandling } = useOpprettKlagebehandling({
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId) });
-            lukkModal();
-            nullstillSkjema();
-        },
-    });
-
-    const { mutate: opprettTilbakekreving } = useOpprettTilbakekreving({
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
-            });
-            nullstillSkjemaStatus();
-            onTilbakekrevingsbehandlingOpprettet();
-        },
-    });
 
     const behandlingstype = useFelt<Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | ''>({
         verdi: '',
@@ -221,6 +188,60 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
         skjemanavn: 'Opprett behandling modal',
     });
 
+    const { mutate: opprettBehandling } = useOpprettBehandling({
+        onSuccess: async behandling => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
+                }),
+                queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) }),
+            ]);
+
+            lukkModal();
+            nullstillSkjema();
+            settSubmitRessurs(byggSuksessRessurs(behandling));
+
+            if (behandling && behandling.årsak === BehandlingÅrsak.SØKNAD) {
+                navigate(
+                    behandling.steg === BehandlingSteg.REGISTRERE_INSTITUSJON
+                        ? `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-mottaker`
+                        : `/fagsak/${fagsakId}/${behandling?.behandlingId}/registrer-soknad`
+                );
+            } else {
+                navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
+            }
+        },
+        onError: error => {
+            settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
+        },
+    });
+
+    const { mutate: opprettKlagebehandling } = useOpprettKlagebehandling({
+        onSuccess: async behandling => {
+            await queryClient.invalidateQueries({ queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId) });
+            lukkModal();
+            nullstillSkjema();
+            settSubmitRessurs(byggSuksessRessurs(behandling));
+        },
+        onError: error => {
+            settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
+        },
+    });
+
+    const { mutate: opprettTilbakekreving } = useOpprettTilbakekreving({
+        onSuccess: async behandling => {
+            await queryClient.invalidateQueries({
+                queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
+            });
+            nullstillSkjemaStatus();
+            onTilbakekrevingsbehandlingOpprettet();
+            settSubmitRessurs(byggSuksessRessurs(behandling));
+        },
+        onError: error => {
+            settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
+        },
+    });
+
     useEffect(() => {
         if (behandlingstype.verdi === Behandlingstype.TEKNISK_ENDRING) {
             behandlingsårsak.validerOgSettFelt(BehandlingÅrsak.TEKNISK_ENDRING);
@@ -231,6 +252,7 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
 
     const onBekreft = () => {
         if (kanSendeSkjema()) {
+            settSubmitRessurs(byggHenterRessurs());
             if (behandlingstype.verdi === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
                 opprettTilbakekreving({ fagsakId });
             } else if (behandlingstype.verdi === Klagebehandlingstype.KLAGE) {
