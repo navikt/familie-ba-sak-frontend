@@ -1,7 +1,6 @@
 import { Activity } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
@@ -11,7 +10,6 @@ import {
     type IBehandling,
     kanLeggeTilUtvidetVilkår,
 } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import { annenVurderingConfig, harPersonIkkeVurdertVilkår, vilkårConfig, VilkårType } from '@typer/vilkår';
 
@@ -37,7 +35,6 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const toggles = useFeatureToggles();
     const skjermstørrelse = useSkjermstørrelse();
     const erLesevisning = useErLesevisning();
 
@@ -58,7 +55,6 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
     );
 
     const skalViseVarselboksForVilkårSomMåKontrolleres =
-        toggles[FeatureToggle.skalViseVarsellampeForManueltLagtTilBarn] &&
         vilkårSomMåKontrolleresPerPerson.length > 0 &&
         (behandling.steg == BehandlingSteg.VILKÅRSVURDERING || behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
 
