@@ -1,44 +1,10 @@
-import styled from 'styled-components';
-
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
 import { lagBarnLabel } from '../../../../utils/formatter';
-
-const CheckboxOgSlettknapp = styled.div`
-    display: flex;
-    align-items: flex-start;
-
-    .knapp {
-        height: 2rem;
-    }
-`;
-
-const StyledCheckbox = styled(Checkbox)`
-    margin-left: 1rem;
-
-    > label {
-        width: 100%;
-    }
-`;
-
-const LabelContent = styled.div`
-    display: flex;
-    white-space: nowrap;
-`;
-
-const LabelTekst = styled.p`
-    margin: 0;
-    text-overflow: ellipsis;
-    overflow: hidden;
-`;
-
-const FjernBarnKnapp = styled(Button)`
-    margin-left: 1rem;
-`;
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -51,15 +17,13 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
-        <div>
-            <CheckboxOgSlettknapp>
-                <StyledCheckbox value={barn.ident}>
-                    <LabelContent>
-                        <LabelTekst title={navnOgIdentTekst}>{navnOgIdentTekst}</LabelTekst>
-                    </LabelContent>
-                </StyledCheckbox>
+        <Box marginInline="space-16 space-0">
+            <HStack gap="space-16" wrap={false}>
+                <Checkbox value={barn.ident}>
+                    <BodyShort truncate>{navnOgIdentTekst}</BodyShort>
+                </Checkbox>
                 {barn.manueltRegistrert && (
-                    <FjernBarnKnapp
+                    <Button
                         variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
                         size={'small'}
@@ -76,16 +40,16 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
                         icon={<TrashIcon />}
                     >
                         {'Fjern barn'}
-                    </FjernBarnKnapp>
+                    </Button>
                 )}
-            </CheckboxOgSlettknapp>
+            </HStack>
 
             <DeltBostedAvtaler
                 barn={barn}
                 avtalerOmDeltBostedPerBarnFelt={avtalerOmDeltBostedPerBarnFelt}
                 visFeilmeldinger={visFeilmeldinger}
             />
-        </div>
+        </Box>
     );
 };
 

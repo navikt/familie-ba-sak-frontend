@@ -1,7 +1,5 @@
-import styled from 'styled-components';
-
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Box, Button, HStack } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import DatovelgerForGammelSkjemaløsning from '../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
@@ -14,28 +12,6 @@ interface IProps {
     avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
     visFeilmeldinger: boolean;
 }
-
-const Container = styled.div`
-    margin-left: 3rem;
-`;
-
-const DatovelgerOgSlettknapp = styled.div<{ feil: boolean }>`
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: ${({ feil }) => (feil ? '0' : '1rem')};
-
-    .knapp {
-        height: 2rem;
-    }
-`;
-
-const FjernAvtaleKnapp = styled(Button)`
-    margin-left: 1rem;
-`;
-
-const LeggTilAvtaleKnapp = styled(Button)`
-    margin-bottom: 1rem;
-`;
 
 const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
     const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
@@ -53,13 +29,13 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
     };
 
     return (
-        <Container>
+        <HStack marginInline={'space-32 space-0'} gap={'space-16'}>
             {avtalerOmDeltBosted.map((avtaleDato, index) => {
                 const feilmelding = hentFeilmelding(avtaleDato);
 
                 return (
                     <div key={`${barn.fødselsdato}`}>
-                        <DatovelgerOgSlettknapp feil={feilmelding !== undefined}>
+                        <HStack gap={'space-16'} align={'end'}>
                             <DatovelgerForGammelSkjemaløsning
                                 label={'Dato for avtale om delt bosted'}
                                 minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}
@@ -83,7 +59,7 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                                 }}
                             />
                             {index !== 0 && (
-                                <FjernAvtaleKnapp
+                                <Button
                                     variant={'tertiary'}
                                     id={`fjern_avtale__${barn.ident}`}
                                     size={'small'}
@@ -105,30 +81,32 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                                     icon={<TrashIcon />}
                                 >
                                     {'Fjern'}
-                                </FjernAvtaleKnapp>
+                                </Button>
                             )}
-                        </DatovelgerOgSlettknapp>
+                        </HStack>
                     </div>
                 );
             })}
 
             {barn.merket && (
-                <LeggTilAvtaleKnapp
-                    variant={'tertiary'}
-                    id={`legg_til_avtale__${barn.ident}`}
-                    size={'small'}
-                    onClick={() =>
-                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                            [barn.ident]: [...avtalerOmDeltBosted, ''],
-                        })
-                    }
-                    icon={<PlusCircleIcon />}
-                >
-                    {'Legg til dato for avtale'}
-                </LeggTilAvtaleKnapp>
+                <Box marginBlock={'space-0 space-16'}>
+                    <Button
+                        variant={'tertiary'}
+                        id={`legg_til_avtale__${barn.ident}`}
+                        size={'small'}
+                        onClick={() =>
+                            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
+                                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                                [barn.ident]: [...avtalerOmDeltBosted, ''],
+                            })
+                        }
+                        icon={<PlusCircleIcon />}
+                    >
+                        {'Legg til dato for avtale'}
+                    </Button>
+                </Box>
             )}
-        </Container>
+        </HStack>
     );
 };
 

@@ -23,34 +23,32 @@ const MålformVelger = ({
     };
 
     return (
-        <Box marginBlock={'space-32'}>
-            <RadioGroup
-                {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
-                readOnly={erLesevisning}
-                value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
-                legend={Legend}
-            >
-                <Box paddingInline={'space-16 space-0'}>
-                    <Radio
-                        value={målform[Målform.NB]}
-                        name={'registrer-søknad-målform'}
-                        checked={målformFelt.verdi === Målform.NB}
-                        onChange={() => radioOnChange(Målform.NB)}
-                        id={'målform-nb'}
-                    >
-                        {målform[Målform.NB]}
-                    </Radio>
-                    <Radio
-                        value={målform[Målform.NN]}
-                        name={'registrer-søknad-målform'}
-                        checked={målformFelt.verdi === Målform.NN}
-                        onChange={() => radioOnChange(Målform.NN)}
-                    >
-                        {målform[Målform.NN]}
-                    </Radio>
-                </Box>
-            </RadioGroup>
-        </Box>
+        <RadioGroup
+            {...målformFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
+            readOnly={erLesevisning}
+            value={målformFelt.verdi ? målform[målformFelt.verdi] : ''}
+            legend={Legend}
+        >
+            <Box paddingInline={'space-16 space-0'}>
+                <Radio
+                    value={målform[Målform.NB]}
+                    name={'registrer-søknad-målform'}
+                    checked={målformFelt.verdi === Målform.NB}
+                    onChange={() => radioOnChange(Målform.NB)}
+                    id={'målform-nb'}
+                >
+                    {målform[Målform.NB]}
+                </Radio>
+                <Radio
+                    value={målform[Målform.NN]}
+                    name={'registrer-søknad-målform'}
+                    checked={målformFelt.verdi === Målform.NN}
+                    onChange={() => radioOnChange(Målform.NN)}
+                >
+                    {målform[Målform.NN]}
+                </Radio>
+            </Box>
+        </RadioGroup>
     );
 };
 
