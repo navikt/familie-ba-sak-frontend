@@ -1,15 +1,9 @@
+import { apiClient } from '@api/client/apiClient';
 import { type IBehandling, type NyBehandling } from '@typer/behandling';
 
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function opprettBehandling(request: FamilieRequest, payload: NyBehandling) {
-    const ressurs = await request<NyBehandling, IBehandling>({
+export async function opprettBehandling(payload: NyBehandling) {
+    return apiClient.post<NyBehandling, IBehandling>({
         data: payload,
-        method: 'POST',
         url: `/familie-ba-sak/api/behandlinger`,
-        påvirkerSystemLaster: true,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

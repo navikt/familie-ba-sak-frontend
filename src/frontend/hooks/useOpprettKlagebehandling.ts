@@ -2,8 +2,6 @@ import { opprettKlagebehandling, type OpprettKlagebehandlingPayload } from '@api
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
-import { useHttp } from '@navikt/familie-http';
-
 interface OpprettKlagebehandlingParameters extends OpprettKlagebehandlingPayload {
     fagsakId: number;
 }
@@ -11,14 +9,9 @@ interface OpprettKlagebehandlingParameters extends OpprettKlagebehandlingPayload
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, OpprettKlagebehandlingParameters>, 'mutationFn'>;
 
 export function useOpprettKlagebehandling(options?: Options) {
-    const { request } = useHttp();
-
     return useMutation<IBehandling, Error, OpprettKlagebehandlingParameters>({
-        mutationFn: (parameters: OpprettKlagebehandlingParameters): Promise<IBehandling> => {
-            const { klageMottattDato, fagsakId } = parameters;
-            const payload = { klageMottattDato };
-            return opprettKlagebehandling(request, payload, fagsakId);
-        },
+        mutationFn: ({ klageMottattDato, fagsakId }: OpprettKlagebehandlingParameters): Promise<IBehandling> =>
+            opprettKlagebehandling({ klageMottattDato }, fagsakId),
         ...options,
     });
 }
