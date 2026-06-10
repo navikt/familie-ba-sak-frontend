@@ -1,49 +1,30 @@
 import type { ChangeEvent } from 'react';
 import { useEffect } from 'react';
 
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import MålformVelger from '@komponenter/MålformVelger';
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import {
-    Box,
-    Button,
-    Fieldset,
-    Heading,
-    HStack,
-    InfoCard,
-    Label,
-    Loader,
-    LocalAlert,
-    Select,
-    VStack,
-} from '@navikt/ds-react';
+import { Box, Button, Fieldset, Heading, HStack, InfoCard, Label, Select, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
+import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import {
-    dokumentÅrsak,
-    type DokumentÅrsak,
-    DokumentÅrsakPerson,
-    useDokumentutsendingContext,
-} from './DokumentutsendingContext';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
+import { DistribusjonskanalInfo } from './DistribusjonskanalInfo';
+import { useDokumentutsendingContext } from './DokumentutsendingContext';
+import { dokumentÅrsak, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
-import { BrevmottakereAlert } from '../../../komponenter/Brevmottaker/BrevmottakereAlert';
-import { LeggTilBarnModal } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import MålformVelger from '../../../komponenter/MålformVelger';
-import { Distribusjonskanal } from '../../../typer/dokument';
-import { FeatureToggle } from '../../../typer/featureToggles';
-import type { IBarnMedOpplysninger } from '../../../typer/søknad';
 import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
-
-enum BarnIBrevÅrsak {
-    BARN_SØKT_FOR,
-    BARN_BOSATT_MED_SØKER,
-}
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 
 export function DokumentutsendingSkjema() {
     const { bruker } = useBrukerContext();
@@ -71,107 +52,11 @@ export function DokumentutsendingSkjema() {
 
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
 
-    const finnBarnIBrevÅrsak = (årsak: DokumentÅrsak | undefined): BarnIBrevÅrsak | undefined => {
-        switch (årsak) {
-            case DokumentÅrsakPerson.TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_FÅTT_EN_SØKNAD_FRA_ANNEN_FORELDER:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HAR_GJORT_VEDTAK_TIL_ANNEN_FORELDER:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_VARSEL_OM_ÅRLIG_KONTROLL:
-            case DokumentÅrsakPerson.TIL_FORELDER_OMFATTET_NORSK_LOVGIVNING_HENTER_IKKE_REGISTEROPPLYSNINGER:
-                return BarnIBrevÅrsak.BARN_SØKT_FOR;
-            case DokumentÅrsakPerson.KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV:
-                return BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER;
-            default:
-                return undefined;
-        }
-    };
-
-    const barnIBrevÅrsakTilTittel: Record<BarnIBrevÅrsak, string> = {
-        [BarnIBrevÅrsak.BARN_SØKT_FOR]: 'Hvilke barn er søkt for?',
-        [BarnIBrevÅrsak.BARN_BOSATT_MED_SØKER]: 'Hvilke barn er bosatt med søker?',
-    };
-
     const barnIBrevÅrsak = finnBarnIBrevÅrsak(skjema.felter.årsak.verdi);
 
     useEffect(() => {
         hentDistribusjonskanal(bruker.personIdent);
     }, []);
-
-    const distribusjonskanalInfo = () => {
-        switch (distribusjonskanal.status) {
-            case RessursStatus.SUKSESS:
-                switch (distribusjonskanal.data) {
-                    case Distribusjonskanal.INGEN_DISTRIBUSJON:
-                    case Distribusjonskanal.UKJENT:
-                        return (
-                            <Box marginBlock={'space-16'}>
-                                <LocalAlert status="warning">
-                                    <LocalAlert.Header>
-                                        <LocalAlert.Title>
-                                            Brevet kan ikke sendes fordi mottaker har ukjent adresse
-                                        </LocalAlert.Title>
-                                    </LocalAlert.Header>
-                                </LocalAlert>
-                            </Box>
-                        );
-                    case Distribusjonskanal.DITT_NAV:
-                    case Distribusjonskanal.DPVT:
-                    case Distribusjonskanal.SDP:
-                        return (
-                            <Box marginBlock={'space-16'}>
-                                <InfoCard data-color="info">
-                                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                        Brevet sendes digitalt
-                                    </InfoCard.Message>
-                                </InfoCard>
-                            </Box>
-                        );
-                    default:
-                        return (
-                            <Box marginBlock={'space-16'}>
-                                <InfoCard data-color="info">
-                                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                        Brevet sendes per post
-                                    </InfoCard.Message>
-                                </InfoCard>
-                            </Box>
-                        );
-                }
-            case RessursStatus.FEILET:
-            case RessursStatus.FUNKSJONELL_FEIL:
-            case RessursStatus.IKKE_TILGANG:
-                return (
-                    <Box marginBlock={'space-16'}>
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>{distribusjonskanal.frontendFeilmelding}</LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
-                    </Box>
-                );
-            case RessursStatus.IKKE_HENTET:
-            case RessursStatus.HENTER:
-                return (
-                    <Box marginBlock={'space-16'}>
-                        <InfoCard data-color="info">
-                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                <Loader title="Laster" />
-                            </InfoCard.Message>
-                        </InfoCard>
-                    </Box>
-                );
-            default:
-                return (
-                    <Box marginBlock={'space-16'}>
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>Ukjent feil ved henting av distribusjonskanal</LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
-                    </Box>
-                );
-        }
-    };
 
     const erLesevisning = !saksbehandler.harSkrivetilgang;
 
@@ -204,7 +89,7 @@ export function DokumentutsendingSkjema() {
             {!erLesevisning && <LeggTilBarnModal />}
             <Box padding="space-32" overflow="auto">
                 <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-                {!brukerHarUtenlandskAdresse && distribusjonskanalInfo()}
+                {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo distribusjonskanal={distribusjonskanal} />}
                 {manuelleBrevmottakerePåFagsak.length > 0 && (
                     <BrevmottakereAlert
                         erPåBehandling={false}
