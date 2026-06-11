@@ -3,6 +3,7 @@ import { useHentFagsak } from '@hooks/useHentFagsak';
 import { useHentPerson } from '@hooks/useHentPerson';
 import { useScrollTilAnker } from '@hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '@hooks/useSyncModiaContext';
+import { useSyncSentryFagsakId } from '@hooks/useSyncSentryFagsakId';
 import { NotFound } from '@komponenter/Error/NotFound';
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
 import { FagsakType } from '@typer/fagsak';
@@ -26,6 +27,7 @@ export function Fagsak() {
 
     useScrollTilAnker();
     useSyncModiaContext(bruker);
+    useSyncSentryFagsakId(fagsak?.id);
 
     if (!fagsakIdParam) {
         return <NotFound />;

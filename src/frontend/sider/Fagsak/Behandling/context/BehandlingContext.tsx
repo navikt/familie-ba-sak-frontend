@@ -4,6 +4,7 @@ import { useState, createContext, useContext, useEffect } from 'react';
 import { useFagsak } from '@hooks/useFagsak';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { useSyncSentryBehandlingId } from '@hooks/useSyncSentryBehandlingId';
 import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlerRolle, BehandlingStatus, Behandlingstype } from '@typer/behandling';
@@ -39,6 +40,7 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
     const { settBehandlingRessurs } = useHentOgSettBehandlingContext();
 
     useNavigerAutomatiskTilSideForBehandlingssteg({ behandling });
+    useSyncSentryBehandlingId(behandling.behandlingId);
 
     const saksbehandler = useSaksbehandler();
     const fagsak = useFagsak();
