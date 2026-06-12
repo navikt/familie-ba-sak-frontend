@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import type { IApp } from '@navikt/familie-backend';
 import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
-import { logError, logInfo, logWarn } from '@navikt/familie-logging';
+import { logInfo, logWarn } from '@navikt/familie-logging';
 
 import { appConfig, frontendPath, sessionConfig } from './config.js';
 import { erLokal } from './env.js';
@@ -40,12 +40,12 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
 
     // Error-handling middleware - må registreres etter alle andre routes
     app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+        if (res.headersSent) {
+            return _next(err); // delegate to Express's default handler to close the connection
+        }
         if (err.message?.includes('did not find expected authorization request details in session')) {
             logWarn(`OIDC-sesjon mangler ved callback - brukeren omdirigeres til login. Detaljer: ${err.message}`);
             res.redirect('/login');
-        } else {
-            logError(`Uhåndtert feil i applikasjonen: ${err.message}`, err);
-            res.status(500).send('Internal Server Error');
         }
     });
 
