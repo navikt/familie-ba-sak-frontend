@@ -1,5 +1,6 @@
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagGrunnlagPerson } from '@testutils/testdata/personTestdata';
+import { BehandlingKategori } from '@typer/behandlingstema';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
 import { describe, expect } from 'vitest';
@@ -7,6 +8,7 @@ import { describe, expect } from 'vitest';
 import {
     Behandlingstype,
     BehandlingÅrsak,
+    erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
     kanLeggeTilUtvidetVilkår,
     MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
     sjekkErBehandleneEnhetMidlertidig,
@@ -146,6 +148,194 @@ describe('behandling', () => {
 
             // Assert
             expect(målform).toBe(Målform.NB);
+        });
+    });
+
+    describe('erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna', () => {
+        test('skal returnere true for eøs førstegangsbehandling', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.EØS,
+                type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2026-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: true,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(true);
+        });
+
+        test('skal returnere true for eøs revurdering søknad med minst ett nytt barn', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.EØS,
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2026-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: true,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(true);
+        });
+
+        test('skal returnere false for nasjonal førstegangsbehandling', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.NASJONAL,
+                type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2026-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: true,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(false);
+        });
+
+        test('skal returnere false for eøs revurdering søknad uten nytt barn', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.EØS,
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2020-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: false,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(false);
+        });
+
+        test('skal returnere false for eøs revurdering med annen årsak enn søknad selv med nytt barn', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.EØS,
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2026-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: true,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(false);
+        });
+
+        test('skal returnere false for nasjonal revurdering søknad med nytt barn', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.NASJONAL,
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2026-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: true,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(false);
         });
     });
 });
