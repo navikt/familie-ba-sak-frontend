@@ -1,7 +1,7 @@
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useVilkårResultatPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { useVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingPanelerContext';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
@@ -16,7 +16,7 @@ const VILKÅRTYPER_SOM_SKAL_ÅPNES = [VilkårType.BOR_MED_SØKER, VilkårType.BO
 export function KopierVilkårFraSøkerTilBarna() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel } = useVilkårsvurderingPaneler();
-    const { åpneVilkårResultatPanel, lukkVilkårResultatPanel } = useVilkårResultatPaneler();
+    const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
     const toggles = useFeatureToggles();
 
     const {
@@ -41,7 +41,7 @@ export function KopierVilkårFraSøkerTilBarna() {
 
                     if (ukompletteKopierteVilkårResultat.length > 0) {
                         åpneVilkårsvurderingspanel(it.personIdent);
-                        ukompletteKopierteVilkårResultat.forEach(it => åpneVilkårResultatPanel(it));
+                        ukompletteKopierteVilkårResultat.forEach(it => ekspanderRad(it));
                     } else {
                         lukkVilkårsvurderingspanel(it.personIdent);
                     }
@@ -50,7 +50,7 @@ export function KopierVilkårFraSøkerTilBarna() {
                         .filter(it => !VILKÅRTYPER_SOM_SKAL_ÅPNES.includes(it.vilkårType))
                         .map(it => it.id);
 
-                    andreVilkårResultat.forEach(it => lukkVilkårResultatPanel(it));
+                    andreVilkårResultat.forEach(it => kollapsRad(it));
                 });
         },
     });

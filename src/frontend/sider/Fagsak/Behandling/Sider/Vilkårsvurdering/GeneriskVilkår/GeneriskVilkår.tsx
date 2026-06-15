@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useVilkårResultatPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
@@ -39,7 +39,8 @@ const Container = styled.div`
 const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
     const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
-    const { åpneVilkårResultatPanel } = useVilkårResultatPaneler();
+
+    const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
 
     const erLesevisning = useErLesevisning();
 
@@ -58,7 +59,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
             .flatMap(it => it.vilkårResultater)
             .filter(it => it.resultat === Resultat.IKKE_VURDERT)
             .filter(it => !eksisterendeVilkårResultatIder.includes(it.id));
-        nyeIkkeVurdertVilkårResultat.forEach(it => åpneVilkårResultatPanel(it.id));
+        nyeIkkeVurdertVilkårResultat.forEach(it => ekspanderRad(it.id));
     }
 
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useVilkårResultatPanel } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
+import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IGrunnlagPerson } from '@typer/person';
 import { type IVilkårConfig, type IVilkårResultat, Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
@@ -36,33 +36,27 @@ export function VilkårTabellRad({
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
-    const id = vilkårResultat.verdi.id;
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
     const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
 
-    const { erVilkårResultatEkspandert, åpneVilkårResultat, lukkVilkårResultat } = useVilkårResultatPanel(id);
+    const { erRadEkspandert, toggleRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.verdi.id);
 
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(vilkårResultat);
 
     const periodeErTom = !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
 
     const toggleForm = (visAlert: boolean) => {
-        if (erVilkårResultatEkspandert && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
-            alert('Vurderingen har endringer som ikke er lagret!');
-        } else {
-            if (erVilkårResultatEkspandert) {
-                lukkVilkårResultat();
-            } else {
-                åpneVilkårResultat();
-            }
+        const isDirty = erRadEkspandert && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår);
+        toggleRad(isDirty);
+        if (!isDirty) {
             settRedigerbartVilkår(vilkårResultat);
         }
     };
 
     return (
         <Table.ExpandableRow
-            key={`${id}-${erVilkårResultatEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel her, se https://github.com/navikt/aksel/issues/4971
-            open={erVilkårResultatEkspandert}
+            key={`${vilkårResultat.verdi.id}-${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel her, se https://github.com/navikt/aksel/issues/4971
+            open={erRadEkspandert}
             togglePlacement={'right'}
             onOpenChange={() => toggleForm(true)}
             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
