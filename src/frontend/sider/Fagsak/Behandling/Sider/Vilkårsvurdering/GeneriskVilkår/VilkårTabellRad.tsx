@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useVilkårResultatPanel } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
 import type { IGrunnlagPerson } from '@typer/person';
-import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
-import { Resultat, resultatVisningsnavn } from '@typer/vilkår';
+import { type IVilkårConfig, type IVilkårResultat, Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 import { alleRegelverk } from '@utils/vilkår';
 import deepEqual from 'deep-equal';
@@ -36,40 +36,38 @@ export function VilkårTabellRad({
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
+    const id = vilkårResultat.verdi.id;
     const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
     const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
 
-    const hentInitiellEkspandering = () => erLesevisning || vilkårResultatVerdi === Resultat.IKKE_VURDERT;
+    const { erVilkårResultatEkspandert, åpneVilkårResultat, lukkVilkårResultat } = useVilkårResultatPanel(id);
 
-    const [ekspandertVilkår, settEkspandertVilkår] = useState(hentInitiellEkspandering());
     const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(vilkårResultat);
-
-    const aktivSettPåVent = behandling.aktivSettPåVent;
-
-    useEffect(() => {
-        settEkspandertVilkår(hentInitiellEkspandering());
-    }, [aktivSettPåVent]);
 
     const periodeErTom = !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
 
     const toggleForm = (visAlert: boolean) => {
-        if (ekspandertVilkår && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
+        if (erVilkårResultatEkspandert && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår)) {
             alert('Vurderingen har endringer som ikke er lagret!');
         } else {
-            settEkspandertVilkår(!ekspandertVilkår);
+            if (erVilkårResultatEkspandert) {
+                lukkVilkårResultat();
+            } else {
+                åpneVilkårResultat();
+            }
             settRedigerbartVilkår(vilkårResultat);
         }
     };
 
     return (
         <Table.ExpandableRow
-            open={ekspandertVilkår}
+            key={`${id}-${erVilkårResultatEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel her, se https://github.com/navikt/aksel/issues/4971
+            open={erVilkårResultatEkspandert}
             togglePlacement={'right'}
             onOpenChange={() => toggleForm(true)}
             id={vilkårFeilmeldingId(vilkårResultat.verdi)}
             content={
                 <VilkårTabellRadEndre
-                    key={`${vilkårResultat.verdi.id}-${ekspandertVilkår ? 'ekspandert' : 'lukket'}`}
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultat={vilkårResultat}
@@ -77,7 +75,6 @@ export function VilkårTabellRad({
                     toggleForm={toggleForm}
                     redigerbartVilkår={redigerbartVilkår}
                     settRedigerbartVilkår={settRedigerbartVilkår}
-                    settEkspandertVilkår={settEkspandertVilkår}
                     settFokusPåKnapp={settFokusPåKnapp}
                     lesevisning={erLesevisning}
                 />

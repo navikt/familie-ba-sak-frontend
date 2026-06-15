@@ -1,14 +1,22 @@
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useVilkårResultatPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårResultatPanelerContext';
+import { useVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingPanelerContext';
 import { FeatureToggle } from '@typer/featureToggles';
+import { PersonType } from '@typer/person';
+import { VilkårType } from '@typer/vilkår';
 
 import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
+const VILKÅRTYPER_SOM_SKAL_ÅPNES = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
+
 export function KopierVilkårFraSøkerTilBarna() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel } = useVilkårsvurderingPaneler();
+    const { åpneVilkårResultatPanel, lukkVilkårResultatPanel } = useVilkårResultatPaneler();
     const toggles = useFeatureToggles();
 
     const {
@@ -16,7 +24,35 @@ export function KopierVilkårFraSøkerTilBarna() {
         isPending: kopierVilkårFraSøkerTilBarnaIsPending,
         error: kopierVilkårFraSøkerTilBarnaError,
     } = useKopierVilkårFraSøkerTilBarna({
-        onSuccess: behandling => settÅpenBehandling(byggSuksessRessurs(behandling)),
+        onSuccess: behandling => {
+            settÅpenBehandling(byggSuksessRessurs(behandling));
+
+            const barnasIdenter = behandling.personer
+                .filter(it => it.type === PersonType.BARN)
+                .map(it => it.personIdent);
+
+            behandling.personResultater
+                .filter(it => barnasIdenter.includes(it.personIdent))
+                .forEach(it => {
+                    const ukompletteKopierteVilkårResultat = it.vilkårResultater
+                        .filter(it => VILKÅRTYPER_SOM_SKAL_ÅPNES.includes(it.vilkårType))
+                        .filter(it => it.utdypendeVilkårsvurderinger.length === 0)
+                        .map(it => it.id);
+
+                    if (ukompletteKopierteVilkårResultat.length > 0) {
+                        åpneVilkårsvurderingspanel(it.personIdent);
+                        ukompletteKopierteVilkårResultat.forEach(it => åpneVilkårResultatPanel(it));
+                    } else {
+                        lukkVilkårsvurderingspanel(it.personIdent);
+                    }
+
+                    const andreVilkårResultat = it.vilkårResultater
+                        .filter(it => !VILKÅRTYPER_SOM_SKAL_ÅPNES.includes(it.vilkårType))
+                        .map(it => it.id);
+
+                    andreVilkårResultat.forEach(it => lukkVilkårResultatPanel(it));
+                });
+        },
     });
 
     if (!toggles[FeatureToggle.kanGenerereBarnasVilkar]) {
