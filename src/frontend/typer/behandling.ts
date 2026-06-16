@@ -27,7 +27,7 @@ import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
-export interface IRestNyBehandling {
+export interface NyBehandling {
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
     behandlingType: Behandlingstype;

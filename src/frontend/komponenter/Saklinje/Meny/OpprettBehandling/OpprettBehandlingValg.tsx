@@ -1,14 +1,9 @@
 import type { ChangeEvent } from 'react';
 
-import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-
-import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
-import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
-import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
-import type { IBehandling } from '../../../../typer/behandling';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehandling';
+import type { ManuellJournalføringSkjemaFelter } from '@sider/ManuellJournalføring/ManuellJournalføringContext';
+import type { IBehandling } from '@typer/behandling';
 import {
     BehandlingResultat,
     BehandlingStatus,
@@ -16,16 +11,22 @@ import {
     behandlingÅrsak,
     BehandlingÅrsak,
     erBehandlingHenlagt,
-} from '../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../typer/common';
-import { FagsakStatus, type IMinimalFagsak } from '../../../../typer/fagsak';
-import { Klagebehandlingstype } from '../../../../typer/klage';
-import type { IPersonInfo } from '../../../../typer/person';
-import { ForelderBarnRelasjonRolle } from '../../../../typer/person';
-import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../utils/fagsak';
-import { hentAlder } from '../../../../utils/formatter';
-import { onOptionSelected } from '../../../../utils/skjema';
+} from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
+import type { IPersonInfo } from '@typer/person';
+import { ForelderBarnRelasjonRolle } from '@typer/person';
+import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '@utils/fagsak';
+import { hentAlder } from '@utils/formatter';
+import { onOptionSelected } from '@utils/skjema';
+
+import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
+
+import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
+import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandlingSkjema';
 
 const erOpprettBehandlingSkjema = (
     skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>
