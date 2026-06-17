@@ -43,25 +43,23 @@ function useInitielleEkspanderteIdenter(): Set<string> {
     return identer;
 }
 
-interface VilkårsvurderingPanelerContext {
-    erVilkårsvurderingspanelEkspandert: (ident: string) => boolean;
-    åpneVilkårsvurderingspanel: (ident: string) => void;
-    lukkVilkårsvurderingspanel: (ident: string) => void;
+interface EkspanderbareVilkårsvurderingPanelerContext {
+    erPanelEkspandert: (ident: string) => boolean;
+    ekspanderPanel: (ident: string) => void;
+    kollapsPanel: (ident: string) => void;
+    togglePanel: (ident: string) => void;
 }
 
-const Context = createContext<VilkårsvurderingPanelerContext | undefined>(undefined);
+const Context = createContext<EkspanderbareVilkårsvurderingPanelerContext | undefined>(undefined);
 
-export function VilkårsvurderingPanelerProvider({ children }: PropsWithChildren) {
+export function EkspanderbareVilkårsvurderingPanelerProvider({ children }: PropsWithChildren) {
     const initielleEkspanderteIdenter = useInitielleEkspanderteIdenter();
 
     const [ekspanderteIdenter, settEkspanderteIdenter] = useState<Set<string>>(initielleEkspanderteIdenter);
 
-    const erVilkårsvurderingspanelEkspandert = useCallback(
-        (ident: string) => ekspanderteIdenter.has(ident),
-        [ekspanderteIdenter]
-    );
+    const erPanelEkspandert = useCallback((ident: string) => ekspanderteIdenter.has(ident), [ekspanderteIdenter]);
 
-    const åpneVilkårsvurderingspanel = useCallback((ident: string) => {
+    const ekspanderPanel = useCallback((ident: string) => {
         settEkspanderteIdenter(forrige => {
             const neste = new Set(forrige);
             neste.add(ident);
@@ -69,7 +67,7 @@ export function VilkårsvurderingPanelerProvider({ children }: PropsWithChildren
         });
     }, []);
 
-    const lukkVilkårsvurderingspanel = useCallback((ident: string) => {
+    const kollapsPanel = useCallback((ident: string) => {
         settEkspanderteIdenter(forrige => {
             const neste = new Set(forrige);
             neste.delete(ident);
@@ -77,18 +75,32 @@ export function VilkårsvurderingPanelerProvider({ children }: PropsWithChildren
         });
     }, []);
 
+    const togglePanel = useCallback((ident: string) => {
+        settEkspanderteIdenter(forrige => {
+            const neste = new Set(forrige);
+            if (neste.has(ident)) {
+                neste.delete(ident);
+            } else {
+                neste.add(ident);
+            }
+            return neste;
+        });
+    }, []);
+
     const value = useMemo(
-        () => ({ erVilkårsvurderingspanelEkspandert, åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel }),
-        [erVilkårsvurderingspanelEkspandert, åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel]
+        () => ({ erPanelEkspandert, ekspanderPanel, kollapsPanel, togglePanel }),
+        [erPanelEkspandert, ekspanderPanel, kollapsPanel, togglePanel]
     );
 
     return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 
-export function useVilkårsvurderingPaneler() {
+export function useEkspanderbareVilkårsvurderingPaneler() {
     const context = useContext(Context);
     if (context === undefined) {
-        throw new Error('useVilkårsvurderingPaneler må brukes innenfor en VilkårsvurderingPanelerProvider.');
+        throw new Error(
+            'useEkspanderbareVilkårsvurderingPaneler må brukes innenfor en EkspanderbareVilkårsvurderingPanelerProvider.'
+        );
     }
     return context;
 }

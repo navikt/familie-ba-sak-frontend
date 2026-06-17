@@ -3,8 +3,8 @@ import { Activity } from 'react';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
-import { useVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingPanelerContext';
 import {
     BehandlingSteg,
     erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
@@ -34,8 +34,7 @@ interface Props {
 export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
-    const { erVilkårsvurderingspanelEkspandert, åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel } =
-        useVilkårsvurderingPaneler();
+    const { erPanelEkspandert, togglePanel } = useEkspanderbareVilkårsvurderingPaneler();
 
     const skjermstørrelse = useSkjermstørrelse();
     const erLesevisning = useErLesevisning();
@@ -90,6 +89,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 </LocalAlert>
             )}
             {vilkårsvurdering.map((personResultat, index) => {
+                const skrollHash = `${index}_${personResultat.person.fødselsdato}`;
                 const ident = personResultat.personIdent;
                 const erSøker = personResultat.person.type === PersonType.SØKER;
                 const andreVurderinger = personResultat.andreVurderinger;
@@ -104,10 +104,10 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 const skalViseKopierVilkårFraSøkerTilBarna =
                     erSøker && erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
 
-                const erEkspandert = erVilkårsvurderingspanelEkspandert(ident);
+                const erEkspandert = erPanelEkspandert(ident);
 
                 return (
-                    <div key={personResultat.person.personIdent} id={`${index}_${personResultat.person.fødselsdato}`}>
+                    <div key={personResultat.person.personIdent} id={skrollHash}>
                         {personSkalSkjermesForBruker ? (
                             <HStack gap="space-24" wrap={false} align="center">
                                 <ShieldLockFillIcon
@@ -143,13 +143,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                         <Button
                                             variant={'tertiary'}
                                             size={erStorSkjerm ? 'medium' : 'small'}
-                                            onClick={() => {
-                                                if (!erEkspandert) {
-                                                    åpneVilkårsvurderingspanel(ident);
-                                                } else {
-                                                    lukkVilkårsvurderingspanel(ident);
-                                                }
-                                            }}
+                                            onClick={() => togglePanel(ident)}
                                             icon={
                                                 erEkspandert ? (
                                                     <ChevronUpIcon aria-hidden />
