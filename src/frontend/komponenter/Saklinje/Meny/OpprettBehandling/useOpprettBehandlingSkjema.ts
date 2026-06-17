@@ -190,6 +190,13 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
 
     const { mutate: opprettBehandling } = useOpprettBehandling({
         onSuccess: async behandling => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
+                }),
+                queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) }),
+            ]);
+
             lukkModal();
             nullstillSkjema();
             settSubmitRessurs(byggSuksessRessurs(behandling));
@@ -203,13 +210,6 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
             } else {
                 navigate(`/fagsak/${fagsakId}/${behandling?.behandlingId}/vilkaarsvurdering`);
             }
-
-            await Promise.all([
-                queryClient.invalidateQueries({
-                    queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
-                }),
-                queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) }),
-            ]);
         },
         onError: error => {
             settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
@@ -218,10 +218,10 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
 
     const { mutate: opprettKlagebehandling } = useOpprettKlagebehandling({
         onSuccess: async behandling => {
+            await queryClient.invalidateQueries({ queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId) });
             lukkModal();
             nullstillSkjema();
             settSubmitRessurs(byggSuksessRessurs(behandling));
-            await queryClient.invalidateQueries({ queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId) });
         },
         onError: error => {
             settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
@@ -230,12 +230,13 @@ export function useOpprettBehandlingSkjema({ fagsakId, lukkModal, onTilbakekrevi
 
     const { mutate: opprettTilbakekreving } = useOpprettTilbakekreving({
         onSuccess: async behandling => {
-            nullstillSkjemaStatus();
-            onTilbakekrevingsbehandlingOpprettet();
-            settSubmitRessurs(byggSuksessRessurs(behandling));
             await queryClient.invalidateQueries({
                 queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
             });
+
+            nullstillSkjemaStatus();
+            onTilbakekrevingsbehandlingOpprettet();
+            settSubmitRessurs(byggSuksessRessurs(behandling));
         },
         onError: error => {
             settSubmitRessurs(byggFunksjonellFeilRessurs(error.message));
