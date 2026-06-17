@@ -1,5 +1,4 @@
 import type { ChangeEvent } from 'react';
-import { useEffect } from 'react';
 
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
@@ -12,7 +11,6 @@ import type { IBarnMedOpplysninger } from '@typer/søknad';
 
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack, InfoCard, Label, Select, VStack } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
@@ -31,7 +29,7 @@ export function DokumentutsendingSkjema() {
 
     const {
         hentForhåndsvisningPåFagsak,
-        hentetDokument,
+        forhåndsvisningLaster,
         skjema,
         nullstillSkjema,
         senderBrev,
@@ -40,9 +38,7 @@ export function DokumentutsendingSkjema() {
         hentSkjemaFeilmelding,
         visForhåndsvisningBeskjed,
         settVisfeilmeldinger,
-        distribusjonskanal,
         brukerHarUkjentAdresse,
-        hentDistribusjonskanal,
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
     } = useDokumentutsendingContext();
@@ -53,10 +49,6 @@ export function DokumentutsendingSkjema() {
     const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
 
     const barnIBrevÅrsak = finnBarnIBrevÅrsak(skjema.felter.årsak.verdi);
-
-    useEffect(() => {
-        hentDistribusjonskanal(bruker.personIdent);
-    }, []);
 
     const erLesevisning = !saksbehandler.harSkrivetilgang;
 
@@ -89,7 +81,7 @@ export function DokumentutsendingSkjema() {
             {!erLesevisning && <LeggTilBarnModal />}
             <Box padding="space-32" overflow="auto">
                 <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-                {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo distribusjonskanal={distribusjonskanal} />}
+                {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo personIdent={bruker.personIdent} />}
                 {manuelleBrevmottakerePåFagsak.length > 0 && (
                     <BrevmottakereAlert
                         erPåBehandling={false}
@@ -191,7 +183,7 @@ export function DokumentutsendingSkjema() {
                         <Button
                             size="medium"
                             variant="primary"
-                            loading={senderBrev()}
+                            loading={senderBrev}
                             disabled={skjemaErLåst() || brukerHarUkjentAdresse()}
                             onClick={sendBrevPåFagsak}
                         >
@@ -207,7 +199,7 @@ export function DokumentutsendingSkjema() {
                             variant={'tertiary'}
                             id={'forhandsvis-vedtaksbrev'}
                             size={'medium'}
-                            loading={hentetDokument.status === RessursStatus.HENTER}
+                            loading={forhåndsvisningLaster}
                             disabled={skjemaErLåst()}
                             onClick={hentForhåndsvisningPåFagsak}
                             icon={<FileTextIcon />}

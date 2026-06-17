@@ -1,7 +1,9 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import useDokument from '@hooks/useDokument';
+import { useForhåndsvisBrevPåFagsak } from '@hooks/useForhåndsvisBrevPåFagsak';
+import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
+import { useSendInformasjonsbrev } from '@hooks/useSendInformasjonsbrev';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { transformerSkjemaData } from '@sider/Fagsak/Dokumentutsending/transformerSkjemaData';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
@@ -12,12 +14,10 @@ import { useBarnIBrevFelter } from '@utils/barnIBrevFelter';
 import type { IsoDatoString } from '@utils/dato';
 import { useDeltBostedFelter } from '@utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '@utils/fritekstfelter';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import deepEqual from 'deep-equal';
 
 import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 import { type DokumentÅrsak, DokumentÅrsakInstitusjon, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
 import { useBrukerContext } from '../BrukerContext';
@@ -38,9 +38,10 @@ export interface DokumentutsendingSkjema {
 interface DokumentutsendingContextValue {
     hentForhåndsvisningPåFagsak: () => void;
     hentSkjemaFeilmelding: () => string | undefined;
-    hentetDokument: Ressurs<string>;
+    forhåndsvisningUrl: string | undefined;
+    forhåndsvisningLaster: boolean;
     sendBrevPåFagsak: () => void;
-    senderBrev: () => boolean;
+    senderBrev: boolean;
     settVisInnsendtBrevModal: (vis: boolean) => void;
     settVisfeilmeldinger: (vis: boolean) => void;
     skjemaErLåst: () => boolean;
@@ -48,10 +49,8 @@ interface DokumentutsendingContextValue {
     visInnsendtBrevModal: boolean;
     skjema: ISkjema<DokumentutsendingSkjema, string>;
     nullstillSkjema: () => void;
-    distribusjonskanal: Ressurs<Distribusjonskanal>;
     brukerHarUtenlandskAdresse: boolean;
     brukerHarUkjentAdresse: () => boolean;
-    hentDistribusjonskanal: (personIdent: string) => void;
     dokumentÅrsaker: DokumentÅrsak[];
 }
 
@@ -63,7 +62,17 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-    const { hentForhåndsvisning, hentetDokument, distribusjonskanal, hentDistribusjonskanal } = useDokument();
+
+    const { data: distribusjonskanal } = useHentDistribusjonskanal(bruker.personIdent);
+
+    const {
+        mutate: forhåndsvisBrev,
+        data: forhåndsvisningUrl,
+        isPending: forhåndsvisningLaster,
+        error: forhåndsvisningError,
+    } = useForhåndsvisBrevPåFagsak(fagsak.id);
+
+    const { mutate: sendBrev, isPending: senderBrev, error: sendBrevError } = useSendInformasjonsbrev(fagsak.id);
 
     const [sistBrukteDataVedForhåndsvisning, settSistBrukteDataVedForhåndsvisning] = useState<
         IManueltBrevRequestPåFagsak | undefined
@@ -159,7 +168,6 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
 
     const {
         skjema,
-        onSubmit,
         nullstillSkjema: nullstillHeleSkjema,
         settVisfeilmeldinger,
         kanSendeSkjema,
@@ -217,8 +225,7 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
             hentDeltBostedMulitiselectVerdierForBarn,
         });
 
-    const skjemaErLåst = () =>
-        skjema.submitRessurs.status === RessursStatus.HENTER || hentetDokument.status === RessursStatus.HENTER;
+    const skjemaErLåst = () => senderBrev || forhåndsvisningLaster;
 
     const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
         mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
@@ -226,48 +233,37 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
 
     const brukerHarUkjentAdresse = () =>
         !brukerHarUtenlandskAdresse &&
-        (distribusjonskanal.status !== RessursStatus.SUKSESS ||
-            distribusjonskanal.data === Distribusjonskanal.UKJENT ||
-            distribusjonskanal.data === Distribusjonskanal.INGEN_DISTRIBUSJON);
-
-    const senderBrev = () => skjema.submitRessurs.status === RessursStatus.HENTER;
+        (distribusjonskanal === undefined ||
+            distribusjonskanal === Distribusjonskanal.UKJENT ||
+            distribusjonskanal === Distribusjonskanal.INGEN_DISTRIBUSJON);
 
     const hentForhåndsvisningPåFagsak = () => {
         const skjemaData = hentSkjemaData();
         settSistBrukteDataVedForhåndsvisning(skjemaData);
-        hentForhåndsvisning<IManueltBrevRequestPåFagsak>({
-            method: 'POST',
-            data: skjemaData,
-            url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/forhaandsvis-brev`,
-        });
+        forhåndsvisBrev(skjemaData);
     };
 
     const sendBrevPåFagsak = () => {
         if (kanSendeSkjema()) {
-            onSubmit(
-                {
-                    method: 'POST',
-                    data: hentSkjemaData(),
-                    url: `/familie-ba-sak/api/dokument/fagsak/${fagsak.id}/send-brev`,
-                },
-                () => {
+            sendBrev(hentSkjemaData(), {
+                onSuccess: () => {
                     settVisInnsendtBrevModal(true);
                     settManuelleBrevmottakerePåFagsak([]);
                     nullstillSkjema();
-                }
-            );
+                },
+            });
         }
     };
 
-    const hentSkjemaFeilmelding = () =>
-        hentFrontendFeilmelding(hentetDokument) || hentFrontendFeilmelding(skjema.submitRessurs);
+    const hentSkjemaFeilmelding = () => forhåndsvisningError?.message || sendBrevError?.message;
 
     return (
         <DokumentutsendingContext.Provider
             value={{
                 hentForhåndsvisningPåFagsak,
                 hentSkjemaFeilmelding,
-                hentetDokument,
+                forhåndsvisningUrl,
+                forhåndsvisningLaster,
                 sendBrevPåFagsak,
                 senderBrev,
                 settVisInnsendtBrevModal,
@@ -277,10 +273,8 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
                 visInnsendtBrevModal,
                 skjema,
                 nullstillSkjema,
-                distribusjonskanal,
                 brukerHarUtenlandskAdresse,
                 brukerHarUkjentAdresse,
-                hentDistribusjonskanal,
                 dokumentÅrsaker,
             }}
         >
