@@ -2,7 +2,7 @@ import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { useVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingPanelerContext';
+import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import { VilkårType } from '@typer/vilkår';
@@ -15,7 +15,7 @@ const VILKÅRTYPER_SOM_SKAL_ÅPNES = [VilkårType.BOR_MED_SØKER, VilkårType.BO
 
 export function KopierVilkårFraSøkerTilBarna() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { åpneVilkårsvurderingspanel, lukkVilkårsvurderingspanel } = useVilkårsvurderingPaneler();
+    const { ekspanderPanel, kollapsPanel } = useEkspanderbareVilkårsvurderingPaneler();
     const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
     const toggles = useFeatureToggles();
 
@@ -40,10 +40,10 @@ export function KopierVilkårFraSøkerTilBarna() {
                         .map(it => it.id);
 
                     if (ukompletteKopierteVilkårResultat.length > 0) {
-                        åpneVilkårsvurderingspanel(it.personIdent);
+                        ekspanderPanel(it.personIdent);
                         ukompletteKopierteVilkårResultat.forEach(it => ekspanderRad(it));
                     } else {
-                        lukkVilkårsvurderingspanel(it.personIdent);
+                        kollapsPanel(it.personIdent);
                     }
 
                     const andreVilkårResultat = it.vilkårResultater
