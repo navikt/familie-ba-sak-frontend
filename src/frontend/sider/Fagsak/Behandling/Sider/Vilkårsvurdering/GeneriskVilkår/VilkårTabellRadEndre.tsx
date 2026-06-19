@@ -1,6 +1,21 @@
 import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
+import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import type { IBehandling } from '@typer/behandling';
+import { BehandlingÅrsak } from '@typer/behandling';
+import type { IGrunnlagPerson } from '@typer/person';
+import { PersonType } from '@typer/person';
+import {
+    type IPersonResultat,
+    type IVilkårConfig,
+    type IVilkårResultat,
+    Regelverk,
+    Resultat,
+    ResultatBegrunnelse,
+    VilkårType,
+} from '@typer/vilkår';
+import { alleRegelverk } from '@utils/vilkår';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -15,20 +30,6 @@ import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { BehandlingÅrsak } from '../../../../../../typer/behandling';
-import type { IGrunnlagPerson } from '../../../../../../typer/person';
-import { PersonType } from '../../../../../../typer/person';
-import {
-    type IPersonResultat,
-    type IVilkårConfig,
-    type IVilkårResultat,
-    Regelverk,
-    Resultat,
-    ResultatBegrunnelse,
-    VilkårType,
-} from '../../../../../../typer/vilkår';
-import { alleRegelverk } from '../../../../../../utils/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { validerVilkår } from '../validering';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
@@ -42,7 +43,6 @@ interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;
     toggleForm: (visAlert: boolean) => void;
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
-    settEkspandertVilkår: (ekspandertVilkår: boolean) => void;
     settFokusPåKnapp: () => void;
 }
 
@@ -75,13 +75,13 @@ const VilkårTabellRadEndre = ({
     toggleForm,
     redigerbartVilkår,
     settRedigerbartVilkår,
-    settEkspandertVilkår,
     settFokusPåKnapp,
     lesevisning,
 }: IProps) => {
-    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
-
     const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
+    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
+    const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.verdi.id);
+
     const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
@@ -145,7 +145,7 @@ const VilkårTabellRadEndre = ({
                 if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settVisFeilmeldingerForEttVilkår(false);
                     settÅpenBehandling(oppdatertBehandling);
-                    settEkspandertVilkår(false);
+                    kollapsRad();
                 } else if (
                     oppdatertBehandling.status === RessursStatus.FEILET ||
                     oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||

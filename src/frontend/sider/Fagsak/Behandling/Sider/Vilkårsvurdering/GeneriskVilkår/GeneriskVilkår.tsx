@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
@@ -39,6 +40,8 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
     const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
+    const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
+
     const erLesevisning = useErLesevisning();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -50,7 +53,19 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
         document.getElementById(leggTilPeriodeKnappId)?.focus();
     };
 
+    function åpneNyeIkkeVurdertVilkårResultat(behandling: IBehandling, eksisterendeVilkårResultatIder: number[]) {
+        // Dette er gjort slik siden APIet ikke returnerer IDen til det opprettede vilkår resultatet.
+        const nyeIkkeVurdertVilkårResultat = behandling.personResultater
+            .flatMap(it => it.vilkårResultater)
+            .filter(it => it.resultat === Resultat.IKKE_VURDERT)
+            .filter(it => !eksisterendeVilkårResultatIder.includes(it.id));
+        nyeIkkeVurdertVilkårResultat.forEach(it => ekspanderRad(it.id));
+    }
+
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
+        const eksisterendeVilkårResultatIder = behandling.personResultater
+            .flatMap(it => it.vilkårResultater)
+            .map(it => it.id);
         promise
             .then((oppdatertBehandling: Ressurs<IBehandling>) => {
                 settVisFeilmeldingerForVilkår(false);
@@ -58,6 +73,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
                 settFeilmelding('');
                 if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settÅpenBehandling(oppdatertBehandling);
+                    åpneNyeIkkeVurdertVilkårResultat(oppdatertBehandling.data, eksisterendeVilkårResultatIder);
                 } else if (
                     oppdatertBehandling.status === RessursStatus.FEILET ||
                     oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
