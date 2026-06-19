@@ -475,6 +475,6 @@ export function erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandl
     const erFørstegangsbehandling = behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
     const erRevurdering = behandling.type === Behandlingstype.REVURDERING;
     const erSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
-    // TODO : Legg inn sjekk om revurdering søknad gjelder nytt barn
-    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad));
+    const harMinstEttNyttBarn = behandling.personer.some(it => it.erNyttBarn);
+    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad && harMinstEttNyttBarn));
 }
