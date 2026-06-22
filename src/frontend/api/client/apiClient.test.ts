@@ -1,5 +1,5 @@
 import { server } from '@testutils/mocks/node';
-import { AxiosError } from 'axios';
+import { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { http, HttpResponse } from 'msw';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -162,6 +162,20 @@ describe('ApiClient', () => {
             expect(apiFeil.ressursStatus).toBe(RessursStatus.IKKE_TILGANG);
             expect(apiFeil.callId).toBeUndefined();
         });
+
+        test('bruker statusbasert fallback når frontendFeilmelding mangler', async () => {
+            server.use(
+                http.get(`${BASE_URL}/api/test`, () =>
+                    HttpResponse.json({ status: RessursStatus.IKKE_TILGANG, melding: 'En feil oppstod' })
+                )
+            );
+
+            const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/test' }));
+
+            expect(apiFeil.message).toBe('Du har ikke tilgang til denne ressursen.');
+            expect(apiFeil.status).toBe(200);
+            expect(apiFeil.ressursStatus).toBe(RessursStatus.IKKE_TILGANG);
+        });
     });
 
     describe('HTTP-feilstatus med Ressurs-body', () => {
@@ -183,15 +197,27 @@ describe('ApiClient', () => {
         });
     });
 
-    describe('HTTP-feilstatus uten Ressurs-body', () => {
-        test('avviser med ApiFeil som bærer HTTP-status og en fallback-melding', async () => {
-            server.use(http.get(`${BASE_URL}/api/test`, () => new HttpResponse(null, { status: 500 })));
+    describe('HTTP-statusbaserte fallback-meldinger uten Ressurs-body', () => {
+        test.each<[number, string]>([
+            [400, 'Den innsendte forespørselen var ugyldig.'],
+            [401, 'Du er ikke innlogget eller økten din har utløpt. Logg inn på nytt.'],
+            [403, 'Du har ikke tilgang til denne ressursen.'],
+            [429, 'Du har sendt for mange forespørsler. Vent litt og prøv igjen senere.'],
+            [
+                500,
+                'Det oppstod en feil på serveren. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.',
+            ],
+            [
+                503,
+                'Det oppstod en feil på serveren. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.',
+            ],
+        ])('HTTP %i gir riktig fallback-melding og bærer statuskoden', async (httpStatus, forventetMelding) => {
+            server.use(http.get(`${BASE_URL}/api/test`, () => new HttpResponse(null, { status: httpStatus })));
 
             const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/test' }));
 
-            // Faller tilbake på axios sin egen melding når det ikke finnes en Ressurs-body.
-            expect(apiFeil.message).toMatch(/500/);
-            expect(apiFeil.status).toBe(500);
+            expect(apiFeil.message).toBe(forventetMelding);
+            expect(apiFeil.status).toBe(httpStatus);
             expect(apiFeil.ressursStatus).toBeUndefined();
             expect(apiFeil.callId).toBeUndefined();
         });
@@ -282,22 +308,31 @@ describe('ApiClient', () => {
     });
 
     describe('Timeout', () => {
-        test('avviser med timeout-meldingen når kallet tar for lang tid', async () => {
+        test('faller tilbake på standard timeout-melding når ingen egendefinert melding er satt', async () => {
             vi.spyOn(client['client'], 'request').mockRejectedValueOnce(
-                new AxiosError(
-                    'Nettverkskallet tok for lang tid. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.',
-                    'ECONNABORTED'
-                )
+                new AxiosError('timeout of 60000ms exceeded', AxiosError.ECONNABORTED)
             );
 
-            const apiFeil = await fangApiFeil(
-                client.request({
-                    method: 'GET',
-                    url: '/api/treg',
-                })
+            const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/treg' }));
+
+            expect(apiFeil.message).toBe(
+                'Nettverkskallet tok for lang tid. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.'
+            );
+            expect(apiFeil.message).not.toMatch(/timeout of/);
+        });
+
+        test('bruker timeoutErrorMessage fra config når den er satt', async () => {
+            const config = {
+                timeoutErrorMessage: 'Søket tok for lang tid. Prøv et mer spesifikt søk.',
+            } as unknown as InternalAxiosRequestConfig;
+
+            vi.spyOn(client['client'], 'request').mockRejectedValueOnce(
+                new AxiosError('timeout of 60000ms exceeded', AxiosError.ECONNABORTED, config)
             );
 
-            expect(apiFeil.message).toMatch(/tok for lang tid/);
+            const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/treg' }));
+
+            expect(apiFeil.message).toBe('Søket tok for lang tid. Prøv et mer spesifikt søk.');
         });
     });
 
@@ -307,8 +342,22 @@ describe('ApiClient', () => {
 
             const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/test' }));
 
-            // Meldingen kommer fra axios (f.eks. "Network Error"); innholdet er miljøavhengig.
             expect(apiFeil.message).toBeTruthy();
+            expect(apiFeil.status).toBeUndefined();
+            expect(apiFeil.ressursStatus).toBeUndefined();
+            expect(apiFeil.callId).toBeUndefined();
+        });
+
+        test('viser nettverksmeldingen ved ERR_NETWORK', async () => {
+            vi.spyOn(client['client'], 'request').mockRejectedValueOnce(
+                new AxiosError('Network Error', AxiosError.ERR_NETWORK)
+            );
+
+            const apiFeil = await fangApiFeil(client.request({ method: 'GET', url: '/api/test' }));
+
+            expect(apiFeil.message).toBe(
+                'Får ikke kontakt med serveren. Sjekk internettforbindelsen din og prøv igjen.'
+            );
             expect(apiFeil.status).toBeUndefined();
             expect(apiFeil.ressursStatus).toBeUndefined();
             expect(apiFeil.callId).toBeUndefined();

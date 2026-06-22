@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 type OnFulfilled = (response: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>;
 type OnRejected = (error: AxiosError) => unknown | Promise<unknown>;
@@ -36,7 +36,27 @@ type Ressurs<T> =
 const DEFAULT_TIME_OUT = 60_000;
 const DEFAULT_TIME_OUT_MESSAGE =
     'Nettverkskallet tok for lang tid. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.';
-const DEFAULT_FEILMELDING = 'En ukjent feil oppstod';
+
+const DEFAULT_FALLBACK_FEILMELDING = 'En ukjent feil oppstod.';
+
+const DEFAULT_FALLBACK_SERVER_FEILMELDING =
+    'Det oppstod en feil på serveren. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.';
+
+const DEFAULT_FALLBACK_NETTVERK_FEILMELDING =
+    'Får ikke kontakt med serveren. Sjekk internettforbindelsen din og prøv igjen.';
+
+const DEFAULT_HTTP_STATUS_FALLBACK_FEILMELDINGER: Partial<Record<number, string>> = {
+    400: 'Den innsendte forespørselen var ugyldig.',
+    401: 'Du er ikke innlogget eller økten din har utløpt. Logg inn på nytt.',
+    403: 'Du har ikke tilgang til denne ressursen.',
+    429: 'Du har sendt for mange forespørsler. Vent litt og prøv igjen senere.',
+};
+
+const DEFAULT_RESSURS_STATUS_FALLBACK_FEILMELDINGER: Partial<Record<RessursStatus, string>> = {
+    [RessursStatus.FEILET]: DEFAULT_FALLBACK_FEILMELDING,
+    [RessursStatus.FUNKSJONELL_FEIL]: DEFAULT_FALLBACK_FEILMELDING,
+    [RessursStatus.IKKE_TILGANG]: 'Du har ikke tilgang til denne ressursen.',
+};
 
 export class ApiFeil extends Error {
     private constructor(
@@ -44,7 +64,7 @@ export class ApiFeil extends Error {
         /**
          * HTTP-statuskoden fra responsen. Kan være 2xx (typisk 200) selv om
          * dette er en feil: backend pakker svar i et Ressurs-objekt og kan
-         * returnere en feil-status (f.eks. IKKE_TILGANG) med HTTP 200.
+         * returnere en feil-status (f.eks. FEILET) med HTTP 200.
          * Bruk `ressursStatus` for å skille på selve feiltypen.
          */
         readonly status?: number,
@@ -56,23 +76,57 @@ export class ApiFeil extends Error {
     }
 
     static fraAxiosError<R>(error: AxiosError<Ressurs<R>>): ApiFeil {
-        const ressurs = error.response?.data;
-        const feilmelding = ressurs?.frontendFeilmelding?.trim() || error.message || DEFAULT_FEILMELDING;
-        return new ApiFeil(
-            ApiFeil.padCallId(feilmelding, ressurs?.callId),
-            error.response?.status,
-            ressurs?.status,
-            ressurs?.callId
-        );
+        const response = error.response;
+        const ressurs = response?.data;
+        const feilmelding = ApiFeil.utledFeilmeldingFraAxiosError(error);
+        return new ApiFeil(feilmelding, response?.status, ressurs?.status, ressurs?.callId);
     }
 
     static fraRessurs(ressurs: Ressurs<unknown>, status?: number): ApiFeil {
-        const feilmelding = ressurs.frontendFeilmelding?.trim() || DEFAULT_FEILMELDING;
-        return new ApiFeil(ApiFeil.padCallId(feilmelding, ressurs.callId), status, ressurs.status, ressurs.callId);
+        const feilmelding = ApiFeil.utledFeilmeldingFraRessurs(ressurs);
+        return new ApiFeil(feilmelding, status, ressurs.status, ressurs.callId);
     }
 
     static fraFeilmelding(feilmelding: string): ApiFeil {
         return new ApiFeil(feilmelding);
+    }
+
+    private static utledFeilmeldingFraAxiosError<R>(error: AxiosError<Ressurs<R>>): string {
+        const ressurs = error.response?.data;
+        const feilmelding =
+            ressurs?.frontendFeilmelding?.trim() ||
+            ApiFeil.utledFeilmeldingForStatus(error.response?.status) ||
+            ApiFeil.utledFeilmeldingForNettverksfeil(error) ||
+            DEFAULT_FALLBACK_FEILMELDING;
+        return ApiFeil.padCallId(feilmelding, ressurs?.callId);
+    }
+
+    private static utledFeilmeldingFraRessurs(ressurs: Ressurs<unknown>): string {
+        const feilmelding =
+            ressurs.frontendFeilmelding?.trim() ||
+            DEFAULT_RESSURS_STATUS_FALLBACK_FEILMELDINGER[ressurs.status] ||
+            DEFAULT_FALLBACK_FEILMELDING;
+        return ApiFeil.padCallId(feilmelding, ressurs.callId);
+    }
+
+    private static utledFeilmeldingForStatus(status?: number): string | undefined {
+        if (status === undefined) {
+            return undefined;
+        }
+        return (
+            DEFAULT_HTTP_STATUS_FALLBACK_FEILMELDINGER[status] ??
+            (status >= 500 ? DEFAULT_FALLBACK_SERVER_FEILMELDING : undefined)
+        );
+    }
+
+    private static utledFeilmeldingForNettverksfeil(error: AxiosError): string | undefined {
+        if (error.code === AxiosError.ECONNABORTED || error.code === AxiosError.ETIMEDOUT) {
+            return error.config?.timeoutErrorMessage || DEFAULT_TIME_OUT_MESSAGE;
+        }
+        if (error.code === AxiosError.ERR_NETWORK) {
+            return DEFAULT_FALLBACK_NETTVERK_FEILMELDING;
+        }
+        return undefined;
     }
 
     private static padCallId(feilmelding: string, callId?: string | null): string {
@@ -94,12 +148,15 @@ export class ApiClient {
                 timeoutErrorMessage: DEFAULT_TIME_OUT_MESSAGE,
                 ...config,
             });
-            return this.resolveRessurs(response);
+            return this.pakkUtRessursResponse(response);
         } catch (error) {
-            if (axios.isAxiosError<Ressurs<R>>(error)) {
-                return Promise.reject(ApiFeil.fraAxiosError(error));
+            if (error instanceof ApiFeil) {
+                throw error;
             }
-            return Promise.reject(ApiFeil.fraFeilmelding(error instanceof Error ? error.message : DEFAULT_FEILMELDING));
+            if (axios.isAxiosError<Ressurs<R>>(error)) {
+                throw ApiFeil.fraAxiosError(error);
+            }
+            throw ApiFeil.fraFeilmelding(DEFAULT_FALLBACK_FEILMELDING);
         }
     }
 
@@ -131,20 +188,20 @@ export class ApiClient {
         this.client.interceptors.response.eject(id);
     }
 
-    private resolveRessurs<T>(response: AxiosResponse<Ressurs<T>>): Promise<T> {
+    private pakkUtRessursResponse<T>(response: AxiosResponse<Ressurs<T>>): T {
         const ressurs = response.data;
         if (!ressurs || typeof ressurs !== 'object' || !('status' in ressurs)) {
-            return Promise.reject(ApiFeil.fraFeilmelding('Ugyldig respons fra serveren.'));
+            throw ApiFeil.fraFeilmelding('Ugyldig respons fra serveren.');
         }
         switch (ressurs.status) {
             case RessursStatus.SUKSESS:
-                return Promise.resolve(ressurs.data);
+                return ressurs.data;
             case RessursStatus.FEILET:
             case RessursStatus.FUNKSJONELL_FEIL:
             case RessursStatus.IKKE_TILGANG:
-                return Promise.reject(ApiFeil.fraRessurs(ressurs, response.status));
+                throw ApiFeil.fraRessurs(ressurs, response.status);
             default:
-                return Promise.reject(ApiFeil.fraFeilmelding(`Uhåndtert status: ${(ressurs as Ressurs<T>).status}`));
+                throw ApiFeil.fraFeilmelding(`Uhåndtert status: ${(ressurs as Ressurs<T>).status}`);
         }
     }
 }
