@@ -38,7 +38,7 @@ describe('useForhåndsvisBrevPåFagsak', () => {
         result.current.mutate(payload);
 
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(forhåndsvisBrevPåFagsak).toHaveBeenCalledWith(expect.any(Function), 1, payload);
+        expect(forhåndsvisBrevPåFagsak).toHaveBeenCalledWith(1, payload);
         expect(result.current.data).toBe('blob:mock-url');
     });
 

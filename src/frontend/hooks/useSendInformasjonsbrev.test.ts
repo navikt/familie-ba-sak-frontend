@@ -32,7 +32,7 @@ describe('useSendInformasjonsbrev', () => {
         result.current.mutate(payload);
 
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(sendInformasjonsbrev).toHaveBeenCalledWith(expect.any(Function), 123456, payload);
+        expect(sendInformasjonsbrev).toHaveBeenCalledWith(123456, payload);
     });
 
     test('kaller onSuccess-callback ved vellykket sending', async () => {

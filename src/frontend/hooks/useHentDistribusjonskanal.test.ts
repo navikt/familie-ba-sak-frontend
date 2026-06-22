@@ -21,7 +21,7 @@ describe('useHentDistribusjonskanal', () => {
         });
 
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(hentDistribusjonskanal).toHaveBeenCalledWith(expect.any(Function), '12345678903');
+        expect(hentDistribusjonskanal).toHaveBeenCalledWith('12345678903');
         expect(result.current.data).toBe(Distribusjonskanal.DITT_NAV);
     });
 

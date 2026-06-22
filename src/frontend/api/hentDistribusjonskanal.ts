@@ -1,17 +1,9 @@
+import { apiClient } from '@api/client/apiClient';
 import type { Distribusjonskanal } from '@typer/dokument';
 
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function hentDistribusjonskanal(
-    request: FamilieRequest,
-    personIdent: string
-): Promise<Distribusjonskanal> {
-    const ressurs = await request<{ ident: string }, Distribusjonskanal>({
-        method: 'POST',
-        data: { ident: personIdent },
+export async function hentDistribusjonskanal(personIdent: string): Promise<Distribusjonskanal> {
+    return apiClient.post<{ ident: string }, Distribusjonskanal>({
         url: `/familie-ba-sak/api/dokument/distribusjonskanal`,
+        data: { ident: personIdent },
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

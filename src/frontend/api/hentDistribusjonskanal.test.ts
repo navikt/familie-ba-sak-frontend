@@ -1,37 +1,35 @@
+import { apiClient } from '@api/client/apiClient';
 import { Distribusjonskanal } from '@typer/dokument';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
-
 import { hentDistribusjonskanal } from './hentDistribusjonskanal';
+
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: {
+        post: vi.fn(),
+    },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
 });
 
 describe('hentDistribusjonskanal', () => {
-    test('kaller request med riktig metode, URL og ident', async () => {
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: Distribusjonskanal.DITT_NAV,
-        });
+    test('kaller apiClient.post med riktig URL og ident', async () => {
+        vi.mocked(apiClient.post).mockResolvedValue(Distribusjonskanal.DITT_NAV);
 
-        const result = await hentDistribusjonskanal(mockRequest, '12345678903');
+        const result = await hentDistribusjonskanal('12345678903');
 
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'POST',
-            data: { ident: '12345678903' },
+        expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/dokument/distribusjonskanal',
+            data: { ident: '12345678903' },
         });
         expect(result).toBe(Distribusjonskanal.DITT_NAV);
     });
 
-    test('kaster feil ved FEILET-status', async () => {
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+    test('kaster feil ved avvist promise', async () => {
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
-        await expect(hentDistribusjonskanal(mockRequest, '12345678903')).rejects.toThrow();
+        await expect(hentDistribusjonskanal('12345678903')).rejects.toThrow('Noe gikk galt');
     });
 });

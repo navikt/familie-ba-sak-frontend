@@ -1,10 +1,15 @@
+import { apiClient } from '@api/client/apiClient';
 import { Informasjonsbrev } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import { Målform } from '@typer/søknad';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
-
 import { sendInformasjonsbrev } from './sendInformasjonsbrev';
+
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: {
+        post: vi.fn(),
+    },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
@@ -19,27 +24,20 @@ const payload = {
 };
 
 describe('sendInformasjonsbrev', () => {
-    test('kaller request med riktig metode, URL og data', async () => {
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: null,
-        });
+    test('kaller apiClient.post med riktig URL og data', async () => {
+        vi.mocked(apiClient.post).mockResolvedValue(undefined);
 
-        await sendInformasjonsbrev(mockRequest, 1, payload);
+        await sendInformasjonsbrev(1, payload);
 
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'POST',
-            data: payload,
+        expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/dokument/fagsak/1/send-brev',
+            data: payload,
         });
     });
 
-    test('kaster feil ved FEILET-status', async () => {
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+    test('kaster feil ved avvist promise', async () => {
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
-        await expect(sendInformasjonsbrev(mockRequest, 1, payload)).rejects.toThrow();
+        await expect(sendInformasjonsbrev(1, payload)).rejects.toThrow('Noe gikk galt');
     });
 });
