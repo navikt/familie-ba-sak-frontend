@@ -1,0 +1,30 @@
+.container {
+    border-color: var(--ax-success-500);
+    background-color: var(--ax-success-500);
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    height: 24px;
+    width: 24px;
+    color: white;
+}
+
+.largerCircle {
+    height: 32px;
+    width: 32px;
+}
+
+.adresseBeskyttet {
+    border-color: var(--ax-warning-500);
+    background-color: var(--ax-warning-500);
+}
+
+.icon {
+    height: 20px;
+    width: 20px;
+}
+
+.largerIcon {
+    height: 28px;
+    width: 28px;
+}
