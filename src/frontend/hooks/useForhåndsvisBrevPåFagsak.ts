@@ -21,7 +21,7 @@ export function useForhåndsvisBrevPåFagsak(fagsakId: number, options?: Options
                 const blob = opprettPdfBlob(base64);
                 return Promise.resolve(window.URL.createObjectURL(blob));
             } catch (e) {
-                const error = e instanceof Error ? e : Error('En ukjent feil oppstod.');
+                const error = e instanceof Error ? e : new Error('En ukjent feil oppstod.');
                 return Promise.reject(error);
             }
         },
