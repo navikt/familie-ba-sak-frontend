@@ -2,7 +2,6 @@ import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
 import { useNavigate } from 'react-router';
 
 import { Button, HGrid, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
@@ -12,7 +11,7 @@ export function Dokumentutsending() {
     const { fagsak } = useFagsakContext();
     const navigate = useNavigate();
 
-    const { hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
+    const { forhåndsvisningUrl, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
 
     return (
         <>
@@ -49,12 +48,7 @@ export function Dokumentutsending() {
                     </Modal>
                 )}
                 <DokumentutsendingSkjema />
-                <iframe
-                    title={'dokument'}
-                    src={hentetDokument.status === RessursStatus.SUKSESS ? hentetDokument.data : ''}
-                    width={'100%'}
-                    height={'100%'}
-                />
+                <iframe title={'dokument'} src={forhåndsvisningUrl ?? ''} width={'100%'} height={'100%'} />
             </HGrid>
         </>
     );
