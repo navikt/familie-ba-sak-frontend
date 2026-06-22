@@ -1,178 +1,15 @@
-import styled from 'styled-components';
+import { FagsakType } from '@typer/fagsak';
+import classNames from 'classnames';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import {
-    Accent600,
-    MetaLime500,
-    MetaPurple800,
-    Neutral000,
-    Success500,
-    Warning500,
-} from '@navikt/ds-tokens/dist/tokens';
+import { Success500, Warning500 } from '@navikt/ds-tokens/dist/tokens';
 import { GuttIkon, JenteIkon, KvinneIkon, MannIkon, NøytralPersonIkon } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
+import styles from './PersonIkon.module.css';
 import KontorIkonGrønn from '../ikoner/KontorIkonGrønn';
 import NavLogo from '../ikoner/NavLogo';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
-import { FagsakType } from '../typer/fagsak';
-
-const StyledJenteIkon = styled(JenteIkon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            return `
-            g {
-                fill: ${Warning500};
-            }
-        `;
-        } else {
-            return `
-                g {
-                    fill: ${MetaPurple800};
-                }
-        `;
-        }
-    }};
-`;
-
-const StyledKvinneIkon = styled(KvinneIkon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            return `
-            g {
-                fill: ${Warning500};
-            }
-        `;
-        } else {
-            return `
-                g {
-                    fill: ${MetaPurple800};
-                }
-        `;
-        }
-    }};
-`;
-
-const StyledGuttIkon = styled(GuttIkon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            {
-                return `
-            g {
-                fill: ${Warning500};
-            }
-        `;
-            }
-        } else {
-            return `
-                g {
-                    fill: ${Accent600};
-                }
-        `;
-        }
-    }};
-`;
-
-const StyledMannIkon = styled(MannIkon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            return `
-            g {
-                fill: ${Warning500};
-            }
-        `;
-        } else {
-            return `
-                g {
-                    fill: ${Accent600};
-                }
-        `;
-        }
-    }};
-`;
-
-const StyledNøytralIkon = styled(NøytralPersonIkon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet)
-            return `
-                path:first-of-type {
-                    fill: ${Warning500};
-                }
-            `;
-    }}
-`;
-
-const StyledEnsligMindreårigIkon = styled(PersonCircleFillIcon)<{ $adresseBeskyttet: boolean }>`
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            return `
-                path {
-                    fill: ${Warning500};
-                }
-            `;
-        } else {
-            return `
-            path {
-                fill: ${MetaLime500};
-            `;
-        }
-    }};
-`;
-
-const StyledNavIkon = styled(NavLogo)`
-    path {
-        fill: ${Neutral000};
-    }
-
-    margin: auto;
-    height: 100%;
-    width: 100%;
-`;
-
-const StyledNavIkonContaier = styled.div<{
-    $adresseBeskyttet: boolean;
-    $kjønn: string;
-    $størrelse: string;
-}>`
-    border-radius: 100%;
-    padding: 3px;
-    place-content: center;
-
-    min-height: 24px;
-    min-width: 24px;
-    max-height: 24px;
-    max-width: 24px;
-
-    background-color: ${Accent600};
-
-    ${props => {
-        if (props.$størrelse === 'm') {
-            return `
-                min-height: 32px;
-                min-width: 32px;
-                max-height: 32px;
-                max-width: 32px;
-            `;
-        }
-    }}
-
-    ${props => {
-        if (props.$kjønn === 'KVINNE') {
-            return `
-                background-color: ${MetaPurple800};
-            `;
-        }
-    }}
-
-    ${props => {
-        if (props.$adresseBeskyttet) {
-            return `
-                background-color: ${Warning500};
-                
-            `;
-        }
-    }};
-`;
 
 interface PersonIkonProps {
     fagsakType?: FagsakType;
@@ -199,9 +36,16 @@ export const PersonIkon = ({
 
     if (erEgenAnsatt) {
         return (
-            <StyledNavIkonContaier $adresseBeskyttet={erAdresseBeskyttet} $kjønn={kjønn} $størrelse={størrelse}>
-                <StyledNavIkon />
-            </StyledNavIkonContaier>
+            <div
+                className={classNames(styles.ansattIkon, {
+                    [styles.ansattStorIkon]: størrelse === 'm',
+                    [styles.ansattMannlig]: kjønn === kjønnType.MANN,
+                    [styles.ansattKvinnelig]: kjønn === kjønnType.KVINNE,
+                    [styles.ansattAdresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            >
+                <NavLogo className={styles.navLogo} />
+            </div>
         );
     }
 
@@ -213,31 +57,59 @@ export const PersonIkon = ({
     }
     const brukStørreIkon = fagsakType === FagsakType.SKJERMET_BARN || fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 
-    const ikonProps = brukStørreIkon
+    const størrelseStyles = brukStørreIkon
         ? størrelse === 's'
-            ? { height: 28, width: 28 }
-            : { height: 36, width: 36 }
+            ? styles.litenIkonStørre
+            : styles.storIkonStørre
         : størrelse === 's'
-          ? { height: 24, width: 24 }
-          : { height: 32, width: 32 };
+          ? styles.litenIkon
+          : styles.storIkon;
 
     if (fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG) {
-        return <StyledEnsligMindreårigIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />;
+        return (
+            <PersonCircleFillIcon
+                className={classNames(styles.ensligMindreårig, størrelseStyles, {
+                    [styles.ensligMindreårigAdresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            />
+        );
     }
 
     if (kjønn === kjønnType.KVINNE) {
         return erBarn ? (
-            <StyledJenteIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            <JenteIkon
+                className={classNames(styles.kvinnelig, størrelseStyles, {
+                    [styles.adresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            />
         ) : (
-            <StyledKvinneIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            <KvinneIkon
+                className={classNames(styles.kvinnelig, størrelseStyles, {
+                    [styles.adresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            />
         );
     }
     if (kjønn === kjønnType.MANN) {
         return erBarn ? (
-            <StyledGuttIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            <GuttIkon
+                className={classNames(styles.mannlig, størrelseStyles, {
+                    [styles.adresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            />
         ) : (
-            <StyledMannIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />
+            <MannIkon
+                className={classNames(styles.mannlig, størrelseStyles, {
+                    [styles.adresseBeskyttet]: erAdresseBeskyttet,
+                })}
+            />
         );
     }
-    return <StyledNøytralIkon $adresseBeskyttet={erAdresseBeskyttet} {...ikonProps} />;
+    return (
+        <NøytralPersonIkon
+            className={classNames(størrelseStyles, {
+                [styles.nøytralAdresseBeskyttet]: erAdresseBeskyttet,
+            })}
+        />
+    );
 };
