@@ -41,6 +41,7 @@ export function DokumentutsendingSkjema() {
         brukerHarUkjentAdresse,
         brukerHarUtenlandskAdresse,
         dokumentÅrsaker,
+        distribusjonskanal,
     } = useDokumentutsendingContext();
 
     const saksbehandler = useSaksbehandler();
@@ -81,7 +82,7 @@ export function DokumentutsendingSkjema() {
             {!erLesevisning && <LeggTilBarnModal />}
             <Box padding="space-32" overflow="auto">
                 <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
-                {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo personIdent={bruker.personIdent} />}
+                {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo distribusjonskanal={distribusjonskanal} />}
                 {manuelleBrevmottakerePåFagsak.length > 0 && (
                     <BrevmottakereAlert
                         erPåBehandling={false}

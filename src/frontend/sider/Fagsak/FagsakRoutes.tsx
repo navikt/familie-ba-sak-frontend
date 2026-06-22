@@ -4,8 +4,8 @@ import { Behandling } from '@sider/Fagsak/Behandling/Behandling';
 import { behandlingRoutes } from '@sider/Fagsak/Behandling/BehandlingRoutes';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { Dokumenter } from '@sider/Fagsak/Dokumenter/Dokumenter';
+import { DokumentContainer } from '@sider/Fagsak/Dokumentutsending/DokumentContainer';
 import { Dokumentutsending } from '@sider/Fagsak/Dokumentutsending/Dokumentutsending';
-import { DokumentutsendingProvider } from '@sider/Fagsak/Dokumentutsending/DokumentutsendingContext';
 import { Infotrygd } from '@sider/Fagsak/Infotrygd/Infotrygd';
 import { RedirectTilSaksoversikt } from '@sider/Fagsak/Saksoversikt/RedirectTilSaksoversikt';
 import { Saksoversikt } from '@sider/Fagsak/Saksoversikt/Saksoversikt';
@@ -23,9 +23,9 @@ export const fagsakRoutes: RouteObject[] = [
     {
         path: 'dokumentutsending',
         element: (
-            <DokumentutsendingProvider>
+            <DokumentContainer>
                 <Dokumentutsending />
-            </DokumentutsendingProvider>
+            </DokumentContainer>
         ),
     },
     {

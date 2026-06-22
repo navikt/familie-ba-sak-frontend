@@ -2,7 +2,6 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useForhåndsvisBrevPåFagsak } from '@hooks/useForhåndsvisBrevPåFagsak';
-import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
 import { useSendInformasjonsbrev } from '@hooks/useSendInformasjonsbrev';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { transformerSkjemaData } from '@sider/Fagsak/Dokumentutsending/transformerSkjemaData';
@@ -52,18 +51,21 @@ interface DokumentutsendingContextValue {
     brukerHarUtenlandskAdresse: boolean;
     brukerHarUkjentAdresse: () => boolean;
     dokumentÅrsaker: DokumentÅrsak[];
+    distribusjonskanal: Distribusjonskanal;
+}
+
+interface Props extends PropsWithChildren {
+    distribusjonskanal: Distribusjonskanal;
 }
 
 const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(undefined);
 
-export function DokumentutsendingProvider({ children }: PropsWithChildren) {
+export function DokumentutsendingProvider({ children, distribusjonskanal }: Props) {
     const { fagsak } = useFagsakContext();
     const { bruker } = useBrukerContext();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
-
-    const { data: distribusjonskanal } = useHentDistribusjonskanal(bruker.personIdent);
 
     const {
         mutate: forhåndsvisBrev,
@@ -233,8 +235,7 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
 
     const brukerHarUkjentAdresse = () =>
         !brukerHarUtenlandskAdresse &&
-        (distribusjonskanal === undefined ||
-            distribusjonskanal === Distribusjonskanal.UKJENT ||
+        (distribusjonskanal === Distribusjonskanal.UKJENT ||
             distribusjonskanal === Distribusjonskanal.INGEN_DISTRIBUSJON);
 
     const hentForhåndsvisningPåFagsak = () => {
@@ -276,6 +277,7 @@ export function DokumentutsendingProvider({ children }: PropsWithChildren) {
                 brukerHarUtenlandskAdresse,
                 brukerHarUkjentAdresse,
                 dokumentÅrsaker,
+                distribusjonskanal,
             }}
         >
             {children}
