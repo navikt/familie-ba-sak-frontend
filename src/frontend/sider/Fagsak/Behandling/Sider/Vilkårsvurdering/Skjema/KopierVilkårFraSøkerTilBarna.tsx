@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
@@ -5,7 +7,7 @@ import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/S
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
-import { VilkårType } from '@typer/vilkår';
+import { Resultat, VilkårType } from '@typer/vilkår';
 
 import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
@@ -18,6 +20,8 @@ export function KopierVilkårFraSøkerTilBarna() {
     const { ekspanderPanel, kollapsPanel } = useEkspanderbareVilkårsvurderingPaneler();
     const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
     const toggles = useFeatureToggles();
+
+    const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
 
     const {
         mutate: kopierVilkårFraSøkerTilBarna,
@@ -55,18 +59,44 @@ export function KopierVilkårFraSøkerTilBarna() {
         },
     });
 
+    function kopierVilkårFraSøkerTilBarnaHvisSøkersVilkårErVurdert() {
+        const søker = behandling.personer.find(it => it.type === PersonType.SØKER);
+
+        if (!søker) {
+            throw Error('Fant ikke forventet søker på behandlingen.');
+        }
+
+        const søkerHarIkkeVurdertVilkår = behandling.personResultater
+            .filter(it => it.personIdent === søker.personIdent)
+            .flatMap(it => it.vilkårResultater)
+            .some(it => it.resultat === Resultat.IKKE_VURDERT);
+
+        if (søkerHarIkkeVurdertVilkår) {
+            settFeilmelding('Du må vurdere alle søkers vilkår før de kan kopieres til barna.');
+        } else {
+            settFeilmelding(undefined);
+            kopierVilkårFraSøkerTilBarna({ behandlingId: behandling.behandlingId });
+        }
+    }
+
     if (!toggles[FeatureToggle.kanGenerereBarnasVilkar]) {
         return null;
     }
 
     return (
-        <VStack gap={'space-8'} marginBlock={'space-48 space-0'} width={'fit-content'}>
+        <VStack gap={'space-20'} marginBlock={'space-56 space-0'} width={'fit-content'}>
+            {feilmelding && (
+                <LocalAlert status={'error'} size={'small'}>
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>{feilmelding}</LocalAlert.Title>
+                        <LocalAlert.CloseButton onClick={() => settFeilmelding(undefined)} />
+                    </LocalAlert.Header>
+                </LocalAlert>
+            )}
             {kopierVilkårFraSøkerTilBarnaError && (
                 <LocalAlert status={'error'} size={'small'}>
                     <LocalAlert.Header>
-                        <LocalAlert.Title>
-                            {kopierVilkårFraSøkerTilBarnaError?.message ?? 'En ukjent feil oppstod.'}
-                        </LocalAlert.Title>
+                        <LocalAlert.Title>{kopierVilkårFraSøkerTilBarnaError.message}</LocalAlert.Title>
                     </LocalAlert.Header>
                 </LocalAlert>
             )}
@@ -74,7 +104,7 @@ export function KopierVilkårFraSøkerTilBarna() {
                 <Button
                     variant={'secondary'}
                     icon={<FilesIcon title="a11y-title" fontSize="1.5rem" />}
-                    onClick={() => kopierVilkårFraSøkerTilBarna({ behandlingId: behandling.behandlingId })}
+                    onClick={kopierVilkårFraSøkerTilBarnaHvisSøkersVilkårErVurdert}
                     loading={kopierVilkårFraSøkerTilBarnaIsPending}
                 >
                     Kopier vilkår fra søker til barna
