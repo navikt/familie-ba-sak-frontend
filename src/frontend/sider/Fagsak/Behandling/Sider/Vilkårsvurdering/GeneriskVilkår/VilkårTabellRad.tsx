@@ -55,7 +55,6 @@ export function VilkårTabellRad({
 
     return (
         <Table.ExpandableRow
-            key={`${vilkårResultat.verdi.id}-${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel her, se https://github.com/navikt/aksel/issues/4971
             open={erRadEkspandert}
             togglePlacement={'right'}
             onOpenChange={() => toggleForm(true)}
