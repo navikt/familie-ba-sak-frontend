@@ -1,14 +1,14 @@
 import type { PropsWithChildren } from 'react';
 
+import { useBruker } from '@hooks/useBruker';
 import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
 
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
 
 import { DokumentutsendingProvider } from './DokumentutsendingContext';
-import { useBrukerContext } from '../BrukerContext';
 
 export function DokumentContainer({ children }: PropsWithChildren) {
-    const { bruker } = useBrukerContext();
+    const bruker = useBruker();
 
     const { data: distribusjonskanal, isPending, error } = useHentDistribusjonskanal(bruker.personIdent);
 

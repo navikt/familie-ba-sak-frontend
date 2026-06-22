@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 
+import { useBruker } from '@hooks/useBruker';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
@@ -20,12 +21,11 @@ import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { dokumentÅrsak, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useBrukerContext } from '../BrukerContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 
 export function DokumentutsendingSkjema() {
-    const { bruker } = useBrukerContext();
+    const bruker = useBruker();
 
     const {
         hentForhåndsvisningPåFagsak,

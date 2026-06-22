@@ -1,6 +1,8 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
+import { useBruker } from '@hooks/useBruker';
+import { useFagsak } from '@hooks/useFagsak';
 import { useForhåndsvisBrevPåFagsak } from '@hooks/useForhåndsvisBrevPåFagsak';
 import { useSendInformasjonsbrev } from '@hooks/useSendInformasjonsbrev';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -19,8 +21,6 @@ import type { Avhengigheter, FeltState, ISkjema } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 
 import { type DokumentÅrsak, DokumentÅrsakInstitusjon, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
-import { useBrukerContext } from '../BrukerContext';
-import { useFagsakContext } from '../FagsakContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 
 export interface DokumentutsendingSkjema {
@@ -61,8 +61,8 @@ interface Props extends PropsWithChildren {
 const DokumentutsendingContext = createContext<DokumentutsendingContextValue | undefined>(undefined);
 
 export function DokumentutsendingProvider({ children, distribusjonskanal }: Props) {
-    const { fagsak } = useFagsakContext();
-    const { bruker } = useBrukerContext();
+    const fagsak = useFagsak();
+    const bruker = useBruker();
     const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
         useManuelleBrevmottakerePåFagsakContext();
     const [visInnsendtBrevModal, settVisInnsendtBrevModal] = useState(false);
