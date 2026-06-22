@@ -3,8 +3,6 @@ import { type DefaultError, useMutation, type UseMutationOptions } from '@tansta
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
 import { opprettPdfBlob } from '@utils/blob';
 
-import { useHttp } from '@navikt/familie-http';
-
 type Options = Omit<
     UseMutationOptions<string, DefaultError, IManueltBrevRequestPåFagsak>,
     'mutationKey' | 'mutationFn'
@@ -15,12 +13,11 @@ export const ForhåndsvisBrevPåFagsakMutationKeyFactory = {
 };
 
 export function useForhåndsvisBrevPåFagsak(fagsakId: number, options?: Options) {
-    const { request } = useHttp();
     return useMutation({
         mutationKey: ForhåndsvisBrevPåFagsakMutationKeyFactory.forhåndsvisBrev(fagsakId),
         mutationFn: async (payload: IManueltBrevRequestPåFagsak) => {
             try {
-                const base64 = await forhåndsvisBrevPåFagsak(request, fagsakId, payload);
+                const base64 = await forhåndsvisBrevPåFagsak(fagsakId, payload);
                 const blob = opprettPdfBlob(base64);
                 return Promise.resolve(window.URL.createObjectURL(blob));
             } catch (e) {

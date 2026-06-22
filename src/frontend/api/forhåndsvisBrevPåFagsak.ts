@@ -1,19 +1,9 @@
+import { apiClient } from '@api/client/apiClient';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
 
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function forhåndsvisBrevPåFagsak(
-    request: FamilieRequest,
-    fagsakId: number,
-    payload: IManueltBrevRequestPåFagsak
-): Promise<string> {
-    const ressurs = await request<IManueltBrevRequestPåFagsak, string>({
-        method: 'POST',
-        data: payload,
+export async function forhåndsvisBrevPåFagsak(fagsakId: number, payload: IManueltBrevRequestPåFagsak): Promise<string> {
+    return apiClient.post<IManueltBrevRequestPåFagsak, string>({
         url: `/familie-ba-sak/api/dokument/fagsak/${fagsakId}/forhaandsvis-brev`,
-        påvirkerSystemLaster: false,
+        data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
