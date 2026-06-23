@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { BehandlingSteg, type IBehandling } from '@typer/behandling';
+import { BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
@@ -37,7 +37,7 @@ const Container = styled.div`
 `;
 
 const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
-    const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
     const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
@@ -109,7 +109,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
             vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
         );
         return (
-            erMigreringsbehandling &&
+            behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
             person.type === PersonType.SØKER &&
             vilkårFraConfig.key === VilkårType.UTVIDET_BARNETRYGD &&
             utvidetVilkår.length !== 0

@@ -1,9 +1,11 @@
 import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
+import { useFagsak } from '@hooks/useFagsak';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingÅrsak } from '@typer/behandling';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon } from '@typer/fagsak';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import {
@@ -78,13 +80,17 @@ const VilkårTabellRadEndre = ({
     settFokusPåKnapp,
     lesevisning,
 }: IProps) => {
-    const { behandling, settÅpenBehandling, gjelderEnsligMindreårig, gjelderInstitusjon } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
     const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.verdi.id);
 
-    const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
+    const fagsak = useFagsak();
 
     const [visFeilmeldingerForEttVilkår, settVisFeilmeldingerForEttVilkår] = useState(false);
+
+    const årsakErSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
+    const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
 
     const validerOgSettRedigerbartVilkår = (endretVilkår: FeltState<IVilkårResultat>) => {
         settRedigerbartVilkår(validerVilkår(endretVilkår, { person }));

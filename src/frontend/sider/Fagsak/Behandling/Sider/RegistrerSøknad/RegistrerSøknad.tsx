@@ -4,7 +4,7 @@ import { useFagsak } from '@hooks/useFagsak';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { BehandlingSteg } from '@typer/behandling';
-import { sjekkGjelderInstitusjon } from '@typer/fagsak';
+import { erFagsakAvTypeInstitusjon } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 
 import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
@@ -33,7 +33,7 @@ export const RegistrerSøknad = () => {
         visBekreftModal,
     } = useSøknadContext();
 
-    const gjelderInstitusjon = sjekkGjelderInstitusjon(fagsak);
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
         skjema.felter.barnaMedOpplysninger.validerOgSettFelt([...skjema.felter.barnaMedOpplysninger.verdi, barn]);
