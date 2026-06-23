@@ -40,7 +40,7 @@
     ]
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "1.73.1",
+    "@dotenvx/dotenvx": "1.74.2",
     "@grafana/faro-web-sdk": "2.7.1",
     "@navikt/aksel-icons": "8.13.0",
     "@navikt/ds-css": "8.13.0",
