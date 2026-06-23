@@ -1,29 +1,18 @@
-import styled from 'styled-components';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import type { IInfotrygdSak } from '@typer/infotrygd';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Heading, InfoCard } from '@navikt/ds-react';
+import { Box, Heading, InfoCard } from '@navikt/ds-react';
 
 import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';
-import type { IMinimalFagsak } from '../../typer/fagsak';
-import type { IInfotrygdSak } from '../../typer/infotrygd';
-import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 
 interface InfotrygdtabellerProps {
     ident?: string;
     saker: IInfotrygdSak[];
     minimalFagsak?: IMinimalFagsak;
 }
-
-const SakerTekst = styled(Heading)`
-    margin-top: 4rem;
-    margin-bottom: 1rem;
-`;
-
-const VedtakTekst = styled(Heading)`
-    margin-top: 4rem;
-    margin-bottom: 1rem;
-`;
 
 const sorterSakerEtterSaksnr = (saker: IInfotrygdSak[]): IInfotrygdSak[] =>
     saker.sort((sakA, sakB) => {
@@ -46,13 +35,17 @@ export const Infotrygdtabeller = ({ ident, saker, minimalFagsak }: Infotrygdtabe
                     </InfoCard.Message>
                 </InfoCard>
             )}
-            <SakerTekst size={'small'} level={'2'}>
-                {ident ? `Saker for ${ident}` : 'Saker'}
-            </SakerTekst>
+            <Box marginBlock={'space-64 space-16'}>
+                <Heading size={'small'} level={'2'}>
+                    {ident ? `Saker for ${ident}` : 'Saker'}
+                </Heading>
+            </Box>
             <Sakstabell saker={sorterSakerEtterSaksnr(saker)} />
-            <VedtakTekst size={'small'} level={'2'}>
-                Vedtak
-            </VedtakTekst>
+            <Box marginBlock={'space-64 space-16'}>
+                <Heading size={'small'} level={'2'}>
+                    Vedtak
+                </Heading>
+            </Box>
             <Vedtakstabell saker={saker} />
         </>
     );

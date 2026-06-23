@@ -1,12 +1,6 @@
-import styled from 'styled-components';
+import type { IInfotrygdSak, IInfotrygdStønad } from '@typer/infotrygd';
 
-import { BodyShort, Table } from '@navikt/ds-react';
-
-import type { IInfotrygdSak, IInfotrygdStønad } from '../../typer/infotrygd';
-
-const IngenVedtakTekst = styled(BodyShort)`
-    margin: 1rem;
-`;
+import { BodyShort, Box, Table } from '@navikt/ds-react';
 
 const seqYearMonthTilYearMonth = (seqDato: string | undefined) => {
     if (!seqDato) {
@@ -95,7 +89,11 @@ export const Vedtakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
                     })}
                 </Table.Body>
             </Table>
-            {sakerMedVedtak.length === 0 ? <IngenVedtakTekst>Ingen vedtak.</IngenVedtakTekst> : undefined}
+            {sakerMedVedtak.length === 0 ? (
+                <Box margin={'space-16'}>
+                    <BodyShort>Ingen vedtak.</BodyShort>
+                </Box>
+            ) : undefined}
         </>
     );
 };
