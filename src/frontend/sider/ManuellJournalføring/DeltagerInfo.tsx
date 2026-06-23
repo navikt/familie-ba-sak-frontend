@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
 
-import styled from 'styled-components';
-
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, HStack } from '@navikt/ds-react';
 
 interface DeltagerProps {
     ikon: ReactNode;
@@ -12,27 +10,18 @@ interface DeltagerProps {
     children?: ReactNode | ReactNode[];
 }
 
-const HSplit = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-
-const MarginedDiv = styled.div`
-    margin-right: 1rem;
-`;
-
 export const DeltagerInfo = ({ ikon, navn, undertittel, ident }: DeltagerProps) => {
     return (
         <div>
-            <HSplit>
-                <MarginedDiv>{ikon}</MarginedDiv>
+            <HStack>
+                <Box marginInline={'space-0 space-16'}>{ikon}</Box>
                 <div>
                     <Heading size={'small'} level={'2'}>
                         {ident ? `${navn} | ${ident}` : navn}
                     </Heading>
                     <BodyShort>{undertittel}</BodyShort>
                 </div>
-            </HSplit>
+            </HStack>
         </div>
     );
 };

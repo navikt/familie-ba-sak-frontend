@@ -1,10 +1,26 @@
 import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 
-import styled from 'styled-components';
+import { KontoSirkel } from '@ikoner/KontoSirkel';
+import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
+import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
+import { fagsakStatus, FagsakType } from '@typer/fagsak';
+import type { ISamhandlerInfo } from '@typer/samhandler';
+import { formaterIdent } from '@utils/formatter';
+import { identValidator } from '@utils/validators';
 
 import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
-import { Box, Button, ExpansionCard, Heading, InlineMessage, ReadMore, Select, TextField } from '@navikt/ds-react';
+import {
+    Box,
+    Button,
+    ExpansionCard,
+    Heading,
+    HStack,
+    InlineMessage,
+    ReadMore,
+    Select,
+    TextField,
+} from '@navikt/ds-react';
 import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -13,37 +29,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { KontoSirkel } from '../../ikoner/KontoSirkel';
-import { SamhandlerTabell } from '../../komponenter/Samhandler/SamhandlerTabell';
-import { useSamhandlerRequest } from '../../komponenter/Samhandler/useSamhandler';
-import { fagsakStatus, FagsakType } from '../../typer/fagsak';
-import type { ISamhandlerInfo } from '../../typer/samhandler';
-import { formaterIdent } from '../../utils/formatter';
-import { identValidator } from '../../utils/validators';
-
-const FlexDiv = styled.div`
-    display: flex;
-    margin-bottom: 1.5rem;
-`;
-
-const StyledButton = styled(Button)`
-    margin-left: 1rem;
-    margin-top: auto;
-    width: 10rem;
-`;
-
-const StyledExpansionCard = styled(ExpansionCard)`
-    margin-top: 1rem;
-    width: 100%;
-`;
-
-const StyledSelect = styled(Select)`
-    margin: 0.75rem 0 1.25rem;
-`;
-
-const ToppMargin = styled.div`
-    margin-top: 2rem;
-`;
 
 export const BrukerPanel = () => {
     const {
@@ -110,7 +95,7 @@ export const BrukerPanel = () => {
     };
 
     return (
-        <StyledExpansionCard
+        <ExpansionCard
             open={åpen}
             onToggle={() => {
                 settÅpen(!åpen);
@@ -137,7 +122,7 @@ export const BrukerPanel = () => {
             <ExpansionCard.Content className={styles.innerContent}>
                 {!erLesevisning() && (
                     <>
-                        <FlexDiv>
+                        <HStack marginBlock={'space-0 space-24'}>
                             <TextField
                                 {...nyIdent.hentNavInputProps(!!feilMelding)}
                                 error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
@@ -145,24 +130,34 @@ export const BrukerPanel = () => {
                                 description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
                                 size="small"
                             />
-                            <StyledButton
-                                onClick={() => {
-                                    if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                                        settSpinner(true);
-                                        nullstillFagsaktype();
-                                        endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
-                                            settSpinner(false);
-                                        });
-                                    } else {
-                                        settFeilMelding('Personident er ugyldig');
-                                    }
-                                }}
-                                children={'Endre bruker'}
-                                loading={spinner}
-                                size="small"
-                                variant="secondary"
-                            />
-                        </FlexDiv>
+                            <Box
+                                marginInline={'space-16 space-0'}
+                                width={'10rem'}
+                                marginBlock={
+                                    nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding
+                                        ? 'auto space-28'
+                                        : 'auto space-0'
+                                }
+                            >
+                                <Button
+                                    onClick={() => {
+                                        if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
+                                            settSpinner(true);
+                                            nullstillFagsaktype();
+                                            endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
+                                                settSpinner(false);
+                                            });
+                                        } else {
+                                            settFeilMelding('Personident er ugyldig');
+                                        }
+                                    }}
+                                    children={'Endre bruker'}
+                                    loading={spinner}
+                                    size="small"
+                                    variant="secondary"
+                                />
+                            </Box>
+                        </HStack>
                         {kanKnyttesTilInstitusjonsfagsak() && (
                             <ReadMore
                                 size="medium"
@@ -170,44 +165,48 @@ export const BrukerPanel = () => {
                                 open={erFagsaktypePanelÅpnet}
                                 onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                             >
-                                <StyledSelect
-                                    label="Fagsaktype"
-                                    size="small"
-                                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                                        oppdaterFagsaktype(event.target.value as FagsakType)
-                                    }
-                                    value={skjema.felter.fagsakType.verdi}
-                                >
-                                    <option value={FagsakType.NORMAL}>Velg</option>
-                                    <option value={FagsakType.INSTITUSJON}>Institusjon</option>
-                                    {<option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>Enslig mindreårig</option>}
-                                </StyledSelect>
-                                {erBrukerPåInstitusjon && (
-                                    <StyledSelect
-                                        label="Institusjon"
+                                <Box marginBlock={'space-12 space-20'}>
+                                    <Select
+                                        label="Fagsaktype"
                                         size="small"
                                         onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                                            settValgtInstitusjon(event.target.value)
+                                            oppdaterFagsaktype(event.target.value as FagsakType)
                                         }
-                                        value={valgtInstitusjon}
+                                        value={skjema.felter.fagsakType.verdi}
                                     >
-                                        <option value="">Velg</option>
-                                        {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
-                                            institusjonsfagsaker.data.map(({ institusjon, status }) => {
-                                                return (
-                                                    institusjon && (
-                                                        <option
-                                                            value={institusjon.orgNummer}
-                                                            key={institusjon.orgNummer}
-                                                        >
-                                                            {formaterIdent(institusjon.orgNummer)} |{' '}
-                                                            {fagsakStatus[status].navn}
-                                                        </option>
-                                                    )
-                                                );
-                                            })}
-                                        <option value="ny-institusjon">Ny institusjon</option>
-                                    </StyledSelect>
+                                        <option value={FagsakType.NORMAL}>Velg</option>
+                                        <option value={FagsakType.INSTITUSJON}>Institusjon</option>
+                                        {<option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>Enslig mindreårig</option>}
+                                    </Select>
+                                </Box>
+                                {erBrukerPåInstitusjon && (
+                                    <Box marginBlock={'space-12 space-20'}>
+                                        <Select
+                                            label="Institusjon"
+                                            size="small"
+                                            onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                                                settValgtInstitusjon(event.target.value)
+                                            }
+                                            value={valgtInstitusjon}
+                                        >
+                                            <option value="">Velg</option>
+                                            {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
+                                                institusjonsfagsaker.data.map(({ institusjon, status }) => {
+                                                    return (
+                                                        institusjon && (
+                                                            <option
+                                                                value={institusjon.orgNummer}
+                                                                key={institusjon.orgNummer}
+                                                            >
+                                                                {formaterIdent(institusjon.orgNummer)} |{' '}
+                                                                {fagsakStatus[status].navn}
+                                                            </option>
+                                                        )
+                                                    );
+                                                })}
+                                            <option value="ny-institusjon">Ny institusjon</option>
+                                        </Select>
+                                    </Box>
                                 )}
                                 {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
                                     <Button
@@ -241,11 +240,11 @@ export const BrukerPanel = () => {
                     </Box>
                 )}
                 {skjema.felter.samhandler.verdi !== undefined && (
-                    <ToppMargin>
+                    <Box marginBlock={'space-32 space-0'}>
                         <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi} />
-                    </ToppMargin>
+                    </Box>
                 )}
             </ExpansionCard.Content>
-        </StyledExpansionCard>
+        </ExpansionCard>
     );
 };
