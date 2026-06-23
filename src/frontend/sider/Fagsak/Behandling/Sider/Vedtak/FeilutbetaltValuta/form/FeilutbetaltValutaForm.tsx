@@ -1,3 +1,5 @@
+import { useBehandling } from '@hooks/useBehandling';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 import { FormProvider } from 'react-hook-form';
 
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
@@ -9,8 +11,6 @@ import { FomDatoField } from './FomDatoField';
 import { TomDatoField } from './TomDatoField';
 import type { Type } from './useFeilutbetaltValutaForm';
 import { useFeilutbetaltValutaForm } from './useFeilutbetaltValutaForm';
-import type { IRestFeilutbetaltValuta } from '../../../../../../../typer/eøs-feilutbetalt-valuta';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaTabellContext';
 
 interface Props {
@@ -21,7 +21,8 @@ interface Props {
 }
 
 export function FeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm, readOnly }: Props) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { skjulFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
 
     const { form, onSubmit } = useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm });

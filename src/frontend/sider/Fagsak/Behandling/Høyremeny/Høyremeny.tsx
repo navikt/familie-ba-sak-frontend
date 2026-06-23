@@ -1,5 +1,8 @@
 import { Activity } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useHentHistorikkinnslag } from '@hooks/useHentHistorikkinnslag';
+
 import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
 
 import { Behandlingskort } from './Behandlingskort/Behandlingskort';
@@ -11,14 +14,13 @@ import { Tab } from './TabContextProvider';
 import { useTabContext } from './TabContextProvider';
 import { Tabvelger } from './Tabvelger';
 import { Totrinnskontroll } from './Totrinnskontroll/Totrinnskontroll';
+import { TotrinnskontrollModal } from './Totrinnskontroll/TotrinnskontrollModal';
 import { useTotrinnskontrollModalContext } from './Totrinnskontroll/TotrinnskontrollModalContextProvider';
 import { useHøyremeny } from './useHøyremeny';
-import { useHentHistorikkinnslag } from '../../../../hooks/useHentHistorikkinnslag';
-import { useBehandlingContext } from '../context/BehandlingContext';
-import { TotrinnskontrollModal } from './Totrinnskontroll/TotrinnskontrollModal';
 
 export function Høyremeny() {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { erModalÅpen } = useTotrinnskontrollModalContext();
     const { tab, settTab } = useTabContext();
 
