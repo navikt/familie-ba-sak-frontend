@@ -1,8 +1,7 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
 import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
-import { EkspanderbareVilkårResultatRaderProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { EkspanderbareVilkårsvurderingPanelerProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
+import { VilkårsvurderingContainer } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingContainer';
 import type { RouteObject } from 'react-router';
 
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
@@ -13,8 +12,6 @@ import { SøknadProvider } from './Sider/RegistrerSøknad/SøknadContext';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
-import { Vilkårsvurdering } from './Sider/Vilkårsvurdering/Vilkårsvurdering';
-import { VilkårsvurderingProvider } from './Sider/Vilkårsvurdering/VilkårsvurderingContext';
 
 export const behandlingRoutes: RouteObject[] = [
     {
@@ -35,15 +32,7 @@ export const behandlingRoutes: RouteObject[] = [
     },
     {
         path: 'vilkaarsvurdering',
-        element: (
-            <VilkårsvurderingProvider>
-                <EkspanderbareVilkårsvurderingPanelerProvider>
-                    <EkspanderbareVilkårResultatRaderProvider>
-                        <Vilkårsvurdering />
-                    </EkspanderbareVilkårResultatRaderProvider>
-                </EkspanderbareVilkårsvurderingPanelerProvider>
-            </VilkårsvurderingProvider>
-        ),
+        element: <VilkårsvurderingContainer />,
     },
     {
         path: 'tilkjent-ytelse',
