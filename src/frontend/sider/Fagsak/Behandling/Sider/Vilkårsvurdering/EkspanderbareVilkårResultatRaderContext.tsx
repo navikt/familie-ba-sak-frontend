@@ -3,17 +3,17 @@ import { createContext, type PropsWithChildren, useCallback, useContext, useMemo
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
+import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna, type IBehandling } from '@typer/behandling';
+import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { Resultat, VilkårType } from '@typer/vilkår';
 
 const RELEVANTE_VILKÅR_TYPER_FOR_KOPIERTE_VILKÅR = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
 
-function useInitielleEkspanderteIder(): Set<number> {
-    const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
-    const toggles = useFeatureToggles();
-
+function finnInitielleEkspanderteIder(
+    behandling: IBehandling,
+    erLesevisning: boolean,
+    toggles: FeatureToggles
+): Set<number> {
     const vilkårResultater = behandling.personResultater.flatMap(it => it.vilkårResultater);
 
     if (erLesevisning) {
@@ -48,11 +48,20 @@ interface EkspanderbareVilkårResultatRaderContext {
 const Context = createContext<EkspanderbareVilkårResultatRaderContext | undefined>(undefined);
 
 export function EkspanderbareVilkårResultatRaderProvider({ children }: PropsWithChildren) {
-    const initielleEkspanderteIdenter = useInitielleEkspanderteIder();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+    const toggles = useFeatureToggles();
 
-    const [ekspanderteIder, settEkspanderteIder] = useState(initielleEkspanderteIdenter);
+    const [ekspanderteIder, settEkspanderteIder] = useState(() =>
+        finnInitielleEkspanderteIder(behandling, erLesevisning, toggles)
+    );
 
-    const erRadEkspandert = useCallback((id: number) => ekspanderteIder.has(id), [ekspanderteIder]);
+    const erRadEkspandert = useCallback(
+        (id: number) => {
+            return ekspanderteIder.has(id);
+        },
+        [ekspanderteIder]
+    );
 
     const ekspanderRad = useCallback((id: number, isDirty: boolean = false) => {
         if (isDirty) {

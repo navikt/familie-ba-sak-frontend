@@ -3,17 +3,17 @@ import { createContext, type PropsWithChildren, useCallback, useContext, useMemo
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
+import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna, type IBehandling } from '@typer/behandling';
+import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { Resultat, VilkårType } from '@typer/vilkår';
 
 const RELEVANTE_VILKÅR_TYPER_FOR_KOPIERTE_VILKÅR = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
 
-function useInitielleEkspanderteIdenter(): Set<string> {
-    const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
-    const toggles = useFeatureToggles();
-
+function finnInitielleEkspanderteIdenter(
+    behandling: IBehandling,
+    erLesevisning: boolean,
+    toggles: FeatureToggles
+): Set<string> {
     if (erLesevisning) {
         return new Set(behandling.personResultater.map(pr => pr.personIdent));
     }
@@ -53,9 +53,13 @@ interface EkspanderbareVilkårsvurderingPanelerContext {
 const Context = createContext<EkspanderbareVilkårsvurderingPanelerContext | undefined>(undefined);
 
 export function EkspanderbareVilkårsvurderingPanelerProvider({ children }: PropsWithChildren) {
-    const initielleEkspanderteIdenter = useInitielleEkspanderteIdenter();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+    const toggles = useFeatureToggles();
 
-    const [ekspanderteIdenter, settEkspanderteIdenter] = useState<Set<string>>(initielleEkspanderteIdenter);
+    const [ekspanderteIdenter, settEkspanderteIdenter] = useState(() =>
+        finnInitielleEkspanderteIdenter(behandling, erLesevisning, toggles)
+    );
 
     const erPanelEkspandert = useCallback((ident: string) => ekspanderteIdenter.has(ident), [ekspanderteIdenter]);
 
