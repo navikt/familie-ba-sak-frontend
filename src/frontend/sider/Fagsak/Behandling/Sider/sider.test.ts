@@ -1,3 +1,6 @@
+import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '@typer/behandling';
+
 import {
     SideId,
     hentTrinnForBehandling,
@@ -6,8 +9,6 @@ import {
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
 } from './sider';
-import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
-import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '../../../../typer/behandling';
 
 describe('sider.ts', () => {
     describe('siderForBehandling', () => {
