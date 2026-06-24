@@ -2,7 +2,6 @@ import { FagsakType } from '@typer/fagsak';
 import classNames from 'classnames';
 
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
-import { Success500, Warning500 } from '@navikt/ds-tokens/dist/tokens';
 import { GuttIkon, JenteIkon, KvinneIkon, MannIkon, NøytralPersonIkon } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
 
@@ -50,10 +49,7 @@ export const PersonIkon = ({
     }
 
     if (fagsakType === FagsakType.INSTITUSJON) {
-        if (størrelse === 'm') {
-            return <KontorIkonGrønn height="32" width="32" color={erAdresseBeskyttet ? Warning500 : Success500} />;
-        }
-        return <KontorIkonGrønn height="24" width="24" color={erAdresseBeskyttet ? Warning500 : Success500} />;
+        return <KontorIkonGrønn størrelse={størrelse} erAdresseBeskyttet={erAdresseBeskyttet} />;
     }
     const brukStørreIkon = fagsakType === FagsakType.SKJERMET_BARN || fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 

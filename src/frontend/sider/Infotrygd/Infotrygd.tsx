@@ -1,32 +1,13 @@
 import { useEffect } from 'react';
 
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { useLocation } from 'react-router';
-import styled from 'styled-components';
 
-import { Button, Fieldset, Heading, TextField } from '@navikt/ds-react';
+import { Box, Button, Fieldset, Heading, HStack, TextField } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import { useInfotrygdSkjema } from './useInfotrygd';
-import { hentFrontendFeilmelding } from '../../utils/ressursUtils';
-
-const InfotrygdContainer = styled.div`
-    padding: 1rem;
-    overflow: auto;
-    height: calc(100vh - 50px);
-`;
-
-const HentSakerFlex = styled.div`
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    display: flex;
-`;
-
-const HentSakerButton = styled(Button)`
-    margin-left: 1rem;
-    margin-top: 30px;
-    margin-bottom: auto;
-`;
 
 export const Infotrygd = () => {
     const { ident, onSubmitWrapper, skjema } = useInfotrygdSkjema();
@@ -43,11 +24,11 @@ export const Infotrygd = () => {
     const skjemaErLåst = skjema.submitRessurs.status === RessursStatus.HENTER;
 
     return (
-        <InfotrygdContainer>
+        <Box padding={'space-16'} overflow={'auto'} height={'calc(100vh - 50px)'}>
             <Heading size={'large'} level={'1'}>
                 Visningsside for Infotrygd
             </Heading>
-            <HentSakerFlex>
+            <HStack marginBlock={'space-32'}>
                 <Fieldset
                     error={hentFrontendFeilmelding(skjema.submitRessurs)}
                     legend="søk infotrygd på fødselsnummer eller d-nummer"
@@ -60,19 +41,21 @@ export const Infotrygd = () => {
                         placeholder={'Fnr/dnr'}
                     />
                 </Fieldset>
-                <HentSakerButton
-                    variant={'secondary'}
-                    size={'medium'}
-                    spinner={skjemaErLåst}
-                    disabled={skjemaErLåst}
-                    onClick={onSubmitWrapper}
-                >
-                    Hent saker
-                </HentSakerButton>
-            </HentSakerFlex>
+                <Box marginInline={'space-16 space-0'} marginBlock={'auto space-0'}>
+                    <Button
+                        variant={'secondary'}
+                        size={'medium'}
+                        loading={skjemaErLåst}
+                        disabled={skjemaErLåst}
+                        onClick={onSubmitWrapper}
+                    >
+                        Hent saker
+                    </Button>
+                </Box>
+            </HStack>
             {skjema.submitRessurs.status === RessursStatus.SUKSESS ? (
                 <Infotrygdtabeller ident={ident} saker={skjema.submitRessurs.data.saker} />
             ) : undefined}
-        </InfotrygdContainer>
+        </Box>
     );
 };

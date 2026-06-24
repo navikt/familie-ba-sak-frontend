@@ -1,35 +1,27 @@
-import styled from 'styled-components';
+import classNames from 'classnames';
 
 import { Buildings3Icon } from '@navikt/aksel-icons';
-import { Success500 } from '@navikt/ds-tokens/dist/tokens';
+
+import styles from './KontorIkonGrønn.module.css';
 
 interface IKontorIkonGrønn {
     className?: string;
-    height?: '32' | '24';
-    width?: '32' | '24';
-    color?: string;
+    størrelse?: 's' | 'm';
+    erAdresseBeskyttet?: boolean;
 }
 
-const IkonSirkel = styled.span<{
-    $height: IKontorIkonGrønn['height'];
-    $width: IKontorIkonGrønn['width'];
-    $color: IKontorIkonGrønn['color'];
-}>`
-    border-color: ${props => props.$color};
-    border-radius: 50%;
-    background-color: ${props => props.$color};
-    display: inline-grid;
-    place-items: center;
-    height: ${props => props.$height}px;
-    width: ${props => props.$width}px;
-    color: white;
-`;
-
-const KontorIkonGrønn = ({ className, height = '24', width = '24', color = Success500 }: IKontorIkonGrønn) => {
+const KontorIkonGrønn = ({ className, størrelse = 's', erAdresseBeskyttet = false }: IKontorIkonGrønn) => {
     return (
-        <IkonSirkel $height={height} $width={width} $color={color}>
-            <Buildings3Icon height={height === '24' ? 20 : 28} width={width === '24' ? 20 : 28} className={className} />
-        </IkonSirkel>
+        <span
+            className={classNames(styles.container, {
+                [styles.largerCircle]: størrelse === 'm',
+                [styles.adresseBeskyttet]: erAdresseBeskyttet,
+            })}
+        >
+            <Buildings3Icon
+                className={classNames(className, styles.icon, { [styles.largerIcon]: størrelse === 'm' })}
+            />
+        </span>
     );
 };
 
