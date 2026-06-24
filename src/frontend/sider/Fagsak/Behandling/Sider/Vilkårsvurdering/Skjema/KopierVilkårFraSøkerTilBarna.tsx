@@ -86,7 +86,7 @@ export function KopierVilkårFraSøkerTilBarna() {
     return (
         <VStack gap={'space-20'} marginBlock={'space-56 space-0'} width={'fit-content'}>
             {feilmelding && (
-                <LocalAlert status={'error'} size={'small'}>
+                <LocalAlert status={'warning'} size={'small'}>
                     <LocalAlert.Header>
                         <LocalAlert.Title>{feilmelding}</LocalAlert.Title>
                         <LocalAlert.CloseButton onClick={() => settFeilmelding(undefined)} />
