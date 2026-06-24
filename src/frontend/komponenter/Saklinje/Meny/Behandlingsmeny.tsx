@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
 import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
@@ -34,14 +34,14 @@ import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
 
 export function Behandlingsmeny() {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
     const toggles = useFeatureToggles();
-    const { pathname } = useLocation();
+    const location = useLocation();
 
     const erBehandleneEnhetMidlertidig = sjekkErBehandleneEnhetMidlertidig(behandling);
     const erBehandlingPåVent = !!behandling.aktivSettPåVent;
 
-    const erPåBehandlingsresultatside = pathname.includes(sider[SideId.BEHANDLINGRESULTAT].href);
+    const erPåBehandlingsresultatside = location.pathname.includes(sider[SideId.BEHANDLINGRESULTAT].href);
     const kanEndreSøknadstidspunkt =
         toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] &&
         behandling.årsak === BehandlingÅrsak.SØKNAD &&

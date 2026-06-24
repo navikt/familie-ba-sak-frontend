@@ -1,10 +1,10 @@
+import { useBehandling } from '@hooks/useBehandling';
+import type { ComboboxOption } from '@typer/common';
+import { lagPersonLabel } from '@utils/formatter';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import type { ComboboxOption } from '../../../../../../../typer/common';
-import { lagPersonLabel } from '../../../../../../../utils/formatter';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
@@ -12,7 +12,8 @@ import {
 } from '../useEndretUtbetalingAndel';
 
 export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { control, getValues } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const tilgjengeligePersoner: ComboboxOption[] = behandling.personer

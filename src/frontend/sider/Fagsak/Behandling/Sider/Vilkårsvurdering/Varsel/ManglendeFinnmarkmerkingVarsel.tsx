@@ -1,10 +1,10 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+
 import { BodyLong, LocalAlert, Table, VStack } from '@navikt/ds-react';
 
-import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-
 export function ManglendeFinnmarkmerkingVarsel() {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     const manglendeFinnmarkmerking = behandling.manglendeFinnmarkmerking;
     const skalViseVarsel = manglendeFinnmarkmerking !== null;

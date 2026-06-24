@@ -1,5 +1,10 @@
 import { useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { årsakTekst } from '@typer/utbetalingAndel';
+import { erDefinert } from '@utils/commons';
+import { Datoformat, isoMånedPeriodeTilFormatertString } from '@utils/dato';
+import { lagPersonLabel } from '@utils/formatter';
 import styled from 'styled-components';
 
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
@@ -8,11 +13,6 @@ import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext'
 import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
 import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
-import { årsakTekst } from '../../../../../../typer/utbetalingAndel';
-import { erDefinert } from '../../../../../../utils/commons';
-import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../utils/dato';
-import { lagPersonLabel } from '../../../../../../utils/formatter';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
 
 const PersonCelle = styled.div`
     display: flex;
@@ -35,7 +35,8 @@ const utbetalingsprosentTilTekst = (prosent: number): string => {
 };
 
 export const EndretUtbetalingAndelRad = () => {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const [erSkjemaEkspandert, settErSkjemaEkspandert] = useState<boolean>(
         endretUtbetalingAndel.personIdenter.length === 0

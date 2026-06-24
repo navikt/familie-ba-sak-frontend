@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import type { IBehandling } from '@typer/behandling';
+import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
 import { useFormContext } from 'react-hook-form';
 
 import { Label, VStack } from '@navikt/ds-react';
 
 import { FomDato } from './FomDato';
 import { TomDato } from './TomDato';
-import type { IBehandling } from '../../../../../../../typer/behandling';
-import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
@@ -41,7 +41,8 @@ export function utledTidligsteOgSenesteDato(
 }
 
 export const Månedperiodevelger = ({ erLesevisning }: StandardFeltProps) => {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { watch } = useFormContext<EndretUtbetalingAndelFormValues>();
 
     const valgtePersoner = watch(EndretUtbetalingAndelFeltnavn.PERSONER).map(p => p.value);

@@ -1,10 +1,10 @@
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import { BehandlerRolle, BehandlingStatus } from '../../../../typer/behandling';
-import { useBehandlingContext } from '../context/BehandlingContext';
+import { useBehandling } from '@hooks/useBehandling';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BehandlerRolle, BehandlingStatus } from '@typer/behandling';
 
 export function useSkalViseTotrinnskontroll() {
-    const { behandling } = useBehandlingContext();
     const saksbehandler = useSaksbehandler();
+    const behandling = useBehandling();
 
     const erBeslutter = BehandlerRolle.BESLUTTER === saksbehandler.rolle;
     const erEgetVedtak = behandling.totrinnskontroll?.saksbehandlerId === saksbehandler.navIdent;
