@@ -1,6 +1,9 @@
 import type { MouseEvent } from 'react';
 import { Activity } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useFagsakId } from '@hooks/useFagsakId';
+import { formaterIdent } from '@utils/formatter';
 import classNames from 'classnames';
 import { NavLink } from 'react-router';
 
@@ -9,16 +12,15 @@ import { BodyShort, Box, Button, CopyButton, HStack, Stack, VStack } from '@navi
 
 import { useVenstremeny } from './useVenstremeny';
 import Styles from './Venstremeny.module.css';
-import { useFagsakId } from '../../../../hooks/useFagsakId';
-import { formaterIdent } from '../../../../utils/formatter';
-import { useBehandlingContext } from '../context/BehandlingContext';
-import { erSidenAktiv } from '../Sider/sider';
+import { erSidenAktiv, finnSiderForBehandling } from '../Sider/sider';
 
 export function Venstremeny() {
-    const { behandling, trinnPåBehandling } = useBehandlingContext();
-
     const fagsakId = useFagsakId();
+    const behandling = useBehandling();
+
     const [erÅpen, settErÅpen] = useVenstremeny();
+
+    const sider = finnSiderForBehandling(behandling);
 
     function stansNavigeringDersomSidenIkkeErAktiv(event: MouseEvent, sidenErAktiv: boolean) {
         if (!sidenErAktiv) {
@@ -46,12 +48,12 @@ export function Venstremeny() {
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                 <Box as={'nav'} width={'clamp(14rem, 15vw, 25rem)'}>
-                    {Object.entries(trinnPåBehandling).map(([sideId, side], index) => {
+                    {sider.map((side, index) => {
                         const tilPath = `/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`;
                         const undersider = side.undersider ? side.undersider(behandling) : [];
                         const sidenErAktiv = erSidenAktiv(side, behandling);
                         return (
-                            <VStack key={sideId}>
+                            <VStack key={side.id}>
                                 <NavLink
                                     to={tilPath}
                                     className={({ isActive }) =>
@@ -70,7 +72,7 @@ export function Venstremeny() {
                                     const antallAksjonspunkter = underside.antallAksjonspunkter();
                                     return (
                                         <NavLink
-                                            key={`${sideId}_${underside.hash}`}
+                                            key={`${side.id}_${underside.hash}`}
                                             to={`${tilPath}#${underside.hash}`}
                                             className={({ isActive }) =>
                                                 classNames(Styles.undersidelenke, {

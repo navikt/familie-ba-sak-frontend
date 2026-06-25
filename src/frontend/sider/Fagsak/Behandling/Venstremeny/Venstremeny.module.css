@@ -55,7 +55,7 @@
 }
 
 .lenkeInaktiv {
-    color: var(--ax-text-neutral-subtle);
+    color: var(--ax-text-neutral-decoration);
     pointer-events: none;
 }
 
