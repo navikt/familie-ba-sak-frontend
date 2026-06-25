@@ -1,8 +1,9 @@
+import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehandling';
+
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { IInstitusjon } from './institusjon';
 import type { Utbetalingsperiode } from './vedtaksperiode';
-import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 
 // Enum
 export enum FagsakStatus {
@@ -50,15 +51,15 @@ export interface IMinimalFagsak extends IBaseFagsak {
     gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
-export function sjekkGjelderInstitusjon(fagsak: IMinimalFagsak) {
+export function erFagsakAvTypeInstitusjon(fagsak: IMinimalFagsak) {
     return fagsak.fagsakType === FagsakType.INSTITUSJON;
 }
 
-export function sjekkGjelderEnsligMindreårig(fagsak: IMinimalFagsak) {
+export function erFagsakAvTypeEnsligMindreårig(fagsak: IMinimalFagsak) {
     return fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
 }
 
-export function sjekkGjelderSkjermetBarn(fagsak: IMinimalFagsak) {
+export function erFagsakAvTypeSkjermetBarn(fagsak: IMinimalFagsak) {
     return fagsak.fagsakType === FagsakType.SKJERMET_BARN;
 }
 

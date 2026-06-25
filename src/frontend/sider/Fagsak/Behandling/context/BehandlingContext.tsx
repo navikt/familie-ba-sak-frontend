@@ -6,8 +6,7 @@ import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNaviger
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
 import type { IBehandling } from '@typer/behandling';
-import { BehandlerRolle, BehandlingStatus, Behandlingstype } from '@typer/behandling';
-import { FagsakType } from '@typer/fagsak';
+import { BehandlerRolle, BehandlingStatus } from '@typer/behandling';
 import { hentSideHref } from '@utils/miljø';
 import { useLocation } from 'react-router';
 
@@ -26,10 +25,6 @@ interface BehandlingContextValue {
     settIkkeKontrollerteSiderTilManglerKontroll: () => void;
     trinnPåBehandling: { [sideId: string]: ITrinn };
     behandling: IBehandling;
-    erMigreringsbehandling: boolean;
-    gjelderInstitusjon: boolean;
-    gjelderEnsligMindreårig: boolean;
-    gjelderSkjermetBarn: boolean;
     settÅpenBehandling: (behandling: Ressurs<IBehandling>) => void;
 }
 
@@ -99,11 +94,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
         BehandlerRolle.BESLUTTER === saksbehandler.rolle &&
         saksbehandler.email !== behandling.endretAv;
 
-    const erMigreringsbehandling = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-    const gjelderInstitusjon = fagsak.fagsakType === FagsakType.INSTITUSJON;
-    const gjelderEnsligMindreårig = fagsak.fagsakType === FagsakType.BARN_ENSLIG_MINDREÅRIG;
-    const gjelderSkjermetBarn = fagsak.fagsakType === FagsakType.SKJERMET_BARN;
-
     return (
         <BehandlingContext.Provider
             value={{
@@ -111,10 +101,6 @@ export const BehandlingProvider = ({ behandling, children }: Props) => {
                 settIkkeKontrollerteSiderTilManglerKontroll,
                 trinnPåBehandling,
                 behandling: behandling,
-                erMigreringsbehandling,
-                gjelderInstitusjon,
-                gjelderEnsligMindreårig,
-                gjelderSkjermetBarn,
                 settÅpenBehandling: settBehandlingRessurs,
             }}
         >

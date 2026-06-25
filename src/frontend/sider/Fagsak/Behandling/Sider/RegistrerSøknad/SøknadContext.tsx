@@ -6,6 +6,7 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '@typer/person';
 import type { IBarnMedOpplysninger, IBarnMedOpplysningerBackend, IRestRegistrerSøknad, Målform } from '@typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
@@ -39,8 +40,7 @@ interface SøknadContextValue {
 const SøknadContext = createContext<SøknadContextValue | undefined>(undefined);
 
 export const SøknadProvider = ({ children }: PropsWithChildren) => {
-    const { behandling, settÅpenBehandling, gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } =
-        useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const fagsak = useFagsak();
     const bruker = useBruker();
@@ -48,6 +48,10 @@ export const SøknadProvider = ({ children }: PropsWithChildren) => {
     const navigate = useNavigate();
 
     const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
+
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
+    const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
+    const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
