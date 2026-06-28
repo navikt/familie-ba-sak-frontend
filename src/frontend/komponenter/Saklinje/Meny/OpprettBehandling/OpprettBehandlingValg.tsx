@@ -46,8 +46,7 @@ const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFa
 const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
     kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
-    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean,
-    kanManueltKorrigereMedVedtaksbrev: boolean
+    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean
 ): BehandlingÅrsak[] =>
     erMigreringFraInfotrygd
         ? Object.values(BehandlingÅrsak).filter(
@@ -67,7 +66,7 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
-                  (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV || kanManueltKorrigereMedVedtaksbrev) &&
+                  årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV &&
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
@@ -113,7 +112,6 @@ const OpprettBehandlingValg = ({
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
     const kanOppretteTekniskEndring = kanOppretteBehandling && saksbehandler.harSuperbrukertilgang;
-    const kanManueltKorrigereMedVedtaksbrev = saksbehandler.harSuperbrukertilgang ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -221,8 +219,7 @@ const OpprettBehandlingValg = ({
                     {hentTilgjengeligeBehandlingsårsaker(
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
-                        kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        kanManueltKorrigereMedVedtaksbrev
+                        kanOppretteMigreringsbehandlingMedEndreMigreringsdato
                     ).map(årsak => {
                         return (
                             <option key={årsak} aria-selected={behandlingsårsak.verdi === årsak} value={årsak}>

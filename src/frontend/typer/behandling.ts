@@ -457,7 +457,6 @@ export function sjekkErBehandleneEnhetMidlertidig(behandling: IBehandling) {
 export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
     return (
         behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
-        behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling.årsak === BehandlingÅrsak.KLAGE ||
         behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO ||
