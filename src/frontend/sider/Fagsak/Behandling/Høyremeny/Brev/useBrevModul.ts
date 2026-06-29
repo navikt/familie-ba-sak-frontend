@@ -221,8 +221,11 @@ export const useBrevModul = () => {
             return felt.verdi.length ? ok(felt) : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            // På svartidsbrev vises feltet kun for EØS-behandlinger.
+            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
+                return behandlingKategori === BehandlingKategori.EØS;
+            }
             return [
-                Brevmal.SVARTIDSBREV,
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
             ].includes(avhengigheter?.brevmal.verdi);
