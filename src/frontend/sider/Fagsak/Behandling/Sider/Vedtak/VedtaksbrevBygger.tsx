@@ -1,5 +1,4 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -49,8 +48,6 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
 
     const saksbehandler = useSaksbehandler();
     const erLesevisning = useErLesevisning();
-
-    const { data: distribusjonskanal } = useHentDistribusjonskanal(bruker.personIdent);
 
     const brukerHarUtenlandskAdresse = åpenBehandling.brevmottakere.some(
         mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
@@ -148,9 +145,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                     brevmottakere={åpenBehandling?.brevmottakere ?? []}
                     åpenBehandling={åpenBehandling}
                 />
-                {distribusjonskanal && !brukerHarUtenlandskAdresse && (
-                    <UkjentAdresseAlert distribusjonskanal={distribusjonskanal} />
-                )}
+                {!brukerHarUtenlandskAdresse && <UkjentAdresseAlert />}
                 {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                 åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                 åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (

@@ -1,12 +1,24 @@
+import { useDistribusjonskanalContext } from '@sider/Fagsak/DistribusjonskanalProvider';
 import { Distribusjonskanal } from '@typer/dokument';
 
 import { Box, LocalAlert } from '@navikt/ds-react';
 
-interface Props {
-    distribusjonskanal: Distribusjonskanal;
-}
+export function UkjentAdresseAlert() {
+    const { distribusjonskanal, distribusjonskanalError } = useDistribusjonskanalContext();
 
-export function UkjentAdresseAlert({ distribusjonskanal }: Props) {
+    if (distribusjonskanalError) {
+        return (
+            <Box marginBlock={'space-16'}>
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Klarte ikke laste inn distribusjonskanal.</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{distribusjonskanalError.message}</LocalAlert.Content>
+                </LocalAlert>
+            </Box>
+        );
+    }
+
     switch (distribusjonskanal) {
         case Distribusjonskanal.INGEN_DISTRIBUSJON:
         case Distribusjonskanal.UKJENT:
