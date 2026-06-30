@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 
+import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { useQueryClient } from '@tanstack/react-query';
+import type { IBehandling } from '@typer/behandling';
+import { BehandlingStatus } from '@typer/behandling';
+import type { ITotrinnskontrollData } from '@typer/totrinnskontroll';
+import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import type { AxiosError } from 'axios';
 import styled from 'styled-components';
 
@@ -15,10 +21,6 @@ import {
 
 import { useTotrinnskontrollModalContext } from './TotrinnskontrollModalContextProvider';
 import { Totrinnskontrollskjema } from './Totrinnskontrollskjema';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingStatus } from '../../../../../typer/behandling';
-import type { ITotrinnskontrollData } from '../../../../../typer/totrinnskontroll';
-import { TotrinnskontrollBeslutning } from '../../../../../typer/totrinnskontroll';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import type { Trinn } from '../../Sider/sider';
 import { KontrollertStatus } from '../../Sider/sider';
@@ -36,6 +38,7 @@ export function Totrinnskontroll() {
     const { åpneModal } = useTotrinnskontrollModalContext();
 
     const { request } = useHttp();
+    const queryClient = useQueryClient();
 
     const [innsendtVedtak, settInnsendtVedtak] = useState<Ressurs<IBehandling>>(byggTomRessurs());
 
@@ -90,7 +93,10 @@ export function Totrinnskontroll() {
                 },
                 url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/iverksett-vedtak`,
             })
-                .then((response: Ressurs<IBehandling>) => {
+                .then(async (response: Ressurs<IBehandling>) => {
+                    await queryClient.invalidateQueries({
+                        queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
+                    });
                     settInnsendtVedtak(response);
                     if (response.status === RessursStatus.SUKSESS) {
                         settÅpenBehandling(response);
