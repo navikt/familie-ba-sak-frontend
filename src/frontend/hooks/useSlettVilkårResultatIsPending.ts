@@ -3,12 +3,12 @@ import { SlettVilkårResultatMutationKeyFactory } from '@hooks/useSlettVilkårRe
 import { useIsMutating } from '@tanstack/react-query';
 
 export function useSlettVilkårResultatIsPending(vilkårResultatId: number) {
-    const isMutating = useIsMutating({
+    const isMutatingAntall = useIsMutating({
         mutationKey: SlettVilkårResultatMutationKeyFactory.slettVilkårResultat(),
         predicate: mutation => {
             const variables = mutation.state.variables as Parameters | undefined;
             return variables?.vilkårResultatId === vilkårResultatId;
         },
     });
-    return isMutating > 0;
+    return isMutatingAntall > 0;
 }

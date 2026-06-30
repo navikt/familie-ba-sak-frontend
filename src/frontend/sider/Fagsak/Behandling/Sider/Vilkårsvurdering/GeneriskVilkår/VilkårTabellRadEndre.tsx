@@ -380,6 +380,7 @@ const VilkårTabellRadEndre = ({
                             <SlettVilkårResultat
                                 personIdent={person.personIdent}
                                 vilkårResultatId={vilkårResultat.verdi.id}
+                                settRedigerbartVilkår={settRedigerbartVilkår}
                             />
                         ) : (
                             <Button
