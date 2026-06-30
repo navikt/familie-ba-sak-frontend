@@ -122,7 +122,7 @@ export const BrukerPanel = () => {
             <ExpansionCard.Content className={styles.innerContent}>
                 {!erLesevisning() && (
                     <>
-                        <HStack marginBlock={'space-0 space-24'}>
+                        <HStack marginBlock={'space-0 space-24'} wrap={false}>
                             <TextField
                                 {...nyIdent.hentNavInputProps(!!feilMelding)}
                                 error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
