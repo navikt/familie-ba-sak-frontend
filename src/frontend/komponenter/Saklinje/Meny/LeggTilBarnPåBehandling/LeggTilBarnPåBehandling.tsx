@@ -7,7 +7,6 @@ import { ActionMenu } from '@navikt/ds-react';
 const relevanteBehandlingsårsaker = [
     BehandlingÅrsak.NYE_OPPLYSNINGER,
     BehandlingÅrsak.KLAGE,
-    BehandlingÅrsak.KORREKSJON_VEDTAKSBREV,
     BehandlingÅrsak.TEKNISK_ENDRING,
     BehandlingÅrsak.IVERKSETTE_KA_VEDTAK,
     Behandlingstype.MIGRERING_FRA_INFOTRYGD,

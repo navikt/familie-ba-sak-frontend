@@ -58,17 +58,6 @@ describe('behandling', () => {
             expect(result).toBe(true);
         });
 
-        test('returnerer true når årsak er KORREKSJON_VEDTAKSBREV', () => {
-            // Arrange
-            const behandling = lagBehandling({ årsak: BehandlingÅrsak.KORREKSJON_VEDTAKSBREV });
-
-            // Act
-            const result = kanLeggeTilUtvidetVilkår(behandling);
-
-            // Assert
-            expect(result).toBe(true);
-        });
-
         test('returnerer true når årsak er TEKNISK_ENDRING', () => {
             // Arrange
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.TEKNISK_ENDRING });

@@ -44,7 +44,6 @@ function kanSendeInnVedtak(vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBeg
     return (
         minstEnPeriodeharBegrunnelseEllerFritekst ||
         behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
-        behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
         behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK ||
         behandling.årsak === BehandlingÅrsak.FALSK_IDENTITET ||
