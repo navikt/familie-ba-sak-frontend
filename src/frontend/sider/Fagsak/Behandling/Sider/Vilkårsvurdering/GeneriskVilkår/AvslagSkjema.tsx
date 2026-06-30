@@ -68,6 +68,7 @@ const AvslagSkjema = ({
 
                 {redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
                     <AvslagBegrunnelseMultiselect
+                        vilkårResultatId={redigerbartVilkår.verdi.id}
                         vilkårType={redigerbartVilkår.verdi.vilkårType}
                         regelverk={redigerbartVilkår.verdi.vurderesEtter}
                         periode={redigerbartVilkår.verdi.periode.verdi}

@@ -213,10 +213,18 @@ export const useBrevModul = () => {
 
     const mottakerlandSed = useFelt<string[]>({
         verdi: [],
-        valideringsfunksjon: (felt: FeltState<string[]>) => {
+        valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
+            // På svartidsbrev er det valgfritt å oppgi land SED er sendt til.
+            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
+                return ok(felt);
+            }
             return felt.verdi.length ? ok(felt) : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            // På svartidsbrev vises feltet kun for EØS-behandlinger.
+            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
+                return behandlingKategori === BehandlingKategori.EØS;
+            }
             return [
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,

@@ -61,8 +61,6 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
             return 'Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på "Vis vedtaksbrev".';
         } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
             return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
-        } else if (årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV) {
-            return 'Behandling bruker manuelt skrevet vedtaksbrev. Forhåndsvis for å se brevet.';
         } else return '';
     };
 
@@ -140,7 +138,6 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                     åpenBehandling={åpenBehandling}
                 />
                 {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
-                åpenBehandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
                 åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
                     <Box marginBlock={'space-32 space-16'}>
                         <InfoCard data-color="info">
