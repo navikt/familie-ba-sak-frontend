@@ -1,7 +1,6 @@
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { settPåVentÅrsaker } from '@typer/behandling';
-import { defaultFunksjonellFeil } from '@typer/feilmeldinger';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
@@ -54,7 +53,7 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                     <Box paddingBlock={'space-0 space-16'}>
                         <LocalAlert status="error">
                             <LocalAlert.Header>
-                                <LocalAlert.Title>{error.message || defaultFunksjonellFeil}</LocalAlert.Title>
+                                <LocalAlert.Title>{error.message}</LocalAlert.Title>
                             </LocalAlert.Header>
                         </LocalAlert>
                     </Box>
@@ -62,7 +61,7 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button
-                    key={'Bekreft'}
+                    type={'submit'}
                     variant="primary"
                     size="small"
                     onClick={() => taBehandlingAvVent(behandling.behandlingId)}
@@ -70,7 +69,7 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                 >
                     Ja, fortsett
                 </Button>
-                <Button key={'Nei'} variant="tertiary" onClick={lukkModal}>
+                <Button variant="tertiary" onClick={lukkModal}>
                     Nei
                 </Button>
             </Modal.Footer>

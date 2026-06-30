@@ -36,7 +36,6 @@ describe('useSettPåVent', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(settPåVent).toHaveBeenCalledWith(
-            expect.any(Function),
             { frist: parameters.frist, årsak: parameters.årsak },
             parameters.behandlingId,
             false
@@ -59,7 +58,6 @@ describe('useSettPåVent', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(settPåVent).toHaveBeenCalledWith(
-            expect.any(Function),
             { frist: parameters.frist, årsak: parameters.årsak },
             parameters.behandlingId,
             true

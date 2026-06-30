@@ -1,30 +1,28 @@
+import { apiClient } from '@api/client/apiClient';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
-
 import { taBehandlingAvVent } from './taBehandlingAvVent';
+
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: { put: vi.fn() },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
 });
 
 describe('taBehandlingAvVent', () => {
-    test('kaller request med riktig metode og URL, og får forventet resultat', async () => {
+    test('kaller PUT med riktig URL, og får forventet resultat', async () => {
         // Arrange
         const behandling = lagBehandling({ behandlingId: 123 });
-
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        vi.mocked(apiClient.put).mockResolvedValue(behandling);
 
         // Act
-        const result = await taBehandlingAvVent(mockRequest, behandling.behandlingId);
+        const result = await taBehandlingAvVent(behandling.behandlingId);
 
         // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'PUT',
+        expect(apiClient.put).toHaveBeenCalledWith({
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}/fortsettbehandling`,
         });
         expect(result).toEqual(behandling);
@@ -32,12 +30,9 @@ describe('taBehandlingAvVent', () => {
 
     test('Skal håndtere feil', async () => {
         // Arrange
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+        vi.mocked(apiClient.put).mockRejectedValue(new Error('Noe gikk galt'));
 
         // Act & assert
-        await expect(taBehandlingAvVent(mockRequest, 123)).rejects.toThrow();
+        await expect(taBehandlingAvVent(123)).rejects.toThrow();
     });
 });

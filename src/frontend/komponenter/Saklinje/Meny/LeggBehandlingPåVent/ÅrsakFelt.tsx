@@ -19,16 +19,20 @@ export function ÅrsakFelt() {
         },
     });
 
+    const { name, value, ref, onBlur, onChange } = field;
+    const { error } = fieldState;
+    const { isSubmitting } = formState;
+
     return (
         <Select
             label={'Årsak'}
-            name={field.name}
-            value={field.value}
-            ref={field.ref}
-            onBlur={field.onBlur}
-            onChange={field.onChange}
-            error={fieldState.error?.message}
-            readOnly={formState.isSubmitting}
+            name={name}
+            value={value}
+            ref={ref}
+            onBlur={onBlur}
+            onChange={onChange}
+            error={error?.message}
+            readOnly={isSubmitting}
         >
             <option value={''}>Velg årsak</option>
             {årsaker.map(årsak => (

@@ -27,7 +27,7 @@ describe('useTaBehandlingAvVent', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(taBehandlingAvVent).toHaveBeenCalledWith(expect.any(Function), behandling.behandlingId);
+        expect(taBehandlingAvVent).toHaveBeenCalledWith(behandling.behandlingId);
         expect(result.current.data).toEqual(behandling);
     });
 

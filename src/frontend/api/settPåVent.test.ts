@@ -1,10 +1,13 @@
+import { apiClient } from '@api/client/apiClient';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
-
 import { settPåVent, type SettPåVentPayload } from './settPåVent';
 import { SettPåVentÅrsak } from '../typer/behandling';
+
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: { post: vi.fn(), put: vi.fn() },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
@@ -16,56 +19,45 @@ describe('settPåVent', () => {
         årsak: SettPåVentÅrsak.AVVENTER_DOKUMENTASJON,
     };
 
-    test('kaller request med POST når behandlingen ikke allerede er på vent', async () => {
+    test('kaller POST når behandlingen ikke allerede er på vent', async () => {
         // Arrange
         const behandling = lagBehandling({ behandlingId: 123 });
-
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        vi.mocked(apiClient.post).mockResolvedValue(behandling);
 
         // Act
-        const result = await settPåVent(mockRequest, payload, behandling.behandlingId, false);
+        const result = await settPåVent(payload, behandling.behandlingId, false);
 
         // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
+        expect(apiClient.post).toHaveBeenCalledWith({
             data: payload,
-            method: 'POST',
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
         });
+        expect(apiClient.put).not.toHaveBeenCalled();
         expect(result).toEqual(behandling);
     });
 
-    test('kaller request med PUT når behandlingen allerede er på vent', async () => {
+    test('kaller PUT når behandlingen allerede er på vent', async () => {
         // Arrange
         const behandling = lagBehandling({ behandlingId: 123 });
-
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        vi.mocked(apiClient.put).mockResolvedValue(behandling);
 
         // Act
-        const result = await settPåVent(mockRequest, payload, behandling.behandlingId, true);
+        const result = await settPåVent(payload, behandling.behandlingId, true);
 
         // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
+        expect(apiClient.put).toHaveBeenCalledWith({
             data: payload,
-            method: 'PUT',
             url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
         });
+        expect(apiClient.post).not.toHaveBeenCalled();
         expect(result).toEqual(behandling);
     });
 
     test('Skal håndtere feil', async () => {
         // Arrange
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
         // Act & assert
-        await expect(settPåVent(mockRequest, payload, 123, false)).rejects.toThrow();
+        await expect(settPåVent(payload, 123, false)).rejects.toThrow();
     });
 });

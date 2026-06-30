@@ -38,15 +38,7 @@ export function useSettPåVentSkjema({ lukkModal }: Props) {
 
     const standardfrist = dateTilIsoDatoString(addDays(dagensDato, STANDARD_ANTALL_DAGER_FRIST));
 
-    const { mutateAsync: settPåVent } = useSettPåVent({
-        onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
-            lukkModal();
-        },
-        onError: error => {
-            setError('root', { message: error.message || 'Teknisk feil ved lagring av sett på vent.' });
-        },
-    });
+    const { mutateAsync: settPåVent } = useSettPåVent();
 
     const form = useForm<SettPåVentFormValues, unknown, TransformedSettPåVentFormValues>({
         values: {
@@ -57,13 +49,20 @@ export function useSettPåVentSkjema({ lukkModal }: Props) {
 
     const { setError } = form;
 
-    function onSubmit(values: TransformedSettPåVentFormValues) {
-        return settPåVent({
-            frist: values.frist,
-            årsak: values.årsak,
-            behandlingId: behandling.behandlingId,
-            erBehandlingAlleredePåVent,
-        });
+    async function onSubmit(values: TransformedSettPåVentFormValues) {
+        try {
+            const oppdatertBehandling = await settPåVent({
+                frist: values.frist,
+                årsak: values.årsak,
+                behandlingId: behandling.behandlingId,
+                erBehandlingAlleredePåVent,
+            });
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            lukkModal();
+        } catch (error) {
+            const message = error instanceof Error ? error.message : '';
+            setError('root', { message: message || 'Teknisk feil ved lagring av sett på vent.' });
+        }
     }
 
     return { form, onSubmit, erBehandlingAlleredePåVent };
