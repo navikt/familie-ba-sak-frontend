@@ -378,34 +378,30 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 className={styles.textField}
                             />
                         )}
-                    {skjema.felter.brevmal.verdi &&
-                        [
-                            Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
-                            Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
-                        ].includes(skjema.felter.brevmal.verdi) && (
-                            <>
-                                <RegionCombobox
-                                    label={'SED er sendt til'}
-                                    value={(skjema.felter.mottakerlandSed?.verdi ?? []) as Regionkode[]}
-                                    options={EØS_LAND_REGIONKODER}
-                                    onChange={value => {
-                                        if (value) {
-                                            skjema.felter.mottakerlandSed.validerOgSettFelt(value);
-                                        } else {
-                                            skjema.felter.mottakerlandSed.nullstill();
-                                        }
-                                    }}
-                                    readOnly={false}
-                                    error={
-                                        skjema.visFeilmeldinger &&
-                                        skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
-                                            ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
-                                            : ''
+                    {skjema.felter.mottakerlandSed.erSynlig && (
+                        <>
+                            <RegionCombobox
+                                label={'SED er sendt til'}
+                                value={(skjema.felter.mottakerlandSed?.verdi ?? []) as Regionkode[]}
+                                options={EØS_LAND_REGIONKODER}
+                                onChange={value => {
+                                    if (value) {
+                                        skjema.felter.mottakerlandSed.validerOgSettFelt(value);
+                                    } else {
+                                        skjema.felter.mottakerlandSed.nullstill();
                                     }
-                                    isMulti={true}
-                                />
-                            </>
-                        )}
+                                }}
+                                readOnly={false}
+                                error={
+                                    skjema.visFeilmeldinger &&
+                                    skjema.felter.mottakerlandSed.valideringsstatus === Valideringsstatus.FEIL
+                                        ? skjema.felter.mottakerlandSed?.feilmelding?.toString()
+                                        : ''
+                                }
+                                isMulti={true}
+                            />
+                        </>
+                    )}
                 </VStack>
             </Fieldset>
             <Knapperekke>
