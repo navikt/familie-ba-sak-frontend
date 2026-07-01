@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
@@ -24,9 +23,9 @@ import { useNavigate } from 'react-router';
 import { LocalAlert, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-import { BehandlingSendtTilTotrinnskontrollModal } from './BehandlingSendtTilTotrinnskontrollModal';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
+import { SendtTilTotrinnskontrollModal } from './SendtTilTotrinnskontrollModal';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
@@ -63,12 +62,11 @@ export function Vedtak() {
 
     const saksbehandler = useSaksbehandler();
     const fagsakId = useFagsakId();
-    const bruker = useBruker();
     const erLesevisning = useErLesevisning();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const [visModal, settVisModal] = useState<boolean>(false);
+    const [visSendtTilTotrinnskontrollModal, settVisSendtTilTotrinnskontrollModal] = useState<boolean>(false);
     const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
 
     const slettSammensattKontrollsakError = useSlettSammensattKontrollsakError(behandling.behandlingId);
@@ -84,7 +82,7 @@ export function Vedtak() {
                 queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
             });
             settÅpenBehandling(byggSuksessRessurs(behandling));
-            settVisModal(true);
+            settVisSendtTilTotrinnskontrollModal(true);
         },
     });
 
@@ -127,6 +125,9 @@ export function Vedtak() {
             feilmelding={feilmelding ?? sendVedtakTilBeslutterError?.message}
             steg={BehandlingSteg.BESLUTTE_VEDTAK}
         >
+            {visSendtTilTotrinnskontrollModal && (
+                <SendtTilTotrinnskontrollModal lukkModal={() => settVisSendtTilTotrinnskontrollModal(false)} />
+            )}
             {erVedtaksbrevutsending ? (
                 <VStack gap={'space-12'}>
                     {slettSammensattKontrollsakError && (
@@ -144,13 +145,11 @@ export function Vedtak() {
                         </LocalAlert>
                     )}
                     <Vedtaksmeny />
-                    <VedtaksbrevBygger åpenBehandling={behandling} bruker={bruker} />
+                    <VedtaksbrevBygger />
                 </VStack>
             ) : (
                 <Vedtaksalert åpenBehandling={behandling} />
             )}
-
-            {visModal && <BehandlingSendtTilTotrinnskontrollModal settVisModal={settVisModal} />}
         </Skjemasteg>
     );
 }

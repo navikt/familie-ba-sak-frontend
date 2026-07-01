@@ -1,6 +1,9 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import {
     BehandlerRolle,
     BehandlingResultat,
@@ -8,13 +11,10 @@ import {
     BehandlingSteg,
     BehandlingÅrsak,
     hentStegNummer,
-    type IBehandling,
 } from '@typer/behandling';
-import type { IPersonInfo } from '@typer/person';
 
-import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, Button, InfoCard } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, InfoCard } from '@navikt/ds-react';
 
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
@@ -28,27 +28,22 @@ import useDokument from '../../../../../hooks/useDokument';
 import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
-interface Props {
-    åpenBehandling: IBehandling;
-    bruker: IPersonInfo;
-}
+export function VedtaksbrevBygger() {
+    const saksbehandler = useSaksbehandler();
+    const erLesevisning = useErLesevisning();
+    const bruker = useBruker();
+    const behandling = useBehandling();
 
-export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
         useDokument();
 
     const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
-
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
-
-    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(åpenBehandling);
-
-    const saksbehandler = useSaksbehandler();
-    const erLesevisning = useErLesevisning();
+    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
 
     const automatiskBehandlingMedFortsattInnvilgetSomResultat =
-        åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && åpenBehandling.skalBehandlesAutomatisk;
+        behandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && behandling.skalBehandlesAutomatisk;
 
     const hentInfostripeTekst = (
         årsak: BehandlingÅrsak,
@@ -64,39 +59,20 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
         } else return '';
     };
 
-    const hentVedtaksbrev = () => {
-        const vedtak = åpenBehandling.vedtak;
-        const genererBrevUnderBehandling =
-            saksbehandler.rolle > BehandlerRolle.VEILEDER &&
-            hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const genererBrevUnderBeslutning =
-            saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
-            hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
-
-        hentForhåndsvisning({
-            method: httpMethod,
-            url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
-        });
-    };
-
     const hentBrevForTilbakekrevingsvedtakMotregning = () => {
-        const behandlingId = åpenBehandling.behandlingId;
         const genererBrevUnderBehandling =
             saksbehandler.rolle > BehandlerRolle.VEILEDER &&
-            hentStegNummer(åpenBehandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+            hentStegNummer(behandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const genererBrevUnderBeslutning =
             saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
-            hentStegNummer(åpenBehandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+            hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
 
         hentForhåndsvisning({
             method: httpMethod,
-            url: `/familie-ba-sak/api/behandling/${behandlingId}/tilbakekrevingsvedtak-motregning/pdf`,
+            url: `/familie-ba-sak/api/behandling/${behandling.behandlingId}/tilbakekrevingsvedtak-motregning/pdf`,
         });
     };
 
@@ -112,7 +88,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                 />
             )}
             <div>
-                {åpenBehandling.korrigertEtterbetaling && (
+                {behandling.korrigertEtterbetaling && (
                     <Box marginBlock={'space-24'}>
                         <InfoCard data-color="info">
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -121,7 +97,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                         </InfoCard>
                     </Box>
                 )}
-                {åpenBehandling.korrigertVedtak && (
+                {behandling.korrigertVedtak && (
                     <Box marginBlock={'space-24'}>
                         <InfoCard data-color="info">
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -134,17 +110,17 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                     bruker={bruker}
                     erPåBehandling={true}
                     erLesevisning={erLesevisning}
-                    brevmottakere={åpenBehandling?.brevmottakere ?? []}
-                    åpenBehandling={åpenBehandling}
+                    brevmottakere={behandling.brevmottakere ?? []}
+                    åpenBehandling={behandling}
                 />
-                {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
-                åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
+                {behandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
+                behandling.status === BehandlingStatus.AVSLUTTET ? (
                     <Box marginBlock={'space-32 space-16'}>
                         <InfoCard data-color="info">
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                                 {hentInfostripeTekst(
-                                    åpenBehandling.årsak,
-                                    åpenBehandling.status,
+                                    behandling.årsak,
+                                    behandling.status,
                                     automatiskBehandlingMedFortsattInnvilgetSomResultat
                                 )}
                             </InfoCard.Message>
@@ -163,24 +139,10 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                         )}
                     </>
                 )}
-                {!automatiskBehandlingMedFortsattInnvilgetSomResultat && (
-                    <Button
-                        id={'forhandsvis-vedtaksbrev'}
-                        variant={'secondary'}
-                        size={'medium'}
-                        onClick={() => {
-                            settVisDokumentModal(true);
-                            hentVedtaksbrev();
-                        }}
-                        loading={hentetDokument.status === RessursStatus.HENTER}
-                        icon={<FileTextIcon aria-hidden />}
-                    >
-                        Vis vedtaksbrev
-                    </Button>
-                )}
-                {åpenBehandling.tilbakekrevingsvedtakMotregning !== null && (
+                {!automatiskBehandlingMedFortsattInnvilgetSomResultat && <ForhåndsvisVedtaksbrev />}
+                {behandling.tilbakekrevingsvedtakMotregning !== null && (
                     <TilbakekrevingsvedtakMotregning
-                        tilbakekrevingsvedtakMotregning={åpenBehandling.tilbakekrevingsvedtakMotregning}
+                        tilbakekrevingsvedtakMotregning={behandling.tilbakekrevingsvedtakMotregning}
                         oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
                         settVisDokumentModal={settVisDokumentModal}
                         hentBrevForTilbakekrevingsvedtakMotregning={hentBrevForTilbakekrevingsvedtakMotregning}
@@ -191,4 +153,4 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
             </div>
         </>
     );
-};
+}
