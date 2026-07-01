@@ -3,6 +3,7 @@ import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import {
     BehandlerRolle,
     BehandlingResultat,
@@ -12,9 +13,8 @@ import {
     hentStegNummer,
 } from '@typer/behandling';
 
-import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, Button, InfoCard } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, InfoCard } from '@navikt/ds-react';
 
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
@@ -57,24 +57,6 @@ export function VedtaksbrevBygger() {
         } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
             return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
         } else return '';
-    };
-
-    const hentVedtaksbrev = () => {
-        const vedtak = behandling.vedtak;
-        const genererBrevUnderBehandling =
-            saksbehandler.rolle > BehandlerRolle.VEILEDER &&
-            hentStegNummer(behandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const genererBrevUnderBeslutning =
-            saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
-            hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
-
-        hentForhåndsvisning({
-            method: httpMethod,
-            url: `/familie-ba-sak/api/dokument/vedtaksbrev/${vedtak?.id}`,
-        });
     };
 
     const hentBrevForTilbakekrevingsvedtakMotregning = () => {
@@ -157,21 +139,7 @@ export function VedtaksbrevBygger() {
                         )}
                     </>
                 )}
-                {!automatiskBehandlingMedFortsattInnvilgetSomResultat && (
-                    <Button
-                        id={'forhandsvis-vedtaksbrev'}
-                        variant={'secondary'}
-                        size={'medium'}
-                        onClick={() => {
-                            settVisDokumentModal(true);
-                            hentVedtaksbrev();
-                        }}
-                        loading={hentetDokument.status === RessursStatus.HENTER}
-                        icon={<FileTextIcon aria-hidden />}
-                    >
-                        Vis vedtaksbrev
-                    </Button>
-                )}
+                {!automatiskBehandlingMedFortsattInnvilgetSomResultat && <ForhåndsvisVedtaksbrev />}
                 {behandling.tilbakekrevingsvedtakMotregning !== null && (
                     <TilbakekrevingsvedtakMotregning
                         tilbakekrevingsvedtakMotregning={behandling.tilbakekrevingsvedtakMotregning}
