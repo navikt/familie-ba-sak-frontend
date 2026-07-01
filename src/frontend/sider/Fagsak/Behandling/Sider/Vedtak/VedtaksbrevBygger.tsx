@@ -1,17 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
-import {
-    BehandlerRolle,
-    BehandlingResultat,
-    BehandlingStatus,
-    BehandlingSteg,
-    BehandlingÅrsak,
-    hentStegNummer,
-} from '@typer/behandling';
+import { BehandlingResultat, BehandlingStatus, BehandlingÅrsak } from '@typer/behandling';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, InfoCard } from '@navikt/ds-react';
@@ -24,23 +16,15 @@ import { SammensattKontrollsak } from './SammensattKontrollsak/SammensattKontrol
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { Vedtaksperioder } from './Vedtaksperioder/Vedtaksperioder';
-import useDokument from '../../../../../hooks/useDokument';
-import PdfVisningModal from '../../../../../komponenter/PdfVisningModal/PdfVisningModal';
-import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 
 export function VedtaksbrevBygger() {
-    const saksbehandler = useSaksbehandler();
     const erLesevisning = useErLesevisning();
     const bruker = useBruker();
     const behandling = useBehandling();
 
-    const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
-        useDokument();
-
     const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
-    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
 
     const automatiskBehandlingMedFortsattInnvilgetSomResultat =
         behandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && behandling.skalBehandlesAutomatisk;
@@ -59,34 +43,8 @@ export function VedtaksbrevBygger() {
         } else return '';
     };
 
-    const hentBrevForTilbakekrevingsvedtakMotregning = () => {
-        const genererBrevUnderBehandling =
-            saksbehandler.rolle > BehandlerRolle.VEILEDER &&
-            hentStegNummer(behandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const genererBrevUnderBeslutning =
-            saksbehandler.rolle === BehandlerRolle.BESLUTTER &&
-            hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-
-        const httpMethod = genererBrevUnderBehandling || genererBrevUnderBeslutning ? 'POST' : 'GET';
-
-        hentForhåndsvisning({
-            method: httpMethod,
-            url: `/familie-ba-sak/api/behandling/${behandling.behandlingId}/tilbakekrevingsvedtak-motregning/pdf`,
-        });
-    };
-
     return (
         <>
-            {visDokumentModal && (
-                <PdfVisningModal
-                    onRequestClose={() => {
-                        settVisDokumentModal(false);
-                        nullstillDokument();
-                    }}
-                    pdfdata={hentetDokument}
-                />
-            )}
             <div>
                 {behandling.korrigertEtterbetaling && (
                     <Box marginBlock={'space-24'}>
@@ -140,16 +98,7 @@ export function VedtaksbrevBygger() {
                     </>
                 )}
                 {!automatiskBehandlingMedFortsattInnvilgetSomResultat && <ForhåndsvisVedtaksbrev />}
-                {behandling.tilbakekrevingsvedtakMotregning !== null && (
-                    <TilbakekrevingsvedtakMotregning
-                        tilbakekrevingsvedtakMotregning={behandling.tilbakekrevingsvedtakMotregning}
-                        oppdaterTilbakekrevingsvedtakMotregning={oppdaterTilbakekrevingsvedtakMotregning}
-                        settVisDokumentModal={settVisDokumentModal}
-                        hentBrevForTilbakekrevingsvedtakMotregning={hentBrevForTilbakekrevingsvedtakMotregning}
-                        hentetDokument={hentetDokument}
-                        erLesevisning={erLesevisning}
-                    />
-                )}
+                {behandling.tilbakekrevingsvedtakMotregning !== null && <TilbakekrevingsvedtakMotregning />}
             </div>
         </>
     );

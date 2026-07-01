@@ -1,17 +1,19 @@
 import { useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useHentEllerOpprettTilbakekrevingsvedtaksbrevPdf } from '@hooks/useHentEllerOpprettTilbakekrevingsvedtaksbrevPdf';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { useTilbakekrevingsvedtakMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
+import { BehandlerRolle, BehandlingSteg, hentStegNummer } from '@typer/behandling';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
-import { FileTextIcon, FloppydiskIcon } from '@navikt/aksel-icons';
-import { Box, Button, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { FileTextIcon, FloppydiskIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { Box, Button, ErrorMessage, ExpansionCard, Heading, HStack, Loader, Modal, VStack } from '@navikt/ds-react';
 
 import Datovelger from './Datovelger';
 import { Tekstfelt } from './Tekstfelt';
-import type {
-    OppdaterTilbakekrevingsvedtakMotregningDTO,
-    TilbakekrevingsvedtakMotregningDTO,
-} from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
+import Styles from './TilbakekrevingsvedtakMotregning.module.css';
 
 const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
     'Årsaken til feilutbetalingen er [SETT INN HVA SOM SKJEDDE, SKILL MELLOM BRUKERS HANDLINGER KONTRA BRUKERS FORSTÅELSE AV UTBETALINGEN].';
@@ -24,40 +26,57 @@ export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     varselDato: string;
 };
 
-interface TilbakekrevingsvedtakMotregningProps {
-    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
-    oppdaterTilbakekrevingsvedtakMotregning: (
-        tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
-    ) => Promise<void>;
-    settVisDokumentModal: (vis: boolean) => void;
-    hentBrevForTilbakekrevingsvedtakMotregning: () => void;
-    hentetDokument: Ressurs<string>;
-    erLesevisning: boolean;
-}
+export function TilbakekrevingsvedtakMotregning() {
+    const saksbehandler = useSaksbehandler();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
-export const TilbakekrevingsvedtakMotregning = ({
-    tilbakekrevingsvedtakMotregning,
-    oppdaterTilbakekrevingsvedtakMotregning,
-    settVisDokumentModal,
-    hentBrevForTilbakekrevingsvedtakMotregning,
-    hentetDokument,
-    erLesevisning,
-}: TilbakekrevingsvedtakMotregningProps) => {
+    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
+
+    const [visModal, settVisModal] = useState(false);
     const [lagrer, settLagrer] = useState(false);
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
 
+    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
+    const årsakTilFeilutbetaling = tilbakekrevingsvedtakMotregning?.årsakTilFeilutbetaling;
+    const vurderingAvSkyld = tilbakekrevingsvedtakMotregning?.vurderingAvSkyld;
+    const varselDato = tilbakekrevingsvedtakMotregning?.varselDato;
+
     const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
-        defaultValues: {
-            årsakTilFeilutbetaling:
-                tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ??
-                PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
-            vurderingAvSkyld:
-                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
-            varselDato: tilbakekrevingsvedtakMotregning.varselDato,
+        values: {
+            årsakTilFeilutbetaling: årsakTilFeilutbetaling ?? PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
+            vurderingAvSkyld: vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
+            varselDato: varselDato ?? '',
         },
     });
 
     const { handleSubmit } = form;
+
+    const {
+        data: tilbakekrevingsvedtaksbrevPdf,
+        mutate: hentEllerOpprettTilbakekrevingsvedtaksbrevPdf,
+        isPending: hentEllerOpprettTilbakekrevingsvedtaksbrevPdfIsPending,
+        error: hentEllerOpprettTilbakekrevingsvedtaksbrevPdfError,
+    } = useHentEllerOpprettTilbakekrevingsvedtaksbrevPdf();
+
+    function onVisTilbakekrevingsvedtaksbrevClicked() {
+        const { behandlingId, steg } = behandling;
+
+        const erMinstSaksbehandler = saksbehandler.rolle >= BehandlerRolle.SAKSBEHANDLER;
+        const erBeslutter = saksbehandler.rolle === BehandlerRolle.BESLUTTER;
+
+        const erFørBeslutteVedtak = hentStegNummer(steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const erPåBeslutteVedtak = hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+
+        const skalGenerereBrevUnderBehandling = erMinstSaksbehandler && erFørBeslutteVedtak;
+        const skalGenerereBrevUnderBeslutning = erBeslutter && erPåBeslutteVedtak;
+
+        const httpMethod = skalGenerereBrevUnderBehandling || skalGenerereBrevUnderBeslutning ? 'POST' : 'GET';
+
+        hentEllerOpprettTilbakekrevingsvedtaksbrevPdf({ httpMethod, behandlingId });
+
+        settVisModal(true);
+    }
 
     const lagreTilbakekrevingsvedtakOgLukkModal: SubmitHandler<TilbakekrevingsvedtakMotregningSkjemaverdier> = ({
         varselDato,
@@ -136,18 +155,45 @@ export const TilbakekrevingsvedtakMotregning = ({
                 </form>
             </FormProvider>
             <Button
-                id={'forhandsvis-tilbakekrevingsvedtak-motregning-brev'}
                 variant={'secondary'}
                 size={'medium'}
-                onClick={() => {
-                    settVisDokumentModal(true);
-                    hentBrevForTilbakekrevingsvedtakMotregning();
-                }}
-                loading={hentetDokument.status === RessursStatus.HENTER}
-                icon={<FileTextIcon aria-hidden />}
+                onClick={onVisTilbakekrevingsvedtaksbrevClicked}
+                loading={hentEllerOpprettTilbakekrevingsvedtaksbrevPdfIsPending}
+                icon={<FileTextIcon aria-hidden={true} />}
             >
                 Vis tilbakekrevingsvedtaksbrev
             </Button>
+            <Modal
+                className={Styles.modal}
+                open={visModal}
+                onClose={() => settVisModal(false)}
+                header={{ heading: 'Forhåndsvis tilbakekrevingsvedtaksbrev', closeButton: true }}
+                width={'100rem'}
+                portal={true}
+            >
+                {hentEllerOpprettTilbakekrevingsvedtaksbrevPdfIsPending && (
+                    <HStack height={'100%'} justify={'center'} align={'center'} gap={'space-8'}>
+                        <Loader size={'small'} title={'Laster Tilbakekrevingsvedtaksbrev...'} />
+                        <Heading size={'small'} level={'2'}>
+                            Laster Tilbakekrevingsvedtaksbrev...
+                        </Heading>
+                    </HStack>
+                )}
+                {hentEllerOpprettTilbakekrevingsvedtaksbrevPdfError && (
+                    <HStack height={'100%'} justify={'center'} align={'center'} gap={'space-8'}>
+                        <XMarkOctagonFillIcon color={'var(--ax-text-danger-subtle)'} fontSize={'1.2rem'} />
+                        <ErrorMessage>{hentEllerOpprettTilbakekrevingsvedtaksbrevPdfError.message}</ErrorMessage>
+                    </HStack>
+                )}
+                {!hentEllerOpprettTilbakekrevingsvedtaksbrevPdfIsPending &&
+                    !hentEllerOpprettTilbakekrevingsvedtaksbrevPdfError && (
+                        <iframe
+                            className={Styles.iframe}
+                            title={'Tilbakekrevingsvedtaksbrev'}
+                            src={tilbakekrevingsvedtaksbrevPdf}
+                        />
+                    )}
+            </Modal>
         </>
     );
-};
+}
