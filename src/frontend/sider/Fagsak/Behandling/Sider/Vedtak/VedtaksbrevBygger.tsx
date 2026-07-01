@@ -1,6 +1,7 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import {
     BehandlerRolle,
     BehandlingResultat,
@@ -22,6 +23,7 @@ import { RefusjonEøsTabell } from './RefusjonEøs/RefusjonEøsTabell';
 import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import { SammensattKontrollsak } from './SammensattKontrollsak/SammensattKontrollsak';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
+import { UkjentAdresseAlert } from './UkjentAdresseAlert';
 import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 import { Vedtaksperioder } from './Vedtaksperioder/Vedtaksperioder';
 import useDokument from '../../../../../hooks/useDokument';
@@ -46,6 +48,10 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
 
     const saksbehandler = useSaksbehandler();
     const erLesevisning = useErLesevisning();
+
+    const brukerHarUtenlandskAdresse = åpenBehandling.brevmottakere.some(
+        mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+    );
 
     const automatiskBehandlingMedFortsattInnvilgetSomResultat =
         åpenBehandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && åpenBehandling.skalBehandlesAutomatisk;
@@ -137,6 +143,7 @@ export const VedtaksbrevBygger = ({ åpenBehandling, bruker }: Props) => {
                     brevmottakere={åpenBehandling?.brevmottakere ?? []}
                     åpenBehandling={åpenBehandling}
                 />
+                {!brukerHarUtenlandskAdresse && <UkjentAdresseAlert />}
                 {åpenBehandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                 åpenBehandling.status === BehandlingStatus.AVSLUTTET ? (
                     <Box marginBlock={'space-32 space-16'}>
