@@ -1,18 +1,30 @@
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import { BehandlingÅrsak, BehandlingSteg, BehandlingStegStatus } from '@typer/behandling';
+import { BehandlingSteg, BehandlingStegStatus, BehandlingÅrsak } from '@typer/behandling';
 
 import {
-    SideId,
-    hentTrinnForBehandling,
-    sider,
     erViPåUdefinertFagsakSide,
     erViPåUlovligSteg,
     finnSideForBehandlingssteg,
+    finnSiderForBehandling,
+    SideId,
+    sider,
 } from './sider';
 
-describe('sider.ts', () => {
-    describe('siderForBehandling', () => {
-        test('REGISTRERE_MOTTAKER returneres når behandling.stegTilstand inneholder steget REGISTRERE_INSTITUSJON_OG_VERGE', () => {
+describe('Sider', () => {
+    describe('FinnSiderForBehandling', () => {
+        test('skal returnere forventede sider for en ordinær søknadsbehandling', () => {
+            const sideIder = finnSiderForBehandling(lagBehandling()).map(side => side.id);
+
+            expect(sideIder).toEqual([
+                SideId.REGISTRERE_SØKNAD,
+                SideId.VILKÅRSVURDERING,
+                SideId.BEHANDLINGRESULTAT,
+                SideId.SIMULERING,
+                SideId.VEDTAK,
+            ]);
+        });
+
+        test('skal vise info om institusjon når stegtilstanden inneholder REGISTRERE_INSTITUSJON', () => {
             const behandling = lagBehandling({
                 stegTilstand: [
                     {
@@ -21,34 +33,73 @@ describe('sider.ts', () => {
                     },
                 ],
             });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRER_INSTITUSJON);
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.REGISTRER_INSTITUSJON);
         });
-        test('REGISTRERE_SØKNAD returneres ved årsak SØKNAD', () => {
+
+        test('skal ikke vise info om institusjon når stegtilstanden ikke inneholder REGISTRERE_INSTITUSJON', () => {
+            const behandling = lagBehandling({
+                stegTilstand: [
+                    {
+                        behandlingSteg: BehandlingSteg.REGISTRERE_SØKNAD,
+                        behandlingStegStatus: BehandlingStegStatus.IKKE_UTFØRT,
+                    },
+                ],
+            });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.REGISTRER_INSTITUSJON);
+        });
+
+        test('skal vise registrer søknad når årsaken er søknad', () => {
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.REGISTRERE_SØKNAD);
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.REGISTRERE_SØKNAD);
         });
-        test('FILTRERING_FØDSELSHENDELSER returneres ved årsak FØDSELSHENDELSE', () => {
+
+        test('skal ikke vise registrer søknad når årsaken ikke er søknad', () => {
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toContain(SideId.FILTRERING_FØDSELSHENDELSER);
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.REGISTRERE_SØKNAD);
         });
-        test('SIMULERING returneres ikke ved automatisk behandling', () => {
-            const behandling = lagBehandling({ skalBehandlesAutomatisk: true });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(SideId.SIMULERING);
-        });
-        test('VEDTAK returneres ikke ved årsak SATSENDRING', () => {
-            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).not.toContain(SideId.VEDTAK);
-        });
-        test('Standard revurdering uten søknad viser alle sider bortsett fra FILTRERING_FØDSELSHENDELSER og REGISTRERE_SØKNAD', () => {
-            const behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER });
-            expect(Object.keys(hentTrinnForBehandling(behandling))).toEqual(
-                Object.values(SideId).filter(
-                    side =>
-                        side !== SideId.FILTRERING_FØDSELSHENDELSER &&
-                        side !== SideId.REGISTRERE_SØKNAD &&
-                        side !== SideId.REGISTRER_INSTITUSJON
-                )
+
+        test('skal vise filtreringsregler når årsaken er fødselshendelse', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(
+                SideId.FILTRERING_FØDSELSHENDELSER
             );
+        });
+
+        test('skal ikke vise filtreringsregler når årsaken ikke er fødselshendelse', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(
+                SideId.FILTRERING_FØDSELSHENDELSER
+            );
+        });
+
+        test('skal vise simulering når behandlingen ikke skal behandles automatisk', () => {
+            const behandling = lagBehandling({ skalBehandlesAutomatisk: false });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.SIMULERING);
+        });
+
+        test('skal ikke vise simulering når behandlingen skal behandles automatisk', () => {
+            const behandling = lagBehandling({ skalBehandlesAutomatisk: true });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.SIMULERING);
+        });
+
+        test('skal vise vedtak når årsaken ikke er satsendring', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.VEDTAK);
+        });
+
+        test('skal ikke vise vedtak når årsaken er satsendring', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SATSENDRING });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.VEDTAK);
         });
     });
 

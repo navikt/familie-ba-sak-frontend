@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';
 import { useQueryClient } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingStatus } from '@typer/behandling';
@@ -22,7 +23,6 @@ import {
 import { useTotrinnskontrollModalContext } from './TotrinnskontrollModalContextProvider';
 import { Totrinnskontrollskjema } from './Totrinnskontrollskjema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
-import type { Trinn } from '../../Sider/sider';
 import { KontrollertStatus } from '../../Sider/sider';
 import { Tab, useTabContext } from '../TabContextProvider';
 
@@ -32,8 +32,8 @@ const Container = styled.div`
 `;
 
 export function Totrinnskontroll() {
-    const { behandling, trinnPåBehandling, settIkkeKontrollerteSiderTilManglerKontroll, settÅpenBehandling } =
-        useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { kontrollsider, settIkkeKontrollerteSiderTilManglerKontroll } = useKontrollsiderContext();
     const { settTab } = useTabContext();
     const { åpneModal } = useTotrinnskontrollModalContext();
 
@@ -42,34 +42,31 @@ export function Totrinnskontroll() {
 
     const [innsendtVedtak, settInnsendtVedtak] = useState<Ressurs<IBehandling>>(byggTomRessurs());
 
-    const [forrigeState, settForrigeState] = useState(trinnPåBehandling);
+    const [forrigeKontrollsider, settForrigeKontrollsider] = useState(kontrollsider);
 
     const nullstillFeilmelding = () => {
-        const erFørsteSjekk = Object.entries(forrigeState).some(([sideId, trinn]) => {
-            const oppdatertTrinn: Trinn = Object.entries(trinnPåBehandling)
-                .filter(([oppdatertSideId, _]) => sideId === oppdatertSideId)
-                .map(([_, aTrinn]) => aTrinn)[0];
+        const harMinstEnSideBlittKontrollert = forrigeKontrollsider.some(forrigeSide => {
+            const nåværendeSide = kontrollsider.find(side => side.id === forrigeSide.id);
             return (
-                (trinn.kontrollert === KontrollertStatus.IKKE_KONTROLLERT ||
-                    trinn.kontrollert === KontrollertStatus.MANGLER_KONTROLL) &&
-                oppdatertTrinn.kontrollert === KontrollertStatus.KONTROLLERT
+                forrigeSide.kontrollertStatus !== KontrollertStatus.KONTROLLERT &&
+                nåværendeSide?.kontrollertStatus === KontrollertStatus.KONTROLLERT
             );
         });
-        if (erFørsteSjekk) {
+        if (harMinstEnSideBlittKontrollert) {
             settInnsendtVedtak(byggTomRessurs());
         }
-        settForrigeState(trinnPåBehandling);
+        settForrigeKontrollsider(kontrollsider);
     };
 
     useEffect(() => {
         nullstillFeilmelding();
-    }, [trinnPåBehandling]);
+    }, [kontrollsider]);
 
     const sendInnVedtak = (beslutning: TotrinnskontrollBeslutning, begrunnelse: string, egetVedtak: boolean) => {
-        if (
-            !egetVedtak &&
-            Object.values(trinnPåBehandling).some(trinn => trinn.kontrollert !== KontrollertStatus.KONTROLLERT)
-        ) {
+        const harSideSomIkkeErKontrollert = kontrollsider.some(
+            side => side.kontrollertStatus !== KontrollertStatus.KONTROLLERT
+        );
+        if (!egetVedtak && harSideSomIkkeErKontrollert) {
             settIkkeKontrollerteSiderTilManglerKontroll();
             settInnsendtVedtak(byggFunksjonellFeilRessurs('Du må kontrollere alle steg i løsningen.'));
             return;
@@ -87,9 +84,7 @@ export function Totrinnskontroll() {
                 data: {
                     beslutning,
                     begrunnelse,
-                    kontrollerteSider: Object.entries(trinnPåBehandling).map(([_, side]) => {
-                        return side.navn;
-                    }),
+                    kontrollerteSider: kontrollsider.map(side => side.navn),
                 },
                 url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/iverksett-vedtak`,
             })
