@@ -1,5 +1,6 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
+import { RegistrerSøknad } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/RegistrerSøknad';
 import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
 import { VilkårsvurderingContainer } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingContainer';
 import type { RouteObject } from 'react-router';
@@ -7,8 +8,6 @@ import type { RouteObject } from 'react-router';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
-import { RegistrerSøknad } from './Sider/RegistrerSøknad/RegistrerSøknad';
-import { SøknadProvider } from './Sider/RegistrerSøknad/SøknadContext';
 import Simulering from './Sider/Simulering/Simulering';
 import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
@@ -20,11 +19,7 @@ export const behandlingRoutes: RouteObject[] = [
     },
     {
         path: 'registrer-soknad',
-        element: (
-            <SøknadProvider>
-                <RegistrerSøknad />
-            </SøknadProvider>
-        ),
+        element: <RegistrerSøknad />,
     },
     {
         path: 'filtreringsregler',

@@ -15,4 +15,5 @@ export enum FeatureToggle {
     kanGenerereBarnasVilkar = 'familie-ba-sak.kan-generere-barnas-vilkar',
     nySlettVilkaarLogikk = 'familie-ba-sak.ny-slett-vilkaar-logikk',
     kanRegistrereSøknadstidspunkt = 'familie-ba-sak.kan-registrere-soknadstidspunkt',
+    brukNyRegistrerSøknad = 'familie-ba-sak.bruk-ny-registrer-soknad',
 }

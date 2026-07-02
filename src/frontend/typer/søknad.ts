@@ -1,5 +1,6 @@
+import type { IsoDatoString } from '@utils/dato';
+
 import type { BehandlingUnderkategori } from './behandlingstema';
-import type { IsoDatoString } from '../utils/dato';
 
 export interface IRestRegistrerSøknad {
     søknad: ISøknadDTO;
