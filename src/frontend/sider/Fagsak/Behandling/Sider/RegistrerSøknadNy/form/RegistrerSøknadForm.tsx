@@ -1,0 +1,95 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
+import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { BekreftEndringModal } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModal';
+import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
+import { Feilsammendrag } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/Feilsammendrag';
+import { BarnaField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/BarnaField';
+import { BegrunnelseField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/BegrunnelseField';
+import { MålformField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/MålformField';
+import { UnderkategoriField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/UnderkategoriField';
+import {
+    RegistrerSøknadFormField,
+    useRegistrerSøknadForm,
+} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
+import { FormProvider } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+
+import { Button, Fieldset, VStack } from '@navikt/ds-react';
+
+import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
+import Styles from './RegistrerSøknadForm.module.css';
+
+export function RegistrerSøknadForm() {
+    const navigate = useNavigate();
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+
+    const { erBekreftEndringModalÅpen } = useBekreftEndringModalContext();
+
+    const form = useRegistrerSøknadForm();
+
+    const {
+        id,
+        handleSubmit,
+        formState: { isSubmitting, errors },
+        watch,
+        fields,
+        actions: { onSubmit, leggTilBarn, slettBarn },
+    } = form;
+
+    const barn = watch(RegistrerSøknadFormField.BARN);
+
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
+    const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
+    const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
+    const harBrevmottaker = behandling.brevmottakere.length > 0;
+
+    const erMuligÅLeggeTilBarn =
+        !erLesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn;
+
+    function submitEllerNaviger(event: React.FormEvent<HTMLFormElement>) {
+        if (erLesevisning) {
+            event.preventDefault();
+            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
+            return;
+        }
+        return handleSubmit(data => onSubmit(data, 'ubekreftet'))(event);
+    }
+
+    const rootError = errors.root ? <span className={Styles.rootError}>{errors.root?.message}</span> : undefined;
+
+    return (
+        <LeggTilBarnModalContextProvider barn={barn} onLeggTilBarn={leggTilBarn} harBrevmottaker={harBrevmottaker}>
+            {erMuligÅLeggeTilBarn && <LeggTilBarnModal />}
+            <FormProvider {...form}>
+                <form id={id} onSubmit={submitEllerNaviger}>
+                    {erBekreftEndringModalÅpen && <BekreftEndringModal onSubmit={onSubmit} />}
+                    <VStack gap={'space-20'}>
+                        <Fieldset error={rootError} legend={'Registrer søknad'} hideLegend={true}>
+                            <VStack gap={'space-20'} marginBlock={'space-20'}>
+                                {!gjelderInstitusjon && <UnderkategoriField />}
+                                <VStack gap={'space-0'}>
+                                    <BarnaField fields={fields[RegistrerSøknadFormField.BARN]} slettBarn={slettBarn} />
+                                    {erMuligÅLeggeTilBarn && <LeggTilBarnKnapp />}
+                                </VStack>
+                                <MålformField />
+                                <BegrunnelseField />
+                            </VStack>
+                        </Fieldset>
+                        <Feilsammendrag />
+                        <div>
+                            <Button form={id} type={'submit'} variant={'primary'} loading={isSubmitting}>
+                                {erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
+                            </Button>
+                        </div>
+                    </VStack>
+                </form>
+            </FormProvider>
+        </LeggTilBarnModalContextProvider>
+    );
+}
