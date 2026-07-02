@@ -1,22 +1,16 @@
 import { useState } from 'react';
 
+import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
 import { useQueryClient } from '@tanstack/react-query';
-import styled from 'styled-components';
+import type { IMinimalFagsak } from '@typer/fagsak';
 
-import { Button, ErrorMessage } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
-
-import { HentFagsakQueryKeyFactory } from '../../../hooks/useHentFagsak';
-import type { IMinimalFagsak } from '../../../typer/fagsak';
 
 interface Props {
     fagsakId: number;
 }
-
-const StyledButton = styled(Button)`
-    margin-top: 1rem;
-`;
 
 export const GjennomførValutajusteringKnapp = ({ fagsakId }: Props) => {
     const { request } = useHttp();
@@ -41,9 +35,9 @@ export const GjennomførValutajusteringKnapp = ({ fagsakId }: Props) => {
     };
 
     return (
-        <>
-            <StyledButton onClick={gjenomførValutajustering}>Gjennomfør valutajustering</StyledButton>
+        <Box marginBlock={'space-16 space-0'}>
+            <Button onClick={gjenomførValutajustering}>Gjennomfør valutajustering</Button>
             {visFeilmelidng && <ErrorMessage>Noe gikk galt med gjennomføringen av valutajustering</ErrorMessage>}
-        </>
+        </Box>
     );
 };

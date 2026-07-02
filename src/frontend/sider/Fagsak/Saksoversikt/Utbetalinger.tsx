@@ -1,24 +1,12 @@
-import styled from 'styled-components';
+import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '@typer/vedtaksperiode';
+import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import { formaterBeløp, sorterUtbetaling } from '@utils/formatter';
 
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { BorderNeutralStrong, Space24, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
 
 import { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import PersonUtbetaling from './PersonUtbetaling';
-import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '../../../typer/vedtaksperiode';
-import { Vedtaksperiodetype } from '../../../typer/vedtaksperiode';
-import { formaterBeløp, sorterUtbetaling } from '../../../utils/formatter';
-
-const LøpendeUtbetalinger = styled(VStack)`
-    max-width: ${SaksoversiktPanelBredde};
-    margin-top: ${Space24};
-`;
-
-const Totallinje = styled(HStack)`
-    margin-left: ${Space32};
-    padding-bottom: ${Space8};
-    border-bottom: 1px solid ${BorderNeutralStrong};
-`;
+import styles from './Utbetalinger.module.css';
 
 interface IUtbetalingerProps {
     vedtaksperiode?: Vedtaksperiode;
@@ -43,7 +31,7 @@ const Utbetalinger = ({ vedtaksperiode }: IUtbetalingerProps) => {
             }, {}) ?? {};
 
     return (
-        <LøpendeUtbetalinger gap="space-16">
+        <VStack maxWidth={SaksoversiktPanelBredde} gap="space-16" marginBlock={'space-24 space-0'}>
             {Object.values(utbetalingsperiodeDetaljerGruppertPåPerson).map(
                 (utbetalingsperiodeDetaljerForPerson, index) => {
                     return (
@@ -54,13 +42,18 @@ const Utbetalinger = ({ vedtaksperiode }: IUtbetalingerProps) => {
                     );
                 }
             )}
-            <Totallinje justify="space-between">
+            <HStack
+                className={styles.total}
+                marginInline={'space-32 space-0'}
+                paddingBlock={'space-0 space-8'}
+                justify="space-between"
+            >
                 <BodyShort>Totalt utbetalt/mnd</BodyShort>
                 <BodyShort weight="semibold">
                     {vedtaksperiode ? formaterBeløp(vedtaksperiode.utbetaltPerMnd) : '-'}
                 </BodyShort>
-            </Totallinje>
-        </LøpendeUtbetalinger>
+            </HStack>
+        </VStack>
     );
 };
 

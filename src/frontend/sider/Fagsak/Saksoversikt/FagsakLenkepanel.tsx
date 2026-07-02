@@ -1,28 +1,19 @@
+import { BehandlingStatus } from '@typer/behandling';
+import type { IBehandlingstema } from '@typer/behandlingstema';
+import { tilBehandlingstema } from '@typer/behandlingstema';
+import { FagsakStatus, FagsakType } from '@typer/fagsak';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '@utils/fagsak';
 import { Link as ReactRouterLink } from 'react-router';
-import styled from 'styled-components';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, HStack, InfoCard, Link, LinkCard, VStack } from '@navikt/ds-react';
-import { FontSizeHeadingMedium, FontSizeXlarge } from '@navikt/ds-tokens/dist/tokens';
 
+import styles from './FagsakLenkepanel.module.css';
 import type { VisningBehandling } from './visningBehandling';
-import { BehandlingStatus } from '../../../typer/behandling';
-import type { IBehandlingstema } from '../../../typer/behandlingstema';
-import { tilBehandlingstema } from '../../../typer/behandlingstema';
-import { FagsakStatus, FagsakType } from '../../../typer/fagsak';
-import { Datoformat, isoStringTilFormatertString } from '../../../utils/dato';
-import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '../../../utils/fagsak';
 import { useFagsakContext } from '../FagsakContext';
 
 export const SaksoversiktPanelBredde = `calc(10 * var(--ax-space-64))`;
-
-const HeaderTekst = styled(BodyShort)`
-    font-size: ${FontSizeXlarge};
-`;
-
-const BodyTekst = styled(BodyShort)`
-    font-size: ${FontSizeHeadingMedium};
-`;
 
 function Innholdstabell() {
     const { fagsak } = useFagsakContext();
@@ -35,22 +26,32 @@ function Innholdstabell() {
     return (
         <HStack gap="space-80">
             <div>
-                <HeaderTekst spacing>Behandlingstema</HeaderTekst>
-                <BodyTekst weight="semibold">{behandlingstema ? behandlingstema.navn : '-'}</BodyTekst>
+                <BodyShort size={'large'} spacing>
+                    Behandlingstema
+                </BodyShort>
+                <BodyShort className={styles.bodyText} weight="semibold">
+                    {behandlingstema ? behandlingstema.navn : '-'}
+                </BodyShort>
             </div>
             <div>
-                <HeaderTekst spacing>Status</HeaderTekst>
-                <BodyTekst weight="semibold">{hentFagsakStatusVisning(fagsak)}</BodyTekst>
+                <BodyShort size={'large'} spacing>
+                    Status
+                </BodyShort>
+                <BodyShort className={styles.bodyText} weight="semibold">
+                    {hentFagsakStatusVisning(fagsak)}
+                </BodyShort>
             </div>
             {fagsakErLåst && fagsak.låstTidspunkt && (
                 <div>
-                    <HeaderTekst spacing>Låst dato</HeaderTekst>
-                    <BodyTekst weight="semibold">
+                    <BodyShort size={'large'} spacing>
+                        Låst dato
+                    </BodyShort>
+                    <BodyShort className={styles.bodyText} weight="semibold">
                         {isoStringTilFormatertString({
                             isoString: fagsak.låstTidspunkt,
                             tilFormat: Datoformat.DATO,
                         })}
-                    </BodyTekst>
+                    </BodyShort>
                 </div>
             )}
         </HStack>
