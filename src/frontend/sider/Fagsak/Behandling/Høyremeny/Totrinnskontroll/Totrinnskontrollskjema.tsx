@@ -7,7 +7,6 @@ import type { IBehandling } from '@typer/behandling';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import styled from 'styled-components';
 
 import {
     BodyShort,
@@ -15,6 +14,7 @@ import {
     Detail,
     Fieldset,
     Heading,
+    HStack,
     Label,
     Radio,
     RadioGroup,
@@ -162,23 +162,15 @@ export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props)
     );
 }
 
-const Trinn = styled.div`
-    display: flex;
-
-    svg {
-        margin-right: 1rem;
-    }
-`;
-
 const TrinnStatus = ({ kontrollertStatus, navn }: { kontrollertStatus: KontrollertStatus; navn: string }) => {
     return (
-        <Trinn>
+        <HStack gap={'space-16'}>
             {kontrollertStatus === KontrollertStatus.IKKE_KONTROLLERT && <ØyeGrå height={24} width={24} />}
 
             {kontrollertStatus === KontrollertStatus.KONTROLLERT && <ØyeGrønn height={24} width={24} />}
 
             {kontrollertStatus === KontrollertStatus.MANGLER_KONTROLL && <ØyeRød height={24} width={24} />}
             <BodyShort>{navn}</BodyShort>
-        </Trinn>
+        </HStack>
     );
 };
