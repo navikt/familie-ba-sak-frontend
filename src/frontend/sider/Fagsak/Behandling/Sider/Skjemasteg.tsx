@@ -1,4 +1,4 @@
-import type { ReactNode, PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 import { useEffect } from 'react';
 
 import { useBehandling } from '@hooks/useBehandling';
@@ -7,9 +7,8 @@ import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAler
 import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
 import { BehandlingSteg } from '@typer/behandling';
 import { behandlingErEtterSteg } from '@utils/steg';
-import styled from 'styled-components';
 
-import { Box, Button, ErrorMessage, Heading, VStack } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, Heading, Stack, VStack } from '@navikt/ds-react';
 
 export const MAX_SKJEMASTEG_BREDDE = '1440px';
 
@@ -28,21 +27,6 @@ interface IProps extends PropsWithChildren {
     feilmelding?: string;
     steg: BehandlingSteg;
 }
-
-const StyledErrorMessage = styled(ErrorMessage)`
-    margin-top: var(--ax-space-16);
-`;
-
-const Navigering = styled.div`
-    margin: var(--ax-space-96) 0 var(--ax-space-16);
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-
-    button:not(:first-child) {
-        margin-right: var(--ax-space-24);
-    }
-`;
 
 const Skjemasteg = ({
     children,
@@ -93,8 +77,18 @@ const Skjemasteg = ({
                         {tittel}
                     </Heading>
                     {children}
-                    {feilmelding !== '' && <StyledErrorMessage>{feilmelding}</StyledErrorMessage>}
-                    <Navigering>
+                    {feilmelding !== '' && (
+                        <Box marginBlock={'space-16 space-0'}>
+                            <ErrorMessage>{'feilmelding'}</ErrorMessage>
+                        </Box>
+                    )}
+                    <Stack
+                        direction={'row-reverse'}
+                        justify={'start'}
+                        marginBlock={'space-96 space-16'}
+                        marginInline={'space-0'}
+                        gap={'space-24'}
+                    >
                         {nesteOnClick && skalViseNesteKnapp && (!erLesevisning || kanGåVidereILesevisning) && (
                             <Button
                                 variant={'primary'}
@@ -110,7 +104,7 @@ const Skjemasteg = ({
                                 {forrigeKnappTittel}
                             </Button>
                         )}
-                    </Navigering>
+                    </Stack>
                 </Box>
             </VStack>
         </Box>
