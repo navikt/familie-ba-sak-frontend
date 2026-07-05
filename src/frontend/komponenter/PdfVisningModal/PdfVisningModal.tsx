@@ -50,8 +50,17 @@ const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
             );
         case RessursStatus.SUKSESS:
             return <iframe className={styles.iframe} title={'Dokument'} src={pdfdata.data} />;
-        case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
+            return (
+                <div>
+                    <LocalAlert status="warning">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{pdfdata.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                </div>
+            );
+        case RessursStatus.FEILET:
         case RessursStatus.IKKE_TILGANG:
             return (
                 <div>
