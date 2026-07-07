@@ -1,7 +1,7 @@
 import { Box, Checkbox, Fieldset, Heading } from '@navikt/ds-react';
 
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import OpprettBehandlingValg from '../../komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingValg';
+import OpprettBehandlingValg from './OpprettBehandlingValg';
 
 /**
  * Legger inn lesevisning slik at på sikt

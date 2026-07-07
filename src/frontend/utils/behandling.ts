@@ -1,7 +1,9 @@
-import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '../typer/behandling';
-import type { IGrunnlagPerson } from '../typer/person';
-import { PersonType } from '../typer/person';
-import { Målform } from '../typer/søknad';
+import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import type { IGrunnlagPerson } from '@typer/person';
+import { PersonType } from '@typer/person';
+import { Målform } from '@typer/søknad';
+import { hentSisteIkkeHenlagteBehandling } from '@utils/fagsak';
 
 export const hentSøkersMålform = (behandling: IBehandling) =>
     behandling.personer.find((person: IGrunnlagPerson) => {
@@ -27,4 +29,45 @@ export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling
     ].includes(type);
 
     return !erBehandlingTypeUtenBrevutsending && !erBehandlingÅrsakUtenBrevutsending;
+};
+
+export const hentTilgjengeligeBehandlingsårsaker = (
+    erMigreringFraInfotrygd: boolean,
+    kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
+    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean
+): BehandlingÅrsak[] =>
+    erMigreringFraInfotrygd
+        ? Object.values(BehandlingÅrsak).filter(
+              årsak =>
+                  (kanOpprettMigreringsbehandlingMedHelmanuellMigrering &&
+                      årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
+                  (kanOppretteMigreringsbehandlingMedEndreMigreringsdato &&
+                      årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+          )
+        : Object.values(BehandlingÅrsak).filter(
+              årsak =>
+                  årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
+                  årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
+                  årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
+                  årsak !== BehandlingÅrsak.SATSENDRING &&
+                  årsak !== BehandlingÅrsak.MIGRERING &&
+                  årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
+                  årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
+                  årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
+                  årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV &&
+                  årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
+                  årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
+                  årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
+                  årsak !== BehandlingÅrsak.KLAGE &&
+                  årsak !== BehandlingÅrsak.FINNMARKSTILLEGG &&
+                  årsak !== BehandlingÅrsak.SVALBARDTILLEGG
+          );
+
+export const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {
+    const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
+    return (
+        behandling?.årsak === BehandlingÅrsak.TEKNISK_ENDRING &&
+        (behandling.resultat === BehandlingResultat.OPPHØRT ||
+            behandling.resultat === BehandlingResultat.ENDRET_OG_OPPHØRT)
+    );
 };
