@@ -1,0 +1,35 @@
+.switch {
+    width: fit-content;
+}
+
+.table {
+    width: unset;
+
+    tbody {
+        th {
+            width: 10rem;
+        }
+    }
+}
+
+.nestePeriode {
+    border-left: 1px dashed;
+}
+
+.dataCell {
+    width: var(--ax-space-72);
+    color: var(--ax-text-neutral);
+}
+
+.negativ {
+    color: var(--ax-text-danger-subtle);
+}
+
+.nesteUtbetaling {
+    color: var(--ax-text-success-subtle);
+    font-weight: var(--ax-font-weight-bold);
+}
+
+.manuellPosteringRad {
+    background-color: var(--ax-bg-neutral-soft);
+}
