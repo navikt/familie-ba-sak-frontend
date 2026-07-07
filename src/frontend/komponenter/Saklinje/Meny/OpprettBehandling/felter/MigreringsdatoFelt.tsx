@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
 import {
     OpprettBehandlingFelt,
@@ -14,8 +13,6 @@ import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-reac
 
 export function MigreringsdatoFelt() {
     const MAKSDATO_FOR_MIGRERING = new Date('2023-01-01');
-
-    const erLesevisning = useErLesevisning();
 
     const { control, trigger } = useFormContext<OpprettBehandlingFormValues>();
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
@@ -76,7 +73,7 @@ export function MigreringsdatoFelt() {
                 label={'Ny migreringsdato'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
                 error={error?.message}
-                readOnly={isSubmitting || erLesevisning}
+                readOnly={isSubmitting}
             />
         </DatePicker>
     );

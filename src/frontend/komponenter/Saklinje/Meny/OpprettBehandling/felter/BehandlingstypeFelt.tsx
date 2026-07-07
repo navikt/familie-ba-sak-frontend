@@ -1,4 +1,3 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import {
@@ -16,7 +15,6 @@ import { Select } from '@navikt/ds-react';
 
 export function BehandlingstypeFelt() {
     const fagsak = useFagsak();
-    const erLesevisning = useErLesevisning();
     const saksbehandler = useSaksbehandler();
 
     const { control, setValue, reset } = useFormContext<OpprettBehandlingFormValues>();
@@ -60,7 +58,7 @@ export function BehandlingstypeFelt() {
     return (
         <Select
             label={'Velg type behandling'}
-            readOnly={isSubmitting || erLesevisning}
+            readOnly={isSubmitting}
             value={value}
             onChange={handleOnChange}
             error={error?.message}

@@ -1,4 +1,3 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
@@ -8,8 +7,6 @@ import { useController, useFormContext } from 'react-hook-form';
 import { Textarea } from '@navikt/ds-react';
 
 export function BegrunnelseFelt() {
-    const erLesevisning = useErLesevisning();
-
     const { control } = useFormContext<OpprettBehandlingFormValues>();
 
     const {
@@ -35,7 +32,7 @@ export function BegrunnelseFelt() {
     return (
         <Textarea
             label={'Begrunnelse for opprettelse av teknisk endring'}
-            readOnly={erLesevisning || isSubmitting}
+            readOnly={isSubmitting}
             maxLength={4000}
             value={value}
             onChange={onChange}

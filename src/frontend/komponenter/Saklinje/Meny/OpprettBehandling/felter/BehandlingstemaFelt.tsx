@@ -1,4 +1,3 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import {
     OpprettBehandlingFelt,
@@ -12,7 +11,6 @@ import { Select } from '@navikt/ds-react';
 
 export const BehandlingstemaFelt = () => {
     const fagsak = useFagsak();
-    const erLesevisning = useErLesevisning();
 
     const { control } = useFormContext<OpprettBehandlingFormValues>();
     const {
@@ -30,7 +28,7 @@ export const BehandlingstemaFelt = () => {
     return (
         <Select
             label={'Velg behandlingstema'}
-            readOnly={erLesevisning || isSubmitting}
+            readOnly={isSubmitting}
             value={value?.id}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));

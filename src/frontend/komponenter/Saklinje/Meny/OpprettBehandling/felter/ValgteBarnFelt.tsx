@@ -1,5 +1,4 @@
 import { useBruker } from '@hooks/useBruker';
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
@@ -12,7 +11,6 @@ import { useController, useFormContext } from 'react-hook-form';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 export function ValgteBarnFelt() {
-    const erLesevisning = useErLesevisning();
     const bruker = useBruker();
 
     const { control } = useFormContext<OpprettBehandlingFormValues>();
@@ -46,7 +44,7 @@ export function ValgteBarnFelt() {
         <UNSAFE_Combobox
             label={'Legg til juridiske barn for migrering'}
             isMultiSelect
-            readOnly={isSubmitting || erLesevisning}
+            readOnly={isSubmitting}
             options={barn}
             selectedOptions={value.map(barn => barn.value)}
             onToggleSelected={onToggleSelected}

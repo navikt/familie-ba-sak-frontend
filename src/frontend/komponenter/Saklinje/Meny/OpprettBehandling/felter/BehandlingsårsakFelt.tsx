@@ -1,4 +1,3 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import {
     OpprettBehandlingFelt,
@@ -14,7 +13,6 @@ import { Select } from '@navikt/ds-react';
 
 export function BehandlingsårsakFelt() {
     const fagsak = useFagsak();
-    const erLesevisning = useErLesevisning();
 
     const { control, watch } = useFormContext<OpprettBehandlingFormValues>();
     const {
@@ -44,7 +42,7 @@ export function BehandlingsårsakFelt() {
     return (
         <Select
             label={'Velg behandlingsårsak'}
-            readOnly={erLesevisning || isSubmitting}
+            readOnly={isSubmitting}
             value={value}
             onChange={onChange}
             error={error?.message}

@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
 import {
     OpprettBehandlingFelt,
@@ -13,8 +12,6 @@ import { useController, useFormContext } from 'react-hook-form';
 import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 export function KlageMottattDatoFelt() {
-    const erLesevisning = useErLesevisning();
-
     const { control, trigger } = useFormContext<OpprettBehandlingFormValues>();
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
 
@@ -74,7 +71,7 @@ export function KlageMottattDatoFelt() {
                 label={'Klage mottatt dato'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
                 error={error?.message}
-                readOnly={isSubmitting || erLesevisning}
+                readOnly={isSubmitting}
             />
         </DatePicker>
     );
