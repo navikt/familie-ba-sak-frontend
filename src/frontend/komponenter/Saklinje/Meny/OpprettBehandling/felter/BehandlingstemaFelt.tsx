@@ -4,7 +4,7 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
-import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';
+import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -27,16 +27,11 @@ export const BehandlingstemaFelt = () => {
         },
     });
 
-    // TODO: fiks herfra og ned
-    const konverterTilBehandlingstema = (behandlingstemaId: string): IBehandlingstema => {
-        return behandlingstemaer[behandlingstemaId as keyof typeof behandlingstemaer];
-    };
-
     return (
         <Select
             label={'Velg behandlingstema'}
             readOnly={erLesevisning || isSubmitting}
-            value={value.id}
+            value={value?.id}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));
             }}
@@ -51,7 +46,7 @@ export const BehandlingstemaFelt = () => {
                 )
                 .map(tema => {
                     return (
-                        <option key={tema.id} aria-selected={value.id === tema.id} value={tema.id}>
+                        <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
                             {tema.navn}
                         </option>
                     );

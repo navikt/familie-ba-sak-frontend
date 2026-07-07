@@ -7,7 +7,6 @@ import {
 import type { ComboboxOption } from '@typer/common';
 import { ForelderBarnRelasjonRolle } from '@typer/person';
 import { hentAlder } from '@utils/formatter';
-import { onOptionSelected } from '@utils/skjema';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
@@ -19,7 +18,7 @@ export function ValgteBarnFelt() {
     const { control } = useFormContext<OpprettBehandlingFormValues>();
 
     const {
-        field: { value },
+        field: { value, onChange },
         fieldState: { error },
         formState: { isSubmitting },
     } = useController({
@@ -35,7 +34,14 @@ export function ValgteBarnFelt() {
                 label: `${relasjon.navn} (${hentAlder(relasjon.fødselsdato)} år) | ${relasjon.personIdent}`,
             })) ?? [];
 
-    // TODO: sjekk Personvelger.tsx for inspo
+    function onToggleSelected(optionValue: string, isSelected: boolean) {
+        const valgteBarn = value;
+        const nyVerdi = isSelected
+            ? [...valgteBarn, barn.find(b => b.value === optionValue)]
+            : valgteBarn.filter(b => b.value !== optionValue);
+        onChange(nyVerdi);
+    }
+
     return (
         <UNSAFE_Combobox
             label={'Legg til juridiske barn for migrering'}
@@ -43,7 +49,7 @@ export function ValgteBarnFelt() {
             readOnly={isSubmitting || erLesevisning}
             options={barn}
             selectedOptions={value.map(barn => barn.value)}
-            onToggleSelected={(valgtOption, isSelected) => onOptionSelected(valgtOption, isSelected)}
+            onToggleSelected={onToggleSelected}
             error={error?.message}
         />
     );

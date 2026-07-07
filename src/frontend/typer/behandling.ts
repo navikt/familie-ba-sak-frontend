@@ -16,6 +16,7 @@ import { type ISøknadDTO, Målform } from './søknad';
 import type {
     Behandlingsstatus,
     TilbakekrevingsbehandlingResultat,
+    Tilbakekrevingsbehandlingstype,
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
 import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
@@ -30,7 +31,7 @@ export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 export interface NyBehandling {
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
-    behandlingType: Behandlingstype;
+    behandlingType: Behandlingstype | Tilbakekrevingsbehandlingstype.REVURDERING_TILBAKEKREVING;
     journalpostID?: string;
     behandlingÅrsak?: BehandlingÅrsak;
     skalBehandlesAutomatisk?: boolean;

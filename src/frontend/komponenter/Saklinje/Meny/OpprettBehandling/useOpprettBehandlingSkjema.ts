@@ -35,23 +35,23 @@ export interface OpprettBehandlingFormValues {
         | Klagebehandlingstype
         | string;
     [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: BehandlingÅrsak | string;
-    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema | undefined; // TODO: fix
+    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema | undefined;
     [OpprettBehandlingFelt.MIGRERINGSDATO]: IsoDatoString;
     [OpprettBehandlingFelt.BEGRUNNELSE]: string;
     [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: IsoDatoString;
     [OpprettBehandlingFelt.KLAGE_MOTTATT_DATO]: IsoDatoString;
-    [OpprettBehandlingFelt.VALGTE_BARN]: OptionType[]; // TODO: fix
+    [OpprettBehandlingFelt.VALGTE_BARN]: OptionType[];
 }
 
 interface TransformedOpprettBehandlingFormValues {
     [OpprettBehandlingFelt.BEHANDLINGSTYPE]: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype;
     [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: BehandlingÅrsak;
-    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema; // TODO: fix
+    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema;
     [OpprettBehandlingFelt.MIGRERINGSDATO]: IsoDatoString;
     [OpprettBehandlingFelt.BEGRUNNELSE]: string;
     [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: IsoDatoString;
     [OpprettBehandlingFelt.KLAGE_MOTTATT_DATO]: IsoDatoString;
-    [OpprettBehandlingFelt.VALGTE_BARN]: OptionType[]; // TODO: fix
+    [OpprettBehandlingFelt.VALGTE_BARN]: OptionType[];
 }
 
 interface Props {
@@ -69,12 +69,12 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
         defaultValues: {
             [OpprettBehandlingFelt.BEHANDLINGSTYPE]: '',
             [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: '',
-            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: undefined, // TODO
+            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: undefined,
             [OpprettBehandlingFelt.MIGRERINGSDATO]: '',
             [OpprettBehandlingFelt.BEGRUNNELSE]: '',
             [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: '',
             [OpprettBehandlingFelt.KLAGE_MOTTATT_DATO]: '',
-            [OpprettBehandlingFelt.VALGTE_BARN]: undefined, // TODO
+            [OpprettBehandlingFelt.VALGTE_BARN]: undefined,
         },
     });
 
@@ -131,12 +131,12 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     // TODO: test at alle verdiene kommer frem som forventet, ref bug sist
                     kategori: behandlingstema.kategori || null,
                     underkategori: behandlingstema.underkategori || null,
-                    behandlingType: behandlingstype as Behandlingstype,
-                    behandlingÅrsak: behandlingsårsak as BehandlingÅrsak,
+                    behandlingType: behandlingstype,
+                    behandlingÅrsak: behandlingsårsak,
                     navIdent: saksbehandler.navIdent,
                     nyMigreringsdato: migreringsdato || undefined,
                     søknadMottattDato: søknadMottattDato || undefined,
-                    barnasIdenter: erHelmanuellMigrering ? valgteBarn.map(option => option.value) : undefined, // TODO: trenger vi sjekken?
+                    barnasIdenter: erHelmanuellMigrering ? valgteBarn.map(option => option.value) : undefined,
                     fagsakId: fagsakId,
                     begrunnelse: begrunnelse,
                 };

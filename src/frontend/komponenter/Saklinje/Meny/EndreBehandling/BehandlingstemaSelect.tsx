@@ -1,11 +1,11 @@
+import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
+import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
+import { FagsakType } from '@typer/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
 import { EndreBehandlingstemaFelt, type EndreBehandlingstemaFormValues } from './useEndreBehandlingstemaSkjema';
-import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
-import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '../../../../typer/behandlingstema';
-import { FagsakType } from '../../../../typer/fagsak';
 
 interface Props {
     erLesevisning: boolean;
@@ -26,10 +26,6 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
             required: 'Behandlingstema må velges.',
         },
     });
-
-    const konverterTilBehandlingstema = (behandlingstemaId: string): IBehandlingstema => {
-        return behandlingstemaer[behandlingstemaId as keyof typeof behandlingstemaer];
-    };
 
     return (
         <Select
