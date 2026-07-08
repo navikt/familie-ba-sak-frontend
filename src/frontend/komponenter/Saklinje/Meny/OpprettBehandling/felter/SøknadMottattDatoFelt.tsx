@@ -47,7 +47,8 @@ export function SøknadMottattDatoFelt() {
         },
     });
 
-    const søknadMottattDatoErMerEnn360DagerSiden = value && isBefore(value, subDays(dagensDato, 360));
+    const søknadMottattDatoErMerEnn360DagerSiden =
+        !!value && isBefore(isoStringTilDate(value), subDays(dagensDato, 360));
 
     const { datepickerProps, inputProps } = useDatepicker({
         onDateChange: dato => {

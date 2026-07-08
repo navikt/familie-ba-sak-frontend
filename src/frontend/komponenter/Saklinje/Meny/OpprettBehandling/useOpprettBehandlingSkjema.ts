@@ -128,7 +128,6 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     erMigreringFraInfoTrygd && behandlingsårsak === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
                 const opprettBehandlingParameters = {
-                    // TODO: test at alle verdiene kommer frem som forventet, ref bug sist
                     kategori: behandlingstema?.kategori || null,
                     underkategori: behandlingstema?.underkategori || null,
                     behandlingType: behandlingstype,
@@ -138,7 +137,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     søknadMottattDato: søknadMottattDato || undefined,
                     barnasIdenter: erHelmanuellMigrering ? valgteBarn.map(option => option.value) : undefined,
                     fagsakId: fagsakId,
-                    begrunnelse: begrunnelse,
+                    begrunnelse: begrunnelse || undefined,
                 };
                 const behandling = await opprettBehandling(opprettBehandlingParameters);
                 queryClient.invalidateQueries({
