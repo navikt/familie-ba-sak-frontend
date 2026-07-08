@@ -45,13 +45,11 @@ export const BehandlingstemaFelt = () => {
                         it.kategori !== BehandlingKategori.EØS ||
                         fagsak.fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
                 )
-                .map(tema => {
-                    return (
-                        <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
-                            {tema.navn}
-                        </option>
-                    );
-                })}
+                .map(tema => (
+                    <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
+                        {tema.navn}
+                    </option>
+                ))}
         </Select>
     );
 };

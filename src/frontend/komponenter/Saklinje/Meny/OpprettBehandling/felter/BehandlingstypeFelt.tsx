@@ -4,11 +4,8 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, erBehandlingHenlagt } from '@typer/behandling';
-import { FagsakStatus } from '@typer/fagsak';
-import { Klagebehandlingstype } from '@typer/klage';
-import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
+import { Behandlingstype, behandlingstyper, BehandlingÅrsak } from '@typer/behandling';
+import { hentTilgjengeligeBehandlingstyper } from '@utils/behandling';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
@@ -30,17 +27,6 @@ export function BehandlingstypeFelt() {
             required: 'Velg type behandling som skal opprettes fra nedtrekkslisten.',
         },
     });
-
-    const behandling = fagsak ? hentAktivBehandlingPåMinimalFagsak(fagsak) : undefined;
-    const harIkkeAktivBehandling = !behandling || behandling?.status === BehandlingStatus.AVSLUTTET;
-
-    const kanOppretteFørstegangsbehandling =
-        fagsak === undefined || (fagsak.status !== FagsakStatus.LØPENDE && harIkkeAktivBehandling);
-    const kanOppretteRevurdering =
-        harIkkeAktivBehandling &&
-        (fagsak?.behandlinger.some(behandling => !erBehandlingHenlagt(behandling.resultat)) ?? false);
-    const kanOppretteTekniskEndring = harIkkeAktivBehandling && saksbehandler.harSuperbrukertilgang;
-    const kanOppretteKlagebehandling = fagsak !== undefined && !fagsak.finnesStrengtFortroligPersonIFagsak;
 
     function handleOnChange(event: React.ChangeEvent<HTMLSelectElement>) {
         reset();
@@ -66,46 +52,11 @@ export function BehandlingstypeFelt() {
             <option disabled={true} value={''}>
                 Velg
             </option>
-            {kanOppretteFørstegangsbehandling && (
-                <option
-                    aria-selected={value === Behandlingstype.FØRSTEGANGSBEHANDLING}
-                    value={Behandlingstype.FØRSTEGANGSBEHANDLING}
-                >
-                    Førstegangsbehandling
+            {hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler).map(type => (
+                <option key={type} aria-selected={value === type} value={type}>
+                    {behandlingstyper[type].navn}
                 </option>
-            )}
-            {kanOppretteRevurdering && (
-                <option aria-selected={value === Behandlingstype.REVURDERING} value={Behandlingstype.REVURDERING}>
-                    Revurdering
-                </option>
-            )}
-            {kanOppretteTekniskEndring && (
-                <option
-                    aria-selected={value === Behandlingstype.TEKNISK_ENDRING}
-                    value={Behandlingstype.TEKNISK_ENDRING}
-                >
-                    Teknisk endring
-                </option>
-            )}
-            <option
-                aria-selected={value === Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
-                value={Tilbakekrevingsbehandlingstype.TILBAKEKREVING}
-            >
-                Tilbakekreving
-            </option>
-            {kanOppretteKlagebehandling && (
-                <option aria-selected={value === Klagebehandlingstype.KLAGE} value={Klagebehandlingstype.KLAGE}>
-                    Klage
-                </option>
-            )}
-            {harIkkeAktivBehandling && (
-                <option
-                    aria-selected={value === Behandlingstype.MIGRERING_FRA_INFOTRYGD}
-                    value={Behandlingstype.MIGRERING_FRA_INFOTRYGD}
-                >
-                    Migrering fra infotrygd
-                </option>
-            )}
+            ))}
         </Select>
     );
 }

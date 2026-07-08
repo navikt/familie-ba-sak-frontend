@@ -108,7 +108,10 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     message: error instanceof Error ? error.message : 'Teknisk feil ved oppretting av klagebehandling.',
                 });
             }
-        } else if (behandlingstype === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) {
+        } else if (
+            behandlingstype === Tilbakekrevingsbehandlingstype.TILBAKEKREVING ||
+            behandlingstype === Tilbakekrevingsbehandlingstype.REVURDERING_TILBAKEKREVING
+        ) {
             try {
                 await opprettTilbakekreving({ fagsakId });
                 await queryClient.invalidateQueries({
@@ -140,7 +143,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     begrunnelse: begrunnelse || undefined,
                 };
                 const behandling = await opprettBehandling(opprettBehandlingParameters);
-                queryClient.invalidateQueries({
+                await queryClient.invalidateQueries({
                     queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
                 });
                 await queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) });

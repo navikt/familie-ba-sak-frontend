@@ -54,13 +54,11 @@ export function BehandlingsårsakFelt() {
                 erMigreringFraInfotrygd,
                 kanOppretteMigreringsbehandlingMedHelmanuellMigrering,
                 kanOppretteMigreringsbehandlingMedEndreMigreringsdato
-            ).map(årsak => {
-                return (
-                    <option key={årsak} aria-selected={value === årsak} value={årsak}>
-                        {behandlingÅrsak[årsak]}
-                    </option>
-                );
-            })}
+            ).map(årsak => (
+                <option key={årsak} aria-selected={value === årsak} value={årsak}>
+                    {behandlingÅrsak[årsak]}
+                </option>
+            ))}
         </Select>
     );
 }

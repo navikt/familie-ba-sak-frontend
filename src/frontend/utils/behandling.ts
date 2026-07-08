@@ -1,9 +1,19 @@
-import { BehandlingResultat, Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
-import type { IMinimalFagsak } from '@typer/fagsak';
+import {
+    BehandlingResultat,
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingÅrsak,
+    erBehandlingHenlagt,
+    type IBehandling,
+} from '@typer/behandling';
+import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
+import type { Saksbehandler } from '@typer/saksbehandler';
 import { Målform } from '@typer/søknad';
-import { hentSisteIkkeHenlagteBehandling } from '@utils/fagsak';
+import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '@utils/fagsak';
 
 export const hentSøkersMålform = (behandling: IBehandling) =>
     behandling.personer.find((person: IGrunnlagPerson) => {
@@ -30,6 +40,38 @@ export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling
 
     return !erBehandlingTypeUtenBrevutsending && !erBehandlingÅrsakUtenBrevutsending;
 };
+
+const TILGJENGELIGE_BEHANDLINGSTYPER = [
+    Behandlingstype.FØRSTEGANGSBEHANDLING,
+    Behandlingstype.REVURDERING,
+    Behandlingstype.TEKNISK_ENDRING,
+    Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
+    Klagebehandlingstype.KLAGE,
+    Behandlingstype.MIGRERING_FRA_INFOTRYGD,
+];
+
+export function hentTilgjengeligeBehandlingstyper(fagsak: IMinimalFagsak, saksbehandler: Saksbehandler) {
+    const behandling = fagsak ? hentAktivBehandlingPåMinimalFagsak(fagsak) : undefined;
+    const harIkkeAktivBehandling = !behandling || behandling?.status === BehandlingStatus.AVSLUTTET;
+
+    const kanOppretteFørstegangsbehandling =
+        fagsak === undefined || (fagsak.status !== FagsakStatus.LØPENDE && harIkkeAktivBehandling);
+    const kanOppretteRevurdering =
+        harIkkeAktivBehandling &&
+        (fagsak?.behandlinger.some(behandling => !erBehandlingHenlagt(behandling.resultat)) ?? false);
+    const kanOppretteTekniskEndring = harIkkeAktivBehandling && saksbehandler.harSuperbrukertilgang;
+    const kanOppretteKlagebehandling = fagsak !== undefined && !fagsak.finnesStrengtFortroligPersonIFagsak;
+
+    return TILGJENGELIGE_BEHANDLINGSTYPER.filter(
+        type =>
+            (kanOppretteFørstegangsbehandling && type === Behandlingstype.FØRSTEGANGSBEHANDLING) ||
+            (kanOppretteRevurdering && type === Behandlingstype.REVURDERING) ||
+            (kanOppretteTekniskEndring && type === Behandlingstype.TEKNISK_ENDRING) ||
+            type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING ||
+            (kanOppretteKlagebehandling && type === Klagebehandlingstype.KLAGE) ||
+            (harIkkeAktivBehandling && type === Behandlingstype.MIGRERING_FRA_INFOTRYGD)
+    );
+}
 
 export const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
