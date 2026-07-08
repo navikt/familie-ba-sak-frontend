@@ -31,7 +31,7 @@ export function KlageMottattDatoFelt() {
                 }
 
                 if (dateValidation && dateValidation.isBefore) {
-                    return `Du kan ikke sette en dato som er etter ${format(tidligsteRelevanteDato, 'dd.MM.yyyy')}.`;
+                    return `Du må velge en dato som er etter ${format(tidligsteRelevanteDato, 'dd.MM.yyyy')}.`;
                 }
 
                 if (dateValidation && (dateValidation.isInvalid || !dateValidation.isValidDate)) {

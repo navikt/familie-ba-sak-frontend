@@ -74,7 +74,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
             [OpprettBehandlingFelt.BEGRUNNELSE]: '',
             [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: '',
             [OpprettBehandlingFelt.KLAGE_MOTTATT_DATO]: '',
-            [OpprettBehandlingFelt.VALGTE_BARN]: undefined,
+            [OpprettBehandlingFelt.VALGTE_BARN]: [],
         },
     });
 

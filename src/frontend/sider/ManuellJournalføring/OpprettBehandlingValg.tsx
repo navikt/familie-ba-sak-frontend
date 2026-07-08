@@ -8,7 +8,6 @@ import type { BehandlingÅrsak } from '@typer/behandling';
 import { BehandlingStatus, Behandlingstype, behandlingÅrsak, erBehandlingHenlagt } from '@typer/behandling';
 import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
-import type { IPersonInfo } from '@typer/person';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { forrigeBehandlingVarTekniskEndringMedOpphør, hentTilgjengeligeBehandlingsårsaker } from '@utils/behandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
@@ -21,7 +20,6 @@ interface IProps {
     minimalFagsak?: IMinimalFagsak;
     erLesevisning?: boolean;
     manuellJournalfør?: boolean;
-    bruker?: IPersonInfo | undefined;
 }
 
 interface BehandlingstypeSelect extends HTMLSelectElement {

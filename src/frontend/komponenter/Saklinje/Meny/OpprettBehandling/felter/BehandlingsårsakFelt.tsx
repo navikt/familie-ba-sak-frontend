@@ -33,8 +33,8 @@ export function BehandlingsårsakFelt() {
     const aktivBehandling = fagsak ? hentAktivBehandlingPåMinimalFagsak(fagsak) : undefined;
     const kanOppretteMigreringFraInfotrygd = !aktivBehandling || aktivBehandling?.status === BehandlingStatus.AVSLUTTET;
     const kanOppretteMigreringsbehandlingMedHelmanuellMigrering =
-        (kanOppretteMigreringFraInfotrygd && forrigeBehandlingVarTekniskEndringMedOpphør(fagsak)) ||
-        fagsak?.status !== FagsakStatus.LØPENDE;
+        kanOppretteMigreringFraInfotrygd &&
+        (forrigeBehandlingVarTekniskEndringMedOpphør(fagsak) || fagsak?.status !== FagsakStatus.LØPENDE);
     const kanOppretteMigreringsbehandlingMedEndreMigreringsdato =
         kanOppretteMigreringFraInfotrygd &&
         (fagsak?.behandlinger.some(behandling => !erBehandlingHenlagt(behandling.resultat)) ?? false);

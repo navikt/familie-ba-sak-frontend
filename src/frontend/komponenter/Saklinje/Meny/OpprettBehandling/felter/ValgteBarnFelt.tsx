@@ -35,7 +35,7 @@ export function ValgteBarnFelt() {
     function onToggleSelected(optionValue: string, isSelected: boolean) {
         const valgteBarn = value;
         const nyVerdi = isSelected
-            ? [...valgteBarn, barn.find(b => b.value === optionValue)]
+            ? [...valgteBarn, barn.find(b => b.value === optionValue)].filter(Boolean)
             : valgteBarn.filter(b => b.value !== optionValue);
         onChange(nyVerdi);
     }

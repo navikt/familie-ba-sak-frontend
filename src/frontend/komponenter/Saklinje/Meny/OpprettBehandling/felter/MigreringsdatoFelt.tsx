@@ -11,9 +11,9 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
-export function MigreringsdatoFelt() {
-    const MAKSDATO_FOR_MIGRERING = new Date('2023-01-01');
+const MAKSDATO_FOR_MIGRERING = new Date('2023-01-01');
 
+export function MigreringsdatoFelt() {
     const { control, trigger } = useFormContext<OpprettBehandlingFormValues>();
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
 
