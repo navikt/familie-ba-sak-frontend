@@ -43,8 +43,13 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
     const skalViseBehandlingstemaFelt =
         fagsak.fagsakType !== FagsakType.INSTITUSJON &&
         behandlingstype in Behandlingstype &&
-        behandlingsårsak in
-            [BehandlingÅrsak.SØKNAD, BehandlingÅrsak.ENDRE_MIGRERINGSDATO, BehandlingÅrsak.HELMANUELL_MIGRERING];
+        (
+            [
+                BehandlingÅrsak.SØKNAD,
+                BehandlingÅrsak.ENDRE_MIGRERINGSDATO,
+                BehandlingÅrsak.HELMANUELL_MIGRERING,
+            ] as string[]
+        ).includes(behandlingsårsak);
     const skalViseSøknadMottattDatoFelt =
         behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING ||
         (behandlingstype === Behandlingstype.REVURDERING && behandlingsårsak === BehandlingÅrsak.SØKNAD);

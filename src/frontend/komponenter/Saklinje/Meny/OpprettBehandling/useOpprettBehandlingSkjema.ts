@@ -35,7 +35,7 @@ export interface OpprettBehandlingFormValues {
         | Klagebehandlingstype
         | string;
     [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: BehandlingÅrsak | string;
-    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema | undefined;
+    [OpprettBehandlingFelt.BEHANDLINGSTEMA]: IBehandlingstema | null;
     [OpprettBehandlingFelt.MIGRERINGSDATO]: IsoDatoString;
     [OpprettBehandlingFelt.BEGRUNNELSE]: string;
     [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: IsoDatoString;
@@ -69,7 +69,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
         defaultValues: {
             [OpprettBehandlingFelt.BEHANDLINGSTYPE]: '',
             [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: '',
-            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: undefined,
+            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: null,
             [OpprettBehandlingFelt.MIGRERINGSDATO]: '',
             [OpprettBehandlingFelt.BEGRUNNELSE]: '',
             [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: '',
@@ -129,8 +129,8 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
 
                 const opprettBehandlingParameters = {
                     // TODO: test at alle verdiene kommer frem som forventet, ref bug sist
-                    kategori: behandlingstema.kategori || null,
-                    underkategori: behandlingstema.underkategori || null,
+                    kategori: behandlingstema?.kategori || null,
+                    underkategori: behandlingstema?.underkategori || null,
                     behandlingType: behandlingstype,
                     behandlingÅrsak: behandlingsårsak,
                     navIdent: saksbehandler.navIdent,

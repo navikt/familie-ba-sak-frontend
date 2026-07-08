@@ -29,12 +29,15 @@ export const BehandlingstemaFelt = () => {
         <Select
             label={'Velg behandlingstema'}
             readOnly={isSubmitting}
-            value={value?.id}
+            value={value?.id ?? ''}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));
             }}
             error={error?.message}
         >
+            <option disabled value={''}>
+                Velg behandlingstema
+            </option>
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
