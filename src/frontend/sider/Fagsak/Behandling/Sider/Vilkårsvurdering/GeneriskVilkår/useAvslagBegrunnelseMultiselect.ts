@@ -1,15 +1,18 @@
-import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '../../../../../../typer/vedtak';
-import { VedtakBegrunnelseType } from '../../../../../../typer/vedtak';
-import type { AlleBegrunnelser, VilkårType } from '../../../../../../typer/vilkår';
-import { Regelverk } from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useFagsak } from '@hooks/useFagsak';
+import { erFagsakAvTypeInstitusjon } from '@typer/fagsak';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår } from '@typer/vedtak';
+import { VedtakBegrunnelseType } from '@typer/vedtak';
+import type { AlleBegrunnelser, VilkårType } from '@typer/vilkår';
+import { Regelverk } from '@typer/vilkår';
 
 const useAvslagBegrunnelseMultiselect = (
     vilkårType: VilkårType,
     regelverk: Regelverk | null,
     alleBegrunnelser: AlleBegrunnelser | undefined
 ) => {
-    const { gjelderInstitusjon } = useBehandlingContext();
+    const fagsak = useFagsak();
+
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
 
     const finnAvslagsbegrunnelserForGjeldendeVilkår = () => {
         if (alleBegrunnelser === undefined) {

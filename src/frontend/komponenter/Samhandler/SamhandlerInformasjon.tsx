@@ -20,7 +20,7 @@ const SamhandlerInformasjon = ({ samhandler, somOverskrift = false }: IProps) =>
             {somOverskrift && (
                 <HStack gap={'space-16'} align={'center'}>
                     <Box marginInline={'space-0 space-8'}>
-                        <KontorIkonGrønn height={'32'} width={'32'} />
+                        <KontorIkonGrønn størrelse={'m'} />
                     </Box>
                     <Heading level="2" size="medium" className={'navn'} title={navn}>
                         {navn}
@@ -41,7 +41,7 @@ const SamhandlerInformasjon = ({ samhandler, somOverskrift = false }: IProps) =>
 
             {!somOverskrift && (
                 <HStack gap={'space-8'} align={'center'}>
-                    <KontorIkonGrønn height={'24'} width={'24'} />
+                    <KontorIkonGrønn />
                     <BodyShort className={'navn'} title={navn}>
                         {navn}
                     </BodyShort>

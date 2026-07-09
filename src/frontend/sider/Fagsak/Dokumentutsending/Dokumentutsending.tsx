@@ -1,32 +1,22 @@
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
-import { fagsakHeaderHøydeRem } from '@typer/styling';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 
-import { Button, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Button, HGrid, Modal } from '@navikt/ds-react';
 
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
 import { useFagsakContext } from '../FagsakContext';
 
-const Container = styled.div`
-    display: grid;
-    grid-template-columns: 35rem 1fr;
-    grid-template-rows: 1fr;
-    height: calc(100vh - ${fagsakHeaderHøydeRem}rem);
-`;
-
 export function Dokumentutsending() {
     const { fagsak } = useFagsakContext();
     const navigate = useNavigate();
 
-    const { hentetDokument, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
+    const { forhåndsvisningUrl, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
 
     return (
         <>
             <Fagsaklinje />
-            <Container>
+            <HGrid columns={'35rem 1fr'} height={'100%'}>
                 {visInnsendtBrevModal && (
                     <Modal
                         open
@@ -58,13 +48,8 @@ export function Dokumentutsending() {
                     </Modal>
                 )}
                 <DokumentutsendingSkjema />
-                <iframe
-                    title={'dokument'}
-                    src={hentetDokument.status === RessursStatus.SUKSESS ? hentetDokument.data : ''}
-                    width={'100%'}
-                    height={'100%'}
-                />
-            </Container>
+                <iframe title={'dokument'} src={forhåndsvisningUrl ?? ''} width={'100%'} height={'100%'} />
+            </HGrid>
         </>
     );
 }

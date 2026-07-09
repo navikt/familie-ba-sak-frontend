@@ -1,19 +1,19 @@
 import type { ChangeEvent } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { behandlendeEnheter } from '@typer/enhet';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
 import { EndreBehandlendeEnhetFormFields, type EndreBehandlendeEnhetFormValues } from './useEndreBehandlendeEnhetForm';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { behandlendeEnheter } from '../../../../typer/enhet';
 
 interface Props {
     readOnly: boolean;
 }
 
 export function VelgNyEnhetField({ readOnly }: Props) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     const { control, clearErrors } = useFormContext<EndreBehandlendeEnhetFormValues>();
 

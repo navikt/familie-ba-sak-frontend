@@ -1,12 +1,6 @@
-import styled from 'styled-components';
+import type { IInfotrygdSak } from '@typer/infotrygd';
 
-import { BodyShort, Table } from '@navikt/ds-react';
-
-import type { IInfotrygdSak } from '../../typer/infotrygd';
-
-const IngenSakerTekst = styled(BodyShort)`
-    margin: 1rem;
-`;
+import { BodyShort, Box, Table } from '@navikt/ds-react';
 
 export const Sakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
     return (
@@ -49,7 +43,11 @@ export const Sakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
                     })}
                 </Table.Body>
             </Table>
-            {saker.length === 0 ? <IngenSakerTekst>Ingen saker.</IngenSakerTekst> : undefined}
+            {saker.length === 0 ? (
+                <Box margin={'space-16'}>
+                    <BodyShort>Ingen saker.</BodyShort>
+                </Box>
+            ) : undefined}
         </>
     );
 };

@@ -1,22 +1,13 @@
-import styled from 'styled-components';
+import { behandlingsstatuser, behandlingstyper } from '@typer/behandling';
+import { finnVisningstekstForJournalføringsbehandlingsårsak } from '@typer/journalføringsbehandling';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { ressursHarFeilet } from '@utils/ressursUtils';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, Checkbox, Heading, InfoCard, LocalAlert, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Checkbox, Heading, InfoCard, LocalAlert, Table, VStack } from '@navikt/ds-react';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { behandlingsstatuser, behandlingstyper } from '../../typer/behandling';
-import { finnVisningstekstForJournalføringsbehandlingsårsak } from '../../typer/journalføringsbehandling';
-import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
-import { ressursHarFeilet } from '../../utils/ressursUtils';
-
-const KnyttDiv = styled.div`
-    margin-top: 20px;
-`;
-
-const GenerellSakInfoStripeTittel = styled.div`
-    font-weight: bold;
-`;
 
 export const KnyttJournalpostTilBehandling = () => {
     const {
@@ -35,7 +26,7 @@ export const KnyttJournalpostTilBehandling = () => {
     const sorterteJournalføringsbehandlinger = hentSorterteJournalføringsbehandlinger();
 
     return (
-        <KnyttDiv>
+        <Box marginBlock={'space-20 space-0'}>
             {sorterteJournalføringsbehandlinger.length > 0 && (
                 <VStack gap="space-24">
                     {ressursHarFeilet(klageStatus) && (
@@ -124,15 +115,15 @@ export const KnyttJournalpostTilBehandling = () => {
                 <Box marginBlock={'space-32 space-0'}>
                     <InfoCard data-color="info">
                         <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                            <GenerellSakInfoStripeTittel>
+                            <BodyShort weight={'semibold'}>
                                 {sorterteJournalføringsbehandlinger.length > 0
                                     ? `Du velger å journalføre uten å knytte til behandling(er).`
                                     : `Du velger å journalføre uten å knytte til ny behandling.`}
-                            </GenerellSakInfoStripeTittel>
+                            </BodyShort>
                         </InfoCard.Message>
                     </InfoCard>
                 </Box>
             )}
-        </KnyttDiv>
+        </Box>
     );
 };

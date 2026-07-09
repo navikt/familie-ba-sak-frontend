@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 import { Button } from '@navikt/ds-react';
 
 import { render } from '../../../../../../../testutils/testrender';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 import { TomDato } from './TomDato';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));

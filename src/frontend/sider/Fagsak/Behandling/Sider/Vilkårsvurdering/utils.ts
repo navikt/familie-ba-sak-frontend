@@ -60,6 +60,37 @@ export const mapFraRestVilkårsvurderingTilUi = (
     return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
 };
 
+export function mapTilFeltStateVilkårResultat(vilkårResultat: IRestVilkårResultat) {
+    return lagInitiellFelt(
+        {
+            begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erBegrunnelseGyldig),
+            id: vilkårResultat.id,
+            periode: lagInitiellFelt(
+                nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
+                erPeriodeGyldig
+            ),
+            resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
+            resultatBegrunnelse: vilkårResultat.resultatBegrunnelse,
+            vilkårType: vilkårResultat.vilkårType,
+            endretAv: vilkårResultat.endretAv,
+            erVurdert: vilkårResultat.erVurdert,
+            erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
+            erEksplisittAvslagPåSøknad: vilkårResultat.erEksplisittAvslagPåSøknad,
+            avslagBegrunnelser: lagInitiellFelt(vilkårResultat.avslagBegrunnelser, erAvslagBegrunnelserGyldig),
+            endretTidspunkt: vilkårResultat.endretTidspunkt,
+            behandlingId: vilkårResultat.behandlingId,
+            vurderesEtter: vilkårResultat.vurderesEtter,
+            utdypendeVilkårsvurderinger: lagInitiellFelt(
+                vilkårResultat.utdypendeVilkårsvurderinger,
+                erUtdypendeVilkårsvurderingerGyldig
+            ),
+            begrunnelseForManuellKontroll: vilkårResultat.begrunnelseForManuellKontroll,
+            erOpprinneligPreutfyltIBehandling: vilkårResultat.erOpprinneligPreutfyltIBehandling,
+        },
+        validerVilkår
+    );
+}
+
 export const mapFraRestPersonResultatTilPersonResultat = (
     personResultater: IRestPersonResultat[],
     personer: IGrunnlagPerson[]
@@ -90,37 +121,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                     personIdent: personResultat.personIdent,
                     vilkårResultater: sorterVilkårsvurderingForPerson(
                         personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
-                            lagInitiellFelt(
-                                {
-                                    begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erBegrunnelseGyldig),
-                                    id: vilkårResultat.id,
-                                    periode: lagInitiellFelt(
-                                        nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
-                                        erPeriodeGyldig
-                                    ),
-                                    resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
-                                    resultatBegrunnelse: vilkårResultat.resultatBegrunnelse,
-                                    vilkårType: vilkårResultat.vilkårType,
-                                    endretAv: vilkårResultat.endretAv,
-                                    erVurdert: vilkårResultat.erVurdert,
-                                    erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
-                                    erEksplisittAvslagPåSøknad: vilkårResultat.erEksplisittAvslagPåSøknad,
-                                    avslagBegrunnelser: lagInitiellFelt(
-                                        vilkårResultat.avslagBegrunnelser,
-                                        erAvslagBegrunnelserGyldig
-                                    ),
-                                    endretTidspunkt: vilkårResultat.endretTidspunkt,
-                                    behandlingId: vilkårResultat.behandlingId,
-                                    vurderesEtter: vilkårResultat.vurderesEtter,
-                                    utdypendeVilkårsvurderinger: lagInitiellFelt(
-                                        vilkårResultat.utdypendeVilkårsvurderinger,
-                                        erUtdypendeVilkårsvurderingerGyldig
-                                    ),
-                                    begrunnelseForManuellKontroll: vilkårResultat.begrunnelseForManuellKontroll,
-                                    erOpprinneligPreutfyltIBehandling: vilkårResultat.erOpprinneligPreutfyltIBehandling,
-                                },
-                                validerVilkår
-                            )
+                            mapTilFeltStateVilkårResultat(vilkårResultat)
                         )
                     ),
                     andreVurderinger: personResultat.andreVurderinger.map(annenVurdering =>

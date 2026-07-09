@@ -7,7 +7,7 @@ import { useBehandling } from './useBehandling';
 import { useFagsak } from './useFagsak';
 import { useSaksbehandler } from './useSaksbehandler';
 
-const ÅRSAKER_ÅPEN_FOR_ALLE = new Set([BehandlingÅrsak.TEKNISK_ENDRING, BehandlingÅrsak.KORREKSJON_VEDTAKSBREV]);
+const ÅRSAKER_ÅPEN_FOR_ALLE = new Set([BehandlingÅrsak.TEKNISK_ENDRING]);
 
 interface Parameters {
     sjekkTilgangTilEnhet?: boolean;

@@ -1,19 +1,12 @@
-import styled from 'styled-components';
-
 import { Box, LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
-const DokumentDiv = styled.div`
-    width: 100%;
-    height: 100%;
-`;
-
 export const DokumentPanel = () => {
     const { hentetDokument } = useManuellJournalføringContext();
     return (
-        <DokumentDiv>
+        <Box height={'100%'} width={'100%'}>
             {hentetDokument.status === RessursStatus.SUKSESS && (
                 <iframe title={'dokument'} src={hentetDokument.data} width={'100%'} height={'100%'} />
             )}
@@ -36,6 +29,6 @@ export const DokumentPanel = () => {
                     </LocalAlert>
                 </Box>
             )}
-        </DokumentDiv>
+        </Box>
     );
 };

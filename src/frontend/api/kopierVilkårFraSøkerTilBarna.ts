@@ -1,13 +1,8 @@
+import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
 
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function kopierVilkårFraSøkerTilBarna(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<null, IBehandling>({
-        method: 'POST',
+export async function kopierVilkårFraSøkerTilBarna(behandlingId: number) {
+    return apiClient.post<null, IBehandling>({
         url: `/familie-ba-sak/api/vilkaarsvurdering/${behandlingId}/automatisk-fyll-ut-barnas-vilkaar`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

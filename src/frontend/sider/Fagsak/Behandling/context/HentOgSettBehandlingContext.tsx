@@ -44,7 +44,7 @@ export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
         navigate(`/fagsak/${fagsak.id}`);
     }
 
-    const settBehandlingRessurs = async (behandling: Ressurs<IBehandling>) => {
+    const settBehandlingRessurs = (behandling: Ressurs<IBehandling>) => {
         if (behandling.status === RessursStatus.SUKSESS) {
             queryClient.invalidateQueries({
                 queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandling.data.behandlingId),

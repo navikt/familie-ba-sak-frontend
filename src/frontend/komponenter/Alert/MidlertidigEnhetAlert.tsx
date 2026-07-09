@@ -1,11 +1,11 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { BehandlingStatus } from '@typer/behandling';
+import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
+
 import { LocalAlert } from '@navikt/ds-react';
 
-import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { BehandlingStatus } from '../../typer/behandling';
-import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../../utils/behandling';
-
 export function MidlertidigEnhetAlert() {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     const erBehandleneEnhetMidlertidig =
         behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId === MIDLERTIDIG_BEHANDLENDE_ENHET_ID;

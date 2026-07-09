@@ -37,6 +37,7 @@ export function lagGrunnlagPerson(person: Partial<IGrunnlagPerson> = {}): IGrunn
         erManueltLagtTilISøknad: false,
         harFalskIdentitet: false,
         skjermesForBruker: false,
+        erNyttBarn: false,
         ...person,
     };
 }

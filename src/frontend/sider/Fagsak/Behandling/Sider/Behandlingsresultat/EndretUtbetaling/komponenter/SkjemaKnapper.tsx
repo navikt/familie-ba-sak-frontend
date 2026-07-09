@@ -8,7 +8,7 @@ import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../.
 import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useEndretUtbetalingAndelContext } from '../EndretUtbetalingAndelContext';
-import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 
 interface SkjemaKnapperProps {
     lukkSkjema: () => void;

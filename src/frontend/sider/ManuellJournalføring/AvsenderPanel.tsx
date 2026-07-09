@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import { EmailIkon } from '@ikoner/EmailIkon';
+import { formaterIdent } from '@utils/formatter';
 import classNames from 'classnames';
-import styled from 'styled-components';
 
 import { BodyShort, Checkbox, ExpansionCard, TextField } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
@@ -9,12 +10,6 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import styles from './AvsenderPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import { EmailIkon } from '../../ikoner/EmailIkon';
-import { formaterIdent } from '../../utils/formatter';
-
-const StyledExpansionCard = styled(ExpansionCard)`
-    margin-top: 1rem;
-`;
 
 export const AvsenderPanel = () => {
     const { skjema, erLesevisning, settAvsenderLikBruker, tilbakestillAvsender, erDigitaltInnsendtDokument } =
@@ -39,7 +34,7 @@ export const AvsenderPanel = () => {
     const lesevisning = erLesevisning() || erDigitaltInnsendtDokument;
 
     return (
-        <StyledExpansionCard
+        <ExpansionCard
             open={åpen}
             onToggle={() => {
                 settÅpen(!åpen);
@@ -101,6 +96,6 @@ export const AvsenderPanel = () => {
                     disabled={brukerErAvsender}
                 />
             </ExpansionCard.Content>
-        </StyledExpansionCard>
+        </ExpansionCard>
     );
 };

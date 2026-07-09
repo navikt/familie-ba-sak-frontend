@@ -52,10 +52,10 @@ const VilkårTabell = ({ person, vilkårFraConfig, vilkårResultater, visFeilmel
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>, index: number) => {
+                    {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
                         return (
                             <VilkårTabellRad
-                                key={`${index}_${person.fødselsdato}_${vilkårResultat.verdi.vilkårType}_${vilkårResultat.verdi.id}`}
+                                key={vilkårResultat.verdi.id}
                                 vilkårFraConfig={vilkårFraConfig}
                                 person={person}
                                 vilkårResultat={vilkårResultat}

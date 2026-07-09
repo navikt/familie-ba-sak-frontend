@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
-import { BehandlingSteg, type IBehandling } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
@@ -38,10 +37,11 @@ const Container = styled.div`
 `;
 
 const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
-    const { behandling, settÅpenBehandling, erMigreringsbehandling } = useBehandlingContext();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settVilkårSubmit, postVilkår, vilkårSubmit } = useVilkårsvurderingContext();
 
-    const toggles = useFeatureToggles();
+    const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
+
     const erLesevisning = useErLesevisning();
 
     const [visFeilmeldingerForVilkår, settVisFeilmeldingerForVilkår] = useState(false);
@@ -53,7 +53,19 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
         document.getElementById(leggTilPeriodeKnappId)?.focus();
     };
 
+    function åpneNyeIkkeVurdertVilkårResultat(behandling: IBehandling, eksisterendeVilkårResultatIder: number[]) {
+        // Dette er gjort slik siden APIet ikke returnerer IDen til det opprettede vilkår resultatet.
+        const nyeIkkeVurdertVilkårResultat = behandling.personResultater
+            .flatMap(it => it.vilkårResultater)
+            .filter(it => it.resultat === Resultat.IKKE_VURDERT)
+            .filter(it => !eksisterendeVilkårResultatIder.includes(it.id));
+        nyeIkkeVurdertVilkårResultat.forEach(it => ekspanderRad(it.id));
+    }
+
     const håndterNyPeriodeVilkårsvurdering = (promise: Promise<Ressurs<IBehandling>>) => {
+        const eksisterendeVilkårResultatIder = behandling.personResultater
+            .flatMap(it => it.vilkårResultater)
+            .map(it => it.id);
         promise
             .then((oppdatertBehandling: Ressurs<IBehandling>) => {
                 settVisFeilmeldingerForVilkår(false);
@@ -61,6 +73,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
                 settFeilmelding('');
                 if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
                     settÅpenBehandling(oppdatertBehandling);
+                    åpneNyeIkkeVurdertVilkårResultat(oppdatertBehandling.data, eksisterendeVilkårResultatIder);
                 } else if (
                     oppdatertBehandling.status === RessursStatus.FEILET ||
                     oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
@@ -96,7 +109,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
             vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
         );
         return (
-            erMigreringsbehandling &&
+            behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
             person.type === PersonType.SØKER &&
             vilkårFraConfig.key === VilkårType.UTVIDET_BARNETRYGD &&
             utvidetVilkår.length !== 0
@@ -104,7 +117,6 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
     };
 
     const skalViseLyspære =
-        toggles[FeatureToggle.skalViseVarsellampeForManueltLagtTilBarn] &&
         behandling.steg == BehandlingSteg.VILKÅRSVURDERING &&
         vilkårResultater.some(vilkår => !!vilkår.verdi.begrunnelseForManuellKontroll);
 

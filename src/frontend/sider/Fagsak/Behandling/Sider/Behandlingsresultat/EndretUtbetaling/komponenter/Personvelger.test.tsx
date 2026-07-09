@@ -14,7 +14,7 @@ import type { IBehandling } from '../../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../../typer/person';
 import { Målform } from '../../../../../../../typer/søknad';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndelRHF';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 
 const defaultBehandling: IBehandling = lagBehandling({
     personer: [

@@ -1,4 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { formaterIdent, hentAlderSomString } from '@utils/formatter';
 import classNames from 'classnames';
@@ -8,7 +10,6 @@ import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
 import styles from './BarnMedOpplysninger.module.css';
 import { useSøknadContext } from './SøknadContext';
 import Slett from '../../../../../ikoner/Slett';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -16,7 +17,12 @@ interface IProps {
 
 export const BarnMedOpplysninger = ({ barn }: IProps) => {
     const { skjema, barnMedLøpendeUtbetaling } = useSøknadContext();
-    const { gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } = useBehandlingContext();
+
+    const fagsak = useFagsak();
+
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
+    const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
+    const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
 
     const erLesevisning = useErLesevisning();
 

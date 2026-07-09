@@ -1,15 +1,9 @@
 import type { ChangeEvent } from 'react';
 
-import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-
-import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
-import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandling';
-import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import type { VisningBehandling } from '../../../../sider/Fagsak/Saksoversikt/visningBehandling';
-import type { ManuellJournalføringSkjemaFelter } from '../../../../sider/ManuellJournalføring/ManuellJournalføringContext';
-import type { IBehandling } from '../../../../typer/behandling';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehandling';
+import type { ManuellJournalføringSkjemaFelter } from '@sider/ManuellJournalføring/ManuellJournalføringContext';
+import type { IBehandling } from '@typer/behandling';
 import {
     BehandlingResultat,
     BehandlingStatus,
@@ -17,17 +11,22 @@ import {
     behandlingÅrsak,
     BehandlingÅrsak,
     erBehandlingHenlagt,
-} from '../../../../typer/behandling';
-import type { ComboboxOption } from '../../../../typer/common';
-import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
-import { FeatureToggle } from '../../../../typer/featureToggles';
-import { Klagebehandlingstype } from '../../../../typer/klage';
-import type { IPersonInfo } from '../../../../typer/person';
-import { ForelderBarnRelasjonRolle } from '../../../../typer/person';
-import { Tilbakekrevingsbehandlingstype } from '../../../../typer/tilbakekrevingsbehandling';
-import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '../../../../utils/fagsak';
-import { hentAlder } from '../../../../utils/formatter';
-import { onOptionSelected } from '../../../../utils/skjema';
+} from '@typer/behandling';
+import type { ComboboxOption } from '@typer/common';
+import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
+import type { IPersonInfo } from '@typer/person';
+import { ForelderBarnRelasjonRolle } from '@typer/person';
+import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { hentAktivBehandlingPåMinimalFagsak, hentSisteIkkeHenlagteBehandling } from '@utils/fagsak';
+import { hentAlder } from '@utils/formatter';
+import { onOptionSelected } from '@utils/skjema';
+
+import { Select, UNSAFE_Combobox } from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
+
+import { OpprettBehandlingBehandlingstemaSelect } from './OpprettBehandlingBehandlingstemaSelect';
+import type { IOpprettBehandlingSkjemaFelter } from './useOpprettBehandlingSkjema';
 
 const erOpprettBehandlingSkjema = (
     skjema: ISkjema<IOpprettBehandlingSkjemaFelter, IBehandling> | ISkjema<ManuellJournalføringSkjemaFelter, string>
@@ -47,8 +46,7 @@ const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFa
 const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
     kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
-    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean,
-    kanManueltKorrigereMedVedtaksbrev: boolean
+    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean
 ): BehandlingÅrsak[] =>
     erMigreringFraInfotrygd
         ? Object.values(BehandlingÅrsak).filter(
@@ -68,7 +66,7 @@ const hentTilgjengeligeBehandlingsårsaker = (
                   årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
                   årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
-                  (årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV || kanManueltKorrigereMedVedtaksbrev) &&
+                  årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV &&
                   årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
                   årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
                   årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
@@ -101,7 +99,6 @@ const OpprettBehandlingValg = ({
     bruker = undefined,
 }: IProps) => {
     const saksbehandler = useSaksbehandler();
-    const toggles = useFeatureToggles();
     const aktivBehandling: VisningBehandling | undefined = minimalFagsak
         ? hentAktivBehandlingPåMinimalFagsak(minimalFagsak)
         : undefined;
@@ -115,7 +112,6 @@ const OpprettBehandlingValg = ({
         : minimalFagsak.behandlinger.filter(behandling => !erBehandlingHenlagt(behandling.resultat)).length > 0 &&
           kanOppretteBehandling;
     const kanOppretteTekniskEndring = kanOppretteBehandling && saksbehandler.harSuperbrukertilgang;
-    const kanManueltKorrigereMedVedtaksbrev = saksbehandler.harSuperbrukertilgang ?? false;
     const kanOppretteTilbakekreving = !manuellJournalfør;
     const kanOppretteMigreringFraInfotrygd = !manuellJournalfør && kanOppretteBehandling;
     const erMigreringFraInfotrygd =
@@ -130,10 +126,7 @@ const OpprettBehandlingValg = ({
         kanOppretteMigreringFraInfotrygd && kanOppretteRevurdering;
 
     const kanOppretteKlagebehandling =
-        minimalFagsak !== undefined &&
-        !minimalFagsak.finnesStrengtFortroligPersonIFagsak &&
-        (minimalFagsak.fagsakType !== FagsakType.INSTITUSJON ||
-            toggles[FeatureToggle.skalKunneBehandleBaInstitusjonFagsaker]);
+        minimalFagsak !== undefined && !minimalFagsak.finnesStrengtFortroligPersonIFagsak;
 
     const barn =
         bruker?.forelderBarnRelasjon
@@ -226,8 +219,7 @@ const OpprettBehandlingValg = ({
                     {hentTilgjengeligeBehandlingsårsaker(
                         erMigreringFraInfotrygd,
                         kanOpprettMigreringsbehandlingMedHelmanuellMigrering,
-                        kanOppretteMigreringsbehandlingMedEndreMigreringsdato,
-                        kanManueltKorrigereMedVedtaksbrev
+                        kanOppretteMigreringsbehandlingMedEndreMigreringsdato
                     ).map(årsak => {
                         return (
                             <option key={årsak} aria-selected={behandlingsårsak.verdi === årsak} value={årsak}>

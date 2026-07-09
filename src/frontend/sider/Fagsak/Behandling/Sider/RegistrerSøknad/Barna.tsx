@@ -1,5 +1,7 @@
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
+import { erFagsakAvTypeInstitusjon, erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IForelderBarnRelasjonMaskert } from '@typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
@@ -12,14 +14,17 @@ import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } fr
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const Barna = () => {
-    const { gjelderInstitusjon, gjelderEnsligMindreårig, gjelderSkjermetBarn } = useBehandlingContext();
     const { skjema } = useSøknadContext();
 
+    const fagsak = useFagsak();
     const bruker = useBruker();
     const erLesevisning = useErLesevisning();
+
+    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
+    const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
+    const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
 
     const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {

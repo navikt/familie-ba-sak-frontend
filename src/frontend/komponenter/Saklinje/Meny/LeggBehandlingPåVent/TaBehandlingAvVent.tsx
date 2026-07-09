@@ -1,13 +1,13 @@
-import { ActionMenu } from '@navikt/ds-react';
+import { useBehandling } from '@hooks/useBehandling';
 
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
+import { ActionMenu } from '@navikt/ds-react';
 
 interface Props {
     åpneModal: () => void;
 }
 
 export function TaBehandlingAvVent({ åpneModal }: Props) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     if (behandling.aktivSettPåVent === undefined || behandling.aktivSettPåVent === null) {
         return null;

@@ -6,7 +6,7 @@ import {
     EndretUtbetalingAndelFeltnavn,
     type EndretUtbetalingAndelFormValues,
     type StandardFeltProps,
-} from '../useEndretUtbetalingAndelRHF';
+} from '../useEndretUtbetalingAndel';
 
 export const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
     const { control } = useFormContext<EndretUtbetalingAndelFormValues>();

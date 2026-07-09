@@ -1,0 +1,100 @@
+.litenIkon {
+    height: 24px;
+    width: 24px;
+}
+
+.storIkon {
+    height: 32px;
+    width: 32px;
+}
+
+.litenIkonStørre {
+    height: 28px;
+    width: 28px;
+}
+
+.storIkonStørre {
+    height: 36px;
+    width: 36px;
+}
+
+.mannlig {
+    g {
+        fill: var(--ax-accent-600);
+    }
+}
+
+.kvinnelig {
+    g {
+        fill: var(--ax-meta-purple-800);
+    }
+}
+
+.adresseBeskyttet {
+    g {
+        fill: var(--ax-warning-500);
+    }
+}
+
+.nøytralAdresseBeskyttet {
+    path {
+        &:first-of-type {
+            fill: var(--ax-warning-500);
+        }
+    }
+}
+
+.ensligMindreårig {
+    path {
+        fill: var(--ax-meta-lime-500);
+    }
+}
+
+.ensligMindreårigAdresseBeskyttet {
+    path {
+        fill: var(--ax-warning-500);
+    }
+}
+
+.navLogo {
+    path {
+        fill: var(--ax-neutral-000);
+    }
+
+    margin: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.ansattIkon {
+    border-radius: 100%;
+    padding: 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 24px;
+    min-width: 24px;
+    max-height: 24px;
+    max-width: 24px;
+}
+
+.ansattStorIkon {
+    min-height: 32px;
+    min-width: 32px;
+    max-height: 32px;
+    max-width: 32px;
+}
+
+.ansattMannlig {
+    background-color: var(--ax-accent-600);
+}
+
+.ansattKvinnelig {
+    background-color: var(--ax-meta-purple-800);
+}
+
+.ansattAdresseBeskyttet {
+    background-color: var(--ax-warning-500);
+}

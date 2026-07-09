@@ -27,7 +27,7 @@ import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
-export interface IRestNyBehandling {
+export interface NyBehandling {
     kategori: BehandlingKategori | null;
     underkategori: BehandlingUnderkategori | null;
     behandlingType: Behandlingstype;
@@ -457,7 +457,6 @@ export function sjekkErBehandleneEnhetMidlertidig(behandling: IBehandling) {
 export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
     return (
         behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD ||
-        behandling.årsak === BehandlingÅrsak.KORREKSJON_VEDTAKSBREV ||
         behandling.årsak === BehandlingÅrsak.TEKNISK_ENDRING ||
         behandling.årsak === BehandlingÅrsak.KLAGE ||
         behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO ||
@@ -475,6 +474,6 @@ export function erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandl
     const erFørstegangsbehandling = behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
     const erRevurdering = behandling.type === Behandlingstype.REVURDERING;
     const erSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
-    // TODO : Legg inn sjekk om revurdering søknad gjelder nytt barn
-    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad));
+    const harMinstEttNyttBarn = behandling.personer.some(it => it.erNyttBarn);
+    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad && harMinstEttNyttBarn));
 }

@@ -1,5 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
+import { useSlettVilkårResultatIsPending } from '@hooks/useSlettVilkårResultatIsPending';
 import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '@typer/vedtak';
 import type { Regelverk, VilkårType } from '@typer/vilkår';
 import type { IIsoDatoPeriode } from '@utils/dato';
@@ -10,6 +11,7 @@ import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
 
 interface IProps {
+    vilkårResultatId: number;
     vilkårType: VilkårType;
     regelverk: Regelverk | null;
     periode: IIsoDatoPeriode;
@@ -22,10 +24,11 @@ interface IOptionType {
     label: string;
 }
 
-const AvslagBegrunnelseMultiselect = ({ vilkårType, begrunnelser, onChange, regelverk }: IProps) => {
+const AvslagBegrunnelseMultiselect = ({ vilkårResultatId, vilkårType, begrunnelser, onChange, regelverk }: IProps) => {
     const { vilkårSubmit } = useVilkårsvurderingContext();
 
     const erLesevisning = useErLesevisning();
+    const slettVilkårResultatIsPending = useSlettVilkårResultatIsPending(vilkårResultatId);
 
     const {
         data: alleBegrunnelser,
@@ -91,10 +94,12 @@ const AvslagBegrunnelseMultiselect = ({ vilkårType, begrunnelser, onChange, reg
             selectedOptions={valgteBegrunnelser}
             label={'Velg standardtekst i brev'}
             placeholder={'Velg begrunnelse(r)'}
-            readOnly={erLesevisning}
+            readOnly={erLesevisning || slettVilkårResultatIsPending}
             isMultiSelect
             onToggleSelected={(option, isSelected) => onChangeBegrunnelse(option, isSelected)}
-            isLoading={vilkårSubmit !== VilkårSubmit.NONE || hentAlleBegrunnelserIsPending}
+            isLoading={
+                vilkårSubmit !== VilkårSubmit.NONE || hentAlleBegrunnelserIsPending || slettVilkårResultatIsPending
+            }
             options={muligeOptions}
         />
     );

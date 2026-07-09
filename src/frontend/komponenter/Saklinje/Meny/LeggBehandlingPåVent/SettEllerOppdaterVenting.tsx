@@ -1,14 +1,14 @@
-import { ActionMenu } from '@navikt/ds-react';
+import { useBehandling } from '@hooks/useBehandling';
+import { BehandlingStatus } from '@typer/behandling';
 
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { BehandlingStatus } from '../../../../typer/behandling';
+import { ActionMenu } from '@navikt/ds-react';
 
 interface Props {
     åpneModal: () => void;
 }
 
 export function SettEllerOppdaterVenting({ åpneModal }: Props) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     if (behandling.status !== BehandlingStatus.UTREDES) {
         return null;

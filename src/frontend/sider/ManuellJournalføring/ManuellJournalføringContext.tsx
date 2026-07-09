@@ -22,7 +22,7 @@ import {
 import { useKlageApi } from '../../api/useKlageApi';
 import useDokument from '../../hooks/useDokument';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
-import type { IOpprettBehandlingSkjemaBase } from '../../komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandling';
+import type { IOpprettBehandlingSkjemaBase } from '../../komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
 import { Behandlingstype, BehandlingÅrsak } from '../../typer/behandling';
 import type { IBehandlingstema } from '../../typer/behandlingstema';
 import { behandlingstemaer } from '../../typer/behandlingstema';

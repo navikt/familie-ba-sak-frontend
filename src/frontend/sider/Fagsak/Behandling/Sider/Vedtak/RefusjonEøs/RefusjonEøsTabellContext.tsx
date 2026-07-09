@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
 
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandling } from '@hooks/useBehandling';
 
 interface RefusjonEøsTabellContext {
     erRefusjonEøsTabellSynlig: boolean;
@@ -15,7 +15,7 @@ interface RefusjonEøsTabellContext {
 const RefusjonEøsTabellContext = createContext<RefusjonEøsTabellContext | undefined>(undefined);
 
 export function RefusjonEøsTabellProvider({ children }: PropsWithChildren) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
 
     const harRefusjonEøs = behandling.refusjonEøs.length !== 0;
 

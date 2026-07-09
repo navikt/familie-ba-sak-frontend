@@ -1,29 +1,30 @@
 import { useState, useEffect } from 'react';
 
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { useBehandling } from '@hooks/useBehandling';
+import { useFagsak } from '@hooks/useFagsak';
+import type { IBehandling } from '@typer/behandling';
+import { BehandlingKategori } from '@typer/behandlingstema';
+import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
+import { FagsakType } from '@typer/fagsak';
+import type { IGrunnlagPerson } from '@typer/person';
+import { PersonType } from '@typer/person';
+import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
+import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '@utils/brevmal';
+import type { IsoDatoString } from '@utils/dato';
+import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '@utils/dato';
+import { useDeltBostedFelter } from '@utils/deltBostedSkjemaFelter';
+import type { IFritekstFelt } from '@utils/fritekstfelter';
+import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '@utils/fritekstfelter';
+
 import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { BehandlingKategori } from '../../../../../typer/behandlingstema';
-import type { IManueltBrevRequestPåBehandling } from '../../../../../typer/dokument';
-import { FagsakType } from '../../../../../typer/fagsak';
-import type { IGrunnlagPerson } from '../../../../../typer/person';
-import { PersonType } from '../../../../../typer/person';
-import type { IBarnMedOpplysninger, Målform } from '../../../../../typer/søknad';
-import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '../../../../../utils/brevmal';
-import type { IsoDatoString } from '../../../../../utils/dato';
-import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '../../../../../utils/dato';
-import { useDeltBostedFelter } from '../../../../../utils/deltBostedSkjemaFelter';
-import type { IFritekstFelt } from '../../../../../utils/fritekstfelter';
-import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../../utils/fritekstfelter';
-import { useFagsakContext } from '../../../FagsakContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 
 export const useBrevModul = () => {
-    const { behandling } = useBehandlingContext();
-    const { fagsak } = useFagsakContext();
+    const fagsak = useFagsak();
+    const behandling = useBehandling();
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
@@ -212,10 +213,18 @@ export const useBrevModul = () => {
 
     const mottakerlandSed = useFelt<string[]>({
         verdi: [],
-        valideringsfunksjon: (felt: FeltState<string[]>) => {
+        valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
+            // På svartidsbrev er det valgfritt å oppgi land SED er sendt til.
+            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
+                return ok(felt);
+            }
             return felt.verdi.length ? ok(felt) : feil(felt, 'Velg land SED er sendt/skal sendes til');
         },
         skalFeltetVises: (avhengigheter: Avhengigheter) => {
+            // På svartidsbrev vises feltet kun for EØS-behandlinger.
+            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
+                return behandlingKategori === BehandlingKategori.EØS;
+            }
             return [
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
                 Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,

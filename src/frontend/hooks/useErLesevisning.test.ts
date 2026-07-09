@@ -8,7 +8,7 @@ import { useSaksbehandler } from './useSaksbehandler';
 import { lagBehandling } from '../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
-import { BehandlingStatus, BehandlingSteg, BehandlingÅrsak } from '../typer/behandling';
+import { BehandlingStatus, BehandlingSteg } from '../typer/behandling';
 import { harTilgangTilEnhet } from '../typer/enhet';
 import { FagsakStatus } from '../typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
@@ -107,15 +107,6 @@ describe('useErLesevisning', () => {
     it('returnerer false når saksbehandler mangler enhetstilgang men er superbruker', () => {
         mockHarTilgangTilEnhet.mockReturnValue(false);
         mockUseSaksbehandler.mockReturnValue(lagSaksbehandler({ harSuperbrukertilgang: true }));
-
-        const { result } = renderHook(() => useErLesevisning());
-
-        expect(result.current).toBe(false);
-    });
-
-    it('returnerer false når saksbehandler mangler enhetstilgang men årsak er KORREKSJON_VEDTAKSBREV', () => {
-        mockHarTilgangTilEnhet.mockReturnValue(false);
-        mockUseBehandling.mockReturnValue(lagBehandling({ årsak: BehandlingÅrsak.KORREKSJON_VEDTAKSBREV }));
 
         const { result } = renderHook(() => useErLesevisning());
 

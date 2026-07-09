@@ -58,10 +58,6 @@ export interface IPersonResultat {
     person: IGrunnlagPerson;
 }
 
-export function harPersonIkkeVurdertVilkår(personResultat: IPersonResultat) {
-    return personResultat.vilkårResultater.some(vr => vr.verdi.resultat.verdi === Resultat.IKKE_VURDERT);
-}
-
 export interface IAnnenVurdering {
     id: number;
     begrunnelse: FeltState<string>;

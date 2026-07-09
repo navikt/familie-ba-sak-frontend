@@ -1,14 +1,15 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '@typer/behandling';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
 import { HenleggBehandlingFormFields, type HenleggBehandlingFormValues } from './useHenleggBehandlingForm';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { erPåHenleggbartSteg, henleggÅrsak, HenleggÅrsak } from '../../../../typer/behandling';
 
 export function ÅrsakFelt() {
-    const { behandling } = useBehandlingContext();
+    const saksbehandler = useSaksbehandler();
+    const behandling = useBehandling();
 
     const { control } = useFormContext<HenleggBehandlingFormValues>();
 
@@ -17,8 +18,6 @@ export function ÅrsakFelt() {
         control,
         rules: { required: 'Årsak er påkrevd.' },
     });
-
-    const saksbehandler = useSaksbehandler();
 
     const harTilgangTilTekniskVedlikeholdHenleggelse = saksbehandler.harSuperbrukertilgang;
 

@@ -41,6 +41,7 @@ export interface IGrunnlagPerson {
     erManueltLagtTilISøknad?: boolean;
     harFalskIdentitet: boolean;
     skjermesForBruker?: boolean;
+    erNyttBarn?: boolean;
 }
 
 export interface IPersonInfo {

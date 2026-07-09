@@ -6,7 +6,7 @@ import { oppgaveTypeFilter } from '@typer/oppgave';
 import { useNavigate } from 'react-router';
 
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
-import { Box, Button, ErrorMessage, ErrorSummary, Heading, LocalAlert } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, ErrorSummary, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import { AvsenderPanel } from './AvsenderPanel';
@@ -57,12 +57,11 @@ export const JournalpostSkjema = () => {
                 <Heading size={'small'} level={'2'} children={'Dokumenter'} />
                 <Dokumenter />
             </Box>
-            <Box marginBlock={'space-40 space-0'}>
+            <VStack marginBlock={'space-40 space-0'} gap={'space-16'}>
                 <Heading size={'small'} level={'2'} children={'Bruker og avsender'} />
                 <BrukerPanel />
-                <br />
                 <AvsenderPanel />
-            </Box>
+            </VStack>
 
             <Box marginBlock={'space-40 space-0'}>
                 {kanKnytteJournalpostTilBehandling() && <KnyttJournalpostTilBehandling />}

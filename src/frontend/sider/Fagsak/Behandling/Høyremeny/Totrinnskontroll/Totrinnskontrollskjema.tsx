@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+import { useBehandling } from '@hooks/useBehandling';
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';
+import type { IBehandling } from '@typer/behandling';
+import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import styled from 'styled-components';
 
 import {
@@ -18,15 +25,9 @@ import {
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import { useSaksbehandler } from '../../../../../hooks/useSaksbehandler';
 import ØyeGrå from '../../../../../ikoner/ØyeGrå';
 import ØyeGrønn from '../../../../../ikoner/ØyeGrønn';
 import ØyeRød from '../../../../../ikoner/ØyeRød';
-import type { IBehandling } from '../../../../../typer/behandling';
-import { TotrinnskontrollBeslutning } from '../../../../../typer/totrinnskontroll';
-import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 import { KontrollertStatus } from '../../Sider/sider';
 
 interface Props {
@@ -35,8 +36,10 @@ interface Props {
 }
 
 export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props) {
-    const { behandling, trinnPåBehandling } = useBehandlingContext();
     const saksbehandler = useSaksbehandler();
+    const behandling = useBehandling();
+
+    const { kontrollsider } = useKontrollsiderContext();
 
     const [beslutning, settBeslutning] = useState<TotrinnskontrollBeslutning>(TotrinnskontrollBeslutning.IKKE_VURDERT);
     const [begrunnelse, settBegrunnelse] = useState<string>('');
@@ -82,11 +85,12 @@ export function Totrinnskontrollskjema({ innsendtVedtak, sendInnVedtak }: Props)
                     ) : (
                         <>
                             <Label spacing>Kontrollerte trinn</Label>
-                            {Object.entries(trinnPåBehandling).map(([_, trinn], index) => {
+                            {kontrollsider.map((side, index) => {
                                 return (
                                     <TrinnStatus
-                                        kontrollertStatus={trinn.kontrollert}
-                                        navn={`${index + 1}. ${trinn.navn}`}
+                                        key={side.id}
+                                        kontrollertStatus={side.kontrollertStatus}
+                                        navn={`${index + 1}. ${side.navn}`}
                                     />
                                 );
                             })}

@@ -1,3 +1,5 @@
+import { useBehandling } from '@hooks/useBehandling';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import { FormProvider } from 'react-hook-form';
 
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
@@ -11,8 +13,6 @@ import Styles from './RefusjonEøsForm.module.css';
 import { TomDatoField } from './TomDatoField';
 import type { Type } from './useRefusjonEøsForm';
 import { useRefusjonEøsForm } from './useRefusjonEøsForm';
-import type { IRestRefusjonEøs } from '../../../../../../../typer/refusjon-eøs';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
 import { useRefusjonEøsTabellContext } from '../RefusjonEøsTabellContext';
 
 interface Props {
@@ -23,7 +23,8 @@ interface Props {
 }
 
 export function RefusjonEøsForm({ type, refusjonEøs, skjulForm, readOnly }: Props) {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+
     const { skjulRefusjonEøsTabell } = useRefusjonEøsTabellContext();
 
     const { form, onSubmit } = useRefusjonEøsForm({ type, refusjonEøs, skjulForm });
