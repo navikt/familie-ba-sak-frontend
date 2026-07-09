@@ -1,26 +1,24 @@
-import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
+import { useFagsak } from '@hooks/useFagsak';
+import {
+    OpprettBehandlingFelt,
+    type OpprettBehandlingFormValues,
+} from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
 import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Select } from '@navikt/ds-react';
 
-import { EndreBehandlingstemaFelt, type EndreBehandlingstemaFormValues } from './useEndreBehandlingstemaSkjema';
+export const BehandlingstemaFelt = () => {
+    const fagsak = useFagsak();
 
-interface Props {
-    erLesevisning: boolean;
-}
-
-export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
-    const { fagsak } = useFagsakContext();
-
-    const { control } = useFormContext<EndreBehandlingstemaFormValues>();
+    const { control } = useFormContext<OpprettBehandlingFormValues>();
     const {
         field: { value, onChange },
         fieldState: { error },
         formState: { isSubmitting },
     } = useController({
-        name: EndreBehandlingstemaFelt.BEHANDLINGSTEMA,
+        name: OpprettBehandlingFelt.BEHANDLINGSTEMA,
         control,
         rules: {
             required: 'Behandlingstema må velges.',
@@ -30,13 +28,16 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
     return (
         <Select
             label={'Velg behandlingstema'}
-            readOnly={erLesevisning || isSubmitting}
-            value={value.id}
+            readOnly={isSubmitting}
+            value={value?.id ?? ''}
             onChange={event => {
                 onChange(konverterTilBehandlingstema(event.target.value));
             }}
             error={error?.message}
         >
+            <option disabled value={''}>
+                Velg behandlingstema
+            </option>
             {Object.values(behandlingstemaer)
                 .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
                 .filter(
@@ -44,13 +45,11 @@ export const BehandlingstemaSelect = ({ erLesevisning }: Props) => {
                         it.kategori !== BehandlingKategori.EØS ||
                         fagsak.fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
                 )
-                .map(tema => {
-                    return (
-                        <option key={tema.id} aria-selected={value.id === tema.id} value={tema.id}>
-                            {tema.navn}
-                        </option>
-                    );
-                })}
+                .map(tema => (
+                    <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
+                        {tema.navn}
+                    </option>
+                ))}
         </Select>
     );
 };

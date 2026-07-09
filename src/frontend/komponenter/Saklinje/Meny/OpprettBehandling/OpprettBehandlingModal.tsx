@@ -1,16 +1,20 @@
-import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
+import { useFagsak } from '@hooks/useFagsak';
+import { BegrunnelseFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/BegrunnelseFelt';
+import { BehandlingstemaFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/BehandlingstemaFelt';
+import { BehandlingstypeFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/BehandlingstypeFelt';
+import { BehandlingsårsakFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/BehandlingsårsakFelt';
+import { KlageMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/KlageMottattDatoFelt';
+import { MigreringsdatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/MigreringsdatoFelt';
+import { SøknadMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/SøknadMottattDatoFelt';
+import { ValgteBarnFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/ValgteBarnFelt';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
-import { dagensDato } from '@utils/dato';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import { isBefore, subDays } from 'date-fns';
+import { FagsakType } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
+import { FormProvider } from 'react-hook-form';
 
-import { Box, Button, Fieldset, LocalAlert, Modal, Textarea, VStack } from '@navikt/ds-react';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 
-import OpprettBehandlingValg from './OpprettBehandlingValg';
-import { useOpprettBehandlingSkjema } from './useOpprettBehandlingSkjema';
-import Datovelger from '../../../Datovelger/Datovelger';
+import { OpprettBehandlingFelt, useOpprettBehandlingSkjema } from './useOpprettBehandlingSkjema';
 
 interface Props {
     lukkModal: () => void;
@@ -18,24 +22,51 @@ interface Props {
 }
 
 export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingOpprettet }: Props) {
-    const { fagsak } = useFagsakContext();
+    const fagsak = useFagsak();
 
-    const { onBekreft, opprettBehandlingSkjema, nullstillSkjemaStatus, bruker, maksdatoForMigrering } =
-        useOpprettBehandlingSkjema({ fagsakId: fagsak.id, lukkModal, onTilbakekrevingsbehandlingOpprettet });
+    const { form, onSubmit } = useOpprettBehandlingSkjema({
+        lukkModal,
+        onTilbakekrevingsbehandlingOpprettet,
+    });
 
-    const lukkOpprettBehandlingModal = () => {
-        nullstillSkjemaStatus();
-        lukkModal();
-    };
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+        watch,
+    } = form;
 
-    const søknadMottattDatoErMerEnn360DagerSiden =
-        opprettBehandlingSkjema.felter.søknadMottattDato.verdi &&
-        isBefore(opprettBehandlingSkjema.felter.søknadMottattDato.verdi, subDays(dagensDato, 360));
+    const behandlingstype = watch(OpprettBehandlingFelt.BEHANDLINGSTYPE);
+    const behandlingsårsak = watch(OpprettBehandlingFelt.BEHANDLINGSÅRSAK);
+
+    const skalViseBehandlingsårsakFelt =
+        behandlingstype === Behandlingstype.REVURDERING || behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const skalViseBehandlingstemaFelt =
+        fagsak.fagsakType !== FagsakType.INSTITUSJON &&
+        behandlingstype in Behandlingstype &&
+        (
+            [
+                BehandlingÅrsak.SØKNAD,
+                BehandlingÅrsak.ENDRE_MIGRERINGSDATO,
+                BehandlingÅrsak.HELMANUELL_MIGRERING,
+            ] as string[]
+        ).includes(behandlingsårsak);
+    const skalViseSøknadMottattDatoFelt =
+        behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+        (behandlingstype === Behandlingstype.REVURDERING && behandlingsårsak === BehandlingÅrsak.SØKNAD);
+    const skalViseKlageMottattDatoFelt = behandlingstype === Klagebehandlingstype.KLAGE;
+    const skalViseBegrunnelseFelt = behandlingsårsak === BehandlingÅrsak.TEKNISK_ENDRING;
+
+    // Migrering fra infotrygd
+    const skalViseMigreringsdatoFelt =
+        behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD && behandlingsårsak in BehandlingÅrsak;
+    const skalViseValgteBarnFelt =
+        behandlingstype === Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
+        behandlingsårsak === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
     return (
         <Modal
             open
-            onClose={lukkOpprettBehandlingModal}
+            onClose={lukkModal}
             width={'35rem'}
             portal={true}
             header={{
@@ -43,90 +74,32 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
                 size: 'medium',
             }}
         >
-            <Modal.Body>
-                <Fieldset
-                    error={hentFrontendFeilmelding(opprettBehandlingSkjema.submitRessurs)}
-                    legend={'Opprett ny behandling'}
-                    hideLegend
-                >
-                    <VStack gap={'space-16'}>
-                        <OpprettBehandlingValg
-                            skjema={opprettBehandlingSkjema}
-                            minimalFagsak={fagsak}
-                            bruker={bruker}
-                        />
-                        {opprettBehandlingSkjema.felter.behandlingstype.verdi ===
-                            Behandlingstype.MIGRERING_FRA_INFOTRYGD &&
-                            opprettBehandlingSkjema.felter.migreringsdato?.erSynlig && (
-                                <Datovelger
-                                    felt={opprettBehandlingSkjema.felter.migreringsdato}
-                                    visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                    label={'Ny migreringsdato'}
-                                    maksDatoAvgrensning={maksdatoForMigrering}
-                                />
-                            )}
-                        {opprettBehandlingSkjema.felter.behandlingsårsak.verdi === BehandlingÅrsak.TEKNISK_ENDRING &&
-                            opprettBehandlingSkjema.felter.begrunnelse?.erSynlig && (
-                                <Textarea
-                                    label={'Begrunnelse for opprettelse av teknisk endring'}
-                                    onChange={(event): void => {
-                                        opprettBehandlingSkjema.felter.begrunnelse.validerOgSettFelt(
-                                            event.target.value
-                                        );
-                                    }}
-                                    error={
-                                        opprettBehandlingSkjema.felter.begrunnelse.valideringsstatus ==
-                                            Valideringsstatus.FEIL &&
-                                        opprettBehandlingSkjema.felter.begrunnelse.feilmelding
-                                    }
-                                />
-                            )}
-                        {opprettBehandlingSkjema.felter.søknadMottattDato?.erSynlig && (
-                            <Datovelger
-                                felt={opprettBehandlingSkjema.felter.søknadMottattDato}
-                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                label={'Mottatt dato'}
-                                kanKunVelgeFortid
-                            />
-                        )}
-                        {opprettBehandlingSkjema.felter.klageMottattDato?.erSynlig && (
-                            <Datovelger
-                                felt={opprettBehandlingSkjema.felter.klageMottattDato}
-                                visFeilmeldinger={opprettBehandlingSkjema.visFeilmeldinger}
-                                label={'Klage mottatt'}
-                                kanKunVelgeFortid
-                            />
-                        )}
-                    </VStack>
-                </Fieldset>
-                {søknadMottattDatoErMerEnn360DagerSiden && (
-                    <Box marginBlock={'space-24 space-0'}>
-                        <LocalAlert status="warning">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Er mottatt dato riktig? <br />
-                                    Det er mer enn 360 dager siden denne datoen.
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
-                    </Box>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    key={'bekreft'}
-                    variant={'primary'}
-                    onClick={() => {
-                        if (opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER) {
-                            return;
-                        }
-                        onBekreft();
-                    }}
-                    children={'Bekreft'}
-                    loading={opprettBehandlingSkjema.submitRessurs.status === RessursStatus.HENTER}
-                />
-                <Button key={'avbryt'} variant="tertiary" onClick={lukkOpprettBehandlingModal} children={'Avbryt'} />
-            </Modal.Footer>
+            <FormProvider {...form}>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Modal.Body>
+                        <Fieldset error={errors.root?.message} legend={'Opprett ny behandling'} hideLegend>
+                            <VStack gap={'space-16'}>
+                                <BehandlingstypeFelt />
+                                {skalViseBehandlingsårsakFelt && <BehandlingsårsakFelt />}
+                                {skalViseValgteBarnFelt && <ValgteBarnFelt />}
+                                {skalViseBehandlingstemaFelt && <BehandlingstemaFelt />}
+                                {skalViseMigreringsdatoFelt && <MigreringsdatoFelt />}
+                                {skalViseBegrunnelseFelt && <BegrunnelseFelt />}
+                                {skalViseSøknadMottattDatoFelt && <SøknadMottattDatoFelt />}
+                                {skalViseKlageMottattDatoFelt && <KlageMottattDatoFelt />}
+                            </VStack>
+                        </Fieldset>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant={'primary'} type={'submit'} loading={isSubmitting}>
+                            Bekreft
+                        </Button>
+                        <Button type={'button'} variant={'tertiary'} disabled={isSubmitting} onClick={lukkModal}>
+                            Avbryt
+                        </Button>
+                    </Modal.Footer>
+                </form>
+            </FormProvider>
         </Modal>
     );
 }

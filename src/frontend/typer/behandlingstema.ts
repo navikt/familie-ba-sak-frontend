@@ -74,6 +74,10 @@ export const tilBehandlingstema = (
     );
 };
 
+export const konverterTilBehandlingstema = (behandlingstemaId: string): IBehandlingstema => {
+    return behandlingstemaer[behandlingstemaId as keyof typeof behandlingstemaer];
+};
+
 export const kodeTilBehandlingUnderkategoriMap: Record<string, BehandlingUnderkategori> = {
     ab0180: BehandlingUnderkategori.ORDINÆR,
     ab0096: BehandlingUnderkategori.UTVIDET,
