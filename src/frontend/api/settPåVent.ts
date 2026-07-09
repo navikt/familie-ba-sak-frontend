@@ -12,11 +12,9 @@ export async function settPåVent(
     behandlingId: number,
     erBehandlingAlleredePåVent: boolean
 ): Promise<IBehandling> {
-    const config = {
-        data: payload,
+    return apiClient.request<SettPåVentPayload, IBehandling>({
+        method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
         url: `/familie-ba-sak/api/sett-på-vent/${behandlingId}`,
-    };
-    return erBehandlingAlleredePåVent
-        ? apiClient.put<SettPåVentPayload, IBehandling>(config)
-        : apiClient.post<SettPåVentPayload, IBehandling>(config);
+        data: payload,
+    });
 }

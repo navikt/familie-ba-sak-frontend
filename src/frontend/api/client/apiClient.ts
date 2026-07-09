@@ -47,7 +47,7 @@ export class ApiClient {
         this.client = axios.create({ baseURL });
     }
 
-    private async request<T, R>(config: AxiosRequestConfig<T>): Promise<R> {
+    async request<T, R>(config: AxiosRequestConfig<T>): Promise<R> {
         const response = await this.client.request<T, AxiosResponse<Ressurs<R>>>({
             timeout: DEFAULT_TIME_OUT,
             timeoutErrorMessage: DEFAULT_TIME_OUT_MESSAGE,
