@@ -90,7 +90,7 @@ describe('LeggTilEllerFjernBrevmottakerePåBehandling', () => {
         const åpneModal = vi.fn();
         const { screen } = render(<LeggTilEllerFjernBrevmottakerePåBehandling åpneModal={åpneModal} />, {
             wrapper: props => (
-                <Wrapper {...props} behandling={lagBehandling({ type: Behandlingstype.TEKNISK_OPPHØR })} />
+                <Wrapper {...props} behandling={lagBehandling({ type: Behandlingstype.TEKNISK_ENDRING })} />
             ),
         });
         expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();

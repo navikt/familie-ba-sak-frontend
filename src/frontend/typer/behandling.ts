@@ -62,7 +62,6 @@ export enum BehandlingÅrsak {
     DØDSFALL_BRUKER = 'DØDSFALL_BRUKER',
     NYE_OPPLYSNINGER = 'NYE_OPPLYSNINGER',
     KLAGE = 'KLAGE',
-    TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     TEKNISK_ENDRING = 'TEKNISK_ENDRING',
     KORREKSJON_VEDTAKSBREV = 'KORREKSJON_VEDTAKSBREV',
     OMREGNING_6ÅR = 'OMREGNING_6ÅR',
@@ -88,7 +87,6 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     DØDSFALL_BRUKER: 'Dødsfall bruker',
     NYE_OPPLYSNINGER: 'Nye opplysninger',
     KLAGE: 'Klage',
-    TEKNISK_OPPHØR: 'Teknisk opphør',
     TEKNISK_ENDRING: 'Teknisk endring',
     KORREKSJON_VEDTAKSBREV: 'Korrigere vedtak med egen brevmal',
     OMREGNING_6ÅR: 'Omregning 6 år',
@@ -205,7 +203,6 @@ export enum Behandlingstype {
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
     MIGRERING_FRA_INFOTRYGD = 'MIGRERING_FRA_INFOTRYGD',
     REVURDERING = 'REVURDERING',
-    TEKNISK_OPPHØR = 'TEKNISK_OPPHØR',
     TEKNISK_ENDRING = 'TEKNISK_ENDRING',
 }
 
@@ -349,10 +346,6 @@ export const behandlingstyper: INøkkelPar = {
     REVURDERING: {
         id: 'REVURDERING',
         navn: 'Revurdering',
-    },
-    TEKNISK_OPPHØR: {
-        id: 'TEKNISK_OPPHØR',
-        navn: 'Teknisk opphør',
     },
     TEKNISK_ENDRING: {
         id: 'TEKNISK_ENDRING',
