@@ -6,7 +6,8 @@ import {
     erBehandlingHenlagt,
     type IBehandling,
 } from '@typer/behandling';
-import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
+import { behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';
+import { FagsakStatus, FagsakType, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
@@ -49,6 +50,11 @@ const TILGJENGELIGE_BEHANDLINGSTYPER = [
     Klagebehandlingstype.KLAGE,
     Behandlingstype.MIGRERING_FRA_INFOTRYGD,
 ];
+
+// Behandlingstema-feltet vises ikke for institusjonssaker, men backend krever kategori/underkategori
+export function hentDefaultBehandlingstema(fagsakType: FagsakType | undefined): IBehandlingstema | undefined {
+    return fagsakType === FagsakType.INSTITUSJON ? behandlingstemaer.NASJONAL_INSTITUSJON : undefined;
+}
 
 export function hentTilgjengeligeBehandlingstyper(fagsak: IMinimalFagsak, saksbehandler: Saksbehandler) {
     const behandling = fagsak ? hentAktivBehandlingPåMinimalFagsak(fagsak) : undefined;

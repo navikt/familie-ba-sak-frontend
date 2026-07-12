@@ -5,7 +5,6 @@ import { useKlageApi } from '@api/useKlageApi';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import type { IBehandlingstema } from '@typer/behandlingstema';
-import { behandlingstemaer } from '@typer/behandlingstema';
 import type { IMinimalFagsak } from '@typer/fagsak';
 import { FagsakType } from '@typer/fagsak';
 import {
@@ -30,6 +29,7 @@ import type { IPersonInfo } from '@typer/person';
 import { Adressebeskyttelsegradering } from '@typer/person';
 import type { ISamhandlerInfo } from '@typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { hentDefaultBehandlingstema } from '@utils/behandling';
 import { isoStringTilDate } from '@utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import type { AxiosError } from 'axios';
@@ -172,10 +172,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                 },
             }),
             behandlingstema: useFelt<IBehandlingstema | undefined>({
-                verdi:
-                    minimalFagsak?.fagsakType === FagsakType.INSTITUSJON
-                        ? behandlingstemaer.NASJONAL_INSTITUSJON
-                        : undefined,
+                verdi: hentDefaultBehandlingstema(minimalFagsak?.fagsakType),
                 avhengigheter: {
                     knyttTilNyBehandling: knyttTilNyBehandling.verdi,
                     behandlingstype: behandlingstype.verdi,
