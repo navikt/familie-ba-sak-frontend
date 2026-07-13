@@ -88,7 +88,6 @@ export const hentTilgjengeligeBehandlingsårsaker = (
           )
         : Object.values(BehandlingÅrsak).filter(
               årsak =>
-                  årsak !== BehandlingÅrsak.TEKNISK_OPPHØR &&
                   årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
                   årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
                   årsak !== BehandlingÅrsak.SATSENDRING &&
