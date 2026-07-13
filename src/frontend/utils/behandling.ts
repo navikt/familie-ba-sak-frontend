@@ -4,7 +4,9 @@ import {
     Behandlingstype,
     BehandlingÅrsak,
     erBehandlingHenlagt,
+    MANUELLE_BEHANDLINGSÅRSAKER,
     type IBehandling,
+    type ManuellBehandlingÅrsak,
 } from '@typer/behandling';
 import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
@@ -75,33 +77,17 @@ export function hentTilgjengeligeBehandlingstyper(fagsak: IMinimalFagsak, saksbe
 
 export const hentTilgjengeligeBehandlingsårsaker = (
     erMigreringFraInfotrygd: boolean,
-    kanOpprettMigreringsbehandlingMedHelmanuellMigrering: boolean,
-    kanOppretteMigreringsbehandlingMedEndreMigreringsdato: boolean
-): BehandlingÅrsak[] =>
+    kanOppretteHelmanuellMigrering: boolean,
+    kanOppretteEndreMigreringsdato: boolean
+): ManuellBehandlingÅrsak[] =>
     erMigreringFraInfotrygd
-        ? Object.values(BehandlingÅrsak).filter(
+        ? MANUELLE_BEHANDLINGSÅRSAKER.filter(
               årsak =>
-                  (kanOpprettMigreringsbehandlingMedHelmanuellMigrering &&
-                      årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
-                  (kanOppretteMigreringsbehandlingMedEndreMigreringsdato &&
-                      årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
+                  (kanOppretteHelmanuellMigrering && årsak === BehandlingÅrsak.HELMANUELL_MIGRERING) ||
+                  (kanOppretteEndreMigreringsdato && årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO)
           )
-        : Object.values(BehandlingÅrsak).filter(
-              årsak =>
-                  årsak !== BehandlingÅrsak.TEKNISK_ENDRING &&
-                  årsak !== BehandlingÅrsak.FØDSELSHENDELSE &&
-                  årsak !== BehandlingÅrsak.SATSENDRING &&
-                  årsak !== BehandlingÅrsak.MIGRERING &&
-                  årsak !== BehandlingÅrsak.OMREGNING_6ÅR &&
-                  årsak !== BehandlingÅrsak.OMREGNING_18ÅR &&
-                  årsak !== BehandlingÅrsak.OMREGNING_SMÅBARNSTILLEGG &&
-                  årsak !== BehandlingÅrsak.KORREKSJON_VEDTAKSBREV &&
-                  årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO &&
-                  årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING &&
-                  årsak !== BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING &&
-                  årsak !== BehandlingÅrsak.KLAGE &&
-                  årsak !== BehandlingÅrsak.FINNMARKSTILLEGG &&
-                  årsak !== BehandlingÅrsak.SVALBARDTILLEGG
+        : MANUELLE_BEHANDLINGSÅRSAKER.filter(
+              årsak => årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO && årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
           );
 
 export const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {

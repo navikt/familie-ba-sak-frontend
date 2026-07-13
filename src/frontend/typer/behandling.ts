@@ -68,6 +68,7 @@ export enum BehandlingÅrsak {
     OMREGNING_18ÅR = 'OMREGNING_18ÅR',
     SMÅBARNSTILLEGG = 'SMÅBARNSTILLEGG',
     SATSENDRING = 'SATSENDRING',
+    SATSENDRING_EØS = 'SATSENDRING_EØS',
     MIGRERING = 'MIGRERING',
     ENDRE_MIGRERINGSDATO = 'ENDRE_MIGRERINGSDATO',
     HELMANUELL_MIGRERING = 'HELMANUELL_MIGRERING',
@@ -95,20 +96,22 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     SMÅBARNSTILLEGG: 'Småbarnstillegg',
     SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID: 'Småbarnstillegg med endring fram i tid',
     SATSENDRING: 'Satsendring',
+    SATSENDRING_EØS: 'Satsendring EØS',
     MIGRERING: 'Migrering',
     ENDRE_MIGRERINGSDATO: 'Endre migreringsdato',
     HELMANUELL_MIGRERING: 'Manuell migrering',
+    MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
+    IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
+    FINNMARKSTILLEGG: 'Finnmarkstillegg',
+    SVALBARDTILLEGG: 'Svalbardtillegg',
+    FALSK_IDENTITET: 'Falsk identitet',
+
     /** De neste er revurderingsårsaker for tilbakekrevingsbehandlinger **/
     REVURDERING_KLAGE_NFP: 'Klage tilbakekreving',
     REVURDERING_KLAGE_KA: 'Klage omgjort av KA',
     REVURDERING_OPPLYSNINGER_OM_VILKÅR: 'Nye opplysninger',
     REVURDERING_OPPLYSNINGER_OM_FORELDELSE: 'Nye opplysninger',
     REVURDERING_FEILUTBETALT_BELØP_HELT_ELLER_DELVIS_BORTFALT: 'Feilutbetalt beløp helt eller delvis bortfalt',
-    MÅNEDLIG_VALUTAJUSTERING: 'Månedlig valutajustering',
-    IVERKSETTE_KA_VEDTAK: 'Iverksette KA-vedtak',
-    FINNMARKSTILLEGG: 'Finnmarkstillegg',
-    SVALBARDTILLEGG: 'Svalbardtillegg',
-    FALSK_IDENTITET: 'Falsk identitet',
 
     /** Klage: **/
     ANNET: 'Annet',
@@ -119,6 +122,25 @@ export const behandlingÅrsak: Record<BehandlingÅrsak | Tilbakekrevingsbehandli
     IKKE_UTREDET_NOK: 'Ikke utredet nok',
     KØET_BEHANDLING: 'Køet behandling',
 };
+
+/**
+ * Behandlingsårsaker som saksbehandler kan velge manuelt, f.eks. ved opprettelse av en revurdering.
+ * Alle andre BehandlingÅrsak-verdier settes kun automatisk i backenden og skal ikke være valgbare.
+ */
+export const MANUELLE_BEHANDLINGSÅRSAKER = [
+    BehandlingÅrsak.SØKNAD,
+    BehandlingÅrsak.ÅRLIG_KONTROLL,
+    BehandlingÅrsak.DØDSFALL_BRUKER,
+    BehandlingÅrsak.NYE_OPPLYSNINGER,
+    BehandlingÅrsak.SMÅBARNSTILLEGG,
+    BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID,
+    BehandlingÅrsak.IVERKSETTE_KA_VEDTAK,
+    BehandlingÅrsak.FALSK_IDENTITET,
+    BehandlingÅrsak.ENDRE_MIGRERINGSDATO,
+    BehandlingÅrsak.HELMANUELL_MIGRERING,
+] as const;
+
+export type ManuellBehandlingÅrsak = (typeof MANUELLE_BEHANDLINGSÅRSAKER)[number];
 
 export enum BehandlingSteg {
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
