@@ -1,68 +1,21 @@
 import { useState } from 'react';
 
-import { isAfter } from 'date-fns';
-import styled from 'styled-components';
-
-import { Box, Heading, LocalAlert, Switch, Table } from '@navikt/ds-react';
-import {
-    BgNeutralSoft,
-    FontWeightBold,
-    FontWeightRegular,
-    TextDangerSubtle,
-    TextNeutral,
-    TextSuccessSubtle,
-} from '@navikt/ds-tokens/dist/tokens';
-
-import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
-import { Årsvelger } from './Årsvelger';
-import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
+import type { ISimuleringDTO, ISimuleringPeriode } from '@typer/simulering';
 import {
     Datoformat,
     isoDatoPeriodeTilFormatertString,
     isoStringTilDate,
     isoStringTilFormatertString,
-} from '../../../../../utils/dato';
-import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '../../../../../utils/simulering';
+} from '@utils/dato';
+import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '@utils/simulering';
+import classNames from 'classnames';
+import { isAfter } from 'date-fns';
 
-const IkkeFullBreddeTabell = styled(Table)`
-    width: unset;
-`;
+import { Box, Heading, LocalAlert, Switch, Table } from '@navikt/ds-react';
 
-const ManuellPosteringRad = styled(Table.Row)`
-    background-color: ${BgNeutralSoft};
-`;
-
-const HeaderCelle = styled(Table.HeaderCell)<{ $skalViseStipletLinje: boolean }>`
-    border-left: ${props => props.$skalViseStipletLinje && '1px dashed'};
-`;
-
-const DataCelle = styled(Table.DataCell)<{ $skalViseStipletLinje: boolean }>`
-    width: var(--ax-space-72);
-    border-left: ${props => props.$skalViseStipletLinje && '1px dashed'};
-`;
-
-const DataCellMedFarge = styled(DataCelle)<{
-    $erNegativtBeløp: boolean;
-    $erNesteUtbetalingsperiode: boolean;
-    $skalViseStipletLinje: boolean; // Sendes videre til DataCelle
-}>`
-    color: ${props => {
-        if (props.$erNegativtBeløp) return TextDangerSubtle;
-        else if (props.$erNesteUtbetalingsperiode) {
-            return TextSuccessSubtle;
-        }
-        return TextNeutral;
-    }};
-    font-weight: ${props => (props.$erNesteUtbetalingsperiode ? FontWeightBold : FontWeightRegular)};
-`;
-
-const StyledSwitch = styled(Switch)`
-    width: fit-content;
-`;
-
-const FørsteKolonne = styled(Table.HeaderCell)`
-    width: 10rem;
-`;
+import styles from './SimuleringTabell.module.css';
+import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';
+import { Årsvelger } from './Årsvelger';
 
 interface ISimuleringProps {
     simulering: ISimuleringDTO;
@@ -139,17 +92,18 @@ const SimuleringTabell = ({ simulering }: ISimuleringProps) => {
                       })}`
                     : `perioden ${tilOgFraDatoForSimulering}`}
             </Heading>
-
             {finnesManuellePosteringer && (
-                <StyledSwitch
+                <Switch
+                    className={styles.switch}
                     checked={visManuellePosteringer}
                     onChange={() => setVisManuellePosteringer(!visManuellePosteringer)}
                     size="small"
                 >
                     Vis manuelle posteringer
-                </StyledSwitch>
+                </Switch>
             )}
-            <IkkeFullBreddeTabell
+            <Table
+                className={styles.table}
                 aria-label={`Simuleringsresultat for ${
                     erMerEnn12MånederISimulering ? aktueltÅr : `perioden ${tilOgFraDatoForSimulering}`
                 }`}
@@ -168,10 +122,10 @@ const SimuleringTabell = ({ simulering }: ISimuleringProps) => {
                             )}
                         </Table.DataCell>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <HeaderCelle
+                            <Table.HeaderCell
                                 key={'måned - ' + periode.fom}
                                 align={'right'}
-                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
+                                className={classNames({ [styles.nestePeriode]: erNesteUtbetalingsperiode(periode) })}
                             >
                                 {kapitaliserTekst(
                                     isoStringTilFormatertString({
@@ -179,68 +133,76 @@ const SimuleringTabell = ({ simulering }: ISimuleringProps) => {
                                         tilFormat: Datoformat.MÅNED_NAVN,
                                     })
                                 )}
-                            </HeaderCelle>
+                            </Table.HeaderCell>
                         ))}
                     </Table.Row>
                 </Table.Header>
 
                 <Table.Body>
                     <Table.Row>
-                        <FørsteKolonne>Nytt beløp</FørsteKolonne>
+                        <Table.HeaderCell>Nytt beløp</Table.HeaderCell>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <DataCelle
+                            <Table.DataCell
+                                className={classNames(styles.dataCell, {
+                                    [styles.nestePeriode]: erNesteUtbetalingsperiode(periode),
+                                })}
                                 key={'nytt beløp - ' + periode.fom}
                                 align={'right'}
-                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                             >
                                 {formaterBeløpUtenValutakode(periode.nyttBeløp)}
-                            </DataCelle>
+                            </Table.DataCell>
                         ))}
                     </Table.Row>
                     <Table.Row>
-                        <FørsteKolonne>Tidligere utbetalt</FørsteKolonne>
+                        <Table.HeaderCell>Tidligere utbetalt</Table.HeaderCell>
                         {perioderSomSkalVisesITabellen.map(periode => {
                             return (
-                                <DataCelle
+                                <Table.DataCell
+                                    className={classNames(styles.dataCell, {
+                                        [styles.nestePeriode]: erNesteUtbetalingsperiode(periode),
+                                    })}
                                     key={'tidligere utbetalt - ' + periode.fom}
                                     align={'right'}
-                                    $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                                 >
                                     {formaterBeløpUtenValutakode(periode.tidligereUtbetalt)}
-                                </DataCelle>
+                                </Table.DataCell>
                             );
                         })}
                     </Table.Row>
                     <Table.Row>
-                        <FørsteKolonne>Resultat</FørsteKolonne>
+                        <Table.HeaderCell>Resultat</Table.HeaderCell>
                         {perioderSomSkalVisesITabellen.map(periode => (
-                            <DataCellMedFarge
+                            <Table.DataCell
+                                className={classNames(styles.dataCell, {
+                                    [styles.nestePeriode]: erNesteUtbetalingsperiode(periode),
+                                    [styles.nesteUtbetaling]: erNesteUtbetalingsperiode(periode),
+                                    [styles.negativ]: !!periode.resultat && periode.resultat < 0,
+                                })}
                                 key={'resultat - ' + periode.fom}
                                 align={'right'}
-                                $erNegativtBeløp={!!periode.resultat && periode.resultat < 0}
-                                $erNesteUtbetalingsperiode={erNesteUtbetalingsperiode(periode)}
-                                $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                             >
                                 {formaterBeløpUtenValutakode(periode.resultat)}
-                            </DataCellMedFarge>
+                            </Table.DataCell>
                         ))}
                     </Table.Row>
                     {visManuellePosteringer && (
-                        <ManuellPosteringRad>
-                            <FørsteKolonne>Manuell postering</FørsteKolonne>
+                        <Table.Row className={styles.manuellPosteringRad}>
+                            <Table.HeaderCell>Manuell postering</Table.HeaderCell>
                             {perioderSomSkalVisesITabellen.map(periode => (
-                                <DataCelle
+                                <Table.DataCell
+                                    className={classNames(styles.dataCell, {
+                                        [styles.nestePeriode]: erNesteUtbetalingsperiode(periode),
+                                    })}
                                     key={'manuell postering - ' + periode.fom}
                                     align={'right'}
-                                    $skalViseStipletLinje={erNesteUtbetalingsperiode(periode)}
                                 >
                                     {formaterBeløpUtenValutakode(periode.manuellPostering)}
-                                </DataCelle>
+                                </Table.DataCell>
                             ))}
-                        </ManuellPosteringRad>
+                        </Table.Row>
                     )}
                 </Table.Body>
-            </IkkeFullBreddeTabell>
+            </Table>
         </>
     );
 };

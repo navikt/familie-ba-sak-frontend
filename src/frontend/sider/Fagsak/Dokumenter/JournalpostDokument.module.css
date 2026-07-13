@@ -1,0 +1,14 @@
+.vedleggListe {
+    list-style-type: none;
+    margin: 0;
+
+    &:first-child {
+        padding-inline-start: 0;
+    }
+}
+
+.text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,4 +1,7 @@
-import styled from 'styled-components';
+import { useHentBarnetrygdbehandlinger } from '@hooks/useHentBarnetrygdbehandlinger';
+import { useHentKlagebehandlinger } from '@hooks/useHentKlagebehandlinger';
+import { useHentTilbakekrevingsbehandlinger } from '@hooks/useHentTilbakekrevingsbehandlinger';
+import { useToggle } from '@hooks/useToggle';
 
 import { BodyShort, Heading, HStack, LocalAlert, Skeleton, Table, VStack } from '@navikt/ds-react';
 
@@ -6,31 +9,20 @@ import { Behandling } from './Behandling';
 import { filtrerSaksoversiktbehandlinger, hentBehandlingerTilSaksoversikten, hentBehandlingId } from './utils';
 import { VisHenlagtBehandlingerSwitch } from './VisHenlagtBehandlingerSwitch';
 import { VisMånedligValutajuseringBehandlingerSwitch } from './VisMånedligValutajuseringBehandlingerSwitch';
-import { useHentBarnetrygdbehandlinger } from '../../../hooks/useHentBarnetrygdbehandlinger';
-import { useHentKlagebehandlinger } from '../../../hooks/useHentKlagebehandlinger';
-import { useHentTilbakekrevingsbehandlinger } from '../../../hooks/useHentTilbakekrevingsbehandlinger';
-import { useToggle } from '../../../hooks/useToggle';
 import { useFagsakContext } from '../FagsakContext';
-
-const StyledHeaderCell = styled(Table.HeaderCell)<{ width?: string }>`
-    width ${props => props.width};
-`;
+import styles from './Behandlinger.module.css';
 
 function TableHeader() {
     return (
         <Table.Header>
-            <Table.Row>
-                <StyledHeaderCell width={'10%'} scope={'col'}>
-                    Opprettet
-                </StyledHeaderCell>
+            <Table.Row className={styles.headerRow}>
+                <Table.HeaderCell scope={'col'}>Opprettet</Table.HeaderCell>
                 <Table.HeaderCell scope={'col'}>Årsak</Table.HeaderCell>
                 <Table.HeaderCell scope={'col'}>Type</Table.HeaderCell>
                 <Table.HeaderCell scope={'col'}>Behandlingstema</Table.HeaderCell>
                 <Table.HeaderCell scope={'col'}>Status</Table.HeaderCell>
                 <Table.HeaderCell scope={'col'}>Vedtaksdato</Table.HeaderCell>
-                <StyledHeaderCell width={'22%'} scope={'col'}>
-                    Resultat
-                </StyledHeaderCell>
+                <Table.HeaderCell scope={'col'}>Resultat</Table.HeaderCell>
             </Table.Row>
         </Table.Header>
     );

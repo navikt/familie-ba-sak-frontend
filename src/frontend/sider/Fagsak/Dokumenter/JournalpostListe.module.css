@@ -1,0 +1,71 @@
+.table {
+    table-layout: fixed;
+}
+
+.headerRow {
+    th {
+        white-space: nowrap;
+
+        &:nth-of-type(1) {
+            width: 3.5rem;
+        }
+
+        &:nth-of-type(2) {
+            width: 10rem;
+        }
+
+        &:nth-of-type(3) {
+            width: 25%;
+        }
+
+        &:nth-of-type(4) {
+            width: 15%;
+        }
+
+        &:nth-of-type(5) {
+            width: 20%;
+        }
+
+        &:nth-of-type(6) {
+            width: 22%;
+        }
+
+        &:nth-of-type(7) {
+            width: 8%;
+        }
+    }
+}
+
+.dataCell {
+    vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vedleggListe {
+    list-style-type: none;
+    margin: 0;
+
+    &:first-child {
+        padding-inline-start: 0;
+    }
+}
+
+.searchNameLink {
+    padding: 0;
+
+    span {
+        font-weight: normal;
+    }
+
+    svg {
+        transform: rotate(90deg);
+    }
+}

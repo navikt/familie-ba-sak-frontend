@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';
@@ -8,8 +8,8 @@ import { BehandlingStatus } from '@typer/behandling';
 import type { ITotrinnskontrollData } from '@typer/totrinnskontroll';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import type { AxiosError } from 'axios';
-import styled from 'styled-components';
 
+import { Box } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
@@ -25,11 +25,6 @@ import { Totrinnskontrollskjema } from './Totrinnskontrollskjema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { KontrollertStatus } from '../../Sider/sider';
 import { Tab, useTabContext } from '../TabContextProvider';
-
-const Container = styled.div`
-    padding: 0.5rem 1.5rem;
-    display: flex;
-`;
 
 export function Totrinnskontroll() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -108,9 +103,9 @@ export function Totrinnskontroll() {
     return (
         <>
             {behandling.status === BehandlingStatus.FATTER_VEDTAK && (
-                <Container className="totrinnskontroll">
+                <Box paddingInline={'space-24'} paddingBlock={'space-8'}>
                     <Totrinnskontrollskjema sendInnVedtak={sendInnVedtak} innsendtVedtak={innsendtVedtak} />
-                </Container>
+                </Box>
             )}
         </>
     );

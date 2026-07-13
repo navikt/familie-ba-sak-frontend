@@ -1,29 +1,9 @@
+import type { ISimuleringDTO, ISimuleringPeriode } from '@typer/simulering';
+import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '@utils/dato';
+import { formaterBeløp } from '@utils/formatter';
 import { isBefore } from 'date-fns';
-import styled from 'styled-components';
 
 import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
-import {
-    BorderNeutral,
-    FontWeightBold,
-    Space16,
-    TextDangerSubtle,
-    TextNeutral,
-    TextSuccessSubtle,
-} from '@navikt/ds-tokens/dist/tokens';
-
-import type { ISimuleringDTO, ISimuleringPeriode } from '../../../../../typer/simulering';
-import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '../../../../../utils/dato';
-import { formaterBeløp } from '../../../../../utils/formatter';
-
-const BoldTekstMedFarge = styled(BodyShort)<{ $farge?: string }>`
-    color: ${props => (props.$farge ? props.$farge : TextNeutral)};
-    font-weight: ${FontWeightBold};
-`;
-
-const HStackMedBorderTop = styled(HStack)`
-    border-top: 1px solid ${BorderNeutral};
-    padding-top: ${Space16};
-`;
 
 interface ISimuleringProps {
     simulering: ISimuleringDTO;
@@ -82,21 +62,27 @@ const SimuleringPanel = ({
                 <HStack>
                     <BodyShort>Feilutbetaling</BodyShort>
                     <Spacer />
-                    <BoldTekstMedFarge $farge={feilutbetaling > 0 ? TextDangerSubtle : TextNeutral}>
+                    <BodyShort
+                        weight={'semibold'}
+                        textColor={feilutbetaling > 0 ? 'subtle' : 'default'}
+                        data-color={feilutbetaling > 0 ? 'danger' : 'neutral'}
+                    >
                         {formaterBeløpEllerDashOmUndefined(feilutbetaling)}
-                    </BoldTekstMedFarge>
+                    </BodyShort>
                 </HStack>
 
                 <HStack>
                     <BodyShort>Etterbetaling</BodyShort>
                     <Spacer />
-                    <BoldTekstMedFarge>{formaterBeløpEllerDashOmUndefined(etterbetaling)}</BoldTekstMedFarge>
+                    <BodyShort weight={'semibold'}>{formaterBeløpEllerDashOmUndefined(etterbetaling)}</BodyShort>
                 </HStack>
-                <HStackMedBorderTop>
-                    <BodyShort weight="semibold">Neste utbetaling</BodyShort>
-                    <Spacer />
-                    {!nestePeriode && <BodyShort weight="semibold">-</BodyShort>}
-                </HStackMedBorderTop>
+                <Box borderColor={'neutral'} borderWidth="1 0 0 0">
+                    <HStack paddingBlock={'space-16 space-0'}>
+                        <BodyShort weight="semibold">Neste utbetaling</BodyShort>
+                        <Spacer />
+                        {!nestePeriode && <BodyShort weight="semibold">-</BodyShort>}
+                    </HStack>
+                </Box>
                 {nestePeriode && (
                     <HStack>
                         <BodyShort>
@@ -108,13 +94,13 @@ const SimuleringPanel = ({
                             )}
                         </BodyShort>
                         <Spacer />
-                        <BoldTekstMedFarge
-                            $farge={
-                                nestePeriode?.resultat && nestePeriode.resultat > 0 ? TextSuccessSubtle : TextNeutral
-                            }
+                        <BodyShort
+                            weight={'semibold'}
+                            textColor={nestePeriode?.resultat && nestePeriode.resultat > 0 ? 'subtle' : 'default'}
+                            data-color={nestePeriode?.resultat && nestePeriode.resultat > 0 ? 'success' : 'neutral'}
                         >
                             {formaterBeløpEllerDashOmUndefined(nestePeriode?.resultat)}
-                        </BoldTekstMedFarge>
+                        </BodyShort>
                     </HStack>
                 )}
             </VStack>

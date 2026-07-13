@@ -1,20 +1,11 @@
 import type { FamilieAxiosRequestConfig } from '@hooks/useDokument';
 import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
-import styled from 'styled-components';
 
 import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, Link } from '@navikt/ds-react';
-import type { IDokumentInfo } from '@navikt/familie-typer';
+import { BodyShort, HStack, Link, VStack } from '@navikt/ds-react';
+import { type IDokumentInfo } from '@navikt/familie-typer';
 
-import { EllipsisBodyShort, Vedleggsliste } from './JournalpostListe';
-
-const ListeElement = styled.li`
-    margin-bottom: 1rem;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-`;
+import styles from './JournalpostDokument.module.css';
 
 interface IProps {
     dokument: IDokumentInfo;
@@ -39,15 +30,15 @@ export const JournalpostDokument = ({ dokument, hentForhåndsvisning, tilgangsst
     const dokumentTittel = dokument.tittel || 'Uten tittel';
 
     return (
-        <ListeElement>
+        <li>
             <HStack gap="space-4">
                 {journalpostTilgang.harTilgang ? (
                     <>
-                        <EllipsisBodyShort size="small" title={dokumentTittel}>
+                        <BodyShort className={styles.text} size="small" title={dokumentTittel}>
                             <Link href="#" onClick={() => hentPdfDokument(dokument.dokumentInfoId)}>
                                 {dokumentTittel}
                             </Link>
-                        </EllipsisBodyShort>
+                        </BodyShort>
 
                         <Link
                             href={`/familie-ba-sak/api/journalpost/${journalpost.journalpostId}/dokument/${dokument.dokumentInfoId}`}
@@ -68,16 +59,18 @@ export const JournalpostDokument = ({ dokument, hentForhåndsvisning, tilgangsst
                 )}
             </HStack>
             {dokument.logiskeVedlegg && dokument.logiskeVedlegg.length > 0 && (
-                <Vedleggsliste>
-                    {dokument.logiskeVedlegg.map(vedlegg => (
-                        <ListeElement key={vedlegg.logiskVedleggId}>
-                            <EllipsisBodyShort size="small" title={vedlegg.tittel}>
-                                {vedlegg.tittel}
-                            </EllipsisBodyShort>
-                        </ListeElement>
-                    ))}
-                </Vedleggsliste>
+                <ul className={styles.vedleggListe}>
+                    <VStack gap={'space-16'}>
+                        {dokument.logiskeVedlegg.map(vedlegg => (
+                            <li key={vedlegg.logiskVedleggId}>
+                                <BodyShort className={styles.text} size="small" title={vedlegg.tittel}>
+                                    {vedlegg.tittel}
+                                </BodyShort>
+                            </li>
+                        ))}
+                    </VStack>
+                </ul>
             )}
-        </ListeElement>
+        </li>
     );
 };

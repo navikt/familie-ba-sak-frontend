@@ -1,21 +1,11 @@
-import styled from 'styled-components';
+import { YtelseType, ytelsetype } from '@typer/beregning';
+import type { IUtbetalingsperiodeDetalj } from '@typer/vedtaksperiode';
+import { formaterBeløp, hentAlder } from '@utils/formatter';
 
-import { BodyShort, HStack } from '@navikt/ds-react';
-import { Space16, Space32, Space8 } from '@navikt/ds-tokens/dist/tokens';
+import { BodyShort, Box, HStack } from '@navikt/ds-react';
 
 import { PersonInformasjonUtbetaling } from './PersonInformasjonUtbetaling';
-import { YtelseType, ytelsetype } from '../../../typer/beregning';
-import type { IUtbetalingsperiodeDetalj } from '../../../typer/vedtaksperiode';
-import { formaterBeløp, hentAlder } from '../../../utils/formatter';
-
-const Ytelser = styled.section`
-    margin: ${Space8} 0 ${Space16} ${Space32};
-    border-bottom: 1px dashed;
-`;
-
-const Ytelselinje = styled(HStack)`
-    margin-bottom: ${Space16};
-`;
+import styles from './PersonUtbetaling.module.css';
 
 interface IPersonUtbetalingProps {
     utbetalingsperiodeDetaljer: IUtbetalingsperiodeDetalj[];
@@ -34,20 +24,33 @@ const PersonUtbetaling = ({ utbetalingsperiodeDetaljer }: IPersonUtbetalingProps
     return (
         <section>
             <PersonInformasjonUtbetaling person={utbetalingsperiodeDetaljer[0].person} />
-            <Ytelser>
-                {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
-                    return (
-                        <Ytelselinje justify="space-between" key={utbetalingsperiodeDetalj.person.personIdent}>
-                            <BodyShort>
-                                {utbetalingsperiodeDetalj.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
-                                    ? genererTekstForOrdinær(utbetalingsperiodeDetalj)
-                                    : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
-                            </BodyShort>
-                            <BodyShort>{formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}</BodyShort>
-                        </Ytelselinje>
-                    );
-                })}
-            </Ytelser>
+            <Box
+                asChild
+                borderColor={'neutral'}
+                borderWidth={'0 0 1 0'}
+                marginBlock={'space-8 space-16'}
+                marginInline={'space-32 space-0'}
+                className={styles.ytelse}
+            >
+                <section>
+                    {utbetalingsperiodeDetaljer.map(utbetalingsperiodeDetalj => {
+                        return (
+                            <HStack
+                                justify="space-between"
+                                key={utbetalingsperiodeDetalj.person.personIdent}
+                                marginBlock={'space-0 space-16'}
+                            >
+                                <BodyShort>
+                                    {utbetalingsperiodeDetalj.ytelseType === YtelseType.ORDINÆR_BARNETRYGD
+                                        ? genererTekstForOrdinær(utbetalingsperiodeDetalj)
+                                        : ytelsetype[utbetalingsperiodeDetalj.ytelseType].navn}
+                                </BodyShort>
+                                <BodyShort>{formaterBeløp(utbetalingsperiodeDetalj.utbetaltPerMnd)}</BodyShort>
+                            </HStack>
+                        );
+                    })}
+                </section>
+            </Box>
         </section>
     );
 };

@@ -1,14 +1,8 @@
-import styled from 'styled-components';
+import { NavigeringsRetning } from '@komponenter/Tidslinje/TidslinjeContext';
 
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 
-import { NavigeringsRetning } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import TidslinjeNavigering from '../../../../../komponenter/Tidslinje/TidslinjeNavigering';
-
-const FlexColumn = styled.div`
-    display: flex;
-    flex-direction: column;
-`;
 
 interface Props {
     settIndexFramvistÅr: (value: ((prevState: number) => number) | number) => void;
@@ -25,7 +19,7 @@ export const Årsvelger = ({
     aktueltÅr,
     årISimuleringen,
 }: Props) => (
-    <FlexColumn>
+    <VStack>
         <TidslinjeNavigering
             naviger={retning =>
                 retning === NavigeringsRetning.VENSTRE
@@ -39,5 +33,5 @@ export const Årsvelger = ({
         >
             <BodyShort size={'small'}>{årISimuleringen[indexFramvistÅr]}</BodyShort>
         </TidslinjeNavigering>
-    </FlexColumn>
+    </VStack>
 );
