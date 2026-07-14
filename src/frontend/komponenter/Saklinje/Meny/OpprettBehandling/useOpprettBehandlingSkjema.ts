@@ -1,4 +1,4 @@
-import { useFagsakId } from '@hooks/useFagsakId';
+import { useFagsak } from '@hooks/useFagsak';
 import { HentBarnetrygdbehandlingerQueryKeyFactory } from '@hooks/useHentBarnetrygdbehandlinger';
 import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
 import { HentKlagebehandlingerQueryKeyFactory } from '@hooks/useHentKlagebehandlinger';
@@ -13,6 +13,7 @@ import type { IBehandlingstema } from '@typer/behandlingstema';
 import type { OptionType } from '@typer/common';
 import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { hentDefaultBehandlingstema } from '@utils/behandling';
 import { type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -60,7 +61,8 @@ interface Props {
 }
 
 export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandlingOpprettet }: Props) {
-    const fagsakId = useFagsakId();
+    const fagsak = useFagsak();
+    const fagsakId = fagsak.id;
     const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -69,7 +71,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
         defaultValues: {
             [OpprettBehandlingFelt.BEHANDLINGSTYPE]: '',
             [OpprettBehandlingFelt.BEHANDLINGSÅRSAK]: '',
-            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: null,
+            [OpprettBehandlingFelt.BEHANDLINGSTEMA]: hentDefaultBehandlingstema(fagsak.fagsakType) ?? null,
             [OpprettBehandlingFelt.MIGRERINGSDATO]: '',
             [OpprettBehandlingFelt.BEGRUNNELSE]: '',
             [OpprettBehandlingFelt.SØKNAD_MOTTATT_DATO]: '',
