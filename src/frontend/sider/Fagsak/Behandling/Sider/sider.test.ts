@@ -101,6 +101,12 @@ describe('Sider', () => {
 
             expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.VEDTAK);
         });
+
+        test('skal vise vedtak når årsaken er satsendring EØS', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SATSENDRING_EØS });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.VEDTAK);
+        });
     });
 
     describe('Sjekk ved endring av sider', () => {
@@ -176,6 +182,18 @@ describe('Sider', () => {
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
                 });
                 expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.SIMULERING);
+            }
+        );
+
+        test(
+            'Skal returnere Vedtak-siden dersom behandlingssteget er etter "send til beslutter" ' +
+                'og behandlinsårsaken er "satsendring EØS"',
+            () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.SATSENDRING_EØS,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.VEDTAK);
             }
         );
     });
