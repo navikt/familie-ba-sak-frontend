@@ -6,16 +6,16 @@ import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/
 import { BehandlingSteg } from '@typer/behandling';
 import { erFagsakAvTypeInstitusjon } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { useFormContext } from 'react-hook-form';
 
 import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { Annet } from './Annet';
-import { Barna } from './Barna';
+import { Barna, BARN_CHECKBOX_GROUP_ID } from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useSøknadContext } from './SøknadContext';
+import { MÅLFORM_RADIOGROUP_ID, MålformFelt } from './MålformFelt';
+import { RegistrerSøknadFelt, type RegistrerSøknadFormValues, useSøknadContext } from './SøknadContext';
 import { SøknadType } from './SøknadType';
-import MålformVelger from '../../../../../komponenter/MålformVelger';
 import Skjemasteg from '../Skjemasteg';
 import styles from './RegistrerSøknad.module.css';
 
@@ -25,23 +25,50 @@ export const RegistrerSøknad = () => {
     const erLesevisning = useErLesevisning();
 
     const {
-        hentFeilTilOppsummering,
+        bekreftModalFeilmelding,
+        erSenderInn,
         nesteAction,
         settVisBekreftModal,
-        skjema,
         søknadErLastetFraBackend,
         visBekreftModal,
     } = useSøknadContext();
 
+    const {
+        getValues,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useFormContext<RegistrerSøknadFormValues>();
+
     const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
 
+    const barnaMedOpplysninger = watch(RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER);
+
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([...skjema.felter.barnaMedOpplysninger.verdi, barn]);
+        setValue(
+            RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER,
+            [...getValues(RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER), barn],
+            {
+                shouldValidate: true,
+                shouldDirty: true,
+            }
+        );
     }
+
+    const feiloppsummering = [
+        errors.barnaMedOpplysninger?.message && {
+            id: BARN_CHECKBOX_GROUP_ID,
+            feilmelding: errors.barnaMedOpplysninger.message,
+        },
+        errors.målform?.message && {
+            id: MÅLFORM_RADIOGROUP_ID,
+            feilmelding: errors.målform.message,
+        },
+    ].filter((feil): feil is { id: string; feilmelding: string } => Boolean(feil));
 
     return (
         <LeggTilBarnModalContextProvider
-            barn={skjema.felter.barnaMedOpplysninger.verdi}
+            barn={barnaMedOpplysninger}
             onLeggTilBarn={onLeggTilBarn}
             harBrevmottaker={behandling.brevmottakere.length > 0}
         >
@@ -53,7 +80,7 @@ export const RegistrerSøknad = () => {
                     nesteAction(false);
                 }}
                 nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-                senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
+                senderInn={erSenderInn}
                 steg={BehandlingSteg.REGISTRERE_SØKNAD}
             >
                 {søknadErLastetFraBackend && !erLesevisning && (
@@ -73,24 +100,21 @@ export const RegistrerSøknad = () => {
                 {!gjelderInstitusjon && <SøknadType />}
                 <Barna />
                 {!erLesevisning && <LeggTilBarnKnapp />}
-                <MålformVelger
-                    målformFelt={skjema.felter.målform}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
-                    erLesevisning={erLesevisning}
-                />
+                <MålformFelt />
                 <Annet />
-                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                {errors.root?.message && (
                     <LocalAlert status="error">
                         <LocalAlert.Header>
-                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                            <LocalAlert.Title>{errors.root.message}</LocalAlert.Title>
                         </LocalAlert.Header>
                     </LocalAlert>
                 )}
-                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+                {feiloppsummering.length > 0 && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
-                        {hentFeilTilOppsummering().map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
+                        {feiloppsummering.map(item => (
+                            <ErrorSummary.Item key={item.id} href={`#${item.id}`}>
+                                {item.feilmelding}
+                            </ErrorSummary.Item>
                         ))}
                     </ErrorSummary>
                 )}
@@ -106,27 +130,20 @@ export const RegistrerSøknad = () => {
                         width={'35rem'}
                     >
                         <Modal.Body>
-                            <BodyShort className={styles.fjernVilkårAdvarsel}>
-                                {skjema.submitRessurs.status === RessursStatus.FEILET ||
-                                    (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
-                                        skjema.submitRessurs.frontendFeilmelding)}
-                            </BodyShort>
+                            <BodyShort className={styles.fjernVilkårAdvarsel}>{bekreftModalFeilmelding}</BodyShort>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button
-                                key={'ja'}
                                 variant={'primary'}
                                 onClick={() => {
                                     settVisBekreftModal(false);
                                     nesteAction(true);
                                 }}
                                 children={'Ja'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                loading={erSenderInn}
                             />
                             <Button
                                 variant={'secondary'}
-                                key={'nei'}
                                 onClick={() => {
                                     settVisBekreftModal(false);
                                 }}

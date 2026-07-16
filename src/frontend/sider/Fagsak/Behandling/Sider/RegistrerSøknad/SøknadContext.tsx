@@ -1,38 +1,44 @@
 import type { PropsWithChildren } from 'react';
-import { useState, useEffect, createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
+import { ApiFeil, RessursStatus } from '@api/client/apiClient';
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import type { IBehandling } from '@typer/behandling';
+import { useRegistrerSøknad } from '@hooks/useRegistrerSøknad';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import { ForelderBarnRelasjonRolle, type IForelderBarnRelasjon } from '@typer/person';
-import type { IBarnMedOpplysninger, IBarnMedOpplysningerBackend, IRestRegistrerSøknad, Målform } from '@typer/søknad';
+import type { IBarnMedOpplysninger, IBarnMedOpplysningerBackend, Målform } from '@typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import type { Avhengigheter, FeiloppsummeringFeil, ISkjema } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import useDeepEffect from '../../../../../hooks/useDeepEffect';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 
-interface SøknadSkjema {
-    underkategori: BehandlingUnderkategori;
-    barnaMedOpplysninger: IBarnMedOpplysninger[];
-    endringAvOpplysningerBegrunnelse: string;
-    målform: Målform | undefined;
+export enum RegistrerSøknadFelt {
+    UNDERKATEGORI = 'underkategori',
+    BARNA_MED_OPPLYSNINGER = 'barnaMedOpplysninger',
+    ENDRING_AV_OPPLYSNINGER_BEGRUNNELSE = 'endringAvOpplysningerBegrunnelse',
+    MÅLFORM = 'målform',
+}
+
+export interface RegistrerSøknadFormValues {
+    [RegistrerSøknadFelt.UNDERKATEGORI]: BehandlingUnderkategori;
+    [RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER]: IBarnMedOpplysninger[];
+    [RegistrerSøknadFelt.ENDRING_AV_OPPLYSNINGER_BEGRUNNELSE]: string;
+    [RegistrerSøknadFelt.MÅLFORM]: Målform | undefined;
 }
 
 interface SøknadContextValue {
     barnMedLøpendeUtbetaling: Set<string>;
-    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
+    bekreftModalFeilmelding: string;
+    erSenderInn: boolean;
     nesteAction: (bekreftEndringerViaFrontend: boolean) => void;
     settVisBekreftModal: (vis: boolean) => void;
-    skjema: ISkjema<SøknadSkjema, IBehandling>;
     søknadErLastetFraBackend: boolean;
     visBekreftModal: boolean;
 }
@@ -48,6 +54,8 @@ export const SøknadProvider = ({ children }: PropsWithChildren) => {
     const navigate = useNavigate();
 
     const [visBekreftModal, settVisBekreftModal] = useState<boolean>(false);
+    const [bekreftModalFeilmelding, settBekreftModalFeilmelding] = useState<string>('');
+    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
 
     const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
     const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
@@ -55,43 +63,25 @@ export const SøknadProvider = ({ children }: PropsWithChildren) => {
 
     const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
 
-    const { skjema, nullstillSkjema, onSubmit, hentFeilTilOppsummering } = useSkjema<SøknadSkjema, IBehandling>({
-        felter: {
-            underkategori: useFelt<BehandlingUnderkategori>({
-                verdi:
-                    behandling.underkategori === BehandlingUnderkategori.UTVIDET
-                        ? BehandlingUnderkategori.UTVIDET
-                        : BehandlingUnderkategori.ORDINÆR,
-            }),
-            barnaMedOpplysninger: useFelt<IBarnMedOpplysninger[]>({
-                verdi: [],
-                valideringsfunksjon: (felt, avhengigheter?: Avhengigheter) => {
-                    return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket) ||
-                        (avhengigheter?.barnMedLøpendeUtbetaling.size ?? []) > 0
-                        ? ok(felt)
-                        : feil(felt, 'Ingen av barna er valgt.');
-                },
-                avhengigheter: { barnMedLøpendeUtbetaling },
-            }),
-            endringAvOpplysningerBegrunnelse: useFelt<string>({
-                verdi: '',
-            }),
-            målform: useFelt<Målform | undefined>({
-                verdi: undefined,
-                valideringsfunksjon: felt =>
-                    felt.verdi !== undefined ? ok(felt) : feil(felt, 'Målform er ikke valgt.'),
-            }),
+    const { mutateAsync: registrerSøknad, isPending } = useRegistrerSøknad();
+
+    const form = useForm<RegistrerSøknadFormValues>({
+        defaultValues: {
+            [RegistrerSøknadFelt.UNDERKATEGORI]:
+                behandling.underkategori === BehandlingUnderkategori.UTVIDET
+                    ? BehandlingUnderkategori.UTVIDET
+                    : BehandlingUnderkategori.ORDINÆR,
+            [RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER]: [],
+            [RegistrerSøknadFelt.ENDRING_AV_OPPLYSNINGER_BEGRUNNELSE]: '',
+            [RegistrerSøknadFelt.MÅLFORM]: undefined,
         },
-        skjemanavn: 'Registrer søknad',
     });
 
-    const [søknadErLastetFraBackend, settSøknadErLastetFraBackend] = useState(false);
+    const { reset, setError, handleSubmit } = form;
 
-    const tilbakestillSøknad = () => {
-        nullstillSkjema();
-        let barnaMedOpplysninger: IBarnMedOpplysninger[];
+    const byggBarnaFraFolkeregister = (): IBarnMedOpplysninger[] => {
         if (gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn) {
-            barnaMedOpplysninger = [
+            return [
                 {
                     merket: true,
                     ident: bruker.personIdent,
@@ -101,21 +91,31 @@ export const SøknadProvider = ({ children }: PropsWithChildren) => {
                     erFolkeregistrert: true,
                 },
             ];
-        } else {
-            barnaMedOpplysninger = bruker.forelderBarnRelasjon
-                .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-                .map(
-                    (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                        merket: false,
-                        ident: relasjon.personIdent,
-                        navn: relasjon.navn,
-                        fødselsdato: relasjon.fødselsdato,
-                        manueltRegistrert: false,
-                        erFolkeregistrert: true,
-                    })
-                );
         }
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(barnaMedOpplysninger);
+        return bruker.forelderBarnRelasjon
+            .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
+            .map(
+                (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                    merket: false,
+                    ident: relasjon.personIdent,
+                    navn: relasjon.navn,
+                    fødselsdato: relasjon.fødselsdato,
+                    manueltRegistrert: false,
+                    erFolkeregistrert: true,
+                })
+            );
+    };
+
+    const tilbakestillSøknad = () => {
+        reset({
+            [RegistrerSøknadFelt.UNDERKATEGORI]:
+                behandling.underkategori === BehandlingUnderkategori.UTVIDET
+                    ? BehandlingUnderkategori.UTVIDET
+                    : BehandlingUnderkategori.ORDINÆR,
+            [RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER]: byggBarnaFraFolkeregister(),
+            [RegistrerSøknadFelt.ENDRING_AV_OPPLYSNINGER_BEGRUNNELSE]: '',
+            [RegistrerSøknadFelt.MÅLFORM]: undefined,
+        });
         settSøknadErLastetFraBackend(false);
     };
 
@@ -126,82 +126,86 @@ export const SøknadProvider = ({ children }: PropsWithChildren) => {
     useDeepEffect(() => {
         if (behandling.søknadsgrunnlag) {
             settSøknadErLastetFraBackend(true);
-            skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-                behandling.søknadsgrunnlag.barnaMedOpplysninger.map(
+            reset({
+                [RegistrerSøknadFelt.UNDERKATEGORI]: behandling.søknadsgrunnlag.underkategori,
+                [RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER]: behandling.søknadsgrunnlag.barnaMedOpplysninger.map(
                     (barnMedOpplysninger: IBarnMedOpplysningerBackend) => ({
                         ...barnMedOpplysninger,
                         merket: barnMedOpplysninger.inkludertISøknaden,
                     })
-                )
-            );
-
-            skjema.felter.målform.validerOgSettFelt(behandling.søknadsgrunnlag.søkerMedOpplysninger.målform);
-            skjema.felter.underkategori.validerOgSettFelt(behandling.søknadsgrunnlag.underkategori);
-            skjema.felter.endringAvOpplysningerBegrunnelse.validerOgSettFelt(
-                behandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse
-            );
+                ),
+                [RegistrerSøknadFelt.ENDRING_AV_OPPLYSNINGER_BEGRUNNELSE]:
+                    behandling.søknadsgrunnlag.endringAvOpplysningerBegrunnelse,
+                [RegistrerSøknadFelt.MÅLFORM]: behandling.søknadsgrunnlag.søkerMedOpplysninger.målform,
+            });
         } else {
             // Ny behandling er lastet som ikke har fullført søknad-steget.
             tilbakestillSøknad();
         }
     }, [behandling.behandlingId, behandling.søknadsgrunnlag]);
 
+    const sendInn = async (values: RegistrerSøknadFormValues, bekreftEndringerViaFrontend: boolean) => {
+        return registrerSøknad({
+            behandlingId: behandling.behandlingId,
+            søknad: {
+                søknad: {
+                    underkategori: values.underkategori,
+                    søkerMedOpplysninger: {
+                        ident: fagsak.søkerFødselsnummer,
+                        målform: values.målform,
+                    },
+                    barnaMedOpplysninger: values.barnaMedOpplysninger.map(
+                        (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
+                            ...barn,
+                            inkludertISøknaden: barn.merket,
+                        })
+                    ),
+                    endringAvOpplysningerBegrunnelse: values.endringAvOpplysningerBegrunnelse,
+                    erAutomatiskRegistrert: false,
+                },
+                bekreftEndringerViaFrontend,
+            },
+        })
+            .then(oppdatertBehandling => {
+                settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+                navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
+            })
+            .catch((error: unknown) => {
+                if (error instanceof ApiFeil && error.ressursStatus === RessursStatus.FUNKSJONELL_FEIL) {
+                    settBekreftModalFeilmelding(error.message);
+                    settVisBekreftModal(true);
+                    return;
+                }
+                setError('root', {
+                    message: error instanceof Error ? error.message : 'Teknisk feil ved registrering av søknad.',
+                });
+            });
+    };
+
     const nesteAction = (bekreftEndringerViaFrontend: boolean) => {
         if (erLesevisning) {
             navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
-        } else {
-            onSubmit<IRestRegistrerSøknad>(
-                {
-                    method: 'POST',
-                    data: {
-                        søknad: {
-                            underkategori: skjema.felter.underkategori.verdi,
-                            søkerMedOpplysninger: {
-                                ident: fagsak.søkerFødselsnummer,
-                                målform: skjema.felter.målform.verdi,
-                            },
-                            barnaMedOpplysninger: skjema.felter.barnaMedOpplysninger.verdi.map(
-                                (barn: IBarnMedOpplysninger): IBarnMedOpplysningerBackend => ({
-                                    ...barn,
-                                    inkludertISøknaden: barn.merket,
-                                })
-                            ),
-                            endringAvOpplysningerBegrunnelse: skjema.felter.endringAvOpplysningerBegrunnelse.verdi,
-                            erAutomatiskRegistrert: false,
-                        },
-                        bekreftEndringerViaFrontend,
-                    },
-                    url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/registrer-søknad`,
-                },
-                (response: Ressurs<IBehandling>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        settÅpenBehandling(response);
-                        navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
-                    }
-                },
-                (errorResponse: Ressurs<IBehandling>) => {
-                    if (errorResponse.status === RessursStatus.FUNKSJONELL_FEIL) {
-                        settVisBekreftModal(true);
-                    }
-                }
-            );
+            return;
         }
+        handleSubmit(values => sendInn(values, bekreftEndringerViaFrontend))();
     };
 
     return (
-        <SøknadContext.Provider
-            value={{
-                barnMedLøpendeUtbetaling,
-                hentFeilTilOppsummering,
-                nesteAction,
-                settVisBekreftModal,
-                skjema,
-                søknadErLastetFraBackend,
-                visBekreftModal,
-            }}
-        >
-            {children}
-        </SøknadContext.Provider>
+        <FormProvider {...form}>
+            <SøknadContext.Provider
+                value={{
+                    barnMedLøpendeUtbetaling,
+                    bekreftModalFeilmelding,
+                    erSenderInn: isPending,
+                    nesteAction,
+                    settVisBekreftModal,
+                    søknadErLastetFraBackend,
+                    visBekreftModal,
+                }}
+            >
+                {children}
+            </SøknadContext.Provider>
+        </FormProvider>
     );
 };
 

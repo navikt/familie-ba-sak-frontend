@@ -1,22 +1,25 @@
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import { erFagsakAvTypeInstitusjon, erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IForelderBarnRelasjonMaskert } from '@typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { isoStringTilDate } from '@utils/dato';
 import { differenceInMilliseconds } from 'date-fns';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } from '@navikt/ds-react';
 
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
-import { useSøknadContext } from './SøknadContext';
+import { RegistrerSøknadFelt, type RegistrerSøknadFormValues, useSøknadContext } from './SøknadContext';
 import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 
+export const BARN_CHECKBOX_GROUP_ID = 'registrer-søknad-barn';
+
 export const Barna = () => {
-    const { skjema } = useSøknadContext();
+    const { barnMedLøpendeUtbetaling } = useSøknadContext();
 
     const fagsak = useFagsak();
     const bruker = useBruker();
@@ -26,7 +29,24 @@ export const Barna = () => {
     const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
     const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
 
-    const sorterteBarnMedOpplysninger = skjema.felter.barnaMedOpplysninger.verdi.sort(
+    const { control } = useFormContext<RegistrerSøknadFormValues>();
+
+    const {
+        field: { value: barnaMedOpplysninger, onChange },
+        fieldState: { error },
+        formState: { isSubmitting },
+    } = useController({
+        name: RegistrerSøknadFelt.BARNA_MED_OPPLYSNINGER,
+        control,
+        rules: {
+            validate: barna =>
+                barna.some((barn: IBarnMedOpplysninger) => barn.merket) || barnMedLøpendeUtbetaling.size > 0
+                    ? undefined
+                    : 'Ingen av barna er valgt.',
+        },
+    });
+
+    const sorterteBarnMedOpplysninger = [...barnaMedOpplysninger].sort(
         (a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
             if (!a.fødselsdato) {
                 return 1;
@@ -48,8 +68,8 @@ export const Barna = () => {
     );
 
     const oppdaterBarnMedMerketStatus = (barnaSomErSjekketAv: string[]) => {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt(
-            skjema.felter.barnaMedOpplysninger.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+        onChange(
+            barnaMedOpplysninger.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
                 ...barnMedOpplysninger,
                 merket: barnaSomErSjekketAv.includes(barnMedOpplysninger.ident),
             }))
@@ -76,7 +96,9 @@ export const Barna = () => {
             })}
             <br />
             <CheckboxGroup
-                {...skjema.felter.barnaMedOpplysninger.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
+                id={BARN_CHECKBOX_GROUP_ID}
+                readOnly={isSubmitting}
+                error={error?.message}
                 legend={
                     !erLesevisning && !gjelderInstitusjon && !gjelderEnsligMindreårig && !gjelderSkjermetBarn ? (
                         <Label>Velg hvilke barn det er søkt om</Label>
@@ -84,7 +106,7 @@ export const Barna = () => {
                         <Label>Barn det er søkt om</Label>
                     )
                 }
-                value={skjema.felter.barnaMedOpplysninger.verdi
+                value={barnaMedOpplysninger
                     .filter((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.merket)
                     .map((barnMedOpplysninger: IBarnMedOpplysninger) => barnMedOpplysninger.ident)}
                 onChange={(merkedeBarn: string[]) => oppdaterBarnMedMerketStatus(merkedeBarn)}
