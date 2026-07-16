@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { useHentPersonerMedUgyldigEtterbetalingsperiode } from '@hooks/useHentPersonerMedUgyldigEtterbetalingsperiode';
 import { useOppdaterBehandlingsresultat } from '@hooks/useOppdaterBehandlingsresultat';
 import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
@@ -29,7 +30,6 @@ import Valutakurser from './Eøs/Valutakurs/Valutakurser';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import { useBehandlingsresultat } from './useBehandlingsresultat';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 
@@ -54,12 +54,23 @@ const Behandlingsresultat = () => {
     const navigate = useNavigate();
     const erLesevisning = useErLesevisning();
 
+    const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
+
     const {
-        visFeilmeldinger,
-        settVisFeilmeldinger,
-        hentPersonerMedUgyldigEtterbetalingsperiode,
-        personerMedUgyldigEtterbetalingsperiode,
-    } = useBehandlingsresultat(behandling);
+        data: personerMedUgyldigEtterbetalingsperiode = [],
+        refetch: refetchPersonerMedUgyldigEtterbetalingsperiode,
+    } = useHentPersonerMedUgyldigEtterbetalingsperiode(behandling.behandlingId);
+
+    // Behandlingen kan endres på dette steget (f.eks. småbarnstillegg og endret utbetaling),
+    // og hvilke personer som har ugyldig etterbetalingsperiode må da hentes på nytt.
+    const erFørsteRender = useRef(true);
+    useEffect(() => {
+        if (erFørsteRender.current) {
+            erFørsteRender.current = false;
+            return;
+        }
+        refetchPersonerMedUgyldigEtterbetalingsperiode();
+    }, [behandling, refetchPersonerMedUgyldigEtterbetalingsperiode]);
 
     const {
         mutate: oppdaterBehandlingsresultat,
@@ -99,10 +110,6 @@ const Behandlingsresultat = () => {
         erValutakurserGyldige,
         hentValutakurserMedFeil,
     } = useEøs(behandling);
-
-    useEffect(() => {
-        hentPersonerMedUgyldigEtterbetalingsperiode();
-    }, [behandling]);
 
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
