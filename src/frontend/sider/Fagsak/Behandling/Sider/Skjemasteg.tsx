@@ -79,7 +79,7 @@ const Skjemasteg = ({
                     {children}
                     {feilmelding !== '' && (
                         <Box marginBlock={'space-16 space-0'}>
-                            <ErrorMessage>{'feilmelding'}</ErrorMessage>
+                            <ErrorMessage>{feilmelding}</ErrorMessage>
                         </Box>
                     )}
                     <Stack
