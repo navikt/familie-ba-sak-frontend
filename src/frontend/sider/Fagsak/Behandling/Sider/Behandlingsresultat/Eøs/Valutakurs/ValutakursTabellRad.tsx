@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { FormProvider } from 'react-hook-form';
 
 import { Table } from '@navikt/ds-react';
 
@@ -19,6 +21,7 @@ interface IProps {
 }
 
 const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: IProps) => {
+    const [erValutakursEkspandert, settErValutakursEkspandert] = useState(false);
     const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] = useState(false);
 
     const barn: OptionType[] = valutakurs.barnIdenter.map(barn => ({
@@ -26,22 +29,12 @@ const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: 
         label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
-    const {
-        erValutakursEkspandert,
-        settErValutakursEkspandert,
-        skjema,
-        valideringErOk,
-        sendInnSkjema,
-        tilbakestillFelterTilDefault,
-        kanSendeSkjema,
-        erValutakursSkjemaEndret,
-        slettValutakurs,
-        sletterValutakurs,
-        erManuellInputAvKurs,
-    } = useValutakursSkjema({
-        valutakurs,
-        barnIValutakurs: barn,
-    });
+    const { form, onSubmit, slettValutakurs, sletterValutakurs, erManuellInputAvKurs, initielFom } =
+        useValutakursSkjema({
+            valutakurs,
+            barnIValutakurs: barn,
+            lukkSkjema: () => settErValutakursEkspandert(false),
+        });
 
     if (erValutakursEkspandert && !skalRendreContentIEkspanderbartPanel) {
         settSkalRendreContentIEkspanderbartPanel(true);
@@ -49,16 +42,16 @@ const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: 
 
     useEffect(() => {
         if (visFeilmeldinger && erValutakursEkspandert) {
-            kanSendeSkjema();
+            form.trigger();
         }
     }, [visFeilmeldinger, erValutakursEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
-        if (erValutakursEkspandert && visAlert && erValutakursSkjemaEndret()) {
+        if (erValutakursEkspandert && visAlert && form.formState.isDirty) {
             alert('Valutakurs har endringer som ikke er lagret!');
         } else {
             settErValutakursEkspandert(!erValutakursEkspandert);
-            tilbakestillFelterTilDefault();
+            form.reset();
         }
     };
 
@@ -70,21 +63,21 @@ const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: 
             id={valutakursFeilmeldingId(valutakurs)}
             content={
                 skalRendreContentIEkspanderbartPanel ? (
-                    <ValutakursTabellRadEndre
-                        skjema={skjema}
-                        tilgjengeligeBarn={barn}
-                        status={valutakurs.status}
-                        valideringErOk={valideringErOk}
-                        sendInnSkjema={sendInnSkjema}
-                        toggleForm={toggleForm}
-                        slettValutakurs={slettValutakurs}
-                        sletterValutakurs={sletterValutakurs}
-                        erManuellInputAvKurs={erManuellInputAvKurs}
-                        key={`${valutakurs.id}-${erValutakursEkspandert ? 'ekspandert' : 'lukket'}`}
-                        vurderingsform={valutakurs.vurderingsform}
-                        åpenBehandling={åpenBehandling}
-                        inneholderBarnSomSkalSkjermes={valutakurs.inneholderBarnSomSkalSkjermes}
-                    />
+                    <FormProvider {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <ValutakursTabellRadEndre
+                                valutakurs={valutakurs}
+                                tilgjengeligeBarn={barn}
+                                initielFom={initielFom}
+                                erManuellInputAvKurs={erManuellInputAvKurs}
+                                vurderingsform={valutakurs.vurderingsform}
+                                inneholderBarnSomSkalSkjermes={valutakurs.inneholderBarnSomSkalSkjermes}
+                                onAvbryt={() => toggleForm(false)}
+                                slettValutakurs={slettValutakurs}
+                                sletterValutakurs={sletterValutakurs}
+                            />
+                        </form>
+                    </FormProvider>
                 ) : null
             }
         >
