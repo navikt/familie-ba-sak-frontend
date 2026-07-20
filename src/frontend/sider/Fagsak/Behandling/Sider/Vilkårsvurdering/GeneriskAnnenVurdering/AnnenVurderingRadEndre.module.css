@@ -1,0 +1,11 @@
+.fieldset {
+    border-left: 0.125rem solid var(--ax-text-info-subtle);
+}
+
+.ikkeVurdert {
+    border-color: var(--ax-text-warning-subtle);
+}
+
+.lesevisning {
+    border-color: var(--ax-border-neutral);
+}

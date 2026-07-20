@@ -1,20 +1,15 @@
 import { useState } from 'react';
 
-import styled from 'styled-components';
+import type { IBehandling } from '@typer/behandling';
+import { VilkårType } from '@typer/vilkår';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { VilkårType } from '../../../../../../typer/vilkår';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-
-const UtførKnapp = styled(Button)`
-    margin-top: var(--ax-space-20);
-`;
 
 interface IProps {
     personIdent: string;
@@ -63,14 +58,16 @@ const FjernUtvidetBarnetrygdVilkår = ({ personIdent, slettVilkårId }: IProps) 
 
     return (
         <>
-            <UtførKnapp
-                id={slettVilkårId}
-                onClick={() => settVisModal(true)}
-                size="small"
-                icon={<TrashIcon title="Fjern vilkår" />}
-            >
-                Fjern vilkår
-            </UtførKnapp>
+            <Box asChild marginBlock={'space-20 space-0'}>
+                <Button
+                    id={slettVilkårId}
+                    onClick={() => settVisModal(true)}
+                    size="small"
+                    icon={<TrashIcon title="Fjern vilkår" />}
+                >
+                    Fjern vilkår
+                </Button>
+            </Box>
 
             {visModal && (
                 <Modal
