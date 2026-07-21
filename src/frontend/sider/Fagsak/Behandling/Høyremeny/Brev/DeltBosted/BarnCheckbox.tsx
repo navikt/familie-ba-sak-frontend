@@ -1,10 +1,11 @@
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { lagBarnLabel } from '@utils/formatter';
+
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
 
 import DeltBostedAvtaler from './DeltBostedAvtaler';
-import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { lagBarnLabel } from '../../../../utils/formatter';
 
 interface IProps {
     barn: IBarnMedOpplysninger;

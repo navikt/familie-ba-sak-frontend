@@ -1,11 +1,10 @@
+import DatovelgerForGammelSkjemaløsning from '@komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { erIsoStringGyldig, type IsoDatoString } from '@utils/dato';
+
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
-
-import DatovelgerForGammelSkjemaløsning from '../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
-import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import type { IsoDatoString } from '../../../../utils/dato';
-import { erIsoStringGyldig } from '../../../../utils/dato';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
