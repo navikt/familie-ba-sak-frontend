@@ -127,6 +127,21 @@ export const slåSammenListeTilStreng = (liste: string[]) => {
     return liste.join(', ').replace(/(.*),/, '$1 og');
 };
 
+export const sorterBarnEtterFødselsdato = <T extends IBarnMedOpplysninger>(barn: T[]): T[] =>
+    [...barn].toSorted((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+        if (!a.fødselsdato) {
+            return 1;
+        }
+
+        if (!b.fødselsdato) {
+            return -1;
+        }
+
+        return !a.ident
+            ? 1
+            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
+    });
+
 export const formaterTekstStorForbokstav = (tekst: string) => {
     return tekst
         .split(' ')
