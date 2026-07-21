@@ -1,30 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useValiderBehandlingsresultat } from '@hooks/useValiderBehandlingsresultat';
 
 import { Box, LocalAlert } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
-import { byggTomRessurs } from '@navikt/familie-typer';
-
-import { hentFrontendFeilmelding } from '../../../../../utils/ressursUtils';
 
 interface IProps {
     behandlingId: number;
 }
 
 const MigreringInfoboks = ({ behandlingId }: IProps) => {
-    const { request } = useHttp();
-    const [melding, settMelding] = useState<Ressurs<boolean>>(byggTomRessurs());
+    const { error } = useValiderBehandlingsresultat(behandlingId);
 
-    useEffect(() => {
-        request<void, boolean>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/behandlingsresultat/valider`,
-        }).then((response: Ressurs<boolean>) => {
-            settMelding(response);
-        });
-    }, []);
-
-    const feilmelding = hentFrontendFeilmelding(melding);
+    const feilmelding = error?.message;
 
     if (feilmelding !== undefined) {
         return (

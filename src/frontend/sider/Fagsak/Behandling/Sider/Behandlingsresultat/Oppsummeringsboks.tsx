@@ -2,6 +2,8 @@ import { type PropsWithChildren, useEffect, useState } from 'react';
 
 import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFjernSmåbarnstillegg } from '@hooks/useFjernSmåbarnstillegg';
+import { useLeggTilSmåbarnstillegg } from '@hooks/useLeggTilSmåbarnstillegg';
 import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
 import { Skillelinje } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
@@ -24,10 +26,8 @@ import styled from 'styled-components';
 
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
 import type { Etikett } from '@navikt/familie-tidslinje';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
@@ -53,10 +53,6 @@ interface IProps {
     kompetanser: IRestKompetanse[];
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-}
-
-interface ISmåbarnstilleggkorrigering {
-    årMåned: string;
 }
 
 const finnUtbetalingsBeløpStatusMap = (
@@ -108,7 +104,6 @@ const Oppsummeringsboks = ({
     utbetaltAnnetLandBeløp,
     valutakurser,
 }: IProps) => {
-    const { request } = useHttp();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useToastContext();
     const { settAktivEtikett } = useTidslinjeContext();
@@ -117,7 +112,6 @@ const Oppsummeringsboks = ({
 
     const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
-    const [justererSmåbarnstillegg, setJustererSmåbarnstillegg] = useState<boolean>(false);
 
     const aktivÅrOgMåned = dateTilFormatertString({
         date: aktivEtikett.date,
@@ -130,61 +124,38 @@ const Oppsummeringsboks = ({
         });
         return navn[0].toUpperCase() + navn.substr(1);
     };
-    const småbarnstilleggkorrigeringUrl = `/familie-ba-sak/api/småbarnstilleggkorrigering/behandling`;
 
-    const fjernSmåbarnstilleggFraMåned = (småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering) => {
-        setJustererSmåbarnstillegg(true);
+    const { mutate: fjernSmåbarnstillegg, isPending: fjernerSmåbarnstillegg } = useFjernSmåbarnstillegg({
+        onSuccess: (oppdatertBehandling: IBehandling) => {
+            settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
+                alertType: AlertType.SUCCESS,
+                tekst: 'Småbarnstillegg er fjernet',
+            });
+            settRestFeil(undefined);
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+        },
+        onError: () => settRestFeil('Teknisk feil ved fjerning av småbarnstillegg'),
+    });
 
-        request<ISmåbarnstilleggkorrigering, IBehandling>({
-            method: 'DELETE',
-            data: småbarnstilleggkorrigering,
-            url: `${småbarnstilleggkorrigeringUrl}/${behandling.behandlingId}`,
-        }).then((response: Ressurs<IBehandling>) => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
-                    alertType: AlertType.SUCCESS,
-                    tekst: 'Småbarnstillegg er fjernet',
-                });
-                settRestFeil(undefined);
-                settÅpenBehandling(response);
-            } else {
-                settRestFeil('Teknisk feil ved fjerning av småbarnstillegg');
-            }
-            setJustererSmåbarnstillegg(false);
-        });
-    };
+    const { mutate: leggTilSmåbarnstillegg, isPending: leggerTilSmåbarnstillegg } = useLeggTilSmåbarnstillegg({
+        onSuccess: (oppdatertBehandling: IBehandling) => {
+            settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
+                alertType: AlertType.SUCCESS,
+                tekst: 'Småbarnstillegg er lagt til',
+            });
+            settRestFeil(undefined);
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+        },
+        onError: () => settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg'),
+    });
 
-    const leggSmåbarnstilleggTilIMåned = (småbarnstilleggkorrigering: ISmåbarnstilleggkorrigering) => {
-        setJustererSmåbarnstillegg(true);
-
-        request<ISmåbarnstilleggkorrigering, IBehandling>({
-            method: 'POST',
-            data: småbarnstilleggkorrigering,
-            url: `${småbarnstilleggkorrigeringUrl}/${behandling.behandlingId}`,
-        }).then((response: Ressurs<IBehandling>) => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settToast(ToastTyper.SMÅBARNSTILLEGG_KORRIGERT, {
-                    alertType: AlertType.SUCCESS,
-                    tekst: 'Småbarnstillegg er lagt til',
-                });
-                settRestFeil(undefined);
-                settÅpenBehandling(response);
-            } else {
-                settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg');
-            }
-            setJustererSmåbarnstillegg(false);
-        });
-    };
+    const justererSmåbarnstillegg = fjernerSmåbarnstillegg || leggerTilSmåbarnstillegg;
 
     useEffect(() => {
         setUtbetalingsBeløpStatusMap(
             finnUtbetalingsBeløpStatusMap(utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser)
         );
     }, [utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser]);
-
-    const småbarnstilleggKorrigering: ISmåbarnstilleggkorrigering = {
-        årMåned: aktivÅrOgMåned,
-    };
 
     return (
         <Box borderColor="neutral-strong" borderWidth="1" padding="space-40">
@@ -269,7 +240,12 @@ const Oppsummeringsboks = ({
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning}
-                                onClick={() => fjernSmåbarnstilleggFraMåned(småbarnstilleggKorrigering)}
+                                onClick={() =>
+                                    fjernSmåbarnstillegg({
+                                        behandlingId: behandling.behandlingId,
+                                        årMåned: aktivÅrOgMåned,
+                                    })
+                                }
                                 icon={<TrashIcon aria-hidden />}
                             >
                                 Fjern småbarnstillegg
@@ -283,7 +259,12 @@ const Oppsummeringsboks = ({
                                 size={'xsmall'}
                                 loading={justererSmåbarnstillegg}
                                 disabled={justererSmåbarnstillegg || erLesevisning}
-                                onClick={() => leggSmåbarnstilleggTilIMåned(småbarnstilleggKorrigering)}
+                                onClick={() =>
+                                    leggTilSmåbarnstillegg({
+                                        behandlingId: behandling.behandlingId,
+                                        årMåned: aktivÅrOgMåned,
+                                    })
+                                }
                                 icon={<PlusCircleIcon aria-hidden />}
                             >
                                 Legg til småbarnstillegg
