@@ -29,7 +29,7 @@ const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: 
         label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
-    const { form, onSubmit, slettValutakurs, sletterValutakurs, erManuellInputAvKurs, initielFom } =
+    const { form, onSubmit, slettValutakurs, sletterValutakurs, erManuellInputAvKurs, initiellFom } =
         useValutakursSkjema({
             valutakurs,
             barnIValutakurs: barn,
@@ -68,7 +68,7 @@ const ValutakursTabellRad = ({ valutakurs, åpenBehandling, visFeilmeldinger }: 
                             <ValutakursTabellRadEndre
                                 valutakurs={valutakurs}
                                 tilgjengeligeBarn={barn}
-                                initielFom={initielFom}
+                                initiellFom={initiellFom}
                                 erManuellInputAvKurs={erManuellInputAvKurs}
                                 vurderingsform={valutakurs.vurderingsform}
                                 inneholderBarnSomSkalSkjermes={valutakurs.inneholderBarnSomSkalSkjermes}

@@ -14,8 +14,9 @@ export function ValutakursBarnFelt({ tilgjengeligeBarn, lesevisning }: Props) {
     const { control } = useFormContext<ValutakursFormValues>();
 
     const {
-        field: { value, onChange },
+        field: { value, onChange, onBlur, ref },
         fieldState: { error },
+        formState: { isSubmitting },
     } = useController({
         name: ValutakursFelt.BARN,
         control,
@@ -42,7 +43,9 @@ export function ValutakursBarnFelt({ tilgjengeligeBarn, lesevisning }: Props) {
             options={tilgjengeligeBarn}
             selectedOptions={value}
             onToggleSelected={onToggleSelected}
-            readOnly={lesevisning}
+            onBlur={onBlur}
+            ref={ref}
+            readOnly={lesevisning || isSubmitting}
             error={error?.message}
         />
     );

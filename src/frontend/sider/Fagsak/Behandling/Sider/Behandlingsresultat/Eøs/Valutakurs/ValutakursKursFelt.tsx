@@ -35,8 +35,9 @@ export function ValutakursKursFelt({ readOnly, erManuellInputAvKurs }: Props) {
     const { control } = useFormContext<ValutakursFormValues>();
 
     const {
-        field: { value, onChange },
+        field: { value, onChange, onBlur, ref },
         fieldState: { error },
+        formState: { isSubmitting },
     } = useController({
         name: ValutakursFelt.KURS,
         control,
@@ -48,9 +49,11 @@ export function ValutakursKursFelt({ readOnly, erManuellInputAvKurs }: Props) {
     return (
         <TextField
             label={'Valutakurs'}
-            readOnly={readOnly}
+            readOnly={readOnly || isSubmitting}
             value={value ?? ''}
             onChange={event => onChange(event.target.value)}
+            onBlur={onBlur}
+            ref={ref}
             error={error?.message}
         />
     );

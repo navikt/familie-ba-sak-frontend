@@ -115,6 +115,6 @@ export const useValutakursSkjema = ({ valutakurs, barnIValutakurs, lukkSkjema }:
         slettValutakurs,
         sletterValutakurs,
         erManuellInputAvKurs,
-        initielFom: valutakurs.fom,
+        initiellFom: valutakurs.fom,
     };
 };

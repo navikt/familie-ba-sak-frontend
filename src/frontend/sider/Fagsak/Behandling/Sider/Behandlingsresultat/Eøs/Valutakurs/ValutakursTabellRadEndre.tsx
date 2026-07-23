@@ -19,7 +19,7 @@ import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSk
 interface Props {
     valutakurs: IRestValutakurs;
     tilgjengeligeBarn: OptionType[];
-    initielFom: string;
+    initiellFom: string;
     erManuellInputAvKurs: boolean;
     vurderingsform: Vurderingsform | undefined;
     inneholderBarnSomSkalSkjermes?: boolean;
@@ -31,7 +31,7 @@ interface Props {
 const ValutakursTabellRadEndre = ({
     valutakurs,
     tilgjengeligeBarn,
-    initielFom,
+    initiellFom,
     erManuellInputAvKurs,
     vurderingsform,
     inneholderBarnSomSkalSkjermes,
@@ -74,7 +74,7 @@ const ValutakursTabellRadEndre = ({
                 )}
                 <ValutakursBarnFelt tilgjengeligeBarn={tilgjengeligeBarn} lesevisning={erRedigeringDeaktivert} />
                 <ValutakursPeriodeFelt
-                    initielFom={initielFom}
+                    initiellFom={initiellFom}
                     periodeFeilmeldingId={periodeFeilmeldingId}
                     lesevisning={erRedigeringDeaktivert}
                 />
@@ -133,7 +133,7 @@ const ValutakursTabellRadEndre = ({
                                 type={'button'}
                                 variant={'tertiary'}
                                 onClick={slettValutakurs}
-                                id={`slett_valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${initielFom}`}
+                                id={`slett_valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${initiellFom}`}
                                 loading={sletterValutakurs}
                                 size={'small'}
                                 icon={<TrashIcon />}

@@ -17,9 +17,9 @@ export function ValutakursDatoFelt({ readOnly }: Props) {
     const [dateValidation, setDateValidation] = useState<DateValidationT | undefined>(undefined);
 
     const {
-        field: { value, onChange },
+        field: { value, onChange, ref },
         fieldState: { error },
-        formState: { isSubmitted },
+        formState: { isSubmitting, isSubmitted },
     } = useController({
         name: ValutakursFelt.VALUTAKURSDATO,
         control,
@@ -74,7 +74,8 @@ export function ValutakursDatoFelt({ readOnly }: Props) {
                 {...inputProps}
                 label={'Valutakursdato'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
-                readOnly={readOnly}
+                ref={ref}
+                readOnly={readOnly || isSubmitting}
                 error={error?.message}
             />
         </DatePicker>
