@@ -6,8 +6,9 @@ COPY dist_backend ./dist_backend
 COPY dist_frontend ./dist_frontend
 COPY assets ./assets
 
-# Må kopiere package.json og node_modules for at backend skal fungere. Backend henter avhengigheter runtime fra node_modules, og package.json trengs for at 'import' statements skal fungere.
-COPY node_modules ./node_modules
+# dist_backend/node_modules inneholder kun de avhengighetene backend faktisk bruker
+# (sporet med @vercel/nft i scripts/prune-backend-node-modules.js), så vi slipper
+# å kopiere hele node_modules inn i imaget. package.json trengs for at 'import' skal fungere.
 COPY package.json .
 COPY .env .
 COPY .env.preprod .
