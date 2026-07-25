@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useEndreVurderingsstrategiForValutakurser } from '@hooks/useEndreVurderingsstrategiForValutakurser';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
@@ -19,8 +20,7 @@ import {
     Table,
     VStack,
 } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import ValutakursTabellRad from './ValutakursTabellRad';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
@@ -64,7 +64,7 @@ interface IProps {
 
 const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }: IProps) => {
     const { settÅpenBehandling } = useBehandlingContext();
-    const { request } = useHttp();
+    const { mutateAsync: endreVurderingsstrategi } = useEndreVurderingsstrategiForValutakurser();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
         useState(false);
 
@@ -90,14 +90,11 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
     const endreVurderingsstrategiForValutakurser = () => {
         const nesteVurderingsstrategi = hentNesteVurderingsstrategi(åpenBehandling.vurderingsstrategiForValutakurser);
 
-        request<undefined, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/differanseberegning/valutakurs/behandlinger/${åpenBehandling.behandlingId}/endre-vurderingsstrategi-til/${nesteVurderingsstrategi}`,
-            påvirkerSystemLaster: true,
-        }).then((response: Ressurs<IBehandling>) => {
-            if (response.status === RessursStatus.SUKSESS) {
-                settÅpenBehandling(response);
-            }
+        endreVurderingsstrategi({
+            behandlingId: åpenBehandling.behandlingId,
+            vurderingsstrategi: nesteVurderingsstrategi,
+        }).then(oppdatertBehandling => {
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
         });
     };
 
