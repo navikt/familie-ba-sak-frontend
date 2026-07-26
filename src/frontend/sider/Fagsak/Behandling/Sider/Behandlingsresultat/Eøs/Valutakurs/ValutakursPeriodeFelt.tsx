@@ -1,7 +1,7 @@
 import MånedÅrVelger from '@komponenter/MånedÅrInput/MånedÅrVelger';
 import { dagensDato, isoStringTilDate } from '@utils/dato';
 import { isEmpty } from '@utils/eøsValidators';
-import { addMonths, endOfMonth, isAfter } from 'date-fns';
+import { addMonths, endOfMonth, isAfter, isBefore } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Fieldset, HStack } from '@navikt/ds-react';
@@ -40,7 +40,7 @@ export function ValutakursPeriodeFelt({ initiellFom, periodeFeilmeldingId, lesev
                 if (fom && valgtDatoErSenereEnnNesteMåned(fom)) {
                     return 'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere';
                 }
-                if (initiellFom && !isAfter(isoStringTilDate(fom), isoStringTilDate(initiellFom))) {
+                if (initiellFom && isBefore(isoStringTilDate(fom), isoStringTilDate(initiellFom))) {
                     return `Du kan ikke legge inn fra og med måned som er før: ${initiellFom}`;
                 }
                 if (tom && valgtDatoErNesteMånedEllerSenere(tom)) {

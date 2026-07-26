@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 
 import { dagensDato } from '@utils/dato';
 import { useController, useFormContext } from 'react-hook-form';
@@ -14,7 +14,7 @@ interface Props {
 export function ValutakursDatoFelt({ readOnly }: Props) {
     const { control, trigger, setValue } = useFormContext<ValutakursFormValues>();
 
-    const [dateValidation, setDateValidation] = useState<DateValidationT | undefined>(undefined);
+    const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
 
     const {
         field: { value, onChange, ref },
@@ -25,6 +25,8 @@ export function ValutakursDatoFelt({ readOnly }: Props) {
         control,
         rules: {
             validate: valgtDato => {
+                const dateValidation = dateValidationRef.current;
+
                 if (dateValidation?.isWeekend) {
                     return 'Du må velge en dato som er en ukedag';
                 }
@@ -39,7 +41,7 @@ export function ValutakursDatoFelt({ readOnly }: Props) {
         },
     });
 
-    const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
+    const { datepickerProps, inputProps } = useDatepicker({
         defaultSelected: value,
         toDate: dagensDato,
         disableWeekends: true,
@@ -52,21 +54,12 @@ export function ValutakursDatoFelt({ readOnly }: Props) {
             }
         },
         onValidate: validation => {
-            setDateValidation(validation);
+            dateValidationRef.current = validation;
             if (isSubmitted) {
                 trigger(ValutakursFelt.VALUTAKURSDATO);
             }
         },
     });
-
-    // Synkroniser datovelgeren dersom feltverdien endres uten at det er datovelgeren som trigget endringen.
-    const [forrigeVerdi, settForrigeVerdi] = useState<Date | undefined>(value);
-    if (value !== forrigeVerdi) {
-        settForrigeVerdi(value);
-        if (value !== selectedDay) {
-            setSelected(value);
-        }
-    }
 
     return (
         <DatePicker dropdownCaption {...datepickerProps}>
