@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import type { Response, Request, Router, NextFunction } from 'express';
-import type { ViteDevServer } from 'vite';
+import { createServer, type ViteDevServer } from 'vite';
 
 import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
@@ -41,18 +41,16 @@ export default async (authClient: Client, router: Router) => {
         res.status(200).send();
     });
 
-    let vite: ViteDevServer | undefined = undefined;
+    let viteDevServer: ViteDevServer | undefined = undefined;
     if (erLokal()) {
-        const { createServer } = await import('vite');
-
-        vite = await createServer({
+        viteDevServer = await createServer({
             root: path.join(process.cwd(), frontendPath),
             mode: process.env.ENV,
             server: { middlewareMode: true },
             appType: 'custom',
         });
 
-        router.use(vite.middlewares);
+        router.use(viteDevServer.middlewares);
     }
 
     const htmlPath = path.join(process.cwd(), frontendPath, 'index.html');
@@ -66,11 +64,11 @@ export default async (authClient: Client, router: Router) => {
             prometheusTellere.appLoad.inc();
 
             if (erLokal()) {
-                if (!vite) {
-                    throw new Error('Vite er ikke initialisert.');
+                if (!viteDevServer) {
+                    throw new Error('ViteDevServer er ikke initialisert.');
                 }
                 const htmlInnhold = await fs.promises.readFile(htmlPath, 'utf-8');
-                const transformed = await vite.transformIndexHtml(req.url, htmlInnhold);
+                const transformed = await viteDevServer.transformIndexHtml(req.url, htmlInnhold);
                 res.status(200).type('html').send(transformed);
             } else {
                 res.sendFile(htmlPath);
