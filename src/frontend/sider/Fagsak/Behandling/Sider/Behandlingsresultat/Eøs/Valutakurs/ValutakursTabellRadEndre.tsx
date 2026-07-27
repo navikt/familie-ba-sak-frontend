@@ -1,113 +1,65 @@
-import type { ReactNode, ChangeEvent } from 'react';
-
+import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { type Valutakode, ValutaCombobox, EØS_VALUTAKODER } from '@komponenter/FlaggCombobox';
-import type { IBehandling } from '@typer/behandling';
 import { VurderingsstrategiForValutakurser } from '@typer/behandling';
-import type { ComboboxOption } from '@typer/common';
-import { EøsPeriodeStatus, type IValutakurs, Vurderingsform } from '@typer/eøsPerioder';
-import { onOptionSelected } from '@utils/skjema';
+import type { OptionType } from '@typer/common';
+import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
+import { useFormContext } from 'react-hook-form';
 
 import { CogRotationIcon, PersonGavelIcon, TrashIcon } from '@navikt/aksel-icons';
-import {
-    Box,
-    Button,
-    Fieldset,
-    Heading,
-    HGrid,
-    HStack,
-    InlineMessage,
-    Label,
-    Link,
-    TextField,
-    UNSAFE_Combobox,
-} from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Box, Button, Fieldset, Heading, HGrid, HStack, InlineMessage, Label, Link } from '@navikt/ds-react';
 
-import Datovelger from '../../../../../../../komponenter/Datovelger/Datovelger';
-import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
+import { type ValutakursFormValues } from './useValutakursSkjema';
+import { ValutakursBarnFelt } from './ValutakursBarnFelt';
+import { ValutakursDatoFelt } from './ValutakursDatoFelt';
+import { ValutakursKursFelt } from './ValutakursKursFelt';
+import { ValutakursPeriodeFelt } from './ValutakursPeriodeFelt';
+import { ValutakursValutaFelt } from './ValutakursValutaFelt';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
-const valutakursPeriodeFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
-    `valutakurs-periode_${valutakurs.felter.barnIdenter.verdi.map(barn => `${barn.value}`)}_${
-        valutakurs.felter.initielFom.verdi
-    }`;
-
-const valutakursValutaFeilmeldingId = (valutakurs: ISkjema<IValutakurs, IBehandling>): string =>
-    `valutakurs-valuta_${valutakurs.felter.barnIdenter.verdi.map(barn => `${barn.value}`)}_${
-        valutakurs.felter.initielFom.verdi
-    }`;
-
-interface IProps {
-    skjema: ISkjema<IValutakurs, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
-    status: EøsPeriodeStatus;
-    valideringErOk: () => boolean;
-    sendInnSkjema: () => void;
-    toggleForm: (visAlert: boolean) => void;
-    slettValutakurs: () => void;
-    sletterValutakurs: boolean;
+interface Props {
+    valutakurs: IRestValutakurs;
+    tilgjengeligeBarn: OptionType[];
+    initiellFom: string;
     erManuellInputAvKurs: boolean;
     vurderingsform: Vurderingsform | undefined;
-    åpenBehandling: IBehandling;
     inneholderBarnSomSkalSkjermes?: boolean;
+    onAvbryt: () => void;
+    slettValutakurs: () => void;
+    sletterValutakurs: boolean;
 }
 
 const ValutakursTabellRadEndre = ({
-    vurderingsform,
-    skjema,
+    valutakurs,
     tilgjengeligeBarn,
-    status,
-    sendInnSkjema,
-    toggleForm,
+    initiellFom,
+    erManuellInputAvKurs,
+    vurderingsform,
+    inneholderBarnSomSkalSkjermes,
+    onAvbryt,
     slettValutakurs,
     sletterValutakurs,
-    erManuellInputAvKurs,
-    åpenBehandling,
-    inneholderBarnSomSkalSkjermes,
-}: IProps) => {
+}: Props) => {
     const erLesevisning = useErLesevisning();
+    const behandling = useBehandling();
+
+    const {
+        formState: { isSubmitting, errors },
+    } = useFormContext<ValutakursFormValues>();
 
     const erValutakursVurdertAutomatisk = vurderingsform === Vurderingsform.AUTOMATISK;
     const skaAutomatiskeValutakurserKunneRedigeres =
-        åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
+        behandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
     const erRedigeringDeaktivert =
         erLesevisning ||
         !!inneholderBarnSomSkalSkjermes ||
         (erValutakursVurdertAutomatisk && !skaAutomatiskeValutakurserKunneRedigeres);
 
-    const visKursGruppeFeilmelding = (): ReactNode => {
-        if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.valutakode.feilmelding;
-        } else if (skjema.felter.valutakursdato?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.valutakursdato.feilmelding;
-        } else if (skjema.felter.kurs?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.kurs.feilmelding;
-        }
-    };
-
-    const visSubmitFeilmelding = () => {
-        if (
-            skjema.submitRessurs.status === RessursStatus.FEILET ||
-            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
-        ) {
-            return skjema.submitRessurs.frontendFeilmelding;
-        } else {
-            return null;
-        }
-    };
-
-    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
-        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
-    };
+    const periodeFeilmeldingId = `valutakurs-periode_${valutakurs.barnIdenter.map(barn => `${barn}`)}_${valutakurs.fom}`;
 
     return (
-        <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend={'Valutakurs skjema'} hideLegend>
-            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={status} gap="space-24">
+        <Fieldset error={errors.root?.message} legend={'Valutakurs skjema'} hideLegend>
+            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={valutakurs.status} gap="space-24">
                 {erValutakursVurdertAutomatisk && (
                     <HStack wrap={false} align={'center'} gap={'space-16'}>
                         <CogRotationIcon title="Automatisk registrert valutakurs" fontSize="1.5rem" />
@@ -120,52 +72,23 @@ const ValutakursTabellRadEndre = ({
                         <Label>Manuelt registrert valutakurs</Label>
                     </HStack>
                 )}
-                <UNSAFE_Combobox
-                    isMultiSelect
-                    label={'Barn'}
-                    options={tilgjengeligeBarn}
-                    selectedOptions={skjema.felter.barnIdenter.verdi}
-                    onToggleSelected={onBarnSelected}
-                    readOnly={erRedigeringDeaktivert}
-                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
-                />
-                <EøsPeriodeSkjema
-                    periode={skjema.felter.periode}
-                    periodeFeilmeldingId={valutakursPeriodeFeilmeldingId(skjema)}
-                    initielFom={skjema.felter.initielFom}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
+                <ValutakursBarnFelt tilgjengeligeBarn={tilgjengeligeBarn} lesevisning={erRedigeringDeaktivert} />
+                <ValutakursPeriodeFelt
+                    initiellFom={initiellFom}
+                    periodeFeilmeldingId={periodeFeilmeldingId}
                     lesevisning={erRedigeringDeaktivert}
                 />
                 <Fieldset
                     className={erRedigeringDeaktivert ? 'lesevisning' : ''}
-                    errorId={valutakursValutaFeilmeldingId(skjema)}
-                    error={skjema.visFeilmeldinger && visKursGruppeFeilmelding()}
                     legend={'Registrer valutakursdato'}
                     hideLegend={erValutakursVurdertAutomatisk}
                 >
                     <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
-                        <Datovelger
-                            felt={skjema.felter.valutakursdato}
-                            label={'Valutakursdato'}
-                            visFeilmeldinger={false}
-                            readOnly={erRedigeringDeaktivert}
-                            disableWeekends
-                            kanKunVelgeFortid
-                        />
-                        <ValutaCombobox
-                            label={'Valuta'}
-                            value={skjema.felter.valutakode?.verdi as Valutakode}
-                            options={EØS_VALUTAKODER}
-                            onChange={() => {}}
-                            readOnly={true}
-                        />
-                        <TextField
-                            label={'Valutakurs'}
+                        <ValutakursDatoFelt readOnly={erRedigeringDeaktivert} />
+                        <ValutakursValutaFelt />
+                        <ValutakursKursFelt
                             readOnly={erRedigeringDeaktivert || !erManuellInputAvKurs}
-                            value={skjema.felter.kurs?.verdi}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                                skjema.felter.kurs?.validerOgSettFelt(event.target.value)
-                            }
+                            erManuellInputAvKurs={erManuellInputAvKurs}
                         />
                     </HGrid>
                     {erManuellInputAvKurs && (
@@ -191,17 +114,13 @@ const ValutakursTabellRadEndre = ({
                 {!erRedigeringDeaktivert && (
                     <Knapperad>
                         <div>
-                            <Button
-                                onClick={() => sendInnSkjema()}
-                                size="small"
-                                variant={'primary'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
+                            <Button type={'submit'} size="small" variant={'primary'} loading={isSubmitting}>
                                 Ferdig
                             </Button>
                             <Button
+                                type={'button'}
                                 style={{ marginLeft: '1rem' }}
-                                onClick={() => toggleForm(false)}
+                                onClick={onAvbryt}
                                 size="small"
                                 variant="tertiary"
                             >
@@ -209,13 +128,12 @@ const ValutakursTabellRadEndre = ({
                             </Button>
                         </div>
 
-                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && !erRedigeringDeaktivert && (
+                        {valutakurs.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
+                                type={'button'}
                                 variant={'tertiary'}
-                                onClick={() => slettValutakurs()}
-                                id={`slett_valutakurs_${skjema.felter.barnIdenter.verdi.map(
-                                    barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
+                                onClick={slettValutakurs}
+                                id={`slett_valutakurs_${valutakurs.barnIdenter.map(barn => `${barn}-`)}_${initiellFom}`}
                                 loading={sletterValutakurs}
                                 size={'small'}
                                 icon={<TrashIcon />}

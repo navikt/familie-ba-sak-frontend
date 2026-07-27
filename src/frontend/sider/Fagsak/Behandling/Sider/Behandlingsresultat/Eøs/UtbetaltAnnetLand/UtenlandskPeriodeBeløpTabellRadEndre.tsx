@@ -1,226 +1,99 @@
-import type { ReactNode, ChangeEvent } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import {
-    type Valutakode,
-    ValutaCombobox,
-    EØS_VALUTAKODER,
-    RegionCombobox,
-    type Regionkode,
-    EØS_LAND_REGIONKODER,
-} from '@komponenter/FlaggCombobox';
-import type { IBehandling } from '@typer/behandling';
-import type { ComboboxOption } from '@typer/common';
-import type { IUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
-import {
-    EøsPeriodeStatus,
-    UtenlandskPeriodeBeløpIntervall,
-    utenlandskPeriodeBeløpIntervaller,
-} from '@typer/eøsPerioder';
-import { onOptionSelected } from '@utils/skjema';
+import type { OptionType } from '@typer/common';
+import { EøsPeriodeStatus, type IRestUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
+import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    BodyShort,
-    Button,
-    Fieldset,
-    HGrid,
-    InlineMessage,
-    Select,
-    TextField,
-    UNSAFE_Combobox,
-} from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { BodyShort, Button, Fieldset, HGrid, InlineMessage } from '@navikt/ds-react';
 
-import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
+import { type UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
+import { UtenlandskPeriodeBeløpBarnFelt } from './UtenlandskPeriodeBeløpBarnFelt';
+import { UtenlandskPeriodeBeløpBeløpFelt } from './UtenlandskPeriodeBeløpBeløpFelt';
+import { UtenlandskPeriodeBeløpIntervallFelt } from './UtenlandskPeriodeBeløpIntervallFelt';
+import { UtenlandskPeriodeBeløpPeriodeFelt } from './UtenlandskPeriodeBeløpPeriodeFelt';
+import { UtenlandskPeriodeBeløpUtbetalingslandFelt } from './UtenlandskPeriodeBeløpUtbetalingslandFelt';
+import { UtenlandskPeriodeBeløpValutaFelt } from './UtenlandskPeriodeBeløpValutaFelt';
 import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;
 `;
 
-const utenlandskPeriodeBeløpPeriodeFeilmeldingId = (
-    utenlandskPeriodeBeløp: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>
-): string =>
-    `utd_beløp-periode_${utenlandskPeriodeBeløp.felter.barnIdenter.verdi.map(
-        barn => `${barn.value}`
-    )}_${utenlandskPeriodeBeløp.felter.initielFom.verdi}`;
-
-const utenlandskPeriodeBeløpUtbetaltFeilmeldingId = (
-    utenlandskPeriodeBeløp: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>
-): string =>
-    `utd_beløp-utbetalt_${utenlandskPeriodeBeløp.felter.barnIdenter.verdi.map(
-        barn => `${barn.value}`
-    )}_${utenlandskPeriodeBeløp.felter.initielFom.verdi}`;
-
-interface IProps {
-    skjema: ISkjema<IUtenlandskPeriodeBeløp, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
-    status: EøsPeriodeStatus;
-    sendInnSkjema: () => void;
-    toggleForm: (visAlert: boolean) => void;
-    slettUtenlandskPeriodeBeløp: () => void;
+interface Props {
+    utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;
+    tilgjengeligeBarn: OptionType[];
+    initiellFom: string;
     inneholderBarnSomSkalSkjermes?: boolean;
+    onAvbryt: () => void;
+    slettUtenlandskPeriodeBeløp: () => void;
+    sletterUtenlandskPeriodeBeløp: boolean;
 }
 
 const UtenlandskPeriodeBeløpTabellRadEndre = ({
-    skjema,
+    utenlandskPeriodeBeløp,
     tilgjengeligeBarn,
-    status,
-    sendInnSkjema,
-    toggleForm,
-    slettUtenlandskPeriodeBeløp,
+    initiellFom,
     inneholderBarnSomSkalSkjermes,
-}: IProps) => {
+    onAvbryt,
+    slettUtenlandskPeriodeBeløp,
+    sletterUtenlandskPeriodeBeløp,
+}: Props) => {
     const erLesevisning = useErLesevisning();
     const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
 
-    const visUtbetaltBeløpGruppeFeilmelding = (): ReactNode => {
-        if (skjema.felter.beløp?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.beløp.feilmelding;
-        } else if (skjema.felter.valutakode?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.valutakode.feilmelding;
-        } else if (skjema.felter.intervall?.valideringsstatus === Valideringsstatus.FEIL) {
-            return skjema.felter.intervall.feilmelding;
-        }
-    };
+    const {
+        formState: { isSubmitting, errors },
+    } = useFormContext<UtenlandskPeriodeBeløpFormValues>();
 
-    const visSubmitFeilmelding = () => {
-        if (
-            skjema.submitRessurs.status === RessursStatus.FEILET ||
-            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
-        ) {
-            return skjema.submitRessurs.frontendFeilmelding;
-        } else {
-            return null;
-        }
-    };
-
-    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
-        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
-    };
+    const periodeFeilmeldingId = `utd_beløp-periode_${utenlandskPeriodeBeløp.barnIdenter.map(
+        barn => `${barn}`
+    )}_${utenlandskPeriodeBeløp.fom}`;
 
     return (
-        <Fieldset
-            error={skjema.visFeilmeldinger && visSubmitFeilmelding()}
-            legend={'Utenlandsk periodebeløp'}
-            hideLegend
-        >
-            <EøsPeriodeSkjemaContainer $lesevisning={erRedigeringDeaktivert} $status={status} gap="space-24">
+        <Fieldset error={errors.root?.message} legend={'Utenlandsk periodebeløp'} hideLegend>
+            <EøsPeriodeSkjemaContainer
+                $lesevisning={erRedigeringDeaktivert}
+                $status={utenlandskPeriodeBeløp.status}
+                gap="space-24"
+            >
                 <InlineMessage status="info">
                     <UtbetaltBeløpText size="small">
                         Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
                     </UtbetaltBeløpText>
                 </InlineMessage>
-                <UNSAFE_Combobox
-                    isMultiSelect
-                    label={'Barn'}
-                    options={tilgjengeligeBarn}
-                    selectedOptions={skjema.felter.barnIdenter.verdi}
-                    onToggleSelected={onBarnSelected}
-                    readOnly={erRedigeringDeaktivert}
-                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
+                <UtenlandskPeriodeBeløpBarnFelt
+                    tilgjengeligeBarn={tilgjengeligeBarn}
+                    lesevisning={erRedigeringDeaktivert}
                 />
-                <EøsPeriodeSkjema
-                    periode={skjema.felter.periode}
-                    periodeFeilmeldingId={utenlandskPeriodeBeløpPeriodeFeilmeldingId(skjema)}
-                    initielFom={skjema.felter.initielFom}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
+                <UtenlandskPeriodeBeløpPeriodeFelt
+                    initiellFom={initiellFom}
+                    periodeFeilmeldingId={periodeFeilmeldingId}
                     lesevisning={erRedigeringDeaktivert}
                 />
                 <Fieldset
                     className={erRedigeringDeaktivert ? 'lesevisning' : ''}
-                    errorId={utenlandskPeriodeBeløpUtbetaltFeilmeldingId(skjema)}
-                    error={skjema.visFeilmeldinger && visUtbetaltBeløpGruppeFeilmelding()}
                     legend={'Utbetalt i det andre landet'}
                     size={'medium'}
                 >
                     <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
-                        <TextField
-                            label={'Beløp per barn'}
-                            readOnly={erRedigeringDeaktivert}
-                            value={skjema.felter.beløp?.verdi}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                                skjema.felter.beløp?.validerOgSettFelt(event.target.value)
-                            }
-                            size={'medium'}
-                        />
-                        <ValutaCombobox
-                            label={'Valuta'}
-                            value={skjema.felter.valutakode?.verdi as Valutakode}
-                            options={EØS_VALUTAKODER}
-                            onChange={value => {
-                                if (value) {
-                                    skjema.felter.valutakode?.validerOgSettFelt(value);
-                                } else {
-                                    skjema.felter.valutakode?.nullstill();
-                                }
-                            }}
-                            readOnly={erRedigeringDeaktivert}
-                            error={skjema.felter.valutakode?.feilmelding?.toString()}
-                        />
-                        <Select
-                            label={'Intervall'}
-                            readOnly={erRedigeringDeaktivert}
-                            value={skjema.felter.intervall?.verdi || undefined}
-                            onChange={event =>
-                                skjema.felter.intervall?.validerOgSettFelt(
-                                    event.target.value as UtenlandskPeriodeBeløpIntervall
-                                )
-                            }
-                            size={'medium'}
-                        >
-                            <option key={'-'} value={''}>
-                                Velg
-                            </option>
-                            {Object.values(UtenlandskPeriodeBeløpIntervall).map(intervall => {
-                                return (
-                                    <option key={intervall} value={intervall}>
-                                        {utenlandskPeriodeBeløpIntervaller[intervall]}
-                                    </option>
-                                );
-                            })}
-                        </Select>
+                        <UtenlandskPeriodeBeløpBeløpFelt readOnly={erRedigeringDeaktivert} />
+                        <UtenlandskPeriodeBeløpValutaFelt readOnly={erRedigeringDeaktivert} />
+                        <UtenlandskPeriodeBeløpIntervallFelt readOnly={erRedigeringDeaktivert} />
                     </HGrid>
-                    <RegionCombobox
-                        label={'Utbetalingsland'}
-                        value={skjema.felter.utbetalingsland.verdi as Regionkode}
-                        options={EØS_LAND_REGIONKODER}
-                        onChange={value => {
-                            if (value) {
-                                skjema.felter.utbetalingsland.validerOgSettFelt(value);
-                            } else {
-                                skjema.felter.utbetalingsland.nullstill();
-                            }
-                        }}
-                        readOnly={erRedigeringDeaktivert}
-                        error={
-                            skjema.visFeilmeldinger &&
-                            skjema.felter.utbetalingsland.valideringsstatus === Valideringsstatus.FEIL
-                                ? skjema.felter.utbetalingsland.feilmelding?.toString()
-                                : ''
-                        }
-                    />
+                    <UtenlandskPeriodeBeløpUtbetalingslandFelt readOnly={erRedigeringDeaktivert} />
                 </Fieldset>
 
                 {!erRedigeringDeaktivert && (
                     <Knapperad>
                         <div>
-                            <Button
-                                onClick={() => sendInnSkjema()}
-                                size="small"
-                                variant={'primary'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
+                            <Button type={'submit'} size="small" variant={'primary'} loading={isSubmitting}>
                                 Ferdig
                             </Button>
                             <Button
+                                type={'button'}
                                 style={{ marginLeft: '1rem' }}
-                                onClick={() => toggleForm(false)}
+                                onClick={onAvbryt}
                                 size="small"
                                 variant="tertiary"
                             >
@@ -228,18 +101,19 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
                             </Button>
                         </div>
 
-                        {skjema.felter.status?.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                        {utenlandskPeriodeBeløp.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
+                                type={'button'}
                                 variant={'tertiary'}
-                                onClick={() => slettUtenlandskPeriodeBeløp()}
-                                id={`slett_utd_beløp_${skjema.felter.barnIdenter.verdi.map(
+                                onClick={slettUtenlandskPeriodeBeløp}
+                                id={`slett_utd_beløp_${utenlandskPeriodeBeløp.barnIdenter.map(
                                     barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                )}_${initiellFom}`}
+                                loading={sletterUtenlandskPeriodeBeløp}
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >
-                                {'Fjern'}
+                                Fjern
                             </Button>
                         )}
                     </Knapperad>

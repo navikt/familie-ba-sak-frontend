@@ -1,4 +1,4 @@
-import { addMonths, endOfMonth, isAfter } from 'date-fns';
+import { addMonths, endOfMonth, isAfter, isBefore } from 'date-fns';
 
 import { feil, ok } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
@@ -30,7 +30,7 @@ const erEøsPeriodeGyldig = (
     if (fom && valgtDatoErSenereEnnNesteMåned(fom)) {
         return feil(felt, 'Du kan ikke sette fra og med (f.o.m.) til måneden etter neste måned eller senere');
     }
-    if (initielFom && !isAfter(isoStringTilDate(fom), isoStringTilDate(initielFom))) {
+    if (initielFom && isBefore(isoStringTilDate(fom), isoStringTilDate(initielFom))) {
         return feil(felt, `Du kan ikke legge inn fra og med måned som er før: ${avhengigheter?.initielFom}`);
     }
     if (tom && valgtDatoErNesteMånedEllerSenere(tom)) {
