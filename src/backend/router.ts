@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import type { Response, Request, Router, NextFunction } from 'express';
-import { type ViteDevServer } from 'vite';
+import type { ViteDevServer } from 'vite';
 
 import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
