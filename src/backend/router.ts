@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import type { Response, Request, Router, NextFunction } from 'express';
-import { createServer, type ViteDevServer } from 'vite';
+import { type ViteDevServer } from 'vite';
 
 import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
@@ -43,6 +43,7 @@ export default async (authClient: Client, router: Router) => {
 
     let viteDevServer: ViteDevServer | undefined = undefined;
     if (erLokal()) {
+        const { createServer } = await import('vite');
         viteDevServer = await createServer({
             root: path.join(process.cwd(), frontendPath),
             mode: process.env.ENV,
