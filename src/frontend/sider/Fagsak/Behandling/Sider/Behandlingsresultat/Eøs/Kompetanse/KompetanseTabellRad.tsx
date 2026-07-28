@@ -1,4 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { FormProvider } from 'react-hook-form';
 
 import { BodyShort, Table } from '@navikt/ds-react';
 
@@ -18,41 +20,36 @@ interface IProps {
 }
 
 const KompetanseTabellRad = ({ kompetanse, åpenBehandling, visFeilmeldinger }: IProps) => {
+    const [erKompetanseEkspandert, settErKompetanseEkspandert] = useState(false);
+    const [skalRendreContentIEkspanderbartPanel, settSkalRendreContentIEkspanderbartPanel] = useState(false);
+
     const barn: OptionType[] = kompetanse.barnIdenter.map(barn => ({
         value: barn,
         label: lagPersonLabel(barn, åpenBehandling.personer),
     }));
 
-    const {
-        erKompetanseEkspandert,
-        settErKompetanseEkspandert,
-        skjema,
-        sendInnSkjema,
-        slettKompetanse,
-        nullstillSkjema,
-        kanSendeSkjema,
-        erKompetanseSkjemaEndret,
-    } = useKompetansePeriodeSkjema({ barnIKompetanse: barn, kompetanse });
+    const { form, onSubmit, slettKompetanse, sletterKompetanse, initiellFom } = useKompetansePeriodeSkjema({
+        kompetanse,
+        barnIKompetanse: barn,
+        lukkSkjema: () => settErKompetanseEkspandert(false),
+    });
 
-    useEffect(() => {
-        if (åpenBehandling) {
-            nullstillSkjema();
-            settErKompetanseEkspandert(false);
-        }
-    }, [åpenBehandling]);
+    if (erKompetanseEkspandert && !skalRendreContentIEkspanderbartPanel) {
+        settSkalRendreContentIEkspanderbartPanel(true);
+    }
 
     useEffect(() => {
         if (visFeilmeldinger && erKompetanseEkspandert) {
-            kanSendeSkjema();
+            form.trigger();
         }
     }, [visFeilmeldinger, erKompetanseEkspandert]);
 
     const toggleForm = (visAlert: boolean) => {
-        if (erKompetanseEkspandert && visAlert && erKompetanseSkjemaEndret()) {
+        if (erKompetanseEkspandert && visAlert && form.formState.isDirty) {
             alert('Kompetansen har endringer som ikke er lagret!');
         } else {
             settErKompetanseEkspandert(!erKompetanseEkspandert);
-            nullstillSkjema();
+            form.reset();
         }
     };
 
@@ -70,6 +67,7 @@ const KompetanseTabellRad = ({ kompetanse, åpenBehandling, visFeilmeldinger }: 
                 return '-';
         }
     };
+
     return (
         <Table.ExpandableRow
             togglePlacement="right"
@@ -77,17 +75,20 @@ const KompetanseTabellRad = ({ kompetanse, åpenBehandling, visFeilmeldinger }: 
             onOpenChange={() => toggleForm(true)}
             id={kompetanseFeilmeldingId(kompetanse)}
             content={
-                erKompetanseEkspandert && (
-                    <KompetanseTabellRadEndre
-                        skjema={skjema}
-                        tilgjengeligeBarn={barn}
-                        sendInnSkjema={sendInnSkjema}
-                        toggleForm={toggleForm}
-                        slettKompetanse={slettKompetanse}
-                        erAnnenForelderOmfattetAvNorskLovgivning={kompetanse.erAnnenForelderOmfattetAvNorskLovgivning}
-                        inneholderBarnSomSkalSkjermes={kompetanse.inneholderBarnSomSkalSkjermes}
-                    />
-                )
+                skalRendreContentIEkspanderbartPanel ? (
+                    <FormProvider {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <KompetanseTabellRadEndre
+                                kompetanse={kompetanse}
+                                tilgjengeligeBarn={barn}
+                                initiellFom={initiellFom}
+                                onAvbryt={() => toggleForm(false)}
+                                slettKompetanse={slettKompetanse}
+                                sletterKompetanse={sletterKompetanse}
+                            />
+                        </form>
+                    </FormProvider>
+                ) : null
             }
         >
             <StatusBarnCelleOgPeriodeCelle

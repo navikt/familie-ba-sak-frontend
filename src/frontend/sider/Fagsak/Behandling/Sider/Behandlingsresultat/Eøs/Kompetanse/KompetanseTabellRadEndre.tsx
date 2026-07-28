@@ -1,99 +1,85 @@
-import type { ChangeEvent } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
-import type { IBehandling } from '@typer/behandling';
-import type { ComboboxOption } from '@typer/common';
-import type { IKompetanse, KompetanseAktivitet } from '@typer/eøsPerioder';
-import {
-    AnnenForelderAktivitet,
-    EøsPeriodeStatus,
-    kompetanseAktiviteter,
-    KompetanseResultat,
-    kompetanseResultater,
-    SøkersAktivitet,
-} from '@typer/eøsPerioder';
-import { onOptionSelected } from '@utils/skjema';
+import type { OptionType } from '@typer/common';
+import type { IRestKompetanse, KompetanseAktivitet } from '@typer/eøsPerioder';
+import { AnnenForelderAktivitet, EøsPeriodeStatus, KompetanseResultat, SøkersAktivitet } from '@typer/eøsPerioder';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, Fieldset, HStack, InlineMessage, Select, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Box, Button, Fieldset, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 
-import EøsPeriodeSkjema from '../EøsKomponenter/EøsPeriodeSkjema';
-
-const kompetansePeriodeFeilmeldingId = (kompetanse: ISkjema<IKompetanse, IBehandling>): string =>
-    `kompetanse-periode_${kompetanse.felter.barnIdenter.verdi.map(barn => `${barn}-`)}_${
-        kompetanse.felter.periode.verdi.fom
-    }`;
+import { KompetanseAktivitetFelt } from './KompetanseAktivitetFelt';
+import { KompetanseBarnFelt } from './KompetanseBarnFelt';
+import { KompetanseLandFelt } from './KompetanseLandFelt';
+import { KompetansePeriodeFelt } from './KompetansePeriodeFelt';
+import { KompetanseResultatFelt } from './KompetanseResultatFelt';
+import { KompetanseFelt, type KompetanseFormValues } from './useKompetansePeriodeSkjema';
 
 interface Props {
-    skjema: ISkjema<IKompetanse, IBehandling>;
-    tilgjengeligeBarn: ComboboxOption[];
-    sendInnSkjema: () => void;
-    toggleForm: (visAlert: boolean) => void;
+    kompetanse: IRestKompetanse;
+    tilgjengeligeBarn: OptionType[];
+    initiellFom: string;
+    onAvbryt: () => void;
     slettKompetanse: () => void;
-    erAnnenForelderOmfattetAvNorskLovgivning?: boolean;
-    inneholderBarnSomSkalSkjermes?: boolean;
+    sletterKompetanse: boolean;
 }
 
+const IKKE_PÅKREVD_FOR_ANNEN_FORELDERS_LAND: KompetanseAktivitet[] = [
+    AnnenForelderAktivitet.IKKE_AKTUELT,
+    AnnenForelderAktivitet.INAKTIV,
+];
+
 export function KompetanseTabellRadEndre({
-    skjema,
+    kompetanse,
     tilgjengeligeBarn,
-    sendInnSkjema,
-    toggleForm,
+    initiellFom,
+    onAvbryt,
     slettKompetanse,
-    erAnnenForelderOmfattetAvNorskLovgivning,
-    inneholderBarnSomSkalSkjermes,
+    sletterKompetanse,
 }: Props) {
     const erLesevisning = useErLesevisning();
-    const erRedigeringDeaktivert = erLesevisning || !!inneholderBarnSomSkalSkjermes;
+    const erRedigeringDeaktivert = erLesevisning || !!kompetanse.inneholderBarnSomSkalSkjermes;
 
-    const visSubmitFeilmelding = () => {
-        if (
-            skjema.submitRessurs.status === RessursStatus.FEILET ||
-            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG
-        ) {
-            return skjema.submitRessurs.frontendFeilmelding;
-        } else {
-            return null;
-        }
-    };
+    const erAnnenForelderOmfattetAvNorskLovgivning = kompetanse.erAnnenForelderOmfattetAvNorskLovgivning;
 
-    const toPrimærland = skjema.felter.resultat?.verdi === KompetanseResultat.TO_PRIMÆRLAND;
+    const {
+        control,
+        formState: { isSubmitting, errors },
+    } = useFormContext<KompetanseFormValues>();
+
+    const annenForeldersAktivitet = useWatch({ control, name: KompetanseFelt.ANNEN_FORELDERS_AKTIVITET });
+    const resultat = useWatch({ control, name: KompetanseFelt.RESULTAT });
+    const barnetsBostedsland = useWatch({ control, name: KompetanseFelt.BARNETS_BOSTEDSLAND });
+    const søkersAktivitetsland = useWatch({ control, name: KompetanseFelt.SØKERS_AKTIVITETSLAND });
+    const annenForeldersAktivitetsland = useWatch({ control, name: KompetanseFelt.ANNEN_FORELDERS_AKTIVITETSLAND });
+
+    const søkerAktiviteter = Object.values(
+        erAnnenForelderOmfattetAvNorskLovgivning ? AnnenForelderAktivitet : SøkersAktivitet
+    ).filter(aktivitet => aktivitet !== AnnenForelderAktivitet.IKKE_AKTUELT);
+
+    const annenForelderAktiviteter = Object.values(
+        erAnnenForelderOmfattetAvNorskLovgivning ? SøkersAktivitet : AnnenForelderAktivitet
+    );
+
+    const toPrimærland = resultat === KompetanseResultat.TO_PRIMÆRLAND;
 
     const nasjonalRettDifferanseberegningMedUlikeAktivitetsland =
-        skjema.felter.resultat?.verdi === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING &&
-        skjema.felter.barnetsBostedsland.verdi === 'NO' &&
-        skjema.felter.søkersAktivitetsland.verdi != null &&
-        skjema.felter.søkersAktivitetsland.verdi != 'NO' &&
-        skjema.felter.annenForeldersAktivitetsland.verdi != null &&
-        skjema.felter.annenForeldersAktivitetsland.verdi != 'NO' &&
-        skjema.felter.søkersAktivitetsland.verdi !== skjema.felter.annenForeldersAktivitetsland.verdi;
+        resultat === KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING &&
+        barnetsBostedsland === 'NO' &&
+        søkersAktivitetsland != null &&
+        søkersAktivitetsland != 'NO' &&
+        annenForeldersAktivitetsland != null &&
+        annenForeldersAktivitetsland != 'NO' &&
+        søkersAktivitetsland !== annenForeldersAktivitetsland;
 
-    const onBarnSelected = (optionValue: string, isSelected: boolean) => {
-        onOptionSelected(optionValue, isSelected, skjema.felter.barnIdenter, tilgjengeligeBarn);
-    };
+    const periodeFeilmeldingId = `kompetanse-periode_${kompetanse.barnIdenter.map(barn => `${barn}-`)}_${kompetanse.fom}`;
 
     return (
-        <Fieldset error={skjema.visFeilmeldinger && visSubmitFeilmelding()} legend="Kompetanseskjema" hideLegend>
+        <Fieldset error={errors.root?.message} legend="Kompetanseskjema" hideLegend>
             <VStack gap={'space-16'} maxWidth={'40rem'} paddingInline={'space-4 space-4'}>
-                <UNSAFE_Combobox
-                    isMultiSelect
-                    label={'Barn'}
-                    options={tilgjengeligeBarn}
-                    selectedOptions={skjema.felter.barnIdenter.verdi}
-                    onToggleSelected={onBarnSelected}
-                    readOnly={erRedigeringDeaktivert}
-                    error={skjema.felter.barnIdenter.hentNavInputProps(skjema.visFeilmeldinger).error}
-                />
-                <EøsPeriodeSkjema
-                    periode={skjema.felter.periode}
-                    periodeFeilmeldingId={kompetansePeriodeFeilmeldingId(skjema)}
-                    initielFom={skjema.felter.initielFom}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
+                <KompetanseBarnFelt tilgjengeligeBarn={tilgjengeligeBarn} lesevisning={erRedigeringDeaktivert} />
+                <KompetansePeriodeFelt
+                    initiellFom={initiellFom}
+                    periodeFeilmeldingId={periodeFeilmeldingId}
                     lesevisning={erRedigeringDeaktivert}
                 />
                 {erAnnenForelderOmfattetAvNorskLovgivning && (
@@ -101,140 +87,47 @@ export function KompetanseTabellRadEndre({
                         Annen forelder er omfattet av norsk lovgivning og søker har selvstendig rett i perioden
                     </InlineMessage>
                 )}
-                <Select
-                    {...skjema.felter.søkersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={erRedigeringDeaktivert}
+                <KompetanseAktivitetFelt
+                    navn={KompetanseFelt.SØKERS_AKTIVITET}
                     label={'Søkers aktivitet'}
-                    value={skjema.felter.søkersAktivitet.verdi || ''}
-                    onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                        skjema.felter.søkersAktivitet.validerOgSettFelt(event.target.value as KompetanseAktivitet)
-                    }
-                >
-                    <option value={''}>Velg</option>
-                    {Object.values(erAnnenForelderOmfattetAvNorskLovgivning ? AnnenForelderAktivitet : SøkersAktivitet)
-                        .filter((aktivitet: KompetanseAktivitet) => aktivitet !== AnnenForelderAktivitet.IKKE_AKTUELT)
-                        .map((aktivitet: KompetanseAktivitet) => {
-                            return (
-                                <option key={aktivitet} value={aktivitet}>
-                                    {kompetanseAktiviteter[aktivitet]}
-                                </option>
-                            );
-                        })}
-                </Select>
-                <Select
-                    className="unset-margin-bottom"
-                    {...skjema.felter.annenForeldersAktivitet.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={erRedigeringDeaktivert}
+                    aktiviteter={søkerAktiviteter}
+                    lesevisning={erRedigeringDeaktivert}
+                    avhengigLandFelt={KompetanseFelt.SØKERS_AKTIVITETSLAND}
+                />
+                <KompetanseAktivitetFelt
+                    navn={KompetanseFelt.ANNEN_FORELDERS_AKTIVITET}
                     label={'Annen forelders aktivitet'}
-                    value={skjema.felter.annenForeldersAktivitet.verdi || ''}
-                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                        skjema.felter.annenForeldersAktivitet.validerOgSettFelt(
-                            event.target.value as KompetanseAktivitet
-                        );
-                    }}
-                >
-                    <option value={''}>Velg</option>
-                    {Object.values(
-                        erAnnenForelderOmfattetAvNorskLovgivning ? SøkersAktivitet : AnnenForelderAktivitet
-                    ).map((aktivitet: KompetanseAktivitet) => {
-                        return (
-                            <option key={aktivitet} value={aktivitet}>
-                                {kompetanseAktiviteter[aktivitet]}
-                            </option>
-                        );
-                    })}
-                </Select>
-                {skjema.felter.annenForeldersAktivitet.verdi === AnnenForelderAktivitet.IKKE_AKTUELT && (
+                    aktiviteter={annenForelderAktiviteter}
+                    lesevisning={erRedigeringDeaktivert}
+                    className={'unset-margin-bottom'}
+                    avhengigLandFelt={KompetanseFelt.ANNEN_FORELDERS_AKTIVITETSLAND}
+                />
+                {annenForeldersAktivitet === AnnenForelderAktivitet.IKKE_AKTUELT && (
                     <InlineMessage status="info" size="small">
                         Søker har enten aleneomsorg for egne barn eller forsørger andre barn
                     </InlineMessage>
                 )}
-                <RegionCombobox
+                <KompetanseLandFelt
+                    navn={KompetanseFelt.SØKERS_AKTIVITETSLAND}
                     label={'Søkers aktivitetsland'}
-                    value={skjema.felter.søkersAktivitetsland.verdi as Regionkode}
-                    options={EØS_LAND_REGIONKODER}
-                    onChange={value => {
-                        if (value) {
-                            skjema.felter.søkersAktivitetsland.validerOgSettFelt(value);
-                        } else {
-                            skjema.felter.søkersAktivitetsland.nullstill();
-                        }
-                    }}
-                    readOnly={erRedigeringDeaktivert}
-                    error={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.søkersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.søkersAktivitetsland.feilmelding?.toString()
-                            : ''
-                    }
+                    lesevisning={erRedigeringDeaktivert}
+                    erPåkrevd={values => values.søkersAktivitet !== SøkersAktivitet.INAKTIV}
                 />
-                <RegionCombobox
+                <KompetanseLandFelt
+                    navn={KompetanseFelt.ANNEN_FORELDERS_AKTIVITETSLAND}
                     label={'Annen forelders aktivitetsland'}
-                    value={skjema.felter.annenForeldersAktivitetsland.verdi as Regionkode}
-                    options={EØS_LAND_REGIONKODER}
-                    onChange={value => {
-                        if (value) {
-                            skjema.felter.annenForeldersAktivitetsland.validerOgSettFelt(value);
-                        } else {
-                            skjema.felter.annenForeldersAktivitetsland.nullstill();
-                        }
-                    }}
-                    readOnly={erRedigeringDeaktivert}
-                    error={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.annenForeldersAktivitetsland.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.annenForeldersAktivitetsland.feilmelding?.toString()
-                            : ''
+                    lesevisning={erRedigeringDeaktivert}
+                    erPåkrevd={values =>
+                        values.annenForeldersAktivitet == null ||
+                        !IKKE_PÅKREVD_FOR_ANNEN_FORELDERS_LAND.includes(values.annenForeldersAktivitet)
                     }
                 />
-                <RegionCombobox
+                <KompetanseLandFelt
+                    navn={KompetanseFelt.BARNETS_BOSTEDSLAND}
                     label={'Barnets bostedsland'}
-                    value={skjema.felter.barnetsBostedsland.verdi as Regionkode}
-                    options={EØS_LAND_REGIONKODER}
-                    onChange={value => {
-                        if (value) {
-                            skjema.felter.barnetsBostedsland.validerOgSettFelt(value);
-                        } else {
-                            skjema.felter.barnetsBostedsland.nullstill();
-                        }
-                    }}
-                    readOnly={erRedigeringDeaktivert}
-                    error={
-                        skjema.visFeilmeldinger &&
-                        skjema.felter.barnetsBostedsland.valideringsstatus === Valideringsstatus.FEIL
-                            ? skjema.felter.barnetsBostedsland.feilmelding?.toString()
-                            : ''
-                    }
+                    lesevisning={erRedigeringDeaktivert}
                 />
-                <Select
-                    {...skjema.felter.resultat.hentNavInputProps(skjema.visFeilmeldinger)}
-                    readOnly={erRedigeringDeaktivert}
-                    label={'Kompetanse'}
-                    value={skjema.felter.resultat.verdi || ''}
-                    onChange={event => {
-                        skjema.felter.resultat.validerOgSettFelt(event.target.value as KompetanseResultat);
-                    }}
-                >
-                    <option value={''}>Velg</option>
-                    <option key={KompetanseResultat.NORGE_ER_PRIMÆRLAND} value={KompetanseResultat.NORGE_ER_PRIMÆRLAND}>
-                        {kompetanseResultater[KompetanseResultat.NORGE_ER_PRIMÆRLAND]}
-                    </option>
-                    <option
-                        key={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
-                        value={KompetanseResultat.NORGE_ER_SEKUNDÆRLAND}
-                    >
-                        {kompetanseResultater[KompetanseResultat.NORGE_ER_SEKUNDÆRLAND]}
-                    </option>
-                    <option
-                        key={KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING}
-                        value={KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING}
-                    >
-                        {kompetanseResultater[KompetanseResultat.NASJONAL_RETT_DIFFERANSEBEREGNING]}
-                    </option>
-                    <option key={KompetanseResultat.TO_PRIMÆRLAND} value={KompetanseResultat.TO_PRIMÆRLAND}>
-                        {kompetanseResultater[KompetanseResultat.TO_PRIMÆRLAND]}
-                    </option>
-                </Select>
+                <KompetanseResultatFelt lesevisning={erRedigeringDeaktivert} />
                 {toPrimærland && (
                     <Box marginBlock={'space-2 space-2'}>
                         <InlineMessage status={'warning'} size={'small'}>
@@ -254,31 +147,26 @@ export function KompetanseTabellRadEndre({
                 {!erRedigeringDeaktivert && (
                     <HStack justify={'space-between'} marginBlock={'space-12 space-0'}>
                         <div>
-                            <Button
-                                onClick={() => sendInnSkjema()}
-                                size="small"
-                                variant={'primary'}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
+                            <Button type={'submit'} size="small" variant={'primary'} loading={isSubmitting}>
                                 Ferdig
                             </Button>
                             <Button
+                                type={'button'}
                                 style={{ marginLeft: '1rem' }}
-                                onClick={() => toggleForm(false)}
+                                onClick={onAvbryt}
                                 size="small"
                                 variant="tertiary"
                             >
                                 Avbryt
                             </Button>
                         </div>
-                        {skjema.felter.status.verdi !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                        {kompetanse.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
                             <Button
+                                type={'button'}
                                 variant={'tertiary'}
-                                onClick={() => slettKompetanse()}
-                                id={`slett_kompetanse_${skjema.felter.barnIdenter.verdi.map(
-                                    barn => `${barn}-`
-                                )}_${skjema.felter.initielFom.verdi}`}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                onClick={slettKompetanse}
+                                id={`slett_kompetanse_${kompetanse.barnIdenter.map(barn => `${barn}-`)}_${initiellFom}`}
+                                loading={sletterKompetanse}
                                 size={'small'}
                                 icon={<TrashIcon />}
                             >
