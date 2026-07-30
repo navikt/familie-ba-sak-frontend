@@ -8,7 +8,6 @@ import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { ManuelleBrevmottakerePåFagsakProvider } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
-import { server } from '@testutils/mocks/node';
 import { lagBehandling, lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagPerson } from '@testutils/testdata/personTestdata';
@@ -21,13 +20,11 @@ import {
     SettPåVentÅrsak,
 } from '@typer/behandling';
 import type { IMinimalFagsak } from '@typer/fagsak';
-import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
-import { http, HttpResponse } from 'msw';
+import type { FeatureToggles } from '@typer/featureToggles';
 import { Route, Routes } from 'react-router';
 import { describe, expect, type MockInstance } from 'vitest';
 
 import { Heading } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { Behandlingsmeny } from './Behandlingsmeny';
 import { HenleggBehandlingModal } from './HenleggBehandling/HenleggBehandlingModal';
@@ -127,7 +124,7 @@ describe('Behandlingsmeny', () => {
         expect(screen.getByRole('menuitem', { name: 'A-Inntekt' })).toBeInTheDocument();
     });
 
-    test('skal vise "Endre søknadstidspunkt" i menyen for en søknadsbehandling på behandlingsresultat-siden når toggle er på', async () => {
+    test('skal vise "Endre søknadstidspunkt" i menyen for en søknadsbehandling på behandlingsresultat-siden', async () => {
         const { screen, user } = render(<Behandlingsmeny />, {
             wrapper: props => (
                 <Wrapper
@@ -175,36 +172,6 @@ describe('Behandlingsmeny', () => {
                         årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
                         steg: BehandlingSteg.REGISTRERE_SØKNAD,
                     })}
-                />
-            ),
-        });
-
-        await user.click(screen.getByRole('button', { name: 'Meny' }));
-
-        expect(screen.queryByRole('menuitem', { name: 'Endre søknadstidspunkt' })).not.toBeInTheDocument();
-    });
-
-    test('skal ikke vise "Endre søknadstidspunkt" i menyen når toggle er av', async () => {
-        const togglesMedSøknadstidspunktAv = {
-            ...skruPåAlleToggles(),
-            [FeatureToggle.kanRegistrereSøknadstidspunkt]: false,
-        };
-        // Overstyr både initialData (prop) og selve henteendepunktet, ellers henter React Query alle toggles på nytt.
-        server.use(
-            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () =>
-                HttpResponse.json(byggSuksessRessurs(togglesMedSøknadstidspunktAv))
-            )
-        );
-
-        const { screen, user } = render(<Behandlingsmeny />, {
-            wrapper: props => (
-                <Wrapper
-                    {...props}
-                    behandling={lagBehandling({
-                        årsak: BehandlingÅrsak.SØKNAD,
-                        steg: BehandlingSteg.BEHANDLINGSRESULTAT,
-                    })}
-                    featureToggles={togglesMedSøknadstidspunktAv}
                 />
             ),
         });

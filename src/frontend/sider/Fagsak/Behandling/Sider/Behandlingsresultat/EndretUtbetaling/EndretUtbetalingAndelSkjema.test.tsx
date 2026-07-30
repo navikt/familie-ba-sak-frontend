@@ -107,7 +107,7 @@ describe('EndretUtbetalingAndelSkjema', () => {
         expect(screen.queryByRole('button', { name: 'Fjern periode' })).not.toBeInTheDocument();
     });
 
-    test('skal kun tillate sletting (ikke endring) for automatisk genererte andeler når toggle er på', () => {
+    test('skal kun tillate sletting (ikke endring) for automatisk genererte andeler', () => {
         function CustomWrapper({ children }: { children: ReactNode }) {
             return (
                 <Wrapper

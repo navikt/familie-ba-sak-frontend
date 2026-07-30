@@ -14,5 +14,4 @@ export enum FeatureToggle {
     preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',
     kanGenerereBarnasVilkar = 'familie-ba-sak.kan-generere-barnas-vilkar',
     nySlettVilkaarLogikk = 'familie-ba-sak.ny-slett-vilkaar-logikk',
-    kanRegistrereSøknadstidspunkt = 'familie-ba-sak.kan-registrere-soknadstidspunkt',
 }
