@@ -25,8 +25,8 @@ export function HeaderMedSøk() {
                 },
             ]}
         >
-            <FagsakDeltagerSøk />
             <DeployetBranch />
+            <FagsakDeltagerSøk />
         </Header>
     );
 }

@@ -1,0 +1,13 @@
+/*
+ * Header-en rendrer tittelen, en spacer med margin-left: auto og deretter children.
+ * For å plassere branch-informasjonen rett etter tittelen – uten å dytte søkefeltet
+ * ut av posisjon – flyttes tittel og branch foran spaceren med flex order.
+ */
+:global(.aksel-internalheader__title) {
+    order: -2;
+}
+
+.deployetBranch {
+    order: -1;
+    padding-inline: var(--ax-space-16);
+}

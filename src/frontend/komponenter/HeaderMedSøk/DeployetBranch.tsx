@@ -3,6 +3,8 @@ import { erPreprod } from '@utils/miljø';
 
 import { Detail, HStack } from '@navikt/ds-react';
 
+import Styles from './DeployetBranch.module.css';
+
 export function DeployetBranch() {
     const { frontendBranch, backendBranch } = useVersjonsinfo();
 
@@ -11,7 +13,7 @@ export function DeployetBranch() {
     }
 
     return (
-        <HStack gap="space-8" align="center" wrap={false}>
+        <HStack gap="space-8" align="center" wrap={false} className={Styles.deployetBranch}>
             <Detail textColor="subtle">{`Frontend: ${frontendBranch ?? 'ukjent'}`}</Detail>
             <Detail textColor="subtle">{`Backend: ${backendBranch ?? 'ukjent'}`}</Detail>
         </HStack>
