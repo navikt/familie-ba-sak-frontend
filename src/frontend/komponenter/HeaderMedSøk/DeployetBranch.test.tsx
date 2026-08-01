@@ -50,4 +50,18 @@ describe('DeployetBranch', () => {
         expect(await screen.findByText('Frontend: min-frontend-branch')).toBeInTheDocument();
         expect(await screen.findByText('Backend: min-backend-branch')).toBeInTheDocument();
     });
+
+    test('viser ukjent når henting av versjonsinfo feiler', async () => {
+        // Arrange
+        erPreprodMock.mockReturnValue(true);
+        hentFrontendVersjonsinfoMock.mockResolvedValue({ branch: 'min-frontend-branch', versjon: 'fe:1' });
+        hentBackendVersjonsinfoMock.mockRejectedValue(new Error('Backend er nede'));
+
+        // Act
+        render(<DeployetBranch />, { wrapper });
+
+        // Assert
+        expect(await screen.findByText('Frontend: min-frontend-branch')).toBeInTheDocument();
+        expect(await screen.findByText('Backend: ukjent')).toBeInTheDocument();
+    });
 });
