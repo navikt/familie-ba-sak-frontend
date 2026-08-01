@@ -4,6 +4,6 @@ import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 export const versionHandlers = [
     http.get('/version', () => {
-        return HttpResponse.json(byggSuksessRessurs('1'));
+        return HttpResponse.json(byggSuksessRessurs({ versjon: '1', branch: 'main' }));
     }),
 ];
