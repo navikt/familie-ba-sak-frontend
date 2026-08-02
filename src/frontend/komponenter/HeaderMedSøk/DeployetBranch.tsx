@@ -6,9 +6,9 @@ import { Detail, HStack } from '@navikt/ds-react';
 import Styles from './DeployetBranch.module.css';
 
 export function DeployetBranch() {
-    const { frontendBranch, backendBranch } = useVersjonsinfo();
+    const { laster, frontendBranch, backendBranch } = useVersjonsinfo();
 
-    if (!erPreprod()) {
+    if (!erPreprod() || laster) {
         return null;
     }
 

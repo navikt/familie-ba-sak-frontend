@@ -51,6 +51,19 @@ describe('DeployetBranch', () => {
         expect(await screen.findByText('Backend: min-backend-branch')).toBeInTheDocument();
     });
 
+    test('viser ingenting mens versjonsinfo hentes', () => {
+        // Arrange
+        erPreprodMock.mockReturnValue(true);
+        hentFrontendVersjonsinfoMock.mockReturnValue(new Promise(() => {}));
+        hentBackendVersjonsinfoMock.mockReturnValue(new Promise(() => {}));
+
+        // Act
+        const { container } = render(<DeployetBranch />, { wrapper });
+
+        // Assert
+        expect(container).toBeEmptyDOMElement();
+    });
+
     test('viser ukjent når henting av versjonsinfo feiler', async () => {
         // Arrange
         erPreprodMock.mockReturnValue(true);

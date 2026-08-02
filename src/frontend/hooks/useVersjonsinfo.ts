@@ -25,6 +25,7 @@ export function useVersjonsinfo() {
             },
         ],
         combine: ([frontend, backend]) => ({
+            laster: frontend.isPending || backend.isPending,
             frontendBranch: frontend.data?.branch,
             backendBranch: backend.data?.branch,
         }),
