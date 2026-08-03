@@ -20,7 +20,7 @@ export function Steg({ tittel, maxWidth, children }: Props) {
                 <BehandlingPåVentAlert />
                 <MidlertidigEnhetAlert />
                 <Box position={'relative'} marginBlock={'space-8'}>
-                    <Heading size={'large'} level={'1'}>
+                    <Heading size={'large'} level={'1'} spacing={true}>
                         {tittel}
                     </Heading>
                     {children}

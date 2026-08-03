@@ -10,8 +10,7 @@ import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/Re
 import { useValgbareBarn } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useValgbareBarn';
 import type { BehandlingUnderkategori } from '@typer/behandlingstema';
 import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
-import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
@@ -71,38 +70,12 @@ export function useRegistrerSøknadForm() {
         control,
         formState: { isDirty },
         setError,
-        clearErrors,
         reset,
     } = form;
 
     useConfirmBrowserRefresh({ enabled: isDirty });
 
     useOnFormSubmitSuccessful(control, () => reset());
-
-    const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
-
-    const { fields, append, remove } = useFieldArray({
-        control: form.control,
-        name: RegistrerSøknadFormField.BARN,
-        rules: {
-            validate: barn => {
-                const merketBarn = barn.filter(b => b.merket);
-                if (merketBarn.length === 0 && barnMedLøpendeUtbetaling.size === 0) {
-                    return 'Minst et barn er påkrevd.';
-                }
-                return true;
-            },
-        },
-    });
-
-    function leggTilBarn(barn: IBarnMedOpplysninger) {
-        append(barn, { shouldFocus: false });
-        clearErrors(RegistrerSøknadFormField.BARN);
-    }
-
-    function slettBarn(index: number) {
-        remove(index);
-    }
 
     async function onSubmit(
         values: TransformedRegistrerSøknadFormValues,
@@ -144,13 +117,6 @@ export function useRegistrerSøknadForm() {
     return {
         id,
         ...form,
-        fields: {
-            [RegistrerSøknadFormField.BARN]: fields,
-        },
-        actions: {
-            onSubmit,
-            leggTilBarn,
-            slettBarn,
-        },
+        onSubmit,
     };
 }
