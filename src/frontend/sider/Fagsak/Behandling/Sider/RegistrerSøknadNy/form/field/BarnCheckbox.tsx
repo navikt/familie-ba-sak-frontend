@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BarnaFieldArrayContext';
 import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
@@ -13,14 +14,15 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Box, Button, Checkbox, Dialog, HStack } from '@navikt/ds-react';
 
 interface Props {
+    index: number;
     barn: IBarnMedOpplysninger & { id: string };
-    slettBarn: () => void;
 }
 
-export function BarnCheckbox({ barn, slettBarn }: Props) {
+export function BarnCheckbox({ index, barn }: Props) {
     const erLesevisning = useErLesevisning();
     const fagsak = useFagsak();
 
+    const { slettBarn } = useBarnaFieldArray();
     const { isSubmitting } = useFormState<RegistrerSøknadFormValues>();
 
     const [visBekreftSlettBarnModal, settVisBekreftSlettBarnModal] = useState(false);
@@ -57,7 +59,7 @@ export function BarnCheckbox({ barn, slettBarn }: Props) {
                         variant={'tertiary'}
                         size={'small'}
                         onClick={() => settVisBekreftSlettBarnModal(true)}
-                        icon={<TrashIcon />}
+                        icon={<TrashIcon fontSize={'1.3rem'} />}
                         disabled={isSubmitting}
                     >
                         Fjern barn
@@ -86,7 +88,7 @@ export function BarnCheckbox({ barn, slettBarn }: Props) {
                                         variant={'danger'}
                                         size={'medium'}
                                         icon={<TrashIcon />}
-                                        onClick={() => slettBarn()}
+                                        onClick={() => slettBarn(index)}
                                         disabled={isSubmitting}
                                     >
                                         Fjern

@@ -3,6 +3,7 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { BarnaFieldArrayProvider } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BarnaFieldArrayContext';
 import { BekreftEndringModal } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModal';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
 import { Feilsammendrag } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/Feilsammendrag';
@@ -35,11 +36,11 @@ export function RegistrerSøknadForm() {
 
     const {
         id,
+        control,
         handleSubmit,
         formState: { isSubmitting, errors },
         watch,
-        fields,
-        actions: { onSubmit, leggTilBarn, slettBarn },
+        onSubmit,
     } = form;
 
     const barn = watch(RegistrerSøknadFormField.BARN);
@@ -64,32 +65,40 @@ export function RegistrerSøknadForm() {
     const rootError = errors.root ? <span className={Styles.rootError}>{errors.root?.message}</span> : undefined;
 
     return (
-        <LeggTilBarnModalContextProvider barn={barn} onLeggTilBarn={leggTilBarn} harBrevmottaker={harBrevmottaker}>
-            {erMuligÅLeggeTilBarn && <LeggTilBarnModal />}
-            <FormProvider {...form}>
-                <form id={id} onSubmit={submitEllerNaviger}>
-                    {erBekreftEndringModalÅpen && <BekreftEndringModal onSubmit={onSubmit} />}
-                    <VStack gap={'space-20'}>
-                        <Fieldset error={rootError} legend={'Registrer søknad'} hideLegend={true}>
-                            <VStack gap={'space-20'} marginBlock={'space-20'}>
-                                {!gjelderInstitusjon && <UnderkategoriField />}
-                                <VStack gap={'space-0'}>
-                                    <BarnaField fields={fields[RegistrerSøknadFormField.BARN]} slettBarn={slettBarn} />
-                                    {erMuligÅLeggeTilBarn && <LeggTilBarnKnapp />}
-                                </VStack>
-                                <MålformField />
-                                <BegrunnelseField />
+        <BarnaFieldArrayProvider control={control}>
+            {({ leggTilBarn }) => (
+                <LeggTilBarnModalContextProvider
+                    barn={barn}
+                    onLeggTilBarn={leggTilBarn}
+                    harBrevmottaker={harBrevmottaker}
+                >
+                    {erMuligÅLeggeTilBarn && <LeggTilBarnModal />}
+                    <FormProvider {...form}>
+                        <form id={id} onSubmit={submitEllerNaviger}>
+                            {erBekreftEndringModalÅpen && <BekreftEndringModal onSubmit={onSubmit} />}
+                            <VStack gap={'space-20'}>
+                                <Fieldset error={rootError} legend={'Registrer søknad'} hideLegend={true}>
+                                    <VStack gap={'space-20'} marginBlock={'space-20'}>
+                                        {!gjelderInstitusjon && <UnderkategoriField />}
+                                        <VStack gap={'space-0'}>
+                                            <BarnaField />
+                                            {erMuligÅLeggeTilBarn && <LeggTilBarnKnapp />}
+                                        </VStack>
+                                        <MålformField />
+                                        <BegrunnelseField />
+                                    </VStack>
+                                </Fieldset>
+                                <Feilsammendrag />
+                                <div>
+                                    <Button form={id} type={'submit'} variant={'primary'} loading={isSubmitting}>
+                                        {erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
+                                    </Button>
+                                </div>
                             </VStack>
-                        </Fieldset>
-                        <Feilsammendrag />
-                        <div>
-                            <Button form={id} type={'submit'} variant={'primary'} loading={isSubmitting}>
-                                {erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-                            </Button>
-                        </div>
-                    </VStack>
-                </form>
-            </FormProvider>
-        </LeggTilBarnModalContextProvider>
+                        </form>
+                    </FormProvider>
+                </LeggTilBarnModalContextProvider>
+            )}
+        </BarnaFieldArrayProvider>
     );
 }

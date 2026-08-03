@@ -40,7 +40,7 @@ export function BekreftEndringModalProvider({ children }: Props) {
 export function useBekreftEndringModalContext() {
     const context = useContext(Context);
     if (context === undefined) {
-        throw new Error('useBekreftEndringModalContext må brukes innenfor en BekreftModalProvider.');
+        throw new Error('useBekreftEndringModalContext må brukes innenfor en BekreftEndringModalProvider.');
     }
     return context;
 }
