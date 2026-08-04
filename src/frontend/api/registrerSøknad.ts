@@ -12,7 +12,7 @@ export interface Payload {
         underkategori: BehandlingUnderkategori;
         søkerMedOpplysninger: {
             ident: string;
-            målform: Målform | undefined;
+            målform: Målform;
         };
         barnaMedOpplysninger: IBarnMedOpplysningerBackend[];
         endringAvOpplysningerBegrunnelse: string;
