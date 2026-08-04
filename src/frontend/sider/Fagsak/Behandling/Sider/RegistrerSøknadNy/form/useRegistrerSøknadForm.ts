@@ -107,10 +107,12 @@ export function useRegistrerSøknadForm() {
             }
         } catch (error: unknown) {
             if (error instanceof ApiFeil && error.ressursStatus === RessursStatus.FUNKSJONELL_FEIL) {
-                åpneBekreftEndringModal();
+                const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+                åpneBekreftEndringModal(message);
+            } else {
+                const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+                setError('root', { message });
             }
-            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
-            setError('root', { message });
         }
     }
 

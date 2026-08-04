@@ -2,7 +2,9 @@ import { type ReactNode, useCallback, useMemo, useState, createContext, useConte
 
 interface BekreftEndringModalContext {
     erBekreftEndringModalÅpen: boolean;
-    åpneBekreftEndringModal: () => void;
+    bekreftEndringFeilmelding: string | undefined;
+    settBekreftEndringFeilmelding: (feilmelding: string) => void;
+    åpneBekreftEndringModal: (feilmelding: string) => void;
     lukkBekreftEndringModal: () => void;
 }
 
@@ -14,22 +16,33 @@ interface Props {
 
 export function BekreftEndringModalProvider({ children }: Props) {
     const [erBekreftEndringModalÅpen, settErBekreftEndringModalÅpen] = useState(false);
+    const [bekreftEndringFeilmelding, settBekreftEndringFeilmelding] = useState<string | undefined>(undefined);
 
-    const åpneBekreftEndringModal = useCallback(() => {
+    const åpneBekreftEndringModal = useCallback((feilmelding: string) => {
+        settBekreftEndringFeilmelding(feilmelding);
         settErBekreftEndringModalÅpen(true);
     }, []);
 
     const lukkBekreftEndringModal = useCallback(() => {
         settErBekreftEndringModalÅpen(false);
+        settBekreftEndringFeilmelding(undefined);
     }, []);
 
     const value = useMemo(
         () => ({
             erBekreftEndringModalÅpen,
+            bekreftEndringFeilmelding,
+            settBekreftEndringFeilmelding,
             åpneBekreftEndringModal,
             lukkBekreftEndringModal,
         }),
-        [erBekreftEndringModalÅpen, åpneBekreftEndringModal, lukkBekreftEndringModal]
+        [
+            erBekreftEndringModalÅpen,
+            bekreftEndringFeilmelding,
+            settBekreftEndringFeilmelding,
+            åpneBekreftEndringModal,
+            lukkBekreftEndringModal,
+        ]
     );
 
     return (

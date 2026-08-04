@@ -18,7 +18,7 @@ export interface BarnaFieldArray {
     slettBarn: (index: number) => void;
 }
 
-const BarnaFieldArrayContext = createContext<BarnaFieldArray | null>(null);
+const BarnaFieldArrayContext = createContext<BarnaFieldArray | undefined>(undefined);
 
 interface Props {
     control: Control<RegistrerSøknadFormValues, unknown, TransformedRegistrerSøknadFormValues>;
@@ -64,7 +64,7 @@ export function BarnaFieldArrayProvider({ control, children }: Props) {
 
 export function useBarnaFieldArray() {
     const barnaFieldArray = useContext(BarnaFieldArrayContext);
-    if (barnaFieldArray === null) {
+    if (barnaFieldArray === undefined) {
         throw new Error('useBarnaFieldArray må brukes innenfor en BarnaFieldArrayProvider');
     }
     return barnaFieldArray;

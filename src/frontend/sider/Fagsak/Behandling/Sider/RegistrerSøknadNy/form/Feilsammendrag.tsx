@@ -10,9 +10,6 @@ function hentFeilmelding(feil: unknown): string | undefined {
     if ('message' in feil && typeof feil.message === 'string') {
         return feil.message;
     }
-    if ('root' in feil) {
-        return hentFeilmelding(feil.root);
-    }
     return undefined;
 }
 

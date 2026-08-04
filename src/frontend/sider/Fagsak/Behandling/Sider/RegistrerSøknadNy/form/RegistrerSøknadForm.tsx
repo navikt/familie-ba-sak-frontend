@@ -22,7 +22,6 @@ import { useNavigate } from 'react-router';
 import { Button, Fieldset, VStack } from '@navikt/ds-react';
 
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import Styles from './RegistrerSøknadForm.module.css';
 
 export function RegistrerSøknadForm() {
     const navigate = useNavigate();
@@ -62,8 +61,6 @@ export function RegistrerSøknadForm() {
         return handleSubmit(data => onSubmit(data, 'ubekreftet'))(event);
     }
 
-    const rootError = errors.root ? <span className={Styles.rootError}>{errors.root?.message}</span> : undefined;
-
     return (
         <BarnaFieldArrayProvider control={control}>
             {({ leggTilBarn }) => (
@@ -77,7 +74,12 @@ export function RegistrerSøknadForm() {
                         <form id={id} onSubmit={submitEllerNaviger}>
                             {erBekreftEndringModalÅpen && <BekreftEndringModal onSubmit={onSubmit} />}
                             <VStack gap={'space-20'}>
-                                <Fieldset error={rootError} legend={'Registrer søknad'} hideLegend={true}>
+                                <Fieldset
+                                    error={errors.root?.message}
+                                    legend={'Registrer søknad'}
+                                    hideLegend={true}
+                                    errorPropagation={false}
+                                >
                                     <VStack gap={'space-20'} marginBlock={'space-20'}>
                                         {!gjelderInstitusjon && <UnderkategoriField />}
                                         <VStack gap={'space-0'}>

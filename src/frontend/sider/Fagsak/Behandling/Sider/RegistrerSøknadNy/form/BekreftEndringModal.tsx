@@ -1,9 +1,7 @@
-import { useState } from 'react';
-
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
-import type {
-    RegistrerSøknadFormValues,
-    TransformedRegistrerSøknadFormValues,
+import {
+    type RegistrerSøknadFormValues,
+    type TransformedRegistrerSøknadFormValues,
 } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
 import { useFormContext } from 'react-hook-form';
 
@@ -16,32 +14,29 @@ interface Props {
 }
 
 export function BekreftEndringModal({ onSubmit }: Props) {
-    const { erBekreftEndringModalÅpen, lukkBekreftEndringModal } = useBekreftEndringModalContext();
+    const {
+        erBekreftEndringModalÅpen,
+        bekreftEndringFeilmelding,
+        settBekreftEndringFeilmelding,
+        lukkBekreftEndringModal,
+    } = useBekreftEndringModalContext();
 
     const {
         handleSubmit,
-        setError,
-        clearErrors,
-        formState: { isSubmitting, errors },
+        formState: { isSubmitting },
     } = useFormContext<RegistrerSøknadFormValues, unknown, TransformedRegistrerSøknadFormValues>();
-
-    const [lokalFeilmelding, settLokalFeilmelding] = useState<string | undefined>(undefined);
 
     async function bekreft() {
         try {
-            settLokalFeilmelding(errors.root?.message);
             await handleSubmit(data => onSubmit(data, 'bekreftet'))();
-            settLokalFeilmelding(undefined);
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
-            setError('root', { message });
-            settLokalFeilmelding(message);
+            settBekreftEndringFeilmelding(message);
         }
     }
 
     function avbryt() {
         lukkBekreftEndringModal();
-        clearErrors('root');
     }
 
     return (
@@ -52,7 +47,7 @@ export function BekreftEndringModal({ onSubmit }: Props) {
             width={'35rem'}
         >
             <Modal.Body>
-                <BodyShort className={Styles.innhold}>{lokalFeilmelding || errors.root?.message}</BodyShort>
+                <BodyShort className={Styles.innhold}>{bekreftEndringFeilmelding}</BodyShort>
             </Modal.Body>
             <Modal.Footer>
                 <Button type={'button'} variant={'primary'} onClick={bekreft} loading={isSubmitting}>

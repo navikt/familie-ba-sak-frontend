@@ -23,6 +23,7 @@ export function BarnaField() {
 
     const {
         setValue,
+        clearErrors,
         formState: { errors, isSubmitting },
     } = useFormContext<RegistrerSøknadFormValues>();
 
@@ -47,6 +48,7 @@ export function BarnaField() {
                 });
             }
         });
+        clearErrors(RegistrerSøknadFormField.BARN);
     }
 
     const description =
