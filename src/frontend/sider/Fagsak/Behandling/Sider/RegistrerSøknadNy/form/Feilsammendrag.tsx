@@ -3,14 +3,21 @@ import { useFormState } from 'react-hook-form';
 
 import { Box, ErrorSummary } from '@navikt/ds-react';
 
-function hentFeilmelding(feil: unknown): string | undefined {
+interface Feil {
+    name: string;
+    message: string;
+}
+
+function flatUtFeil(feil: unknown, sti: string): Feil[] {
     if (!feil || typeof feil !== 'object') {
-        return undefined;
+        return [];
     }
-    if ('message' in feil && typeof feil.message === 'string') {
-        return feil.message;
+    if ('message' in feil && typeof feil.message === 'string' && feil.message.length > 0) {
+        return [{ name: sti, message: feil.message }];
     }
-    return undefined;
+    return Object.entries(feil)
+        .filter(([nøkkel]) => nøkkel !== 'ref' && nøkkel !== 'types')
+        .flatMap(([nøkkel, verdi]) => flatUtFeil(verdi, nøkkel === 'root' ? sti : `${sti}.${nøkkel}`));
 }
 
 export function Feilsammendrag() {
@@ -18,10 +25,7 @@ export function Feilsammendrag() {
 
     const feil = Object.entries(errors)
         .filter(([name]) => name !== 'root')
-        .flatMap(([name, error]) => {
-            const message = hentFeilmelding(error);
-            return message ? [{ name, message }] : [];
-        });
+        .flatMap(([navn, feil]) => flatUtFeil(feil, navn));
 
     if (feil.length === 0) {
         return null;
