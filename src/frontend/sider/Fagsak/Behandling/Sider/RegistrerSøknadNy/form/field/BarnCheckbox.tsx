@@ -37,9 +37,12 @@ export function BarnCheckbox({ index, barn }: Props) {
     const navn = barn.navn ?? 'Navn ukjent';
     const alder = hentAlderSomString(barn.fødselsdato);
     const ident = formaterIdent(barn.ident);
-    const løpende = barnetHarLøpendeUtbetaling ? '(løpende)' : '';
-    const manueltRegistrert = barn.manueltRegistrert ? '| (manuelt registrert)' : '';
-    const navnOgIdentTekst = `${navn} (${alder}) | ${ident} ${løpende} ${manueltRegistrert}`;
+    const løpende = barnetHarLøpendeUtbetaling ? 'løpende' : undefined;
+    const manueltRegistrert = barn.manueltRegistrert ? 'manuelt registrert' : undefined;
+
+    const navnOgIdentTekst = [`${navn} (${alder})`, ident, løpende, manueltRegistrert]
+        .filter(value => value !== undefined)
+        .join(' | ');
 
     const kanSletteBarn = barn.manueltRegistrert && !erLesevisning;
 
