@@ -1,8 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useOppdatererEndretUtbetalingAndelIsPending } from '@hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSletterEndretUtbetalingAndelIsPending } from '@hooks/useSletterEndretUtbetalingAndelIsPending';
-import { FeatureToggle } from '@typer/featureToggles';
 import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
@@ -29,13 +27,11 @@ export const EndretUtbetalingAndelSkjema = ({ form, onSubmit, lukkSkjema }: Endr
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
 
     const erLesevisning = useErLesevisning();
-    const toggles = useFeatureToggles();
 
     const sletterEndretUtbetalingAndel = useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
     const oppdatererEndretUtbetalingAndel = useOppdatererEndretUtbetalingAndelIsPending({ endretUtbetalingAndel });
 
-    const erAutomatiskGenerert =
-        toggles[FeatureToggle.kanRegistrereSøknadstidspunkt] && !!endretUtbetalingAndel.erAutomatiskGenerert;
+    const erAutomatiskGenerert = !!endretUtbetalingAndel.erAutomatiskGenerert;
 
     const låsFelter =
         erLesevisning ||
