@@ -1,10 +1,11 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
+import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertEtterbetalingAdvarsel';
+import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertVedtakAdvarsel';
 import {
     BehandlerRolle,
     BehandlingResultat,
@@ -33,7 +34,6 @@ import { useTilbakekrevingsvedtakMotregning } from '../Simulering/UlovfestetMotr
 export function VedtaksbrevBygger() {
     const saksbehandler = useSaksbehandler();
     const erLesevisning = useErLesevisning();
-    const bruker = useBruker();
     const behandling = useBehandling();
 
     const { hentForhåndsvisning, nullstillDokument, visDokumentModal, hentetDokument, settVisDokumentModal } =
@@ -94,31 +94,9 @@ export function VedtaksbrevBygger() {
                 />
             )}
             <div>
-                {behandling.korrigertEtterbetaling && (
-                    <Box marginBlock={'space-24'}>
-                        <InfoCard data-color="info">
-                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                Etterbetalingsbeløp i brevet er manuelt korrigert
-                            </InfoCard.Message>
-                        </InfoCard>
-                    </Box>
-                )}
-                {behandling.korrigertVedtak && (
-                    <Box marginBlock={'space-24'}>
-                        <InfoCard data-color="info">
-                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                Vedtaket er korrigert etter § 35
-                            </InfoCard.Message>
-                        </InfoCard>
-                    </Box>
-                )}
-                <BrevmottakereAlert
-                    bruker={bruker}
-                    erPåBehandling={true}
-                    erLesevisning={erLesevisning}
-                    brevmottakere={behandling.brevmottakere ?? []}
-                    åpenBehandling={behandling}
-                />
+                {behandling.korrigertEtterbetaling && <KorrigertEtterbetalingAdvarsel />}
+                {behandling.korrigertVedtak && <KorrigertVedtakAdvarsel />}
+                <BrevmottakereBehandlingAdvarsel kilde={'vedtak'} />
                 {!brukerHarUtenlandskAdresse && <UkjentAdresseAlert />}
                 {behandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
                 behandling.status === BehandlingStatus.AVSLUTTET ? (
