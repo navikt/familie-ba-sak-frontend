@@ -1,16 +1,15 @@
 import { opprettKlagebehandling, type OpprettKlagebehandlingPayload } from '@api/opprettKlagebehandling';
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
 
 interface OpprettKlagebehandlingParameters extends OpprettKlagebehandlingPayload {
     fagsakId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, OpprettKlagebehandlingParameters>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<number, DefaultError, OpprettKlagebehandlingParameters>, 'mutationFn'>;
 
 export function useOpprettKlagebehandling(options?: Options) {
-    return useMutation<IBehandling, Error, OpprettKlagebehandlingParameters>({
-        mutationFn: ({ klageMottattDato, fagsakId }: OpprettKlagebehandlingParameters): Promise<IBehandling> =>
+    return useMutation<number, Error, OpprettKlagebehandlingParameters>({
+        mutationFn: ({ klageMottattDato, fagsakId }: OpprettKlagebehandlingParameters): Promise<number> =>
             opprettKlagebehandling({ klageMottattDato }, fagsakId),
         ...options,
     });
