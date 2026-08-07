@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { type OpprettKlagebehandlingParameters, useOpprettKlagebehandling } from './useOpprettKlagebehandling';
+import { useOpprettKlagebehandling } from './useOpprettKlagebehandling';
 
 vi.mock('@api/opprettKlagebehandling');
 
@@ -11,7 +11,7 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const parameters: OpprettKlagebehandlingParameters = {
+const parameters = {
     klageMottattDato: '2026-08-07',
     fagsakId: 123,
 };
