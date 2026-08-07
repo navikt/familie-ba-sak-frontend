@@ -1,5 +1,6 @@
 import { Header } from '@navikt/familie-header';
 
+import { DeployetBranch } from './DeployetBranch';
 import FagsakDeltagerSøk from './FagsakDeltagerSøk';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
@@ -24,6 +25,7 @@ export function HeaderMedSøk() {
                 },
             ]}
         >
+            <DeployetBranch />
             <FagsakDeltagerSøk />
         </Header>
     );

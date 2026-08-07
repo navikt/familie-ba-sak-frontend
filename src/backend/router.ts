@@ -25,7 +25,13 @@ const redirectHvisInternUrlIPreprod = () => {
 export default async (authClient: Client, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
-            .send({ status: 'SUKSESS', data: envVar('APP_VERSION') })
+            .send({
+                status: 'SUKSESS',
+                data: {
+                    versjon: envVar('APP_VERSION'),
+                    branch: envVar('APP_BRANCH', false, 'ukjent'),
+                },
+            })
             .end();
     });
 
