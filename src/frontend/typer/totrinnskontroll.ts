@@ -4,12 +4,6 @@ export enum TotrinnskontrollBeslutning {
     UNDERKJENT = 'UNDERKJENT',
 }
 
-export interface ITotrinnskontrollData {
-    beslutning: TotrinnskontrollBeslutning;
-    begrunnelse: string;
-    kontrollerteSider: string[];
-}
-
 export interface ITotrinnskontroll {
     saksbehandler: string;
     saksbehandlerId: string;
