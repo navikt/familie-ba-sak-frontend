@@ -5,13 +5,11 @@ interface Props {
     åpneModal: () => void;
 }
 
-const EndreEndringstidspunkt = ({ åpneModal }: Props) => {
+export function EndreEndringstidspunkt({ åpneModal }: Props) {
     return (
         <ActionMenu.Item onSelect={åpneModal}>
             <CalendarIcon fontSize={'1.4rem'} />
             Oppdater endringstidspunkt
         </ActionMenu.Item>
     );
-};
-
-export default EndreEndringstidspunkt;
+}
