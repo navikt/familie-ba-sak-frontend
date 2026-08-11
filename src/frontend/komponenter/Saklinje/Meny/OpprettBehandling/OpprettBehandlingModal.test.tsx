@@ -174,14 +174,6 @@ describe('OpprettBehandlingModal', () => {
         expect(behandlingstypeFelt).toHaveValue(Tilbakekrevingsbehandlingstype.TILBAKEKREVING);
     });
 
-    test('skal velge Tilbakekreving som type behandling', async () => {
-        const { screen, user } = renderOpprettBehandlingModal();
-
-        const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
-        await user.selectOptions(behandlingstypeFelt, Tilbakekrevingsbehandlingstype.TILBAKEKREVING);
-        expect(behandlingstypeFelt).toHaveValue(Tilbakekrevingsbehandlingstype.TILBAKEKREVING);
-    });
-
     test('skal kunne lukke modalen', async () => {
         const { screen, user, lukkModal } = renderOpprettBehandlingModal();
 
