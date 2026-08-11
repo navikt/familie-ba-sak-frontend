@@ -4,6 +4,7 @@ import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
+import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/IngenVedtaksbrevbyggerAdvarsel';
 import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertEtterbetalingAdvarsel';
 import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertVedtakAdvarsel';
 import {
@@ -14,9 +15,6 @@ import {
     BehandlingÅrsak,
     hentStegNummer,
 } from '@typer/behandling';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, InfoCard } from '@navikt/ds-react';
 
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
@@ -51,19 +49,8 @@ export function VedtaksbrevBygger() {
     const automatiskBehandlingMedFortsattInnvilgetSomResultat =
         behandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && behandling.skalBehandlesAutomatisk;
 
-    const hentInfostripeTekst = (
-        årsak: BehandlingÅrsak,
-        status: BehandlingStatus,
-        automatiskBehandlingMedFortsattInnvilgetSomResultat: boolean
-    ): string => {
-        if (automatiskBehandlingMedFortsattInnvilgetSomResultat) {
-            return 'Automatisk behandling med resultat "Fortsatt innvilget" sender ikke vedtaksbrev.';
-        } else if (status === BehandlingStatus.AVSLUTTET) {
-            return 'Behandlingen er avsluttet. Du kan se vedtaksbrevet ved å trykke på "Vis vedtaksbrev".';
-        } else if (årsak === BehandlingÅrsak.DØDSFALL_BRUKER) {
-            return 'Vedtak om opphør på grunn av dødsfall er automatisk generert.';
-        } else return '';
-    };
+    const erBehandlingMedVedtaksbrevbygger =
+        behandling.årsak !== BehandlingÅrsak.DØDSFALL_BRUKER && behandling.status !== BehandlingStatus.AVSLUTTET;
 
     const hentBrevForTilbakekrevingsvedtakMotregning = () => {
         const genererBrevUnderBehandling =
@@ -98,24 +85,11 @@ export function VedtaksbrevBygger() {
                 {behandling.korrigertVedtak && <KorrigertVedtakAdvarsel />}
                 <BrevmottakereBehandlingAdvarsel kilde={'vedtak'} />
                 {!brukerHarUtenlandskAdresse && <UkjentAdresseAlert />}
-                {behandling.årsak === BehandlingÅrsak.DØDSFALL_BRUKER ||
-                behandling.status === BehandlingStatus.AVSLUTTET ? (
-                    <Box marginBlock={'space-32 space-16'}>
-                        <InfoCard data-color="info">
-                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                {hentInfostripeTekst(
-                                    behandling.årsak,
-                                    behandling.status,
-                                    automatiskBehandlingMedFortsattInnvilgetSomResultat
-                                )}
-                            </InfoCard.Message>
-                        </InfoCard>
-                    </Box>
-                ) : (
+                {!erBehandlingMedVedtaksbrevbygger && <IngenVedtaksbrevbyggerAdvarsel />}
+                {erBehandlingMedVedtaksbrevbygger && (
                     <>
-                        {sammensattKontrollsak ? (
-                            <SammensattKontrollsak />
-                        ) : (
+                        {sammensattKontrollsak && <SammensattKontrollsak />}
+                        {!sammensattKontrollsak && (
                             <>
                                 <Vedtaksperioder />
                                 {erFeilutbetaltValutaTabellSynlig && <FeilutbetaltValutaTabell />}
