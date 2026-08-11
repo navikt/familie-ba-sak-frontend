@@ -3,48 +3,44 @@ import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingC
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
+import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagPerson } from '@testutils/testdata/personTestdata';
+import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
 import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
+import type { IPersonInfo } from '@typer/person';
+import type { Saksbehandler } from '@typer/saksbehandler';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { http, HttpResponse } from 'msw';
 import { describe, expect, test, vi } from 'vitest';
 
 interface WrapperProps {
     fagsak?: IMinimalFagsak;
+    bruker?: IPersonInfo;
     behandling?: IBehandling;
+    saksbehandler?: Saksbehandler;
     children: React.ReactNode;
 }
 
 function Wrapper({
     fagsak = lagFagsak({ status: FagsakStatus.OPPRETTET, behandlinger: [] }),
+    bruker = lagPerson(),
     behandling = lagBehandling(),
+    saksbehandler = lagSaksbehandler(),
     children,
 }: WrapperProps) {
     return (
-        <TestProviders>
+        <TestProviders saksbehandler={saksbehandler}>
             <FagsakProvider fagsak={fagsak}>
-                <BrukerProvider bruker={lagPerson()}>
+                <BrukerProvider bruker={bruker}>
                     <HentOgSettBehandlingProvider>
                         <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
                     </HentOgSettBehandlingProvider>
                 </BrukerProvider>
-            </FagsakProvider>
-        </TestProviders>
-    );
-}
-
-// Egen wrapper for revurdering, siden vi må ha en eksisterende (ikke-aktiv) behandling for å kunne opprette revurdering
-function WrapperRevurdering({ fagsak = lagFagsak(), behandling = lagBehandling(), children }: WrapperProps) {
-    return (
-        <TestProviders>
-            <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                </HentOgSettBehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
@@ -118,7 +114,7 @@ describe('OpprettBehandlingModal', () => {
                 onTilbakekrevingsbehandlingOpprettet={onTilbakekrevingsbehandlingOpprettet}
             />,
             {
-                wrapper: WrapperRevurdering,
+                wrapper: props => <Wrapper {...props} fagsak={lagFagsak()} />,
             }
         );
         const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
@@ -156,21 +152,30 @@ describe('OpprettBehandlingModal', () => {
     });
 
     test('skal vise begrunnelseFelt ved teknisk endring', async () => {
-        // TODO: må være spesiell type saksbehandler for å ha tilgang - skal vi teste det da?
+        const saksbehandler = lagSaksbehandler({
+            groups: ['d21e00a4-969d-4b28-8782-dc818abfae65', '314fa714-f13c-4cdc-ac5c-e13ce08e241c'],
+        });
+
+        server.use(
+            http.get('/user/profile', () => {
+                return HttpResponse.json(saksbehandler);
+            })
+        );
+
         const { screen, user } = render(
             <OpprettBehandlingModal
                 lukkModal={lukkModal}
                 onTilbakekrevingsbehandlingOpprettet={onTilbakekrevingsbehandlingOpprettet}
             />,
             {
-                wrapper: Wrapper,
+                wrapper: props => <Wrapper {...props} fagsak={lagFagsak()} saksbehandler={saksbehandler} />,
             }
         );
         const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
         await user.selectOptions(behandlingstypeFelt, Behandlingstype.TEKNISK_ENDRING);
         expect(behandlingstypeFelt).toHaveValue(Behandlingstype.TEKNISK_ENDRING);
 
-        const begrunnelseFelt = screen.getByLabelText('Begrunnelse');
+        const begrunnelseFelt = screen.getByLabelText('Begrunnelse for opprettelse av teknisk endring');
         await user.type(begrunnelseFelt, 'Test begrunnelse');
         expect(begrunnelseFelt).toHaveValue('Test begrunnelse');
     });
