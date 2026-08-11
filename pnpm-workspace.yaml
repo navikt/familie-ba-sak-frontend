@@ -7,5 +7,4 @@ nodeLinker: hoisted
 # Avhengigheter får ikke kjøre (pre|post)install-scripts (sikkerhetstiltak).
 # Tilsvarer 'ignore-scripts true' som lå i .yarnrc.
 allowBuilds:
-  '@sentry/cli': false
   msw: false

@@ -22,6 +22,21 @@ const redirectHvisInternUrlIPreprod = () => {
     };
 };
 
+const naisMetaTags = () => {
+    const metadata = [
+        ['nais-app', process.env.NAIS_APP_NAME],
+        ['nais-team', process.env.NAIS_NAMESPACE ?? process.env.NAIS_TEAM],
+        ['nais-cluster', process.env.NAIS_CLUSTER_NAME],
+        ['nais-version', process.env.APP_VERSION],
+        ['nais-telemetry-url', process.env.NAIS_TELEMETRY_URL],
+    ];
+
+    return metadata
+        .filter((entry): entry is [string, string] => Boolean(entry[1]))
+        .map(([name, value]) => `<meta name="${name}" content="${value.replaceAll('"', '&quot;')}">`)
+        .join('\n    ');
+};
+
 export default async (authClient: Client, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
@@ -74,11 +89,15 @@ export default async (authClient: Client, router: Router) => {
                 if (!viteDevServer) {
                     throw new Error('ViteDevServer er ikke initialisert.');
                 }
-                const htmlInnhold = await fs.promises.readFile(htmlPath, 'utf-8');
+                const htmlInnhold = (await fs.promises.readFile(htmlPath, 'utf-8')).replace(
+                    '{{{NAIS_META_TAGS}}}',
+                    naisMetaTags()
+                );
                 const transformed = await viteDevServer.transformIndexHtml(req.url, htmlInnhold);
                 res.status(200).type('html').send(transformed);
             } else {
-                res.sendFile(htmlPath);
+                const htmlInnhold = await fs.promises.readFile(htmlPath, 'utf-8');
+                res.status(200).type('html').send(htmlInnhold.replace('{{{NAIS_META_TAGS}}}', naisMetaTags()));
             }
         }
     );
