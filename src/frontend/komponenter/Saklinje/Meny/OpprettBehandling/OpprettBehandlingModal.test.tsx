@@ -1,12 +1,14 @@
 import { OpprettBehandlingModal } from '@komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingModal';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
+import { lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
-import type { IMinimalFagsak } from '@typer/fagsak';
+import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { describe, expect, test, vi } from 'vitest';
@@ -17,7 +19,26 @@ interface WrapperProps {
     children: React.ReactNode;
 }
 
-function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children }: WrapperProps) {
+function Wrapper({
+    fagsak = lagFagsak({ status: FagsakStatus.OPPRETTET, behandlinger: [] }),
+    behandling = lagBehandling(),
+    children,
+}: WrapperProps) {
+    return (
+        <TestProviders>
+            <FagsakProvider fagsak={fagsak}>
+                <BrukerProvider bruker={lagPerson()}>
+                    <HentOgSettBehandlingProvider>
+                        <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
+                    </HentOgSettBehandlingProvider>
+                </BrukerProvider>
+            </FagsakProvider>
+        </TestProviders>
+    );
+}
+
+// Egen wrapper for revurdering, siden vi må ha en eksisterende (ikke-aktiv) behandling for å kunne opprette revurdering
+function WrapperRevurdering({ fagsak = lagFagsak(), behandling = lagBehandling(), children }: WrapperProps) {
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
@@ -65,12 +86,10 @@ describe('OpprettBehandlingModal', () => {
         await user.selectOptions(behandlingstypeFelt, Behandlingstype.FØRSTEGANGSBEHANDLING);
         expect(behandlingstypeFelt).toHaveValue(Behandlingstype.FØRSTEGANGSBEHANDLING);
 
-        // Når Førstegangsbehandling velges som type skal felter for behandlingstema og søknad mottatt dato vises
         expect(screen.getByLabelText('Velg behandlingstema')).toBeInTheDocument();
         expect(screen.getByLabelText('Søknad mottatt dato')).toBeInTheDocument();
         // Årsaksfeltet skal ikke vises siden årsaken automatisk settes ved førstegangsbehandling
         expect(screen.queryByLabelText('Velg årsak')).not.toBeInTheDocument();
-        // TODO: denne feiler pga feil initial state for testdataen - hvilke behandlinger som lastes inn
     });
 
     test('skal rendre 360-dagers-alert ved søknadsdato som er mer enn 360 dager siden', async () => {
@@ -92,17 +111,16 @@ describe('OpprettBehandlingModal', () => {
         expect(screen.getByText('Det er mer enn 360 dager siden denne datoen.')).toBeInTheDocument();
     });
 
-    test.todo('skal rendre riktige felter ved revurdering', async () => {
+    test('skal rendre riktige felter ved revurdering', async () => {
         const { screen, user } = render(
             <OpprettBehandlingModal
                 lukkModal={lukkModal}
                 onTilbakekrevingsbehandlingOpprettet={onTilbakekrevingsbehandlingOpprettet}
             />,
             {
-                wrapper: Wrapper,
+                wrapper: WrapperRevurdering,
             }
         );
-        // TODO: kan vi overstyre aktivBehandling el.l. manuelt sånn at REVURDERING-valget vises i lista? Ev. fjern testen
         const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
         await user.selectOptions(behandlingstypeFelt, Behandlingstype.REVURDERING);
         expect(behandlingstypeFelt).toHaveValue(Behandlingstype.REVURDERING);
@@ -129,7 +147,6 @@ describe('OpprettBehandlingModal', () => {
         expect(behandlingstypeFelt).toHaveValue(Behandlingstype.MIGRERING_FRA_INFOTRYGD);
 
         const behandlingsårsakFelt = screen.getByRole('combobox', { name: 'Velg behandlingsårsak' });
-        // TODO: dette feiler trolig pga initiell state for testdataen - hvilke behandlinger som lastes inn
         await user.selectOptions(behandlingsårsakFelt, BehandlingÅrsak.HELMANUELL_MIGRERING);
         expect(behandlingsårsakFelt).toHaveValue(BehandlingÅrsak.HELMANUELL_MIGRERING);
 
