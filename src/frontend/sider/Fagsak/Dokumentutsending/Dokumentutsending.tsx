@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router';
 
 import { Button, HGrid, Modal } from '@navikt/ds-react';
 
-import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
 import { useFagsakContext } from '../FagsakContext';
+import { useDokumentutsendingContext } from './DokumentutsendingContextRHF';
 
 export function Dokumentutsending() {
     const { fagsak } = useFagsakContext();
