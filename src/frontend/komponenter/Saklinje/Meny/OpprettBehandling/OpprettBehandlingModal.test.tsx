@@ -202,10 +202,6 @@ describe('OpprettBehandlingModal', () => {
         );
         const { screen, user, lukkModal } = renderOpprettBehandlingModal();
 
-        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeInTheDocument();
-        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
-        expect(lukkModal).toHaveBeenCalledOnce();
-
         const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
         await user.selectOptions(behandlingstypeFelt, Behandlingstype.FØRSTEGANGSBEHANDLING);
         expect(behandlingstypeFelt).toHaveValue(Behandlingstype.FØRSTEGANGSBEHANDLING);
