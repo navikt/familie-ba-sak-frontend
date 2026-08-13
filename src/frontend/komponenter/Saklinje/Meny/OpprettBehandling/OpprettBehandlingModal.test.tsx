@@ -1,3 +1,4 @@
+import { apiClient } from '@api/client/apiClient';
 import { OpprettBehandlingModal } from '@komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingModal';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
@@ -11,13 +12,18 @@ import { lagPerson } from '@testutils/testdata/personTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
+import { BehandlingKategori, Behandlingstema, BehandlingUnderkategori } from '@typer/behandlingstema';
 import { FagsakStatus, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import type { IPersonInfo } from '@typer/person';
 import type { Saksbehandler } from '@typer/saksbehandler';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { http, HttpResponse } from 'msw';
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
+
+afterEach(() => {
+    vi.restoreAllMocks();
+});
 
 interface WrapperProps {
     fagsak?: IMinimalFagsak;
@@ -180,5 +186,51 @@ describe('OpprettBehandlingModal', () => {
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
         expect(lukkModal).toHaveBeenCalledOnce();
+    });
+
+    test('skal kalle onSubmit når skjemaet sendes inn', async () => {
+        const { screen, user, lukkModal } = renderOpprettBehandlingModal();
+
+        vi.spyOn(apiClient, 'post').mockResolvedValue(
+            lagBehandling({
+                type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                kategori: BehandlingKategori.NASJONAL,
+                underkategori: BehandlingUnderkategori.ORDINÆR,
+                søknadMottattDato: '01.01.2024',
+            })
+        );
+
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
+        expect(lukkModal).toHaveBeenCalledOnce();
+
+        const behandlingstypeFelt = screen.getByRole('combobox', { name: 'Velg type behandling' });
+        await user.selectOptions(behandlingstypeFelt, Behandlingstype.FØRSTEGANGSBEHANDLING);
+        expect(behandlingstypeFelt).toHaveValue(Behandlingstype.FØRSTEGANGSBEHANDLING);
+
+        const behandlingstemaFelt = screen.getByRole('combobox', { name: 'Velg behandlingstema' });
+        await user.selectOptions(behandlingstemaFelt, Behandlingstema.NASJONAL_ORDINÆR);
+        expect(behandlingstemaFelt).toHaveValue(Behandlingstema.NASJONAL_ORDINÆR);
+
+        const søknadMottattDatoFelt = screen.getByLabelText('Søknad mottatt dato');
+        await user.type(søknadMottattDatoFelt, '01.01.2024');
+        expect(søknadMottattDatoFelt).toHaveValue('01.01.2024');
+
+        const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+        await user.click(bekreftKnapp);
+        expect(apiClient.post).toHaveBeenCalledTimes(1);
+    });
+
+    test('skal ikke kunne sende inn skjemaet ved ugyldige felter', async () => {
+        const { screen, user } = renderOpprettBehandlingModal();
+
+        vi.spyOn(apiClient, 'post').mockResolvedValue(lagBehandling());
+
+        const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
+        await user.click(bekreftKnapp);
+        expect(screen.getByText('Velg type behandling som skal opprettes fra nedtrekkslisten.')).toBeInTheDocument();
+
+        expect(apiClient.post).not.toHaveBeenCalled();
     });
 });
