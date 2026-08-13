@@ -1,7 +1,17 @@
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
+import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { FagsakStatus } from '@typer/fagsak';
+import { Klagebehandlingstype } from '@typer/klage';
+import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
+import { expect } from 'vitest';
 
-import { erBehandlingMedVedtaksbrevutsending, hentTilgjengeligeBehandlingsårsaker } from './behandling';
+import {
+    erBehandlingMedVedtaksbrevutsending,
+    hentTilgjengeligeBehandlingstyper,
+    hentTilgjengeligeBehandlingsårsaker,
+} from './behandling';
 
 describe('hentTilgjengeligeBehandlingsårsaker', () => {
     test('skal ikke inneholde automatiske behandlingsårsaker ved vanlig revurdering', () => {
@@ -72,5 +82,53 @@ describe('erBehandlingMedVedtaksbrevutsending', () => {
         });
 
         expect(erBehandlingMedVedtaksbrevutsending(behandling)).toBe(true);
+    });
+});
+
+describe('hentTilgjengeligeBehandlingstyper', () => {
+    test('skal inneholde forventede behandlingstyper ved nyopprettet fagsak', () => {
+        const fagsak = lagFagsak({ status: FagsakStatus.OPPRETTET, behandlinger: [] });
+        const saksbehandler = lagSaksbehandler();
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler);
+        const forventedeBehandlingstyper = [
+            Behandlingstype.FØRSTEGANGSBEHANDLING,
+            Behandlingstype.MIGRERING_FRA_INFOTRYGD,
+            Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
+            Klagebehandlingstype.KLAGE,
+        ];
+
+        expect(tilgjengeligeBehandlingstyper).toEqual(expect.arrayContaining(forventedeBehandlingstyper));
+    });
+
+    test('skal inneholde forventede behandlingstyper ved fagsak uten aktiv behandling', () => {
+        const fagsak = lagFagsak();
+        const saksbehandler = lagSaksbehandler();
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler);
+        const forventedeBehandlingstyper = [
+            Behandlingstype.REVURDERING,
+            Behandlingstype.MIGRERING_FRA_INFOTRYGD,
+            Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
+            Klagebehandlingstype.KLAGE,
+        ];
+        expect(tilgjengeligeBehandlingstyper).toEqual(expect.arrayContaining(forventedeBehandlingstyper));
+    });
+
+    test('skal inneholde teknisk endring når saksbehandler er superbruker', () => {
+        const fagsak = lagFagsak();
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler);
+        expect(tilgjengeligeBehandlingstyper).toContain(Behandlingstype.TEKNISK_ENDRING);
+    });
+
+    test('skal ikke inneholde klage ved strengt fortrolig person i fagsak', () => {
+        const fagsak = lagFagsak({ finnesStrengtFortroligPersonIFagsak: true });
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler);
+
+        expect(tilgjengeligeBehandlingstyper).not.toContain(Klagebehandlingstype.KLAGE);
     });
 });
