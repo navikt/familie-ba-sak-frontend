@@ -98,7 +98,7 @@ describe('hentTilgjengeligeBehandlingstyper', () => {
             Klagebehandlingstype.KLAGE,
         ];
 
-        expect(tilgjengeligeBehandlingstyper).toEqual(expect.arrayContaining(forventedeBehandlingstyper));
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
     });
 
     test('skal inneholde forventede behandlingstyper ved fagsak uten aktiv behandling', () => {
@@ -112,7 +112,7 @@ describe('hentTilgjengeligeBehandlingstyper', () => {
             Tilbakekrevingsbehandlingstype.TILBAKEKREVING,
             Klagebehandlingstype.KLAGE,
         ];
-        expect(tilgjengeligeBehandlingstyper).toEqual(expect.arrayContaining(forventedeBehandlingstyper));
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
     });
 
     test('skal inneholde teknisk endring når saksbehandler er superbruker', () => {
