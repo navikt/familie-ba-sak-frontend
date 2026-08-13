@@ -191,7 +191,7 @@ describe('OpprettBehandlingModal', () => {
     });
 
     test('skal opprette førstegangsbehandling og lukke modalen ved vellykket innsending', async () => {
-        vi.mocked(opprettBehandling).mockRejectedValue(
+        vi.mocked(opprettBehandling).mockResolvedValue(
             lagBehandling({
                 type: Behandlingstype.FØRSTEGANGSBEHANDLING,
                 årsak: BehandlingÅrsak.SØKNAD,
