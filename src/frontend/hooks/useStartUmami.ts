@@ -4,15 +4,14 @@ import { erProd } from '../utils/miljø';
 
 export const useStartUmami = () => {
     useEffect(() => {
+        const src = erProd()
+            ? 'https://cdn.nav.no/team-researchops/sporing/sporing.js'
+            : 'https://cdn.nav.no/team-researchops/sporing/sporing-dev.js';
         const websiteId = erProd() ? 'e0e5e641-6d90-46ef-823c-e11ef40472cc' : 'a95c215b-4c37-450f-8ec6-b1355d53a36b';
-        //const hostUrl = erProd() ? 'https://reops-event-proxy.nav.no' : 'https://reops-event-proxy.ekstern.dev.nav.no';
 
         const script = document.createElement('script');
         script.defer = true;
-        script.src = erProd()
-            ? 'https://cdn.nav.no/team-researchops/sporing/sporing.js'
-            : 'https://cdn.nav.no/team-researchops/sporing/sporing-dev.js';
-        //script.setAttribute('data-host-url', hostUrl);
+        script.src = src;
         script.setAttribute('data-website-id', websiteId);
 
         document.body.appendChild(script);
