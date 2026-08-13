@@ -1,10 +1,10 @@
-import { apiClient } from '@api/client/apiClient';
+import { opprettBehandling } from '@api/opprettBehandling';
 import { OpprettBehandlingModal } from '@komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingModal';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
-import type { RenderOptions } from '@testing-library/react';
+import { type RenderOptions, waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
@@ -20,6 +20,8 @@ import type { Saksbehandler } from '@typer/saksbehandler';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { http, HttpResponse } from 'msw';
 import { afterEach, describe, expect, test, vi } from 'vitest';
+
+vi.mock('@api/opprettBehandling');
 
 afterEach(() => {
     vi.restoreAllMocks();
@@ -188,10 +190,8 @@ describe('OpprettBehandlingModal', () => {
         expect(lukkModal).toHaveBeenCalledOnce();
     });
 
-    test('skal kalle onSubmit når skjemaet sendes inn', async () => {
-        const { screen, user, lukkModal } = renderOpprettBehandlingModal();
-
-        vi.spyOn(apiClient, 'post').mockResolvedValue(
+    test('skal opprette førstegangsbehandling og lukke modalen ved vellykket innsending', async () => {
+        vi.mocked(opprettBehandling).mockRejectedValue(
             lagBehandling({
                 type: Behandlingstype.FØRSTEGANGSBEHANDLING,
                 årsak: BehandlingÅrsak.SØKNAD,
@@ -200,6 +200,7 @@ describe('OpprettBehandlingModal', () => {
                 søknadMottattDato: '01.01.2024',
             })
         );
+        const { screen, user, lukkModal } = renderOpprettBehandlingModal();
 
         expect(screen.getByRole('button', { name: 'Avbryt' })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
@@ -219,18 +220,28 @@ describe('OpprettBehandlingModal', () => {
 
         const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(bekreftKnapp);
-        expect(apiClient.post).toHaveBeenCalledTimes(1);
+        await waitFor(() => {
+            expect(opprettBehandling).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                    kategori: BehandlingKategori.NASJONAL,
+                    underkategori: BehandlingUnderkategori.ORDINÆR,
+                    søknadMottattDato: '2024-01-01',
+                })
+            );
+        });
+        await waitFor(() => {
+            expect(lukkModal).toHaveBeenCalledOnce();
+        });
     });
 
     test('skal ikke kunne sende inn skjemaet ved ugyldige felter', async () => {
-        const { screen, user } = renderOpprettBehandlingModal();
-
-        vi.spyOn(apiClient, 'post').mockResolvedValue(lagBehandling());
+        vi.mocked(opprettBehandling).mockRejectedValue(new Error('Teknisk feil ved opprettelse av behandling.'));
+        const { screen, user, lukkModal } = renderOpprettBehandlingModal();
 
         const bekreftKnapp = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(bekreftKnapp);
         expect(screen.getByText('Velg type behandling som skal opprettes fra nedtrekkslisten.')).toBeInTheDocument();
-
-        expect(apiClient.post).not.toHaveBeenCalled();
+        expect(lukkModal).not.toHaveBeenCalled();
     });
 });
