@@ -5,7 +5,7 @@ import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
 
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack } from '@navikt/ds-react';
 
-import { DokumentutsendingProvider } from './DokumentutsendingContextRHF';
+import { DokumentutsendingProvider } from './DokumentutsendingContext';
 
 export function DokumentContainer({ children }: PropsWithChildren) {
     const bruker = useBruker();

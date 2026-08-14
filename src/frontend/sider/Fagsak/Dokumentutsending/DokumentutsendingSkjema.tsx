@@ -12,7 +12,7 @@ import { Box, Button, Fieldset, Heading, HStack, InfoCard, VStack } from '@navik
 
 import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
 import { DistribusjonskanalInfo } from './DistribusjonskanalInfo';
-import { useDokumentutsendingContext } from './DokumentutsendingContextRHF';
+import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentÅrsakInstitusjon, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
 import { useFagsakContext } from '../FagsakContext';
 import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
