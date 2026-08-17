@@ -1,18 +1,13 @@
+import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
-
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import { RessursResolver } from '../utils/ressursResolver';
 
 export interface LeggTilBarnPåBehandlingPayload {
     barnIdent: string;
 }
 
-export const leggTilBarnPåBehandling = async (request: FamilieRequest, barnIdent: string, behandlingId: number) => {
-    const ressurs = await request<LeggTilBarnPåBehandlingPayload, IBehandling>({
-        data: { barnIdent: barnIdent },
-        method: 'POST',
+export async function leggTilBarnPåBehandling(payload: LeggTilBarnPåBehandlingPayload, behandlingId: number) {
+    return apiClient.post<LeggTilBarnPåBehandlingPayload, IBehandling>({
+        data: payload,
         url: `/familie-ba-sak/api/behandlinger/${behandlingId}/legg-til-barn`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
-};
+}
