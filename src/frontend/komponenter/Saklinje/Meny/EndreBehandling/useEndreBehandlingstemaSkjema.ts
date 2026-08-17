@@ -1,11 +1,10 @@
+import { useOppdaterBehandlingstema } from '@hooks/useOppdaterBehandlingstema';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import type { IBehandlingstema } from '@typer/behandlingstema';
+import { behandlingstemaer } from '@typer/behandlingstema';
 import { useForm } from 'react-hook-form';
 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { useOppdaterBehandlingstema } from '../../../../hooks/useOppdaterBehandlingstema';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import type { IBehandlingstema } from '../../../../typer/behandlingstema';
-import { behandlingstemaer } from '../../../../typer/behandlingstema';
 
 export enum EndreBehandlingstemaFelt {
     BEHANDLINGSTEMA = 'behandlingstema',
