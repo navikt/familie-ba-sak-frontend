@@ -1,6 +1,5 @@
-import type { ChangeEvent } from 'react';
-
 import { Textarea } from '@navikt/ds-react';
+import type { ChangeEvent } from 'react';
 
 import { useDokumentutsendingContext } from '../DokumentutsendingContext';
 
@@ -17,7 +16,6 @@ const FritekstAvsnitt = () => {
                 skjema.felter.fritekstAvsnitt.validerOgSettFelt(event.target.value)
             }
             error={skjema.visFeilmeldinger && skjema.felter.fritekstAvsnitt?.feilmelding}
-            /* eslint-disable-next-line jsx-a11y/no-autofocus */
             autoFocus
             resize={'vertical'}
         />

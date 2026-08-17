@@ -6,7 +6,6 @@ import { utledTekstTilModia } from './modiaStandardtekst';
 describe('utledTekstTilModia', () => {
     setDefaultOptions({ locale: nb });
 
-    /* eslint-disable no-irregular-whitespace */
     test('formatering av én avregningsperiode på én måned', () => {
         const avregningsperioder = [
             {

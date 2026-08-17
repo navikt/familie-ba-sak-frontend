@@ -1,5 +1,5 @@
 .innerContent {
-    &[data-open='true'] {
+    &[data-open="true"] {
         padding: var(--ax-space-16);
         padding-top: var(--ax-space-8);
 

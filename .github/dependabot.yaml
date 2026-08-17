@@ -65,16 +65,7 @@ updates:
           - "@navikt/flagg-ikoner"
       linting:
         patterns:
-          - "eslint"
-          - "@eslint/js"
-          - "eslint-config-prettier"
-          - "eslint-plugin-import"
-          - "eslint-plugin-jsx-a11y"
-          - "eslint-plugin-prettier"
-          - "eslint-plugin-react-hooks"
-          - "globals"
-          - "typescript-eslint"
-          - "prettier"
+          - "@biomejs/biome"
           - "lint-staged"
           - "husky"
       vitest:

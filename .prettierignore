@@ -1,9 +1,0 @@
-*.json
-*.yaml
-*.yml
-*.md
-*.html
-frontend_development/*
-frontend_production/*
-.prettierrc
-backend/*

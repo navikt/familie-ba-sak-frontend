@@ -1,8 +1,6 @@
-import { useEffect, useRef } from 'react';
-
 import { useToastContext } from '@context/ToastContext';
-
 import { LocalAlert } from '@navikt/ds-react';
+import { useEffect, useRef } from 'react';
 
 import styles from './Toast.module.css';
 import type { IToast } from './typer';
@@ -24,7 +22,6 @@ const Toast = ({ toastId, toast }: { toastId: string; toast: IToast }) => {
     useEffect(() => {
         const timer = setTimeout(
             () => {
-                // eslint-disable-next-line
                 const { [toastId]: fjernetToast, ...resterendeToast } = toasts;
                 settToasts(resterendeToast);
             },
