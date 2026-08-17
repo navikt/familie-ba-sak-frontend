@@ -2,22 +2,18 @@ import { leggTilBarnPåBehandling, type LeggTilBarnPåBehandlingPayload } from '
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
-import { useHttp } from '@navikt/familie-http';
-
 interface LeggTilBarnPåBehandlingParameters extends LeggTilBarnPåBehandlingPayload {
     behandlingId: number;
 }
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, LeggTilBarnPåBehandlingParameters>, 'mutationFn'>;
 
-export const useLeggTilBarnPåBehandling = (options?: Options) => {
-    const { request } = useHttp();
-
+export function useLeggTilBarnPåBehandling(options?: Options) {
     return useMutation<IBehandling, Error, LeggTilBarnPåBehandlingParameters>({
-        mutationFn: (parameters: LeggTilBarnPåBehandlingParameters): Promise<IBehandling> => {
-            const { barnIdent, behandlingId } = parameters;
-            return leggTilBarnPåBehandling(request, barnIdent, behandlingId);
+        mutationFn: (parameters: LeggTilBarnPåBehandlingParameters) => {
+            const { behandlingId, ...payload } = parameters;
+            return leggTilBarnPåBehandling(payload, behandlingId);
         },
         ...options,
     });
-};
+}

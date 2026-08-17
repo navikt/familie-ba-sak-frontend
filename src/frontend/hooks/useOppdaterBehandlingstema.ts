@@ -1,9 +1,6 @@
+import { oppdaterBehandlingstema, type OppdaterBehandlingstemaPayload } from '@api/oppdaterBehandlingstema';
 import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
-import { useHttp } from '@navikt/familie-http';
-
-import { oppdaterBehandlingstema, type OppdaterBehandlingstemaPayload } from '../api/oppdaterBehandlingstema';
-import type { IBehandling } from '../typer/behandling';
+import type { IBehandling } from '@typer/behandling';
 
 interface OppdaterBehandlingstemaParameters extends OppdaterBehandlingstemaPayload {
     behandlingId: number;
@@ -11,14 +8,12 @@ interface OppdaterBehandlingstemaParameters extends OppdaterBehandlingstemaPaylo
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, OppdaterBehandlingstemaParameters>, 'mutationFn'>;
 
-export const useOppdaterBehandlingstema = (options?: Options) => {
-    const { request } = useHttp();
-
+export function useOppdaterBehandlingstema(options?: Options) {
     return useMutation<IBehandling, Error, OppdaterBehandlingstemaParameters>({
         mutationFn: (parameters: OppdaterBehandlingstemaParameters): Promise<IBehandling> => {
-            const { behandlingUnderkategori, behandlingKategori, behandlingId } = parameters;
-            return oppdaterBehandlingstema(request, behandlingKategori, behandlingUnderkategori, behandlingId);
+            const { behandlingId, ...payload } = parameters;
+            return oppdaterBehandlingstema(payload, behandlingId);
         },
         ...options,
     });
-};
+}
