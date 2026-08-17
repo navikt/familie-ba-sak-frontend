@@ -51,6 +51,8 @@ spec:
     outbound:
       rules:
         - application: familie-ba-sak
+      external:
+        - host: reops-event-proxy.nav.no
   envFrom:
     - secret: familie-ba-sak-frontend
   env:
