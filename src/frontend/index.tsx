@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 
-import { init } from '@nais/apm';
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
+import { initApm } from './apm';
 import { App } from './App';
 import { erLokal } from './utils/miljø';
 
@@ -13,9 +13,7 @@ import { erLokal } from './utils/miljø';
 setDefaultOptions({ locale: nb });
 
 if (!erLokal()) {
-    init({
-        tracing: true,
-    });
+    initApm();
 }
 
 if (erLokal()) {
