@@ -1,6 +1,6 @@
 import { BodyShort } from '@navikt/ds-react';
 
-import { type IRestValutakurs } from '../../../../../../../typer/eøsPerioder';
+import type { IRestValutakurs } from '../../../../../../../typer/eøsPerioder';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../../utils/dato';
 
 interface IStatusBarnCelleOgPeriodeCelleProps {

@@ -1,20 +1,18 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Fieldset, HGrid, InlineMessage } from '@navikt/ds-react';
 import type { OptionType } from '@typer/common';
 import { EøsPeriodeStatus, type IRestUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
-
-import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Fieldset, HGrid, InlineMessage } from '@navikt/ds-react';
-
-import { type UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
+import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 import { UtenlandskPeriodeBeløpBarnFelt } from './UtenlandskPeriodeBeløpBarnFelt';
 import { UtenlandskPeriodeBeløpBeløpFelt } from './UtenlandskPeriodeBeløpBeløpFelt';
 import { UtenlandskPeriodeBeløpIntervallFelt } from './UtenlandskPeriodeBeløpIntervallFelt';
 import { UtenlandskPeriodeBeløpPeriodeFelt } from './UtenlandskPeriodeBeløpPeriodeFelt';
 import { UtenlandskPeriodeBeløpUtbetalingslandFelt } from './UtenlandskPeriodeBeløpUtbetalingslandFelt';
 import { UtenlandskPeriodeBeløpValutaFelt } from './UtenlandskPeriodeBeløpValutaFelt';
-import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
+import type { UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
 
 const UtbetaltBeløpText = styled(BodyShort)`
     font-weight: bold;

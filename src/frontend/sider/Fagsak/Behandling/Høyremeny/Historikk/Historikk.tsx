@@ -1,9 +1,8 @@
 import { InformationSquareFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, HStack, Loader, VStack } from '@navikt/ds-react';
-
-import Styles from './Historikk.module.css';
-import { type Historikkinnslag } from '../../../../../hooks/useHentHistorikkinnslag';
+import type { Historikkinnslag } from '../../../../../hooks/useHentHistorikkinnslag';
 import { BehandlerRolle, behandlerRoller } from '../../../../../typer/behandling';
+import Styles from './Historikk.module.css';
 
 interface Props {
     historikkinnslag?: Historikkinnslag[];

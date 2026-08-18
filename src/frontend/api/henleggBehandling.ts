@@ -1,7 +1,5 @@
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { HenleggÅrsak } from '../typer/behandling';
-import { type IBehandling } from '../typer/behandling';
+import type { HenleggÅrsak, IBehandling } from '../typer/behandling';
 import { RessursResolver } from '../utils/ressursResolver';
 
 export interface HenleggBehandlingPayload {

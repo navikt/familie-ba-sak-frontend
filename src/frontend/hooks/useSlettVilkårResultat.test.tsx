@@ -1,15 +1,14 @@
-import { type PropsWithChildren } from 'react';
-
 import { slettVilkårResultat } from '@api/slettVilkårResultat';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import type { PropsWithChildren } from 'react';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {
-    useSlettVilkårResultat,
-    SlettVilkårResultatMutationKeyFactory,
     type Parameters,
+    SlettVilkårResultatMutationKeyFactory,
+    useSlettVilkårResultat,
 } from './useSlettVilkårResultat';
 
 vi.mock('@api/slettVilkårResultat', () => ({

@@ -22,14 +22,8 @@
     "useEditorconfig": true,
     "includes": [
       "**",
-      "!**/*.json",
-      "!**/*.yaml",
-      "!**/*.yml",
-      "!**/*.md",
-      "!**/*.html",
       "!frontend_development/*",
-      "!frontend_production/*",
-      "!backend/*"
+      "!frontend_production/*"
     ]
   },
   "linter": {

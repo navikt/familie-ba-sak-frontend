@@ -14,7 +14,7 @@ import type { OptionType } from '@typer/common';
 import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { hentDefaultBehandlingstema } from '@utils/behandling';
-import { type IsoDatoString } from '@utils/dato';
+import type { IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 

@@ -1,11 +1,10 @@
 import { differenceInMilliseconds, isBefore } from 'date-fns';
-
-import { dagensDato, isoStringTilDate } from './dato';
 import { YtelseType } from '../typer/beregning';
 import type { IGrunnlagPerson, IPersonInfo } from '../typer/person';
 import { PersonType } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IUtbetalingsperiodeDetalj } from '../typer/vedtaksperiode';
+import { dagensDato, isoStringTilDate } from './dato';
 
 export const millisekunderIEttÅr = 3.15576e10;
 
@@ -125,7 +124,7 @@ export const sorterUtbetaling = (
 };
 
 export const slåSammenListeTilStreng = (liste: string[]) => {
-    return liste.join(', ').replace(new RegExp('(.*),'), '$1 og');
+    return liste.join(', ').replace(/(.*),/, '$1 og');
 };
 
 export const formaterTekstStorForbokstav = (tekst: string) => {

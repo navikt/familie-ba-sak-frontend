@@ -1,14 +1,12 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
 import { useSlettVilkårResultatIsPending } from '@hooks/useSlettVilkårResultatIsPending';
-import { type IRestVedtakBegrunnelseTilknyttetVilkår, type VedtakBegrunnelse } from '@typer/vedtak';
+import { ErrorMessage, LocalAlert, Stack, UNSAFE_Combobox } from '@navikt/ds-react';
+import type { IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelse } from '@typer/vedtak';
 import type { Regelverk, VilkårType } from '@typer/vilkår';
 import type { IIsoDatoPeriode } from '@utils/dato';
-
-import { ErrorMessage, LocalAlert, Stack, UNSAFE_Combobox } from '@navikt/ds-react';
-
-import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import useAvslagBegrunnelseMultiselect from './useAvslagBegrunnelseMultiselect';
 
 interface IProps {
     vilkårResultatId: number;

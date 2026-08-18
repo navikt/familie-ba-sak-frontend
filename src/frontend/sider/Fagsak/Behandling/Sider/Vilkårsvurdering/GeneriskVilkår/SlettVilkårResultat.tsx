@@ -1,14 +1,13 @@
 import { useSlettVilkårResultat } from '@hooks/useSlettVilkårResultat';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { mapTilFeltStateVilkårResultat } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/utils';
-import { validerVilkår } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/validering';
-import { type IVilkårResultat } from '@typer/vilkår';
-
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { mapTilFeltStateVilkårResultat } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/utils';
+import { validerVilkår } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/validering';
+import type { IVilkårResultat } from '@typer/vilkår';
 
 interface Props {
     personIdent: string;

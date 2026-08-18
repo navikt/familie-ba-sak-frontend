@@ -1,11 +1,10 @@
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
-import {
-    type RegistrerSøknadFormValues,
-    type TransformedRegistrerSøknadFormValues,
+import type {
+    RegistrerSøknadFormValues,
+    TransformedRegistrerSøknadFormValues,
 } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
 import { useFormContext } from 'react-hook-form';
-
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
 
 import Styles from './BekreftEndringModal.module.css';
 
