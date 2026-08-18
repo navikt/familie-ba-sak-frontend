@@ -9,3 +9,5 @@ nodeLinker: hoisted
 allowBuilds:
   '@sentry/cli': false
   msw: false
+minimumReleaseAgeExclude:
+  - '@navikt/*'
