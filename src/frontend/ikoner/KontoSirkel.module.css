@@ -1,4 +1,5 @@
 .svg {
+    /* biome-ignore lint/correctness/noUnknownProperty: Kan denne fjernes? */
     enable-background: new 0 0 24 24;
 }
 

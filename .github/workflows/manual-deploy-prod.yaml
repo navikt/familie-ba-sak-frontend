@@ -7,7 +7,7 @@ on:
         default: false
         type: boolean
       skip-validation:
-        description: 'Skip validation? (eslint, prettier, typecheck)'
+        description: 'Skip validation? (biome, typecheck)'
         default: false
         type: boolean
 

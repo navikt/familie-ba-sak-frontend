@@ -1,8 +1,7 @@
-import type { ChangeEvent } from 'react';
-
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, HStack, Textarea } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
+import type { ChangeEvent } from 'react';
 
 import type { IFritekstFelt } from '../../../../utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '../../../../utils/fritekstfelter';
@@ -69,7 +68,6 @@ const KanSøkeFritekst = ({
                                         onChangeFritekst(event, fritekstId)
                                     }
                                     error={skjema.visFeilmeldinger && fritekst.feilmelding}
-                                    /* eslint-disable-next-line jsx-a11y/no-autofocus */
                                     autoFocus
                                 />
                             </Box>

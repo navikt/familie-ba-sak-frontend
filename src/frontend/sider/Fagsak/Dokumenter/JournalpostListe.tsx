@@ -1,8 +1,3 @@
-import { useEffect, useState } from 'react';
-
-import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
-import { hentSortState, Sorteringsrekkefølge } from '@utils/tabell';
-
 import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HStack, LocalAlert, Table, VStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
@@ -10,12 +5,18 @@ import type { IJournalpost, Ressurs, Utsendingsinfo } from '@navikt/familie-type
 import {
     byggHenterRessurs,
     byggTomRessurs,
-    journalpoststatus,
     Journalposttype,
+    journalpoststatus,
     RessursStatus,
 } from '@navikt/familie-typer';
-
+import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
+import { hentSortState, Sorteringsrekkefølge } from '@utils/tabell';
+import { useEffect, useState } from 'react';
+import useDokument from '../../../hooks/useDokument';
+import PdfVisningModal from '../../../komponenter/PdfVisningModal/PdfVisningModal';
+import { useBrukerContext } from '../BrukerContext';
 import { JournalpostDokument } from './JournalpostDokument';
+import styles from './JournalpostListe.module.css';
 import {
     formaterDatoRegistrertSendtMottatt,
     formaterFagsak,
@@ -23,10 +24,6 @@ import {
     hentSorterteJournalposter,
 } from './journalpostUtils';
 import { UtsendingsinfoModal } from './UtsendingsinfoModal';
-import useDokument from '../../../hooks/useDokument';
-import PdfVisningModal from '../../../komponenter/PdfVisningModal/PdfVisningModal';
-import { useBrukerContext } from '../BrukerContext';
-import styles from './JournalpostListe.module.css';
 
 const hentIkonForJournalpostType = (journalposttype: Journalposttype) => {
     switch (journalposttype) {
@@ -51,8 +48,9 @@ const settRiktigDatoMottatForJournalpost = (journalpost: IJournalpost): IJournal
 export function JournalpostListe() {
     const { bruker } = useBrukerContext();
     const { request } = useHttp();
-    const [journalposterRessurs, settJournalposterRessurs] =
-        useState<Ressurs<ITilgangsstyrtJournalpost[]>>(byggTomRessurs());
+    const [journalposterRessurs, settJournalposterRessurs] = useState<Ressurs<ITilgangsstyrtJournalpost[]>>(
+        byggTomRessurs()
+    );
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(Sorteringsrekkefølge.INGEN_SORTERING);
     const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } = useDokument();
     const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);

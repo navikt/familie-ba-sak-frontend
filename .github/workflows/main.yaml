@@ -10,11 +10,9 @@ on:
       - '**.MD'
       - '.github/**.yaml'
       - '.gitignore'
-      - '.prettierignore'
-      - '.prettierrc'
       - 'CODEOWNERS'
       - 'LICENSE'
-      - 'eslint.config.mjs'
+      - 'biome.json'
 
 jobs:
   build-dev:

@@ -1,15 +1,12 @@
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-
-import { useVirtualizer } from '@tanstack/react-virtual';
-import classNames from 'classnames';
-
 import { ExclamationmarkTriangleFillIcon, PadlockLockedFillIcon } from '@navikt/aksel-icons';
 import { ErrorMessage, HStack, Label, VStack } from '@navikt/ds-react';
 import _Flag from '@navikt/flagg-ikoner';
-
-import styles from './FlaggCombobox.module.css';
-import { type Regionkode } from './RegionCombobox/region';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import classNames from 'classnames';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useMergedRef } from '../../hooks/useMergedRef';
+import styles from './FlaggCombobox.module.css';
+import type { Regionkode } from './RegionCombobox/region';
 
 const Flag = (_Flag as unknown as { default?: typeof _Flag }).default ?? _Flag;
 
@@ -97,7 +94,6 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         });
     }, [options, inputValue]);
 
-    // eslint-disable-next-line react-hooks/incompatible-library
     const rowVirtualizer = useVirtualizer({
         count: filteredOptions.length,
         getScrollElement: () => listboxRef.current,
@@ -488,7 +484,6 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                     </div>
                 </div>
                 {isOpen && (
-                    // eslint-disable-next-line jsx-a11y/interactive-supports-focus
                     <div
                         id={`${inputId}-listbox`}
                         className={classNames(
@@ -515,7 +510,8 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                                         ? multiValues.includes(option.value)
                                         : singleValue === option.value;
                                     return (
-                                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/interactive-supports-focus
+                                        // biome-ignore lint/a11y/useKeyWithClickEvents: <Det går bra her>
+                                        // biome-ignore lint/a11y/useFocusableInteractive: <Det går bra her>
                                         <div
                                             key={option.value}
                                             id={`${inputId}-option-${option.value}`}
