@@ -1,16 +1,13 @@
 import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
 
-import * as Sentry from '@sentry/browser';
+import { captureException } from '@nais/apm';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
-
-import { showSentryReportDialog } from '../../sentry';
+import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 
 interface State {
     hasError: boolean;
     error?: Error;
-    sentryEventId?: string;
 }
 
 export class ErrorBoundary extends Component<PropsWithChildren, State> {
@@ -24,13 +21,12 @@ export class ErrorBoundary extends Component<PropsWithChildren, State> {
     }
 
     public componentDidCatch(error: Error, info: ErrorInfo): void {
-        const eventId = Sentry.captureException(error, {
-            tags: { type: 'error-boundary' },
-            extra: {
+        captureException(error, {
+            context: {
+                type: 'error-boundary',
                 componentStack: info.componentStack,
             },
         });
-        this.setState({ sentryEventId: eventId });
     }
 
     render(): ReactNode {
@@ -52,18 +48,6 @@ export class ErrorBoundary extends Component<PropsWithChildren, State> {
                                 <BodyShort>Feilmelding:</BodyShort>
                                 <ErrorMessage>{this.state.error?.message}</ErrorMessage>
                             </VStack>
-                        )}
-                        {Sentry.isEnabled() && this.state.sentryEventId && (
-                            <HStack justify={'end'}>
-                                <div>
-                                    <Button
-                                        variant={'tertiary'}
-                                        onClick={() => showSentryReportDialog(this.state.sentryEventId)}
-                                    >
-                                        Gi en mer utfyllende beskjed
-                                    </Button>
-                                </div>
-                            </HStack>
                         )}
                     </VStack>
                 </VStack>

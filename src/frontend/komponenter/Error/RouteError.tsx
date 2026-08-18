@@ -1,30 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import * as Sentry from '@sentry/browser';
+import { captureException } from '@nais/apm';
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 
-import { showSentryReportDialog } from '../../sentry';
-
-function captureSentryException(error: unknown) {
+function captureRouteException(error: unknown) {
     if (isRouteErrorResponse(error)) {
         if (error.status === 404) {
             return undefined;
         }
         const routerError = new Error(`Route error ${error.status}: ${error.statusText}`);
-        return Sentry.captureException(routerError, {
-            tags: { type: 'route-error' },
-            contexts: {
-                router: {
-                    status: error.status,
-                    statusText: error.statusText,
-                },
+        captureException(routerError, {
+            context: {
+                type: 'route-error',
+                status: error.status,
+                statusText: error.statusText,
             },
         });
+        return;
     }
-    return Sentry.captureException(error, { tags: { type: 'route-error' } });
+    captureException(error, { context: { type: 'route-error' } });
 }
 
 function utledFeilmelding(error: unknown) {
@@ -40,12 +37,8 @@ function utledFeilmelding(error: unknown) {
 export function RouteError() {
     const error = useRouteError();
 
-    const [sentryEventId, setSentryEventId] = useState<string | undefined>();
-
     useEffect(() => {
-        const eventId = captureSentryException(error);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setSentryEventId(eventId);
+        captureRouteException(error);
     }, [error]);
 
     const feilmelding = utledFeilmelding(error);
@@ -66,15 +59,6 @@ export function RouteError() {
                     <BodyShort>Feilmelding:</BodyShort>
                     <ErrorMessage>{feilmelding}</ErrorMessage>
                 </VStack>
-                {Sentry.isEnabled() && sentryEventId && (
-                    <HStack justify={'end'}>
-                        <div>
-                            <Button variant={'tertiary'} onClick={() => showSentryReportDialog(sentryEventId)}>
-                                Gi en mer utfyllende beskjed
-                            </Button>
-                        </div>
-                    </HStack>
-                )}
             </VStack>
         </VStack>
     );

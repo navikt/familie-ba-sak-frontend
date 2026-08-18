@@ -5,17 +5,15 @@ import { nb } from 'date-fns/locale';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
+import { initApm } from './apm';
 import { App } from './App';
-import { initGrafanaFaro } from './grafana';
-import { initSentry } from './sentry';
 import { erLokal } from './utils/miljø';
 
 // Setter default locale til norsk bokmål for date-fns
 setDefaultOptions({ locale: nb });
 
 if (!erLokal()) {
-    initSentry();
-    initGrafanaFaro();
+    initApm();
 }
 
 if (erLokal()) {

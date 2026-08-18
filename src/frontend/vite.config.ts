@@ -1,11 +1,7 @@
-import console from 'console';
-import process from 'process';
-
-import { sentryVitePlugin } from '@sentry/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
     try {
         return {
             build: {
@@ -26,24 +22,10 @@ export default defineConfig(({ mode }) => {
             resolve: {
                 tsconfigPaths: true,
             },
-            plugins: [
-                reactPlugin(),
-                mode === 'prod' || mode === 'preprod' ? sentryPlugin() : undefined, // Sentry må være siste plugin
-            ],
+            plugins: [reactPlugin()],
         };
     } catch (e) {
         console.error('Vite define config feilet', e);
         throw e;
     }
 });
-
-const sentryPlugin = () =>
-    sentryVitePlugin({
-        org: 'nav',
-        project: 'familie-ba-sak-frontend',
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        url: 'https://sentry.gc.nav.no/',
-        errorHandler: err => {
-            console.warn('Sentry CLI Plugin: ' + err.message);
-        },
-    });

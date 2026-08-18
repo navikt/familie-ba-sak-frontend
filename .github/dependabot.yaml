@@ -49,10 +49,10 @@ updates:
           - "@tanstack/react-query"
           - "@tanstack/react-query-devtools"
           - "@tanstack/react-virtual"
-      sentry:
+      nais-apm:
         patterns:
-          - "@sentry/browser"
-          - "@sentry/vite-plugin"
+          - "@nais/apm"
+          - "@grafana/faro-web-sdk"
       testing-library:
         patterns:
           - "@testing-library/dom"
