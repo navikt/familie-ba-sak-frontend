@@ -1,13 +1,11 @@
-import { differenceInMilliseconds } from 'date-fns';
-
 import { Checkbox, CheckboxGroup, InlineMessage } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
-
-import styles from './BarnBrevetGjelder.module.css';
+import { differenceInMilliseconds } from 'date-fns';
 import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
 import { isoStringTilDate } from '../../../../../utils/dato';
 import { lagBarnLabel } from '../../../../../utils/formatter';
+import styles from './BarnBrevetGjelder.module.css';
 
 interface IProps {
     barnBrevetGjelderFelt: Felt<IBarnMedOpplysninger[]>;
@@ -70,11 +68,9 @@ export const BarnBrevetGjelder = (props: IProps) => {
                 );
             })}
             {skalViseVarselOmManglendeBarn && (
-                <InlineMessage
-                    status="warning"
-                    children={'Du må trykke "Bekreft og fortsett" før du kan legge til barn.'}
-                    size={'small'}
-                />
+                <InlineMessage status="warning" size={'small'}>
+                    Du må trykke "Bekreft og fortsett" før du kan legge til barn.
+                </InlineMessage>
             )}
         </CheckboxGroup>
     );

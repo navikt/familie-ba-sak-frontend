@@ -10,7 +10,9 @@ export const Annet = () => {
 
     return (
         <VStack marginBlock={'space-32'}>
-            <Heading size={'medium'} level={'2'} children={'Annet'} />
+            <Heading size={'medium'} level={'2'}>
+                Annet
+            </Heading>
             <br />
             <Textarea
                 {...skjema.felter.endringAvOpplysningerBegrunnelse.hentNavInputProps(skjema.visFeilmeldinger)}

@@ -1,15 +1,13 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { formaterIdent, hentAlderSomString } from '@utils/formatter';
 import classNames from 'classnames';
-
-import { BodyShort, Button, Checkbox, HStack } from '@navikt/ds-react';
-
+import Slett from '../../../../../ikoner/Slett';
 import styles from './BarnMedOpplysninger.module.css';
 import { useSøknadContext } from './SøknadContext';
-import Slett from '../../../../../ikoner/Slett';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -36,14 +34,11 @@ export const BarnMedOpplysninger = ({ barn }: IProps) => {
         <HStack gap={'space-16'}>
             {erLesevisning || gjelderInstitusjon || gjelderEnsligMindreårig || gjelderSkjermetBarn ? (
                 barn.merket ? (
-                    <BodyShort
-                        className={classNames('skjemaelement', 'lese-felt')}
-                        children={
-                            <HStack className={styles.labelContent}>
-                                <p title={navnOgIdentTekst}>{navnOgIdentTekst}</p>
-                            </HStack>
-                        }
-                    />
+                    <BodyShort className={classNames('skjemaelement', 'lese-felt')}>
+                        <HStack className={styles.labelContent}>
+                            <p title={navnOgIdentTekst}>{navnOgIdentTekst}</p>
+                        </HStack>
+                    </BodyShort>
                 ) : null
             ) : (
                 <Checkbox className={styles.checkbox} value={barn.ident}>

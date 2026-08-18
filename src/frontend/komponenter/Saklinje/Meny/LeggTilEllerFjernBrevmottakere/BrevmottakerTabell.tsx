@@ -24,7 +24,7 @@ const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     return (
         <Box marginBlock={'space-40 space-0'}>
             <HStack justify={'space-between'}>
-                <Heading size="medium" children={mottakerVisningsnavn[mottaker.type]} />
+                <Heading size="medium">{mottakerVisningsnavn[mottaker.type]}</Heading>
                 {!erLesevisning && (
                     <Button
                         variant={'tertiary'}

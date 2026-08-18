@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
-
 import { Box, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import type { Felt } from '@navikt/familie-skjema';
+import type { ReactNode } from 'react';
 
 import { Målform, målform } from '../typer/søknad';
 
@@ -16,7 +15,11 @@ const MålformVelger = ({
     målformFelt,
     visFeilmeldinger,
     erLesevisning,
-    Legend = <Heading size={'medium'} level={'2'} children={'Målform'} />,
+    Legend = (
+        <Heading size={'medium'} level={'2'}>
+            Målform
+        </Heading>
+    ),
 }: IProps) => {
     const radioOnChange = (målform: Målform) => {
         målformFelt.validerOgSettFelt(målform);

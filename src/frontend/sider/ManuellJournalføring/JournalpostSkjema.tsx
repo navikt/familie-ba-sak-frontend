@@ -1,21 +1,18 @@
-import { useState } from 'react';
-
-import { FagsakType } from '@typer/fagsak';
-import type { OppgavetypeFilter } from '@typer/oppgave';
-import { oppgaveTypeFilter } from '@typer/oppgave';
-import { useNavigate } from 'react-router';
-
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage, ErrorSummary, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-
+import { FagsakType } from '@typer/fagsak';
+import type { OppgavetypeFilter } from '@typer/oppgave';
+import { oppgaveTypeFilter } from '@typer/oppgave';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import Knapperekke from '../../komponenter/Knapperekke';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
 import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import Knapperekke from '../../komponenter/Knapperekke';
 
 export const JournalpostSkjema = () => {
     const {
@@ -54,11 +51,15 @@ export const JournalpostSkjema = () => {
             )}
             <Journalpost />
             <Box marginBlock={'space-40 space-0'}>
-                <Heading size={'small'} level={'2'} children={'Dokumenter'} />
+                <Heading size={'small'} level={'2'}>
+                    Dokumenter
+                </Heading>
                 <Dokumenter />
             </Box>
             <VStack marginBlock={'space-40 space-0'} gap={'space-16'}>
-                <Heading size={'small'} level={'2'} children={'Bruker og avsender'} />
+                <Heading size={'small'} level={'2'}>
+                    Bruker og avsender
+                </Heading>
                 <BrukerPanel />
                 <AvsenderPanel />
             </VStack>

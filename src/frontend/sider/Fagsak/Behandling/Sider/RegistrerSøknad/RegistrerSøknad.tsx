@@ -3,21 +3,19 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
+import { RessursStatus } from '@navikt/familie-typer';
 import { BehandlingSteg } from '@typer/behandling';
 import { erFagsakAvTypeInstitusjon } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
-
-import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
-
+import MålformVelger from '../../../../../komponenter/MålformVelger';
+import Skjemasteg from '../Skjemasteg';
 import { Annet } from './Annet';
 import { Barna } from './Barna';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
+import styles from './RegistrerSøknad.module.css';
 import { useSøknadContext } from './SøknadContext';
 import { SøknadType } from './SøknadType';
-import MålformVelger from '../../../../../komponenter/MålformVelger';
-import Skjemasteg from '../Skjemasteg';
-import styles from './RegistrerSøknad.module.css';
 
 export const RegistrerSøknad = () => {
     const fagsak = useFagsak();
@@ -120,18 +118,20 @@ export const RegistrerSøknad = () => {
                                     settVisBekreftModal(false);
                                     nesteAction(true);
                                 }}
-                                children={'Ja'}
                                 loading={skjema.submitRessurs.status === RessursStatus.HENTER}
                                 disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            />
+                            >
+                                Ja
+                            </Button>
                             <Button
                                 variant={'secondary'}
                                 key={'nei'}
                                 onClick={() => {
                                     settVisBekreftModal(false);
                                 }}
-                                children={'Nei'}
-                            />
+                            >
+                                Nei
+                            </Button>
                         </Modal.Footer>
                     </Modal>
                 )}

@@ -9,15 +9,14 @@ import {
     PersonIcon,
 } from '@navikt/aksel-icons';
 import { Box, Detail, Heading } from '@navikt/ds-react';
-
-import styles from './Registeropplysninger.module.css';
-import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 import { useFeatureToggles } from '../../../../../../hooks/useFeatureToggles';
 import { FeatureToggle } from '../../../../../../typer/featureToggles';
 import type { IRestRegisterhistorikk } from '../../../../../../typer/person';
 import { Registeropplysning } from '../../../../../../typer/registeropplysning';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 import { formaterIdent } from '../../../../../../utils/formatter';
+import styles from './Registeropplysninger.module.css';
+import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 
 interface IRegisteropplysningerProps {
     registerHistorikk: IRestRegisterhistorikk;
@@ -34,16 +33,13 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato }: IRegisteroppl
                 Registeropplysninger
             </Heading>
             <Box width={'32rem'}>
-                <Detail
-                    className={styles.detail}
-                    children={
-                        'Sist hentet fra Folkeregisteret ' +
+                <Detail className={styles.detail}>
+                    {'Sist hentet fra Folkeregisteret ' +
                         isoStringTilFormatertString({
                             isoString: registerHistorikk.hentetTidspunkt,
                             tilFormat: Datoformat.DATO_TID_SEKUNDER,
-                        })
-                    }
-                />
+                        })}
+                </Detail>
                 <RegisteropplysningerTabell
                     opplysningstype={Registeropplysning.FØDSELSDATO}
                     ikon={<CalendarIcon fontSize={'1.5rem'} title="Kalender-ikon" focusable="false" />}

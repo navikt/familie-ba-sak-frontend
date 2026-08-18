@@ -1,11 +1,9 @@
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
-import { useNavigate } from 'react-router';
-
 import { Button, HGrid, Modal } from '@navikt/ds-react';
-
+import { useNavigate } from 'react-router';
+import { useFagsakContext } from '../FagsakContext';
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
 import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
-import { useFagsakContext } from '../FagsakContext';
 
 export function Dokumentutsending() {
     const { fagsak } = useFagsakContext();
@@ -33,8 +31,9 @@ export function Dokumentutsending() {
                                     navigate(`/fagsak/${fagsak.id}/saksoversikt`);
                                     settVisInnsendtBrevModal(false);
                                 }}
-                                children={'Se saksoversikt'}
-                            />
+                            >
+                                Se saksoversikt
+                            </Button>
                             <Button
                                 variant={'secondary'}
                                 key={'til oppgavebenken'}
@@ -42,8 +41,9 @@ export function Dokumentutsending() {
                                 onClick={() => {
                                     navigate('/oppgaver');
                                 }}
-                                children={'Se oppgavebenk'}
-                            />
+                            >
+                                Se oppgavebenk
+                            </Button>
                         </Modal.Footer>
                     </Modal>
                 )}

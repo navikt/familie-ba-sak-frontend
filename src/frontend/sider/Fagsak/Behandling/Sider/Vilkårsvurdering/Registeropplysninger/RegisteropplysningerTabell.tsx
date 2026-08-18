@@ -1,12 +1,9 @@
-import type { ReactNode } from 'react';
-import { useState } from 'react';
-
-import { differenceInMilliseconds } from 'date-fns';
-
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Table } from '@navikt/ds-react';
 
-import styles from './RegisteropplysningerTabell.module.css';
+import { differenceInMilliseconds } from 'date-fns';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 import type { IRestRegisteropplysning } from '../../../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../../../typer/registeropplysning';
 import {
@@ -16,6 +13,7 @@ import {
     isoStringTilFormatertString,
     tidenesMorgen,
 } from '../../../../../../utils/dato';
+import styles from './RegisteropplysningerTabell.module.css';
 
 interface IRegisteropplysningerTabellProps {
     opplysningstype: Registeropplysning;
@@ -78,7 +76,7 @@ const RegisteropplysningerTabell = ({ opplysningstype, ikon, historikk }: IRegis
     return (
         <>
             <HStack wrap={false} marginBlock={'space-16 space-0'} justify={'space-between'} width={'100%'}>
-                <div className={styles.opplysningsIkon} children={ikon} />
+                <div className={styles.opplysningsIkon}>{ikon}</div>
                 <Table
                     className={styles.table}
                     size={'small'}
@@ -86,28 +84,26 @@ const RegisteropplysningerTabell = ({ opplysningstype, ikon, historikk }: IRegis
                 >
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell
-                                className={styles.headerCell}
-                                children={registeropplysning[opplysningstype]}
-                            />
-                            <Table.HeaderCell
-                                className={styles.headerCell}
-                                children={hentDatoHeader(opplysningstype)}
-                            />
+                            <Table.HeaderCell className={styles.headerCell}>
+                                {registeropplysning[opplysningstype]}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell className={styles.headerCell}>
+                                {hentDatoHeader(opplysningstype)}
+                            </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {manglerOpplysninger && (
                             <Table.Row key={`${opplysningstype}_ukjent`}>
-                                <Table.DataCell children={'Ingen opplysninger'} />
-                                <Table.DataCell children={'-'} />
+                                <Table.DataCell>Ingen opplysninger</Table.DataCell>
+                                <Table.DataCell>-</Table.DataCell>
                             </Table.Row>
                         )}
                         {!manglerOpplysninger &&
                             synligHistorikk.map(periode => (
                                 <Table.Row key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
-                                    <Table.DataCell className={styles.dataCell} children={periode.verdi} />
-                                    <Table.DataCell children={hentDatoVerdi(opplysningstype, periode)} />
+                                    <Table.DataCell className={styles.dataCell}>{periode.verdi}</Table.DataCell>
+                                    <Table.DataCell>{hentDatoVerdi(opplysningstype, periode)}</Table.DataCell>
                                 </Table.Row>
                             ))}
                     </Table.Body>

@@ -38,8 +38,7 @@
       "preset": "recommended",
       "correctness": {
         "useExhaustiveDependencies": "warn",
-        "useJsxKeyInIterable": "warn",
-        "noChildrenProp": "warn"
+        "useJsxKeyInIterable": "warn"
       },
       "suspicious": {
         "noDoubleEquals": "warn",

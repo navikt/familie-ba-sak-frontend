@@ -1,21 +1,19 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
-import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
-import { FeatureToggle } from '@typer/featureToggles';
-import { type IAnnenVurdering, type IVilkårResultat } from '@typer/vilkår';
-import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-import { erProd } from '@utils/miljø';
-import { useNavigate } from 'react-router';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
+import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import { annenVurderingConfig, type IAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { erProd } from '@utils/miljø';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
@@ -23,11 +21,9 @@ import { OppdaterRegisteropplysninger } from './OppdaterRegisteropplysninger';
 import { VilkårsvurderingSkjema } from './Skjema/VilkårsvurderingSkjema';
 import { TømPersonopplysningerCacheITestmiljøKnapp } from './TømPersonopplysningerCacheITestmiljøKnapp';
 import { ManglendeFinnmarkmerkingVarsel } from './Varsel/ManglendeFinnmarkmerkingVarsel';
+import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
-import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
-import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkingVarsel';
 
 export function Vilkårsvurdering() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -88,13 +84,12 @@ export function Vilkårsvurdering() {
         >
             <>
                 {behandling?.migreringsdato !== null && (
-                    <Detail
-                        className={styles.hentetLabel}
-                        children={`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
+                    <Detail className={styles.hentetLabel}>
+                        {`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
                             isoString: behandling?.migreringsdato,
                             tilFormat: Datoformat.DATO,
                         })}`}
-                    />
+                    </Detail>
                 )}
                 <OppdaterRegisteropplysninger />
             </>

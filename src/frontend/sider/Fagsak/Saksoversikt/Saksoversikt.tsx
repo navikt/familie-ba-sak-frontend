@@ -1,6 +1,8 @@
 import { useFagsak } from '@hooks/useFagsak';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Heading, InfoCard, Link, LocalAlert, VStack } from '@navikt/ds-react';
 import { BehandlingStatus, erBehandlingHenlagt } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import { FagsakStatus } from '@typer/fagsak';
@@ -9,9 +11,6 @@ import { Datoformat, isoStringTilDate, periodeOverlapperMedValgtDato } from '@ut
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import { addMonths, differenceInMilliseconds, format } from 'date-fns';
 import { Link as ReactRouterLink } from 'react-router';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, Heading, InfoCard, Link, LocalAlert, VStack } from '@navikt/ds-react';
 
 import { Behandlinger } from './Behandlinger';
 import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
@@ -122,7 +121,9 @@ export function Saksoversikt() {
         <>
             <Fagsaklinje />
             <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
-                <Heading size="large" level="1" children="Saksoversikt" />
+                <Heading size="large" level="1">
+                    Saksoversikt
+                </Heading>
                 {saksbehandler.harSuperbrukertilgang && fagsak.løpendeKategori === BehandlingKategori.EØS && (
                     <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
                 )}
