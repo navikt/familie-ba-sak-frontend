@@ -28,13 +28,15 @@
     "lint:fix": "biome lint --write ./src",
     "format": "biome format ./src",
     "format:fix": "biome format --write ./src",
+    "check": "biome check ./src",
+    "check:fix": "biome check --write ./src",
     "prepare": "husky",
     "typecheck": "tsc --noEmit -p src/backend/tsconfig.json && tsc --noEmit -p src/frontend/tsconfig.json",
-    "validate": "pnpm typecheck && pnpm lint && pnpm format"
+    "validate": "pnpm typecheck && pnpm check"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,css}": [
-      "biome check --write --no-errors-on-unmatched"
+      "biome check"
     ]
   },
   "dependencies": {
