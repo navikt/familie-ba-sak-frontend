@@ -44,7 +44,6 @@
       "suspicious": {
         "noDoubleEquals": "warn",
         "noArrayIndexKey": "warn",
-        "noImplicitAnyLet": "warn",
         "useIterableCallbackReturn": "warn"
       }
     }

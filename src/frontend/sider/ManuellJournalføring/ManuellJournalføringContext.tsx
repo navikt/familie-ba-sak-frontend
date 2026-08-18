@@ -373,7 +373,7 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
     };
 
     const hentAktivBehandlingForJournalføring = (): VisningBehandling | undefined => {
-        let aktivBehandling;
+        let aktivBehandling: VisningBehandling | undefined;
         if (
             dataForManuellJournalføring.status === RessursStatus.SUKSESS &&
             dataForManuellJournalføring.data.minimalFagsak

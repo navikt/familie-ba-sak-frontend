@@ -19,7 +19,7 @@ const useAvslagBegrunnelseMultiselect = (
             return [];
         }
 
-        let begrunnelsestypeGyldigForBehandling;
+        let begrunnelsestypeGyldigForBehandling: VedtakBegrunnelseType;
 
         if (regelverk === Regelverk.EØS_FORORDNINGEN) {
             begrunnelsestypeGyldigForBehandling = VedtakBegrunnelseType.EØS_AVSLAG;
