@@ -47,9 +47,6 @@
         "noArrayIndexKey": "warn",
         "noImplicitAnyLet": "warn",
         "useIterableCallbackReturn": "warn"
-      },
-      "a11y": {
-        "noSvgWithoutTitle": "warn"
       }
     }
   },
@@ -67,9 +64,6 @@
     }
   },
   "html": {
-    "parser": {
-      "interpolation": true
-    },
     "formatter": {
       "indentScriptAndStyle": false,
       "selfCloseVoidElements": "always"

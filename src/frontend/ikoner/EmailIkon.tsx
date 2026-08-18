@@ -19,6 +19,7 @@ export const EmailIkon = ({ className, filled = false, width = 48, height = 48 }
             viewBox="0 0 24 24"
             enableBackground="new 0 0 24 24"
         >
+            <title id={'email'}>Email ikon</title>
             <g fill="#0067c5" stroke="none">
                 <path
                     d="M22.709,4.976l-10.394,8.413C12.224,13.463,12.111,13.5,12,13.5s-0.223-0.037-0.314-0.111L1.293,4.976

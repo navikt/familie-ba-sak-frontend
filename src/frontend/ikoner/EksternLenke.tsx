@@ -15,6 +15,7 @@ export const EksternLenke = ({ className, width = 16, height = 16 }: IEksternLen
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 64 64"
         >
+            <title>Ekstern lenke</title>
             <g>
                 <line
                     strokeWidth="4"
