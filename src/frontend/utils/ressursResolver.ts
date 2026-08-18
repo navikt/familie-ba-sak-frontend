@@ -1,4 +1,4 @@
-import { type Ressurs } from '@navikt/familie-typer';
+import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { ApiError } from '../api/error/apiError';

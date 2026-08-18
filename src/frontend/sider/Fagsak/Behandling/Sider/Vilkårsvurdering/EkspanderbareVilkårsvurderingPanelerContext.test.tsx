@@ -1,5 +1,3 @@
-import { type PropsWithChildren } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
@@ -14,6 +12,7 @@ import { lagVilkårResultat } from '@testutils/testdata/vilkårResultatTestdata'
 import * as behandling from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { Resultat, UtdypendeVilkårsvurderingDeltBosted, VilkårType } from '@typer/vilkår';
+import type { PropsWithChildren } from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@hooks/useBehandling', () => ({ useBehandling: vi.fn() }));

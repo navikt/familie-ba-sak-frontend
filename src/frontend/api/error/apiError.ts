@@ -13,7 +13,7 @@ export class ApiError extends Error {
     public readonly type: Type;
 
     static opprettFraRessurs(message: string, status: Exclude<RessursStatus, RessursStatus.SUKSESS>) {
-        return this.opprettFra(message, Type[status]);
+        return ApiError.opprettFra(message, Type[status]);
     }
 
     static opprettFra(message: string, type: Type) {

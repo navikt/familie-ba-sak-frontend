@@ -1,12 +1,10 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
+import type { Ressurs } from '@navikt/familie-typer';
 import type { IBehandling } from '@typer/behandling';
-
-import { type Ressurs } from '@navikt/familie-typer';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext } from 'react';
 
 import { useHentOgSettBehandlingContext } from './HentOgSettBehandlingContext';
 

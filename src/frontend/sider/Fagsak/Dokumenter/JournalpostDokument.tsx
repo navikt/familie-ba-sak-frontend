@@ -1,9 +1,8 @@
 import type { FamilieAxiosRequestConfig } from '@hooks/useDokument';
-import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
-
 import { ExternalLinkIcon, PadlockLockedIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Link, VStack } from '@navikt/ds-react';
-import { type IDokumentInfo } from '@navikt/familie-typer';
+import type { IDokumentInfo } from '@navikt/familie-typer';
+import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
 
 import styles from './JournalpostDokument.module.css';
 
