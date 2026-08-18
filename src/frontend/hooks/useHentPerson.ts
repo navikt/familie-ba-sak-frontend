@@ -1,9 +1,8 @@
 import { hentPerson } from '@api/hentPerson';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import { ForelderBarnRelasjonRolle, type IPersonInfo } from '@typer/person';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { ForelderBarnRelasjonRolle, type IPersonInfo } from '@typer/person';
 
 function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     const obfuskertNavn = 'Søker Søkersen';

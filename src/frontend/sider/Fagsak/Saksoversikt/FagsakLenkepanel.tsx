@@ -1,3 +1,5 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, HStack, InfoCard, Link, LinkCard, VStack } from '@navikt/ds-react';
 import { BehandlingStatus } from '@typer/behandling';
 import type { IBehandlingstema } from '@typer/behandlingstema';
 import { tilBehandlingstema } from '@typer/behandlingstema';
@@ -5,13 +7,9 @@ import { FagsakStatus, FagsakType } from '@typer/fagsak';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { hentAktivBehandlingPåMinimalFagsak, hentFagsakStatusVisning } from '@utils/fagsak';
 import { Link as ReactRouterLink } from 'react-router';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, HStack, InfoCard, Link, LinkCard, VStack } from '@navikt/ds-react';
-
+import { useFagsakContext } from '../FagsakContext';
 import styles from './FagsakLenkepanel.module.css';
 import type { VisningBehandling } from './visningBehandling';
-import { useFagsakContext } from '../FagsakContext';
 
 export const SaksoversiktPanelBredde = `calc(10 * var(--ax-space-64))`;
 

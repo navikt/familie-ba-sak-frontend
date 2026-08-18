@@ -1,11 +1,7 @@
+import { Button } from '@navikt/ds-react';
 import type { ReactNode } from 'react';
-
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
-
-import { Button } from '@navikt/ds-react';
-
-import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 import { lagBehandling } from '../../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../../testutils/testdata/fagsakTestdata';
 import { lagPersonMedAndelerTilkjentYtelse } from '../../../../../../../testutils/testdata/personTestdata';
@@ -15,6 +11,7 @@ import { FagsakProvider } from '../../../../../FagsakContext';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../context/HentOgSettBehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
+import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 
 const DEFAULT_VALUES: DefaultValues<EndretUtbetalingAndelFormValues> = {
     [EndretUtbetalingAndelFeltnavn.PERSONER]: [],

@@ -1,7 +1,6 @@
+import { useHttp } from '@navikt/familie-http';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-
-import { useHttp } from '@navikt/familie-http';
 
 import { hentSamhandler } from '../../../../api/hentSamhandler';
 import { useOnFormSubmitSuccessful } from '../../../../hooks/useOnFormSubmitSuccessful';

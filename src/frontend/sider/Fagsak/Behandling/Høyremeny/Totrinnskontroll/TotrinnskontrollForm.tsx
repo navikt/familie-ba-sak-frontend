@@ -1,5 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BodyShort, Button, Fieldset, Heading, VStack } from '@navikt/ds-react';
 import { EgetVedtakInformasjon } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/EgetVedtakInformasjon';
 import { BegrunnelseField } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/field/BegrunnelseField';
 import { BeslutningField } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/field/BeslutningField';
@@ -10,8 +11,6 @@ import {
 } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/useTotrinnskontrollForm';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { FormProvider } from 'react-hook-form';
-
-import { BodyShort, Button, Fieldset, Heading, VStack } from '@navikt/ds-react';
 
 function finnSubmitKnappText(egetVedtak: boolean, beslutning: TotrinnskontrollBeslutning) {
     if (egetVedtak) {

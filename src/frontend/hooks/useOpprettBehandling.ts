@@ -1,5 +1,5 @@
 import { opprettBehandling } from '@api/opprettBehandling';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling, NyBehandling } from '@typer/behandling';
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, NyBehandling>, 'mutationFn'>;

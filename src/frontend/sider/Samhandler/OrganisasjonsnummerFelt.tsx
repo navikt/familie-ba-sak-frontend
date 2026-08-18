@@ -1,6 +1,5 @@
-import { useController, useFormContext } from 'react-hook-form';
-
 import { TextField } from '@navikt/ds-react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { SamhandlerFeltnavn, type SamhandlerFormValues } from './useSamhandlerForm';
 

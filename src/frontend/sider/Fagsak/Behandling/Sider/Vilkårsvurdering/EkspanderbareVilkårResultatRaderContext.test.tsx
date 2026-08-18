@@ -1,5 +1,3 @@
-import type { PropsWithChildren } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
@@ -10,6 +8,7 @@ import { lagVilkårResultat } from '@testutils/testdata/vilkårResultatTestdata'
 import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna } from '@typer/behandling';
 import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { Resultat, UtdypendeVilkårsvurderingEøsBarnBorMedSøker, VilkårType } from '@typer/vilkår';
+import type { PropsWithChildren } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {

@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react';
+import { FlagCrossIcon, StarsEuIcon } from '@navikt/aksel-icons';
 
 import { Regelverk } from '@typer/vilkår';
-
-import { FlagCrossIcon, StarsEuIcon } from '@navikt/aksel-icons';
+import type { ReactNode } from 'react';
 
 import styles from './vilkår.module.css';
 

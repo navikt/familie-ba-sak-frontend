@@ -1,6 +1,5 @@
-import { Controller, useFormContext } from 'react-hook-form';
-
 import { Textarea } from '@navikt/ds-react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import {
     EndretUtbetalingAndelFeltnavn,

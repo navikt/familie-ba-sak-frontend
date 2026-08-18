@@ -4,9 +4,8 @@ import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 
 interface Props {
     refusjonEøsId: number;

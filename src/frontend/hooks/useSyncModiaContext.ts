@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-
-import { useSettAktivBrukerIModiaContext } from './useSettAktivBrukerIModiaContext';
 import type { IPersonInfo } from '../typer/person';
+import { useSettAktivBrukerIModiaContext } from './useSettAktivBrukerIModiaContext';
 
 export function useSyncModiaContext(bruker: IPersonInfo | undefined) {
     const { mutate } = useSettAktivBrukerIModiaContext();

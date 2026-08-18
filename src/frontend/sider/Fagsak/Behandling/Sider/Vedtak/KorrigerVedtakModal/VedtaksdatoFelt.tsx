@@ -1,15 +1,13 @@
-import { useRef } from 'react';
-
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
+import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 import {
     KorrigerVedtakFelt,
     type KorrigerVedtakFormValues,
 } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/useKorrigerVedtakSkjema';
 import { dateTilIsoDatoString, isoStringTilDate } from '@utils/dato';
 import { format, startOfDay } from 'date-fns';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 interface Props {
     erLesevisning: boolean;

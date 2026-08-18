@@ -1,8 +1,7 @@
+import { Select } from '@navikt/ds-react';
 import type { KompetanseAktivitet } from '@typer/eøsPerioder';
 import { kompetanseAktiviteter } from '@typer/eøsPerioder';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Select } from '@navikt/ds-react';
 
 import type { KompetanseFelt, KompetanseFormValues } from './useKompetansePeriodeSkjema';
 

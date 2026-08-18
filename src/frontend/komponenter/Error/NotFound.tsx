@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router';
-
 import { BodyShort, Box, Button, Heading, VStack } from '@navikt/ds-react';
+import { useNavigate } from 'react-router';
 
 export function NotFound() {
     const navigate = useNavigate();

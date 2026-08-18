@@ -1,13 +1,9 @@
-import type { PropsWithChildren, ReactNode } from 'react';
-import { createContext, useContext } from 'react';
-
-import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
-import { afterEach, describe, expect, test } from 'vitest';
-
 import { Button } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
-
-import { Personvelger } from './Personvelger';
+import type { PropsWithChildren, ReactNode } from 'react';
+import { createContext, useContext } from 'react';
+import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
+import { afterEach, describe, expect, test } from 'vitest';
 import { lagBehandling } from '../../../../../../../testutils/testdata/behandlingTestdata';
 import { render } from '../../../../../../../testutils/testrender';
 import type { IBehandling } from '../../../../../../../typer/behandling';
@@ -15,6 +11,7 @@ import { PersonType } from '../../../../../../../typer/person';
 import { Målform } from '../../../../../../../typer/søknad';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
+import { Personvelger } from './Personvelger';
 
 const defaultBehandling: IBehandling = lagBehandling({
     personer: [

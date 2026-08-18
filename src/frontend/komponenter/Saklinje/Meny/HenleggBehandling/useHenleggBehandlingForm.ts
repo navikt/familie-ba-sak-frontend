@@ -1,6 +1,5 @@
-import { type FieldErrors, useForm } from 'react-hook-form';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { ModalType } from '../../../../context/ModalContext';
 import { useHenleggBehandling } from '../../../../hooks/useHenleggBehandling';

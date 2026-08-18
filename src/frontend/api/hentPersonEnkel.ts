@@ -1,7 +1,6 @@
-import { adressebeskyttelsestyper, type IPersonInfo } from '@typer/person';
-
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import { RessursStatus } from '@navikt/familie-typer';
+import { adressebeskyttelsestyper, type IPersonInfo } from '@typer/person';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

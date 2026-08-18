@@ -1,10 +1,9 @@
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
+import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
-import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 interface Props {
     lukkModal: () => void;

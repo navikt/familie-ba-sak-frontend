@@ -1,14 +1,12 @@
-import { FagsakType } from '@typer/fagsak';
-import classNames from 'classnames';
-
 import { PersonCircleFillIcon } from '@navikt/aksel-icons';
 import { GuttIkon, JenteIkon, KvinneIkon, MannIkon, NøytralPersonIkon } from '@navikt/familie-ikoner';
 import { kjønnType } from '@navikt/familie-typer';
-
-import styles from './PersonIkon.module.css';
+import { FagsakType } from '@typer/fagsak';
+import classNames from 'classnames';
 import KontorIkonGrønn from '../ikoner/KontorIkonGrønn';
 import NavLogo from '../ikoner/NavLogo';
 import StatusIkon, { Status } from '../ikoner/StatusIkon';
+import styles from './PersonIkon.module.css';
 
 interface PersonIkonProps {
     fagsakType?: FagsakType;

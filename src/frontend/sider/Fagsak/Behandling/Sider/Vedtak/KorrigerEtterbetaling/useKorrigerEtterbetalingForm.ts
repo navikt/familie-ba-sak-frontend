@@ -4,11 +4,10 @@ import { useAngreKorrigertEtterbetaling } from '@hooks/useAngreKorrigertEtterbet
 import { useKorrigerEtterbetaling } from '@hooks/useKorrigerEtterbetaling';
 import { useModal } from '@hooks/useModal';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import type { OptionType } from '@typer/common';
 import { KorrigertEtterbetalingÅrsak } from '@typer/vedtak';
 import { useForm } from 'react-hook-form';
-
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 

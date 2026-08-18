@@ -5,10 +5,9 @@ import { FeilmeldingModal } from '@komponenter/Modal/fagsak/FeilmeldingModal';
 import { OpprettFagsakModal } from '@komponenter/Modal/fagsak/OpprettFagsakModal';
 import { UgyldigSesjon } from '@komponenter/Modal/SesjonUtløpt';
 import { ForhåndsvisOpprettingAvPdfModal } from '@komponenter/PdfVisningModal/ForhåndsvisOpprettingAvPdfModal';
+import { Box } from '@navikt/ds-react';
 import classNames from 'classnames';
 import { Outlet } from 'react-router';
-
-import { Box } from '@navikt/ds-react';
 
 import Styles from './AppContainer.module.css';
 import SystemetLaster from './komponenter/SystemetLaster/SystemetLaster';

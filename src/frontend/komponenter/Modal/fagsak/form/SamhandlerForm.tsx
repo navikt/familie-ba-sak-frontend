@@ -1,6 +1,5 @@
-import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
-
 import { Box, Button, HGrid, LocalAlert } from '@navikt/ds-react';
+import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { OrganisasjonsnummerFelt } from '../felt/OrganisasjonsnummerFelt';
 

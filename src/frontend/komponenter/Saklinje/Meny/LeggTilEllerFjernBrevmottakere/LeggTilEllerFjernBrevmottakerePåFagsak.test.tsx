@@ -1,15 +1,12 @@
+import { ActionMenu, Heading } from '@navikt/ds-react';
 import type { PropsWithChildren } from 'react';
-
 import { Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
-
-import { ActionMenu, Heading } from '@navikt/ds-react';
-
-import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakerePåFagsak';
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { ManuelleBrevmottakerePåFagsakProvider } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { BrevmottakerTestdata } from '../../../../testutils/testdata/brevmottakerTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
+import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakerePåFagsak';
+import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 
 interface WrapperProps extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];

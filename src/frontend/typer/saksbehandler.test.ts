@@ -1,14 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-import { BehandlerRolle } from './behandling';
-import {
-    utledBehandlerRolle,
-    harSuperbrukertilgang,
-    harSkrivetilgang,
-    mapISaksbehandlerTilSaksbehandler,
-} from './saksbehandler';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lagISaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
 import { erProd } from '../utils/miljø';
+import { BehandlerRolle } from './behandling';
+import {
+    harSkrivetilgang,
+    harSuperbrukertilgang,
+    mapISaksbehandlerTilSaksbehandler,
+    utledBehandlerRolle,
+} from './saksbehandler';
 
 vi.mock('../utils/miljø', () => ({
     erProd: vi.fn(),

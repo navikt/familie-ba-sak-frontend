@@ -1,8 +1,7 @@
 import { oppdaterSammensattKontrollsak } from '@api/oppdaterSammensattKontrollsak';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
+import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
 
 type Parameters = IRestSammensattKontrollsak;
 

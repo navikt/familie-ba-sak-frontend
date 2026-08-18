@@ -1,14 +1,12 @@
-import { useEffect, useRef } from 'react';
-
 import ØyeGrå from '@ikoner/ØyeGrå';
 import ØyeGrønn from '@ikoner/ØyeGrønn';
 import ØyeRød from '@ikoner/ØyeRød';
+import { BodyShort, Box, HStack, Label } from '@navikt/ds-react';
 import type { TotrinnskontrollFormValues } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/useTotrinnskontrollForm';
 import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';
 import { KontrollertStatus } from '@sider/Fagsak/Behandling/Sider/sider';
+import { useEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
-
-import { BodyShort, Box, HStack, Label } from '@navikt/ds-react';
 
 export function Kontrollsider() {
     const { kontrollsider } = useKontrollsiderContext();

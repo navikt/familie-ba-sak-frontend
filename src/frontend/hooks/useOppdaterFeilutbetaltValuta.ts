@@ -1,8 +1,7 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { oppdaterFeilutbetaltValuta, type OppdaterFeilutbetaltValutaPayload } from '../api/oppdaterFeilutbetaltValuta';
+import { type OppdaterFeilutbetaltValutaPayload, oppdaterFeilutbetaltValuta } from '../api/oppdaterFeilutbetaltValuta';
 import type { IBehandling } from '../typer/behandling';
 
 interface Parameters {

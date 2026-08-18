@@ -2,12 +2,11 @@ import type { PropsWithChildren } from 'react';
 
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
-
-import { TilbakekrevingsbehandlingOpprettetModal } from './TilbakekrevingsbehandlingOpprettetModal';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render } from '../../../../testutils/testrender';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
+import { TilbakekrevingsbehandlingOpprettetModal } from './TilbakekrevingsbehandlingOpprettetModal';
 
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;

@@ -1,6 +1,5 @@
-import { FormProvider } from 'react-hook-form';
-
 import { BodyShort, Box, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
+import { FormProvider } from 'react-hook-form';
 
 import { FristFelt } from './FristFelt';
 import { SETT_PÅ_VENT_FORM_ID, useSettPåVentSkjema } from './useSettPåVentSkjema';

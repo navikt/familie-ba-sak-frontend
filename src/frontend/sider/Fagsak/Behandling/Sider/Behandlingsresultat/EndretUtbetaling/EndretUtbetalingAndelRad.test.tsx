@@ -1,12 +1,7 @@
-import type { ReactNode } from 'react';
-
-import { describe, expect, test, vi } from 'vitest';
-
 import { Table } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
-
-import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
+import type { ReactNode } from 'react';
+import { describe, expect, test, vi } from 'vitest';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';
@@ -17,6 +12,8 @@ import { IEndretUtbetalingAndelÅrsak, type IRestEndretUtbetalingAndel } from '.
 import { FagsakProvider } from '../../../../FagsakContext';
 import { BehandlingProvider } from '../../../context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../context/HentOgSettBehandlingContext';
+import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
+import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
 
 const defaultBehandling: IBehandling = {
     ...lagBehandling(),

@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
-import styled from 'styled-components';
-
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import { useState } from 'react';
+import styled from 'styled-components';
 
 import type { IBehandling } from '../../../../../../typer/behandling';
 import { VilkårType } from '../../../../../../typer/vilkår';

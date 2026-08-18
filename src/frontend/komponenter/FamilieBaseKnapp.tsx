@@ -1,6 +1,5 @@
-import type { ButtonHTMLAttributes } from 'react';
-
 import classNames from 'classnames';
+import type { ButtonHTMLAttributes } from 'react';
 
 import styles from './FamilieBaseKnapp.module.css';
 

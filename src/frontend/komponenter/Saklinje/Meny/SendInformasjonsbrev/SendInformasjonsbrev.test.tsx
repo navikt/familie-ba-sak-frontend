@@ -1,15 +1,12 @@
-import type { PropsWithChildren } from 'react';
-
-import { describe, expect } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import { SendInformasjonsbrev } from './SendInformasjonsbrev';
+import type { PropsWithChildren } from 'react';
+import { describe, expect } from 'vitest';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../../../../testutils/testdata/saksbehandlerTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import type { Saksbehandler } from '../../../../typer/saksbehandler';
+import { SendInformasjonsbrev } from './SendInformasjonsbrev';
 
 interface WrapperProps extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];

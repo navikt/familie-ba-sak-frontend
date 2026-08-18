@@ -1,6 +1,5 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
 import { angreKorrigertEtterbetaling } from '../api/angreKorrigertEtterbetaling';
 import type { IBehandling } from '../typer/behandling';

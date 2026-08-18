@@ -1,6 +1,5 @@
-import type { IInfotrygdSak } from '@typer/infotrygd';
-
 import { BodyShort, Box, Table } from '@navikt/ds-react';
+import type { IInfotrygdSak } from '@typer/infotrygd';
 
 export const Sakstabell = ({ saker }: { saker: IInfotrygdSak[] }) => {
     return (

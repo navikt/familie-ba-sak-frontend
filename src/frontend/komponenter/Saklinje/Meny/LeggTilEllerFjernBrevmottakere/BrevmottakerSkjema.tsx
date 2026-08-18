@@ -1,16 +1,13 @@
-import type { ChangeEvent } from 'react';
-
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import { useLocation } from 'react-router';
-
 import { Box, Button, Fieldset, HGrid, HStack, InlineMessage, Select, TextField, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
+import type { ChangeEvent } from 'react';
+import { useLocation } from 'react-router';
+import { ALLE_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../FlaggCombobox';
 import styles from './BrevmottakerSkjema.module.css';
 import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
-import { ALLE_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../FlaggCombobox';
 
 interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
     lukkModal: () => void;

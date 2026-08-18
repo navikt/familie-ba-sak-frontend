@@ -1,5 +1,5 @@
 import { slettVilkårResultat } from '@api/slettVilkårResultat';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 export interface Parameters {

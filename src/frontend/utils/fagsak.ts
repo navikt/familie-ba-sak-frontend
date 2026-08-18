@@ -1,11 +1,10 @@
 import { differenceInMilliseconds, isAfter } from 'date-fns';
-
-import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
 import type { VisningBehandling } from '../sider/Fagsak/Saksoversikt/visningBehandling';
 import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
+import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
     minimalFagsak.behandlinger.length === 0

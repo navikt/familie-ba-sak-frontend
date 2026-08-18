@@ -1,8 +1,7 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { korrigerEtterbetaling, type KorrigerEtterbetalingPayload } from '../api/korrigerEtterbetaling';
+import { type KorrigerEtterbetalingPayload, korrigerEtterbetaling } from '../api/korrigerEtterbetaling';
 import type { IBehandling } from '../typer/behandling';
 
 interface KorrigerEtterbetalingParameters extends KorrigerEtterbetalingPayload {

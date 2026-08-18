@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Box, Heading, LocalAlert, Switch, Table } from '@navikt/ds-react';
 
 import type { ISimuleringDTO, ISimuleringPeriode } from '@typer/simulering';
 import {
@@ -10,8 +10,7 @@ import {
 import { hentPeriodelisteMedTommePerioder, hentÅrISimuleringen } from '@utils/simulering';
 import classNames from 'classnames';
 import { isAfter } from 'date-fns';
-
-import { Box, Heading, LocalAlert, Switch, Table } from '@navikt/ds-react';
+import { useState } from 'react';
 
 import styles from './SimuleringTabell.module.css';
 import { formaterBeløpUtenValutakode, kapitaliserTekst } from './simuleringUtil';

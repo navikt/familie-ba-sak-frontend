@@ -1,13 +1,12 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { useEndreSøknadstidspunkt } from '@hooks/useEndreSøknadstidspunkt';
 import { HentRegistrerteSøknadstidspunkterQueryKeyFactory } from '@hooks/useHentRegistrerteSøknadstidspunkter';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 import type { IGrunnlagPerson } from '@typer/person';
 import { dateTilIsoDatoString, isoStringTilDateEllerUndefined } from '@utils/dato';
 import { useFieldArray, useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 export interface Person {
     personIdent: string;

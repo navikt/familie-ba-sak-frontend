@@ -1,16 +1,14 @@
-import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid, parseISO } from 'date-fns';
-
 import type { Avhengigheter, FeltState, ValiderFelt } from '@navikt/familie-skjema';
 import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
 import { idnr } from '@navikt/fnrvalidator';
-
-import type { IIsoDatoPeriode } from './dato';
-import { dagensDato, isoStringTilDate } from './dato';
-import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
+import { addYears, endOfMonth, isAfter, isBefore, isSameDay, isValid, parseISO } from 'date-fns';
 import { Adressebeskyttelsegradering, type IGrunnlagPerson, PersonType } from '../typer/person';
 import type { VedtakBegrunnelse } from '../typer/vedtak';
 import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
 import { Regelverk, Resultat, ResultatBegrunnelse, VilkårType } from '../typer/vilkår';
+import type { IIsoDatoPeriode } from './dato';
+import { dagensDato, isoStringTilDate } from './dato';
+import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 
 const harFyltInnIdent = (felt: FeltState<string>): FeltState<string> => {
     return /^\d{11}$/.test(felt.verdi.replace(' ', '')) ? ok(felt) : feil(felt, 'Identen har ikke 11 tall');

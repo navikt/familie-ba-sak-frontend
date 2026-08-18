@@ -1,8 +1,7 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { låsOppFagsak, type LåsOppFagsakPayload } from '../api/låsOppFagsak';
+import { type LåsOppFagsakPayload, låsOppFagsak } from '../api/låsOppFagsak';
 import type { IMinimalFagsak } from '../typer/fagsak';
 
 interface Parameters extends LåsOppFagsakPayload {

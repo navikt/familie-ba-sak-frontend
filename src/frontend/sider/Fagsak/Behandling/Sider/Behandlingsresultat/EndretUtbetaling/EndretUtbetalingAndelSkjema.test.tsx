@@ -2,10 +2,6 @@ import type { ReactNode } from 'react';
 
 import { type DefaultValues, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';
-
-import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
-import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
-import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndel';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';
@@ -16,6 +12,9 @@ import { FagsakProvider } from '../../../../FagsakContext';
 import { BehandlingProvider } from '../../../context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../context/HentOgSettBehandlingContext';
 import { Utbetaling } from '../Utbetaling';
+import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
+import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
+import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from './useEndretUtbetalingAndel';
 
 const defaultEndretUtbetalingAndel: IRestEndretUtbetalingAndel = {
     id: 1,

@@ -1,15 +1,13 @@
-import { useRef } from 'react';
-
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
 import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
+import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 import { dagensDato, dateTilIsoDatoString, isoStringTilDate } from '@utils/dato';
 import { format, startOfDay } from 'date-fns';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 export function KlageMottattDatoFelt() {
     const { control, trigger } = useFormContext<OpprettBehandlingFormValues>();

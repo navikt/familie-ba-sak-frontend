@@ -1,5 +1,5 @@
 export * from './FlaggCombobox';
-export * from './RegionCombobox/region';
 export * from './RegionCombobox/RegionCombobox';
-export * from './ValutaCombobox/valuta';
+export * from './RegionCombobox/region';
 export * from './ValutaCombobox/ValutaCombobox';
+export * from './ValutaCombobox/valuta';

@@ -1,8 +1,7 @@
+import { TextField } from '@navikt/ds-react';
 import { konverterSkjemaverdiTilDesimal } from '@utils/eøs';
 import { isEmpty, isNumeric, tellAntallDesimaler } from '@utils/eøsValidators';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { TextField } from '@navikt/ds-react';
 
 import { ValutakursFelt, type ValutakursFormValues } from './useValutakursSkjema';
 

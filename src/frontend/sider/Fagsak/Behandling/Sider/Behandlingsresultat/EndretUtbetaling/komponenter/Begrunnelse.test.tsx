@@ -1,13 +1,10 @@
+import { Button } from '@navikt/ds-react';
 import type { ReactNode } from 'react';
-
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
-
-import { Button } from '@navikt/ds-react';
-
-import { Begrunnelse } from './Begrunnelse';
 import { render } from '../../../../../../../testutils/testrender';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
+import { Begrunnelse } from './Begrunnelse';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 

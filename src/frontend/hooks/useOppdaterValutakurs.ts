@@ -1,5 +1,5 @@
-import { oppdaterValutakurs, type OppdaterValutakursPayload } from '@api/valutakurs';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type OppdaterValutakursPayload, oppdaterValutakurs } from '@api/valutakurs';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface OppdaterValutakursParameters extends OppdaterValutakursPayload {

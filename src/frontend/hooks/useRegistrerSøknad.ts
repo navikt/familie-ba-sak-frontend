@@ -1,6 +1,6 @@
 import type { ApiFeil } from '@api/client/apiClient';
 import { type Payload, registrerSøknad } from '@api/registrerSøknad';
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface Parameters extends Payload {

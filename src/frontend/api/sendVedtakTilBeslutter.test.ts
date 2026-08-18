@@ -1,7 +1,6 @@
+import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
 
 import { sendVedtakTilBeslutter } from './sendVedtakTilBeslutter';
 

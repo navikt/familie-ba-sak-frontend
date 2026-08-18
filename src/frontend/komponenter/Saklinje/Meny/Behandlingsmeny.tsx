@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
-import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
-import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
-import { useLocation } from 'react-router';
-
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
+import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
+import { BehandlingÅrsak, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
+import { useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { AInntekt } from './AInntekt/AInntekt';
 import Styles from './Behandlingsmeny.module.css';

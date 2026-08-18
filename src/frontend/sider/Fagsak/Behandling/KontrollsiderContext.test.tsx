@@ -1,11 +1,10 @@
-import type { PropsWithChildren } from 'react';
-
-import { KontrollertStatus, SideId, type Kontrollside } from '@sider/Fagsak/Behandling/Sider/sider';
-import { renderHook, act } from '@testing-library/react';
+import { KontrollertStatus, type Kontrollside, SideId } from '@sider/Fagsak/Behandling/Sider/sider';
+import { act, renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { BehandlerRolle, BehandlingStatus, BehandlingÅrsak } from '@typer/behandling';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import type { PropsWithChildren } from 'react';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { KontrollsiderProvider, useKontrollsiderContext } from './KontrollsiderContext';
 

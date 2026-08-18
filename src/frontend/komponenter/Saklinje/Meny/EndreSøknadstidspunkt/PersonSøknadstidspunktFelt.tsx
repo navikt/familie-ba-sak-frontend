@@ -1,9 +1,3 @@
-import { useRef } from 'react';
-
-import { dagensDato } from '@utils/dato';
-import { formaterIdent, formaterTekstStorForbokstav, hentAlderSomString } from '@utils/formatter';
-import { useController, useFormContext } from 'react-hook-form';
-
 import {
     BodyShort,
     Box,
@@ -11,9 +5,14 @@ import {
     type DateValidationT,
     Detail,
     HStack,
-    VStack,
     useDatepicker,
+    VStack,
 } from '@navikt/ds-react';
+
+import { dagensDato } from '@utils/dato';
+import { formaterIdent, formaterTekstStorForbokstav, hentAlderSomString } from '@utils/formatter';
+import { useRef } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import type { EndreSøknadstidspunktFormValues } from './useEndreSøknadstidspunktForm';
 

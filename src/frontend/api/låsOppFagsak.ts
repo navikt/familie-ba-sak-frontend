@@ -1,6 +1,5 @@
-import type { IMinimalFagsak } from '@typer/fagsak';
-
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import type { IMinimalFagsak } from '@typer/fagsak';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

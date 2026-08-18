@@ -1,5 +1,5 @@
-import { korrigerVedtak, type KorrigerVedtakPayload } from '@api/korrigerVedtak';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type KorrigerVedtakPayload, korrigerVedtak } from '@api/korrigerVedtak';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface KorrigerVedtakParameters extends KorrigerVedtakPayload {

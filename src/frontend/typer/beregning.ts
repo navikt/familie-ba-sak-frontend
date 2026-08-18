@@ -1,5 +1,5 @@
-import type { INøkkelPar } from './common';
 import type { IsoMånedString } from '../utils/dato';
+import type { INøkkelPar } from './common';
 
 export interface IPersonMedAndelerTilkjentYtelse {
     personIdent: string;

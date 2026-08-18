@@ -1,5 +1,5 @@
-import { settPåVent, type SettPåVentPayload } from '@api/settPåVent';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type SettPåVentPayload, settPåVent } from '@api/settPåVent';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface SettPåVentParameters extends SettPåVentPayload {

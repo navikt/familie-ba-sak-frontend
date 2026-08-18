@@ -1,7 +1,6 @@
+import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { startOfDay } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
 
 import { Fields, type FormValues } from './useLeggTilBarnForm';
 

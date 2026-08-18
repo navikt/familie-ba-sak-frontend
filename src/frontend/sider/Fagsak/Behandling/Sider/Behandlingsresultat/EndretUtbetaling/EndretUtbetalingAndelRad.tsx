@@ -1,18 +1,15 @@
-import { useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
+import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { årsakTekst } from '@typer/utbetalingAndel';
 import { erDefinert } from '@utils/commons';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '@utils/dato';
 import { lagPersonLabel } from '@utils/formatter';
+import { useState } from 'react';
 import styled from 'styled-components';
-
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
-
+import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
 import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
-import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 
 const PersonCelle = styled.div`
     display: flex;

@@ -1,6 +1,6 @@
 import type { IsoDatoString } from '@utils/dato';
 
-import { ytelsetype, YtelseType } from './beregning';
+import { YtelseType, ytelsetype } from './beregning';
 import type { IGrunnlagPerson } from './person';
 import type { IEndretUtbetalingAndelÅrsak } from './utbetalingAndel';
 import { Standardbegrunnelse, type VedtakBegrunnelse, VedtakBegrunnelseType } from './vedtak';

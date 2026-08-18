@@ -1,7 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { BehandlingStatus } from '@typer/behandling';
-
 import { ActionMenu } from '@navikt/ds-react';
+import { BehandlingStatus } from '@typer/behandling';
 
 interface Props {
     åpneModal: () => void;

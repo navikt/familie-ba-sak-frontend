@@ -1,11 +1,10 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import type { OptionType } from '@typer/common';
 import type { IRestKompetanse, KompetanseAktivitet } from '@typer/eøsPerioder';
 import { AnnenForelderAktivitet, EøsPeriodeStatus, KompetanseResultat, SøkersAktivitet } from '@typer/eøsPerioder';
 import { useFormContext, useWatch } from 'react-hook-form';
-
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, Fieldset, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 
 import { KompetanseAktivitetFelt } from './KompetanseAktivitetFelt';
 import { KompetanseBarnFelt } from './KompetanseBarnFelt';

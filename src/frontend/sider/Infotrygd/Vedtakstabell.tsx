@@ -1,6 +1,5 @@
-import type { IInfotrygdSak, IInfotrygdStønad } from '@typer/infotrygd';
-
 import { BodyShort, Box, Table } from '@navikt/ds-react';
+import type { IInfotrygdSak, IInfotrygdStønad } from '@typer/infotrygd';
 
 const seqYearMonthTilYearMonth = (seqDato: string | undefined) => {
     if (!seqDato) {

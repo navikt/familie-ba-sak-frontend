@@ -1,12 +1,10 @@
-import { StrictMode } from 'react';
-
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
-
-import { initApm } from './apm';
 import { App } from './App';
+import { initApm } from './apm';
 import { erLokal } from './utils/miljø';
 
 // Setter default locale til norsk bokmål for date-fns

@@ -1,8 +1,7 @@
 import { Header } from '@navikt/familie-header';
-
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { DeployetBranch } from './DeployetBranch';
 import FagsakDeltagerSøk from './FagsakDeltagerSøk';
-import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
 export function HeaderMedSøk() {
     const saksbehandler = useSaksbehandler();

@@ -1,9 +1,8 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, Heading, InfoCard } from '@navikt/ds-react';
 import type { IMinimalFagsak } from '@typer/fagsak';
 import type { IInfotrygdSak } from '@typer/infotrygd';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, Heading, InfoCard } from '@navikt/ds-react';
 
 import { Sakstabell } from './Sakstabell';
 import { Vedtakstabell } from './Vedtakstabell';

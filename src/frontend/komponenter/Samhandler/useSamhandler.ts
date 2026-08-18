@@ -1,14 +1,12 @@
-import { useState } from 'react';
-
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
-import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '@typer/samhandler';
-import { obfuskerSamhandler } from '@utils/obfuskerData';
-import type { AxiosError } from 'axios';
-
 import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs } from '@navikt/familie-typer';
+import type { ISamhandlerInfo, ISamhandlerInfoRequest } from '@typer/samhandler';
+import { obfuskerSamhandler } from '@utils/obfuskerData';
+import type { AxiosError } from 'axios';
+import { useState } from 'react';
 
 export const useSamhandlerRequest = (erIEnBehandling: boolean) => {
     const { request } = useHttp();

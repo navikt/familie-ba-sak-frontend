@@ -1,9 +1,8 @@
 import { ActionMenu, BodyShort, Loader } from '@navikt/ds-react';
-
-import { useHentAInntektUrl } from './useHentAInntektUrl';
 import { ModalType } from '../../../../context/ModalContext';
 import { useModal } from '../../../../hooks/useModal';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';
+import { useHentAInntektUrl } from './useHentAInntektUrl';
 
 function Feilmelding({ error }: { error: Error }) {
     return (

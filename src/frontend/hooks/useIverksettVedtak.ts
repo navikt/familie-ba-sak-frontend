@@ -1,6 +1,6 @@
 import type { ApiFeil } from '@api/client/apiClient';
 import { iverksettVedtak } from '@api/iverksettVedtak';
-import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 import type { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 

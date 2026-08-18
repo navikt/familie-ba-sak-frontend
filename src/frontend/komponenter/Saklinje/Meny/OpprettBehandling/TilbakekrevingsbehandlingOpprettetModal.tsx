@@ -1,7 +1,6 @@
+import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { useNavigate } from 'react-router';
-
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
 
 interface Props {
     lukkModal: () => void;

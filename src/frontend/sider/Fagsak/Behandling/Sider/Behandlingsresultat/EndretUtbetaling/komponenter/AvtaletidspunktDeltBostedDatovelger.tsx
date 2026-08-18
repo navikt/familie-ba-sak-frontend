@@ -1,8 +1,6 @@
-import { useRef } from 'react';
-
-import { useController, useFormContext } from 'react-hook-form';
-
 import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
+import { useRef } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import {

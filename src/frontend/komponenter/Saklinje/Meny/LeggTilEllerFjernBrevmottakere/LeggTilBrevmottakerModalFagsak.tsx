@@ -1,7 +1,7 @@
+import { useManuelleBrevmottakerePåFagsakContext } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import type { BrevmottakerUseSkjema, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 import { felterTilSkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { useManuelleBrevmottakerePåFagsakContext } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 
 interface IFagsakModalProps {
     lukkModal: () => void;

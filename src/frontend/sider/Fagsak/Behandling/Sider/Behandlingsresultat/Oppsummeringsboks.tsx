@@ -1,5 +1,3 @@
-import { type PropsWithChildren, useEffect, useState } from 'react';
-
 import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFjernSmåbarnstillegg } from '@hooks/useFjernSmåbarnstillegg';
@@ -8,6 +6,10 @@ import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
 import { Skillelinje } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
+import type { Etikett } from '@navikt/familie-tidslinje';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { IBehandling } from '@typer/behandling';
 import { Behandlingstype } from '@typer/behandling';
 import { ytelsetype } from '@typer/beregning';
@@ -20,17 +22,12 @@ import type {
 } from '@typer/eøsPerioder';
 import { EøsPeriodeStatus, KompetanseResultat } from '@typer/eøsPerioder';
 import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
-import { dateTilFormatertString, Datoformat } from '@utils/dato';
+import { Datoformat, dateTilFormatertString } from '@utils/dato';
 import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
-import type { Etikett } from '@navikt/familie-tidslinje';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 import { useBehandlingContext } from '../../context/BehandlingContext';
+import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 
 const UtbetalingsbeløpStack = styled(VStack)`
     padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
@@ -275,4 +272,5 @@ const Oppsummeringsboks = ({
         </Box>
     );
 };
+
 export { Oppsummeringsboks };

@@ -7,12 +7,11 @@ import { KlageMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandli
 import { MigreringsdatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/MigreringsdatoFelt';
 import { SøknadMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/SøknadMottattDatoFelt';
 import { ValgteBarnFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/ValgteBarnFelt';
+import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { FagsakType } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import { FormProvider } from 'react-hook-form';
-
-import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 
 import { OpprettBehandlingFelt, useOpprettBehandlingSkjema } from './useOpprettBehandlingSkjema';
 

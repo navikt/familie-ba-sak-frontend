@@ -1,11 +1,10 @@
-import { hentHistorikkinnslag, type HistorikkinnslagDto } from '@api/hentHistorikkinnslag';
+import { type HistorikkinnslagDto, hentHistorikkinnslag } from '@api/hentHistorikkinnslag';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { BehandlerRolle } from '@typer/behandling';
 import { LoggType } from '@typer/logg';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
-import { useHttp } from '@navikt/familie-http';
 
 export interface Historikkinnslag {
     id: string;

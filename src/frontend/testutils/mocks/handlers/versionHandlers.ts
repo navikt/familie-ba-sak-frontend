@@ -1,6 +1,5 @@
-import { http, HttpResponse } from 'msw';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { HttpResponse, http } from 'msw';
 
 export const versionHandlers = [
     http.get('/version', () => {

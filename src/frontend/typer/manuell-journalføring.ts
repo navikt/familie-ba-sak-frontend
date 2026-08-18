@@ -1,8 +1,7 @@
 import type { IJournalpost } from '@navikt/familie-typer';
 
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
-import type { IMinimalFagsak } from './fagsak';
-import type { FagsakType } from './fagsak';
+import type { FagsakType, IMinimalFagsak } from './fagsak';
 import type { Journalføringsbehandlingstype } from './journalføringsbehandling';
 import type { IOppgave } from './oppgave';
 import type { IPersonInfo } from './person';

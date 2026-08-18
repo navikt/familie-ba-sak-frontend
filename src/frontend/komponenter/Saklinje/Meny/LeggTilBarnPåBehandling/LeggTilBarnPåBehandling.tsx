@@ -1,8 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
-
 import { ActionMenu } from '@navikt/ds-react';
+import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 
 const relevanteBehandlingsårsaker = [
     BehandlingÅrsak.NYE_OPPLYSNINGER,

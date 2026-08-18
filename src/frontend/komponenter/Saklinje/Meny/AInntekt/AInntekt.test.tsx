@@ -1,18 +1,15 @@
-import type { PropsWithChildren } from 'react';
-
-import { delay, http, HttpResponse } from 'msw';
-import { afterEach, beforeEach, describe, expect, type MockInstance, vi } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { AInntekt } from './AInntekt';
+import { delay, HttpResponse, http } from 'msw';
+import type { PropsWithChildren } from 'react';
+import { afterEach, beforeEach, describe, expect, type MockInstance, vi } from 'vitest';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { server } from '../../../../testutils/mocks/node';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { FeilmeldingModal } from '../../../Modal/fagsak/FeilmeldingModal';
+import { AInntekt } from './AInntekt';
 
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;

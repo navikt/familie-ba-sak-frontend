@@ -1,8 +1,7 @@
+import { kjønnType } from '@navikt/familie-typer';
 import { type IPersonMedAndelerTilkjentYtelse, YtelseType } from '@typer/beregning';
 import { Adressebeskyttelsegradering, type IGrunnlagPerson, type IPersonInfo, PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
-
-import { kjønnType } from '@navikt/familie-typer';
 
 export function lagPerson(person: Partial<IPersonInfo> = {}): IPersonInfo {
     return {

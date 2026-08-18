@@ -1,7 +1,6 @@
 import { useMutationState } from '@tanstack/react-query';
-
-import { SlettEndretUtbetalingAndelMutationKeyFactory } from './useSlettEndretUtbetalingAndel';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
+import { SlettEndretUtbetalingAndelMutationKeyFactory } from './useSlettEndretUtbetalingAndel';
 
 interface Props {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;

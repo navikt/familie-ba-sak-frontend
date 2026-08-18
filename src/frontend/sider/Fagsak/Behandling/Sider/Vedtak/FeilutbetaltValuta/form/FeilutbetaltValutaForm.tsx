@@ -1,17 +1,15 @@
 import { useBehandling } from '@hooks/useBehandling';
-import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
-import { FormProvider } from 'react-hook-form';
-
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ErrorMessage, Fieldset, Stack } from '@navikt/ds-react';
-
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
+import { FormProvider } from 'react-hook-form';
+import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaTabellContext';
 import { BeløpField } from './BeløpField';
 import Styles from './FeilutbetaltValutaForm.module.css';
 import { FomDatoField } from './FomDatoField';
 import { TomDatoField } from './TomDatoField';
 import type { Type } from './useFeilutbetaltValutaForm';
 import { useFeilutbetaltValutaForm } from './useFeilutbetaltValutaForm';
-import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaTabellContext';
 
 interface Props {
     type: Type;

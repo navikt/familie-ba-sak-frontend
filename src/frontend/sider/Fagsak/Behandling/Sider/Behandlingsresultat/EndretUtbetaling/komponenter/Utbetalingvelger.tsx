@@ -1,6 +1,5 @@
-import { Controller, useFormContext } from 'react-hook-form';
-
 import { Label, Radio, RadioGroup } from '@navikt/ds-react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import {

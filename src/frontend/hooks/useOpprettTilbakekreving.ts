@@ -1,5 +1,5 @@
 import { opprettTilbakekreving } from '@api/opprettTilbakekreving';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
 interface OpprettTilbakekrevingParameters {
     fagsakId: number;

@@ -1,9 +1,8 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
-import { FormProvider, useController, useFormContext } from 'react-hook-form';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, InfoCard, Modal, Textarea, VStack } from '@navikt/ds-react';
+import { FormProvider, useController, useFormContext } from 'react-hook-form';
 
 import {
     LAAS_OPP_FAGSAK_FORM_ID,

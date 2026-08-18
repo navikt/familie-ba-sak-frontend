@@ -1,11 +1,9 @@
-import { type PropsWithChildren, useCallback, useState } from 'react';
-import { createContext, useContext } from 'react';
+import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
 
 import type { Adressebeskyttelsegradering } from '@typer/person';
 import { adressebeskyttelsestyper } from '@typer/person';
-
-import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
 interface ManglerTilgang {
     readonly begrunnelse: string;

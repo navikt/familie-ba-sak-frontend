@@ -1,11 +1,7 @@
-import { useState } from 'react';
-
-import { useLocation } from 'react-router';
-
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button, InfoCard, VStack } from '@navikt/ds-react';
-
-import BrevmottakerListe from './BrevmottakerListe';
+import { useState } from 'react';
+import { useLocation } from 'react-router';
 import { sider } from '../../sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '../../typer/behandling';
 import type { IPersonInfo } from '../../typer/person';
@@ -16,6 +12,7 @@ import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
 } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import BrevmottakerListe from './BrevmottakerListe';
 
 interface Props {
     bruker: IPersonInfo;

@@ -1,8 +1,7 @@
 import { describe, expect, test } from 'vitest';
-
-import { Historikk } from './Historikk';
 import { lagHistorikkInnslag } from '../../../../../testutils/testdata/historikkinnslagTestdata';
 import { render } from '../../../../../testutils/testrender';
+import { Historikk } from './Historikk';
 
 describe('Historikk', () => {
     test('skal vise laster tilstand', () => {

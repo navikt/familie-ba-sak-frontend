@@ -1,6 +1,5 @@
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-
 import type { ISaksbehandler } from '@navikt/familie-typer';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { hentSaksbehandler } from '../api/hentSaksbehandler';
 import { mapISaksbehandlerTilSaksbehandler, type Saksbehandler } from '../typer/saksbehandler';

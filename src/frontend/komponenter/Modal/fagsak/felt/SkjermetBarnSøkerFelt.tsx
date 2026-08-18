@@ -1,7 +1,6 @@
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Box, TextField } from '@navikt/ds-react';
 import { dnr, fnr } from '@navikt/fnrvalidator';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { OpprettFagsakFeltnavn, type OpprettFagsakFormValues } from '../form/OpprettFagsakForm';
 

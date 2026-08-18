@@ -1,7 +1,7 @@
+import type { IBehandling } from '../../../../../../typer/behandling';
 import { useKompetanse } from './Kompetanse/useKompetanse';
 import { useUtenlandskPeriodeBeløp } from './UtbetaltAnnetLand/useUtenlandskPeriodeBeløp';
 import { useValutakurs } from './Valutakurs/useValutakurs';
-import type { IBehandling } from '../../../../../../typer/behandling';
 
 export const useEøs = (åpenBehandling: IBehandling) => {
     const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse({

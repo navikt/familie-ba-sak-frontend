@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { IBehandling } from '../../../../../../../typer/behandling';
-import { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
+import { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';
 import { sorterEøsPerioder } from '../../../../../../../utils/eøs';
 
 interface IProps {

@@ -1,8 +1,7 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { henleggBehandling, type HenleggBehandlingPayload } from '../api/henleggBehandling';
+import { type HenleggBehandlingPayload, henleggBehandling } from '../api/henleggBehandling';
 import type { IBehandling } from '../typer/behandling';
 
 interface Parameters extends HenleggBehandlingPayload {

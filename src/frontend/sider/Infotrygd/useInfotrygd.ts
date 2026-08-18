@@ -1,9 +1,8 @@
-import { useState } from 'react';
-
 import type { FamilieRequestConfig } from '@navikt/familie-http';
 import { useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFunksjonellFeilRessurs, RessursStatus } from '@navikt/familie-typer';
+import { useState } from 'react';
 
 import type { IInfotrygdsaker, IInfotrygdsakerRequest } from '../../typer/infotrygd';
 import { Adressebeskyttelsegradering } from '../../typer/person';

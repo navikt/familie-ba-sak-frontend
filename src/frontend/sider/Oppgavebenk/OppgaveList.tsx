@@ -1,15 +1,14 @@
+import { BodyLong, BodyShort, Box, HStack, Loader, LocalAlert, Table, Tooltip } from '@navikt/ds-react';
+import { RessursStatus } from '@navikt/familie-typer';
 import {
     type GjelderFilter,
     gjelderFilter,
-    oppgaveTypeFilter,
     type OppgavetypeFilter,
+    oppgaveTypeFilter,
     PrioritetFilter,
 } from '@typer/oppgave';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
-
-import { BodyLong, BodyShort, Box, HStack, Loader, LocalAlert, Table, Tooltip } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 import { OppgaveDirektelenke } from './OppgaveDirektelenke';

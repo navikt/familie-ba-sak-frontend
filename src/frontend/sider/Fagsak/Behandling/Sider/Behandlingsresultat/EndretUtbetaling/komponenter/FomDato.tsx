@@ -1,10 +1,8 @@
+import { MonthPicker, type MonthValidationT, useMonthpicker } from '@navikt/ds-react';
 import { useRef } from 'react';
-
 import { useController, useFormContext } from 'react-hook-form';
 
-import { MonthPicker, type MonthValidationT, useMonthpicker } from '@navikt/ds-react';
-
-import { dateTilFormatertString, Datoformat } from '../../../../../../../utils/dato';
+import { Datoformat, dateTilFormatertString } from '../../../../../../../utils/dato';
 import type { EndretUtbetalingAndelFormValues, StandardFeltProps } from '../useEndretUtbetalingAndel';
 import { EndretUtbetalingAndelFeltnavn } from '../useEndretUtbetalingAndel';
 

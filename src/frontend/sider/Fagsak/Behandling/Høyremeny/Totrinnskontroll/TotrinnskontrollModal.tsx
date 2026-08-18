@@ -1,8 +1,7 @@
 import { useFagsak } from '@hooks/useFagsak';
+import { BodyShort, Box, Button, Modal } from '@navikt/ds-react';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { useNavigate } from 'react-router';
-
-import { BodyShort, Box, Button, Modal } from '@navikt/ds-react';
 
 import { useTotrinnskontrollModalContext } from './TotrinnskontrollModalContextProvider';
 

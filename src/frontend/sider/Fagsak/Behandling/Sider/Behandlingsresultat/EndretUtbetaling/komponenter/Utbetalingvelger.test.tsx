@@ -1,15 +1,12 @@
+import { Button } from '@navikt/ds-react';
 import type { ReactNode } from 'react';
-
 import { type DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { describe, expect, test } from 'vitest';
-
-import { Button } from '@navikt/ds-react';
-
-import { Utbetalingvelger } from './Utbetalingvelger';
 import { render } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
+import { Utbetalingvelger } from './Utbetalingvelger';
 
 const onSubmit = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
 

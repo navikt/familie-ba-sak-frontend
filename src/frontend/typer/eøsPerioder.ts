@@ -1,5 +1,5 @@
-import type { OptionType } from './common';
 import type { IIsoDatoPeriode, IIsoMånedPeriode, IsoDatoString, IsoMånedString } from '../utils/dato';
+import type { OptionType } from './common';
 
 export type KompetanseAktivitet = SøkersAktivitet | AnnenForelderAktivitet;
 

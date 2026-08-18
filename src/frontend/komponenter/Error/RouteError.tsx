@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
-
 import { captureException } from '@nais/apm';
-import { isRouteErrorResponse, useRouteError } from 'react-router';
-
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
+import { useEffect } from 'react';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 
 function captureRouteException(error: unknown) {
     if (isRouteErrorResponse(error)) {

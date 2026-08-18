@@ -1,6 +1,5 @@
-import type { IKlagebehandling } from '@typer/klage';
-
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import type { IKlagebehandling } from '@typer/klage';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

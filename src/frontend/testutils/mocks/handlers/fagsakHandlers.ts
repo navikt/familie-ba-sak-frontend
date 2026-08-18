@@ -1,6 +1,5 @@
-import { http, HttpResponse } from 'msw';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { HttpResponse, http } from 'msw';
 
 import { lagVisningBehandling } from '../../testdata/behandlingTestdata';
 import { FagsakTestdata } from '../../testdata/fagsakTestdata';

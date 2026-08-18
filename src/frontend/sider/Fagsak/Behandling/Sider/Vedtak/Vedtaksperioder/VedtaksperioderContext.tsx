@@ -1,7 +1,6 @@
+import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 
 interface VedtaksperioderContext {
     vedtaksperioder: IVedtaksperiodeMedBegrunnelser[];

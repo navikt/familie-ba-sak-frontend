@@ -1,9 +1,8 @@
 import { settAktivBrukerIModiaContext } from '@api/settAktivBrukerIModiaContext';
 import { useToastContext } from '@context/ToastContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { useMutation } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { useMutation } from '@tanstack/react-query';
 
 export function useSettAktivBrukerIModiaContext() {
     const { request } = useHttp();

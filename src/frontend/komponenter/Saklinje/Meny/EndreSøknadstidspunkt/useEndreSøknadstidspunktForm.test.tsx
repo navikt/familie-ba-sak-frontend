@@ -1,6 +1,5 @@
-import type { PropsWithChildren } from 'react';
-
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
+import { kjønnType } from '@navikt/familie-typer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -8,9 +7,8 @@ import type { IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
 import { dateTilIsoDatoString } from '@utils/dato';
+import type { PropsWithChildren } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-
-import { kjønnType } from '@navikt/familie-typer';
 
 import { useEndreSøknadstidspunktForm } from './useEndreSøknadstidspunktForm';
 

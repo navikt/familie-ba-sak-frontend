@@ -1,6 +1,4 @@
 import { Valideringsstatus } from '@navikt/familie-skjema';
-
-import { erOrgNr } from './formatter';
 import { Brevmal } from '../sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import type { IBehandling } from '../typer/behandling';
 import { Behandlingstype, BehandlingÅrsak } from '../typer/behandling';
@@ -8,6 +6,7 @@ import { BehandlingKategori } from '../typer/behandlingstema';
 import type { IGrunnlagPerson } from '../typer/person';
 import { PersonType } from '../typer/person';
 import { Målform } from '../typer/søknad';
+import { erOrgNr } from './formatter';
 
 export const hentMuligeBrevmalerImplementering = (
     åpenBehandling: IBehandling,

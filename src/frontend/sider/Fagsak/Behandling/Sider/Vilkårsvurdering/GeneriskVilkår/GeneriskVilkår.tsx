@@ -1,24 +1,21 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
+import type { FeltState } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
 import { Resultat, VilkårType } from '@typer/vilkår';
+import { useState } from 'react';
 import styled from 'styled-components';
-
-import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
-import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
-import VilkårTabell from './VilkårTabell';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
+import VilkårTabell from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;

@@ -1,9 +1,7 @@
-import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
-
 import { captureException } from '@nais/apm';
-
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
 
 interface State {
     hasError: boolean;

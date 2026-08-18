@@ -1,6 +1,5 @@
-import { http, HttpResponse } from 'msw';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { HttpResponse, http } from 'msw';
 
 export const ainntektHandlers = [
     http.post<never, { ident: string }>('/familie-ba-sak/api/a-inntekt/hent-url', async ({ request }) => {

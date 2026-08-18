@@ -1,7 +1,6 @@
 import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
-
-import { RessursResolver } from './ressursResolver';
 import { ApiError } from '../api/error/apiError';
+import { RessursResolver } from './ressursResolver';
 
 describe('RessursResolver', () => {
     test('skal kaste error hvis man prøver å resolve HENTER ressurs', () => {

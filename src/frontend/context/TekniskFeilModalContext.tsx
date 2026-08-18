@@ -1,7 +1,6 @@
-import { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
-
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
 function finnFeilmeldingstekst(error: unknown): string {
     if (error instanceof Error) {

@@ -1,9 +1,8 @@
-import { endOfMonth } from 'date-fns';
-import styled from 'styled-components';
-
 import { BodyShort, Heading } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import { Tidslinje } from '@navikt/familie-tidslinje';
+import { endOfMonth } from 'date-fns';
+import styled from 'styled-components';
 
 import { useTidslinjeContext } from '../../../../../komponenter/Tidslinje/TidslinjeContext';
 import TidslinjeEtikett from '../../../../../komponenter/Tidslinje/TidslinjeEtikett';

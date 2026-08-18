@@ -1,6 +1,5 @@
-import classNames from 'classnames';
-
 import { Buildings3Icon } from '@navikt/aksel-icons';
+import classNames from 'classnames';
 
 import styles from './KontorIkonGrønn.module.css';
 

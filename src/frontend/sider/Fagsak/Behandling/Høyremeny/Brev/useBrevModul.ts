@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useFagsak } from '@hooks/useFagsak';
+import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
@@ -15,9 +15,7 @@ import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '@utils/da
 import { useDeltBostedFelter } from '@utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '@utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '@utils/fritekstfelter';
-
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
+import { useEffect, useState } from 'react';
 
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';

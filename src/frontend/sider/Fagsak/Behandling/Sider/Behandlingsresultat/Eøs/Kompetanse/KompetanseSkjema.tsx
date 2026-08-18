@@ -1,12 +1,10 @@
-import styled from 'styled-components';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Heading, InfoCard, LocalAlert, Table } from '@navikt/ds-react';
-
-import KompetanseTabellRad from './KompetanseTabellRad';
+import styled from 'styled-components';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { BehandlingÅrsak } from '../../../../../../../typer/behandling';
 import { EøsPeriodeStatus, type IRestKompetanse } from '../../../../../../../typer/eøsPerioder';
+import KompetanseTabellRad from './KompetanseTabellRad';
 
 const KompetanseContainer = styled.div`
     margin-top: 5rem;

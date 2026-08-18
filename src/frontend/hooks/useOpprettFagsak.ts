@@ -1,8 +1,7 @@
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
-import { opprettFagsak, type OpprettFagsakPayload } from '../api/opprettFagsak';
+import { type OpprettFagsakPayload, opprettFagsak } from '../api/opprettFagsak';
 import type { IMinimalFagsak } from '../typer/fagsak';
 
 type Options = Omit<UseMutationOptions<IMinimalFagsak, DefaultError, OpprettFagsakPayload>, 'mutationFn'>;

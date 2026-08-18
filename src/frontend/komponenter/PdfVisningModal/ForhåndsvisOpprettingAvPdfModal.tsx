@@ -1,10 +1,8 @@
-import { type MutationKey, useMutationState } from '@tanstack/react-query';
-
 import { Heading, HStack, Loader, LocalAlert, Modal, VStack } from '@navikt/ds-react';
-
-import styles from './ForhåndsvisOpprettingAvPdfModal.module.css';
+import { type MutationKey, useMutationState } from '@tanstack/react-query';
 import { ModalType } from '../../context/ModalContext';
 import { useModal } from '../../hooks/useModal';
+import styles from './ForhåndsvisOpprettingAvPdfModal.module.css';
 
 export function ForhåndsvisOpprettingAvPdfModal() {
     const { args, erModalÅpen, lukkModal, tittel, bredde } = useModal(ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF);

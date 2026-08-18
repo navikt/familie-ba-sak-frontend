@@ -1,13 +1,11 @@
-import { useRef } from 'react';
+import { MonthPicker, type MonthValidationT, useMonthpicker } from '@navikt/ds-react';
 
 import { endOfMonth, format, isBefore, startOfToday } from 'date-fns';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { MonthPicker, useMonthpicker, type MonthValidationT } from '@navikt/ds-react';
-
-import { Fields, type FormValues } from './useFeilutbetaltValutaForm';
 import { tidligsteRelevanteDato } from '../../../../../../../komponenter/Datovelger/utils';
 import { dateTilIsoDatoString, isoStringTilDate } from '../../../../../../../utils/dato';
+import { Fields, type FormValues } from './useFeilutbetaltValutaForm';
 
 function parseDatoFieldValueTilDato(datoFieldValue: string | null, fallback: Date): Date {
     return datoFieldValue ? isoStringTilDate(datoFieldValue) : fallback;

@@ -1,4 +1,5 @@
-import { BehandlingStatus, Behandlingstype, behandlingÅrsak, BehandlingÅrsak } from './behandling';
+import { KlageTestdata } from '../testutils/testdata/klageTestdata';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, behandlingÅrsak } from './behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import {
     finnVisningstekstForJournalføringsbehandlingsårsak,
@@ -6,7 +7,6 @@ import {
     opprettJournalføringsbehandlingFraKlagebehandling,
 } from './journalføringsbehandling';
 import { Klagebehandlingstype, KlageStatus, KlageÅrsak } from './klage';
-import { KlageTestdata } from '../testutils/testdata/klageTestdata';
 
 describe('Journalføringsbehandling', () => {
     describe('FinnVisningstekstForJournalføringsbehandlingsårsak', () => {

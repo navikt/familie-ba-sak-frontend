@@ -1,8 +1,7 @@
 import { Button, LocalAlert, Modal } from '@navikt/ds-react';
-
-import { OpprettFagsakModalInnhold } from './OpprettFagsakModalInnhold';
 import { ModalType } from '../../../context/ModalContext';
 import { useModal } from '../../../hooks/useModal';
+import { OpprettFagsakModalInnhold } from './OpprettFagsakModalInnhold';
 
 export function OpprettFagsakModal() {
     const { tittel, erModalÅpen, lukkModal, args, bredde } = useModal(ModalType.OPPRETT_FAGSAK);

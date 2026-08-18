@@ -1,14 +1,12 @@
-import { useState } from 'react';
-
 import { useVisManglerTilgangModal } from '@context/ManglerTilgangModalContext';
 import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
 import { useSjekkSaksbehandlertilgangTilIdent } from '@hooks/useSjekkSaksbehandlertilgangTilIdent';
-import type { IOppgave } from '@typer/oppgave';
-import { oppgaveTypeFilter, OppgavetypeFilter } from '@typer/oppgave';
-import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
-import { useNavigate } from 'react-router';
-
 import { Button } from '@navikt/ds-react';
+import type { IOppgave } from '@typer/oppgave';
+import { OppgavetypeFilter, oppgaveTypeFilter } from '@typer/oppgave';
+import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { useOppgavebenkContext } from './OppgavebenkContext';
 

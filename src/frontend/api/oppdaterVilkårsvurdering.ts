@@ -1,6 +1,5 @@
-import type { IBehandling } from '@typer/behandling';
-
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import type { IBehandling } from '@typer/behandling';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

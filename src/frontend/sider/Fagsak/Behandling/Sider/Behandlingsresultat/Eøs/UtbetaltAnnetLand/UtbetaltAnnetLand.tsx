@@ -1,10 +1,8 @@
-import styled from 'styled-components';
-
 import { Heading, LocalAlert, Table } from '@navikt/ds-react';
-
-import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
+import styled from 'styled-components';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
+import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
 
 const UtenlandskPeriodeBeløperContainer = styled.div`
     margin-top: 5rem;

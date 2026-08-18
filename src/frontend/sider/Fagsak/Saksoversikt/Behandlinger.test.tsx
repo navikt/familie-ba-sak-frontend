@@ -1,12 +1,9 @@
-import type { PropsWithChildren } from 'react';
-
-import { waitFor, waitForElementToBeRemoved, within } from '@testing-library/dom';
-import { delay, http, HttpResponse } from 'msw';
-import { describe, expect, test } from 'vitest';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 
-import { Behandlinger } from './Behandlinger';
+import { waitFor, waitForElementToBeRemoved, within } from '@testing-library/dom';
+import { delay, HttpResponse, http } from 'msw';
+import type { PropsWithChildren } from 'react';
+import { describe, expect, test } from 'vitest';
 import { server } from '../../../testutils/mocks/node';
 import { BehandlingTestdata } from '../../../testutils/testdata/behandlingTestdata';
 import { FagsakTestdata } from '../../../testutils/testdata/fagsakTestdata';
@@ -17,6 +14,7 @@ import { BehandlingResultat, BehandlingÅrsak } from '../../../typer/behandling'
 import { KlageResultat } from '../../../typer/klage';
 import { Behandlingsresultatstype } from '../../../typer/tilbakekrevingsbehandling';
 import { FagsakProvider } from '../FagsakContext';
+import { Behandlinger } from './Behandlinger';
 
 function Wrapper({ children }: PropsWithChildren) {
     return (

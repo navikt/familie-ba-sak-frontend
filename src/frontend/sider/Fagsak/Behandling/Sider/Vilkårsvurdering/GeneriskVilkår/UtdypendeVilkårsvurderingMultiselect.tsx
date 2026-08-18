@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react';
-import { useEffect } from 'react';
-
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
+import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 
 import type { OptionType } from '../../../../../../typer/common';
 import type { PersonType } from '../../../../../../typer/person';

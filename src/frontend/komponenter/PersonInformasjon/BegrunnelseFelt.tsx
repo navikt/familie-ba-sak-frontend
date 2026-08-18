@@ -1,6 +1,5 @@
-import { useFormContext } from 'react-hook-form';
-
 import { Textarea } from '@navikt/ds-react';
+import { useFormContext } from 'react-hook-form';
 
 import { RegistrerDødsfallDatoFelt, type RegistrerDødsfallDatoFormValues } from './useRegistrerDødsfallDatoSkjema';
 

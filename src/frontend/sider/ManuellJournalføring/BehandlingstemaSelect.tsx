@@ -1,9 +1,8 @@
+import { Select } from '@navikt/ds-react';
+import type { Felt } from '@navikt/familie-skjema';
 import type { Behandlingstema } from '@typer/behandlingstema';
 import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
-
-import { Select } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 
 interface Props {
     behandlingstema: Felt<IBehandlingstema | undefined>;

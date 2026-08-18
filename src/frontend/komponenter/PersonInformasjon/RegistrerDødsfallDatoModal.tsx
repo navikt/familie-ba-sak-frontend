@@ -1,11 +1,9 @@
-import { FormProvider } from 'react-hook-form';
-
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
-
+import { FormProvider } from 'react-hook-form';
+import type { IGrunnlagPerson } from '../../typer/person';
 import { BegrunnelseFelt } from './BegrunnelseFelt';
 import { DødsfallDatoFelt } from './DødsfallDatoFelt';
 import { useRegistrerDødsfallDatoSkjema } from './useRegistrerDødsfallDatoSkjema';
-import type { IGrunnlagPerson } from '../../typer/person';
 
 interface Props {
     lukkModal: () => void;

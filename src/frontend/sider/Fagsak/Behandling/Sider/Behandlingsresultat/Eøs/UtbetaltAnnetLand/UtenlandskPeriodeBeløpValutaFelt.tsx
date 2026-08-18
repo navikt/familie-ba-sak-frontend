@@ -1,4 +1,4 @@
-import { EØS_VALUTAKODER, type Valutakode, ValutaCombobox } from '@komponenter/FlaggCombobox';
+import { EØS_VALUTAKODER, ValutaCombobox, type Valutakode } from '@komponenter/FlaggCombobox';
 import { isEmpty } from '@utils/eøsValidators';
 import { useController, useFormContext } from 'react-hook-form';
 

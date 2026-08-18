@@ -1,15 +1,13 @@
-import { useRef } from 'react';
-
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
 import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
+import { Box, DatePicker, type DateValidationT, LocalAlert, useDatepicker } from '@navikt/ds-react';
 import { dagensDato, dateTilIsoDatoString, isoStringTilDate } from '@utils/dato';
 import { format, isBefore, startOfDay, subDays } from 'date-fns';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Box, DatePicker, type DateValidationT, LocalAlert, useDatepicker } from '@navikt/ds-react';
 
 export function SøknadMottattDatoFelt() {
     const { control, trigger } = useFormContext<OpprettBehandlingFormValues>();

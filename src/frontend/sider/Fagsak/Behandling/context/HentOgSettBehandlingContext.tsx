@@ -1,20 +1,18 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
-
 import { useBehandlingIdParam } from '@hooks/useBehandlingIdParam';
 import { useFagsak } from '@hooks/useFagsak';
 import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
 import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
+import { useHttp } from '@navikt/familie-http';
+import { byggFeiletRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
 import { BehandlerRolle, type IBehandling } from '@typer/behandling';
 import { obfuskerBehandling } from '@utils/obfuskerData';
 import type { AxiosError } from 'axios';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-
-import { useHttp } from '@navikt/familie-http';
-import { byggFeiletRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 
 interface HentOgSettBehandlingContextValue {
     behandlingRessurs: Ressurs<IBehandling>;

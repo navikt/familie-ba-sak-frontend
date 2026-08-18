@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
 import { useRegistrerDødsfallDato } from '../../hooks/useRegistrerDødsfallDato';

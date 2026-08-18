@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { useQuery } from '@tanstack/react-query';
 
 import { hentAInntektUrl } from './hentAInntektUrl';
 

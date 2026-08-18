@@ -1,9 +1,7 @@
-import { useLocation } from 'react-router';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
+import { useLocation } from 'react-router';
 import { useManuelleBrevmottakerePåFagsakContext } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
+import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 
 const utledLabel = (brevmottakere: SkjemaBrevmottaker[]) => {
     if (brevmottakere.length === 0) {

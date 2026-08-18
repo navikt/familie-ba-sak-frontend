@@ -1,6 +1,5 @@
-import type { PropsWithChildren } from 'react';
-
 import { renderHook } from '@testing-library/react';
+import type { PropsWithChildren } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 
 import { useBehandlingIdParam } from './useBehandlingIdParam';

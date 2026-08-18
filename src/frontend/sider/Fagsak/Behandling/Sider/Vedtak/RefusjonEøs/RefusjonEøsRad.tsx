@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Table } from '@navikt/ds-react';
 import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
-
-import { Table } from '@navikt/ds-react';
+import { useState } from 'react';
 
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';

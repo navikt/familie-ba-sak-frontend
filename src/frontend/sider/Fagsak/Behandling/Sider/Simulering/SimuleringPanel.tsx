@@ -1,9 +1,8 @@
+import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
 import type { ISimuleringDTO, ISimuleringPeriode } from '@typer/simulering';
 import { Datoformat, isoStringTilDate, isoStringTilFormatertString } from '@utils/dato';
 import { formaterBeløp } from '@utils/formatter';
 import { isBefore } from 'date-fns';
-
-import { BodyShort, Box, HStack, Spacer, VStack } from '@navikt/ds-react';
 
 interface ISimuleringProps {
     simulering: ISimuleringDTO;

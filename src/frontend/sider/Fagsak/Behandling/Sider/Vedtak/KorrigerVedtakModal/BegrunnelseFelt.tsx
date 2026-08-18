@@ -1,10 +1,9 @@
+import { Textarea } from '@navikt/ds-react';
 import {
     KorrigerVedtakFelt,
     type KorrigerVedtakFormValues,
 } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/useKorrigerVedtakSkjema';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Textarea } from '@navikt/ds-react';
 
 interface Props {
     erLesevisning: boolean;

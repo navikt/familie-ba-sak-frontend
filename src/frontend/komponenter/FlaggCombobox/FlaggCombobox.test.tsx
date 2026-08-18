@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 import { fireEvent } from '@testing-library/dom';
-import { vi, beforeAll, afterAll } from 'vitest';
-
-import { FlaggCombobox, type FlaggComboboxOption } from './FlaggCombobox';
+import { useState } from 'react';
+import { afterAll, beforeAll, vi } from 'vitest';
 import { render } from '../../testutils/testrender';
+import { FlaggCombobox, type FlaggComboboxOption } from './FlaggCombobox';
 
 const valutaOptions: FlaggComboboxOption[] = [
     { value: 'SEK', label: 'SEK - Svensk krone', regionCode: 'SE' },

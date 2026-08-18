@@ -1,11 +1,10 @@
 import { useSettPåVent } from '@hooks/useSettPåVent';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { SettPåVentÅrsak } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { addDays } from 'date-fns';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 const STANDARD_ANTALL_DAGER_FRIST = 3 * 7;
 

@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react';
-
-import { FormProvider } from 'react-hook-form';
-
 import { Table } from '@navikt/ds-react';
-
-import {
-    useUtenlandskPeriodeBeløpSkjema,
-    utenlandskPeriodeBeløpFeilmeldingId,
-} from './useUtenlandskPeriodeBeløpSkjema';
-import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
+import { useEffect, useState } from 'react';
+import { FormProvider } from 'react-hook-form';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsKomponenter/EøsSkjemaKomponenter';
+import UtenlandskPeriodeBeløpTabellRadEndre from './UtenlandskPeriodeBeløpTabellRadEndre';
+import {
+    useUtenlandskPeriodeBeløpSkjema,
+    utenlandskPeriodeBeløpFeilmeldingId,
+} from './useUtenlandskPeriodeBeløpSkjema';
 
 interface IProps {
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;

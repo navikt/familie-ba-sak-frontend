@@ -1,10 +1,9 @@
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { Box, HStack, LocalAlert } from '@navikt/ds-react';
 import { PersonType } from '@typer/person';
 import type { IPersonResultat } from '@typer/vilkår';
-import { annenVurderingConfig, AnnenVurderingType, vilkårConfigEnsligMindreårig, VilkårType } from '@typer/vilkår';
-
-import { Box, HStack, LocalAlert } from '@navikt/ds-react';
+import { AnnenVurderingType, annenVurderingConfig, VilkårType, vilkårConfigEnsligMindreårig } from '@typer/vilkår';
 
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';

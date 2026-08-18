@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react';
-
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
@@ -9,6 +7,7 @@ import { useOppdaterVedtaksperiodeMedFritekster } from '@hooks/useOppdaterVedtak
 import { MAKS_LENGDE_FRITEKST } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/Fritekstbegrunnelser';
 import { useVedtaksperiodeContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperiodeContext';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 const NY_FRITEKSTBEGRUNNELSE = { value: '' };

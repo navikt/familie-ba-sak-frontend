@@ -1,9 +1,7 @@
+import type { Etikett, Periode } from '@navikt/familie-tidslinje';
+import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useState } from 'react';
-
-import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
-
-import type { Etikett, Periode } from '@navikt/familie-tidslinje';
 
 import type { IPersonMedAndelerTilkjentYtelse, IYtelsePeriode } from '../../typer/beregning';
 import { YtelseType } from '../../typer/beregning';

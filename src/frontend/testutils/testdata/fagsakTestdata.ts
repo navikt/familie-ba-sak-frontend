@@ -1,6 +1,6 @@
-import { BehandlingTestdata } from './behandlingTestdata';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
 import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
+import { BehandlingTestdata } from './behandlingTestdata';
 
 export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
     return {

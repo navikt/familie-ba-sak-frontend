@@ -1,6 +1,5 @@
-import type { PropsWithChildren } from 'react';
-
 import { HStack } from '@navikt/ds-react';
+import type { PropsWithChildren } from 'react';
 
 const Knapperekke = ({ children }: PropsWithChildren) => {
     return (

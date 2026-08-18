@@ -2,9 +2,8 @@ import { ModalType } from '@context/ModalContext';
 import { useHentFagsaker } from '@hooks/useHentFagsaker';
 import { useHentPersonEnkel } from '@hooks/useHentPersonEnkel';
 import { useModal } from '@hooks/useModal';
-import { FagsakType } from '@typer/fagsak';
-
 import { Button, LocalAlert, Modal, Skeleton, VStack } from '@navikt/ds-react';
+import { FagsakType } from '@typer/fagsak';
 
 import { FagsakerProvider } from './context/FagsakerContext';
 import {

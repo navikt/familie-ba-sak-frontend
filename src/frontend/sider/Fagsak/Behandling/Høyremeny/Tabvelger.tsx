@@ -1,14 +1,13 @@
 import { Tabs } from '@navikt/ds-react';
-
+import { useBehandling } from '../../../../hooks/useBehandling';
+import { useErLesevisning } from '../../../../hooks/useErLesevisning';
+import { Behandlingstype } from '../../../../typer/behandling';
 import IkonHistorikk from './Ikoner/IkonHistorikk';
 import IkonMeldinger from './Ikoner/IkonMeldinger';
 import IkonTotrinnskontroll from './Ikoner/IkonTotrinnskontroll';
 import { Tab } from './TabContextProvider';
 import styles from './Tabvelger.module.css';
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
-import { useBehandling } from '../../../../hooks/useBehandling';
-import { useErLesevisning } from '../../../../hooks/useErLesevisning';
-import { Behandlingstype } from '../../../../typer/behandling';
 
 export function Tabvelger() {
     const behandling = useBehandling();

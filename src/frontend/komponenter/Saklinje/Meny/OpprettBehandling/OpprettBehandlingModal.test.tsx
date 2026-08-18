@@ -18,7 +18,7 @@ import { Klagebehandlingstype } from '@typer/klage';
 import type { IPersonInfo } from '@typer/person';
 import type { Saksbehandler } from '@typer/saksbehandler';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/opprettBehandling');

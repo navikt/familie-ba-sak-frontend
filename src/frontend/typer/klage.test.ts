@@ -1,3 +1,4 @@
+import { KlageTestdata } from '../testutils/testdata/klageTestdata';
 import { behandlingsresultater } from './behandling';
 import {
     erKlageFeilregistrertAvKA,
@@ -7,7 +8,6 @@ import {
     klageinstansUtfallTilTekst,
     utledKlagebehandlingResultattekst,
 } from './klage';
-import { KlageTestdata } from '../testutils/testdata/klageTestdata';
 
 describe('Klage', () => {
     describe('HarAnkeEksistertPåKlagebehandling', () => {

@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Table } from '@navikt/ds-react';
 import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
-
-import { Table } from '@navikt/ds-react';
+import { useState } from 'react';
 
 import { FeilutbetaltValutaForm } from './form/FeilutbetaltValutaForm';
 import { Type } from './form/useFeilutbetaltValutaForm';

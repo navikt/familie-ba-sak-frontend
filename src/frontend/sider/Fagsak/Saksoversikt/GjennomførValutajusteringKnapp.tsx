@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
 import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
-import { useQueryClient } from '@tanstack/react-query';
-import type { IMinimalFagsak } from '@typer/fagsak';
-
 import { Box, Button, ErrorMessage } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
+import { useQueryClient } from '@tanstack/react-query';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import { useState } from 'react';
 
 interface Props {
     fagsakId: number;

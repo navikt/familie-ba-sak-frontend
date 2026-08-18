@@ -1,8 +1,7 @@
-import type { IGrunnlagPerson } from '@typer/person';
-import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
-
 import { Box, Table } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
+import type { IGrunnlagPerson } from '@typer/person';
+import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
 
 import Styles from './VilkårTabell.module.css';
 import { VilkårTabellRad } from './VilkårTabellRad';

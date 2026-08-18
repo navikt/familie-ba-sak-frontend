@@ -1,12 +1,11 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack } from '@navikt/ds-react';
 import { type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { mapEøsPeriodeStatusTilStatus } from '@utils/eøs';
 import { lagPersonLabel } from '@utils/formatter';
 import styled from 'styled-components';
-
-import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack } from '@navikt/ds-react';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
 

@@ -1,7 +1,6 @@
-import { format, isValid, parseISO, startOfToday } from 'date-fns';
-
 import type { FeltState } from '@navikt/familie-skjema';
 import { feil, ok } from '@navikt/familie-skjema';
+import { format, isValid, parseISO, startOfToday } from 'date-fns';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
 export type IsoMånedString = string; // Format YYYY-MM (ISO)

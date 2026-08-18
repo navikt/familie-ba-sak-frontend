@@ -1,10 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { BehandlingSteg, hentStegNummer } from '@typer/behandling';
 import { FormProvider } from 'react-hook-form';
-
-import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 
 import { BegrunnelseField } from './BegrunnelseField';
 import { useEndreBehandlendeEnhetForm } from './useEndreBehandlendeEnhetForm';

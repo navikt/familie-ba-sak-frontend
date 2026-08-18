@@ -1,11 +1,9 @@
-import { useState } from 'react';
-
-import type { IGrunnlagPerson } from '@typer/person';
-import type { IAnnenVurdering, IAnnenVurderingConfig } from '@typer/vilkår';
-import styled from 'styled-components';
-
 import { Fieldset, Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
+import type { IGrunnlagPerson } from '@typer/person';
+import type { IAnnenVurdering, IAnnenVurderingConfig } from '@typer/vilkår';
+import { useState } from 'react';
+import styled from 'styled-components';
 
 import { AnnenVurderingTabell } from './AnnenVurderingTabell';
 

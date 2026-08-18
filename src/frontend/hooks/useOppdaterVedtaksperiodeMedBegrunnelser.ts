@@ -1,9 +1,8 @@
 import { oppdaterVedtaksperiodeMedBegrunnelser } from '@api/oppdaterVedtaksperiodeMedBegrunnelser';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { VedtakBegrunnelse } from '@typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
-
-import { useHttp } from '@navikt/familie-http';
 
 export const OppdaterVedtaksperiodeMedBegrunnelserMutationKeyFactory = {
     vedtaksperiodeMedBegrunnelser: (vedtaksperiodeMedBegrunnelserId: number) => [

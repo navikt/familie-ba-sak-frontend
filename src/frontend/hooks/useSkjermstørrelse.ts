@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export enum Skjermstørrelse {
     XS = 0, // 0–479px
