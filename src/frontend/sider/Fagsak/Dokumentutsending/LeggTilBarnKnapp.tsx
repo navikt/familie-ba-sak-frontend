@@ -1,8 +1,8 @@
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { useLeggTilBarnModalContext } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
-import { useLeggTilBarnModalContext } from '../../../komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 
 export function LeggTilBarnKnapp() {
     const { åpneModal } = useLeggTilBarnModalContext();
@@ -13,7 +13,7 @@ export function LeggTilBarnKnapp() {
     }
 
     return (
-        <Button variant={'tertiary'} size={'medium'} onClick={åpneModal} icon={<PlusCircleIcon />}>
+        <Button variant={'tertiary'} size={'medium'} type={'button'} onClick={åpneModal} icon={<PlusCircleIcon />}>
             Legg til barn
         </Button>
     );
