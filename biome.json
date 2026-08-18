@@ -39,8 +39,7 @@
       "correctness": {
         "useExhaustiveDependencies": "warn",
         "useJsxKeyInIterable": "warn",
-        "noChildrenProp": "warn",
-        "noSwitchDeclarations": "warn"
+        "noChildrenProp": "warn"
       },
       "suspicious": {
         "noDoubleEquals": "warn",
