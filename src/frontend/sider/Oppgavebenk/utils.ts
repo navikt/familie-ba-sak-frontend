@@ -25,8 +25,8 @@ export interface IOppgaveRad extends Omit<IOppgave, 'tilordnetRessurs' | 'idente
 }
 
 export const sorterEtterNøkkel = (a: IOppgaveRad, b: IOppgaveRad, sorteringsnøkkel: Sorteringsnøkkel): number => {
-    let aVerdi: IOppgaveRad[keyof IOppgaveRad];
-    let bVerdi: IOppgaveRad[keyof IOppgaveRad];
+    let aVerdi: IOppgave | string;
+    let bVerdi: IOppgave | string;
     if (sorteringsnøkkel === Sorteringsnøkkel.IDENT) {
         aVerdi = hentFnrFraOppgaveIdenter(b.ident) || 'Ukjent';
         bVerdi = hentFnrFraOppgaveIdenter(b.ident) || 'Ukjent';
