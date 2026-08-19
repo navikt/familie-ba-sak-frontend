@@ -1,6 +1,7 @@
 import { apiClient } from '@api/client/apiClient';
 import { korrigerVedtak, type KorrigerVedtakPayload } from '@api/korrigerVedtak';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
     apiClient: {
