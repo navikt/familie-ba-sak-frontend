@@ -1,6 +1,7 @@
 import { angreKorrigertVedtak } from '@api/angreKorrigertVedtak';
 import { apiClient } from '@api/client/apiClient';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
     apiClient: {

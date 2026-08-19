@@ -1,6 +1,7 @@
 import { apiClient } from '@api/client/apiClient';
 import { harSaksbehandlerTilgang } from '@api/harSaksbehandlerTilgang';
 import { Adressebeskyttelsegradering, type IRestTilgang } from '@typer/person';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
     apiClient: {
