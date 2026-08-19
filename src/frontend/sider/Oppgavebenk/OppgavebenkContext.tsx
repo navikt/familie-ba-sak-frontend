@@ -1,10 +1,12 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-
 import { useFagsakApi } from '@api/useFagsakApi';
 import { useToastContext } from '@context/ToastContext';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
+import type { SortState } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { IMinimalFagsak } from '@typer/fagsak';
 import { FagsakStatus } from '@typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '@typer/oppgave';
@@ -14,17 +16,13 @@ import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
 import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { hentNesteSorteringsrekkefølge, hentSortState, Sorteringsrekkefølge } from '@utils/tabell';
 import type { AxiosError } from 'axios';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-
-import type { SortState } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
-import type { Ressurs } from '@navikt/familie-typer';
 
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
-import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, sorterEtterNøkkel, Sorteringsnøkkel } from './utils';
+import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
 
@@ -330,7 +328,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         settOppgaver(byggHenterRessurs());
 
         const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
-        let tildeltRessurs;
+        let tildeltRessurs: boolean | undefined;
         switch (saksbehandlerFilter) {
             case SaksbehandlerFilter.FORDELTE:
                 tildeltRessurs = true;
@@ -408,7 +406,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                     personIdent: brukerident,
                 },
             }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
-                if (fagsak.status === RessursStatus.SUKSESS && !!fagsak.data) {
+                if (fagsak.status === RessursStatus.SUKSESS && fagsak.data) {
                     window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.data.id}/behandling/${oppgave.saksreferanse}`;
                 }
             });

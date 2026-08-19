@@ -25,6 +25,7 @@ export const KontoSirkel = ({ className, filled = false, width = 48, height = 48
             enableBackground="new 0 0 24 24"
             fill="#0067c5"
         >
+            <title id={'kontosirkel'}>Kontosirkel</title>
             <path
                 className={styles.path}
                 d="M12,0C5.383,0,0,5.383,0,12c0,3.18,1.232,6.177,3.469,8.438l0,0.001C5.743,22.735,8.772,24,12,24

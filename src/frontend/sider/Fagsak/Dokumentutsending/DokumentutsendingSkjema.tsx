@@ -1,5 +1,3 @@
-import type { ChangeEvent } from 'react';
-
 import { useBruker } from '@hooks/useBruker';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
@@ -7,22 +5,21 @@ import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import MålformVelger from '@komponenter/MålformVelger';
-import { FeatureToggle } from '@typer/featureToggles';
-import type { IBarnMedOpplysninger } from '@typer/søknad';
-
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack, InfoCard, Label, Select, VStack } from '@navikt/ds-react';
-
+import { FeatureToggle } from '@typer/featureToggles';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import type { ChangeEvent } from 'react';
+import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
 import BarnIBrevSkjema from './BarnIBrev/BarnIBrevSkjema';
 import { barnIBrevÅrsakTilTittel, finnBarnIBrevÅrsak } from './barnIBrevÅrsak';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import { DistribusjonskanalInfo } from './DistribusjonskanalInfo';
 import { useDokumentutsendingContext } from './DokumentutsendingContext';
-import { dokumentÅrsak, DokumentÅrsakPerson } from './dokumentÅrsakTyper';
+import { DokumentÅrsakPerson, dokumentÅrsak } from './dokumentÅrsakTyper';
+import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 import KanSøkeSkjema from './KanSøke/KanSøkeSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { useManuelleBrevmottakerePåFagsakContext } from '../ManuelleBrevmottakerePåFagsakContext';
-import FritekstAvsnitt from './FritekstAvsnitt/FritekstAvsnitt';
 
 export function DokumentutsendingSkjema() {
     const bruker = useBruker();
@@ -81,7 +78,9 @@ export function DokumentutsendingSkjema() {
         >
             {!erLesevisning && <LeggTilBarnModal />}
             <Box padding="space-32" overflow="auto">
-                <Heading size={'large'} level={'1'} children={'Send informasjonsbrev'} />
+                <Heading size={'large'} level={'1'}>
+                    Send informasjonsbrev
+                </Heading>
                 {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo distribusjonskanal={distribusjonskanal} />}
                 {manuelleBrevmottakerePåFagsak.length > 0 && (
                     <BrevmottakereAlert
@@ -167,7 +166,7 @@ export function DokumentutsendingSkjema() {
                                 målformFelt={skjema.felter.målform}
                                 visFeilmeldinger={skjema.visFeilmeldinger}
                                 erLesevisning={false}
-                                Legend={<Label children={'Målform'} />}
+                                Legend={<Label>Målform</Label>}
                             />
                             {skjema.felter.årsak.verdi && visForhåndsvisningBeskjed() && (
                                 <InfoCard data-color="info">

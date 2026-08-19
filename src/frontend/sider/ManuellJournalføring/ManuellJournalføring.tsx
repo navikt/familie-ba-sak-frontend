@@ -1,8 +1,7 @@
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
-import classNames from 'classnames';
-
 import { GlobalAlert } from '@navikt/ds-react';
 import { Journalstatus, RessursStatus } from '@navikt/familie-typer';
+import classNames from 'classnames';
 
 import { DokumentPanel } from './Dokument/DokumentPanel';
 import { JournalpostSkjema } from './JournalpostSkjema';
@@ -13,7 +12,7 @@ const ManuellJournalføringContent = () => {
     const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalføringContext();
 
     switch (dataForManuellJournalføring.status) {
-        case RessursStatus.SUKSESS:
+        case RessursStatus.SUKSESS: {
             const viserAlert = dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT;
             return (
                 <>
@@ -40,6 +39,7 @@ const ManuellJournalføringContent = () => {
                     </div>
                 </>
             );
+        }
 
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:

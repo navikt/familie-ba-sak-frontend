@@ -1,14 +1,6 @@
-import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-
 import { KontoSirkel } from '@ikoner/KontoSirkel';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { fagsakStatus, FagsakType } from '@typer/fagsak';
-import type { ISamhandlerInfo } from '@typer/samhandler';
-import { formaterIdent } from '@utils/formatter';
-import { identValidator } from '@utils/validators';
-
 import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
 import {
     Box,
@@ -25,6 +17,12 @@ import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import { FagsakType, fagsakStatus } from '@typer/fagsak';
+import type { ISamhandlerInfo } from '@typer/samhandler';
+import { formaterIdent } from '@utils/formatter';
+import { identValidator } from '@utils/validators';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
 
 import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
@@ -151,11 +149,12 @@ export const BrukerPanel = () => {
                                             settFeilMelding('Personident er ugyldig');
                                         }
                                     }}
-                                    children={'Endre bruker'}
                                     loading={spinner}
                                     size="small"
                                     variant="secondary"
-                                />
+                                >
+                                    Endre bruker
+                                </Button>
                             </Box>
                         </HStack>
                         {kanKnyttesTilInstitusjonsfagsak() && (

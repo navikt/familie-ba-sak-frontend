@@ -3,11 +3,10 @@ import { NotFound } from '@komponenter/Error/NotFound';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-import { KontrollsiderProvider } from '@sider/Fagsak/Behandling/KontrollsiderContext';
-import { Outlet } from 'react-router';
-
 import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import { KontrollsiderProvider } from '@sider/Fagsak/Behandling/KontrollsiderContext';
+import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
 import { BehandlingProvider } from './context/BehandlingContext';
@@ -28,7 +27,7 @@ export function Behandling() {
     }
 
     switch (behandlingRessurs.status) {
-        case RessursStatus.SUKSESS:
+        case RessursStatus.SUKSESS: {
             const behandling = behandlingRessurs.data;
             return (
                 <BehandlingProvider key={behandling.behandlingId} behandling={behandling}>
@@ -57,6 +56,7 @@ export function Behandling() {
                     </KontrollsiderProvider>
                 </BehandlingProvider>
             );
+        }
         case RessursStatus.IKKE_TILGANG:
             return (
                 <GlobalAlert status="warning">

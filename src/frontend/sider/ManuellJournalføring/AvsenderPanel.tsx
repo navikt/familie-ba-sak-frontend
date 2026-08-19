@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
-
 import { EmailIkon } from '@ikoner/EmailIkon';
-import { formaterIdent } from '@utils/formatter';
-import classNames from 'classnames';
-
 import { BodyShort, Checkbox, ExpansionCard, TextField } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
+import { formaterIdent } from '@utils/formatter';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 import styles from './AvsenderPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
@@ -55,10 +53,7 @@ export const AvsenderPanel = () => {
             <ExpansionCard.Content className={styles.innerContent}>
                 {lesevisning ? (
                     brukerErAvsender ? (
-                        <BodyShort
-                            className={classNames('skjemaelement', 'lese-felt')}
-                            children={'Avsender er bruker'}
-                        />
+                        <BodyShort className={classNames('skjemaelement', 'lese-felt')}>Avsender er bruker</BodyShort>
                     ) : null
                 ) : (
                     <Checkbox

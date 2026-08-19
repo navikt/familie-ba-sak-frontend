@@ -1,11 +1,10 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import type { VedtakBegrunnelse } from '@typer/vedtak';
-import type { IVilkårResultat } from '@typer/vilkår';
-import classNames from 'classnames';
-
 import { BodyShort, Checkbox, Fieldset, VStack } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { VedtakBegrunnelse } from '@typer/vedtak';
+import type { IVilkårResultat } from '@typer/vilkår';
+import classNames from 'classnames';
 
 import AvslagBegrunnelseMultiselect from './AvslagBegrunnelseMultiselect';
 
@@ -38,10 +37,9 @@ const AvslagSkjema = ({
             <VStack gap="space-16">
                 {erLesevisning ? (
                     redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad && (
-                        <BodyShort
-                            className={classNames('skjemaelement', 'lese-felt')}
-                            children={'Vurderingen er et avslag'}
-                        />
+                        <BodyShort className={classNames('skjemaelement', 'lese-felt')}>
+                            Vurderingen er et avslag
+                        </BodyShort>
                     )
                 ) : (
                     <Checkbox

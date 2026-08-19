@@ -20,6 +20,7 @@ export const DokumentIkon = ({ className, filled = false, width = 48, height = 4
             enableBackground="new 0 0 24 24"
             fill="#0067c5"
         >
+            <title id={'dokument'}>Dokument ikon</title>
             <path
                 d="M20.854,6.146l-6-6C14.76,0.053,14.632,0,14.5,0h-11C3.224,0,3,0.224,3,0.5v23C3,23.776,3.224,24,3.5,24h17
        c0.276,0,0.5-0.224,0.5-0.5v-17C21,6.367,20.947,6.24,20.854,6.146z M7.5,7H12c0.276,0,0.5,0.224,0.5,0.5S12.276,8,12,8H7.5

@@ -14,6 +14,7 @@ const NavLogo = ({ className, height = 20, width = 65 }: INavLogo) => {
             xmlns="http://www.w3.org/2000/svg"
             className={className}
         >
+            <title>Nav</title>
             <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"

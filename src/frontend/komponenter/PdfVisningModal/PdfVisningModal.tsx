@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
-
 import { Heading, HStack, Loader, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import { useEffect } from 'react';
 
 import styles from './PdfVisningModal.module.css';
 
@@ -43,7 +42,9 @@ const Dokument = ({ pdfdata }: { pdfdata: Ressurs<string> }) => {
             return (
                 <HStack justify={'center'} height={'100%'} align={'center'}>
                     <VStack align={'center'}>
-                        <Heading size={'small'} level={'2'} children={'Innhenter dokument'} />
+                        <Heading size={'small'} level={'2'}>
+                            Innhenter dokument
+                        </Heading>
                         <Loader size="xlarge" title="Innhenter dokument" />
                     </VStack>
                 </HStack>

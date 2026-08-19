@@ -1,19 +1,17 @@
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import { erFagsakAvTypeInstitusjon, erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } from '@navikt/ds-react';
+import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IForelderBarnRelasjonMaskert } from '@typer/person';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { isoStringTilDate } from '@utils/dato';
 import { differenceInMilliseconds } from 'date-fns';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, CheckboxGroup, Heading, HStack, InfoCard, Label, VStack } from '@navikt/ds-react';
-
+import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 import { BarnMedOpplysninger } from './BarnMedOpplysninger';
 import { useSøknadContext } from './SøknadContext';
-import StatusIkon, { Status } from '../../../../../ikoner/StatusIkon';
 
 export const Barna = () => {
     const { skjema } = useSøknadContext();
@@ -58,7 +56,9 @@ export const Barna = () => {
 
     return (
         <VStack marginBlock={'space-16'}>
-            <Heading size={'medium'} level={'2'} children={'Opplysninger om barn'} />
+            <Heading size={'medium'} level={'2'}>
+                Opplysninger om barn
+            </Heading>
             {maskerteRelasjoner.map((forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert, index: number) => {
                 return (
                     <HStack

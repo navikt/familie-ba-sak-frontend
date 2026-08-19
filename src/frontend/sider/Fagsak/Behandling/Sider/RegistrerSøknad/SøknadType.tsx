@@ -1,7 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { behandlingUnderkategori, BehandlingUnderkategori } from '@typer/behandlingstema';
-
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { BehandlingUnderkategori, behandlingUnderkategori } from '@typer/behandlingstema';
 
 import { useSøknadContext } from './SøknadContext';
 import styles from './SøknadType.module.css';
@@ -21,7 +20,11 @@ export const SøknadType = () => {
             {...skjema.felter.underkategori.hentNavBaseSkjemaProps(skjema.visFeilmeldinger)}
             readOnly={erLesevisning}
             value={behandlingUnderkategori[skjema.felter.underkategori.verdi]}
-            legend={<Heading size={'medium'} level={'2'} children={'Hva har bruker søkt om?'} />}
+            legend={
+                <Heading size={'medium'} level={'2'}>
+                    Hva har bruker søkt om?
+                </Heading>
+            }
         >
             <Radio
                 className={styles.radio}

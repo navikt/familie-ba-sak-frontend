@@ -1,12 +1,9 @@
-import type { ReactNode } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
-
 import { BodyShort, Box, Heading, HStack, Loader, LocalAlert } from '@navikt/ds-react';
-
-import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
+import type { ReactNode } from 'react';
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
+import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
 
 const InnholdContainer = ({ children }: { children: ReactNode }) => (
     <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
@@ -52,7 +49,9 @@ export const Infotrygd = () => {
         <>
             <Fagsaklinje />
             <InnholdContainer>
-                <Heading size="large" level="1" children="Infotrygd" />
+                <Heading size="large" level="1">
+                    Infotrygd
+                </Heading>
                 <Infotrygdtabeller ident={fagsak.søkerFødselsnummer} saker={data.saker} minimalFagsak={fagsak} />
             </InnholdContainer>
         </>

@@ -1,16 +1,13 @@
-import { useState } from 'react';
-
+import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker, VStack } from '@navikt/ds-react';
+import { useHttp } from '@navikt/familie-http';
+import { byggHenterRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
 import { type IBehandling, type ISettPåVent, SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString } from '@utils/dato';
 import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { addDays } from 'date-fns';
-
-import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker, VStack } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import { byggHenterRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
-
-import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
+import { useState } from 'react';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 
 interface IProps {
     lukkModal: () => void;
@@ -92,11 +89,14 @@ export const SettBehandlingPåVentModalMotregning = ({ lukkModal, behandling }: 
                     key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                     size={'medium'}
                     onClick={settBehandlingPåVent}
-                    children={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                     loading={submitRessurs.status === RessursStatus.HENTER}
                     disabled={submitRessurs.status === RessursStatus.HENTER}
-                />
-                <Button variant={'tertiary'} key={'Avbryt'} size="medium" onClick={lukkModal} children={'Avbryt'} />
+                >
+                    {erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
+                </Button>
+                <Button variant={'tertiary'} key={'Avbryt'} size="medium" onClick={lukkModal}>
+                    Avbryt
+                </Button>
             </Modal.Footer>
         </Modal>
     );
