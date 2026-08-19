@@ -1,7 +1,7 @@
 import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
 
-import { type RegistrertSøknadstidspunkt } from './hentRegistrerteSøknadstidspunkter';
+import type { RegistrertSøknadstidspunkt } from './hentRegistrerteSøknadstidspunkter';
 
 export interface EndreSøknadstidspunktPayload {
     søknadstidspunktPerPerson: RegistrertSøknadstidspunkt[];

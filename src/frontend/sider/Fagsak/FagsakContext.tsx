@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
-import { type IMinimalFagsak } from '../../typer/fagsak';
+import type { IMinimalFagsak } from '../../typer/fagsak';
 
 interface IFagsakContext {
     fagsak: IMinimalFagsak;

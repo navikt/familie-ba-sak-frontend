@@ -1,37 +1,33 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useHentPersonerMedUgyldigEtterbetalingsperiode } from '@hooks/useHentPersonerMedUgyldigEtterbetalingsperiode';
 import { useOppdaterBehandlingsresultat } from '@hooks/useOppdaterBehandlingsresultat';
 import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
-import { BehandlingResultat, type IBehandling } from '@typer/behandling';
-import { BehandlingSteg, Behandlingstype } from '@typer/behandling';
-import { type IRestKompetanse, type IRestUtenlandskPeriodeBeløp, type IRestValutakurs } from '@typer/eøsPerioder';
-import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
-import { periodeOverlapperMedValgtDato } from '@utils/dato';
-import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
-import { useNavigate } from 'react-router';
-import styled from 'styled-components';
-
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage, ErrorSummary, Label, LocalAlert } from '@navikt/ds-react';
 import { byggDataRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
-
+import { BehandlingResultat, BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
+import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '@typer/eøsPerioder';
+import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
+import { periodeOverlapperMedValgtDato } from '@utils/dato';
+import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import styled from 'styled-components';
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import Skjemasteg from '../Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';
 import { kompetanseFeilmeldingId } from './Eøs/Kompetanse/useKompetansePeriodeSkjema';
-import { useEøs } from './Eøs/useEøs';
-import { utenlandskPeriodeBeløpFeilmeldingId } from './Eøs/UtbetaltAnnetLand/useUtenlandskPeriodeBeløpSkjema';
 import UtbetaltAnnetLand from './Eøs/UtbetaltAnnetLand/UtbetaltAnnetLand';
+import { utenlandskPeriodeBeløpFeilmeldingId } from './Eøs/UtbetaltAnnetLand/useUtenlandskPeriodeBeløpSkjema';
+import { useEøs } from './Eøs/useEøs';
 import { valutakursFeilmeldingId } from './Eøs/Valutakurs/useValutakursSkjema';
 import Valutakurser from './Eøs/Valutakurs/Valutakurser';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-import { useBehandlingContext } from '../../context/BehandlingContext';
-import Skjemasteg from '../Skjemasteg';
 
 const EndretUtbetalingAndel = styled.div`
     display: flex;

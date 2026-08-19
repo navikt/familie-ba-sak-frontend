@@ -1,10 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
-import { describe } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import { SettEllerOppdaterVenting } from './SettEllerOppdaterVenting';
+import type { PropsWithChildren } from 'react';
+import { describe } from 'vitest';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
@@ -12,7 +8,8 @@ import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import { BehandlingStatus, type IBehandling, SettPåVentÅrsak } from '../../../../typer/behandling';
-import { type IMinimalFagsak } from '../../../../typer/fagsak';
+import type { IMinimalFagsak } from '../../../../typer/fagsak';
+import { SettEllerOppdaterVenting } from './SettEllerOppdaterVenting';
 
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;

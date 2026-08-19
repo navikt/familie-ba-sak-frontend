@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import { type IBehandling, type NyBehandling } from '@typer/behandling';
+import type { IBehandling, NyBehandling } from '@typer/behandling';
 
 export async function opprettBehandling(payload: NyBehandling) {
     return apiClient.post<NyBehandling, IBehandling>({

@@ -1,12 +1,10 @@
+import type { Client } from '@navikt/familie-backend';
+import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
+import { LOG_LEVEL } from '@navikt/familie-logging';
+import type { NextFunction, Request, Response, Router } from 'express';
 import fs from 'fs';
 import path from 'path';
-
-import type { Response, Request, Router, NextFunction } from 'express';
 import type { ViteDevServer } from 'vite';
-
-import type { Client } from '@navikt/familie-backend';
-import { ensureAuthenticated, logRequest, envVar } from '@navikt/familie-backend';
-import { LOG_LEVEL } from '@navikt/familie-logging';
 
 import { frontendPath } from './config.js';
 import { erLokal, erPreprod } from './env.js';
@@ -62,7 +60,7 @@ export default async (authClient: Client, router: Router) => {
         res.status(200).send();
     });
 
-    let viteDevServer: ViteDevServer | undefined = undefined;
+    let viteDevServer: ViteDevServer | undefined;
     if (erLokal()) {
         const { createServer } = await import('vite');
         viteDevServer = await createServer({

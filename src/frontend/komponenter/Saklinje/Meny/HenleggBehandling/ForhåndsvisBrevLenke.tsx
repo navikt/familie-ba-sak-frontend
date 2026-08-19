@@ -6,10 +6,9 @@ import {
     mutationKey,
     useOpprettForhåndsvisbarBehandlingBrevPdf,
 } from '@hooks/useOpprettForhåndsvisbarBehandlingBrevPdf';
-import { Brevmal } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
-import { type IManueltBrevRequestPåBehandling } from '@typer/dokument';
-
 import { Link } from '@navikt/ds-react';
+import { Brevmal } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
+import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
 
 function lagRequestPayload(brevmal: Brevmal): IManueltBrevRequestPåBehandling {
     return {

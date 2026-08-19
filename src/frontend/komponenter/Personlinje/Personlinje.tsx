@@ -5,7 +5,7 @@ import { useHentPerson } from '../../hooks/useHentPerson';
 import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { FagsakType } from '../../typer/fagsak';
-import { type IPersonInfo } from '../../typer/person';
+import type { IPersonInfo } from '../../typer/person';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
 import { formaterIdent, hentAlder, millisekunderIEttÅr } from '../../utils/formatter';
 import { erAdresseBeskyttet } from '../../utils/validators';
