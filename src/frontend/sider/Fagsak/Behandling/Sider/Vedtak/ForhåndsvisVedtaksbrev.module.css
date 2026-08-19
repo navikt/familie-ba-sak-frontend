@@ -1,17 +1,8 @@
-.modal {
-    width: 80%;
-    height: 80%;
-    overflow: hidden;
-
-    section {
-        height: 100%;
-        width: 90%;
-        margin: 0 auto;
-    }
+.body {
+    height: 100%;
 }
 
 .iframe {
-    margin: 0 auto;
     height: 100%;
     width: 100%;
 }
