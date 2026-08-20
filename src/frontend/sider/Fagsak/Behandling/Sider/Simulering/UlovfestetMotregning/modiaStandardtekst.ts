@@ -1,7 +1,7 @@
 import type { IAvregningsperiode } from '../../../../../../typer/simulering';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../../utils/dato';
 import { formaterBeløpUtenValutakode } from '../simuleringUtil';
-import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './konstanter';
 
 const formaterPerioder = (
     avregningsperioder: IAvregningsperiode[],

@@ -8,8 +8,8 @@ import type { RouteObject } from 'react-router';
 import Behandlingsresultat from './Sider/Behandlingsresultat/Behandlingsresultat';
 import Filtreringsregler from './Sider/FiltreringFødselshendelser/Filtreringsregler';
 import RegistrerInstitusjon from './Sider/RegistrerInstitusjon/RegistrerInstitusjon';
-import Simulering from './Sider/Simulering/Simulering';
-import { SimuleringProvider } from './Sider/Simulering/SimuleringContext';
+import { Simulering } from './Sider/Simulering/Simulering';
+import { SimuleringContainer } from './Sider/Simulering/SimuleringContainer';
 import { Vedtak } from './Sider/Vedtak/Vedtak';
 
 export const behandlingRoutes: RouteObject[] = [
@@ -40,19 +40,17 @@ export const behandlingRoutes: RouteObject[] = [
     {
         path: 'simulering',
         element: (
-            <SimuleringProvider>
+            <SimuleringContainer>
                 <Simulering />
-            </SimuleringProvider>
+            </SimuleringContainer>
         ),
     },
     {
         path: 'vedtak',
         element: (
-            <SimuleringProvider>
-                <VedtakContainer>
-                    <Vedtak />
-                </VedtakContainer>
-            </SimuleringProvider>
+            <VedtakContainer>
+                <Vedtak />
+            </VedtakContainer>
         ),
     },
     {

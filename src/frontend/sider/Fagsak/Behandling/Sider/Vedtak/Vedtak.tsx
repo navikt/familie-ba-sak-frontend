@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
@@ -7,6 +5,8 @@ import { useOpprettSammensattKontrollsakError } from '@hooks/useOpprettSammensat
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { useSlettSammensattKontrollsakError } from '@hooks/useSlettSammensattKontrollsakError';
+import { LocalAlert, VStack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
 import {
     BehandlingStatus,
@@ -18,22 +18,19 @@ import {
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { erBehandlingMedVedtaksbrevutsending } from '@utils/behandling';
 import { erDefinert } from '@utils/commons';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-
-import { LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useSimuleringsvurdering } from '../Simulering/useSimuleringsvurdering';
+import Skjemasteg from '../Skjemasteg';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
+import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { SendtTilTotrinnskontrollModal } from './SendtTilTotrinnskontrollModal';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
 import { useVedtaksperioderContext } from './Vedtaksperioder/VedtaksperioderContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
-import { useSimuleringContext } from '../Simulering/SimuleringContext';
-import Skjemasteg from '../Skjemasteg';
-import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 
 function kanSendeInnVedtak(vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[], behandling: IBehandling) {
     const minstEnPeriodeharBegrunnelseEllerFritekst = vedtaksperioderMedBegrunnelser.some(
@@ -57,7 +54,7 @@ export function Vedtak() {
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
     const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
-    const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
+    const simuleringsvurdering = useSimuleringsvurdering();
     const { vedtaksperioder } = useVedtaksperioderContext();
 
     const saksbehandler = useSaksbehandler();
@@ -115,7 +112,7 @@ export function Vedtak() {
             forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/simulering`)}
             nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
             nesteKnappTittel={
-                erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
+                erMigreringFraInfotrygd && !simuleringsvurdering?.behandlingErMigreringMedAvvikUtenforBeløpsgrenser
                     ? 'Bekreft migrering'
                     : 'Til godkjenning'
             }

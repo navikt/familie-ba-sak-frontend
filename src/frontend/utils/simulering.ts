@@ -1,7 +1,6 @@
 import { addMonths, differenceInCalendarMonths, isAfter, isSameDay } from 'date-fns';
-
-import { dateTilIsoDatoString, isoStringTilDate } from './dato';
-import type { ISimuleringPeriode } from '../typer/simulering';
+import type { ISimuleringDTO, ISimuleringPeriode } from '../typer/simulering';
+import { dateTilIsoDatoString, isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from './dato';
 
 export const hentPeriodelisteMedTommePerioder = (perioder: ISimuleringPeriode[]): ISimuleringPeriode[] => {
     const fomDatoerISimulering = hentSorterteFomdatoer(perioder);
@@ -36,4 +35,27 @@ const hentAntallMånederISimuleringen = (fomListe: Date[]): number => {
     const sistePeriodeFom = fomListe[fomListe.length - 1];
 
     return differenceInCalendarMonths(sistePeriodeFom, førstePeriodeFom) + 1;
+};
+
+export const settPerioderTilIkkeUtbetaltOmForfallsdatoIkkePassert = (simulering: ISimuleringDTO): ISimuleringDTO => ({
+    ...simulering,
+    perioder: simulering.perioder.map(periode =>
+        settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(periode, simulering.tidSimuleringHentet)
+    ),
+});
+
+const settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert = (
+    periode: ISimuleringPeriode,
+    tidSimuleringHentet: string | undefined
+): ISimuleringPeriode => {
+    const forfallsdatoErEtterTidSimuleringHentet = isAfter(
+        isoStringTilDateMedFallback({ isoString: periode.forfallsdato, fallbackDate: tidenesMorgen }),
+        isoStringTilDateMedFallback({ isoString: tidSimuleringHentet, fallbackDate: tidenesMorgen })
+    );
+
+    if (periode.resultat === 0 && forfallsdatoErEtterTidSimuleringHentet) {
+        return { ...periode, tidligereUtbetalt: 0, resultat: periode.nyttBeløp };
+    }
+
+    return periode;
 };
