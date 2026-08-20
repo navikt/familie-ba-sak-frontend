@@ -7,7 +7,6 @@ import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
 import { Resultat, VilkårType } from '@typer/vilkår';
-import styled from 'styled-components';
 
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
@@ -27,14 +26,6 @@ interface IProps {
     visFeilmeldinger: boolean;
     generiskVilkårKey: string;
 }
-
-const Container = styled.div`
-    margin-top: var(--ax-space-64);
-
-    &:last-child {
-        margin-bottom: var(--ax-space-20);
-    }
-`;
 
 const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, generiskVilkårKey }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -121,51 +112,49 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
         vilkårResultater.some(vilkår => !!vilkår.verdi.begrunnelseForManuellKontroll);
 
     return (
-        <Container>
-            <Fieldset
-                error={visFeilmeldingerForVilkår ? feilmelding : undefined}
-                legend={vilkårFraConfig.tittel}
-                hideLegend
-            >
-                <HStack gap="space-16" align="center">
-                    {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--ax-warning-500)" />}
-                    <Heading size="medium" level="3">
-                        {vilkårFraConfig.tittel}
-                    </Heading>
-                </HStack>
-                <VilkårTabell
-                    person={person}
-                    vilkårFraConfig={vilkårFraConfig}
-                    vilkårResultater={vilkårResultater}
-                    visFeilmeldinger={visFeilmeldinger}
-                    settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
+        <Fieldset
+            error={visFeilmeldingerForVilkår ? feilmelding : undefined}
+            legend={vilkårFraConfig.tittel}
+            hideLegend
+        >
+            <HStack gap="space-16" align="center">
+                {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--ax-warning-500)" />}
+                <Heading size="medium" level="3">
+                    {vilkårFraConfig.tittel}
+                </Heading>
+            </HStack>
+            <VilkårTabell
+                person={person}
+                vilkårFraConfig={vilkårFraConfig}
+                vilkårResultater={vilkårResultater}
+                visFeilmeldinger={visFeilmeldinger}
+                settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
+            />
+            {skalViseLeggTilKnapp() && (
+                <Box marginBlock={'space-20 space-0'}>
+                    <Button
+                        onClick={() => {
+                            const promise = postVilkår(person.personIdent, vilkårFraConfig.key as VilkårType);
+                            håndterNyPeriodeVilkårsvurdering(promise);
+                        }}
+                        id={leggTilPeriodeKnappId}
+                        loading={vilkårSubmit === VilkårSubmit.POST}
+                        disabled={vilkårSubmit === VilkårSubmit.POST}
+                        variant="tertiary"
+                        size="medium"
+                        icon={<PlusCircleIcon />}
+                    >
+                        Legg til periode
+                    </Button>
+                </Box>
+            )}
+            {skalViseFjernUtvidetBarnetrygdKnapp() && (
+                <FjernUtvidetBarnetrygdVilkår
+                    personIdent={person.personIdent}
+                    slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
                 />
-                {skalViseLeggTilKnapp() && (
-                    <Box marginBlock={'space-20 space-0'}>
-                        <Button
-                            onClick={() => {
-                                const promise = postVilkår(person.personIdent, vilkårFraConfig.key as VilkårType);
-                                håndterNyPeriodeVilkårsvurdering(promise);
-                            }}
-                            id={leggTilPeriodeKnappId}
-                            loading={vilkårSubmit === VilkårSubmit.POST}
-                            disabled={vilkårSubmit === VilkårSubmit.POST}
-                            variant="tertiary"
-                            size="medium"
-                            icon={<PlusCircleIcon />}
-                        >
-                            Legg til periode
-                        </Button>
-                    </Box>
-                )}
-                {skalViseFjernUtvidetBarnetrygdKnapp() && (
-                    <FjernUtvidetBarnetrygdVilkår
-                        personIdent={person.personIdent}
-                        slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
-                    />
-                )}
-            </Fieldset>
-        </Container>
+            )}
+        </Fieldset>
     );
 };
 

@@ -22,11 +22,21 @@ import {
     VilkårType,
 } from '@typer/vilkår';
 import { alleRegelverk } from '@utils/vilkår';
-import styled from 'styled-components';
+import classNames from 'classnames';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
-import { BorderNeutral, TextInfoSubtle, TextWarningSubtle } from '@navikt/ds-tokens/dist/tokens';
+import {
+    Button,
+    ErrorMessage,
+    Fieldset,
+    HStack,
+    Label,
+    Radio,
+    RadioGroup,
+    Select,
+    Textarea,
+    VStack,
+} from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -36,6 +46,7 @@ import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
 import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
+import styles from './VilkårTabellRadEndre.module.css';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { validerVilkår } from '../validering';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
@@ -51,27 +62,6 @@ interface IProps {
     settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     settFokusPåKnapp: () => void;
 }
-
-export const StyledVStack = styled(VStack)<{ $lesevisning: boolean; $vilkårResultat: Resultat }>`
-    max-width: 30rem;
-    border-left: 0.125rem solid
-        ${props => {
-            if (props.$lesevisning) {
-                return BorderNeutral;
-            }
-            if (props.$vilkårResultat === Resultat.IKKE_VURDERT) {
-                return TextWarningSubtle;
-            }
-            return TextInfoSubtle;
-        }};
-    padding-left: 2rem;
-`;
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-`;
 
 const VilkårTabellRadEndre = ({
     person,
@@ -216,9 +206,13 @@ const VilkårTabellRadEndre = ({
             error={errors.length > 0 ? <VStack gap={'space-16'}>{errors}</VStack> : undefined}
             errorPropagation={false}
         >
-            <StyledVStack
-                $lesevisning={lesevisning}
-                $vilkårResultat={vilkårResultat.verdi.resultat.verdi}
+            <VStack
+                className={classNames(styles.fieldset, {
+                    [styles.ikkeVurdert]: vilkårResultat.verdi.resultat.verdi,
+                    [styles.lesevisning]: lesevisning,
+                })}
+                maxWidth={'30rem'}
+                paddingInline={'space-32 space-0'}
                 gap="space-16"
             >
                 {visRegelverkValg() && (
@@ -356,7 +350,7 @@ const VilkårTabellRadEndre = ({
                     }}
                 />
                 {!lesevisning && (
-                    <Knapperad>
+                    <HStack justify={'space-between'} marginBlock={'space-16'}>
                         <div>
                             <Button
                                 onClick={onClickVilkårFerdig}
@@ -398,9 +392,9 @@ const VilkårTabellRadEndre = ({
                                 {'Fjern'}
                             </Button>
                         )}
-                    </Knapperad>
+                    </HStack>
                 )}
-            </StyledVStack>
+            </VStack>
         </Fieldset>
     );
 };

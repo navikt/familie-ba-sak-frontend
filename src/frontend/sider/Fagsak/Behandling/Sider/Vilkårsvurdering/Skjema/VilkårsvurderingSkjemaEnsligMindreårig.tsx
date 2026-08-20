@@ -4,7 +4,7 @@ import { PersonType } from '@typer/person';
 import type { IPersonResultat } from '@typer/vilkår';
 import { annenVurderingConfig, AnnenVurderingType, vilkårConfigEnsligMindreårig, VilkårType } from '@typer/vilkår';
 
-import { Box, HStack, LocalAlert } from '@navikt/ds-react';
+import { Box, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
@@ -61,12 +61,14 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
                     </LocalAlert>
                 )}
                 {opplysningsplikt && (
-                    <GeneriskAnnenVurdering
-                        person={personResultat.person}
-                        andreVurderinger={personResultat.andreVurderinger}
-                        annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                        visFeilmeldinger={visFeilmeldinger}
-                    />
+                    <VStack gap={'space-64'} marginBlock={'space-64 space-32'}>
+                        <GeneriskAnnenVurdering
+                            person={personResultat.person}
+                            andreVurderinger={personResultat.andreVurderinger}
+                            annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
+                            visFeilmeldinger={visFeilmeldinger}
+                        />
+                    </VStack>
                 )}
                 {Object.values(vilkårConfigEnsligMindreårig).map(vilkårConfig => {
                     if (vilkårConfig.key === VilkårType.UTVIDET_BARNETRYGD) {
@@ -79,16 +81,18 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
                         }
                     }
                     return (
-                        <GeneriskVilkår
-                            key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
-                            generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
-                            person={personResultat.person}
-                            vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
-                            )}
-                            vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
-                        />
+                        <VStack gap={'space-64'} marginBlock={'space-64 space-20'}>
+                            <GeneriskVilkår
+                                key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
+                                generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
+                                person={personResultat.person}
+                                vilkårResultater={personResultat.vilkårResultater.filter(
+                                    vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                )}
+                                vilkårFraConfig={vilkårConfig}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        </VStack>
                     );
                 })}
             </Box>

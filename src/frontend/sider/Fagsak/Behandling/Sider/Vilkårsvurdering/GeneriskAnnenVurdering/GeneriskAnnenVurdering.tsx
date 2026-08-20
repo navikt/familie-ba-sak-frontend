@@ -2,9 +2,8 @@ import { useState } from 'react';
 
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '@typer/vilkår';
-import styled from 'styled-components';
 
-import { Fieldset, Heading } from '@navikt/ds-react';
+import { Box, Fieldset, Heading } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 
 import { AnnenVurderingTabell } from './AnnenVurderingTabell';
@@ -16,20 +15,12 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-const Container = styled.div`
-    margin-top: var(--ax-space-64);
-
-    &:last-child {
-        margin-bottom: var(--ax-space-32);
-    }
-`;
-
 const GeneriskAnnenVurdering = ({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }: IProps) => {
     const [visFeilmeldingerForAnnenVurdering] = useState(false);
     const [feilmelding] = useState('');
 
     return (
-        <Container>
+        <Box marginBlock={'space-64 space-32'}>
             <Fieldset
                 error={visFeilmeldingerForAnnenVurdering ? feilmelding : undefined}
                 legend={annenVurderingConfig.tittel}
@@ -45,7 +36,7 @@ const GeneriskAnnenVurdering = ({ person, annenVurderingConfig, andreVurderinger
                     visFeilmeldinger={visFeilmeldinger}
                 />
             </Fieldset>
-        </Container>
+        </Box>
     );
 };
 

@@ -6,9 +6,9 @@ import type { IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig, IPersonResultat } from '@typer/vilkår';
 import { Resultat, resultater } from '@typer/vilkår';
-import styled from 'styled-components';
+import classNames from 'classnames';
 
-import { Button, Fieldset, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
+import { Button, Fieldset, HStack, Radio, RadioGroup, Textarea, VStack } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -16,9 +16,9 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { annenVurderingBegrunnelseFeilmeldingId, annenVurderingResultatFeilmeldingId } from './AnnenVurderingTabell';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { StyledVStack } from '../GeneriskVilkår/VilkårTabellRadEndre';
 import { validerAnnenVurdering } from '../validering';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import styles from './AnnenVurderingRadEndre.module.css';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -30,12 +30,6 @@ interface IProps {
     settRedigerbartAnnenVurdering: (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => void;
     settEkspandertAnnenVurdering: (ekspandertAnnenVurdering: boolean) => void;
 }
-
-const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-`;
 
 const AnnenVurderingRadEndre = ({
     person,
@@ -143,9 +137,13 @@ const AnnenVurderingRadEndre = ({
             legend={'Skjema for å gjøre vurderingen'}
             hideLegend
         >
-            <StyledVStack
-                $lesevisning={erLesevisning}
-                $vilkårResultat={redigerbartAnnenVurdering.verdi.resultat.verdi}
+            <VStack
+                className={classNames(styles.fieldset, {
+                    [styles.ikkeVurdert]: redigerbartAnnenVurdering.verdi.resultat.verdi === Resultat.IKKE_VURDERT,
+                    [styles.lesevisning]: erLesevisning,
+                })}
+                maxWidth={'30rem'}
+                paddingInline={'space-32 space-0'}
                 gap="space-16"
             >
                 <RadioGroup
@@ -208,29 +206,22 @@ const AnnenVurderingRadEndre = ({
                     }}
                 />
                 {!erLesevisning && (
-                    <Knapperad>
-                        <div>
-                            <Button
-                                onClick={onClickFerdig}
-                                size="medium"
-                                variant="secondary"
-                                loading={vilkårSubmit === VilkårSubmit.PUT}
-                                disabled={vilkårSubmit === VilkårSubmit.PUT}
-                            >
-                                Ferdig
-                            </Button>
-                            <Button
-                                style={{ marginLeft: '1rem' }}
-                                onClick={() => toggleForm(false)}
-                                size="medium"
-                                variant="tertiary"
-                            >
-                                Avbryt
-                            </Button>
-                        </div>
-                    </Knapperad>
+                    <HStack marginBlock={'space-16'} gap={'space-16'}>
+                        <Button
+                            onClick={onClickFerdig}
+                            size="medium"
+                            variant="secondary"
+                            loading={vilkårSubmit === VilkårSubmit.PUT}
+                            disabled={vilkårSubmit === VilkårSubmit.PUT}
+                        >
+                            Ferdig
+                        </Button>
+                        <Button onClick={() => toggleForm(false)} size="medium" variant="tertiary">
+                            Avbryt
+                        </Button>
+                    </HStack>
                 )}
-            </StyledVStack>
+            </VStack>
         </Fieldset>
     );
 };
