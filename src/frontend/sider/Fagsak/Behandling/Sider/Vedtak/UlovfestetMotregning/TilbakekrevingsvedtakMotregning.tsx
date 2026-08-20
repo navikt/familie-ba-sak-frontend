@@ -1,17 +1,14 @@
+import { useBehandling } from '@hooks/useBehandling';
+import { useErLesevisning } from '@hooks/useErLesevisning';
+import { FloppydiskIcon } from '@navikt/aksel-icons';
+import { Box, Button, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
+import { useTilbakekrevingsvedtakMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
 import { useState } from 'react';
-
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
-import { FileTextIcon, FloppydiskIcon } from '@navikt/aksel-icons';
-import { Box, Button, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
-
 import Datovelger from './Datovelger';
+import { ForhåndsvisTilbakekrevingsvedtaksbrev } from './ForhåndsvisTilbakekrevingsvedtaksbrev';
 import { Tekstfelt } from './Tekstfelt';
-import type {
-    OppdaterTilbakekrevingsvedtakMotregningDTO,
-    TilbakekrevingsvedtakMotregningDTO,
-} from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
 
 const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
     'Årsaken til feilutbetalingen er [SETT INN HVA SOM SKJEDDE, SKILL MELLOM BRUKERS HANDLINGER KONTRA BRUKERS FORSTÅELSE AV UTBETALINGEN].';
@@ -24,36 +21,25 @@ export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
     varselDato: string;
 };
 
-interface TilbakekrevingsvedtakMotregningProps {
-    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO;
-    oppdaterTilbakekrevingsvedtakMotregning: (
-        tilbakekrevingsvedtakMotregning: OppdaterTilbakekrevingsvedtakMotregningDTO
-    ) => Promise<void>;
-    settVisDokumentModal: (vis: boolean) => void;
-    hentBrevForTilbakekrevingsvedtakMotregning: () => void;
-    hentetDokument: Ressurs<string>;
-    erLesevisning: boolean;
-}
+export function TilbakekrevingsvedtakMotregning() {
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
 
-export const TilbakekrevingsvedtakMotregning = ({
-    tilbakekrevingsvedtakMotregning,
-    oppdaterTilbakekrevingsvedtakMotregning,
-    settVisDokumentModal,
-    hentBrevForTilbakekrevingsvedtakMotregning,
-    hentetDokument,
-    erLesevisning,
-}: TilbakekrevingsvedtakMotregningProps) => {
+    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
+
     const [lagrer, settLagrer] = useState(false);
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
 
+    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
+    const årsakTilFeilutbetaling = tilbakekrevingsvedtakMotregning?.årsakTilFeilutbetaling;
+    const vurderingAvSkyld = tilbakekrevingsvedtakMotregning?.vurderingAvSkyld;
+    const varselDato = tilbakekrevingsvedtakMotregning?.varselDato;
+
     const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
         defaultValues: {
-            årsakTilFeilutbetaling:
-                tilbakekrevingsvedtakMotregning.årsakTilFeilutbetaling ??
-                PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
-            vurderingAvSkyld:
-                tilbakekrevingsvedtakMotregning.vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
-            varselDato: tilbakekrevingsvedtakMotregning.varselDato,
+            årsakTilFeilutbetaling: årsakTilFeilutbetaling ?? PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
+            vurderingAvSkyld: vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
+            varselDato: varselDato,
         },
     });
 
@@ -135,19 +121,7 @@ export const TilbakekrevingsvedtakMotregning = ({
                     </VStack>
                 </form>
             </FormProvider>
-            <Button
-                id={'forhandsvis-tilbakekrevingsvedtak-motregning-brev'}
-                variant={'secondary'}
-                size={'medium'}
-                onClick={() => {
-                    settVisDokumentModal(true);
-                    hentBrevForTilbakekrevingsvedtakMotregning();
-                }}
-                loading={hentetDokument.status === RessursStatus.HENTER}
-                icon={<FileTextIcon aria-hidden />}
-            >
-                Vis tilbakekrevingsvedtaksbrev
-            </Button>
+            <ForhåndsvisTilbakekrevingsvedtaksbrev />
         </>
     );
-};
+}
