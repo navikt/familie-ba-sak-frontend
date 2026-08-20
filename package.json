@@ -64,7 +64,7 @@
     "classnames": "2.5.1",
     "clsx": "2.1.1",
     "date-fns": "4.4.0",
-    "dayjs": "1.11.21",
+    "dayjs": "1.11.22",
     "deep-equal": "2.2.3",
     "express": "5.2.1",
     "http-proxy-middleware": "4.2.0",
@@ -73,7 +73,7 @@
     "react-dom": "19.2.8",
     "react-hook-form": "7.85.0",
     "react-router": "8.3.0",
-    "styled-components": "6.5.2",
+    "styled-components": "6.5.3",
     "tslib": "2.8.1",
     "uuid": "14.0.1"
   },

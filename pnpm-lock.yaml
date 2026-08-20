@@ -34,10 +34,10 @@ importers:
         version: 10.1.26(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@navikt/familie-form-elements':
         specifier: 22.0.2
-        version: 22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)
+        version: 22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)
       '@navikt/familie-header':
         specifier: 17.0.4
-        version: 17.0.4(@navikt/aksel-icons@8.16.1)(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+        version: 17.0.4(@navikt/aksel-icons@8.16.1)(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
       '@navikt/familie-http':
         specifier: 8.0.23
         version: 8.0.23(axios@1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.2.8)
@@ -52,7 +52,7 @@ importers:
         version: 8.2.49(axios@1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.2.8)
       '@navikt/familie-tidslinje':
         specifier: 11.0.3
-        version: 11.0.3(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(dayjs@1.11.21)(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+        version: 11.0.3(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(dayjs@1.11.22)(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
       '@navikt/familie-typer':
         specifier: 8.0.6
         version: 8.0.6
@@ -87,8 +87,8 @@ importers:
         specifier: 4.4.0
         version: 4.4.0
       dayjs:
-        specifier: 1.11.21
-        version: 1.11.21
+        specifier: 1.11.22
+        version: 1.11.22
       deep-equal:
         specifier: 2.2.3
         version: 2.2.3
@@ -114,8 +114,8 @@ importers:
         specifier: 8.3.0
         version: 8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       styled-components:
-        specifier: 6.5.2
-        version: 6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 6.5.3
+        version: 6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -1391,8 +1391,8 @@ packages:
   date-fns@4.4.0:
     resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
 
-  dayjs@1.11.21:
-    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+  dayjs@1.11.22:
+    resolution: {integrity: sha512-1YRnxzt/AabP3GHxnaB9/b+ZScCKu5TeF+co+BWG+lnWVIwEcTFc1FVE0WLNmNO3sA6GGXL40i5qkHfbLzpwrg==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -2519,8 +2519,8 @@ packages:
     resolution: {integrity: sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ==}
     engines: {node: '>=8'}
 
-  styled-components@6.5.2:
-    resolution: {integrity: sha512-49qBCjwsBmt08/UXIr3KYa1wdntVkhU5cxvQ4uqytl/fITQC85B0PI5EN1GWetRYOzyzcgxqukiitqFRemZ7pg==}
+  styled-components@6.5.3:
+    resolution: {integrity: sha512-vAX79sfpmUerP9fsTTxoTrBDE0RuO4ahjInyWYoohNgqrdg63Ms4q6FJ/o2Fyity82NU3cujOT8Ewl9TThBdwg==}
     engines: {node: '>= 16'}
     peerDependencies:
       css-to-react-native: '>= 3.2.0'
@@ -3333,19 +3333,19 @@ snapshots:
       - kerberos
       - supports-color
 
-  '@navikt/familie-form-elements@22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)':
+  '@navikt/familie-form-elements@22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)':
     dependencies:
       '@navikt/ds-css': 8.16.1
       '@navikt/ds-react': 8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react: 19.2.8
       react-select: 5.10.2(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)
-      styled-components: 6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      styled-components: 6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     transitivePeerDependencies:
       - '@types/react'
       - react-dom
       - supports-color
 
-  '@navikt/familie-header@17.0.4(@navikt/aksel-icons@8.16.1)(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
+  '@navikt/familie-header@17.0.4(@navikt/aksel-icons@8.16.1)(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
     dependencies:
       '@navikt/aksel-icons': 8.16.1
       '@navikt/ds-css': 8.16.1
@@ -3354,7 +3354,7 @@ snapshots:
       '@navikt/familie-typer': 8.0.6
       '@navikt/fnrvalidator': 2.2.0
       react: 19.2.8
-      styled-components: 6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      styled-components: 6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
 
   '@navikt/familie-http@8.0.23(axios@1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.2.8)':
     dependencies:
@@ -3383,16 +3383,16 @@ snapshots:
     transitivePeerDependencies:
       - axios
 
-  '@navikt/familie-tidslinje@11.0.3(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(dayjs@1.11.21)(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
+  '@navikt/familie-tidslinje@11.0.3(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(dayjs@1.11.22)(react@19.2.8)(styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
     dependencies:
       '@navikt/ds-css': 8.16.1
       '@navikt/ds-react': 8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@types/react': 19.2.18
       classnames: 2.5.1
-      dayjs: 1.11.21
+      dayjs: 1.11.22
       nanoid: 5.1.5
       react: 19.2.8
-      styled-components: 6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      styled-components: 6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
 
   '@navikt/familie-typer@8.0.6': {}
 
@@ -4110,7 +4110,7 @@ snapshots:
 
   date-fns@4.4.0: {}
 
-  dayjs@1.11.21: {}
+  dayjs@1.11.22: {}
 
   debug@2.6.9(supports-color@7.2.0):
     dependencies:
@@ -5273,7 +5273,7 @@ snapshots:
     dependencies:
       min-indent: 1.0.1
 
-  styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+  styled-components@6.5.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
       '@emotion/is-prop-valid': 1.4.0
       csstype: 3.2.3
