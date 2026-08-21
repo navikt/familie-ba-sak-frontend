@@ -1,3 +1,4 @@
+import { renderNaisMetaTags } from '@nais/apm';
 import type { Client } from '@navikt/familie-backend';
 import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
@@ -18,21 +19,6 @@ const redirectHvisInternUrlIPreprod = () => {
             next();
         }
     };
-};
-
-const naisMetaTags = () => {
-    const metadata = [
-        ['nais-app', process.env.NAIS_APP_NAME],
-        ['nais-team', process.env.NAIS_NAMESPACE ?? process.env.NAIS_TEAM],
-        ['nais-cluster', process.env.NAIS_CLUSTER_NAME],
-        ['nais-version', process.env.APP_VERSION],
-        ['nais-telemetry-url', process.env.NAIS_TELEMETRY_URL],
-    ];
-
-    return metadata
-        .filter((entry): entry is [string, string] => Boolean(entry[1]))
-        .map(([name, value]) => `<meta name="${name}" content="${value.replaceAll('"', '&quot;')}">`)
-        .join('\n    ');
 };
 
 export default async (authClient: Client, router: Router) => {
@@ -89,13 +75,13 @@ export default async (authClient: Client, router: Router) => {
                 }
                 const htmlInnhold = (await fs.promises.readFile(htmlPath, 'utf-8')).replace(
                     '{{{NAIS_META_TAGS}}}',
-                    naisMetaTags()
+                    renderNaisMetaTags()
                 );
                 const transformed = await viteDevServer.transformIndexHtml(req.url, htmlInnhold);
                 res.status(200).type('html').send(transformed);
             } else {
                 const htmlInnhold = await fs.promises.readFile(htmlPath, 'utf-8');
-                res.status(200).type('html').send(htmlInnhold.replace('{{{NAIS_META_TAGS}}}', naisMetaTags()));
+                res.status(200).type('html').send(htmlInnhold.replace('{{{NAIS_META_TAGS}}}', renderNaisMetaTags()));
             }
         }
     );
