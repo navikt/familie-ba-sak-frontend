@@ -1,10 +1,11 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
 import { FloppydiskIcon } from '@navikt/aksel-icons';
-import { Box, Button, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
-import { useTilbakekrevingsvedtakMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
+import { Box, Button, ErrorMessage, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useState } from 'react';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import Datovelger from './Datovelger';
 import { ForhåndsvisTilbakekrevingsvedtaksbrev } from './ForhåndsvisTilbakekrevingsvedtaksbrev';
@@ -22,12 +23,12 @@ export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
 };
 
 export function TilbakekrevingsvedtakMotregning() {
-    const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
-    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const [lagrer, settLagrer] = useState(false);
+    const { mutateAsync: oppdaterTilbakekrevingsvedtakMotregning } = useOppdaterTilbakekrevingsvedtakMotregning();
+
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
 
     const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
@@ -43,28 +44,34 @@ export function TilbakekrevingsvedtakMotregning() {
         },
     });
 
-    const { handleSubmit } = form;
+    const {
+        handleSubmit,
+        setError,
+        formState: { isSubmitting, errors },
+    } = form;
 
-    const lagreTilbakekrevingsvedtakOgLukkModal: SubmitHandler<TilbakekrevingsvedtakMotregningSkjemaverdier> = ({
+    async function lagreTilbakekrevingsvedtak({
         varselDato,
         årsakTilFeilutbetaling,
         vurderingAvSkyld,
-    }) => {
-        settLagrer(true);
-        oppdaterTilbakekrevingsvedtakMotregning({
-            varselDato: varselDato,
-            årsakTilFeilutbetaling: årsakTilFeilutbetaling,
-            vurderingAvSkyld: vurderingAvSkyld,
-        }).finally(() => {
-            settLagrer(false);
+    }: TilbakekrevingsvedtakMotregningSkjemaverdier): Promise<void> {
+        try {
+            const oppdatertBehandling = await oppdaterTilbakekrevingsvedtakMotregning({
+                behandlingId: behandling.behandlingId,
+                tilbakekrevingsvedtakMotregning: { varselDato, årsakTilFeilutbetaling, vurderingAvSkyld },
+            });
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
             settExpansionCardErÅpen(false);
-        });
-    };
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message });
+        }
+    }
 
     return (
         <>
             <FormProvider {...form}>
-                <form onSubmit={handleSubmit(lagreTilbakekrevingsvedtakOgLukkModal)}>
+                <form onSubmit={handleSubmit(lagreTilbakekrevingsvedtak)}>
                     <VStack gap="space-12" marginBlock="space-32">
                         <Heading level="2" size="small">
                             Tilbakekrevingsvedtak ved motregning
@@ -108,13 +115,14 @@ export function TilbakekrevingsvedtakMotregning() {
                                                 type="submit"
                                                 variant="primary"
                                                 disabled={erLesevisning}
-                                                loading={lagrer}
+                                                loading={isSubmitting}
                                                 icon={<FloppydiskIcon aria-hidden />}
                                             >
                                                 Lagre
                                             </Button>
                                         </Box>
                                     )}
+                                    {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
                                 </VStack>
                             </ExpansionCard.Content>
                         </ExpansionCard>

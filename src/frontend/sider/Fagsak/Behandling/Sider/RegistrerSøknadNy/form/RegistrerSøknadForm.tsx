@@ -3,10 +3,11 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
+import { Feilsammendrag } from '@komponenter/Skjema/Feilsammendrag';
+import { Button, Fieldset, VStack } from '@navikt/ds-react';
 import { BarnaFieldArrayProvider } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BarnaFieldArrayContext';
 import { BekreftEndringModal } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModal';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
-import { Feilsammendrag } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/Feilsammendrag';
 import { BarnaField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/BarnaField';
 import { BegrunnelseField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/BegrunnelseField';
 import { MålformField } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/MålformField';
@@ -18,8 +19,6 @@ import {
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-
-import { Button, Fieldset, VStack } from '@navikt/ds-react';
 
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 
