@@ -30,6 +30,12 @@ describe('utledTilbakekreving', () => {
         expect(tilbakekreving).toBeUndefined();
     });
 
+    test('skal returnere undefined når vedtak er null fra backend', () => {
+        const tilbakekreving = utledTilbakekreving(lagFormValues(), null, true);
+
+        expect(tilbakekreving).toBeUndefined();
+    });
+
     test('skal sette vedtakId, valg og begrunnelse', () => {
         const values = lagFormValues({
             [TilbakekrevingFormField.TILBAKEKREVINGSVALG]: Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING,

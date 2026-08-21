@@ -1,15 +1,16 @@
 import { type ITilbakekreving, Tilbakekrevingsvalg } from '@typer/simulering';
 import type { IVedtakForBehandling } from '@typer/vedtak';
+import { erDefinert } from '@utils/commons';
 import type { TilbakekrevingFormValues } from './useTilbakekrevingForm';
 
 export function utledTilbakekreving(
     values: TilbakekrevingFormValues,
-    vedtak: IVedtakForBehandling | undefined,
+    vedtak: IVedtakForBehandling | undefined | null,
     erFeilutbetaling: boolean
 ): ITilbakekreving | undefined {
     const { tilbakekrevingsvalg, fritekstVarsel, begrunnelse } = values;
 
-    if (tilbakekrevingsvalg === '' || vedtak === undefined) {
+    if (tilbakekrevingsvalg === '' || !erDefinert(vedtak)) {
         return undefined;
     }
 

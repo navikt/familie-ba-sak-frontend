@@ -16,6 +16,8 @@ import {
 } from '@sider/Fagsak/Behandling/Sider/Simulering/form/useTilbakekrevingForm';
 import { målform } from '@typer/søknad';
 import { hentSøkersMålform } from '@utils/behandling';
+import { useEffect } from 'react';
+
 import { useController, useFormContext } from 'react-hook-form';
 
 export function FritekstVarselField() {
@@ -29,7 +31,13 @@ export function FritekstVarselField() {
             onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
         });
 
-    const { control } = useFormContext<TilbakekrevingFormValues>();
+    const { control, clearErrors } = useFormContext<TilbakekrevingFormValues>();
+
+    // Feltet demonteres når saksbehandler bytter tilbakekrevingsvalg. Uten opprydding
+    // blir feilmeldingen stående igjen i feilsammendraget frem til neste innsending.
+    useEffect(() => {
+        return () => clearErrors(TilbakekrevingFormField.FRITEKST_VARSEL);
+    }, [clearErrors]);
 
     const {
         field: { name, value, onChange, onBlur },
