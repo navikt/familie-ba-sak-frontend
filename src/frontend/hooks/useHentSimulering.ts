@@ -16,7 +16,10 @@ export function useHentSimulering(behandlingId: number, options?: Options) {
         queryFn: () => hentSimulering(behandlingId),
         select: settPerioderTilIkkeUtbetaltOmForfallsdatoIkkePassert,
         meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
-        gcTime: 0, // Deaktiver cache slik at steget ikke viser en utdatert simulering etter endringer i behandlingen (kan overskrives).
+        // Deaktiver cache slik at steget ikke viser en utdatert simulering etter endringer i behandlingen (kan
+        // overskrives). Ved navigering direkte fra vedtak holdes spørringen i live av useSimuleringsvurdering,
+        // og eksisterende data vises mens ny hentes.
+        gcTime: 0,
         ...options,
     });
 }

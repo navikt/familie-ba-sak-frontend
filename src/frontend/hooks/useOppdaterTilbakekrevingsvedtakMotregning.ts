@@ -1,5 +1,6 @@
 import type { ApiFeil } from '@api/client/apiClient';
 import { oppdaterTilbakekrevingsvedtakMotregning } from '@api/oppdaterTilbakekrevingsvedtakMotregning';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '@typer/tilbakekrevingsvedtakMotregning';
@@ -16,6 +17,8 @@ export function useOppdaterTilbakekrevingsvedtakMotregning(options?: Options) {
         mutationFn: ({ behandlingId, tilbakekrevingsvedtakMotregning }: Parameters): Promise<IBehandling> => {
             return oppdaterTilbakekrevingsvedtakMotregning({ behandlingId }, tilbakekrevingsvedtakMotregning);
         },
+        // Blokkerer interaksjon (bl.a. Neste steg) mens mutasjonen pågår, som legacy påvirkerSystemLaster.
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
         ...options,
     });
 }

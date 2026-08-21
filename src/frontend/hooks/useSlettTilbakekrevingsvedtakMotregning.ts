@@ -1,5 +1,6 @@
 import type { ApiFeil } from '@api/client/apiClient';
 import { slettTilbakekrevingsvedtakMotregning } from '@api/slettTilbakekrevingsvedtakMotregning';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
@@ -14,6 +15,8 @@ export function useSlettTilbakekrevingsvedtakMotregning(options?: Options) {
         mutationFn: ({ behandlingId }: Parameters): Promise<IBehandling> => {
             return slettTilbakekrevingsvedtakMotregning({ behandlingId });
         },
+        // Blokkerer interaksjon (bl.a. Neste steg) mens mutasjonen pågår, som legacy påvirkerSystemLaster.
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
         ...options,
     });
 }
