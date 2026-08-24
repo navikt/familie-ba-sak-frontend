@@ -1,40 +1,27 @@
-import { useState } from 'react';
-
-import { useBehandling } from '@hooks/useBehandling';
-import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFagsak } from '@hooks/useFagsak';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { ActionMenu, Button, Stack } from '@navikt/ds-react';
 import { EndreEndringstidspunkt } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/EndreEndringstidspunkt';
 import { OppdaterEndringstidspunktModal } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/OppdaterEndringstidspunktModal';
+import { FeilutbetaltValuta } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValuta';
+import { useSkalViseFeilutbetaltValutaMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/useSkalViseFeilutbetaltValutaMenyvalg';
+import { RefusjonEøs } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøs';
+import { useSkalViseRefusjonEøsMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/useSkalViseRefusjonEøsMenyvalg';
 import { AngreSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/AngreSammensattKontrollsak';
 import { OpprettSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/OpprettSammensattKontrollsak';
 import { useSkalViseSammensattKontrollsakMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/useSkalViseSammensattKontrollsakMenyvalg';
-import { Behandlingstype } from '@typer/behandling';
-import { BehandlingKategori } from '@typer/behandlingstema';
-import { FagsakType } from '@typer/fagsak';
-import { vedtakHarFortsattUtbetaling } from '@utils/vedtakUtils';
-
-import { CalculatorIcon, ChevronDownIcon, StarsEuIcon } from '@navikt/aksel-icons';
-import { ActionMenu, Button, Stack } from '@navikt/ds-react';
-
-import Styles from './Vedtaksmeny.module.css';
-import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
-import KorrigerEtterbetaling from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
+import { useState } from 'react';
+import { KorrigerEtterbetaling } from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
 import { KorrigerVedtak } from '../KorrigerVedtakModal/KorrigerVedtak';
 import { KorrigerVedtakModal } from '../KorrigerVedtakModal/KorrigerVedtakModal';
-import { useRefusjonEøsTabellContext } from '../RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
+import Styles from './Vedtaksmeny.module.css';
 
 export function Vedtaksmeny() {
-    const { erFeilutbetaltValutaTabellSynlig, visFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
-    const { erRefusjonEøsTabellSynlig, visRefusjonEøsTabell } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
 
-    const fagsak = useFagsak();
-    const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
+    const visFeilutbetaltValutaMenyvalg = useSkalViseFeilutbetaltValutaMenyvalg();
+    const visRefusjonEøsMenyvalg = useSkalViseRefusjonEøsMenyvalg();
     const visSammensattKontrollsakMenyvalg = useSkalViseSammensattKontrollsakMenyvalg();
-
-    const fagsakType = fagsak.fagsakType;
 
     const [visKorrigerVedtakModal, settVisKorrigerVedtakModal] = useState<boolean>(false);
     const [visEndreEndringstidspunktModal, settVisEndreEndringstidspunktModal] = useState(false);
@@ -52,30 +39,11 @@ export function Vedtaksmeny() {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content className={Styles.menu}>
-                    <KorrigerEtterbetaling
-                        erLesevisning={erLesevisning}
-                        korrigertEtterbetaling={behandling.korrigertEtterbetaling}
-                        behandlingId={behandling.behandlingId}
-                    />
+                    <KorrigerEtterbetaling />
                     <KorrigerVedtak åpneModal={() => settVisKorrigerVedtakModal(true)} />
                     <EndreEndringstidspunkt åpneModal={() => settVisEndreEndringstidspunktModal(true)} />
-                    {behandling.type === Behandlingstype.REVURDERING &&
-                        behandling.kategori === BehandlingKategori.EØS &&
-                        !erLesevisning &&
-                        !erFeilutbetaltValutaTabellSynlig && (
-                            <ActionMenu.Item onSelect={visFeilutbetaltValutaTabell}>
-                                <CalculatorIcon fontSize={'1.4rem'} />
-                                Legg til feilutbetalt valuta og sats
-                            </ActionMenu.Item>
-                        )}
-                    {fagsakType === FagsakType.NORMAL &&
-                        vedtakHarFortsattUtbetaling(behandling.resultat) &&
-                        !erRefusjonEøsTabellSynlig && (
-                            <ActionMenu.Item onSelect={visRefusjonEøsTabell}>
-                                <StarsEuIcon fontSize={'1.4rem'} />
-                                Legg til refusjon EØS
-                            </ActionMenu.Item>
-                        )}
+                    {visFeilutbetaltValutaMenyvalg && <FeilutbetaltValuta />}
+                    {visRefusjonEøsMenyvalg && <RefusjonEøs />}
                     {visSammensattKontrollsakMenyvalg &&
                         (sammensattKontrollsak ? (
                             <AngreSammensattKontrollsak sammensattKontrollsak={sammensattKontrollsak} />
