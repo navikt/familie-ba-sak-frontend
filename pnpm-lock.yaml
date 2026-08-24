@@ -11,9 +11,6 @@ importers:
       '@dotenvx/dotenvx':
         specifier: 2.21.0
         version: 2.21.0
-      '@grafana/faro-web-sdk':
-        specifier: 2.9.0
-        version: 2.9.0
       '@nais/apm':
         specifier: 0.6.0
         version: 0.6.0(@grafana/faro-react@2.9.0(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-router@8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@7.2.0))(react-dom@19.2.8(react@19.2.8))(react-router-dom@7.18.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-router@8.3.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@7.2.0)
