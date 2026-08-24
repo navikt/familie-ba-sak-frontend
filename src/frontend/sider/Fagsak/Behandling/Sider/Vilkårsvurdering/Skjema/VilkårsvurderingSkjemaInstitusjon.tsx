@@ -6,7 +6,7 @@ import { PersonType } from '@typer/person';
 import type { IPersonResultat } from '@typer/vilkår';
 import { annenVurderingConfig, AnnenVurderingType, vilkårConfigInstitusjon } from '@typer/vilkår';
 
-import { Bleed, Box, HStack, LocalAlert } from '@navikt/ds-react';
+import { Bleed, Box, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
@@ -64,12 +64,14 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                     </HStack>
                     <Bleed marginBlock={'space-0 space-24'}>
                         <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
-                            <GeneriskAnnenVurdering
-                                person={personResultat.person}
-                                andreVurderinger={personResultat.andreVurderinger}
-                                annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                                visFeilmeldinger={visFeilmeldinger}
-                            />
+                            <VStack gap={'space-64'} marginBlock={'space-64 space-32'}>
+                                <GeneriskAnnenVurdering
+                                    person={personResultat.person}
+                                    andreVurderinger={personResultat.andreVurderinger}
+                                    annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
+                                    visFeilmeldinger={visFeilmeldinger}
+                                />
+                            </VStack>
                         </Box>
                     </Bleed>
                 </>
@@ -92,16 +94,18 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                 )}
                 {vilkårConfigInstitusjon.map(vilkårConfig => {
                     return (
-                        <GeneriskVilkår
-                            key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
-                            generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
-                            person={personResultat.person}
-                            vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
-                            )}
-                            vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
-                        />
+                        <VStack gap={'space-64'} marginBlock={'space-64 space-20'}>
+                            <GeneriskVilkår
+                                key={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
+                                generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
+                                person={personResultat.person}
+                                vilkårResultater={personResultat.vilkårResultater.filter(
+                                    vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                )}
+                                vilkårFraConfig={vilkårConfig}
+                                visFeilmeldinger={visFeilmeldinger}
+                            />
+                        </VStack>
                     );
                 })}
             </Box>

@@ -4,11 +4,10 @@ import { Resultat } from '@typer/vilkår';
 import type { IsoDatoString } from '@utils/dato';
 import { dagensDato, nyIsoDatoPeriode } from '@utils/dato';
 import { endOfMonth } from 'date-fns';
-import styled from 'styled-components';
 
-import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import { Valideringsstatus } from '@navikt/familie-skjema';
+import { Fieldset, HelpText, HStack, Label } from '@navikt/ds-react';
 import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 
 import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import DatovelgerForGammelSkjemaløsning from '../../../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
@@ -18,22 +17,6 @@ interface IProps {
     validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
     visFeilmeldinger: boolean;
 }
-
-const StyledLegend = styled.legend`
-    && {
-        display: flex;
-        margin-bottom: 0;
-    }
-`;
-
-const StyledLabel = styled(Label)`
-    margin-right: 0.5rem;
-`;
-
-const FlexDiv = styled.div`
-    display: flex;
-    gap: 1.125rem;
-`;
 
 const VelgPeriode = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visFeilmeldinger }: IProps) => {
     const erLesevisning = useErLesevisning();
@@ -50,16 +33,17 @@ const VelgPeriode = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visF
             hideLegend
         >
             {!erLesevisning && (
-                <StyledLegend>
-                    <StyledLabel>Velg periode</StyledLabel>
-                    <HelpText title="Hvordan fastsette periode">
-                        Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli
-                        beregnet ut fra dette. Dersom vurderingen gjelder et avslag er ikke periode påkrevd.
-                    </HelpText>
-                </StyledLegend>
+                <HStack gap={'space-8'} marginBlock={'space-0'} asChild>
+                    <legend>
+                        <Label>Velg periode</Label>
+                        <HelpText title="Hvordan fastsette periode">
+                            Oppgi startdato/periode hvor vilkåret er oppfylt/ikke oppfylt. Virkningstidspunktet vil bli
+                            beregnet ut fra dette. Dersom vurderingen gjelder et avslag er ikke periode påkrevd.
+                        </HelpText>
+                    </legend>
+                </HStack>
             )}
-
-            <FlexDiv>
+            <HStack gap={'space-20'}>
                 <DatovelgerForGammelSkjemaløsning
                     label={
                         redigerbartVilkår.verdi.resultat.verdi === Resultat.IKKE_OPPFYLT &&
@@ -102,7 +86,7 @@ const VelgPeriode = ({ redigerbartVilkår, validerOgSettRedigerbartVilkår, visF
                     visFeilmeldinger={false}
                     readOnly={erLesevisning}
                 />
-            </FlexDiv>
+            </HStack>
         </Fieldset>
     );
 };

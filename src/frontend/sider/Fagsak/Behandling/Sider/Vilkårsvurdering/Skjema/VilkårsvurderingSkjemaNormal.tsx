@@ -15,7 +15,7 @@ import { PersonType } from '@typer/person';
 import { annenVurderingConfig, vilkårConfig, VilkårType } from '@typer/vilkår';
 
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack, VStack } from '@navikt/ds-react';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
 
@@ -188,14 +188,16 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                 // For barn ønsker vi alltid å rendre alle vilkår slik at man evt kan legge til tom periode
                                                 else
                                                     return (
-                                                        <GeneriskVilkår
-                                                            key={vc.key}
-                                                            generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
-                                                            person={personResultat.person}
-                                                            vilkårResultater={vilkårResultater}
-                                                            vilkårFraConfig={vc}
-                                                            visFeilmeldinger={visFeilmeldinger}
-                                                        />
+                                                        <VStack gap={'space-64'} marginBlock={'space-64 space-20'}>
+                                                            <GeneriskVilkår
+                                                                key={vc.key}
+                                                                generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
+                                                                person={personResultat.person}
+                                                                vilkårResultater={vilkårResultater}
+                                                                vilkårFraConfig={vc}
+                                                                visFeilmeldinger={visFeilmeldinger}
+                                                            />
+                                                        </VStack>
                                                     );
                                             })}
                                         {andreVurderinger.length > 0 &&
