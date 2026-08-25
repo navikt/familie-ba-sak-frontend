@@ -1,29 +1,21 @@
+import { ModalType } from '@context/ModalContext';
+import { useBehandling } from '@hooks/useBehandling';
+import { useModal } from '@hooks/useModal';
+
 import { DocPencilIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
-import { ModalType } from '../../../../../../context/ModalContext';
-import { useModal } from '../../../../../../hooks/useModal';
-import type { IRestKorrigertEtterbetaling } from '../../../../../../typer/vedtak';
+export function KorrigerEtterbetaling() {
+    const behandling = useBehandling();
 
-interface IKorrigerEtterbetaling {
-    korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
-    behandlingId: number;
-    erLesevisning: boolean;
-}
-
-const KorrigerEtterbetaling = ({ korrigertEtterbetaling }: IKorrigerEtterbetaling) => {
     const { åpneModal } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
+    const label = behandling.korrigertEtterbetaling ? 'Vis korrigert etterbetaling' : 'Korriger etterbetaling';
+
     return (
-        <ActionMenu.Item
-            onSelect={() => {
-                åpneModal();
-            }}
-        >
+        <ActionMenu.Item onSelect={() => åpneModal()}>
             <DocPencilIcon fontSize={'1.4rem'} />
-            {korrigertEtterbetaling ? <>Vis korrigert etterbetaling</> : <>Korriger etterbetaling</>}
+            {label}
         </ActionMenu.Item>
     );
-};
-
-export default KorrigerEtterbetaling;
+}
