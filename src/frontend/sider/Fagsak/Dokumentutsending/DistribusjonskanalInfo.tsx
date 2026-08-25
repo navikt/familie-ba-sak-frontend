@@ -1,13 +1,26 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { Box, ErrorMessage, InfoCard, LocalAlert } from '@navikt/ds-react';
+import { useDistribusjonskanalContext } from '@sider/Fagsak/DistribusjonskanalProvider';
 import { Distribusjonskanal } from '@typer/dokument';
 
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, InfoCard, LocalAlert } from '@navikt/ds-react';
+export function DistribusjonskanalInfo() {
+    const { distribusjonskanal, distribusjonskanalError } = useDistribusjonskanalContext();
 
-interface Props {
-    distribusjonskanal: Distribusjonskanal;
-}
+    if (distribusjonskanalError) {
+        return (
+            <Box marginBlock={'space-16'}>
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Feil ved henting av distribusjonskanal</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>
+                        <ErrorMessage>{distribusjonskanalError.message}</ErrorMessage>
+                    </LocalAlert.Content>
+                </LocalAlert>
+            </Box>
+        );
+    }
 
-export function DistribusjonskanalInfo({ distribusjonskanal }: Props) {
     switch (distribusjonskanal) {
         case Distribusjonskanal.INGEN_DISTRIBUSJON:
         case Distribusjonskanal.UKJENT:
@@ -16,9 +29,13 @@ export function DistribusjonskanalInfo({ distribusjonskanal }: Props) {
                     <LocalAlert status="warning">
                         <LocalAlert.Header>
                             <LocalAlert.Title>
-                                Brevet kan ikke sendes fordi mottaker har ukjent adresse
+                                Søker mottar ikke digitale brev og har ingen kjent adresse.
                             </LocalAlert.Title>
                         </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Legg til adresse i "Legg til brevmottaker". Hvis adresse ikke blir lagt til kan ikke brevet
+                            sendes.
+                        </LocalAlert.Content>
                     </LocalAlert>
                 </Box>
             );
