@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
@@ -7,33 +5,26 @@ import { useOpprettSammensattKontrollsakError } from '@hooks/useOpprettSammensat
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { useSlettSammensattKontrollsakError } from '@hooks/useSlettSammensattKontrollsakError';
+import { Button, ErrorMessage, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-    BehandlingStatus,
-    BehandlingSteg,
-    Behandlingstype,
-    BehandlingÅrsak,
-    type IBehandling,
-} from '@typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { erBehandlingMedVedtaksbrevutsending } from '@utils/behandling';
 import { erDefinert } from '@utils/commons';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-
-import { LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-
+import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useSimuleringContext } from '../Simulering/SimuleringContext';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
+import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from './SammensattKontrollsak/SammensattKontrollsakContext';
 import { SendtTilTotrinnskontrollModal } from './SendtTilTotrinnskontrollModal';
 import { Vedtaksalert } from './Vedtaksalert';
 import { VedtaksbrevBygger } from './VedtaksbrevBygger';
 import { Vedtaksmeny } from './Vedtaksmeny/Vedtaksmeny';
 import { useVedtaksperioderContext } from './Vedtaksperioder/VedtaksperioderContext';
-import { useBehandlingContext } from '../../context/BehandlingContext';
-import { useSimuleringContext } from '../Simulering/SimuleringContext';
-import Skjemasteg from '../Skjemasteg';
-import { useRefusjonEøsTabellContext } from './RefusjonEøs/RefusjonEøsTabellContext';
 
 function kanSendeInnVedtak(vedtaksperioderMedBegrunnelser: IVedtaksperiodeMedBegrunnelser[], behandling: IBehandling) {
     const minstEnPeriodeharBegrunnelseEllerFritekst = vedtaksperioderMedBegrunnelser.some(
@@ -67,7 +58,7 @@ export function Vedtak() {
     const queryClient = useQueryClient();
 
     const [visSendtTilTotrinnskontrollModal, settVisSendtTilTotrinnskontrollModal] = useState<boolean>(false);
-    const [feilmelding, settFeilmelding] = useState<string | undefined>(undefined);
+    const [tilGodkjenningFeilmelding, settTilGodkjenningFeilmelding] = useState<string | undefined>(undefined);
 
     const slettSammensattKontrollsakError = useSlettSammensattKontrollsakError(behandling.behandlingId);
     const opprettSammensattKontrollsakError = useOpprettSammensattKontrollsakError(behandling.behandlingId);
@@ -86,70 +77,80 @@ export function Vedtak() {
         },
     });
 
-    const visSubmitKnapp = !erLesevisning && behandling.status === BehandlingStatus.UTREDES;
+    const visTilGodkjenningKnapp = !erLesevisning && behandling.status === BehandlingStatus.UTREDES;
     const erVedtaksbrevutsending = erBehandlingMedVedtaksbrevutsending(behandling);
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
+    const feilmelding = tilGodkjenningFeilmelding || sendVedtakTilBeslutterError?.message;
 
-    function sendTilBeslutter() {
+    function onTilGodkjenningClicked() {
         if (erDefinert(sammensattKontrollsak) && sammensattKontrollsak.fritekst.trim() === '') {
-            settFeilmelding('Sammensatt kontrollsak mangler en begrunnelse.');
+            settTilGodkjenningFeilmelding('Sammensatt kontrollsak mangler en begrunnelse.');
         } else if (erLeggTilFeilutbetaltValutaFormÅpen) {
-            settFeilmelding(
+            settTilGodkjenningFeilmelding(
                 'Det er lagt til en ny periode med feilutbetalt valuta. Fyll ut periode og beløp, eller fjern perioden.'
             );
         } else if (erLeggTilRefusjonEøsFormÅpen) {
-            settFeilmelding(
+            settTilGodkjenningFeilmelding(
                 'Det er lagt til en ny periode med refusjon EØS. Fyll ut periode og refusjonsbeløp, eller fjern perioden.'
             );
         } else if (!kanSendeInnVedtak(vedtaksperioder, behandling) && !erDefinert(sammensattKontrollsak)) {
-            settFeilmelding('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.');
+            settTilGodkjenningFeilmelding('Vedtaksbrevet mangler begrunnelse. Du må legge til minst én begrunnelse.');
         } else {
-            settFeilmelding(undefined);
+            settTilGodkjenningFeilmelding(undefined);
             sendVedtakTilBeslutter({ behandlingId: behandling.behandlingId, behandlendeEnhet: saksbehandler.enhet });
         }
     }
 
+    function onForrigeStegClicked() {
+        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/simulering`);
+    }
+
     return (
-        <Skjemasteg
-            tittel="Vedtak"
-            forrigeOnClick={() => navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/simulering`)}
-            nesteOnClick={visSubmitKnapp ? sendTilBeslutter : undefined}
-            nesteKnappTittel={
-                erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
-                    ? 'Bekreft migrering'
-                    : 'Til godkjenning'
-            }
-            senderInn={sendVedtakTilBeslutterIsPending}
-            maxWidthStyle="54rem"
-            className={'vedtak'}
-            feilmelding={feilmelding ?? sendVedtakTilBeslutterError?.message}
-            steg={BehandlingSteg.BESLUTTE_VEDTAK}
-        >
+        <Steg tittel={'Vedtak'} maxWidth={'60rem'}>
             {visSendtTilTotrinnskontrollModal && (
                 <SendtTilTotrinnskontrollModal lukkModal={() => settVisSendtTilTotrinnskontrollModal(false)} />
             )}
-            {erVedtaksbrevutsending ? (
-                <VStack gap={'space-12'}>
-                    {slettSammensattKontrollsakError && (
-                        <LocalAlert status={'error'}>
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>{slettSammensattKontrollsakError.message}</LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
+            <VStack gap={'space-40'}>
+                {erVedtaksbrevutsending ? (
+                    <VStack gap={'space-12'}>
+                        {slettSammensattKontrollsakError && (
+                            <LocalAlert status={'error'}>
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{slettSammensattKontrollsakError.message}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        )}
+                        {opprettSammensattKontrollsakError && (
+                            <LocalAlert status={'error'}>
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{opprettSammensattKontrollsakError.message}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        )}
+                        <Vedtaksmeny />
+                        <VedtaksbrevBygger />
+                    </VStack>
+                ) : (
+                    <Vedtaksalert åpenBehandling={behandling} />
+                )}
+                {feilmelding && <ErrorMessage>{feilmelding}</ErrorMessage>}
+                <HStack gap={'space-20'}>
+                    <Button variant={'tertiary'} onClick={onForrigeStegClicked}>
+                        Forrige steg
+                    </Button>
+                    {visTilGodkjenningKnapp && (
+                        <Button
+                            variant={'primary'}
+                            onClick={onTilGodkjenningClicked}
+                            loading={sendVedtakTilBeslutterIsPending}
+                        >
+                            {erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
+                                ? 'Bekreft migrering'
+                                : 'Til godkjenning'}
+                        </Button>
                     )}
-                    {opprettSammensattKontrollsakError && (
-                        <LocalAlert status={'error'}>
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>{opprettSammensattKontrollsakError.message}</LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
-                    )}
-                    <Vedtaksmeny />
-                    <VedtaksbrevBygger />
-                </VStack>
-            ) : (
-                <Vedtaksalert åpenBehandling={behandling} />
-            )}
-        </Skjemasteg>
+                </HStack>
+            </VStack>
+        </Steg>
     );
 }
