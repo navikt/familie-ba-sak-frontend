@@ -1,8 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { BekreftEndringModalProvider } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
-import { RegistrerSøknadForm } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/RegistrerSøknadForm';
-import { SøknadRegistrert } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/SøknadRegistrert';
+import { BekreftEndringModalProvider } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
+import { RegistrerSøknadForm } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/RegistrerSøknadForm';
+import { SøknadRegistrert } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/SøknadRegistrert';
 import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 
 export function RegistrerSøknad() {

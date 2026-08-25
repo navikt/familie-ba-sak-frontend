@@ -1,13 +1,12 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { FieldLabel } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/FieldLabel';
+import { Radio, RadioGroup } from '@navikt/ds-react';
+import { FieldLabel } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/field/FieldLabel';
 import {
     RegistrerSøknadFormField,
     type RegistrerSøknadFormValues,
-} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
-import { behandlingUnderkategori, BehandlingUnderkategori } from '@typer/behandlingstema';
+} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
+import { BehandlingUnderkategori, behandlingUnderkategori } from '@typer/behandlingstema';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Radio, RadioGroup } from '@navikt/ds-react';
 
 export function UnderkategoriField() {
     const erLesevisning = useErLesevisning();

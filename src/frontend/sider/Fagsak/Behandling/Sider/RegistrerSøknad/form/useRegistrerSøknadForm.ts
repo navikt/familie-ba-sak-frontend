@@ -1,19 +1,17 @@
-import { useId } from 'react';
-
 import { ApiFeil, RessursStatus } from '@api/client/apiClient';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useRegistrerSøknad } from '@hooks/useRegistrerSøknad';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BekreftEndringModalContext';
-import { useValgbareBarn } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useValgbareBarn';
+import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
+import { useValgbareBarn } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useValgbareBarn';
 import type { BehandlingUnderkategori } from '@typer/behandlingstema';
 import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
+import { useId } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 export enum RegistrerSøknadFormField {
     UNDERKATEGORI = 'underkategori',

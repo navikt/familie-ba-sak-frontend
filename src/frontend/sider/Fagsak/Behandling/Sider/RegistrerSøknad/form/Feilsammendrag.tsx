@@ -1,7 +1,6 @@
-import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
-import { useFormState } from 'react-hook-form';
-
 import { Box, ErrorSummary } from '@navikt/ds-react';
+import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
+import { useFormState } from 'react-hook-form';
 
 interface Feil {
     name: string;

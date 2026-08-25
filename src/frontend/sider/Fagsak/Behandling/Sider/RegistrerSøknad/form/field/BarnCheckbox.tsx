@@ -1,17 +1,15 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BarnaFieldArrayContext';
-import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { BodyLong, BodyShort, Box, Button, Checkbox, Dialog, HStack } from '@navikt/ds-react';
+import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BarnaFieldArrayContext';
+import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
 import { formaterIdent, hentAlderSomString } from '@utils/formatter';
+import { useState } from 'react';
 import { useFormState } from 'react-hook-form';
-
-import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Box, Button, Checkbox, Dialog, HStack } from '@navikt/ds-react';
 
 interface Props {
     index: number;

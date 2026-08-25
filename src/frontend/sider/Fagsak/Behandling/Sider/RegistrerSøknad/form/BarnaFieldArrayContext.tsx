@@ -1,13 +1,12 @@
-import { createContext, useContext, useMemo } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
 import {
     RegistrerSøknadFormField,
     type RegistrerSøknadFormValues,
     type TransformedRegistrerSøknadFormValues,
-} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
+} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
+import { createContext, useContext, useMemo } from 'react';
 import { type Control, useFieldArray, useWatch } from 'react-hook-form';
 
 export type BarnField = IBarnMedOpplysninger & { id: string };
