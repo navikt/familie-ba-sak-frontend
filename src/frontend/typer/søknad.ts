@@ -2,11 +2,6 @@ import type { IsoDatoString } from '@utils/dato';
 
 import type { BehandlingUnderkategori } from './behandlingstema';
 
-export interface IRestRegistrerSøknad {
-    søknad: ISøknadDTO;
-    bekreftEndringerViaFrontend: boolean;
-}
-
 export interface ISøknadDTO {
     underkategori: BehandlingUnderkategori;
     søkerMedOpplysninger: ISøkerMedOpplysninger;
