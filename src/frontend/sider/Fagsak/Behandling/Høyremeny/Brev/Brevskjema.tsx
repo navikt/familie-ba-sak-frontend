@@ -37,10 +37,10 @@ import type { ChangeEvent } from 'react';
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Datovelger from '../../../../../komponenter/Datovelger/Datovelger';
 import Knapperekke from '../../../../../komponenter/Knapperekke';
-import DeltBostedSkjema from '../../../Dokumentutsending/DeltBosted/DeltBostedSkjema';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import styles from './Brevskjema.module.css';
+import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import type { BrevtypeSelect } from './typer';
 import {

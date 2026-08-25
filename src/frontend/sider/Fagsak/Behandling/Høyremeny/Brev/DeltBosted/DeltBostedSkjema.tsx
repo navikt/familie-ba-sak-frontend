@@ -1,15 +1,14 @@
-import { differenceInMilliseconds } from 'date-fns';
-
-import { CheckboxGroup } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
-
-import BarnCheckbox from './BarnCheckbox';
 import type {
     IRestBrevmottaker,
     SkjemaBrevmottaker,
-} from '../../../../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { IBarnMedOpplysninger } from '../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../utils/dato';
+} from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { CheckboxGroup } from '@navikt/ds-react';
+import type { Felt } from '@navikt/familie-skjema';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
+import { isoStringTilDate } from '@utils/dato';
+import { differenceInMilliseconds } from 'date-fns';
+
+import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
     barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
