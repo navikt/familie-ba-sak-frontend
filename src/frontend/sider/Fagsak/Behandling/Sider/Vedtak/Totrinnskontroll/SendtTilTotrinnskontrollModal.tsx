@@ -1,13 +1,11 @@
 import { useFagsakId } from '@hooks/useFagsakId';
+import { BodyShort, Box, Button, Modal } from '@navikt/ds-react';
+import { useSendtTilTotrinnskontrollModalContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/Totrinnskontroll/SendtTilTotrinnskontrollModalContext';
 import { useNavigate } from 'react-router';
 
-import { BodyShort, Box, Button, Modal } from '@navikt/ds-react';
+export function SendtTilTotrinnskontrollModal() {
+    const { erModalÅpen, lukkModal } = useSendtTilTotrinnskontrollModalContext();
 
-export interface Props {
-    lukkModal: () => void;
-}
-
-export function SendtTilTotrinnskontrollModal({ lukkModal }: Props) {
     const navigate = useNavigate();
     const fagsakId = useFagsakId();
 
@@ -22,7 +20,7 @@ export function SendtTilTotrinnskontrollModal({ lukkModal }: Props) {
     }
 
     return (
-        <Modal open={true} onClose={lukkModal} header={{ heading: 'Totrinnskontroll' }} portal={true}>
+        <Modal open={erModalÅpen} onClose={lukkModal} header={{ heading: 'Totrinnskontroll' }} portal={true}>
             <Modal.Body>
                 <Box marginBlock={'space-16'}>
                     <BodyShort>Behandlingen er nå sendt til totrinnskontroll.</BodyShort>
