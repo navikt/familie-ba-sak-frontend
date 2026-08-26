@@ -1,7 +1,8 @@
-import type { PropsWithChildren, SetStateAction, Dispatch } from 'react';
-import { createContext, useState, useEffect, useContext } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
+import { useHttp } from '@navikt/familie-http';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
 import type { IBehandling } from '@typer/behandling';
 import type {
     IAnnenVurdering,
@@ -12,11 +13,8 @@ import type {
     IVilkårResultat,
     VilkårType,
 } from '@typer/vilkår';
-
-import { useHttp } from '@navikt/familie-http';
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
+import type { Dispatch, PropsWithChildren, SetStateAction } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { mapFraRestVilkårsvurderingTilUi } from './utils';
 
@@ -37,7 +35,6 @@ interface VilkårsvurderingContextValue {
         redigerbartVilkår: FeltState<IVilkårResultat>
     ) => Promise<Ressurs<IBehandling>>;
     putAnnenVurdering: (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => Promise<Ressurs<IBehandling>>;
-    deleteVilkår: (personIdent: string, vilkårId: number) => Promise<Ressurs<IBehandling>>;
     postVilkår: (personIdent: string, vilkårType: VilkårType) => Promise<Ressurs<IBehandling>>;
     erVilkårsvurderingenGyldig: () => boolean;
     hentVilkårMedFeil: () => IVilkårResultat[];
@@ -115,16 +112,6 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
         });
     };
 
-    const deleteVilkår = (personIdent: string, vilkårId: number) => {
-        settVilkårSubmit(VilkårSubmit.DELETE);
-
-        return request<string, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/${vilkårId}`,
-            data: personIdent,
-        });
-    };
-
     const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
@@ -186,7 +173,6 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
     return (
         <VilkårsvurderingContext.Provider
             value={{
-                deleteVilkår,
                 postVilkår,
                 erVilkårsvurderingenGyldig,
                 hentVilkårMedFeil,

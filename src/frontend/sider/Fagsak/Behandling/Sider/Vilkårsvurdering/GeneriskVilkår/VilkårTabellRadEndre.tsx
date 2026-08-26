@@ -1,15 +1,16 @@
-import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
-import { useState } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
-import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useSlettVilkårResultatError } from '@hooks/useSlettVilkårResultatError';
+import { Button, ErrorMessage, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
+import { BorderNeutral, TextInfoSubtle, TextWarningSubtle } from '@navikt/ds-tokens/dist/tokens';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { SlettVilkårResultat } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/GeneriskVilkår/SlettVilkårResultat';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingÅrsak } from '@typer/behandling';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon } from '@typer/fagsak';
-import { FeatureToggle } from '@typer/featureToggles';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import {
@@ -22,23 +23,16 @@ import {
     VilkårType,
 } from '@typer/vilkår';
 import { alleRegelverk } from '@utils/vilkår';
+import type { ChangeEvent, FocusEvent, ReactNode } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Fieldset, Label, Radio, RadioGroup, Select, Textarea, VStack } from '@navikt/ds-react';
-import { BorderNeutral, TextInfoSubtle, TextWarningSubtle } from '@navikt/ds-tokens/dist/tokens';
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
+import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import { validerVilkår } from '../validering';
 import AvslagSkjema from './AvslagSkjema';
 import { UtdypendeVilkårsvurderingMultiselect } from './UtdypendeVilkårsvurderingMultiselect';
 import VelgPeriode from './VelgPeriode';
-import { vilkårBegrunnelseFeilmeldingId, vilkårFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { validerVilkår } from '../validering';
-import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import { vilkårBegrunnelseFeilmeldingId, vilkårResultatFeilmeldingId } from './VilkårTabell';
 
 interface IProps {
     person: IGrunnlagPerson;
@@ -85,10 +79,9 @@ const VilkårTabellRadEndre = ({
     lesevisning,
 }: IProps) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { vilkårsvurdering, putVilkår, deleteVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
+    const { vilkårsvurdering, putVilkår, vilkårSubmit, settVilkårSubmit } = useVilkårsvurderingContext();
     const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.verdi.id);
 
-    const toggles = useFeatureToggles();
     const fagsak = useFagsak();
 
     const slettVilkårResultatError = useSlettVilkårResultatError(vilkårResultat.verdi.id);
@@ -376,28 +369,11 @@ const VilkårTabellRadEndre = ({
                                 Avbryt
                             </Button>
                         </div>
-                        {toggles[FeatureToggle.nySlettVilkaarLogikk] ? (
-                            <SlettVilkårResultat
-                                personIdent={person.personIdent}
-                                vilkårResultatId={vilkårResultat.verdi.id}
-                                settRedigerbartVilkår={settRedigerbartVilkår}
-                            />
-                        ) : (
-                            <Button
-                                variant={'tertiary'}
-                                onClick={() => {
-                                    const promise = deleteVilkår(person.personIdent, redigerbartVilkår.verdi.id);
-                                    håndterEndringPåVilkårsvurdering(promise);
-                                }}
-                                id={vilkårFeilmeldingId(vilkårResultat.verdi)}
-                                loading={vilkårSubmit === VilkårSubmit.DELETE}
-                                disabled={vilkårSubmit === VilkårSubmit.DELETE}
-                                size={'medium'}
-                                icon={<TrashIcon />}
-                            >
-                                {'Fjern'}
-                            </Button>
-                        )}
+                        <SlettVilkårResultat
+                            personIdent={person.personIdent}
+                            vilkårResultatId={vilkårResultat.verdi.id}
+                            settRedigerbartVilkår={settRedigerbartVilkår}
+                        />
                     </Knapperad>
                 )}
             </StyledVStack>
