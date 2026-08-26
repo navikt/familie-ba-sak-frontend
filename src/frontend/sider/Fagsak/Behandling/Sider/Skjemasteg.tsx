@@ -1,14 +1,12 @@
-import type { PropsWithChildren, ReactNode } from 'react';
-import { useEffect } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAlert';
 import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
+import { Box, Button, ErrorMessage, Heading, Stack, VStack } from '@navikt/ds-react';
 import { BehandlingSteg } from '@typer/behandling';
 import { behandlingErEtterSteg } from '@utils/steg';
-
-import { Box, Button, ErrorMessage, Heading, Stack, VStack } from '@navikt/ds-react';
+import type { PropsWithChildren, ReactNode } from 'react';
+import { useEffect } from 'react';
 
 export const MAX_SKJEMASTEG_BREDDE = '1440px';
 
@@ -28,6 +26,9 @@ interface IProps extends PropsWithChildren {
     steg: BehandlingSteg;
 }
 
+/**
+ * @deprecated Bruk heller {@link Steg}
+ */
 const Skjemasteg = ({
     children,
     className,
