@@ -2,19 +2,18 @@ import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import StatusIkon, { Status } from '@ikoner/StatusIkon';
-import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/BarnaFieldArrayContext';
-import { BarnCheckbox } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/BarnCheckbox';
-import { FieldLabel } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/field/FieldLabel';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, CheckboxGroup, HStack, InfoCard, VStack } from '@navikt/ds-react';
+import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BarnaFieldArrayContext';
+import { BarnCheckbox } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/field/BarnCheckbox';
+import { FieldLabel } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/field/FieldLabel';
 import {
     RegistrerSøknadFormField,
     type RegistrerSøknadFormValues,
-} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/form/useRegistrerSøknadForm';
+} from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import { adressebeskyttelsestyper, ForelderBarnRelasjonRolle } from '@typer/person';
 import { useFormContext } from 'react-hook-form';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, CheckboxGroup, HStack, InfoCard, VStack } from '@navikt/ds-react';
 
 export function BarnaField() {
     const fagsak = useFagsak();

@@ -1,6 +1,6 @@
 import { NotFound } from '@komponenter/Error/NotFound';
 import { TidslinjeProvider } from '@komponenter/Tidslinje/TidslinjeContext';
-import { RegistrerSøknad } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknadNy/RegistrerSøknad';
+import { RegistrerSøknad } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/RegistrerSøknad';
 import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
 import { VilkårsvurderingContainer } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/VilkårsvurderingContainer';
 import type { RouteObject } from 'react-router';

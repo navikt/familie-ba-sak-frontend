@@ -1,141 +1,20 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFagsak } from '@hooks/useFagsak';
-import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
-import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import { BodyShort, Button, ErrorSummary, LocalAlert, Modal } from '@navikt/ds-react';
-import { RessursStatus } from '@navikt/familie-typer';
-import { BehandlingSteg } from '@typer/behandling';
-import { erFagsakAvTypeInstitusjon } from '@typer/fagsak';
-import type { IBarnMedOpplysninger } from '@typer/søknad';
-import MålformVelger from '../../../../../komponenter/MålformVelger';
-import Skjemasteg from '../Skjemasteg';
-import { Annet } from './Annet';
-import { Barna } from './Barna';
-import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import styles from './RegistrerSøknad.module.css';
-import { useSøknadContext } from './SøknadContext';
-import { SøknadType } from './SøknadType';
+import { BekreftEndringModalProvider } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
+import { RegistrerSøknadForm } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/RegistrerSøknadForm';
+import { SøknadRegistrert } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/SøknadRegistrert';
+import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 
-export const RegistrerSøknad = () => {
-    const fagsak = useFagsak();
+export function RegistrerSøknad() {
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
-    const {
-        hentFeilTilOppsummering,
-        nesteAction,
-        settVisBekreftModal,
-        skjema,
-        søknadErLastetFraBackend,
-        visBekreftModal,
-    } = useSøknadContext();
-
-    const gjelderInstitusjon = erFagsakAvTypeInstitusjon(fagsak);
-
-    function onLeggTilBarn(barn: IBarnMedOpplysninger) {
-        skjema.felter.barnaMedOpplysninger.validerOgSettFelt([...skjema.felter.barnaMedOpplysninger.verdi, barn]);
-    }
-
     return (
-        <LeggTilBarnModalContextProvider
-            barn={skjema.felter.barnaMedOpplysninger.verdi}
-            onLeggTilBarn={onLeggTilBarn}
-            harBrevmottaker={behandling.brevmottakere.length > 0}
-        >
-            {!erLesevisning && <LeggTilBarnModal />}
-            <Skjemasteg
-                className={'søknad'}
-                tittel={'Registrer opplysninger fra søknaden'}
-                nesteOnClick={() => {
-                    nesteAction(false);
-                }}
-                nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-                senderInn={skjema.submitRessurs.status === RessursStatus.HENTER}
-                steg={BehandlingSteg.REGISTRERE_SØKNAD}
-            >
-                {søknadErLastetFraBackend && !erLesevisning && (
-                    <>
-                        <br />
-                        <LocalAlert status="warning">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>Søknad registrert</LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                En søknad er allerede registrert på behandlingen. Vi har fylt ut søknaden i skjemaet.
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                        <br />
-                    </>
-                )}
-                {!gjelderInstitusjon && <SøknadType />}
-                <Barna />
-                {!erLesevisning && <LeggTilBarnKnapp />}
-                <MålformVelger
-                    målformFelt={skjema.felter.målform}
-                    visFeilmeldinger={skjema.visFeilmeldinger}
-                    erLesevisning={erLesevisning}
-                />
-                <Annet />
-                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
-                        </LocalAlert.Header>
-                    </LocalAlert>
-                )}
-                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
-                        {hentFeilTilOppsummering().map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
-                        ))}
-                    </ErrorSummary>
-                )}
-                {visBekreftModal && (
-                    <Modal
-                        open
-                        onClose={() => settVisBekreftModal(false)}
-                        header={{
-                            heading: 'Er du sikker på at du vil gå videre?',
-                            size: 'small',
-                            closeButton: false,
-                        }}
-                        width={'35rem'}
-                    >
-                        <Modal.Body>
-                            <BodyShort className={styles.fjernVilkårAdvarsel}>
-                                {skjema.submitRessurs.status === RessursStatus.FEILET ||
-                                    (skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL &&
-                                        skjema.submitRessurs.frontendFeilmelding)}
-                            </BodyShort>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                key={'ja'}
-                                variant={'primary'}
-                                onClick={() => {
-                                    settVisBekreftModal(false);
-                                    nesteAction(true);
-                                }}
-                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                            >
-                                Ja
-                            </Button>
-                            <Button
-                                variant={'secondary'}
-                                key={'nei'}
-                                onClick={() => {
-                                    settVisBekreftModal(false);
-                                }}
-                            >
-                                Nei
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-            </Skjemasteg>
-        </LeggTilBarnModalContextProvider>
+        <BekreftEndringModalProvider>
+            <Steg tittel={'Registrer opplysninger fra søknaden'} maxWidth={'60rem'}>
+                {behandling.søknadsgrunnlag && !erLesevisning && <SøknadRegistrert />}
+                <RegistrerSøknadForm />
+            </Steg>
+        </BekreftEndringModalProvider>
     );
-};
+}
