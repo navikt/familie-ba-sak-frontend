@@ -1,17 +1,16 @@
-import type { PropsWithChildren } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
+import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
 import { AlleBegrunnelserProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/AlleBegrunnelserContext';
 import { FeilutbetaltValutaTabellProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { RefusjonEøsTabellProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 import { SammensattKontrollsakProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
+import { SendtTilTotrinnskontrollModalProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Totrinnskontroll/SendtTilTotrinnskontrollModalContext';
 import { VedtaksperioderProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 import { erDefinert } from '@utils/commons';
-
-import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
+import type { PropsWithChildren } from 'react';
 
 export function VedtakContainer({ children }: PropsWithChildren) {
     const behandling = useBehandling();
@@ -72,9 +71,11 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         <SammensattKontrollsakProvider sammensattKontrollsak={sammensattKontrollsak ?? undefined}>
             <AlleBegrunnelserProvider alleBegrunnelser={alleBegrunnelser}>
                 <VedtaksperioderProvider vedtaksperioder={vedtaksperioder}>
-                    <FeilutbetaltValutaTabellProvider>
-                        <RefusjonEøsTabellProvider>{children}</RefusjonEøsTabellProvider>
-                    </FeilutbetaltValutaTabellProvider>
+                    <SendtTilTotrinnskontrollModalProvider>
+                        <FeilutbetaltValutaTabellProvider>
+                            <RefusjonEøsTabellProvider>{children}</RefusjonEøsTabellProvider>
+                        </FeilutbetaltValutaTabellProvider>
+                    </SendtTilTotrinnskontrollModalProvider>
                 </VedtaksperioderProvider>
             </AlleBegrunnelserProvider>
         </SammensattKontrollsakProvider>
