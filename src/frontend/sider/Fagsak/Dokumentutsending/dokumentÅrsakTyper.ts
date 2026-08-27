@@ -1,4 +1,4 @@
-export enum DokumentÅrsakPerson {
+export enum DokumentÅrsak {
     DELT_BOSTED = 'DELT_BOSTED',
     FØDSEL_MINDREÅRIG = 'FØDSEL_MINDREÅRIG',
     FØDSEL_VERGEMÅL = 'FØDSEL_VERGEMÅL',
@@ -12,13 +12,10 @@ export enum DokumentÅrsakPerson {
     TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD = 'TIL_FORELDER_MED_SELVSTENDIG_RETT_VI_HAR_FÅTT_F016_KAN_SØKE_OM_BARNETRYGD',
     KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV = 'KAN_HA_RETT_TIL_PENGESTØTTE_FRA_NAV',
     INNHENTE_OPPLYSNINGER_KLAGE = 'INNHENTE_OPPLYSNINGER_KLAGE',
-}
-
-export enum DokumentÅrsakInstitusjon {
     INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON = 'INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON',
 }
 
-export type DokumentÅrsak = DokumentÅrsakPerson | DokumentÅrsakInstitusjon;
+export const institusjonÅrsaker: DokumentÅrsak[] = [DokumentÅrsak.INNHENTE_OPPLYSNINGER_KLAGE_INSTITUSJON];
 
 export const dokumentÅrsak: Record<DokumentÅrsak, string> = {
     DELT_BOSTED: 'Delt bosted',

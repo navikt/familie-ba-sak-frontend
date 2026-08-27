@@ -1,54 +1,26 @@
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
-import { Button, HGrid, Modal } from '@navikt/ds-react';
-import { useNavigate } from 'react-router';
-import { useFagsakContext } from '../FagsakContext';
-import { useDokumentutsendingContext } from './DokumentutsendingContext';
-import { DokumentutsendingSkjema } from './DokumentutsendingSkjema';
+import { HGrid } from '@navikt/ds-react';
+import { BrevSendtDialog } from '@sider/Fagsak/Dokumentutsending/BrevSendtDialog';
+import { DokumentutsendingSkjema } from '@sider/Fagsak/Dokumentutsending/DokumentutsendingSkjema';
+import { useState } from 'react';
 
 export function Dokumentutsending() {
-    const { fagsak } = useFagsakContext();
-    const navigate = useNavigate();
-
-    const { forhåndsvisningUrl, settVisInnsendtBrevModal, visInnsendtBrevModal } = useDokumentutsendingContext();
+    const [erBrevSendtDialogÅpen, settErBrevSendtDialogÅpen] = useState(false);
+    const [forhåndsvisningUrl, settForhåndsvisningUrl] = useState<string | undefined>(undefined);
 
     return (
         <>
             <Fagsaklinje />
             <HGrid columns={'35rem 1fr'} height={'100%'}>
-                {visInnsendtBrevModal && (
-                    <Modal
-                        open
-                        onClose={() => settVisInnsendtBrevModal(false)}
-                        header={{ heading: 'Brevet er sendt', size: 'medium' }}
-                        portal
-                    >
-                        <Modal.Footer>
-                            <Button
-                                variant={'secondary'}
-                                key={'til saksoversikt'}
-                                size={'medium'}
-                                onClick={() => {
-                                    navigate(`/fagsak/${fagsak.id}/saksoversikt`);
-                                    settVisInnsendtBrevModal(false);
-                                }}
-                            >
-                                Se saksoversikt
-                            </Button>
-                            <Button
-                                variant={'secondary'}
-                                key={'til oppgavebenken'}
-                                size={'medium'}
-                                onClick={() => {
-                                    navigate('/oppgaver');
-                                }}
-                            >
-                                Se oppgavebenk
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-                <DokumentutsendingSkjema />
-                <iframe title={'dokument'} src={forhåndsvisningUrl ?? ''} width={'100%'} height={'100%'} />
+                <BrevSendtDialog
+                    erBrevSendtDialogÅpen={erBrevSendtDialogÅpen}
+                    settErBrevSendtDialogÅpen={settErBrevSendtDialogÅpen}
+                />
+                <DokumentutsendingSkjema
+                    settForhåndsvisningUrl={settForhåndsvisningUrl}
+                    åpneBrevSendtDialog={() => settErBrevSendtDialogÅpen(true)}
+                />
+                <iframe title={'dokument'} src={forhåndsvisningUrl} width={'100%'} height={'100%'} />
             </HGrid>
         </>
     );

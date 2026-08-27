@@ -1,10 +1,9 @@
 import { BehandlingStatus, BehandlingSteg, BehandlingÅrsak, hentStegNummer } from '@typer/behandling';
 import { harTilgangTilEnhet } from '@typer/enhet';
-import { FagsakStatus } from '@typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
 
 import { useBehandling } from './useBehandling';
-import { useFagsak } from './useFagsak';
+import { useErLesevisningFagsak } from './useErLesevisningFagsak';
 import { useSaksbehandler } from './useSaksbehandler';
 
 const ÅRSAKER_ÅPEN_FOR_ALLE = new Set([BehandlingÅrsak.TEKNISK_ENDRING]);
@@ -20,9 +19,9 @@ export function useErLesevisning({
 }: Parameters = {}) {
     const saksbehandler = useSaksbehandler();
     const behandling = useBehandling();
-    const fagsak = useFagsak();
+    const erLesevisningFagsak = useErLesevisningFagsak();
 
-    if (fagsak.status === FagsakStatus.LÅST) {
+    if (erLesevisningFagsak) {
         return true;
     }
 
@@ -44,10 +43,6 @@ export function useErLesevisning({
     }
 
     if (erBehandleneEnhetMidlertidig && !skalIgnorereOmEnhetErMidlertidig) {
-        return true;
-    }
-
-    if (!saksbehandler.harSkrivetilgang) {
         return true;
     }
 
