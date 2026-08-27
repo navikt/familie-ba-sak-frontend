@@ -30,7 +30,6 @@ export function FritekstAvsnitt() {
             onChange={(event: ChangeEvent<HTMLTextAreaElement>) => field.onChange(event.target.value)}
             onBlur={field.onBlur}
             error={fieldState.error?.message}
-            /* eslint-disable-next-line jsx-a11y/no-autofocus */
             autoFocus
             resize={'vertical'}
             readOnly={erLesevisning || isSubmitting}

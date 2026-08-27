@@ -31,7 +31,6 @@ function FritekstFelt({ index, id }: { index: number; id: string }) {
             hideLabel={true}
             maxLength={makslengdeFritekst}
             error={fieldState.error?.message}
-            /* eslint-disable-next-line jsx-a11y/no-autofocus */
             autoFocus
         />
     );

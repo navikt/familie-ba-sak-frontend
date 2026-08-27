@@ -1,5 +1,5 @@
 import { useErLesevisningFagsak } from '@hooks/useErLesevisningFagsak';
-import { Box, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Box, Radio, RadioGroup } from '@navikt/ds-react';
 import {
     DokumentutsendingFeltnavn,
     type DokumentutsendingFormValues,
@@ -22,34 +22,16 @@ export function MålformVelger() {
 
     return (
         <RadioGroup
-            value={field.value ? målform[field.value] : ''}
+            value={field.value}
+            name={field.name}
             error={fieldState.error?.message}
-            legend={
-                <Heading size={'medium'} level={'2'}>
-                    Målform
-                </Heading>
-            }
+            legend={'Målform'}
             readOnly={isSubmitting || erLesevisning}
+            onChange={field.onChange}
         >
             <Box paddingInline={'space-16 space-0'}>
-                <Radio
-                    value={målform[Målform.NB]}
-                    name={'dokumentutsending-målform'}
-                    checked={field.value === Målform.NB}
-                    onChange={() => field.onChange(Målform.NB)}
-                    readOnly={isSubmitting || erLesevisning}
-                >
-                    {målform[Målform.NB]}
-                </Radio>
-                <Radio
-                    value={målform[Målform.NN]}
-                    name={'dokumentutsending-målform'}
-                    checked={field.value === Målform.NN}
-                    onChange={() => field.onChange(Målform.NN)}
-                    readOnly={isSubmitting || erLesevisning}
-                >
-                    {målform[Målform.NN]}
-                </Radio>
+                <Radio value={Målform.NB}>{målform[Målform.NB]}</Radio>
+                <Radio value={Målform.NN}>{målform[Målform.NN]}</Radio>
             </Box>
         </RadioGroup>
     );

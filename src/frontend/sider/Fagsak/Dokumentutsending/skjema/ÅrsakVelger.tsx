@@ -34,6 +34,7 @@ export function ÅrsakVelger() {
     const {
         control,
         reset,
+        getValues,
         formState: { isSubmitting },
     } = useFormContext<DokumentutsendingFormValues>();
     const valgbareÅrsaker = useValgbareÅrsaker();
@@ -49,6 +50,7 @@ export function ÅrsakVelger() {
         reset({
             ...dokumentutsendingSkjemaStandardverdier(bruker),
             [DokumentutsendingFeltnavn.ÅRSAK]: nyÅrsak,
+            [DokumentutsendingFeltnavn.MÅLFORM]: getValues(DokumentutsendingFeltnavn.MÅLFORM),
         });
     };
 
