@@ -1,9 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { Heading, VStack } from '@navikt/ds-react';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { partition } from '@utils/commons';
-
-import { Heading, VStack } from '@navikt/ds-react';
 
 import { filtrerOgSorterPerioderMedBegrunnelseBehov } from './utils';
 import { Vedtaksperiode } from './Vedtaksperiode';
@@ -29,7 +28,7 @@ export function Vedtaksperioder() {
     }
 
     return (
-        <VStack gap={'space-32'} marginBlock={'space-32'}>
+        <VStack gap={'space-32'}>
             <GrupperteVedtaksperioder
                 vedtaksperioderMedBegrunnelser={begrunnelser}
                 overskrift={'Begrunnelser i vedtaksbrev'}

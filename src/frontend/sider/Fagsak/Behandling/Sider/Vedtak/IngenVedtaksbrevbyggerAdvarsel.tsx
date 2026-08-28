@@ -1,8 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { BehandlingResultat, BehandlingStatus, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Box, InfoCard } from '@navikt/ds-react';
+import { InfoCard } from '@navikt/ds-react';
+import { BehandlingResultat, BehandlingStatus, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
 
 function finnAdvarseltekts(behandling: IBehandling): string | undefined {
     if (behandling.resultat === BehandlingResultat.FORTSATT_INNVILGET && behandling.skalBehandlesAutomatisk) {
@@ -27,10 +26,8 @@ export function IngenVedtaksbrevbyggerAdvarsel() {
     }
 
     return (
-        <Box marginBlock={'space-32 space-16'}>
-            <InfoCard data-color={'info'}>
-                <InfoCard.Message icon={<InformationSquareIcon aria-hidden={true} />}>{advarseltekts}</InfoCard.Message>
-            </InfoCard>
-        </Box>
+        <InfoCard data-color={'info'}>
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden={true} />}>{advarseltekts}</InfoCard.Message>
+        </InfoCard>
     );
 }
