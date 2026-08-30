@@ -14,7 +14,7 @@ const {
     useFeilutbetaltValutaTabellContextMock,
     useRefusjonEøsTabellContextMock,
     useSammensattKontrollsakContextMock,
-    useSimuleringContextMock,
+    useSimuleringsvurderingMock,
     useVedtaksperioderContextMock,
     useSaksbehandlerMock,
     useSendVedtakTilBeslutterMock,
@@ -26,7 +26,7 @@ const {
     useFeilutbetaltValutaTabellContextMock: vi.fn(),
     useRefusjonEøsTabellContextMock: vi.fn(),
     useSammensattKontrollsakContextMock: vi.fn(),
-    useSimuleringContextMock: vi.fn(),
+    useSimuleringsvurderingMock: vi.fn(),
     useVedtaksperioderContextMock: vi.fn(),
     useSaksbehandlerMock: vi.fn(),
     useSendVedtakTilBeslutterMock: vi.fn(),
@@ -49,8 +49,8 @@ vi.mock('@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellCo
 vi.mock('@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext', () => ({
     useSammensattKontrollsakContext: useSammensattKontrollsakContextMock,
 }));
-vi.mock('@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext', () => ({
-    useSimuleringContext: useSimuleringContextMock,
+vi.mock('@sider/Fagsak/Behandling/Sider/Simulering/useSimuleringsvurdering', () => ({
+    useSimuleringsvurdering: useSimuleringsvurderingMock,
 }));
 vi.mock('@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext', () => ({
     useVedtaksperioderContext: useVedtaksperioderContextMock,
@@ -79,7 +79,7 @@ beforeEach(() => {
     useFeilutbetaltValutaTabellContextMock.mockReturnValue({ erLeggTilFeilutbetaltValutaFormÅpen: false });
     useRefusjonEøsTabellContextMock.mockReturnValue({ erLeggTilRefusjonEøsFormÅpen: false });
     useSammensattKontrollsakContextMock.mockReturnValue({ sammensattKontrollsak: undefined });
-    useSimuleringContextMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: false });
+    useSimuleringsvurderingMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: false });
     useVedtaksperioderContextMock.mockReturnValue({
         vedtaksperioder: [
             lagVedtaksperiodeMedBegrunnelser({ begrunnelser: [{ standardbegrunnelse: 'BEGRUNNELSE' } as never] }),
@@ -233,7 +233,7 @@ describe('TilGodkjenning', () => {
             behandling: lagBehandling({ type: Behandlingstype.MIGRERING_FRA_INFOTRYGD }),
             settÅpenBehandling: settÅpenBehandlingMock,
         });
-        useSimuleringContextMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: false });
+        useSimuleringsvurderingMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: false });
 
         // Act
         render(<TilGodkjenning settFeilmelding={settFeilmeldingMock} />);
@@ -248,7 +248,7 @@ describe('TilGodkjenning', () => {
             behandling: lagBehandling({ type: Behandlingstype.MIGRERING_FRA_INFOTRYGD }),
             settÅpenBehandling: settÅpenBehandlingMock,
         });
-        useSimuleringContextMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: true });
+        useSimuleringsvurderingMock.mockReturnValue({ behandlingErMigreringMedAvvikUtenforBeløpsgrenser: true });
 
         // Act
         render(<TilGodkjenning settFeilmelding={settFeilmeldingMock} />);

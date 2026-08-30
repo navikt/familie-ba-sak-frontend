@@ -1,25 +1,22 @@
-import { useState } from 'react';
-
-import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import type { IAvregningsperiode } from '@typer/simulering';
-import { erProd } from '@utils/miljø';
-
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, CopyButton, Link, List, LocalAlert } from '@navikt/ds-react';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
+import { useSimuleringContext } from '@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext';
+import { SettBehandlingPåVentModalMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/SettBehandlingPåVentModalMotregning';
+import type { IAvregningsperiode } from '@typer/simulering';
+import { erProd } from '@utils/miljø';
+import { useState } from 'react';
 
 import { utledTekstTilModia } from './modiaStandardtekst';
-import { SettBehandlingPåVentModalMotregning } from './SettBehandlingPåVentModalMotregning';
 
-interface AvregningAlertProps {
+interface Props {
     avregningsperioder: IAvregningsperiode[];
-    harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
 }
 
-const AvregningAlert = ({ avregningsperioder, harÅpenTilbakekrevingRessurs }: AvregningAlertProps) => {
-    const behandling = useBehandling();
+export function AvregningAlert({ avregningsperioder }: Props) {
     const erLesevisning = useErLesevisning();
+
+    const { harÅpenTilbakekreving } = useSimuleringContext();
 
     const [visModal, settVisModal] = useState(false);
 
@@ -37,8 +34,7 @@ const AvregningAlert = ({ avregningsperioder, harÅpenTilbakekrevingRessurs }: A
                 <BodyLong>Du må derfor velge 1 eller 2:</BodyLong>
                 <List as={'ol'}>
                     <List.Item>
-                        {harÅpenTilbakekrevingRessurs.status == RessursStatus.SUKSESS &&
-                        harÅpenTilbakekrevingRessurs.data
+                        {harÅpenTilbakekreving
                             ? 'Ferdigstille t-saken, og deretter gjøre nytt vedtak om etterbetaling'
                             : 'Først gjøre vedtak om etterbetalingen, og deretter gjøre nytt vedtak om feilutbetalingen og opprette t-sak («splitte saken»).'}
                     </List.Item>
@@ -69,15 +65,8 @@ const AvregningAlert = ({ avregningsperioder, harÅpenTilbakekrevingRessurs }: A
                         </Link>
                     </Box>
                 )}
-                {visModal && (
-                    <SettBehandlingPåVentModalMotregning
-                        lukkModal={() => settVisModal(false)}
-                        behandling={behandling}
-                    />
-                )}
+                {visModal && <SettBehandlingPåVentModalMotregning lukkModal={() => settVisModal(false)} />}
             </LocalAlert.Content>
         </LocalAlert>
     );
-};
-
-export default AvregningAlert;
+}

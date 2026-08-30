@@ -1,31 +1,29 @@
+import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
-import { BehandlingSteg, type IBehandling } from '@typer/behandling';
-import type { ITilbakekreving } from '@typer/simulering';
-import { hentSøkersMålform } from '@utils/behandling';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-import { useNavigate } from 'react-router';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, GlobalAlert, InfoCard, List, LocalAlert } from '@navikt/ds-react';
-import { type Ressurs, RessursStatus } from '@navikt/familie-typer';
-
-import { MigreringAlerts } from './MigreringAlerts';
-import { useSimuleringContext } from './SimuleringContext';
-import TilbakekrevingSkjema from './TilbakekrevingSkjema';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { BodyShort, Box, InfoCard, List, LocalAlert } from '@navikt/ds-react';
+import { TilbakekrevingForm } from '@sider/Fagsak/Behandling/Sider/Simulering/form/TilbakekrevingForm';
+import { useTilbakekrevingForm } from '@sider/Fagsak/Behandling/Sider/Simulering/form/useTilbakekrevingForm';
+import { MigreringAlerts } from '@sider/Fagsak/Behandling/Sider/Simulering/MigreringAlerts';
+import { useSimuleringContext } from '@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext';
+import { TilbakekrevingsvedtakMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
+import { BehandlingSteg } from '@typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { FormProvider } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import Skjemasteg from '../Skjemasteg';
 import SimuleringPanel from './SimuleringPanel';
 import SimuleringTabell from './SimuleringTabell';
-import { TilbakekrevingsvedtakMotregning } from './UlovfestetMotregning/TilbakekrevingsvedtakMotregning';
 
-const Simulering = () => {
+export function Simulering() {
+    const fagsakId = useFagsakId();
+    const behandling = useBehandling();
+    const erLesevisning = useErLesevisning();
+    const navigate = useNavigate();
+
     const {
-        hentSkjemadata,
-        onSubmit,
-        simuleringsresultat,
-        tilbakekrevingSkjema,
-        harÅpenTilbakekrevingRessurs,
+        simulering,
         erFeilutbetaling,
         avregningsperioder,
         overlappendePerioderMedAndreFagsaker,
@@ -36,45 +34,27 @@ const Simulering = () => {
         behandlingErEndreMigreringsdato,
     } = useSimuleringContext();
 
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { form, onSubmit } = useTilbakekrevingForm();
 
-    const fagsakId = useFagsakId();
-    const erLesevisning = useErLesevisning();
-    const navigate = useNavigate();
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+    } = form;
 
     const harOverlappendePerioderMedAndreFagsakerOgSkalStanses =
         !behandlingErEndreMigreringsdato &&
         overlappendePerioderMedAndreFagsaker.flatMap(periode => periode.fagsaker).length > 0;
 
-    const nesteOnClick = () => {
+    function nesteOnClick() {
         if (erLesevisning) {
             navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
-        } else {
-            onSubmit<ITilbakekreving | undefined>(
-                {
-                    data: hentSkjemadata(),
-                    method: 'POST',
-                    url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/tilbakekreving`,
-                },
-                (ressurs: Ressurs<IBehandling>) => {
-                    if (ressurs.status === RessursStatus.SUKSESS) {
-                        settÅpenBehandling(ressurs);
-                        navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
-                    }
-                }
-            );
+            return;
         }
-    };
+        void handleSubmit(onSubmit)();
+    }
 
-    const forrigeOnClick = () => {
+    function forrigeOnClick() {
         navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/tilkjent-ytelse`);
-    };
-
-    if (
-        simuleringsresultat.status === RessursStatus.HENTER ||
-        simuleringsresultat.status === RessursStatus.IKKE_HENTET
-    ) {
-        return <div />;
     }
 
     const erAvregning = avregningsperioder.length > 0;
@@ -86,11 +66,11 @@ const Simulering = () => {
     const skalDisableNesteKnapp =
         (erAvregning && !heleBeløpetSkalKrevesTilbake) || harOverlappendePerioderMedAndreFagsakerOgSkalStanses;
 
-    const skalViseTilbakekrevingSkjema = erFeilutbetaling && (!erAvregning || heleBeløpetSkalKrevesTilbake);
+    const skalViseTilbakekrevingForm = erFeilutbetaling && (!erAvregning || heleBeløpetSkalKrevesTilbake);
 
     return (
         <Skjemasteg
-            senderInn={tilbakekrevingSkjema.submitRessurs.status === RessursStatus.HENTER}
+            senderInn={isSubmitting}
             tittel="Simulering"
             className="simulering"
             forrigeOnClick={forrigeOnClick}
@@ -99,8 +79,8 @@ const Simulering = () => {
             steg={BehandlingSteg.VURDER_TILBAKEKREVING}
             skalDisableNesteKnapp={skalDisableNesteKnapp}
         >
-            {simuleringsresultat?.status === RessursStatus.SUKSESS ? (
-                simuleringsresultat.data.perioder.length === 0 ? (
+            <FormProvider {...form}>
+                {simulering.perioder.length === 0 ? (
                     <Box marginBlock={'space-0 space-32'}>
                         <InfoCard data-color="info">
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -110,8 +90,8 @@ const Simulering = () => {
                     </Box>
                 ) : (
                     <>
-                        <SimuleringPanel simulering={simuleringsresultat.data} />
-                        <SimuleringTabell simulering={simuleringsresultat.data} />
+                        <SimuleringPanel simulering={simulering} />
+                        <SimuleringTabell simulering={simulering} />
 
                         <MigreringAlerts
                             behandlingErEndreMigreringsdato={behandlingErEndreMigreringsdato}
@@ -155,7 +135,7 @@ const Simulering = () => {
                                         <BodyShort>Perioder med overlapp:</BodyShort>
                                         <List as="ul">
                                             {overlappendePerioderMedAndreFagsaker.map(periode => (
-                                                <List.Item>
+                                                <List.Item key={`${periode.fom}-${periode.tom}`}>
                                                     {`${isoStringTilFormatertString({
                                                         isoString: periode.fom,
                                                         tilFormat: Datoformat.MÅNED_ÅR_KORTNAVN,
@@ -172,50 +152,27 @@ const Simulering = () => {
                         )}
                         {erAvregning && (
                             <TilbakekrevingsvedtakMotregning
-                                åpenBehandling={behandling}
                                 tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning}
                                 avregningsperioder={avregningsperioder}
-                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
                             />
                         )}
-                        {skalViseTilbakekrevingSkjema && (
-                            <TilbakekrevingSkjema
-                                søkerMålform={hentSøkersMålform(behandling)}
-                                harÅpenTilbakekrevingRessurs={harÅpenTilbakekrevingRessurs}
-                                åpenBehandling={behandling}
-                            />
-                        )}
+                        {skalViseTilbakekrevingForm && <TilbakekrevingForm />}
                     </>
-                )
-            ) : (
-                <Box marginBlock={'space-0 space-32'}>
-                    <GlobalAlert status={'error'}>
-                        <GlobalAlert.Header>
-                            <GlobalAlert.Title>Det har skjedd en feil</GlobalAlert.Title>
-                        </GlobalAlert.Header>
-                        <GlobalAlert.Content>{simuleringsresultat?.frontendFeilmelding}</GlobalAlert.Content>
-                    </GlobalAlert>
-                </Box>
-            )}
+                )}
 
-            {(tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FEILET ||
-                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                tilbakekrevingSkjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                <Box marginBlock={'space-32'}>
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>
-                                Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget
-                            </LocalAlert.Title>
-                        </LocalAlert.Header>
-                        <LocalAlert.Content>
-                            {tilbakekrevingSkjema.submitRessurs.frontendFeilmelding}
-                        </LocalAlert.Content>
-                    </LocalAlert>
-                </Box>
-            )}
+                {errors.root?.message && (
+                    <Box marginBlock={'space-32'}>
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Det har skjedd en feil og vi klarte ikke å lagre tilbakekrevingsvalget
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{errors.root.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    </Box>
+                )}
+            </FormProvider>
         </Skjemasteg>
     );
-};
-
-export default Simulering;
+}

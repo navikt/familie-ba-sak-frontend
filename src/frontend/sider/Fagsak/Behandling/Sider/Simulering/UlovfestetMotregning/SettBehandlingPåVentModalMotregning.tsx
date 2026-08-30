@@ -1,48 +1,34 @@
+import { useSettPåVent } from '@hooks/useSettPåVent';
 import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker, VStack } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import { byggHenterRessurs, byggTomRessurs, type Ressurs, RessursStatus } from '@navikt/familie-typer';
-import { type IBehandling, type ISettPåVent, SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/konstanter';
+import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString } from '@utils/dato';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import { addDays } from 'date-fns';
-import { useState } from 'react';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from './useTilbakekrevingsvedtakMotregning';
 
-interface IProps {
+interface Props {
     lukkModal: () => void;
-    behandling: IBehandling;
 }
 
-export const SettBehandlingPåVentModalMotregning = ({ lukkModal, behandling }: IProps) => {
-    const { settÅpenBehandling } = useBehandlingContext();
-
-    const { request } = useHttp();
+export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const årsak = SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
     const frist = addDays(dagensDato, dagerFristForAvventerSamtykkeUlovfestetMotregning);
 
     const erBehandlingAlleredePåVent = !!behandling.aktivSettPåVent;
 
-    const [submitRessurs, settSubmitRessurs] = useState<Ressurs<IBehandling>>(byggTomRessurs());
-
-    const settBehandlingPåVent = () => {
-        settSubmitRessurs(byggHenterRessurs());
-        request<ISettPåVent, IBehandling>({
-            method: erBehandlingAlleredePåVent ? 'PUT' : 'POST',
-            data: {
-                frist: dateTilIsoDatoString(frist),
-                årsak: årsak,
-            },
-            url: `/familie-ba-sak/api/sett-på-vent/${behandling.behandlingId}`,
-        }).then(ressurs => {
-            settSubmitRessurs(ressurs);
-            if (ressurs.status === RessursStatus.SUKSESS) {
-                settÅpenBehandling(ressurs);
-                lukkModal();
-            }
-        });
-    };
+    const {
+        mutate: settPåVent,
+        isPending: setterPåVent,
+        error,
+    } = useSettPåVent({
+        onSuccess: oppdatertBehandling => {
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            lukkModal();
+        },
+    });
 
     const { datepickerProps, inputProps } = useDatepicker({ defaultSelected: frist });
 
@@ -58,12 +44,7 @@ export const SettBehandlingPåVentModalMotregning = ({ lukkModal, behandling }: 
             portal
         >
             <Modal.Body>
-                <Fieldset
-                    error={hentFrontendFeilmelding(submitRessurs)}
-                    errorPropagation={false}
-                    legend="Sett behandling på vent"
-                    hideLegend
-                >
+                <Fieldset error={error?.message} errorPropagation={false} legend="Sett behandling på vent" hideLegend>
                     <VStack gap={'space-32'}>
                         {erBehandlingAlleredePåVent && <BodyShort>Behandlingen er satt på vent.</BodyShort>}
 
@@ -86,18 +67,24 @@ export const SettBehandlingPåVentModalMotregning = ({ lukkModal, behandling }: 
             <Modal.Footer>
                 <Button
                     variant={'primary'}
-                    key={erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                     size={'medium'}
-                    onClick={settBehandlingPåVent}
-                    loading={submitRessurs.status === RessursStatus.HENTER}
-                    disabled={submitRessurs.status === RessursStatus.HENTER}
+                    onClick={() =>
+                        settPåVent({
+                            behandlingId: behandling.behandlingId,
+                            erBehandlingAlleredePåVent,
+                            frist: dateTilIsoDatoString(frist),
+                            årsak,
+                        })
+                    }
+                    loading={setterPåVent}
+                    disabled={setterPåVent}
                 >
                     {erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
                 </Button>
-                <Button variant={'tertiary'} key={'Avbryt'} size="medium" onClick={lukkModal}>
+                <Button variant={'tertiary'} size="medium" onClick={lukkModal}>
                     Avbryt
                 </Button>
             </Modal.Footer>
         </Modal>
     );
-};
+}

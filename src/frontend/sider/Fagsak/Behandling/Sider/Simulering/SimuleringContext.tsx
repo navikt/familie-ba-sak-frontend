@@ -1,296 +1,49 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
-import { useFagsakId } from '@hooks/useFagsakId';
-import type { IBehandling } from '@typer/behandling';
-import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
-import { PersonType } from '@typer/person';
-import type {
-    IAvregningsperiode,
-    IOverlappendePeriodeMedAndreFagsaker,
-    ISimuleringDTO,
-    ISimuleringPeriode,
-    ITilbakekreving,
-} from '@typer/simulering';
-import { Tilbakekrevingsvalg } from '@typer/simulering';
-import { isoStringTilDate, isoStringTilDateMedFallback, tidenesMorgen } from '@utils/dato';
-import { isAfter, isBefore } from 'date-fns';
+import {
+    type Simuleringsvurdering,
+    utledSimuleringsvurdering,
+} from '@sider/Fagsak/Behandling/Sider/Simulering/simuleringsvurdering';
+import type { IAvregningsperiode, IOverlappendePeriodeMedAndreFagsaker, ISimuleringDTO } from '@typer/simulering';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
-import { type FamilieRequestConfig, useHttp } from '@navikt/familie-http';
-import type { Avhengigheter, FeiloppsummeringFeil, ISkjema } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
-interface Tilbakekrevingsskjema {
-    tilbakekrevingsvalg: Tilbakekrevingsvalg | undefined;
-    fritekstVarsel: string;
-    begrunnelse: string;
+interface Props extends PropsWithChildren {
+    simulering: ISimuleringDTO;
+    harÅpenTilbakekreving: boolean;
 }
 
-interface SimuleringContextValue {
-    simuleringsresultat: Ressurs<ISimuleringDTO>;
-    tilbakekrevingSkjema: ISkjema<Tilbakekrevingsskjema, IBehandling>;
-    onSubmit: <SkjemaData>(
-        requestConfig: FamilieRequestConfig<SkjemaData>,
-        onSuccess: (ressurs: Ressurs<IBehandling>) => void,
-        onError?: (ressurs: Ressurs<IBehandling>) => void
-    ) => void;
-    hentFeilTilOppsummering: () => FeiloppsummeringFeil[];
-    erFeilutbetaling: boolean | undefined;
+interface SimuleringContextValue extends Simuleringsvurdering {
+    simulering: ISimuleringDTO;
+    harÅpenTilbakekreving: boolean;
     avregningsperioder: IAvregningsperiode[];
     overlappendePerioderMedAndreFagsaker: IOverlappendePeriodeMedAndreFagsaker[];
-    hentSkjemadata: () => ITilbakekreving | undefined;
-    maksLengdeTekst: number;
-    harÅpenTilbakekrevingRessurs: Ressurs<boolean>;
-    erMigreringFraInfotrygdMedAvvik: boolean;
-    behandlingErMigreringMedAvvikInnenforBeløpsgrenser: boolean;
-    behandlingErMigreringMedAvvikUtenforBeløpsgrenser: boolean;
-    behandlingErMigreringMedManuellePosteringer: boolean | undefined;
-    behandlingErMigreringFraInfotrygdMedKun0Utbetalinger: boolean;
-    behandlingErEndreMigreringsdato: boolean;
 }
 
 const SimuleringContext = createContext<SimuleringContextValue | undefined>(undefined);
 
-export const SimuleringProvider = ({ children }: PropsWithChildren) => {
-    const { request } = useHttp();
-
-    const fagsakId = useFagsakId();
+export function SimuleringProvider({ simulering, harÅpenTilbakekreving, children }: Props) {
     const behandling = useBehandling();
 
-    const [simuleringsresultat, settSimuleringresultat] = useState<Ressurs<ISimuleringDTO>>({
-        status: RessursStatus.HENTER,
-    });
-
-    const [harÅpenTilbakekrevingRessurs, settHarÅpentTilbakekrevingRessurs] = useState<Ressurs<boolean>>({
-        status: RessursStatus.HENTER,
-    });
-
-    const vedtak = behandling.vedtak;
-    const personerMedAndelerTilkjentYtelse = behandling.personerMedAndelerTilkjentYtelse;
-    const maksLengdeTekst = 1500;
-    const maksgrenseForAvvikIBeløpVedMigrering = 100;
-    const mars2023 = '2023-03-01';
-
-    useEffect(() => {
-        request<IBehandling, ISimuleringDTO>({
-            method: 'GET',
-            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/simulering`,
-            påvirkerSystemLaster: true,
-        }).then(response =>
-            response.status === RessursStatus.SUKSESS
-                ? settSimuleringresultat({
-                      ...response,
-                      data: {
-                          ...response.data,
-                          perioder: response.data.perioder.map(periode =>
-                              settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
-                                  periode,
-                                  response.data.tidSimuleringHentet
-                              )
-                          ),
-                      },
-                  })
-                : settSimuleringresultat(response)
-        );
-    }, [behandling]);
-
-    useEffect(() => {
-        if (erFeilutbetaling || avregningsperioder.length > 0) {
-            request<undefined, boolean>({
-                method: 'GET',
-                url: `/familie-ba-sak/api/fagsaker/${fagsakId}/har-apen-tilbakekreving`,
-                påvirkerSystemLaster: true,
-            }).then(response => {
-                settHarÅpentTilbakekrevingRessurs(response);
-            });
-        }
-    }, [fagsakId, simuleringsresultat]);
-
-    const harÅpenTilbakekreving: boolean =
-        harÅpenTilbakekrevingRessurs.status === RessursStatus.SUKSESS && harÅpenTilbakekrevingRessurs.data;
-
-    const simResultat = simuleringsresultat.status === RessursStatus.SUKSESS ? simuleringsresultat.data : undefined;
-    const simPerioderFørMars2023 =
-        simResultat?.perioder.filter(periode => isBefore(isoStringTilDate(periode.fom), isoStringTilDate(mars2023))) ||
-        [];
-    const perioderesultaterFørMars2023 = simPerioderFørMars2023.map(periode => periode.resultat || 0);
-    const totalEtterbetalingFørMars2023 = simPerioderFørMars2023.reduce(
-        (acc, periode) => acc + (periode.etterbetaling || 0),
-        0
+    const simuleringsvurdering = useMemo(
+        () => utledSimuleringsvurdering(simulering, behandling),
+        [simulering, behandling]
     );
 
-    const avregningsperioder = simResultat?.avregningsperioder ?? [];
-    const overlappendePerioderMedAndreFagsaker = simResultat?.overlappendePerioderMedAndreFagsaker ?? [];
-    const erFeilutbetaling = simResultat && simResultat.feilutbetaling > 0;
-    const erEtterutbetaling = totalEtterbetalingFørMars2023 > 0;
-
-    const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
-
-    const erAvvikISimuleringForBehandling = erFeilutbetaling || erEtterutbetaling;
-
-    const erMigreringFraInfotrygdMedAvvik = erMigreringFraInfotrygd && erAvvikISimuleringForBehandling;
-
-    const behandlingHarManuellePosteringer = simResultat?.perioder.some(
-        periode => periode.manuellPostering && periode.manuellPostering > 0
-    );
-
-    const behandlingErMigreringFraInfotrygdMedKun0Utbetalinger =
-        erMigreringFraInfotrygd &&
-        !personerMedAndelerTilkjentYtelse.some(
-            personMedAndelerTilkjentYtelse => personMedAndelerTilkjentYtelse.beløp !== 0
-        );
-
-    const harMaks1KroneIAvvikPerBarn = (perioderesultater: number[]) => {
-        const antallBarn = behandling.personer.filter(person => person.type === PersonType.BARN).length;
-        return perioderesultater.every(beløp => Math.abs(beløp) <= antallBarn);
-    };
-
-    const harTotaltAvvikUnderBeløpsgrense = (perioderesultater: number[]) => {
-        const totaltAvvik = Math.abs(perioderesultater.reduce((acc, val) => acc + val, 0));
-        return totaltAvvik <= maksgrenseForAvvikIBeløpVedMigrering;
-    };
-
-    const behandlingErMigreringMedAvvikInnenforBeløpsgrenser =
-        erMigreringFraInfotrygdMedAvvik &&
-        harMaks1KroneIAvvikPerBarn(perioderesultaterFørMars2023) &&
-        harTotaltAvvikUnderBeløpsgrense(perioderesultaterFørMars2023);
-
-    const behandlingErMigreringMedAvvikUtenforBeløpsgrenser =
-        erMigreringFraInfotrygdMedAvvik && !behandlingErMigreringMedAvvikInnenforBeløpsgrenser;
-
-    const behandlingErMigreringMedManuellePosteringer = erMigreringFraInfotrygd && behandlingHarManuellePosteringer;
-
-    const behandlingErEndreMigreringsdato = behandling.årsak === BehandlingÅrsak.ENDRE_MIGRERINGSDATO;
-
-    const tilbakekrevingsvalg = useFelt<Tilbakekrevingsvalg | undefined>({
-        verdi: behandling.tilbakekreving?.valg,
-        avhengigheter: {
-            erMigreringFraInfotrygdMedAvvik,
-            erFeilutbetaling,
+    const value = useMemo(
+        () => ({
+            ...simuleringsvurdering,
+            simulering,
             harÅpenTilbakekreving,
-        },
-        skalFeltetVises: avhengigheter => avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
-        valideringsfunksjon: felt =>
-            felt.verdi === undefined
-                ? feil(
-                      felt,
-                      'Resultatet medfører en feilutbetaling. Du må velge om det skal opprettes tilbakekrevingsbehandling.'
-                  )
-                : ok(felt),
-    });
-    const fritekstVarsel = useFelt<string>({
-        verdi: behandling.tilbakekreving?.varsel ?? '',
-        avhengigheter: {
-            tilbakekreving: tilbakekrevingsvalg,
-            erFeilutbetaling,
-            maksLengdeTekst,
-        },
-        valideringsfunksjon: (felt, avhengigheter) =>
-            avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL &&
-            felt.verdi === ''
-                ? feil(felt, 'Du må skrive en fritekst for varselet til tilbakekrevingen.')
-                : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
-                  ? feil(felt, `Du har nådd maks antall tegn i varselbrevet: 1 500. Prøv å forkorte/forenkle teksten.`)
-                  : ok(felt),
-        skalFeltetVises: (avhengigheter: Avhengigheter) =>
-            avhengigheter?.erFeilutbetaling &&
-            avhengigheter?.tilbakekreving?.verdi === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
-    });
-    const begrunnelse = useFelt<string>({
-        verdi: behandling.tilbakekreving?.begrunnelse ?? '',
-        avhengigheter: {
-            erFeilutbetaling,
-            maksLengdeTekst: maksLengdeTekst,
-            harÅpenTilbakekreving,
-        },
-        skalFeltetVises: avhengigheter => avhengigheter?.erFeilutbetaling && !avhengigheter?.harÅpenTilbakekreving,
-        valideringsfunksjon: (felt, avhengigheter) =>
-            felt.verdi === ''
-                ? feil(felt, 'Du må skrive en begrunnelse for valget om tilbakekreving.')
-                : avhengigheter && felt.verdi.length > avhengigheter.maksLengdeTekst
-                  ? feil(felt, `Du har nådd maks antall tegn i begrunnelsen: 1 500. Prøv å forkorte/forenkle teksten.`)
-                  : ok(felt),
-    });
-
-    const {
-        skjema: tilbakekrevingSkjema,
-        hentFeilTilOppsummering,
-        onSubmit,
-    } = useSkjema<Tilbakekrevingsskjema, IBehandling>({
-        felter: { tilbakekrevingsvalg, fritekstVarsel, begrunnelse },
-        skjemanavn: 'Opprett tilbakekreving',
-    });
-
-    const hentSkjemadata = (): ITilbakekreving | undefined => {
-        return tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi && vedtak
-            ? {
-                  vedtakId: vedtak?.id,
-                  valg: tilbakekrevingSkjema.felter.tilbakekrevingsvalg.verdi,
-                  begrunnelse: tilbakekrevingSkjema.felter.begrunnelse.verdi,
-                  varsel: tilbakekrevingSkjema.felter.fritekstVarsel.erSynlig
-                      ? tilbakekrevingSkjema.felter.fritekstVarsel.verdi
-                      : undefined,
-              }
-            : undefined;
-    };
-
-    function settPeriodeTilIkkeUtbetaltOmForfallsdatoIkkePassert(
-        periode: ISimuleringPeriode,
-        tidSimuleringHentet: string | undefined
-    ): ISimuleringPeriode {
-        if (
-            periode.resultat === 0 &&
-            isAfter(
-                isoStringTilDateMedFallback({
-                    isoString: periode.forfallsdato,
-                    fallbackDate: tidenesMorgen,
-                }),
-                isoStringTilDateMedFallback({
-                    isoString: tidSimuleringHentet,
-                    fallbackDate: tidenesMorgen,
-                })
-            )
-        ) {
-            return {
-                ...periode,
-                tidligereUtbetalt: 0,
-                resultat: periode.nyttBeløp,
-            };
-        }
-        return periode;
-    }
-
-    return (
-        <SimuleringContext.Provider
-            value={{
-                simuleringsresultat,
-                tilbakekrevingSkjema,
-                onSubmit,
-                hentFeilTilOppsummering,
-                erFeilutbetaling,
-                avregningsperioder,
-                overlappendePerioderMedAndreFagsaker,
-                hentSkjemadata,
-                maksLengdeTekst,
-                harÅpenTilbakekrevingRessurs,
-                erMigreringFraInfotrygdMedAvvik,
-                behandlingErMigreringMedAvvikInnenforBeløpsgrenser,
-                behandlingErMigreringMedAvvikUtenforBeløpsgrenser,
-                behandlingErMigreringMedManuellePosteringer,
-                behandlingErMigreringFraInfotrygdMedKun0Utbetalinger,
-                behandlingErEndreMigreringsdato,
-            }}
-        >
-            {children}
-        </SimuleringContext.Provider>
+            avregningsperioder: simulering.avregningsperioder,
+            overlappendePerioderMedAndreFagsaker: simulering.overlappendePerioderMedAndreFagsaker,
+        }),
+        [simuleringsvurdering, simulering, harÅpenTilbakekreving]
     );
-};
 
-export const useSimuleringContext = () => {
+    return <SimuleringContext.Provider value={value}>{children}</SimuleringContext.Provider>;
+}
+
+export function useSimuleringContext() {
     const context = useContext(SimuleringContext);
 
     if (context === undefined) {
@@ -298,4 +51,4 @@ export const useSimuleringContext = () => {
     }
 
     return context;
-};
+}
