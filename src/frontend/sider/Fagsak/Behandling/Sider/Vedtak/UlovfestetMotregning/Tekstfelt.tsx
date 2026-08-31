@@ -1,8 +1,7 @@
+import { Textarea } from '@navikt/ds-react';
 import { useController } from 'react-hook-form';
 
-import { Textarea } from '@navikt/ds-react';
-
-import type { TilbakekrevingsvedtakMotregningSkjemaverdier } from './TilbakekrevingsvedtakMotregning';
+import type { TilbakekrevingsvedtakMotregningSkjemaverdier } from './useTilbakekrevingsvedtakMotregningForm';
 
 interface TilbakekrevingsvedtakMotregningFritekstProps {
     feltnavn: keyof Omit<TilbakekrevingsvedtakMotregningSkjemaverdier, 'varselDato'>;

@@ -4,7 +4,7 @@ interface IProps {
     behandlingErEndreMigreringsdato: boolean;
     behandlingErMigreringMedAvvikInnenforBeløpsgrenser: boolean;
     behandlingErMigreringMedAvvikUtenforBeløpsgrenser: boolean;
-    behandlingErMigreringMedManuellePosteringer: boolean | undefined;
+    behandlingErMigreringMedManuellePosteringer: boolean;
     behandlingErMigreringFraInfotrygdMedKun0Utbetalinger: boolean;
 }
 

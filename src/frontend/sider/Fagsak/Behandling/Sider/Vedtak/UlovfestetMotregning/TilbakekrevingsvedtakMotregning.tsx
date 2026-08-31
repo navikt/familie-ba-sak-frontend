@@ -1,70 +1,32 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { FloppydiskIcon } from '@navikt/aksel-icons';
-import { Box, Button, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
-import { useTilbakekrevingsvedtakMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/useTilbakekrevingsvedtakMotregning';
+import { Box, Button, ErrorMessage, ExpansionCard, Heading, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
 import Datovelger from './Datovelger';
 import { ForhåndsvisTilbakekrevingsvedtaksbrev } from './ForhåndsvisTilbakekrevingsvedtaksbrev';
 import { Tekstfelt } from './Tekstfelt';
-
-const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
-    'Årsaken til feilutbetalingen er [SETT INN HVA SOM SKJEDDE, SKILL MELLOM BRUKERS HANDLINGER KONTRA BRUKERS FORSTÅELSE AV UTBETALINGEN].';
-const PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD =
-    'Vi vurderer at [VURDER SKYLD, SETT INN KONKRET BEGRUNNELSE, OG SKILL MELLOM MOTTAKERS HANDLINGER KONTRA MOTTAKERS FORSTÅELSE.].';
-
-export type TilbakekrevingsvedtakMotregningSkjemaverdier = {
-    årsakTilFeilutbetaling: string;
-    vurderingAvSkyld: string;
-    varselDato: string;
-};
+import { useTilbakekrevingsvedtakMotregningForm } from './useTilbakekrevingsvedtakMotregningForm';
 
 export function TilbakekrevingsvedtakMotregning() {
-    const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
-    const { oppdaterTilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregning(behandling);
-
-    const [lagrer, settLagrer] = useState(false);
     const [expansionCardErÅpen, settExpansionCardErÅpen] = useState(false);
 
-    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
-    const årsakTilFeilutbetaling = tilbakekrevingsvedtakMotregning?.årsakTilFeilutbetaling;
-    const vurderingAvSkyld = tilbakekrevingsvedtakMotregning?.vurderingAvSkyld;
-    const varselDato = tilbakekrevingsvedtakMotregning?.varselDato;
-
-    const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
-        defaultValues: {
-            årsakTilFeilutbetaling: årsakTilFeilutbetaling ?? PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING,
-            vurderingAvSkyld: vurderingAvSkyld ?? PREUTFYLT_DEFAULT_TEKST_VURDERING_AV_SKYLD,
-            varselDato: varselDato,
-        },
+    const { form, onSubmit } = useTilbakekrevingsvedtakMotregningForm({
+        lukkExpansionCard: () => settExpansionCardErÅpen(false),
     });
 
-    const { handleSubmit } = form;
-
-    const lagreTilbakekrevingsvedtakOgLukkModal: SubmitHandler<TilbakekrevingsvedtakMotregningSkjemaverdier> = ({
-        varselDato,
-        årsakTilFeilutbetaling,
-        vurderingAvSkyld,
-    }) => {
-        settLagrer(true);
-        oppdaterTilbakekrevingsvedtakMotregning({
-            varselDato: varselDato,
-            årsakTilFeilutbetaling: årsakTilFeilutbetaling,
-            vurderingAvSkyld: vurderingAvSkyld,
-        }).finally(() => {
-            settLagrer(false);
-            settExpansionCardErÅpen(false);
-        });
-    };
+    const {
+        handleSubmit,
+        formState: { isSubmitting, errors },
+    } = form;
 
     return (
         <>
             <FormProvider {...form}>
-                <form onSubmit={handleSubmit(lagreTilbakekrevingsvedtakOgLukkModal)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <VStack gap="space-12" marginBlock="space-32">
                         <Heading level="2" size="small">
                             Tilbakekrevingsvedtak ved motregning
@@ -108,13 +70,14 @@ export function TilbakekrevingsvedtakMotregning() {
                                                 type="submit"
                                                 variant="primary"
                                                 disabled={erLesevisning}
-                                                loading={lagrer}
+                                                loading={isSubmitting}
                                                 icon={<FloppydiskIcon aria-hidden />}
                                             >
                                                 Lagre
                                             </Button>
                                         </Box>
                                     )}
+                                    {errors.root?.message && <ErrorMessage>{errors.root.message}</ErrorMessage>}
                                 </VStack>
                             </ExpansionCard.Content>
                         </ExpansionCard>

@@ -1,21 +1,30 @@
-import { useState } from 'react';
-
+import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
+import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, HStack, InfoCard } from '@navikt/ds-react';
+import { BodyLong, Button, ErrorMessage, HStack, InfoCard, VStack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 
-import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '../../../../../../typer/tilbakekrevingsvedtakMotregning';
+export function BekreftSamtykkeTilMotregning() {
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-interface IProps {
-    slettTilbakekrevingsvedtakMotregning: () => Promise<void>;
-    oppdaterTilbakekrevingsvedtakMotregning: (dto: OppdaterTilbakekrevingsvedtakMotregningDTO) => Promise<void>;
-}
+    const {
+        mutate: oppdaterTilbakekrevingsvedtakMotregning,
+        isPending: oppdaterer,
+        error: oppdaterError,
+    } = useOppdaterTilbakekrevingsvedtakMotregning({
+        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+    });
 
-export const BekreftSamtykkeTilMotregning = ({
-    slettTilbakekrevingsvedtakMotregning,
-    oppdaterTilbakekrevingsvedtakMotregning,
-}: IProps) => {
-    const [oppdaterer, settOppdaterer] = useState(false);
-    const [sletter, settSletter] = useState(false);
+    const {
+        mutate: slettTilbakekrevingsvedtakMotregning,
+        isPending: sletter,
+        error: slettError,
+    } = useSlettTilbakekrevingsvedtakMotregning({
+        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+    });
+
+    const error = oppdaterError ?? slettError;
 
     return (
         <InfoCard data-color="info">
@@ -23,32 +32,34 @@ export const BekreftSamtykkeTilMotregning = ({
                 <BodyLong spacing>
                     Bruker har samtykket til at vi venter med etterbetalingen til vi har vurdert feilutbetalingen
                 </BodyLong>
-                <HStack gap="space-16" justify="center">
-                    <Button
-                        onClick={() => {
-                            settSletter(true);
-                            slettTilbakekrevingsvedtakMotregning().finally(() => settSletter(false));
-                        }}
-                        loading={sletter}
-                        disabled={sletter || oppdaterer}
-                        variant="secondary"
-                    >
-                        Nei
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            settOppdaterer(true);
-                            oppdaterTilbakekrevingsvedtakMotregning({ samtykke: true }).finally(() =>
-                                settOppdaterer(false)
-                            );
-                        }}
-                        loading={oppdaterer}
-                        disabled={oppdaterer || sletter}
-                    >
-                        Ja
-                    </Button>
-                </HStack>
+                <VStack gap="space-16">
+                    <HStack gap="space-16" justify="center">
+                        <Button
+                            onClick={() =>
+                                slettTilbakekrevingsvedtakMotregning({ behandlingId: behandling.behandlingId })
+                            }
+                            loading={sletter}
+                            disabled={sletter || oppdaterer}
+                            variant="secondary"
+                        >
+                            Nei
+                        </Button>
+                        <Button
+                            onClick={() =>
+                                oppdaterTilbakekrevingsvedtakMotregning({
+                                    behandlingId: behandling.behandlingId,
+                                    tilbakekrevingsvedtakMotregning: { samtykke: true },
+                                })
+                            }
+                            loading={oppdaterer}
+                            disabled={oppdaterer || sletter}
+                        >
+                            Ja
+                        </Button>
+                    </HStack>
+                    {error && <ErrorMessage>{error.message}</ErrorMessage>}
+                </VStack>
             </InfoCard.Message>
         </InfoCard>
     );
-};
+}

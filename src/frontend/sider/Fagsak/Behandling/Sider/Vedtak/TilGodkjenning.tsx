@@ -4,7 +4,7 @@ import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { Button } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useSimuleringContext } from '@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext';
+import { useSimuleringsvurdering } from '@sider/Fagsak/Behandling/Sider/Simulering/useSimuleringsvurdering';
 import { useFeilutbetaltValutaTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useRefusjonEøsTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 import { useSammensattKontrollsakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
@@ -42,7 +42,7 @@ export function TilGodkjenning({ settFeilmelding }: Props) {
     const { erLeggTilFeilutbetaltValutaFormÅpen } = useFeilutbetaltValutaTabellContext();
     const { erLeggTilRefusjonEøsFormÅpen } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
-    const { behandlingErMigreringMedAvvikUtenforBeløpsgrenser } = useSimuleringContext();
+    const simuleringsvurdering = useSimuleringsvurdering();
     const { vedtaksperioder } = useVedtaksperioderContext();
 
     const saksbehandler = useSaksbehandler();
@@ -51,7 +51,7 @@ export function TilGodkjenning({ settFeilmelding }: Props) {
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     const label =
-        erMigreringFraInfotrygd && !behandlingErMigreringMedAvvikUtenforBeløpsgrenser
+        erMigreringFraInfotrygd && !simuleringsvurdering?.behandlingErMigreringMedAvvikUtenforBeløpsgrenser
             ? 'Bekreft migrering'
             : 'Til godkjenning';
 
