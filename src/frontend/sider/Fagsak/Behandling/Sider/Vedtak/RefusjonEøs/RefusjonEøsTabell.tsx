@@ -1,18 +1,16 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
 import type { IBehandling } from '@typer/behandling';
 import type { IMinimalFagsak } from '@typer/fagsak';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
-
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
-
+import { summerTotalBeløpForPerioder } from '../utils';
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
 import { Type } from './form/useRefusjonEøsForm';
 import { RefusjonEøsRad } from './RefusjonEøsRad';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
-import { summerTotalBeløpForPerioder } from '../utils';
 import { SlettRefusjonEøsError } from './SlettRefusjonEøsError';
 
 function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandling) {
@@ -47,7 +45,7 @@ export function RefusjonEøsTabell() {
     const erLesevisning = useErLesevisning();
 
     return (
-        <Stack direction={'column'} gap={'space-20'} marginBlock={'space-48 space-48'}>
+        <Stack direction={'column'} gap={'space-20'}>
             <Heading level={'2'} size={'small'} spacing={false}>
                 Refusjon EØS
             </Heading>

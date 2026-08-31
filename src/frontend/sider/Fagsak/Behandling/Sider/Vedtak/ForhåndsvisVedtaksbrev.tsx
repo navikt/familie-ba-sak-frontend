@@ -45,7 +45,7 @@ export function ForhåndsvisVedtaksbrev() {
     }
 
     return (
-        <>
+        <div>
             <Button
                 variant={'secondary'}
                 size={'medium'}
@@ -85,6 +85,6 @@ export function ForhåndsvisVedtaksbrev() {
                     </Dialog.Body>
                 </Dialog.Popup>
             </Dialog>
-        </>
+        </div>
     );
 }
