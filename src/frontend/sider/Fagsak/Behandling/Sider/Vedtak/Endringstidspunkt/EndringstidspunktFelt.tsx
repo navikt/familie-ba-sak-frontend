@@ -1,11 +1,9 @@
-import { useRef } from 'react';
-
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
-import { dateTilFormatertString, Datoformat } from '@utils/dato';
-import { format, parseISO, startOfToday } from 'date-fns';
-import { useController, useFormContext } from 'react-hook-form';
-
 import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
+import { Datoformat, dateTilFormatertString } from '@utils/dato';
+import { format, parseISO, startOfToday } from 'date-fns';
+import { useRef } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { Feltnavn, type FormValues } from './useEndringstidspunktForm';
 

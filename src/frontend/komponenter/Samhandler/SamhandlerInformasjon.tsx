@@ -1,7 +1,6 @@
+import { BodyShort, Box, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 import type { ISamhandlerInfo } from '@typer/samhandler';
 import { formaterIdent } from '@utils/formatter';
-
-import { BodyShort, Box, CopyButton, Heading, HStack, VStack } from '@navikt/ds-react';
 
 import KontorIkonGrønn from '../../ikoner/KontorIkonGrønn';
 import { Skillelinje } from '../PersonInformasjon/PersonInformasjon';

@@ -1,8 +1,7 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { FormProvider } from 'react-hook-form';
-
 import { BodyShort, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
+import { FormProvider } from 'react-hook-form';
 
 import { PersonSøknadstidspunktFelt } from './PersonSøknadstidspunktFelt';
 import { useEndreSøknadstidspunktForm } from './useEndreSøknadstidspunktForm';

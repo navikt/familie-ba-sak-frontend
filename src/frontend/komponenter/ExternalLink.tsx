@@ -1,7 +1,6 @@
-import type { UIEvent } from 'react';
-
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { HStack, Link } from '@navikt/ds-react';
+import type { UIEvent } from 'react';
 
 interface Props {
     label: string;

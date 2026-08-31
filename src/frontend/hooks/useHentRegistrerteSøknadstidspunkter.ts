@@ -2,7 +2,7 @@ import {
     hentRegistrerteSøknadstidspunkter,
     type RegistrertSøknadstidspunkt,
 } from '@api/hentRegistrerteSøknadstidspunkter';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export const HentRegistrerteSøknadstidspunkterQueryKeyFactory = {
     registrerteSøknadstidspunkter: (behandlingId: number) => ['registrerte-soknadstidspunkter', behandlingId],

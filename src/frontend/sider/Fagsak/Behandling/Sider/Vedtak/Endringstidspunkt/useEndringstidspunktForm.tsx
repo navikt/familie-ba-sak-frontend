@@ -1,11 +1,10 @@
 import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstidspunkt';
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOppdaterEndringstidspunkt } from '@hooks/useOppdaterEndringstidspunkt';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
 import type { IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 

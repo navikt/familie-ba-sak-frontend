@@ -1,5 +1,5 @@
-import { oppdaterBehandlingstema, type OppdaterBehandlingstemaPayload } from '@api/oppdaterBehandlingstema';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type OppdaterBehandlingstemaPayload, oppdaterBehandlingstema } from '@api/oppdaterBehandlingstema';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface OppdaterBehandlingstemaParameters extends OppdaterBehandlingstemaPayload {

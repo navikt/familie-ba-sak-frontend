@@ -1,7 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
+import type { PropsWithChildren } from 'react';
 
 import { NavigeringsRetning } from './TidslinjeContext';
 

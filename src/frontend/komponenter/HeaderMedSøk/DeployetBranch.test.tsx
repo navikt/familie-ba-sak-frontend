@@ -1,7 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
+import type { PropsWithChildren } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { DeployetBranch } from './DeployetBranch';

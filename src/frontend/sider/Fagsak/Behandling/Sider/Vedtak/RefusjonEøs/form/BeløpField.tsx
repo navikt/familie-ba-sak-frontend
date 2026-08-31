@@ -1,11 +1,9 @@
-import { useController, useFormContext } from 'react-hook-form';
-
 import { TextField } from '@navikt/ds-react';
-
-import Styles from './BeløpField.module.css';
-import { Fields, type FormValues } from './useRefusjonEøsForm';
+import { useController, useFormContext } from 'react-hook-form';
 import { isNumeric } from '../../../../../../../utils/eøsValidators';
 import { erPositivtHeltall } from '../../../../../../../utils/validators';
+import Styles from './BeløpField.module.css';
+import { Fields, type FormValues } from './useRefusjonEøsForm';
 
 const INTEGER_MAX_VALUE = 2_147_483_647;
 

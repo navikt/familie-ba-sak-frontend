@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useRef } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
 import {
     erViPåUdefinertFagsakSide,
@@ -7,6 +5,7 @@ import {
     finnSideForBehandlingssteg,
 } from '@sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '@typer/behandling';
+import { useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 interface Props {

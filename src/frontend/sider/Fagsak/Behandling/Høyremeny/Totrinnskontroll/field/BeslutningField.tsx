@@ -1,13 +1,12 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Radio, RadioGroup, Stack } from '@navikt/ds-react';
 import {
     TotrinnskontrollFormField,
     type TotrinnskontrollFormValues,
 } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/useTotrinnskontrollForm';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Radio, RadioGroup, Stack } from '@navikt/ds-react';
 
 export function BeslutningField() {
     const saksbehandler = useSaksbehandler();

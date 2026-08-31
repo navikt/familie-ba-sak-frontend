@@ -1,12 +1,11 @@
 import { feil, ok, useFelt } from '@navikt/familie-skjema';
 import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
-
-import type { IsoDatoString } from './dato';
-import { Datoformat, erIsoStringGyldig, isoStringTilFormatertString } from './dato';
 import { useBrukerContext } from '../sider/Fagsak/BrukerContext';
 import type { IForelderBarnRelasjon } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
+import type { IsoDatoString } from './dato';
+import { Datoformat, erIsoStringGyldig, isoStringTilFormatertString } from './dato';
 
 interface IProps {
     avhengigheter?: Avhengigheter;

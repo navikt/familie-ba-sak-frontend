@@ -1,8 +1,3 @@
-import { useState } from 'react';
-
-import type { Distribusjonskanal } from '@typer/dokument';
-import type { AxiosError, AxiosRequestConfig } from 'axios';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import {
@@ -12,6 +7,9 @@ import {
     byggTomRessurs,
     RessursStatus,
 } from '@navikt/familie-typer';
+import type { Distribusjonskanal } from '@typer/dokument';
+import type { AxiosError, AxiosRequestConfig } from 'axios';
+import { useState } from 'react';
 
 export type FamilieAxiosRequestConfig<D> = AxiosRequestConfig & {
     data?: D;

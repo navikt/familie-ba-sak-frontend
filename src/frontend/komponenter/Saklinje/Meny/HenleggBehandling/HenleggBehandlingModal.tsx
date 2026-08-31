@@ -1,8 +1,9 @@
-import { FormProvider } from 'react-hook-form';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, InfoCard, Modal, VStack } from '@navikt/ds-react';
-
+import { FormProvider } from 'react-hook-form';
+import { ModalType } from '../../../../context/ModalContext';
+import { useModal } from '../../../../hooks/useModal';
+import { HenleggÅrsak } from '../../../../typer/behandling';
 import { BegrunnelseFelt } from './BegrunnelseFelt';
 import { ForhåndsvisBrevLenke } from './ForhåndsvisBrevLenke';
 import {
@@ -12,9 +13,6 @@ import {
     useHenleggBehandlingForm,
 } from './useHenleggBehandlingForm';
 import { ÅrsakFelt } from './ÅrsakFelt';
-import { ModalType } from '../../../../context/ModalContext';
-import { useModal } from '../../../../hooks/useModal';
-import { HenleggÅrsak } from '../../../../typer/behandling';
 
 export function HenleggBehandlingModal() {
     const { erModalÅpen, tittel, lukkModal, bredde } = useModal(ModalType.HENLEGG_BEHANDLING);

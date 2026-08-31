@@ -1,9 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@typer/common';
 import { lagPersonLabel } from '@utils/formatter';
 import { Controller, useFormContext } from 'react-hook-form';
-
-import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 import {
     EndretUtbetalingAndelFeltnavn,

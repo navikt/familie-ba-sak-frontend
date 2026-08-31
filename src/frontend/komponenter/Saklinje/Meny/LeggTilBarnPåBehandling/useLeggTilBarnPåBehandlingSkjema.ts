@@ -1,11 +1,10 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHarSaksbehandlerTilgang } from '@hooks/useHarSaksbehandlerTilgang';
 import { useLeggTilBarnPåBehandling } from '@hooks/useLeggTilBarnPåBehandling';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { adressebeskyttelsestyper } from '@typer/person';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 export enum LeggTilBarnPåBehandlingFelt {
     BARNIDENT = 'barnIdent',

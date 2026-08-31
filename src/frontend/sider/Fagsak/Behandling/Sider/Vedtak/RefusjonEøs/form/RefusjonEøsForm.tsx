@@ -1,10 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
-import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
-import { FormProvider } from 'react-hook-form';
-
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ErrorMessage, Fieldset, Stack } from '@navikt/ds-react';
-
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
+import { FormProvider } from 'react-hook-form';
+import { useRefusjonEøsTabellContext } from '../RefusjonEøsTabellContext';
 import { BeløpField } from './BeløpField';
 import { FomDatoField } from './FomDatoField';
 import { LandkodeField } from './LandkodeField';
@@ -13,7 +12,6 @@ import Styles from './RefusjonEøsForm.module.css';
 import { TomDatoField } from './TomDatoField';
 import type { Type } from './useRefusjonEøsForm';
 import { useRefusjonEøsForm } from './useRefusjonEøsForm';
-import { useRefusjonEøsTabellContext } from '../RefusjonEøsTabellContext';
 
 interface Props {
     type: Type;

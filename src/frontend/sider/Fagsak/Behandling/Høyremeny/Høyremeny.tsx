@@ -1,17 +1,14 @@
-import { Activity } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentHistorikkinnslag } from '@hooks/useHentHistorikkinnslag';
-
 import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
+import { Activity } from 'react';
 
 import { Behandlingskort } from './Behandlingskort/Behandlingskort';
 import { Brev } from './Brev/Brev';
 import { Historikk } from './Historikk/Historikk';
 import Styles from './Høyremeny.module.css';
 import { HøyremenyKnappikon } from './HøyremenyKnappikon';
-import { Tab } from './TabContextProvider';
-import { useTabContext } from './TabContextProvider';
+import { Tab, useTabContext } from './TabContextProvider';
 import { Tabvelger } from './Tabvelger';
 import { Totrinnskontroll } from './Totrinnskontroll/Totrinnskontroll';
 import { TotrinnskontrollModal } from './Totrinnskontroll/TotrinnskontrollModal';

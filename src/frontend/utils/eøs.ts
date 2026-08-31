@@ -1,9 +1,8 @@
 import { isBefore, isSameMonth } from 'date-fns';
-
-import { sorterPåDato } from './formatter';
 import { Status } from '../ikoner/StatusIkon';
 import type { EøsPeriodeStatus, IRestEøsPeriode } from '../typer/eøsPerioder';
 import type { IGrunnlagPerson } from '../typer/person';
+import { sorterPåDato } from './formatter';
 
 export const mapEøsPeriodeStatusTilStatus: Record<EøsPeriodeStatus, Status> = {
     IKKE_UTFYLT: Status.ADVARSEL,

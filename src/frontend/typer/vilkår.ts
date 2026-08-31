@@ -1,6 +1,5 @@
-import type { IIsoDatoPeriode, IsoDatoString } from '@utils/dato';
-
 import type { FeltState } from '@navikt/familie-skjema';
+import type { IIsoDatoPeriode, IsoDatoString } from '@utils/dato';
 
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';

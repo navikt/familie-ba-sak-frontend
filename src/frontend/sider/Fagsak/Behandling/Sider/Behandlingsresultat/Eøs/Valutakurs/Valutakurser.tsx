@@ -1,12 +1,6 @@
-import { useState } from 'react';
-
 import { useEndreVurderingsstrategiForValutakurser } from '@hooks/useEndreVurderingsstrategiForValutakurser';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
-import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
-import styled from 'styled-components';
-
 import {
     BodyLong,
     Box,
@@ -21,9 +15,12 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import ValutakursTabellRad from './ValutakursTabellRad';
+import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
+import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
+import { useState } from 'react';
+import styled from 'styled-components';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import ValutakursTabellRad from './ValutakursTabellRad';
 
 const ValutakurserContainer = styled.div`
     margin-top: 5rem;

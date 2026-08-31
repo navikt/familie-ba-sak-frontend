@@ -1,6 +1,5 @@
-import { addYears } from 'date-fns';
-
 import { kjønnType } from '@navikt/familie-typer';
+import { addYears } from 'date-fns';
 
 import { FagsakTestdata } from '../../testutils/testdata/fagsakTestdata';
 import { YtelseType } from '../../typer/beregning';

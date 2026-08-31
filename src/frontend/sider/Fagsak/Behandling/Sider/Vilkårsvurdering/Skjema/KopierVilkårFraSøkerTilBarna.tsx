@@ -1,17 +1,15 @@
-import { useState } from 'react';
-
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
+import { FilesIcon } from '@navikt/aksel-icons';
+import { Button, LocalAlert, VStack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import { Resultat, VilkårType } from '@typer/vilkår';
-
-import { FilesIcon } from '@navikt/aksel-icons';
-import { Button, LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useState } from 'react';
 
 const VILKÅRTYPER_SOM_SKAL_ÅPNES = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
 

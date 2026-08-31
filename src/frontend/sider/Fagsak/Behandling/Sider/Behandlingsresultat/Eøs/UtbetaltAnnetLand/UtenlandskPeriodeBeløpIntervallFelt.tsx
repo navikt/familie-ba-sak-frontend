@@ -1,8 +1,7 @@
+import { Select } from '@navikt/ds-react';
 import { UtenlandskPeriodeBeløpIntervall, utenlandskPeriodeBeløpIntervaller } from '@typer/eøsPerioder';
 import { isEmpty } from '@utils/eøsValidators';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Select } from '@navikt/ds-react';
 
 import { UtenlandskPeriodeBeløpFelt, type UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
 

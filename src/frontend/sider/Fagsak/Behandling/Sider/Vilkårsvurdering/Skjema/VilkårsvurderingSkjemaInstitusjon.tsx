@@ -2,12 +2,11 @@ import { useBehandlingId } from '@hooks/useBehandlingId';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { PersonType } from '@typer/person';
-import type { IPersonResultat } from '@typer/vilkår';
-import { annenVurderingConfig, AnnenVurderingType, vilkårConfigInstitusjon } from '@typer/vilkår';
-
 import { Bleed, Box, HStack, LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import { PersonType } from '@typer/person';
+import type { IPersonResultat } from '@typer/vilkår';
+import { AnnenVurderingType, annenVurderingConfig, vilkårConfigInstitusjon } from '@typer/vilkår';
 
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';

@@ -1,5 +1,5 @@
-import { endreSøknadstidspunkt, type EndreSøknadstidspunktPayload } from '@api/endreSøknadstidspunkt';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type EndreSøknadstidspunktPayload, endreSøknadstidspunkt } from '@api/endreSøknadstidspunkt';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface EndreSøknadstidspunktParameters extends EndreSøknadstidspunktPayload {

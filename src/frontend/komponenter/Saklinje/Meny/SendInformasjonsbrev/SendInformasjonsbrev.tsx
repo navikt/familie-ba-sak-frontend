@@ -1,6 +1,5 @@
-import { useLocation, useNavigate } from 'react-router';
-
 import { ActionMenu } from '@navikt/ds-react';
+import { useLocation, useNavigate } from 'react-router';
 
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 import { useFagsakContext } from '../../../../sider/Fagsak/FagsakContext';

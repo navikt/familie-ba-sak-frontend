@@ -3,12 +3,11 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@typer/common';
 import { ForelderBarnRelasjonRolle } from '@typer/person';
 import { hentAlder } from '@utils/formatter';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 export function ValgteBarnFelt() {
     const bruker = useBruker();

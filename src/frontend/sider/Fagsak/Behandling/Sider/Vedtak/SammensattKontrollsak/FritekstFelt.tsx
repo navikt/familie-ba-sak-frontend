@@ -1,6 +1,5 @@
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Textarea } from '@navikt/ds-react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { SammensattKontrollsakFormField, type SammensattKontrollsakFormValues } from './useSammensattKontrollsakForm';
 

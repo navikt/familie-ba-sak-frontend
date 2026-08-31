@@ -1,6 +1,5 @@
-import { endOfMonth, startOfMonth } from 'date-fns';
-
 import type { Periode } from '@navikt/familie-tidslinje';
+import { endOfMonth, startOfMonth } from 'date-fns';
 
 import type { IYtelsePeriode } from '../../typer/beregning';
 import { YtelseType } from '../../typer/beregning';

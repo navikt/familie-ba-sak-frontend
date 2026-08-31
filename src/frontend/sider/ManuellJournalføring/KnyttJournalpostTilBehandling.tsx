@@ -1,10 +1,9 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Checkbox, Heading, InfoCard, LocalAlert, Table, VStack } from '@navikt/ds-react';
 import { behandlingsstatuser, behandlingstyper } from '@typer/behandling';
 import { finnVisningstekstForJournalføringsbehandlingsårsak } from '@typer/journalføringsbehandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { ressursHarFeilet } from '@utils/ressursUtils';
-
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Checkbox, Heading, InfoCard, LocalAlert, Table, VStack } from '@navikt/ds-react';
 
 import { KnyttTilNyBehandling } from './KnyttTilNyBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';

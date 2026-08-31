@@ -1,6 +1,6 @@
 import { server } from '@testutils/mocks/node';
 import { AxiosError, type InternalAxiosRequestConfig } from 'axios';
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { ApiClient, ApiFeil, RessursStatus } from './apiClient';

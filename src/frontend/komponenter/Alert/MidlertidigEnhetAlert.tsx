@@ -1,8 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { LocalAlert } from '@navikt/ds-react';
 import { BehandlingStatus } from '@typer/behandling';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '@utils/behandling';
-
-import { LocalAlert } from '@navikt/ds-react';
 
 export function MidlertidigEnhetAlert() {
     const behandling = useBehandling();

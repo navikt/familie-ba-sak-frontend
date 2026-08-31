@@ -1,5 +1,5 @@
-import { behandlingsresultater } from './behandling';
 import type { IsoDatoString } from '../utils/dato';
+import { behandlingsresultater } from './behandling';
 
 export interface IKlagebehandling {
     id: string;

@@ -1,5 +1,5 @@
 import { hentPersonerMedUgyldigEtterbetalingsperiode } from '@api/hentPersonerMedUgyldigEtterbetalingsperiode';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 type Options = Omit<UseQueryOptions<string[]>, 'queryKey' | 'queryFn'>;
 

@@ -1,11 +1,8 @@
-import type { PropsWithChildren } from 'react';
-
-import { describe, expect } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet';
+import type { PropsWithChildren } from 'react';
+import { describe, expect } from 'vitest';
 import { render } from '../../../../testutils/testrender';
+import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet';
 
 function Wrapper({ children }: PropsWithChildren) {
     return (

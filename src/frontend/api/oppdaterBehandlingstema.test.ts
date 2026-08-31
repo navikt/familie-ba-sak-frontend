@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import { oppdaterBehandlingstema, type OppdaterBehandlingstemaPayload } from '@api/oppdaterBehandlingstema';
+import { type OppdaterBehandlingstemaPayload, oppdaterBehandlingstema } from '@api/oppdaterBehandlingstema';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { BehandlingKategori, BehandlingUnderkategori } from '@typer/behandlingstema';
 import { afterEach, describe, expect, test, vi } from 'vitest';

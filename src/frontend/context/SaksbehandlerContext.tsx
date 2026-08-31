@@ -1,10 +1,8 @@
+import { useHentSaksbehandler } from '@hooks/useHentSaksbehandler';
+import { Box, GlobalAlert } from '@navikt/ds-react';
+import type { Saksbehandler } from '@typer/saksbehandler';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import { useHentSaksbehandler } from '@hooks/useHentSaksbehandler';
-import type { Saksbehandler } from '@typer/saksbehandler';
-
-import { Box, GlobalAlert } from '@navikt/ds-react';
 
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
 

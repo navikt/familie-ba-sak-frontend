@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-
-import { useSaksbehandler } from './useSaksbehandler';
 import { hentSideFraUrl } from '../sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { hentSideHref } from '../utils/miljø';
 import { sendTilUmami } from '../utils/umami';
+import { useSaksbehandler } from './useSaksbehandler';
 
 export const useTrackTidsbrukPåSide = (fagsak: IMinimalFagsak, behandling: IBehandling) => {
     const saksbehandler = useSaksbehandler();

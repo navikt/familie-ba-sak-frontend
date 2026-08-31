@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-
-import classNames from 'classnames';
-
 import type { Etikett } from '@navikt/familie-tidslinje';
 
-import { TidslinjeVindu, useTidslinjeContext } from './TidslinjeContext';
+import classNames from 'classnames';
+import { useEffect } from 'react';
 import FamilieBaseKnapp from '../FamilieBaseKnapp';
+import { TidslinjeVindu, useTidslinjeContext } from './TidslinjeContext';
 import styles from './TidslinjeEtikett.module.css';
 
 interface IEtikettProp {

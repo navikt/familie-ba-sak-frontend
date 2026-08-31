@@ -1,7 +1,6 @@
-import type { IOppgave } from '@typer/oppgave';
-
 import { BodyLong, Box, Heading, HStack, Pagination } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import type { IOppgave } from '@typer/oppgave';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
 

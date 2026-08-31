@@ -1,5 +1,5 @@
 import { forhåndsvisBrevPåFagsak } from '@api/forhåndsvisBrevPåFagsak';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
 import { opprettPdfBlob } from '@utils/blob';
 

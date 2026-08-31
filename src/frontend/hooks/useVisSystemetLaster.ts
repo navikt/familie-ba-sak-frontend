@@ -1,7 +1,6 @@
 import { MetaKey } from '@hooks/meta/metaKey';
-import { useIsFetching, useIsMutating } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 
 export function useVisSystemetLaster() {
     const { systemetLaster } = useHttp();

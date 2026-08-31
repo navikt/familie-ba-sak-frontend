@@ -1,7 +1,6 @@
 import type { ISaksbehandler } from '@navikt/familie-typer';
-
-import { BehandlerRolle } from './behandling';
 import { erProd } from '../utils/miljø';
+import { BehandlerRolle } from './behandling';
 
 function gruppeIdTilRolle(gruppeId: string) {
     const rolleConfig = erProd()

@@ -1,7 +1,13 @@
-import { type Dispatch, type PropsWithChildren, type SetStateAction, useMemo, useState } from 'react';
-import { createContext, useContext } from 'react';
-
 import type { IToast, ToastTyper } from '@komponenter/Toast/typer';
+import {
+    createContext,
+    type Dispatch,
+    type PropsWithChildren,
+    type SetStateAction,
+    useContext,
+    useMemo,
+    useState,
+} from 'react';
 
 interface ToastContext {
     settToast: (toastId: ToastTyper, toast: IToast) => void;

@@ -1,8 +1,7 @@
 import { oppdaterBehandlingsresultat } from '@api/oppdaterBehandlingsresultat';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
+import type { IBehandling } from '@typer/behandling';
 
 interface Parameters {
     behandlingId: number;

@@ -4,8 +4,8 @@ import {
     Behandlingstype,
     BehandlingÅrsak,
     erBehandlingHenlagt,
-    MANUELLE_BEHANDLINGSÅRSAKER,
     type IBehandling,
+    MANUELLE_BEHANDLINGSÅRSAKER,
     type ManuellBehandlingÅrsak,
 } from '@typer/behandling';
 import { behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';

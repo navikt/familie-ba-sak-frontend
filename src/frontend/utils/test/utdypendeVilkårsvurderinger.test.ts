@@ -3,10 +3,10 @@ import {
     Regelverk,
     Resultat,
     UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
+    UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
-    UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
-    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
     VilkårType,
 } from '../../typer/vilkår';
 import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';

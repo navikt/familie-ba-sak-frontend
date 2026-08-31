@@ -1,7 +1,6 @@
+import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import type { VedtakBegrunnelse } from '@typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
-
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

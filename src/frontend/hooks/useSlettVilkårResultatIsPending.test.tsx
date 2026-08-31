@@ -1,11 +1,10 @@
-import { type PropsWithChildren, useState } from 'react';
-
 import { slettVilkårResultat } from '@api/slettVilkårResultat';
-import { useSlettVilkårResultat, type Parameters } from '@hooks/useSlettVilkårResultat';
+import { type Parameters, useSlettVilkårResultat } from '@hooks/useSlettVilkårResultat';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { type PropsWithChildren, useState } from 'react';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { useSlettVilkårResultatIsPending } from './useSlettVilkårResultatIsPending';
 

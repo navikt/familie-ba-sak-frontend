@@ -1,7 +1,6 @@
+import type { AlleBegrunnelser } from '@typer/vilkår';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import type { AlleBegrunnelser } from '@typer/vilkår';
 
 interface AlleBegrunnelserContext {
     alleBegrunnelser: AlleBegrunnelser;

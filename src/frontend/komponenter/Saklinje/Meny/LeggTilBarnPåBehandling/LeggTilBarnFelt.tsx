@@ -1,7 +1,6 @@
+import { TextField } from '@navikt/ds-react';
 import { sjekkEr11Tall, sjekkErGyldigIdent } from '@utils/validators';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { TextField } from '@navikt/ds-react';
 
 import {
     LeggTilBarnPåBehandlingFelt,

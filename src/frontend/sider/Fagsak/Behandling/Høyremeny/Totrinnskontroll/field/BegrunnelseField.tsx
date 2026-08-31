@@ -1,10 +1,9 @@
+import { Textarea } from '@navikt/ds-react';
 import {
     TotrinnskontrollFormField,
     type TotrinnskontrollFormValues,
 } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/useTotrinnskontrollForm';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Textarea } from '@navikt/ds-react';
 
 export function BegrunnelseField() {
     const { control } = useFormContext<TotrinnskontrollFormValues>();

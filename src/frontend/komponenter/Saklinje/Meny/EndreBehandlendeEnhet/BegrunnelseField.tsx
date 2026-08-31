@@ -1,8 +1,6 @@
-import type { ChangeEvent } from 'react';
-
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Textarea } from '@navikt/ds-react';
+import type { ChangeEvent } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { EndreBehandlendeEnhetFormFields, type EndreBehandlendeEnhetFormValues } from './useEndreBehandlendeEnhetForm';
 

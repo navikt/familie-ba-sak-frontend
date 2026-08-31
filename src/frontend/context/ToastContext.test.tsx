@@ -1,7 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
 import { AlertType, type IToast, ToastTyper } from '@komponenter/Toast/typer';
 import { act, renderHook } from '@testing-library/react';
+import type { PropsWithChildren } from 'react';
 import { describe, expect, test } from 'vitest';
 
 import { ToastProvider, useToastContext } from './ToastContext';

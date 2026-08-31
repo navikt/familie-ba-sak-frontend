@@ -1,5 +1,3 @@
-import type { PropsWithChildren } from 'react';
-
 import { opprettBehandling } from '@api/opprettBehandling';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { act, renderHook } from '@testing-library/react';
@@ -9,6 +7,7 @@ import { TestProviders } from '@testutils/testrender';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '@typer/behandlingstema';
 import { FagsakStatus, FagsakType } from '@typer/fagsak';
+import type { PropsWithChildren } from 'react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { OpprettBehandlingFelt, useOpprettBehandlingSkjema } from './useOpprettBehandlingSkjema';

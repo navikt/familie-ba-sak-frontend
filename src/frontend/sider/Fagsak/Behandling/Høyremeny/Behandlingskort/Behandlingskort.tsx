@@ -1,8 +1,6 @@
 import { BodyShort, Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { TextDangerSubtle, TextInfoSubtle, TextNeutral, TextSuccessSubtle } from '@navikt/ds-tokens/dist/tokens';
 import type { AkselColoredBorderToken } from '@navikt/ds-tokens/types';
-
-import { Informasjonsbolk } from './Informasjonsbolk';
 import { useBehandling } from '../../../../../hooks/useBehandling';
 import { useFagsak } from '../../../../../hooks/useFagsak';
 import {
@@ -16,6 +14,7 @@ import {
 } from '../../../../../typer/behandling';
 import { behandlingKategori, behandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import { Informasjonsbolk } from './Informasjonsbolk';
 
 function hentResultatfarge(behandlingResultat: BehandlingResultat): AkselColoredBorderToken {
     if (erBehandlingHenlagt(behandlingResultat)) {

@@ -1,7 +1,6 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useState, useMemo, useCallback } from 'react';
-
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 interface Context {
     erModalÅpen: boolean;

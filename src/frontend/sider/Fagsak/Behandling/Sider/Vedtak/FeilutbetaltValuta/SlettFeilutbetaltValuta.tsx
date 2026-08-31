@@ -4,9 +4,8 @@ import { useSlettFeilutbetaltValuta } from '@hooks/useSlettFeilutbetaltValuta';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 
 interface Props {
     feilutbetaltValutaId: number;

@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import { korrigerVedtak, type KorrigerVedtakPayload } from '@api/korrigerVedtak';
+import { type KorrigerVedtakPayload, korrigerVedtak } from '@api/korrigerVedtak';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 

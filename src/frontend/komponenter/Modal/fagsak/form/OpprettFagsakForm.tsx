@@ -1,6 +1,5 @@
-import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
-
 import { VStack } from '@navikt/ds-react';
+import { type FieldErrors, FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
 
 import { FagsakType } from '../../../../typer/fagsak';
 import type { ISamhandlerInfo } from '../../../../typer/samhandler';

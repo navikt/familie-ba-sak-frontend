@@ -1,10 +1,8 @@
-import styled from 'styled-components';
-
 import { Heading, Table } from '@navikt/ds-react';
-
+import styled from 'styled-components';
+import type { IBehandling } from '../../../../../../typer/behandling';
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
-import type { IBehandling } from '../../../../../../typer/behandling';
 
 interface IEndretUtbetalingAndelTabellProps {
     åpenBehandling: IBehandling;

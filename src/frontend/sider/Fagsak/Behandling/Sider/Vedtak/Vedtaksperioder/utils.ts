@@ -1,3 +1,4 @@
+import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
 import { BehandlingStatus } from '@typer/behandling';
 import {
     type IRestVedtakBegrunnelseTilknyttetVilkår,
@@ -9,8 +10,6 @@ import { type IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from '@typer/
 import type { AlleBegrunnelser } from '@typer/vilkår';
 import { dagensDato, isoStringTilDateMedFallback, tidenesMorgen } from '@utils/dato';
 import { addMonths, isBefore, startOfMonth } from 'date-fns';
-
-import type { GroupBase, OptionType } from '@navikt/familie-form-elements';
 
 const vedtaksperiodeTilMuligeVedtakBegrunnelseTyper = (
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser

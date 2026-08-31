@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
-
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import { useLocation } from 'react-router';
-
 import { Box, Button, Fieldset, Heading, HStack, TextField } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router';
 
 import { Infotrygdtabeller } from './Infotrygdtabeller';
 import { useInfotrygdSkjema } from './useInfotrygd';

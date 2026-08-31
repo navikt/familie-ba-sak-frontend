@@ -1,22 +1,19 @@
-import { useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
+import type { FeltState } from '@navikt/familie-skjema';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IGrunnlagPerson } from '@typer/person';
 import { type IVilkårConfig, type IVilkårResultat, Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 import { alleRegelverk } from '@utils/vilkår';
 import deepEqual from 'deep-equal';
-
-import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
-
+import { useState } from 'react';
+import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import Styles from './VilkårTabellRad.module.css';
 import VilkårTabellRadEndre from './VilkårTabellRadEndre';
-import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 
 interface Props {
     person: IGrunnlagPerson;

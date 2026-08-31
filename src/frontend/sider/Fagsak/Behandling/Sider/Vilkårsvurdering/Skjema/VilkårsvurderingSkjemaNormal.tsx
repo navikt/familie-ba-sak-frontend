@@ -1,8 +1,10 @@
-import { Activity } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
+import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
+import type { Ressurs } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
@@ -12,20 +14,15 @@ import {
     kanLeggeTilUtvidetVilkår,
 } from '@typer/behandling';
 import { PersonType } from '@typer/person';
-import { annenVurderingConfig, vilkårConfig, VilkårType } from '@typer/vilkår';
-
-import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-
-import styles from './VilkårsvurderingSkjema.module.css';
+import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår';
+import { Activity } from 'react';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import styles from './VilkårsvurderingSkjema.module.css';
 
 interface Props {
     visFeilmeldinger: boolean;

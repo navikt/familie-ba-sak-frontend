@@ -1,9 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { InfoCard } from '@navikt/ds-react';
+import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 export function BehandlingPåVentAlert() {
     const behandling = useBehandling();

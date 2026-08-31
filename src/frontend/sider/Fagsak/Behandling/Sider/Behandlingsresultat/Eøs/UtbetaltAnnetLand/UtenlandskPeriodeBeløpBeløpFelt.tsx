@@ -1,8 +1,7 @@
+import { TextField } from '@navikt/ds-react';
 import { konverterSkjemaverdiTilDesimal } from '@utils/eøs';
 import { isEmpty, isNumeric } from '@utils/eøsValidators';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { TextField } from '@navikt/ds-react';
 
 import { UtenlandskPeriodeBeløpFelt, type UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
 

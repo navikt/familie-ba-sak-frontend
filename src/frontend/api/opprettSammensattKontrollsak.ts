@@ -1,7 +1,6 @@
+import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import type { IRestOpprettSammensattKontrollsak, IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
 import { RessursResolver } from '@utils/ressursResolver';
-
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
 export async function opprettSammensattKontrollsak(
     request: FamilieRequest,

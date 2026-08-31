@@ -1,5 +1,5 @@
-import type { VilkårType } from './vilkår';
 import type { IsoDatoString } from '../utils/dato';
+import type { VilkårType } from './vilkår';
 
 export interface IVedtakForBehandling {
     aktiv: boolean;

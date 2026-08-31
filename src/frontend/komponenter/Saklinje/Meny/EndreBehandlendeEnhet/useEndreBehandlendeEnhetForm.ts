@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
-
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useForm } from 'react-hook-form';
 
 import { useOppdaterBehandlendeEnhet } from '../../../../hooks/useOppdaterBehandlendeEnhet';
 import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';

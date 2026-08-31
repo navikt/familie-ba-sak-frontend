@@ -1,22 +1,23 @@
-import { act, renderHook } from '@testing-library/react';
+import type { FeltState } from '@navikt/familie-skjema';
 
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import type { FeltState } from '@navikt/familie-skjema';
 import { kjønnType } from '@navikt/familie-typer';
+import { act, renderHook } from '@testing-library/react';
 
 import generator from '../../testutils/testverktøy/fnr/fnr-generator';
 import type { IGrunnlagPerson } from '../../typer/person';
 import { PersonType } from '../../typer/person';
 import { Målform } from '../../typer/søknad';
 import type { UtdypendeVilkårsvurdering } from '../../typer/vilkår';
-import { Regelverk, UtdypendeVilkårsvurderingEøsBarnBorMedSøker } from '../../typer/vilkår';
 import {
+    Regelverk,
     Resultat,
-    VilkårType,
     UtdypendeVilkårsvurderingDeltBosted,
+    UtdypendeVilkårsvurderingEøsBarnBorMedSøker,
     UtdypendeVilkårsvurderingEøsSøkerBosattIRiket,
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
+    VilkårType,
 } from '../../typer/vilkår';
 import type { IIsoDatoPeriode } from '../dato';
 import { nyIsoDatoPeriode } from '../dato';

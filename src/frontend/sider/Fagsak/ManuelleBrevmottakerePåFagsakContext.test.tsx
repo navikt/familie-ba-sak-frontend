@@ -1,12 +1,10 @@
-import type { PropsWithChildren } from 'react';
-
 import { act, renderHook } from '@testing-library/react';
-
+import type { PropsWithChildren } from 'react';
+import { lagBrevmottaker } from '../../testutils/testdata/brevmottakerTestdata';
 import {
     ManuelleBrevmottakerePåFagsakProvider,
     useManuelleBrevmottakerePåFagsakContext,
 } from './ManuelleBrevmottakerePåFagsakContext';
-import { lagBrevmottaker } from '../../testutils/testdata/brevmottakerTestdata';
 
 function Provider({ children }: PropsWithChildren) {
     return <ManuelleBrevmottakerePåFagsakProvider>{children}</ManuelleBrevmottakerePåFagsakProvider>;

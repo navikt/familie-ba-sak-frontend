@@ -1,17 +1,6 @@
-import { type Ref, useId, useImperativeHandle } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterVedtaksperiodeMedBegrunnelserIsPending } from '@hooks/useOppdaterVedtaksperiodeMedBegrunnelserIsPending';
-import {
-    Field,
-    useFritekstbegrunnelserForm,
-} from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/useFritekstbegrunnelserForm';
-import { utledSøkersMålform } from '@typer/behandling';
-import { målform } from '@typer/søknad';
-import classNames from 'classnames';
-import { FormProvider } from 'react-hook-form';
-
 import { ExternalLinkIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     BodyLong,
@@ -27,6 +16,15 @@ import {
     Textarea,
     VStack,
 } from '@navikt/ds-react';
+import {
+    Field,
+    useFritekstbegrunnelserForm,
+} from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/useFritekstbegrunnelserForm';
+import { utledSøkersMålform } from '@typer/behandling';
+import { målform } from '@typer/søknad';
+import classNames from 'classnames';
+import { type Ref, useId, useImperativeHandle } from 'react';
+import { FormProvider } from 'react-hook-form';
 
 import Styles from './Fritekstbegrunnelser.module.css';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';

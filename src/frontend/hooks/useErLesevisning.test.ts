@@ -1,10 +1,5 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { useBehandling } from './useBehandling';
-import { useErLesevisning } from './useErLesevisning';
-import { useFagsak } from './useFagsak';
-import { useSaksbehandler } from './useSaksbehandler';
 import { lagBehandling } from '../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
@@ -12,6 +7,10 @@ import { BehandlingStatus, BehandlingSteg } from '../typer/behandling';
 import { harTilgangTilEnhet } from '../typer/enhet';
 import { FagsakStatus } from '../typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
+import { useBehandling } from './useBehandling';
+import { useErLesevisning } from './useErLesevisning';
+import { useFagsak } from './useFagsak';
+import { useSaksbehandler } from './useSaksbehandler';
 
 vi.mock('./useBehandling');
 vi.mock('./useSaksbehandler');

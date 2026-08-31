@@ -1,6 +1,6 @@
 import { fjernSmåbarnstillegg } from '@api/fjernSmåbarnstillegg';
 import type { Småbarnstilleggkorrigering } from '@api/leggTilSmåbarnstillegg';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface Parameters extends Småbarnstilleggkorrigering {

@@ -1,9 +1,8 @@
 import { BodyShort, Box, ExpansionCard, UNSAFE_Combobox } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-
-import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 import { JournalpostTittel } from '../../typer/manuell-journalføring';
 import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
+import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
 const EndreJournalpost = () => {
     const { skjema, erLesevisning } = useManuellJournalføringContext();

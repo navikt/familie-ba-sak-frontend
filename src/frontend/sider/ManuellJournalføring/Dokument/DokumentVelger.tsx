@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-
 import { Box, ExpansionCard } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
-
+import { useEffect, useState } from 'react';
+import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 import { DokumentInfoStripe } from './DokumentInfoStripe';
 import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
-import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;

@@ -1,10 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useFagsakId } from '@hooks/useFagsakId';
+import { BodyShort, List } from '@navikt/ds-react';
 import { BehandlingSteg } from '@typer/behandling';
 import { Filtreringsregel, filtreringsregler } from '@typer/fødselshendelser';
 import { useNavigate } from 'react-router';
-
-import { BodyShort, List } from '@navikt/ds-react';
 
 import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
 import Skjemasteg from '../Skjemasteg';

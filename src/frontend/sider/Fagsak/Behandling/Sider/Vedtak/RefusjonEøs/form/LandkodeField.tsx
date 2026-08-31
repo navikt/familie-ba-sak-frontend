@@ -1,8 +1,7 @@
 import { useController, useFormContext } from 'react-hook-form';
-
+import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../../../komponenter/FlaggCombobox';
 import Styles from './LandkodeField.module.css';
 import { Fields, type FormValues } from './useRefusjonEøsForm';
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../../../../../komponenter/FlaggCombobox';
 
 interface Props {
     readOnly?: boolean;

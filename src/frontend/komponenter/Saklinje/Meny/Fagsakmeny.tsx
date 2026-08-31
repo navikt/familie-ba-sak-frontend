@@ -1,10 +1,8 @@
-import { useState } from 'react';
-
 import { useFagsak } from '@hooks/useFagsak';
-import { FagsakStatus } from '@typer/fagsak';
-
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
+import { FagsakStatus } from '@typer/fagsak';
+import { useState } from 'react';
 
 import Styles from './Fagsakmeny.module.css';
 import { LeggTilBrevmottakerModalFagsak } from './LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';

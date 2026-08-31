@@ -1,15 +1,13 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
-import type { IRegistrerInstitusjon } from '@typer/institusjon';
-import { hentFrontendFeilmelding } from '@utils/ressursUtils';
-import { useNavigate } from 'react-router';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import { BehandlingSteg, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
+import type { IRegistrerInstitusjon } from '@typer/institusjon';
+import { hentFrontendFeilmelding } from '@utils/ressursUtils';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { useBehandlingContext } from '../../context/BehandlingContext';
 

@@ -1,14 +1,12 @@
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import type { IPar } from '@typer/common';
-import type { IsoDatoString } from '@utils/dato';
-
 import { Box, Button, Fieldset, HStack, Select } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
-
+import type { IPar } from '@typer/common';
+import type { IsoDatoString } from '@utils/dato';
+import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import { useOppgavebenkContext } from './OppgavebenkContext';
 import type { IOppgaveFelt } from './oppgavefelter';
-import DatovelgerForGammelSkjemaløsning from '../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 
 export function FilterSkjema() {
     const { hentOppgaver, oppgaver, oppgaveFelter, settVerdiPåOppgaveFelt, tilbakestillOppgaveFelter, validerSkjema } =

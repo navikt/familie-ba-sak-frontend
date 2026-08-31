@@ -1,9 +1,8 @@
 import { describe, expect, test } from 'vitest';
-
-import { utledAdressebeskyttelseGradering } from './Personlinje';
 import { lagPerson } from '../../testutils/testdata/personTestdata';
 import { FagsakType } from '../../typer/fagsak';
 import { Adressebeskyttelsegradering } from '../../typer/person';
+import { utledAdressebeskyttelseGradering } from './Personlinje';
 
 describe('utledAdressebeskyttelseGradering', () => {
     test('skal bruke barns gradering når fagsakType er SKJERMET_BARN', () => {

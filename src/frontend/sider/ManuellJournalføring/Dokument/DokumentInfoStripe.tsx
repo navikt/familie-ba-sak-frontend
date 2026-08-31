@@ -3,9 +3,8 @@ import { EksternLenke } from '@ikoner/EksternLenke';
 
 import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
-
-import styles from './DokumentInfoStripe.module.css';
 import FamilieBaseKnapp from '../../../komponenter/FamilieBaseKnapp';
+import styles from './DokumentInfoStripe.module.css';
 
 interface IDokumentInfoStripeProps {
     valgt: boolean;

@@ -1,19 +1,16 @@
-import { useState } from 'react';
-
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { PersonIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Table } from '@navikt/ds-react';
+import type { FeltState } from '@navikt/familie-skjema';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IAnnenVurdering, IAnnenVurderingConfig } from '@typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import deepEqual from 'deep-equal';
-
-import { PersonIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
-
+import { useState } from 'react';
+import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 import AnnenVurderingRadEndre from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
 import Styles from './AnnenVurderingTabellRad.module.css';
-import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
 
 interface Props {
     person: IGrunnlagPerson;

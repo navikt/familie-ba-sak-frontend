@@ -3,7 +3,7 @@ import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { renderHook } from '@testing-library/react';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { FeatureToggle } from '@typer/featureToggles';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { useSkalObfuskereData } from './useSkalObfuskereData';
 

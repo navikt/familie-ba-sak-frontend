@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useScrollOnMount<T extends HTMLElement = HTMLElement>(
     options: ScrollIntoViewOptions = { block: 'start' }

@@ -1,11 +1,10 @@
+import { kjønnType } from '@navikt/familie-typer';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { render } from '@testutils/testrender';
 import type { IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-
-import { kjønnType } from '@navikt/familie-typer';
 
 import { EndreSøknadstidspunktModal } from './EndreSøknadstidspunktModal';
 

@@ -1,10 +1,8 @@
-import { describe, test, expect } from 'vitest';
-
 import { kjønnType } from '@navikt/familie-typer';
-
-import { PersonIkon } from './PersonIkon';
+import { describe, expect, test } from 'vitest';
 import { render } from '../testutils/testrender';
 import { FagsakType } from '../typer/fagsak';
+import { PersonIkon } from './PersonIkon';
 
 describe('PersonIkon', () => {
     test('Voksen kvinne skal få kvinne-ikon, ikke jente-ikon', () => {

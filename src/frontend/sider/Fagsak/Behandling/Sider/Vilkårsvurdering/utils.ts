@@ -1,3 +1,5 @@
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonTypeVisningsRangering } from '@typer/person';
@@ -20,9 +22,6 @@ import {
     lagInitiellFelt,
 } from '@utils/validators';
 import { differenceInMilliseconds } from 'date-fns';
-
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { FeltState } from '@navikt/familie-skjema';
 
 import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 

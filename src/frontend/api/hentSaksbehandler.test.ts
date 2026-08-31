@@ -1,9 +1,8 @@
-import { http, HttpResponse } from 'msw';
-import { describe, it, expect } from 'vitest';
-
-import { hentSaksbehandler } from './hentSaksbehandler';
+import { HttpResponse, http } from 'msw';
+import { describe, expect, it } from 'vitest';
 import { server } from '../testutils/mocks/node';
 import { lagISaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
+import { hentSaksbehandler } from './hentSaksbehandler';
 
 describe('hentSaksbehandler', () => {
     it('skal hente saksbehandler', async () => {

@@ -1,12 +1,11 @@
-import type { PropsWithChildren } from 'react';
+import { BodyShort, ExpansionCard, HGrid, Label } from '@navikt/ds-react';
 
 import { useVedtaksperiodeContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperiodeContext';
 import { hentVedtaksperiodeTittel, Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { dagensDato, isoDatoPeriodeTilFormatertString, isoStringTilDateMedFallback, tidenesEnde } from '@utils/dato';
 import { formaterBeløp, summer } from '@utils/formatter';
 import { endOfMonth, isAfter } from 'date-fns';
-
-import { BodyShort, Label, ExpansionCard, HGrid } from '@navikt/ds-react';
+import type { PropsWithChildren } from 'react';
 
 const VEDTAKSPERIODETYPE_SOM_SKAL_VISE_SUM = [
     Vedtaksperiodetype.UTBETALING,

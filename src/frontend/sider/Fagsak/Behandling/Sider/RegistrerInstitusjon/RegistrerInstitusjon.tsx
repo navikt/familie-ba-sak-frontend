@@ -2,13 +2,11 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { BehandlingSteg } from '@typer/behandling';
-
 import { LocalAlert } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-
-import { useInstitusjon } from './useInstitusjon';
+import { BehandlingSteg } from '@typer/behandling';
 import Skjemasteg from '../Skjemasteg';
+import { useInstitusjon } from './useInstitusjon';
 
 const RegistrerInstitusjon = () => {
     const behandling = useBehandling();

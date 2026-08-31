@@ -1,10 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
-import { describe, expect } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import { LeggTilEllerFjernBrevmottakerePåBehandling } from './LeggTilEllerFjernBrevmottakerePåBehandling';
+import type { PropsWithChildren } from 'react';
+import { describe, expect } from 'vitest';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
@@ -14,6 +10,7 @@ import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import { BehandlingStatus, Behandlingstype, type IBehandling } from '../../../../typer/behandling';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
+import { LeggTilEllerFjernBrevmottakerePåBehandling } from './LeggTilEllerFjernBrevmottakerePåBehandling';
 
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;

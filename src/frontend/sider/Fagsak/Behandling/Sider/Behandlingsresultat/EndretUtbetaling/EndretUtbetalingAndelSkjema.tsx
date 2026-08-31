@@ -1,10 +1,9 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdatererEndretUtbetalingAndelIsPending } from '@hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSletterEndretUtbetalingAndelIsPending } from '@hooks/useSletterEndretUtbetalingAndelIsPending';
+import { LocalAlert, VStack } from '@navikt/ds-react';
 import { IEndretUtbetalingAndelÅrsak } from '@typer/utbetalingAndel';
 import { FormProvider, type SubmitHandler, type UseFormReturn } from 'react-hook-form';
-
-import { LocalAlert, VStack } from '@navikt/ds-react';
 
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
 import { AvtaletidspunktDeltBostedDatovelger } from './komponenter/AvtaletidspunktDeltBostedDatovelger';

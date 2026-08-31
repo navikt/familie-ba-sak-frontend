@@ -1,11 +1,6 @@
-import { useId } from 'react';
-
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useHentEndringstidspunkt } from '@hooks/useHentEndringstidspunkt';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-import { FormProvider } from 'react-hook-form';
-
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import {
     BodyShort,
@@ -19,6 +14,9 @@ import {
     Modal,
     VStack,
 } from '@navikt/ds-react';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { useId } from 'react';
+import { FormProvider } from 'react-hook-form';
 
 import { EndringstidspunktFelt } from './EndringstidspunktFelt';
 import { useEndringstidspunktForm } from './useEndringstidspunktForm';

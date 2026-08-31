@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router';
-
 import { BodyShort, Button, LocalAlert, Modal } from '@navikt/ds-react';
+import { useNavigate } from 'react-router';
 
 import { ModalType } from '../../../../context/ModalContext';
 import { useModal } from '../../../../hooks/useModal';

@@ -1,7 +1,6 @@
 import { hentGenererteBrevbegrunnelser } from '@api/hentGenererteBrevbegrunnelser';
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export const HentGenererteBrevbegrunnelserQueryKeyFactory = {
     vedtaksperiode: (vedtaksperiodeId: number) => ['genererteBrevbegrunnelser', vedtaksperiodeId],

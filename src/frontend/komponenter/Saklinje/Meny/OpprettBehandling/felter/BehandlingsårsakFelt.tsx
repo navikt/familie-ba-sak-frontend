@@ -3,13 +3,12 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
+import { Select } from '@navikt/ds-react';
 import { BehandlingStatus, Behandlingstype, behandlingÅrsak, erBehandlingHenlagt } from '@typer/behandling';
 import { FagsakStatus } from '@typer/fagsak';
 import { forrigeBehandlingVarTekniskEndringMedOpphør, hentTilgjengeligeBehandlingsårsaker } from '@utils/behandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Select } from '@navikt/ds-react';
 
 export function BehandlingsårsakFelt() {
     const fagsak = useFagsak();

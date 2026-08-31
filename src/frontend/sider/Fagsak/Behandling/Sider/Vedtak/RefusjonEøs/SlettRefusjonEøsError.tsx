@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { LocalAlert } from '@navikt/ds-react';
 
 import { useMutationState } from '@tanstack/react-query';
-
-import { LocalAlert } from '@navikt/ds-react';
+import { useState } from 'react';
 
 import { lagMutationKey } from '../../../../../../hooks/useSlettRefusjonEøs';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';

@@ -1,12 +1,11 @@
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterKompetanse } from '@hooks/useOppdaterKompetanse';
 import { useSlettKompetanse } from '@hooks/useSlettKompetanse';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { OptionType } from '@typer/common';
 import type { IRestKompetanse, KompetanseAktivitet, KompetanseResultat } from '@typer/eøsPerioder';
 import { type IIsoMånedPeriode, nyIsoMånedPeriode } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
 

@@ -2,8 +2,8 @@ import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { FagsakType } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import { formaterIdent, lagBrukerLabel } from '../../utils/formatter';
-import { Mottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import type { SkjemaBrevmottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import { Mottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
 interface IProps {
     bruker: IPersonInfo;

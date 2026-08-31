@@ -1,7 +1,6 @@
-import styled from 'styled-components';
-
 import { CogRotationIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
+import styled from 'styled-components';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
 import type { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';

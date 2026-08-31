@@ -1,10 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { ActionMenu } from '@navikt/ds-react';
 import { Behandlingstype } from '@typer/behandling';
 import { FagsakType } from '@typer/fagsak';
-
-import { ActionMenu } from '@navikt/ds-react';
 
 import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 

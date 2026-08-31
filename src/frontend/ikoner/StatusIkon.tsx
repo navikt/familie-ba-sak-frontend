@@ -1,11 +1,10 @@
-import classNames from 'classnames';
-
 import {
     CheckmarkCircleFillIcon,
     ExclamationmarkTriangleFillIcon,
     InformationSquareFillIcon,
     XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
+import classNames from 'classnames';
 
 import styles from './StatusIkon.module.css';
 

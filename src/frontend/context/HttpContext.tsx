@@ -1,9 +1,7 @@
-import type { PropsWithChildren } from 'react';
-
 import { HttpProvider } from '@navikt/familie-http';
-
-import { useAuthContext } from './AuthContext';
+import type { PropsWithChildren } from 'react';
 import { useSaksbehandler } from '../hooks/useSaksbehandler';
+import { useAuthContext } from './AuthContext';
 
 interface Props extends PropsWithChildren {
     fjernRessursSomLasterTimeout?: number;

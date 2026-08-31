@@ -1,17 +1,14 @@
-import { useEffect, useState } from 'react';
-
-import { FormProvider } from 'react-hook-form';
-
 import { BodyShort, Table } from '@navikt/ds-react';
-
-import { KompetanseTabellRadEndre } from './KompetanseTabellRadEndre';
-import { kompetanseFeilmeldingId, useKompetansePeriodeSkjema } from './useKompetansePeriodeSkjema';
+import { useEffect, useState } from 'react';
+import { FormProvider } from 'react-hook-form';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { OptionType } from '../../../../../../../typer/common';
 import type { IRestKompetanse } from '../../../../../../../typer/eøsPerioder';
 import { KompetanseResultat } from '../../../../../../../typer/eøsPerioder';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
 import { StatusBarnCelleOgPeriodeCelle } from '../EøsKomponenter/EøsSkjemaKomponenter';
+import { KompetanseTabellRadEndre } from './KompetanseTabellRadEndre';
+import { kompetanseFeilmeldingId, useKompetansePeriodeSkjema } from './useKompetansePeriodeSkjema';
 
 interface IProps {
     kompetanse: IRestKompetanse;

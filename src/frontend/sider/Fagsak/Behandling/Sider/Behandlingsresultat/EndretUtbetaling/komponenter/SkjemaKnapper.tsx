@@ -1,8 +1,7 @@
-import { useFormContext } from 'react-hook-form';
-
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import { byggDataRessurs } from '@navikt/familie-typer';
+import { useFormContext } from 'react-hook-form';
 
 import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';

@@ -1,7 +1,6 @@
-import type { PropsWithChildren } from 'react';
-
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
+import { Heading } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
@@ -21,14 +20,12 @@ import {
 } from '@typer/behandling';
 import type { IMinimalFagsak } from '@typer/fagsak';
 import type { FeatureToggles } from '@typer/featureToggles';
+import type { PropsWithChildren } from 'react';
 import { Route, Routes } from 'react-router';
 import { describe, expect, type MockInstance } from 'vitest';
-
-import { Heading } from '@navikt/ds-react';
-
+import { OpprettFagsakModal } from '../../Modal/fagsak/OpprettFagsakModal';
 import { Behandlingsmeny } from './Behandlingsmeny';
 import { HenleggBehandlingModal } from './HenleggBehandling/HenleggBehandlingModal';
-import { OpprettFagsakModal } from '../../Modal/fagsak/OpprettFagsakModal';
 
 function OpprettFagsakModalWrapper() {
     const { erModalÅpen } = useModal(ModalType.OPPRETT_FAGSAK);

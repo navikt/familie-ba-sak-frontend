@@ -1,10 +1,9 @@
 import MånedÅrVelger from '@komponenter/MånedÅrInput/MånedÅrVelger';
+import { Fieldset, HStack } from '@navikt/ds-react';
 import { dagensDato, isoStringTilDate } from '@utils/dato';
 import { isEmpty } from '@utils/eøsValidators';
 import { addMonths, endOfMonth, isAfter, isBefore } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Fieldset, HStack } from '@navikt/ds-react';
 
 import { ValutakursFelt, type ValutakursFormValues } from './useValutakursSkjema';
 

@@ -1,7 +1,6 @@
 import { expect } from 'vitest';
-
-import { FalskIdentitet } from './FalskIdentitet';
 import { render } from '../../testutils/testrender';
+import { FalskIdentitet } from './FalskIdentitet';
 
 describe('FalskIdentitet', () => {
     test('skal rendre komponent som forventet når erHeading er false', () => {

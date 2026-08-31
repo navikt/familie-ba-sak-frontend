@@ -1,8 +1,6 @@
-import type { ChangeEvent } from 'react';
-
-import { Controller, useFormContext } from 'react-hook-form';
-
 import { Select } from '@navikt/ds-react';
+import type { ChangeEvent } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { IEndretUtbetalingAndelÅrsak, årsaker, årsakTekst } from '../../../../../../../typer/utbetalingAndel';
 import { Utbetaling } from '../../Utbetaling';

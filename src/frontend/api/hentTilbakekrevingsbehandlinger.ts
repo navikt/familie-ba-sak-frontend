@@ -1,6 +1,5 @@
-import type { ITilbakekrevingsbehandling } from '@typer/tilbakekrevingsbehandling';
-
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import type { ITilbakekrevingsbehandling } from '@typer/tilbakekrevingsbehandling';
 
 import { RessursResolver } from '../utils/ressursResolver';
 

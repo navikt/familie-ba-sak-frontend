@@ -2,9 +2,8 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Textarea } from '@navikt/ds-react';
+import { useController, useFormContext } from 'react-hook-form';
 
 export function BegrunnelseFelt() {
     const { control } = useFormContext<OpprettBehandlingFormValues>();

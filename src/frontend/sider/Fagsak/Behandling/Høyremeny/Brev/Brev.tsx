@@ -1,13 +1,10 @@
-import { useState } from 'react';
-
-import { useNavigate } from 'react-router';
-
 import { Button, Modal, VStack } from '@navikt/ds-react';
-
-import Brevskjema from './Brevskjema';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useBrukerContext } from '../../../BrukerContext';
 import { useFagsakContext } from '../../../FagsakContext';
 import { Tab, useTabContext } from '../TabContextProvider';
+import Brevskjema from './Brevskjema';
 
 export function Brev() {
     const { fagsak } = useFagsakContext();

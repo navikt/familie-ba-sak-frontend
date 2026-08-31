@@ -1,8 +1,7 @@
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import type { IUtbetalingsperiodeDetalj, Vedtaksperiode } from '@typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { formaterBeløp, sorterUtbetaling } from '@utils/formatter';
-
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 
 import { SaksoversiktPanelBredde } from './FagsakLenkepanel';
 import PersonUtbetaling from './PersonUtbetaling';

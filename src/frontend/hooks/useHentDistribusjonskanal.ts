@@ -1,6 +1,6 @@
 import { hentDistribusjonskanal } from '@api/hentDistribusjonskanal';
 import { MetaKey } from '@hooks/meta/metaKey';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { Distribusjonskanal } from '@typer/dokument';
 
 type Options = Omit<UseQueryOptions<Distribusjonskanal>, 'queryKey' | 'queryFn' | 'enabled'>;

@@ -1,10 +1,8 @@
-import type { ChangeEvent } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
-import { behandlendeEnheter } from '@typer/enhet';
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Select } from '@navikt/ds-react';
+import { behandlendeEnheter } from '@typer/enhet';
+import type { ChangeEvent } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { EndreBehandlendeEnhetFormFields, type EndreBehandlendeEnhetFormValues } from './useEndreBehandlendeEnhetForm';
 

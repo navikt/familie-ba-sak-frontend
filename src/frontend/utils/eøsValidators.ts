@@ -1,11 +1,10 @@
-import { addMonths, endOfMonth, isAfter, isBefore } from 'date-fns';
-
-import { feil, ok } from '@navikt/familie-skjema';
 import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
 
+import { feil, ok } from '@navikt/familie-skjema';
+import { addMonths, endOfMonth, isAfter, isBefore } from 'date-fns';
+import type { OptionType } from '../typer/common';
 import type { IIsoMånedPeriode, IsoMånedString } from './dato';
 import { dagensDato, isoStringTilDate } from './dato';
-import type { OptionType } from '../typer/common';
 
 const isEmpty = (text?: string | number | boolean | Date | null) =>
     text === null || text === undefined || text.toString().trim().length === 0;
@@ -50,4 +49,4 @@ const tellAntallDesimaler = (verdi: string): number => verdi.split(/,|\./)[1]?.l
 
 const isNumeric = (val: string): boolean => !isNaN(Number(val));
 
-export { erEøsPeriodeGyldig, erBarnGyldig, erValutakodeGyldig, isEmpty, isNumeric, tellAntallDesimaler };
+export { erBarnGyldig, erEøsPeriodeGyldig, erValutakodeGyldig, isEmpty, isNumeric, tellAntallDesimaler };

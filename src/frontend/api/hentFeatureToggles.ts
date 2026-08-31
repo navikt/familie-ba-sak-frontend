@@ -1,6 +1,6 @@
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
-import { type FeatureToggles, FeatureToggle } from '../typer/featureToggles';
+import { FeatureToggle, type FeatureToggles } from '../typer/featureToggles';
 import { RessursResolver } from '../utils/ressursResolver';
 
 export async function hentFeatureToggles(request: FamilieRequest, påvirkerSystemLaster: boolean = true) {

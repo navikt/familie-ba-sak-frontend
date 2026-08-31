@@ -1,8 +1,7 @@
 import { useKorrigerVedtak } from '@hooks/useKorrigerVedtak';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 

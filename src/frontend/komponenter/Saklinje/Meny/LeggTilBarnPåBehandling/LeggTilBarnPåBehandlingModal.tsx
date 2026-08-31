@@ -1,8 +1,7 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { FormProvider } from 'react-hook-form';
-
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, Heading, HelpText, HStack, InfoCard, Modal } from '@navikt/ds-react';
+import { FormProvider } from 'react-hook-form';
 
 import { LeggTilBarnFelt } from './LeggTilBarnFelt';
 import { useLeggTilBarnPåBehandlingSkjema } from './useLeggTilBarnPåBehandlingSkjema';

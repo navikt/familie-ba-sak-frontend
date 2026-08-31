@@ -1,9 +1,7 @@
-import { addDays, endOfMonth, isAfter, isBefore, startOfMonth, subDays } from 'date-fns';
-
 import type { Periode } from '@navikt/familie-tidslinje';
-
-import { isoStringTilDate } from './dato';
+import { addDays, endOfMonth, isAfter, isBefore, startOfMonth, subDays } from 'date-fns';
 import type { IYtelsePeriode } from '../typer/beregning';
+import { isoStringTilDate } from './dato';
 
 export const splittYtelseVedEndringerPåAnnenYtelse = (
     opprinneligPeriode: Periode,

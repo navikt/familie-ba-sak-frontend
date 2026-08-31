@@ -3,9 +3,8 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useModal } from '@hooks/useModal';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { erPåHenleggbartSteg } from '@typer/behandling';
-
 import { ActionMenu } from '@navikt/ds-react';
+import { erPåHenleggbartSteg } from '@typer/behandling';
 
 export function HenleggBehandling() {
     const saksbehandler = useSaksbehandler();

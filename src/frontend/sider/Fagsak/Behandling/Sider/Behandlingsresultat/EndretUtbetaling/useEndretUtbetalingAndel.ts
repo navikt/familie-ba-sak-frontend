@@ -1,6 +1,5 @@
-import { type SubmitHandler, useForm } from 'react-hook-form';
-
 import { byggDataRessurs } from '@navikt/familie-typer';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
 import { useOppdaterEndretUtbetalingAndel } from '../../../../../../hooks/useOppdaterEndretUtbetalingAndel';

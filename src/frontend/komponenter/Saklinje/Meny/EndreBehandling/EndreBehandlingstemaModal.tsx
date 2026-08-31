@@ -1,7 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { FormProvider } from 'react-hook-form';
-
 import { Button, Fieldset, Modal } from '@navikt/ds-react';
+import { FormProvider } from 'react-hook-form';
 
 import { BehandlingstemaSelect } from './BehandlingstemaSelect';
 import { useEndreBehandlingstemaSkjema } from './useEndreBehandlingstemaSkjema';

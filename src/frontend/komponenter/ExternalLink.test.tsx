@@ -1,7 +1,6 @@
-import { describe, test, expect } from 'vitest';
-
-import { ExternalLink } from './ExternalLink';
+import { describe, expect, test } from 'vitest';
 import { render } from '../testutils/testrender';
+import { ExternalLink } from './ExternalLink';
 
 describe('ExternalLink', () => {
     test('skal rendre komponenten som forventent', () => {

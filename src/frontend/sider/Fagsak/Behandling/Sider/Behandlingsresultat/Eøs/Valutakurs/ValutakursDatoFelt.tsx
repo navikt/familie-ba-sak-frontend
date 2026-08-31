@@ -1,9 +1,8 @@
-import { useRef } from 'react';
+import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import { dagensDato } from '@utils/dato';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import { ValutakursFelt, type ValutakursFormValues } from './useValutakursSkjema';
 

@@ -1,9 +1,8 @@
+import { Select } from '@navikt/ds-react';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Select } from '@navikt/ds-react';
 
 import { EndreBehandlingstemaFelt, type EndreBehandlingstemaFormValues } from './useEndreBehandlingstemaSkjema';
 

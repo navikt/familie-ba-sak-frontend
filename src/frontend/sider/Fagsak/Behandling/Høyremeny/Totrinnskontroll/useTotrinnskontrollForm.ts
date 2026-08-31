@@ -3,6 +3,7 @@ import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperiode
 import { useIverksettVedtak } from '@hooks/useIverksettVedtak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { Tab, useTabContext } from '@sider/Fagsak/Behandling/Høyremeny/TabContextProvider';
 import { useTotrinnskontrollModalContext } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
@@ -11,8 +12,6 @@ import { KontrollertStatus } from '@sider/Fagsak/Behandling/Sider/sider';
 import { useQueryClient } from '@tanstack/react-query';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { useForm } from 'react-hook-form';
-
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 
 export enum TotrinnskontrollFormField {
     BESLUTNING = 'beslutning',

@@ -3,11 +3,10 @@ import {
     OpprettBehandlingFelt,
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
+import { Select } from '@navikt/ds-react';
 import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
 import { FagsakType } from '@typer/fagsak';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { Select } from '@navikt/ds-react';
 
 export const BehandlingstemaFelt = () => {
     const fagsak = useFagsak();

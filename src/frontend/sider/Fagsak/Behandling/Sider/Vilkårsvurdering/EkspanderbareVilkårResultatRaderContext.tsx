@@ -1,11 +1,10 @@
-import { createContext, type PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna, type IBehandling } from '@typer/behandling';
 import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { Resultat, VilkårType } from '@typer/vilkår';
+import { createContext, type PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react';
 
 const RELEVANTE_VILKÅR_TYPER_FOR_KOPIERTE_VILKÅR = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
 

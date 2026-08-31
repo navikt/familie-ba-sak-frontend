@@ -1,10 +1,9 @@
 import { renderHook } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-import { useSaksbehandler } from './useSaksbehandler';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSaksbehandlerContext } from '../context/SaksbehandlerContext';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
 import { BehandlerRolle } from '../typer/behandling';
+import { useSaksbehandler } from './useSaksbehandler';
 
 vi.mock('../context/SaksbehandlerContext', () => ({
     useSaksbehandlerContext: vi.fn(),

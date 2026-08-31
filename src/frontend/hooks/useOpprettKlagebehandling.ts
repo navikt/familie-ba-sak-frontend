@@ -1,5 +1,5 @@
-import { opprettKlagebehandling, type OpprettKlagebehandlingPayload } from '@api/opprettKlagebehandling';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type OpprettKlagebehandlingPayload, opprettKlagebehandling } from '@api/opprettKlagebehandling';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
 interface OpprettKlagebehandlingParameters extends OpprettKlagebehandlingPayload {
     fagsakId: number;

@@ -1,6 +1,5 @@
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { hentFeatureToggles } from '../api/hentFeatureToggles';
 import { FeatureToggle, type FeatureToggles } from '../typer/featureToggles';

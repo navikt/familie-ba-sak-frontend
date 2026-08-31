@@ -1,5 +1,5 @@
-import { leggTilBarnPåBehandling, type LeggTilBarnPåBehandlingPayload } from '@api/leggTilBarnPåBehandling';
-import { type DefaultError, useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import { type LeggTilBarnPåBehandlingPayload, leggTilBarnPåBehandling } from '@api/leggTilBarnPåBehandling';
+import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
 interface LeggTilBarnPåBehandlingParameters extends LeggTilBarnPåBehandlingPayload {

@@ -2,11 +2,10 @@ import { useBehandlingId } from '@hooks/useBehandlingId';
 import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
 import { HentSammensattKontrollsakQueryKeyFactory } from '@hooks/useHentSammensattKontrollsak';
 import { useSlettSammensattKontrollsak } from '@hooks/useSlettSammensattKontrollsak';
-import { useQueryClient } from '@tanstack/react-query';
-import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
-
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { ActionMenu, HStack, Loader } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
 
 interface Props {
     sammensattKontrollsak: IRestSammensattKontrollsak;

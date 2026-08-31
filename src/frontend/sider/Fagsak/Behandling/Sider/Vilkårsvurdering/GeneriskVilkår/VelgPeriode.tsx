@@ -1,17 +1,15 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Fieldset, HelpText, Label } from '@navikt/ds-react';
+import type { FeltState } from '@navikt/familie-skjema';
+import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { IVilkårResultat } from '@typer/vilkår';
 import { Resultat } from '@typer/vilkår';
 import type { IsoDatoString } from '@utils/dato';
 import { dagensDato, nyIsoDatoPeriode } from '@utils/dato';
 import { endOfMonth } from 'date-fns';
 import styled from 'styled-components';
-
-import { HelpText, Label, Fieldset } from '@navikt/ds-react';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { FeltState } from '@navikt/familie-skjema';
-
-import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 import DatovelgerForGammelSkjemaløsning from '../../../../../../komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
+import { vilkårPeriodeFeilmeldingId } from './VilkårTabell';
 
 interface IProps {
     redigerbartVilkår: FeltState<IVilkårResultat>;

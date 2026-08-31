@@ -1,13 +1,11 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-
-import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 
 const FALLBACK_MESSAGE =
     'Kunne ikke oppdatere registeropplysninger. Prøv igjen eller kontakt brukerstøtte hvis problemet vedvarer.';

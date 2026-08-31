@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
+import { useEffect, useState } from 'react';
 
 import { useBrukerContext } from '../../../../sider/Fagsak/BrukerContext';
 import type { IBehandling } from '../../../../typer/behandling';

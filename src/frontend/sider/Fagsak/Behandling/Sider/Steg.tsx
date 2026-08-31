@@ -1,10 +1,8 @@
-import type { PropsWithChildren } from 'react';
-
 import { useScrollOnMount } from '@hooks/useScrollOnMount';
 import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAlert';
 import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
-
 import { Box, type BoxProps, Heading, VStack } from '@navikt/ds-react';
+import type { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
     tittel: string;

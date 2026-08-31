@@ -6,10 +6,9 @@ import { useScrollTilAnker } from '@hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '@hooks/useSyncModiaContext';
 import { NotFound } from '@komponenter/Error/NotFound';
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
+import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 import { FagsakType } from '@typer/fagsak';
 import { Outlet } from 'react-router';
-
-import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 
 import { BrukerProvider } from './BrukerContext';
 import { DistribusjonskanalProvider } from './DistribusjonskanalProvider';

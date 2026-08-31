@@ -1,7 +1,6 @@
 import { useVersjonsinfo } from '@hooks/useVersjonsinfo';
-import { erPreprod } from '@utils/miljø';
-
 import { Detail, HStack } from '@navikt/ds-react';
+import { erPreprod } from '@utils/miljø';
 
 import Styles from './DeployetBranch.module.css';
 

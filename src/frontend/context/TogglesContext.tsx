@@ -1,7 +1,6 @@
+import { GlobalAlert } from '@navikt/ds-react';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import { GlobalAlert } from '@navikt/ds-react';
 
 import { useHentFeatureToggles } from '../hooks/useHentFeatureToggles';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';

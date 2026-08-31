@@ -1,6 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
-
 import { useHttp } from '@navikt/familie-http';
+import { useMutation } from '@tanstack/react-query';
 
 import { oppdaterBehandlendeEnhet } from '../api/oppdaterBehandlendeEnhet';
 

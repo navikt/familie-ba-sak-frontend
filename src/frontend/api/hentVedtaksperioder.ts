@@ -1,7 +1,6 @@
+import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { RessursResolver } from '@utils/ressursResolver';
-
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
 
 export async function hentVedtaksperioder(
     request: FamilieRequest,

@@ -1,7 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
-
 import { BodyLong, LocalAlert, Table, VStack } from '@navikt/ds-react';
+import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 
 export function ManglendeFinnmarkmerkingVarsel() {
     const behandling = useBehandling();

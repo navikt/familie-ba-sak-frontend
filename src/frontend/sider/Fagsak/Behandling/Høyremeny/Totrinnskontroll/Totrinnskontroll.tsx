@@ -1,7 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { BehandlingStatus } from '@typer/behandling';
-
 import { Box } from '@navikt/ds-react';
+import { BehandlingStatus } from '@typer/behandling';
 
 import { TotrinnskontrollForm } from './TotrinnskontrollForm';
 

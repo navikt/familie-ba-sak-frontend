@@ -1,16 +1,13 @@
-import type { UIEvent } from 'react';
-
-import { FormProvider } from 'react-hook-form';
-
 import { BodyLong, Button, Fieldset, Heading, HelpText, HStack, Modal, VStack } from '@navikt/ds-react';
-
+import type { UIEvent } from 'react';
+import { FormProvider } from 'react-hook-form';
+import { ExternalLink } from '../../ExternalLink';
 import { ErFolkeregistrertField } from './ErFolkeregistrertField';
 import { FødselsdatoField } from './FødselsdatoField';
 import { FødselsnummerField } from './FødselsnummerField';
 import { useLeggTilBarnModalContext } from './LeggTilBarnModalContext';
 import { NavnField } from './NavnField';
 import { Fields, useLeggTilBarnForm } from './useLeggTilBarnForm';
-import { ExternalLink } from '../../ExternalLink';
 
 export function LeggTilBarnModal() {
     const { lukkModal, erModalÅpen } = useLeggTilBarnModalContext();

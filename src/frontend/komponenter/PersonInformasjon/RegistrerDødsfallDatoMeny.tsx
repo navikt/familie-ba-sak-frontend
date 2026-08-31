@@ -1,11 +1,9 @@
-import { useState } from 'react';
-
 import { MenuElipsisHorizontalCircleIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
-
-import { RegistrerDødsfallDatoModal } from './RegistrerDødsfallDatoModal';
+import { useState } from 'react';
 import { Skjermstørrelse, useSkjermstørrelse } from '../../hooks/useSkjermstørrelse';
 import type { IGrunnlagPerson } from '../../typer/person';
+import { RegistrerDødsfallDatoModal } from './RegistrerDødsfallDatoModal';
 
 interface IRegistrerDødsfallDato {
     person: IGrunnlagPerson;

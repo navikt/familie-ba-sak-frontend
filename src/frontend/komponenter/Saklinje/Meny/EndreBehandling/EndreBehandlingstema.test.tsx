@@ -1,14 +1,11 @@
-import type { PropsWithChildren } from 'react';
-
-import { describe, expect } from 'vitest';
-
 import { ActionMenu } from '@navikt/ds-react';
-
-import { EndreBehandlingstema } from './EndreBehandlingstema';
+import type { PropsWithChildren } from 'react';
+import { describe, expect } from 'vitest';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render } from '../../../../testutils/testrender';
 import { FagsakType, type IMinimalFagsak } from '../../../../typer/fagsak';
+import { EndreBehandlingstema } from './EndreBehandlingstema';
 
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;

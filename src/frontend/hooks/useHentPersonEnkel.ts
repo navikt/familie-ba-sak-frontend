@@ -1,8 +1,7 @@
 import { hentPersonEnkel } from '@api/hentPersonEnkel';
-import { type DefaultError, useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { IPersonInfo } from '@typer/person';
-
 import { useHttp } from '@navikt/familie-http';
+import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { IPersonInfo } from '@typer/person';
 
 export const HentPersonEnkelQueryKeyFactory = {
     personEnkel: (personIdent: string) => ['person_enkel', personIdent],

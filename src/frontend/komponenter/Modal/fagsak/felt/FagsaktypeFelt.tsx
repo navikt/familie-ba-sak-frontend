@@ -1,6 +1,5 @@
-import { useController, useFormContext } from 'react-hook-form';
-
 import { Select } from '@navikt/ds-react';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { useFeatureToggles } from '../../../../hooks/useFeatureToggles';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';

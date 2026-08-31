@@ -1,7 +1,6 @@
+import type { Distribusjonskanal } from '@typer/dokument';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import type { Distribusjonskanal } from '@typer/dokument';
 
 type DistribusjonskanalContext =
     | { distribusjonskanal: Distribusjonskanal; distribusjonskanalError: undefined }

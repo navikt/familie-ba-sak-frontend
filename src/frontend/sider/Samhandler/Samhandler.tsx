@@ -1,13 +1,10 @@
+import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-
 import { FormProvider } from 'react-hook-form';
 import { useLocation } from 'react-router';
-
-import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
-
+import type { ISamhandlerInfo } from '../../typer/samhandler';
 import { OrganisasjonsnummerFelt } from './OrganisasjonsnummerFelt';
 import { SamhandlerFeltnavn, useSamhandlerForm } from './useSamhandlerForm';
-import type { ISamhandlerInfo } from '../../typer/samhandler';
 
 export const Samhandler = () => {
     const location = useLocation();

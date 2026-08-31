@@ -1,6 +1,6 @@
-import type { ChangeEvent } from 'react';
-
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { Select } from '@navikt/ds-react';
+import type { ISkjema } from '@navikt/familie-skjema';
 import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehandling';
 import { BehandlingstemaSelect } from '@sider/ManuellJournalføring/BehandlingstemaSelect';
 import type { ManuellJournalføringSkjemaFelter } from '@sider/ManuellJournalføring/ManuellJournalføringContext';
@@ -11,9 +11,7 @@ import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { forrigeBehandlingVarTekniskEndringMedOpphør, hentTilgjengeligeBehandlingsårsaker } from '@utils/behandling';
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
-
-import { Select } from '@navikt/ds-react';
-import type { ISkjema } from '@navikt/familie-skjema';
+import type { ChangeEvent } from 'react';
 
 interface IProps {
     skjema: ISkjema<ManuellJournalføringSkjemaFelter, string>;

@@ -1,9 +1,8 @@
 import { apiClient } from '@api/client/apiClient';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-
-import { settPåVent, type SettPåVentPayload } from './settPåVent';
 import { SettPåVentÅrsak } from '../typer/behandling';
+import { type SettPåVentPayload, settPåVent } from './settPåVent';
 
 vi.mock('@api/client/apiClient', () => ({
     apiClient: { request: vi.fn() },

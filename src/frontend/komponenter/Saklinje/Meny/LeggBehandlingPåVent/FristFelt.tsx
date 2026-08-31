@@ -1,10 +1,9 @@
-import { useRef } from 'react';
+import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import { dagensDato, dateTilIsoDatoString, isoStringTilDate } from '@utils/dato';
 import { startOfDay } from 'date-fns';
+import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import { SettPåVentFelt, type SettPåVentFormValues } from './useSettPåVentSkjema';
 

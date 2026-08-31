@@ -1,11 +1,10 @@
 import { useToastContext } from '@context/ToastContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import type { IBehandling } from '@typer/behandling';
-
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggHenterRessurs, RessursStatus } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import type { IBehandling } from '@typer/behandling';
 
 import type { BrevmottakerUseSkjema, IRestBrevmottaker } from './useBrevmottakerSkjema';
 

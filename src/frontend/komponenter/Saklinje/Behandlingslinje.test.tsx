@@ -2,8 +2,6 @@ import type { PropsWithChildren } from 'react';
 
 import { Route, Routes } from 'react-router';
 import { describe, expect, test } from 'vitest';
-
-import { Behandlingslinje } from './Behandlingslinje';
 import { BehandlingProvider } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from '../../sider/Fagsak/BrukerContext';
@@ -18,6 +16,7 @@ import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import type { IPersonInfo } from '../../typer/person';
 import type { Saksbehandler } from '../../typer/saksbehandler';
+import { Behandlingslinje } from './Behandlingslinje';
 
 interface WrapperProps extends PropsWithChildren {
     saksbehandler?: Saksbehandler;

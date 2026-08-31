@@ -4,13 +4,12 @@ import { useHentTilbakekrevingsbehandlinger } from '@hooks/useHentTilbakekreving
 import { useToggle } from '@hooks/useToggle';
 
 import { BodyShort, Heading, HStack, LocalAlert, Skeleton, Table, VStack } from '@navikt/ds-react';
-
+import { useFagsakContext } from '../FagsakContext';
 import { Behandling } from './Behandling';
+import styles from './Behandlinger.module.css';
 import { filtrerSaksoversiktbehandlinger, hentBehandlingerTilSaksoversikten, hentBehandlingId } from './utils';
 import { VisHenlagtBehandlingerSwitch } from './VisHenlagtBehandlingerSwitch';
 import { VisMånedligValutajuseringBehandlingerSwitch } from './VisMånedligValutajuseringBehandlingerSwitch';
-import { useFagsakContext } from '../FagsakContext';
-import styles from './Behandlinger.module.css';
 
 function TableHeader() {
     return (

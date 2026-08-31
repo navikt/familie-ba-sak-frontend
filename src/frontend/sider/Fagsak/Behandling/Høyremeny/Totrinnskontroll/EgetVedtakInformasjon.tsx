@@ -1,7 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
 function formaterOpprettetTidspunkt(opprettetTidspunkt: string | undefined) {
     return isoStringTilFormatertString({

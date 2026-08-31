@@ -1,7 +1,6 @@
+import { Box, ErrorMessage, HStack } from '@navikt/ds-react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-
-import { Box, ErrorMessage, HStack } from '@navikt/ds-react';
 
 import MånedVelger from './MånedVelger';
 import Årvelger from './ÅrVelger';

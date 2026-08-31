@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { useBruker } from '@hooks/useBruker';
 import BrevmottakerListe from '@komponenter/Brevmottaker/BrevmottakerListe';
 import { LeggTilBrevmottakerModalBehandling } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Button, InfoCard } from '@navikt/ds-react';
+import { useState } from 'react';
 
 type Kilde = 'vedtak' | 'simulering';
 

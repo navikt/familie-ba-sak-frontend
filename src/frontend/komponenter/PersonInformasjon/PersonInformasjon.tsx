@@ -1,17 +1,15 @@
 import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { BodyShort, CopyButton, Heading, HStack } from '@navikt/ds-react';
 import { type IGrunnlagPerson, type IPersonInfo, personTypeMap } from '@typer/person';
 import { formaterIdent, hentAlder } from '@utils/formatter';
 import { erAdresseBeskyttet } from '@utils/validators';
-
-import { BodyShort, CopyButton, Heading, HStack } from '@navikt/ds-react';
-
-import RegistrerDødsfallDatoMeny from './RegistrerDødsfallDatoMeny';
 import DødsfallTag from '../DødsfallTag';
 import { FalskIdentitet } from '../FalskIdentitet/FalskIdentitet';
 import { PersonIkon } from '../PersonIkon';
 import Styles from './PersonInformasjon.module.css';
+import RegistrerDødsfallDatoMeny from './RegistrerDødsfallDatoMeny';
 
 function hentAdresseBeskyttelseGradering(bruker: IPersonInfo, personIdent: string): boolean | undefined {
     const forelderBarnRelasjon = bruker.forelderBarnRelasjon.find(rel => rel.personIdent === personIdent);

@@ -1,12 +1,10 @@
-import { Link as ReactRouterLink, useLocation } from 'react-router';
-
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
-
-import { Behandlingsmeny } from './Meny/Behandlingsmeny';
+import { Link as ReactRouterLink, useLocation } from 'react-router';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { FagsakStatus } from '../../typer/fagsak';
+import { Behandlingsmeny } from './Meny/Behandlingsmeny';
 
 function lagAktivFaneStyle(fanenavn: string, pathname: string) {
     const urlSplit = pathname.split('/');

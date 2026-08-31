@@ -1,9 +1,8 @@
-import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useState } from 'react';
-
 import { useBehandling } from '@hooks/useBehandling';
 import { Behandlingstype } from '@typer/behandling';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 interface Props extends PropsWithChildren {
     vedtaksperiodeMedBegrunnelser: IVedtaksperiodeMedBegrunnelser;

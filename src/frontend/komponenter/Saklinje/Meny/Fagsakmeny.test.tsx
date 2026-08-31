@@ -1,11 +1,7 @@
+import { Heading } from '@navikt/ds-react';
 import type { PropsWithChildren } from 'react';
-
 import { Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
-
-import { Heading } from '@navikt/ds-react';
-
-import { Fagsakmeny } from './Fagsakmeny';
 import { ModalType } from '../../../context/ModalContext';
 import { useModal } from '../../../hooks/useModal';
 import { BrukerProvider } from '../../../sider/Fagsak/BrukerContext';
@@ -15,6 +11,7 @@ import { FagsakTestdata } from '../../../testutils/testdata/fagsakTestdata';
 import { PersonTestdata } from '../../../testutils/testdata/personTestdata';
 import { render, TestProviders } from '../../../testutils/testrender';
 import { OpprettFagsakModal } from '../../Modal/fagsak/OpprettFagsakModal';
+import { Fagsakmeny } from './Fagsakmeny';
 
 function OpprettFagsakModalWrapper() {
     const { erModalÅpen } = useModal(ModalType.OPPRETT_FAGSAK);

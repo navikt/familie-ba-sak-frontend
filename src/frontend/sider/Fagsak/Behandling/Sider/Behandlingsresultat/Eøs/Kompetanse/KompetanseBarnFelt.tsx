@@ -1,7 +1,6 @@
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { OptionType } from '@typer/common';
 import { useController, useFormContext } from 'react-hook-form';
-
-import { UNSAFE_Combobox } from '@navikt/ds-react';
 
 import { KompetanseFelt, type KompetanseFormValues } from './useKompetansePeriodeSkjema';
 
