@@ -25,25 +25,6 @@ export const hentSøkersMålform = (behandling: IBehandling) =>
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
 
-export const erBehandlingMedVedtaksbrevutsending = (åpenBehandling: IBehandling) => {
-    const { type, årsak } = åpenBehandling;
-
-    const erBehandlingÅrsakUtenBrevutsending = [
-        BehandlingÅrsak.SATSENDRING,
-        BehandlingÅrsak.SMÅBARNSTILLEGG_ENDRING_FRAM_I_TID,
-        BehandlingÅrsak.MÅNEDLIG_VALUTAJUSTERING,
-        BehandlingÅrsak.IVERKSETTE_KA_VEDTAK,
-        BehandlingÅrsak.FALSK_IDENTITET,
-    ].includes(årsak);
-
-    const erBehandlingTypeUtenBrevutsending = [
-        Behandlingstype.MIGRERING_FRA_INFOTRYGD,
-        Behandlingstype.TEKNISK_ENDRING,
-    ].includes(type);
-
-    return !erBehandlingTypeUtenBrevutsending && !erBehandlingÅrsakUtenBrevutsending;
-};
-
 const TILGJENGELIGE_BEHANDLINGSTYPER = [
     Behandlingstype.FØRSTEGANGSBEHANDLING,
     Behandlingstype.REVURDERING,
