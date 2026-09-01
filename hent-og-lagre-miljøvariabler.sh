@@ -4,6 +4,11 @@ set -euo pipefail
 SECRET_FILNAVN=".secrets.env"
 MAKS_ALDER_SEKUNDER=3600 # En time
 
+SECRET_NAVN="azuread-familie-ba-sak-frontend-lokal"
+TEAM="teamfamilie"
+MILJO="dev-gcp"
+BEGRUNNELSE="Lokal utvikling av familie-ba-sak-frontend"
+
 # Avbryt hvis forrige henting skjedde innen en time
 function avbryt_hvis_nylig_hentet() {
   # Sjekk om fil eksisterer
@@ -28,25 +33,30 @@ function avbryt_hvis_nylig_hentet() {
 }
 avbryt_hvis_nylig_hentet
 
-kubectl config use-context dev-gcp
-
-if ! kubectl auth can-i get pods >/dev/null 2>&1; then
-  echo "Du er ikke autentisert mot Kubernetes. Skru på Naisdevice og kjør: 'nais login'."
+if [[ "$(nais device status || true)" != *"Connected"* ]]; then
+  echo "Naisdevice er ikke tilkoblet. Start naisdevice og velg connect. Status må være grønn."
   exit 1
 fi
 
-function get_secrets() {
-  local repo=$1
-  kubectl -n teamfamilie get secret "${repo}" -o json | jq '.data | map_values(@base64d)'
+# Henter secreten med nais-cli. Uthentingen logges, derfor --reason.
+# nais-cli skriver feilmeldinger til stdout, så vi fanger dem og viser dem videre.
+if ! LOKAL_SECRETS=$(nais secret get "$SECRET_NAVN" -e "$MILJO" -t "$TEAM" \
+  --with-values --reason "$BEGRUNNELSE" -o json 2>&1); then
+  echo "Klarte ikke hente secreten $SECRET_NAVN:"
+  echo "$LOKAL_SECRETS"
+  echo "Er du pålogget naisdevice og logget inn med 'nais login -y'?"
+  exit 1
+fi
+
+function hent_verdi() {
+  printf '%s\n' "$LOKAL_SECRETS" | jq -r --arg k "$1" '.data[] | select(.key == $k) | .value'
 }
 
-LOKAL_SECRETS=$(get_secrets azuread-familie-ba-sak-frontend-lokal)
-
-AZURE_APP_CLIENT_ID=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_ID')
-AZURE_APP_CLIENT_SECRET=$(echo "$LOKAL_SECRETS" | jq -r '.AZURE_APP_CLIENT_SECRET')
+AZURE_APP_CLIENT_ID=$(hent_verdi AZURE_APP_CLIENT_ID)
+AZURE_APP_CLIENT_SECRET=$(hent_verdi AZURE_APP_CLIENT_SECRET)
 
 if [[ -z "$AZURE_APP_CLIENT_ID" || -z "$AZURE_APP_CLIENT_SECRET" ]]; then
-  echo "Noe gikk galt. Klarte ikke å hente miljøvariabler."
+  echo "Fant ikke AZURE_APP_CLIENT_ID/AZURE_APP_CLIENT_SECRET i $SECRET_NAVN."
   exit 1
 fi
 

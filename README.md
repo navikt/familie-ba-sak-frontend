@@ -5,7 +5,7 @@ Frontend app for barnetrygd sak.
 
 # Kom i gang med utvikling
 
-* Logg deg på naisdevice og gcloud, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler. 
+* Logg deg på naisdevice og kjør `nais login -y`, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler. 
 * Installer [NVM] (https://github.com/nvm-sh/nvm).
 * Kjør `nvm use`
 * Aktiver riktig pnpm-versjon med `corepack enable` (henter versjonen fra `packageManager` i package.json)
@@ -61,7 +61,14 @@ De lokale profilene kan kjøres med sine tilsvarende pnpm-kommandoer.
 For lokal kjøring er scriptet: [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) bakt inn.
 Dette scriptet henter secrets man trenger for utvikling og lagrer det i `.secrets.env`. Denne skal ikke lagres i git.
 
-Scriptet krever at man er pålogget naisdevice og Google Cloud (`nais login`).
+Scriptet bruker [nais-cli](https://cli.nais.io) og krever at man er pålogget naisdevice og har kjørt `nais login -y`.
+Uthenting av secret-verdier logges, og scriptet oppgir en begrunnelse (`--reason`) automatisk.
+
+Vil du hente secreten manuelt:
+```
+nais secret get azuread-familie-ba-sak-frontend-lokal -e dev-gcp -t teamfamilie --with-values --reason "Lokal utvikling"
+```
+Merk at `nais secret get` uten `--with-values` ikke finner plattform-secrets som denne.
 
 I kjørende miljø (preprod og prod) er secrets definert i Nais Console, under "Secrets" (pluss et lite dryss i
 nais-filene).
