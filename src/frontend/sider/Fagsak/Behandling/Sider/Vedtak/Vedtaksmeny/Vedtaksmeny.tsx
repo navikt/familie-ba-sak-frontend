@@ -4,6 +4,8 @@ import { EndreEndringstidspunkt } from '@sider/Fagsak/Behandling/Sider/Vedtak/En
 import { OppdaterEndringstidspunktModal } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/OppdaterEndringstidspunktModal';
 import { FeilutbetaltValuta } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValuta';
 import { useSkalViseFeilutbetaltValutaMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/useSkalViseFeilutbetaltValutaMenyvalg';
+import { KorrigerVedtak } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigerVedtak';
+import { KorrigerVedtakModal } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigerVedtakModal';
 import { RefusjonEøs } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøs';
 import { useSkalViseRefusjonEøsMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/useSkalViseRefusjonEøsMenyvalg';
 import { AngreSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/AngreSammensattKontrollsak';
@@ -11,8 +13,6 @@ import { OpprettSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Ved
 import { useSkalViseSammensattKontrollsakMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/useSkalViseSammensattKontrollsakMenyvalg';
 import { useState } from 'react';
 import { KorrigerEtterbetaling } from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
-import { KorrigerVedtak } from '../KorrigerVedtakModal/KorrigerVedtak';
-import { KorrigerVedtakModal } from '../KorrigerVedtakModal/KorrigerVedtakModal';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
 import Styles from './Vedtaksmeny.module.css';
 

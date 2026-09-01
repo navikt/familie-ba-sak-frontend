@@ -6,8 +6,8 @@ import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottak
 import { Box, LocalAlert, VStack } from '@navikt/ds-react';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/IngenVedtaksbrevbyggerAdvarsel';
-import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertEtterbetalingAdvarsel';
-import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigertVedtakAdvarsel';
+import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingAdvarsel';
+import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakAdvarsel';
 import { Vedtaksmeny } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksmeny/Vedtaksmeny';
 import { BehandlingResultat, BehandlingStatus, BehandlingÅrsak } from '@typer/behandling';
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValuta/FeilutbetaltValutaTabell';
