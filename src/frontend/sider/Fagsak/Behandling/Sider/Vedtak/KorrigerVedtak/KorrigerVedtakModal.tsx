@@ -4,8 +4,8 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/BegrunnelseFelt';
-import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/VedtaksdatoFelt';
+import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/BegrunnelseFelt';
+import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/VedtaksdatoFelt';
 import { FormProvider } from 'react-hook-form';
 
 import { KORRIGER_VEDTAK_FORM_ID, useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';

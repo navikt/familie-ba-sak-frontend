@@ -3,7 +3,7 @@ import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-reac
 import {
     KorrigerVedtakFelt,
     type KorrigerVedtakFormValues,
-} from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtakModal/useKorrigerVedtakSkjema';
+} from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/useKorrigerVedtakSkjema';
 import { dateTilIsoDatoString, isoStringTilDate } from '@utils/dato';
 import { format, startOfDay } from 'date-fns';
 import { useRef } from 'react';

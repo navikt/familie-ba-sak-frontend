@@ -10,6 +10,7 @@ import { useOppdaterVedtaksperiodeMedFriteksterIsPending } from '@hooks/useOppda
 import { BodyShort, Box, Label } from '@navikt/ds-react';
 import type { ActionMeta, FormatOptionLabelMeta, GroupBase, StylesConfig } from '@navikt/familie-form-elements';
 import { FamilieReactSelect } from '@navikt/familie-form-elements';
+import { useAlleBegrunnelserContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/AlleBegrunnelserContext';
 import { useQueryClient } from '@tanstack/react-query';
 import type { OptionType } from '@typer/common';
 import type { VedtakBegrunnelse, VedtakBegrunnelseType } from '@typer/vedtak';
@@ -17,7 +18,6 @@ import { Standardbegrunnelse, vedtakBegrunnelseTyper } from '@typer/vedtak';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { finnVedtakBegrunnelseType, hentBakgrunnsfarge, hentBorderfarge } from '@utils/vedtakUtils';
 import { type Ref, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { useAlleBegrunnelserContext } from '../AlleBegrunnelserContext';
 import Styles from './BegrunnelserMultiselect.module.css';
 import { grupperBegrunnelser, mapBegrunnelserTilSelectOptions } from './utils';
 import { useVedtaksperiodeContext } from './VedtaksperiodeContext';
