@@ -1,12 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { AlleBegrunnelser } from '@typer/vilkår';
-import { RessursResolver } from '@utils/ressursResolver';
 
-export async function hentAlleBegrunnelser(request: FamilieRequest): Promise<AlleBegrunnelser> {
-    const ressurs = await request<void, AlleBegrunnelser>({
-        method: 'GET',
+export async function hentAlleBegrunnelser(): Promise<AlleBegrunnelser> {
+    return apiClient.get<void, AlleBegrunnelser>({
         url: `/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser`,
-        påvirkerSystemLaster: true,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
