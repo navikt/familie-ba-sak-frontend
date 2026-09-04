@@ -1,14 +1,9 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { IKlagebehandling } from '@typer/klage';
 
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function hentKlagebehandlinger(request: FamilieRequest, fagsakId: number): Promise<IKlagebehandling[]> {
-    const ressurs = await request<void, IKlagebehandling[]>({
-        method: 'GET',
+export async function hentKlagebehandlinger(fagsakId: number): Promise<IKlagebehandling[]> {
+    return apiClient.get<void, IKlagebehandling[]>({
         url: `/familie-ba-sak/api/fagsaker/${fagsakId}/hent-klagebehandlinger`,
-        påvirkerSystemLaster: true,
         timeout: 10000,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
