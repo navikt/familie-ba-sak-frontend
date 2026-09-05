@@ -1,74 +1,40 @@
+import { useSlettVilkår } from '@hooks/useSlettVilkår';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Modal } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { Box, Button, ErrorMessage, Modal } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { VilkårType } from '@typer/vilkår';
 import { useState } from 'react';
-import styled from 'styled-components';
 
-import type { IBehandling } from '../../../../../../typer/behandling';
-import { VilkårType } from '../../../../../../typer/vilkår';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-
-const UtførKnapp = styled(Button)`
-    margin-top: var(--ax-space-20);
-`;
-
-interface IProps {
+interface Props {
     personIdent: string;
-    slettVilkårId: string;
 }
 
-const FjernUtvidetBarnetrygdVilkår = ({ personIdent, slettVilkårId }: IProps) => {
-    const { request } = useHttp();
+export function FjernUtvidetBarnetrygdVilkår({ personIdent }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const [visModal, settVisModal] = useState<boolean>(false);
-    const [disabled, settDisabled] = useState<boolean>(false);
-    const [visFrontendFeilmelding, settVisFrontendFeilmelding] = useState<boolean>(false);
-    const [feilmelding, settFeilmelding] = useState<string>();
+    const [visModal, settVisModal] = useState(false);
 
-    const fjernVilkårUtvidet = () => {
-        settDisabled(true);
-        request<{ personIdent: string; vilkårType: VilkårType }, IBehandling>({
-            method: 'DELETE',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/vilkaar`,
-            data: {
-                personIdent: personIdent,
-                vilkårType: VilkårType.UTVIDET_BARNETRYGD,
-            },
-        }).then((oppdatertBehandling: Ressurs<IBehandling>) => {
-            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
-                settÅpenBehandling(oppdatertBehandling);
-            } else if (
-                oppdatertBehandling.status === RessursStatus.FUNKSJONELL_FEIL ||
-                oppdatertBehandling.status === RessursStatus.FEILET ||
-                oppdatertBehandling.status === RessursStatus.IKKE_TILGANG
-            ) {
-                settVisFrontendFeilmelding(true);
-                settFeilmelding(
-                    oppdatertBehandling.frontendFeilmelding ?? 'Ukjent feil ved fjerning av vilkåret utvidet barnetrygd'
-                );
-                settDisabled(false);
-            }
-        });
-    };
+    const {
+        mutate: slettVilkår,
+        isPending: slettVilkårIsPending,
+        error: slettVilkårError,
+        reset: nullstillSlettVilkår,
+    } = useSlettVilkår({
+        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+    });
 
     const onCloseModal = () => {
-        settVisFrontendFeilmelding(false);
-        settFeilmelding(undefined);
+        nullstillSlettVilkår();
         settVisModal(false);
     };
 
     return (
         <>
-            <UtførKnapp
-                id={slettVilkårId}
-                onClick={() => settVisModal(true)}
-                size="small"
-                icon={<TrashIcon title="Fjern vilkår" />}
-            >
-                Fjern vilkår
-            </UtførKnapp>
+            <Box marginBlock={'space-20 space-0'}>
+                <Button onClick={() => settVisModal(true)} size="small" icon={<TrashIcon title="Fjern vilkår" />}>
+                    Fjern vilkår
+                </Button>
+            </Box>
 
             {visModal && (
                 <Modal
@@ -84,13 +50,23 @@ const FjernUtvidetBarnetrygdVilkår = ({ personIdent, slettVilkårId }: IProps) 
                 >
                     <Modal.Body>
                         Er du sikker?
-                        {visFrontendFeilmelding && <ErrorMessage size="small">{feilmelding}</ErrorMessage>}
+                        {slettVilkårError && <ErrorMessage size="small">{slettVilkårError.message}</ErrorMessage>}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button disabled={disabled} key={'bekreft'} onClick={() => fjernVilkårUtvidet()} size="small">
+                        <Button
+                            loading={slettVilkårIsPending}
+                            onClick={() =>
+                                slettVilkår({
+                                    behandlingId: behandling.behandlingId,
+                                    personIdent,
+                                    vilkårType: VilkårType.UTVIDET_BARNETRYGD,
+                                })
+                            }
+                            size="small"
+                        >
                             Bekreft
                         </Button>
-                        <Button variant="tertiary" key={'avbryt'} onClick={onCloseModal} size="small">
+                        <Button variant="tertiary" onClick={onCloseModal} size="small">
                             Avbryt
                         </Button>
                     </Modal.Footer>
@@ -98,6 +74,4 @@ const FjernUtvidetBarnetrygdVilkår = ({ personIdent, slettVilkårId }: IProps) 
             )}
         </>
     );
-};
-
-export default FjernUtvidetBarnetrygdVilkår;
+}
