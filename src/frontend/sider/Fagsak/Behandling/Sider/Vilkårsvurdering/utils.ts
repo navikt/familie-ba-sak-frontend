@@ -1,5 +1,4 @@
 import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonTypeVisningsRangering } from '@typer/person';
@@ -8,7 +7,6 @@ import {
     type IRestPersonResultat,
     type IRestVilkårResultat,
     type IVilkårResultat,
-    Resultat,
 } from '@typer/vilkår';
 import type { IIsoDatoPeriode } from '@utils/dato';
 import { isoStringTilDate, isoStringTilDateMedFallback, nyIsoDatoPeriode, tidenesEnde } from '@utils/dato';
@@ -18,12 +16,11 @@ import {
     erPeriodeGyldig,
     erResultatGyldig,
     erUtdypendeVilkårsvurderingerGyldig,
-    ikkeValider,
     lagInitiellFelt,
 } from '@utils/validators';
 import { differenceInMilliseconds } from 'date-fns';
 
-import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
+import { kjørValidering, validerVilkår } from './validering';
 
 const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     if (!periodeA.fom && !periodeA.tom) {
@@ -123,26 +120,7 @@ export const mapFraRestPersonResultatTilPersonResultat = (
                             mapTilFeltStateVilkårResultat(vilkårResultat)
                         )
                     ),
-                    andreVurderinger: personResultat.andreVurderinger.map(annenVurdering =>
-                        lagInitiellFelt(
-                            {
-                                begrunnelse: {
-                                    feilmelding: '',
-                                    valider: ikkeValider,
-                                    valideringsstatus: Valideringsstatus.OK,
-                                    verdi: annenVurdering.begrunnelse,
-                                },
-                                id: annenVurdering.id,
-                                resultat: lagInitiellFelt(annenVurdering.resultat, erResultatGyldig),
-                                endretAv: annenVurdering.endretAv,
-                                erVurdert: annenVurdering.resultat !== Resultat.IKKE_VURDERT,
-                                endretTidspunkt: annenVurdering.endretTidspunkt,
-                                behandlingId: annenVurdering.behandlingId,
-                                type: annenVurdering.type,
-                            },
-                            validerAnnenVurdering
-                        )
-                    ),
+                    andreVurderinger: personResultat.andreVurderinger,
                 };
             }
         })

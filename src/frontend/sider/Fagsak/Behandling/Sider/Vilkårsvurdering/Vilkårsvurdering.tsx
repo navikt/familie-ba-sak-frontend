@@ -7,7 +7,7 @@ import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
-import { annenVurderingConfig, type IAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
+import { annenVurderingConfig, type IRestAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
 import { useState } from 'react';
@@ -132,7 +132,7 @@ export function Vilkårsvurdering() {
                                 }' er ikke fullstendig`,
                                 skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                             })),
-                            ...hentAndreVurderingerMedFeil().map((annenVurdering: IAnnenVurdering) => ({
+                            ...hentAndreVurderingerMedFeil().map((annenVurdering: IRestAnnenVurdering) => ({
                                 feilmelding: `Et vilkår av typen '${
                                     annenVurderingConfig[annenVurdering.type].tittel
                                 }' er ikke fullstendig`,
