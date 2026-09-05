@@ -14,7 +14,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
-import FjernUtvidetBarnetrygdVilkår from './FjernUtvidetBarnetrygdVilkår';
+import { FjernUtvidetBarnetrygdVilkår } from './FjernUtvidetBarnetrygdVilkår';
 import VilkårTabell from './VilkårTabell';
 
 interface IProps {
@@ -156,10 +156,7 @@ const GeneriskVilkår = ({ person, vilkårFraConfig, vilkårResultater, visFeilm
                     </Box>
                 )}
                 {skalViseFjernUtvidetBarnetrygdKnapp() && (
-                    <FjernUtvidetBarnetrygdVilkår
-                        personIdent={person.personIdent}
-                        slettVilkårId={generiskVilkårKey + '__slett-vilkår-utvidet'}
-                    />
+                    <FjernUtvidetBarnetrygdVilkår personIdent={person.personIdent} />
                 )}
             </Fieldset>
         </Container>
