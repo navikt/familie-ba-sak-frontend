@@ -1,7 +1,5 @@
-import type { FeltState } from '@navikt/familie-skjema';
-
 import { PersonType } from '../typer/person';
-import type { IVilkårResultat, UtdypendeVilkårsvurdering } from '../typer/vilkår';
+import type { UtdypendeVilkårsvurdering } from '../typer/vilkår';
 import {
     Regelverk,
     Resultat,
@@ -122,7 +120,7 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
                 return 'Du må velge ett alternativ';
             }
             if (antallValgteEøsAlternativerForBosattIRiket.length > 1) {
-                return 'Du kan kun velge ett av disse alternativene: ' + antallValgteEøsAlternativerForBosattIRiket;
+                return `Du kan kun velge ett av disse alternativene: ${antallValgteEøsAlternativerForBosattIRiket}`;
             }
         }
         if (avhengigheter.vilkårType === VilkårType.BOR_MED_SØKER) {
@@ -139,38 +137,10 @@ export const bestemFeilmeldingForUtdypendeVilkårsvurdering = (
     }
 };
 
-const inneholderUmuligeAlternativer = (
+export function filtrerUtUmuligeUtdypendeVilkårsvurderinger(
     valgteAlternativer: UtdypendeVilkårsvurdering[],
-    muligeAlternativer: UtdypendeVilkårsvurdering[]
-): boolean => {
-    return valgteAlternativer.some(item => !muligeAlternativer.includes(item));
-};
-
-const filtrerUtUmuligeAlternativer = (
-    valgteAlternativer: UtdypendeVilkårsvurdering[],
-    muligeAlternativer: UtdypendeVilkårsvurdering[]
-): UtdypendeVilkårsvurdering[] => {
+    avhengigheter: UtdypendeVilkårsvurderingAvhengigheter
+): UtdypendeVilkårsvurdering[] {
+    const muligeAlternativer = bestemMuligeUtdypendeVilkårsvurderinger(avhengigheter);
     return valgteAlternativer.filter(item => muligeAlternativer.includes(item));
-};
-
-export const fjernUmuligeAlternativerFraRedigerbartVilkår = (
-    validerOgSettRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void,
-    redigerbartVilkår: FeltState<IVilkårResultat>,
-    muligeAlternativer: UtdypendeVilkårsvurdering[]
-) => {
-    if (inneholderUmuligeAlternativer(redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi, muligeAlternativer)) {
-        validerOgSettRedigerbartVilkår({
-            ...redigerbartVilkår,
-            verdi: {
-                ...redigerbartVilkår.verdi,
-                utdypendeVilkårsvurderinger: {
-                    ...redigerbartVilkår.verdi.utdypendeVilkårsvurderinger,
-                    verdi: filtrerUtUmuligeAlternativer(
-                        redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                        muligeAlternativer
-                    ),
-                },
-            },
-        });
-    }
-};
+}

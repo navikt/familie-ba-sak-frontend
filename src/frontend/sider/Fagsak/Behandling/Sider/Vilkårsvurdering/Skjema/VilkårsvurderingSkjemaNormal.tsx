@@ -1,16 +1,15 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
+import { BodyShort, Box, Button, ErrorMessage, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
     BehandlingSteg,
     erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
-    type IBehandling,
     kanLeggeTilUtvidetVilkår,
 } from '@typer/behandling';
 import { PersonType } from '@typer/person';
@@ -18,10 +17,10 @@ import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår
 import { Activity } from 'react';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
-import { useVilkårsvurderingContext, VilkårSubmit } from '../VilkårsvurderingContext';
+import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
 interface Props {
@@ -30,7 +29,7 @@ interface Props {
 
 export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { vilkårsvurdering, settVilkårSubmit, postVilkår } = useVilkårsvurderingContext();
+    const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { erPanelEkspandert, togglePanel } = useEkspanderbareVilkårsvurderingPaneler();
 
     const skjermstørrelse = useSkjermstørrelse();
@@ -38,15 +37,20 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
 
     const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
 
-    const leggTilVilkårUtvidet = (personIdent: string) => {
-        const promise = postVilkår(personIdent, VilkårType.UTVIDET_BARNETRYGD);
-        promise.then((oppdatertBehandling: Ressurs<IBehandling>) => {
-            settVilkårSubmit(VilkårSubmit.NONE);
-            if (oppdatertBehandling.status === RessursStatus.SUKSESS) {
-                settÅpenBehandling(oppdatertBehandling);
-            }
+    const {
+        mutate: opprettVilkårResultat,
+        isPending: opprettVilkårResultatIsPending,
+        error: opprettVilkårResultatError,
+    } = useOpprettVilkårResultat({
+        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+    });
+
+    const leggTilVilkårUtvidet = (personIdent: string) =>
+        opprettVilkårResultat({
+            behandlingId: behandling.behandlingId,
+            personIdent,
+            vilkårType: VilkårType.UTVIDET_BARNETRYGD,
         });
-    };
 
     const vilkårSomMåKontrolleresPerPerson = Object.entries(
         utledVilkårSomMåKontrolleresPerPerson(behandling, vilkårsvurdering)
@@ -54,7 +58,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
 
     const skalViseVarselboksForVilkårSomMåKontrolleres =
         vilkårSomMåKontrolleresPerPerson.length > 0 &&
-        (behandling.steg == BehandlingSteg.VILKÅRSVURDERING || behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK);
+        (behandling.steg === BehandlingSteg.VILKÅRSVURDERING || behandling.steg === BehandlingSteg.BESLUTTE_VEDTAK);
 
     return (
         <>
@@ -62,7 +66,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 <LocalAlert status="warning">
                     <LocalAlert.Header>
                         <LocalAlert.Title>
-                            {behandling.steg == BehandlingSteg.BESLUTTE_VEDTAK
+                            {behandling.steg === BehandlingSteg.BESLUTTE_VEDTAK
                                 ? 'Automatisk utfylte vilkår som saksbehandler 1 ikke har gjort endringer på:'
                                 : 'Vær oppmerksom:'}
                         </LocalAlert.Title>
@@ -91,8 +95,8 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                 const erSøker = personResultat.person.type === PersonType.SØKER;
                 const andreVurderinger = personResultat.andreVurderinger;
                 const personSkalSkjermesForBruker = personResultat.person.skjermesForBruker;
-                const harUtvidet = personResultat.vilkårResultater.find(
-                    vilkårResultat => vilkårResultat.verdi.vilkårType === VilkårType.UTVIDET_BARNETRYGD
+                const harUtvidet = personResultat.vilkårResultater.some(
+                    vilkårResultat => vilkårResultat.vilkårType === VilkårType.UTVIDET_BARNETRYGD
                 );
 
                 const skalKunneLeggeTilUtvidetBarnetrygdVilkår =
@@ -132,6 +136,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                 variant={'tertiary'}
                                                 size={erStorSkjerm ? 'medium' : 'small'}
                                                 onClick={() => leggTilVilkårUtvidet(ident)}
+                                                loading={opprettVilkårResultatIsPending}
                                                 icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
                                             >
                                                 Legg til vilkår utvidet barnetrygd
@@ -154,6 +159,9 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                         </Button>
                                     </HStack>
                                 </Stack>
+                                {erSøker && opprettVilkårResultatError && (
+                                    <ErrorMessage>{opprettVilkårResultatError.message}</ErrorMessage>
+                                )}
                                 <Activity mode={erEkspandert ? 'visible' : 'hidden'}>
                                     <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
                                         {personResultat.person.registerhistorikk ? (
@@ -174,7 +182,7 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                             .filter(vc => vc.parterDetteGjelderFor.includes(personResultat.person.type))
                                             .map(vc => {
                                                 const vilkårResultater = personResultat.vilkårResultater.filter(
-                                                    vilkårResultat => vilkårResultat.verdi.vilkårType === vc.key
+                                                    vilkårResultat => vilkårResultat.vilkårType === vc.key
                                                 );
 
                                                 if (
