@@ -1,0 +1,13 @@
+.ramme {
+    max-width: 30rem;
+    padding-left: var(--ax-space-32);
+    border-left: 0.125rem solid var(--ax-text-info-subtle);
+}
+
+.ikkeVurdert {
+    border-left-color: var(--ax-text-warning-subtle);
+}
+
+.lesevisning {
+    border-left-color: var(--ax-border-neutral);
+}
