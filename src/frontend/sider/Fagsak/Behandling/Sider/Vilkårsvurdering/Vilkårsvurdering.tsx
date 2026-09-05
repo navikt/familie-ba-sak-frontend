@@ -7,7 +7,7 @@ import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, 
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
-import { annenVurderingConfig, type IRestAnnenVurdering, type IVilkårResultat, vilkårConfig } from '@typer/vilkår';
+import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
 import { useState } from 'react';
@@ -28,7 +28,7 @@ import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 export function Vilkårsvurdering() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const { erVilkårsvurderingenGyldig, hentVilkårMedFeil, hentAndreVurderingerMedFeil, vilkårsvurdering } =
+    const { erVilkårsvurderingenGyldig, vilkårMedFeil, andreVurderingerMedFeil, vilkårsvurdering } =
         useVilkårsvurderingContext();
 
     const fagsak = useFagsak();
@@ -72,7 +72,7 @@ export function Vilkårsvurdering() {
             nesteOnClick={() => {
                 if (erLesevisning) {
                     navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
-                } else if (erVilkårsvurderingenGyldig()) {
+                } else if (erVilkårsvurderingenGyldig) {
                     oppdaterVilkårsvurdering({ behandlingId: behandling.behandlingId });
                 } else {
                     settVisFeilmeldinger(true);
@@ -82,17 +82,15 @@ export function Vilkårsvurdering() {
             senderInn={oppdaterVilkårsvurderingIsPending}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
-            <>
-                {behandling?.migreringsdato !== null && (
-                    <Detail className={styles.hentetLabel}>
-                        {`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
-                            isoString: behandling?.migreringsdato,
-                            tilFormat: Datoformat.DATO,
-                        })}`}
-                    </Detail>
-                )}
-                <OppdaterRegisteropplysninger />
-            </>
+            {behandling?.migreringsdato !== null && (
+                <Detail className={styles.hentetLabel}>
+                    {`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
+                        isoString: behandling?.migreringsdato,
+                        tilFormat: Datoformat.DATO,
+                    })}`}
+                </Detail>
+            )}
+            <OppdaterRegisteropplysninger />
             {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (
                 <HStack gap="space-16" marginBlock={'space-32 space-32'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={behandling.behandlingId} />
@@ -123,29 +121,29 @@ export function Vilkårsvurdering() {
                         </InfoCard.Message>
                     </InfoCard>
                 )}
-                {(hentVilkårMedFeil().length > 0 || hentAndreVurderingerMedFeil().length > 0) && visFeilmeldinger && (
+                {!erVilkårsvurderingenGyldig && visFeilmeldinger && (
                     <ErrorSummary heading={'For å gå videre må du rette opp følgende:'} size="small">
                         {[
-                            ...hentVilkårMedFeil().map((vilkårResultat: IVilkårResultat) => ({
+                            ...vilkårMedFeil.map(vilkårResultat => ({
                                 feilmelding: `Et vilkår av typen '${
                                     vilkårConfig[vilkårResultat.vilkårType].tittel
                                 }' er ikke fullstendig`,
                                 skjemaelementId: vilkårFeilmeldingId(vilkårResultat),
                             })),
-                            ...hentAndreVurderingerMedFeil().map((annenVurdering: IRestAnnenVurdering) => ({
+                            ...andreVurderingerMedFeil.map(annenVurdering => ({
                                 feilmelding: `Et vilkår av typen '${
                                     annenVurderingConfig[annenVurdering.type].tittel
                                 }' er ikke fullstendig`,
                                 skjemaelementId: annenVurderingFeilmeldingId(annenVurdering),
                             })),
                         ].map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
+                            <ErrorSummary.Item key={item.skjemaelementId} href={`#${item.skjemaelementId}`}>
+                                {item.feilmelding}
+                            </ErrorSummary.Item>
                         ))}
                     </ErrorSummary>
                 )}
-                {oppdaterVilkårsvurderingError && (
-                    <ErrorMessage>{oppdaterVilkårsvurderingError.message ?? 'En ukjent feil oppstod.'}</ErrorMessage>
-                )}
+                {oppdaterVilkårsvurderingError && <ErrorMessage>{oppdaterVilkårsvurderingError.message}</ErrorMessage>}
                 <ManglendeSvalbardmerkingVarsel />
                 <ManglendeFinnmarkmerkingVarsel />
             </VStack>

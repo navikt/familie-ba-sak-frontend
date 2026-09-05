@@ -1,24 +1,23 @@
-import { useBehandling } from '@hooks/useBehandling';
-import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useBehandlingId } from '@hooks/useBehandlingId';
+import VilkårResultatIkon from '@ikoner/VilkårResultatIkon';
 import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IGrunnlagPerson } from '@typer/person';
-import { type IVilkårConfig, type IVilkårResultat, Resultat, resultatVisningsnavn } from '@typer/vilkår';
-import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
+import { type IRestVilkårResultat, type IVilkårConfig, Resultat, resultatVisningsnavn } from '@typer/vilkår';
+import { isoDatoPeriodeTilFormatertString, nyIsoDatoPeriode } from '@utils/dato';
 import { alleRegelverk } from '@utils/vilkår';
-import deepEqual from 'deep-equal';
-import { useState } from 'react';
-import VilkårResultatIkon from '../../../../../../ikoner/VilkårResultatIkon';
+import { useEffect } from 'react';
+import { FormProvider, useWatch } from 'react-hook-form';
+import { useVilkårResultatSkjema, VilkårResultatFelt } from './useVilkårResultatSkjema';
 import { vilkårFeilmeldingId } from './VilkårTabell';
 import Styles from './VilkårTabellRad.module.css';
-import VilkårTabellRadEndre from './VilkårTabellRadEndre';
+import { VilkårTabellRadEndre } from './VilkårTabellRadEndre';
 
 interface Props {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
-    vilkårResultat: FeltState<IVilkårResultat>;
+    vilkårResultat: IRestVilkårResultat;
     visFeilmeldinger: boolean;
     settFokusPåKnapp: () => void;
 }
@@ -30,78 +29,95 @@ export function VilkårTabellRad({
     visFeilmeldinger,
     settFokusPåKnapp,
 }: Props) {
-    const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
+    const behandlingId = useBehandlingId();
 
-    const vilkårResultatVerdi = vilkårResultat.verdi.resultat.verdi;
-    const vilkårResultatbegrunnelse = vilkårResultat.verdi.resultatBegrunnelse;
+    const { erRadEkspandert, toggleRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.id);
 
-    const { erRadEkspandert, toggleRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.verdi.id);
+    const { form, onSubmit } = useVilkårResultatSkjema({ vilkårResultat, person, visFeilmeldinger, settFokusPåKnapp });
 
-    const [redigerbartVilkår, settRedigerbartVilkår] = useState<FeltState<IVilkårResultat>>(vilkårResultat);
+    const {
+        control,
+        handleSubmit,
+        reset,
+        trigger,
+        formState: { isDirty },
+    } = form;
 
-    const periodeErTom = !redigerbartVilkår.verdi.periode.verdi.fom && !redigerbartVilkår.verdi.periode.verdi.tom;
+    const vurderesEtter = useWatch({ control, name: VilkårResultatFelt.VURDERES_ETTER });
+
+    useEffect(() => {
+        if (visFeilmeldinger && erRadEkspandert) {
+            trigger();
+        }
+    }, [visFeilmeldinger, erRadEkspandert, trigger]);
+
+    const periodeErTom = !vilkårResultat.periodeFom && !vilkårResultat.periodeTom;
 
     const toggleForm = (visAlert: boolean) => {
-        const isDirty = erRadEkspandert && visAlert && !deepEqual(vilkårResultat, redigerbartVilkår);
-        toggleRad(isDirty);
-        if (!isDirty) {
-            settRedigerbartVilkår(vilkårResultat);
+        const harUlagredeEndringer = erRadEkspandert && visAlert && isDirty;
+        toggleRad(harUlagredeEndringer);
+        if (!harUlagredeEndringer) {
+            reset();
         }
     };
 
     return (
         <Table.ExpandableRow
-            key={`${vilkårResultat.verdi.id}-${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel, se https://github.com/navikt/aksel/issues/5017
+            key={`${vilkårResultat.id}-${erRadEkspandert ? 'ekspandert' : 'lukket'}`} // Pga. React.Activity ikke fungerer så bra med Aksel, se https://github.com/navikt/aksel/issues/5017
             open={erRadEkspandert}
             togglePlacement={'right'}
             onOpenChange={() => toggleForm(true)}
-            id={vilkårFeilmeldingId(vilkårResultat.verdi)}
+            id={vilkårFeilmeldingId(vilkårResultat)}
             content={
-                <VilkårTabellRadEndre
-                    person={person}
-                    vilkårFraConfig={vilkårFraConfig}
-                    vilkårResultat={vilkårResultat}
-                    visFeilmeldinger={visFeilmeldinger}
-                    toggleForm={toggleForm}
-                    redigerbartVilkår={redigerbartVilkår}
-                    settRedigerbartVilkår={settRedigerbartVilkår}
-                    settFokusPåKnapp={settFokusPåKnapp}
-                    lesevisning={erLesevisning}
-                />
+                erRadEkspandert ? (
+                    <FormProvider {...form}>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <VilkårTabellRadEndre
+                                person={person}
+                                vilkårFraConfig={vilkårFraConfig}
+                                vilkårResultat={vilkårResultat}
+                                onAvbryt={() => toggleForm(false)}
+                            />
+                        </form>
+                    </FormProvider>
+                ) : null
             }
         >
             <Table.DataCell className={Styles.celle}>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
                     <VilkårResultatIkon
-                        resultat={vilkårResultatVerdi}
-                        resultatBegrunnelse={vilkårResultatbegrunnelse}
+                        resultat={vilkårResultat.resultat}
+                        resultatBegrunnelse={vilkårResultat.resultatBegrunnelse}
                     />
                     <BodyShort>
-                        {vilkårResultatVerdi === Resultat.OPPFYLT && vilkårResultatbegrunnelse
-                            ? resultatVisningsnavn[vilkårResultatbegrunnelse]
-                            : resultatVisningsnavn[vilkårResultatVerdi]}
+                        {vilkårResultat.resultat === Resultat.OPPFYLT && vilkårResultat.resultatBegrunnelse
+                            ? resultatVisningsnavn[vilkårResultat.resultatBegrunnelse]
+                            : resultatVisningsnavn[vilkårResultat.resultat]}
                     </BodyShort>
                 </HStack>
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
                 <BodyShort>
-                    {periodeErTom ? '-' : isoDatoPeriodeTilFormatertString(vilkårResultat.verdi.periode.verdi)}
+                    {periodeErTom
+                        ? '-'
+                        : isoDatoPeriodeTilFormatertString(
+                              nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom)
+                          )}
                 </BodyShort>
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
-                {vilkårResultat.verdi.begrunnelse.verdi && (
-                    <Tooltip content={vilkårResultat.verdi.begrunnelse.verdi} className={Styles.tooltip}>
-                        <BodyShort className={Styles.beskrivelse}>{vilkårResultat.verdi.begrunnelse.verdi}</BodyShort>
+                {vilkårResultat.begrunnelse && (
+                    <Tooltip content={vilkårResultat.begrunnelse} className={Styles.tooltip}>
+                        <BodyShort className={Styles.beskrivelse}>{vilkårResultat.begrunnelse}</BodyShort>
                     </Tooltip>
                 )}
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    {redigerbartVilkår.verdi.vurderesEtter ? (
+                    {vurderesEtter ? (
                         <>
-                            {alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].symbol}
-                            <BodyShort>{alleRegelverk[redigerbartVilkår.verdi.vurderesEtter].tekst}</BodyShort>
+                            {alleRegelverk[vurderesEtter].symbol}
+                            <BodyShort>{alleRegelverk[vurderesEtter].tekst}</BodyShort>
                         </>
                     ) : (
                         <>
@@ -113,14 +129,14 @@ export function VilkårTabellRad({
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    {vilkårResultat.verdi.erAutomatiskVurdert ? (
+                    {vilkårResultat.erAutomatiskVurdert ? (
                         <CogRotationIcon title={'Automatisk Vurdering'} className={Styles.ikon} />
                     ) : (
                         <PersonIcon title={'Manuell vurdering'} className={Styles.ikon} />
                     )}
                     <BodyShort>
-                        {vilkårResultat.verdi.erVurdert
-                            ? vilkårResultat.verdi.behandlingId === behandling.behandlingId
+                        {vilkårResultat.erVurdert
+                            ? vilkårResultat.behandlingId === behandlingId
                                 ? 'Vurdert i denne behandlingen'
                                 : 'Vurdert i tidligere behandling'
                             : ''}
