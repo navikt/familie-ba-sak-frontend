@@ -1,89 +1,57 @@
-import { feil, ok, useFelt } from '@navikt/familie-skjema';
-import type { Avhengigheter } from '@navikt/familie-skjema/dist/typer';
-import { useBrukerContext } from '../sider/Fagsak/BrukerContext';
-import type { IForelderBarnRelasjon } from '../typer/person';
+import type { IForelderBarnRelasjon, IPersonInfo } from '../typer/person';
 import { ForelderBarnRelasjonRolle } from '../typer/person';
 import type { IBarnMedOpplysninger } from '../typer/søknad';
 import type { IsoDatoString } from './dato';
 import { Datoformat, erIsoStringGyldig, isoStringTilFormatertString } from './dato';
 
-interface IProps {
-    avhengigheter?: Avhengigheter;
-    skalFeltetVises?: (avhengigheter: Avhengigheter) => boolean;
-}
-
-export const useDeltBostedFelter = ({ avhengigheter, skalFeltetVises }: IProps) => {
-    const { bruker } = useBrukerContext();
-
-    const barnMedDeltBosted = useFelt<IBarnMedOpplysninger[]>({
-        verdi: [],
-        valideringsfunksjon: felt => {
-            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
-                ? ok(felt)
-                : feil(felt, 'Du må velge barn');
-        },
-        avhengigheter: avhengigheter,
-        skalFeltetVises: skalFeltetVises,
-        nullstillVedAvhengighetEndring: false,
-    });
-
-    const avtalerOmDeltBostedPerBarn = useFelt<Record<string, IsoDatoString[]>>({
-        verdi: {},
-        valideringsfunksjon: (felt, avhengigheter) => {
-            const barnMedDeltBosted = avhengigheter?.verdi ?? [];
-
-            return barnMedDeltBosted
-                .filter((barn: IBarnMedOpplysninger) => barn.merket)
-                .some((barn: IBarnMedOpplysninger) =>
-                    felt.verdi[barn.ident]?.some(
-                        avtaleDato => avtaleDato.length === 0 || !erIsoStringGyldig(avtaleDato)
-                    )
-                )
-                ? feil(felt, 'Minst én av barna mangler avtale om delt bosted')
-                : ok(felt);
-        },
-        avhengigheter: barnMedDeltBosted,
-    });
-
-    const hentBarnMedOpplysningerFraBruker = () => {
-        return bruker.forelderBarnRelasjon
-            .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
-            .map(
-                (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
-                    merket: false,
-                    ident: relasjon.personIdent,
-                    navn: relasjon.navn,
-                    fødselsdato: relasjon.fødselsdato,
-                    manueltRegistrert: false,
-                    erFolkeregistrert: true,
-                })
-            );
-    };
-
-    const nullstillDeltBosted = () => {
-        avtalerOmDeltBostedPerBarn.nullstill();
-        barnMedDeltBosted.validerOgSettFelt(hentBarnMedOpplysningerFraBruker());
-    };
-
-    const hentDeltBostedMulitiselectVerdierForBarn = (barn: IBarnMedOpplysninger) => {
-        const avtalerOmDeltBosted = avtalerOmDeltBostedPerBarn.verdi[barn.ident] ?? [];
-
-        return avtalerOmDeltBosted.map(
-            avtaletidspunktDeltBosted =>
-                `Barn født ${isoStringTilFormatertString({
-                    isoString: barn.fødselsdato,
-                    tilFormat: Datoformat.DATO,
-                })}. Avtalen gjelder fra ${isoStringTilFormatertString({
-                    isoString: avtaletidspunktDeltBosted,
-                    tilFormat: Datoformat.DATO_FORLENGET,
-                })}.`
+export const hentBarnMedOpplysningerFraBruker = (bruker: IPersonInfo): IBarnMedOpplysninger[] => {
+    return bruker.forelderBarnRelasjon
+        .filter((relasjon: IForelderBarnRelasjon) => relasjon.relasjonRolle === ForelderBarnRelasjonRolle.BARN)
+        .map(
+            (relasjon: IForelderBarnRelasjon): IBarnMedOpplysninger => ({
+                merket: false,
+                ident: relasjon.personIdent,
+                navn: relasjon.navn,
+                fødselsdato: relasjon.fødselsdato,
+                manueltRegistrert: false,
+                erFolkeregistrert: true,
+            })
         );
-    };
+};
 
-    return {
-        barnMedDeltBosted,
-        avtalerOmDeltBostedPerBarn,
-        nullstillDeltBosted,
-        hentDeltBostedMulitiselectVerdierForBarn,
-    };
+export const validerBarnMedDeltBosted = (barnMedDeltBosted: IBarnMedOpplysninger[]): string | undefined => {
+    return barnMedDeltBosted.some((barn: IBarnMedOpplysninger) => barn.merket) ? undefined : 'Du må velge barn';
+};
+
+export const validerAvtalerOmDeltBostedPerBarn = (
+    avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>,
+    barnMedDeltBosted: IBarnMedOpplysninger[]
+): string | undefined => {
+    return barnMedDeltBosted
+        .filter((barn: IBarnMedOpplysninger) => barn.merket)
+        .some((barn: IBarnMedOpplysninger) =>
+            avtalerOmDeltBostedPerBarn[barn.ident]?.some(
+                avtaleDato => avtaleDato.length === 0 || !erIsoStringGyldig(avtaleDato)
+            )
+        )
+        ? 'Minst én av barna mangler avtale om delt bosted'
+        : undefined;
+};
+
+export const hentDeltBostedMulitiselectVerdierForBarn = (
+    barn: IBarnMedOpplysninger,
+    avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>
+): string[] => {
+    const avtalerOmDeltBosted = avtalerOmDeltBostedPerBarn[barn.ident] ?? [];
+
+    return avtalerOmDeltBosted.map(
+        avtaletidspunktDeltBosted =>
+            `Barn født ${isoStringTilFormatertString({
+                isoString: barn.fødselsdato,
+                tilFormat: Datoformat.DATO,
+            })}. Avtalen gjelder fra ${isoStringTilFormatertString({
+                isoString: avtaletidspunktDeltBosted,
+                tilFormat: Datoformat.DATO_FORLENGET,
+            })}.`
+    );
 };
