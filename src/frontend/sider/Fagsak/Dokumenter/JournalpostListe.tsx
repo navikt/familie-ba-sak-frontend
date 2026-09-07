@@ -12,8 +12,6 @@ import {
 import type { ITilgangsstyrtJournalpost } from '@typer/journalpost';
 import { hentSortState, Sorteringsrekkefølge } from '@utils/tabell';
 import { useEffect, useState } from 'react';
-import useDokument from '../../../hooks/useDokument';
-import PdfVisningModal from '../../../komponenter/PdfVisningModal/PdfVisningModal';
 import { useBrukerContext } from '../BrukerContext';
 import { JournalpostDokument } from './JournalpostDokument';
 import styles from './JournalpostListe.module.css';
@@ -52,7 +50,6 @@ export function JournalpostListe() {
         byggTomRessurs()
     );
     const [sortering, settSortering] = useState<Sorteringsrekkefølge>(Sorteringsrekkefølge.INGEN_SORTERING);
-    const { visDokumentModal, hentetDokument, settVisDokumentModal, hentForhåndsvisning } = useDokument();
     const [utsendingsinfo, settUtsendingsinfo] = useState<Utsendingsinfo | undefined>(undefined);
 
     useEffect(() => {
@@ -165,7 +162,6 @@ export function JournalpostListe() {
                                                     <JournalpostDokument
                                                         dokument={dokument}
                                                         key={dokument.dokumentInfoId}
-                                                        hentForhåndsvisning={hentForhåndsvisning}
                                                         tilgangsstyrtJournalpost={tilgangsstyrtJournalpost}
                                                     />
                                                 ))}
@@ -237,9 +233,6 @@ export function JournalpostListe() {
                         ))}
                     </Table.Body>
                 </Table>
-                {visDokumentModal && (
-                    <PdfVisningModal onRequestClose={() => settVisDokumentModal(false)} pdfdata={hentetDokument} />
-                )}
                 {utsendingsinfo && (
                     <UtsendingsinfoModal onClose={() => settUtsendingsinfo(undefined)} data={utsendingsinfo} />
                 )}
