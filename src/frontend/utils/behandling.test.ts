@@ -1,4 +1,3 @@
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
@@ -7,11 +6,7 @@ import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { expect } from 'vitest';
 
-import {
-    erBehandlingMedVedtaksbrevutsending,
-    hentTilgjengeligeBehandlingstyper,
-    hentTilgjengeligeBehandlingsårsaker,
-} from './behandling';
+import { hentTilgjengeligeBehandlingstyper, hentTilgjengeligeBehandlingsårsaker } from './behandling';
 
 describe('hentTilgjengeligeBehandlingsårsaker', () => {
     test('skal ikke inneholde automatiske behandlingsårsaker ved vanlig revurdering', () => {
@@ -53,35 +48,6 @@ describe('hentTilgjengeligeBehandlingsårsaker', () => {
         const tilgjengeligeÅrsaker = hentTilgjengeligeBehandlingsårsaker(true, false, false);
 
         expect(tilgjengeligeÅrsaker).toEqual([]);
-    });
-});
-
-describe('erBehandlingMedVedtaksbrevutsending', () => {
-    test('skal returnere true for satsendring EØS', () => {
-        const behandling = lagBehandling({
-            type: Behandlingstype.REVURDERING,
-            årsak: BehandlingÅrsak.SATSENDRING_EØS,
-        });
-
-        expect(erBehandlingMedVedtaksbrevutsending(behandling)).toBe(true);
-    });
-
-    test('skal returnere false for satsendring', () => {
-        const behandling = lagBehandling({
-            type: Behandlingstype.REVURDERING,
-            årsak: BehandlingÅrsak.SATSENDRING,
-        });
-
-        expect(erBehandlingMedVedtaksbrevutsending(behandling)).toBe(false);
-    });
-
-    test('skal returnere true for søknad', () => {
-        const behandling = lagBehandling({
-            type: Behandlingstype.FØRSTEGANGSBEHANDLING,
-            årsak: BehandlingÅrsak.SØKNAD,
-        });
-
-        expect(erBehandlingMedVedtaksbrevutsending(behandling)).toBe(true);
     });
 });
 
