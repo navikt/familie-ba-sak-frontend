@@ -22,7 +22,7 @@ const Filtreringsregler = () => {
             }}
             maxWidthStyle={'80rem'}
             senderInn={false}
-            steg={BehandlingSteg.FILTRERING_FØDSELSHENDELSER}
+            steg={BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING}
         >
             <List>
                 {Object.keys(Filtreringsregel).map(filtreringsregel => {

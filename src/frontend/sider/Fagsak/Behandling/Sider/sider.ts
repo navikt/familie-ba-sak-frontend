@@ -77,7 +77,7 @@ export const sider: Record<SideId, Side> = {
         id: SideId.FILTRERING_FØDSELSHENDELSER,
         href: 'filtreringsregler',
         navn: 'Filtreringsregler',
-        steg: BehandlingSteg.FILTRERING_FØDSELSHENDELSER,
+        steg: BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING,
         visSide: behandling => {
             return behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE;
         },
@@ -206,8 +206,8 @@ function finnSteg(behandling: IBehandling): BehandlingSteg {
         if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING)) {
             return BehandlingSteg.VILKÅRSVURDERING;
         }
-        if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_FØDSELSHENDELSER)) {
-            return BehandlingSteg.FILTRERING_FØDSELSHENDELSER;
+        if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING)) {
+            return BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING;
         }
         return BehandlingSteg.REGISTRERE_SØKNAD;
     } else {
