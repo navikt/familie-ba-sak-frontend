@@ -1,4 +1,5 @@
 import { useBruker } from '@hooks/useBruker';
+import { useErLesevisningFagsak } from '@hooks/useErLesevisningFagsak';
 import { useFagsak } from '@hooks/useFagsak';
 import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
@@ -60,7 +61,8 @@ export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvis
             distribusjonskanal === Distribusjonskanal.UKJENT ||
             distribusjonskanal === Distribusjonskanal.INGEN_DISTRIBUSJON);
 
-    const skjemaErLåst = isSubmitting || forhåndsvisningLaster || brukerHarUkjentAdresse;
+    const erLesevisning = useErLesevisningFagsak();
+    const skjemaErLåst = erLesevisning || isSubmitting || forhåndsvisningLaster || brukerHarUkjentAdresse;
 
     const årsak = watch(DokumentutsendingFeltnavn.ÅRSAK);
     const barnIBrevÅrsak = finnBarnIBrevÅrsak(årsak);
