@@ -1,9 +1,4 @@
-import type {
-    IRestBrevmottaker,
-    SkjemaBrevmottaker,
-} from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { CheckboxGroup } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { isoStringTilDate } from '@utils/dato';
 import { differenceInMilliseconds } from 'date-fns';
@@ -11,18 +6,23 @@ import { differenceInMilliseconds } from 'date-fns';
 import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
-    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
+    barnMedDeltBosted: IBarnMedOpplysninger[];
+    settBarnMedDeltBosted: (barn: IBarnMedOpplysninger[]) => void;
+    avtalerOmDeltBostedPerBarn: Record<string, string[]>;
+    settAvtalerOmDeltBostedPerBarn: (avtaler: Record<string, string[]>) => void;
     visFeilmeldinger: boolean;
-    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
-    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
-    vurderErLesevisning: () => boolean;
+    error?: string;
 }
 
-const DeltBostedSkjema = (props: IProps) => {
-    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
-
-    const sorterteBarn = barnMedDeltBostedFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
+const DeltBostedSkjema = ({
+    barnMedDeltBosted,
+    settBarnMedDeltBosted,
+    avtalerOmDeltBostedPerBarn,
+    settAvtalerOmDeltBostedPerBarn,
+    visFeilmeldinger,
+    error,
+}: IProps) => {
+    const sorterteBarn = [...barnMedDeltBosted].sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
         if (!a.fødselsdato) {
             return 1;
         }
@@ -37,8 +37,8 @@ const DeltBostedSkjema = (props: IProps) => {
     });
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
-        barnMedDeltBostedFelt.validerOgSettFelt(
-            barnMedDeltBostedFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+        settBarnMedDeltBosted(
+            barnMedDeltBosted.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
                 ...barnMedOpplysninger,
                 merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
             }))
@@ -46,43 +46,45 @@ const DeltBostedSkjema = (props: IProps) => {
     };
 
     const oppdaterAvtalerOmDeltBostedPerBarn = (barnaSomErMerket: string[]) => {
-        const barnHvorMerkingErFjernet = barnMedDeltBostedFelt.verdi
+        const barnHvorMerkingErFjernet = barnMedDeltBosted
             .filter((barn: IBarnMedOpplysninger) => barn.merket && !barnaSomErMerket.includes(barn.ident))
             .map((barn: IBarnMedOpplysninger) => barn.ident);
-        const barnHvorMerkingErLagtTil = barnMedDeltBostedFelt.verdi
+        const barnHvorMerkingErLagtTil = barnMedDeltBosted
             .filter((barn: IBarnMedOpplysninger) => !barn.merket && barnaSomErMerket.includes(barn.ident))
             .map((barn: IBarnMedOpplysninger) => barn.ident);
 
-        barnHvorMerkingErFjernet.forEach((ident: string) =>
-            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                [ident]: [],
-            })
-        );
-
-        barnHvorMerkingErLagtTil.forEach((ident: string) =>
-            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                [ident]: [''],
-            })
-        );
+        const nyeAvtaler = { ...avtalerOmDeltBostedPerBarn };
+        barnHvorMerkingErFjernet.forEach((ident: string) => {
+            nyeAvtaler[ident] = [];
+        });
+        barnHvorMerkingErLagtTil.forEach((ident: string) => {
+            nyeAvtaler[ident] = [''];
+        });
+        settAvtalerOmDeltBostedPerBarn(nyeAvtaler);
     };
 
     return (
         <CheckboxGroup
-            {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={'Hvilke barn har delt bosted?'}
-            value={barnMedDeltBostedFelt.verdi
+            error={error}
+            value={barnMedDeltBosted
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .map((barn: IBarnMedOpplysninger) => barn.ident)}
             onChange={(barnaSomErMerket: string[]) => {
                 oppdaterAvtalerOmDeltBostedPerBarn(barnaSomErMerket);
-                settVisFeilmeldinger(false);
                 oppdaterBarnMedNyMerketStatus(barnaSomErMerket);
             }}
         >
             {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
-                <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} {...props} />
+                <BarnCheckbox
+                    key={barnMedOpplysninger.ident}
+                    barn={barnMedOpplysninger}
+                    barnMedDeltBosted={barnMedDeltBosted}
+                    settBarnMedDeltBosted={settBarnMedDeltBosted}
+                    avtalerOmDeltBostedPerBarn={avtalerOmDeltBostedPerBarn}
+                    settAvtalerOmDeltBostedPerBarn={settAvtalerOmDeltBostedPerBarn}
+                    visFeilmeldinger={visFeilmeldinger}
+                />
             ))}
         </CheckboxGroup>
     );

@@ -1,41 +1,31 @@
-import type { Felt, FeltState } from '@navikt/familie-skjema';
-import { feil, ok, Valideringsstatus } from '@navikt/familie-skjema';
-
 export interface IFritekstFelt {
     tekst: string;
     id: number;
+    valideringsmelding?: string;
 }
 
-export const genererIdBasertPåAndreFritekstKulepunkter = (fritekstKulepunkter?: Felt<FeltState<IFritekstFelt>[]>) => {
-    if (fritekstKulepunkter && fritekstKulepunkter.verdi.length > 0) {
-        return Math.max(...fritekstKulepunkter.verdi.map(fritekstKulepunkt => fritekstKulepunkt.verdi.id, 10)) + 1;
+export const genererIdBasertPåAndreFritekstKulepunkter = (fritekstKulepunkter: IFritekstFelt[]): number => {
+    if (fritekstKulepunkter.length > 0) {
+        return Math.max(...fritekstKulepunkter.map(fritekstKulepunkt => fritekstKulepunkt.id)) + 1;
     } else {
         return 1;
     }
 };
 
-export const lagInitiellFritekst = (
-    initiellVerdi: string,
-    id: number,
-    makslengde: number,
-    valideringsmelding?: string
-): FeltState<IFritekstFelt> => ({
-    feilmelding: initiellVerdi === '' ? 'Fritekstfeltet er tomt.' : '',
-    verdi: {
-        tekst: initiellVerdi,
-        id: id,
-    },
-    valider: (felt: FeltState<IFritekstFelt>) => {
-        if (felt.verdi.tekst.length > makslengde) {
-            return feil(felt, `Du har nådd maks antall tegn: ${makslengde}.`);
-        } else if (felt.verdi.tekst.trim().length === 0) {
-            return feil(
-                felt,
-                valideringsmelding || 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
-            );
-        } else {
-            return ok(felt);
-        }
-    },
-    valideringsstatus: initiellVerdi === '' ? Valideringsstatus.IKKE_VALIDERT : Valideringsstatus.OK,
+export const lagInitiellFritekst = (initiellVerdi: string, id: number, valideringsmelding?: string): IFritekstFelt => ({
+    tekst: initiellVerdi,
+    id: id,
+    valideringsmelding: valideringsmelding,
 });
+
+export const validerFritekstKulepunkt = (fritekst: IFritekstFelt, makslengde: number): string | undefined => {
+    if (fritekst.tekst.length > makslengde) {
+        return `Du har nådd maks antall tegn: ${makslengde}.`;
+    } else if (fritekst.tekst.trim().length === 0) {
+        return (
+            fritekst.valideringsmelding || 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.'
+        );
+    } else {
+        return undefined;
+    }
+};

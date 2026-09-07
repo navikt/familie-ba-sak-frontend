@@ -1,6 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { lagBarnLabel } from '@utils/formatter';
 
@@ -8,12 +7,21 @@ import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
+    barnMedDeltBosted: IBarnMedOpplysninger[];
+    settBarnMedDeltBosted: (barn: IBarnMedOpplysninger[]) => void;
+    avtalerOmDeltBostedPerBarn: Record<string, string[]>;
+    settAvtalerOmDeltBostedPerBarn: (avtaler: Record<string, string[]>) => void;
     visFeilmeldinger: boolean;
 }
 
-const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
+const BarnCheckbox = ({
+    barn,
+    barnMedDeltBosted,
+    settBarnMedDeltBosted,
+    avtalerOmDeltBostedPerBarn,
+    settAvtalerOmDeltBostedPerBarn,
+    visFeilmeldinger,
+}: IProps) => {
     const navnOgIdentTekst = lagBarnLabel(barn);
 
     return (
@@ -28,14 +36,14 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
                         id={`fjern__${barn.ident}`}
                         size={'small'}
                         onClick={() => {
-                            barnMedDeltBostedFelt.validerOgSettFelt([
-                                ...barnMedDeltBostedFelt.verdi.filter(
+                            settBarnMedDeltBosted(
+                                barnMedDeltBosted.filter(
                                     barnMedDeltBosted =>
                                         barnMedDeltBosted.ident !== barn.ident ||
                                         barnMedDeltBosted.navn !== barn.navn ||
                                         barnMedDeltBosted.fødselsdato !== barn.fødselsdato
-                                ),
-                            ]);
+                                )
+                            );
                         }}
                         icon={<TrashIcon />}
                     >
@@ -46,7 +54,8 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
 
             <DeltBostedAvtaler
                 barn={barn}
-                avtalerOmDeltBostedPerBarnFelt={avtalerOmDeltBostedPerBarnFelt}
+                avtalerOmDeltBostedPerBarn={avtalerOmDeltBostedPerBarn}
+                settAvtalerOmDeltBostedPerBarn={settAvtalerOmDeltBostedPerBarn}
                 visFeilmeldinger={visFeilmeldinger}
             />
         </Box>

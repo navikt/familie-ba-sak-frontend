@@ -1,18 +1,23 @@
 import DatovelgerForGammelSkjemaløsning from '@komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { erIsoStringGyldig, type IsoDatoString } from '@utils/dato';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
+    avtalerOmDeltBostedPerBarn: Record<string, string[]>;
+    settAvtalerOmDeltBostedPerBarn: (avtaler: Record<string, string[]>) => void;
     visFeilmeldinger: boolean;
 }
 
-const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
-    const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
+const DeltBostedAvtaler = ({
+    barn,
+    avtalerOmDeltBostedPerBarn,
+    settAvtalerOmDeltBostedPerBarn,
+    visFeilmeldinger,
+}: IProps) => {
+    const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarn[barn.ident] ?? [];
 
     const hentFeilmelding = (avtaleDato?: IsoDatoString) => {
         if (!visFeilmeldinger) return undefined;
@@ -41,8 +46,8 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                                 visFeilmeldinger={feilmelding !== undefined}
                                 feilmelding={feilmelding}
                                 onDateChange={(dato?: IsoDatoString) => {
-                                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                                    settAvtalerOmDeltBostedPerBarn({
+                                        ...avtalerOmDeltBostedPerBarn,
                                         [barn.ident]: avtalerOmDeltBosted.reduce(
                                             (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
                                                 if (index === reduceIndex) {
@@ -62,8 +67,8 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                                     id={`fjern_avtale__${barn.ident}`}
                                     size={'small'}
                                     onClick={() => {
-                                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                                        settAvtalerOmDeltBostedPerBarn({
+                                            ...avtalerOmDeltBostedPerBarn,
                                             [barn.ident]: avtalerOmDeltBosted.reduce(
                                                 (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
                                                     if (index === reduceIndex) {
@@ -93,8 +98,8 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                         id={`legg_til_avtale__${barn.ident}`}
                         size={'small'}
                         onClick={() =>
-                            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                ...avtalerOmDeltBostedPerBarnFelt.verdi,
+                            settAvtalerOmDeltBostedPerBarn({
+                                ...avtalerOmDeltBostedPerBarn,
                                 [barn.ident]: [...avtalerOmDeltBosted, ''],
                             })
                         }
