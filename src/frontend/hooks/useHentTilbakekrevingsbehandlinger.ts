@@ -1,16 +1,15 @@
-import { useHttp } from '@navikt/familie-http';
+import { hentTilbakekrevingsbehandlinger } from '@api/hentTilbakekrevingsbehandlinger';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
-
-import { hentTilbakekrevingsbehandlinger } from '../api/hentTilbakekrevingsbehandlinger';
 
 export const HentTilbakekrevingsbehandlingerQueryKeyFactory = {
     fagsak: (fagsakId: number) => ['tilbakekrevingsbehandlinger', fagsakId],
 };
 
 export function useHentTilbakekrevingsbehandlinger(fagsakId: number) {
-    const { request } = useHttp();
     return useQuery({
         queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
-        queryFn: () => hentTilbakekrevingsbehandlinger(request, fagsakId),
+        queryFn: () => hentTilbakekrevingsbehandlinger(fagsakId),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });
 }

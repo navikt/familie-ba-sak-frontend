@@ -1,16 +1,15 @@
-import { useHttp } from '@navikt/familie-http';
+import { hentKlagebehandlinger } from '@api/hentKlagebehandlinger';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
-
-import { hentKlagebehandlinger } from '../api/hentKlagebehandlinger';
 
 export const HentKlagebehandlingerQueryKeyFactory = {
     fagsak: (fagsakId: number) => ['klagebehandlinger', fagsakId],
 };
 
 export function useHentKlagebehandlinger(fagsakId: number) {
-    const { request } = useHttp();
     return useQuery({
         queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId),
-        queryFn: () => hentKlagebehandlinger(request, fagsakId),
+        queryFn: () => hentKlagebehandlinger(fagsakId),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });
 }
