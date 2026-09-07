@@ -1,0 +1,7 @@
+.container {
+    margin-top: var(--ax-space-64);
+}
+
+.container:last-child {
+    margin-bottom: var(--ax-space-32);
+}

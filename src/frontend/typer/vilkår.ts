@@ -25,12 +25,6 @@ export const resultatVisningsnavn: Record<ResultatUI, string> = {
     IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
-export const resultater: Record<Resultat, string> = {
-    OPPFYLT: 'Ja',
-    IKKE_OPPFYLT: 'Nei',
-    IKKE_VURDERT: 'Kanskje',
-};
-
 export enum AnnenVurderingType {
     OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
 }
@@ -53,19 +47,8 @@ export enum Regelverk {
 export interface IPersonResultat {
     personIdent: string;
     vilkårResultater: FeltState<IVilkårResultat>[];
-    andreVurderinger: FeltState<IAnnenVurdering>[];
+    andreVurderinger: IRestAnnenVurdering[];
     person: IGrunnlagPerson;
-}
-
-export interface IAnnenVurdering {
-    id: number;
-    begrunnelse: FeltState<string>;
-    behandlingId: number;
-    endretAv: string;
-    endretTidspunkt: string;
-    erVurdert: boolean;
-    resultat: FeltState<Resultat>;
-    type: AnnenVurderingType;
 }
 
 export interface IVilkårResultat {

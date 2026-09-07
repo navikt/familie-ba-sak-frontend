@@ -5,7 +5,6 @@ import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import type { IBehandling } from '@typer/behandling';
 import type {
-    IAnnenVurdering,
     IPersonResultat,
     IRestAnnenVurdering,
     IRestNyttVilkår,
@@ -17,6 +16,7 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { mapFraRestVilkårsvurderingTilUi } from './utils';
+import { erAnnenVurderingGyldig } from './validering';
 
 export enum VilkårSubmit {
     PUT,
@@ -34,11 +34,10 @@ interface VilkårsvurderingContextValue {
         vilkårsvurderingForPerson: IPersonResultat,
         redigerbartVilkår: FeltState<IVilkårResultat>
     ) => Promise<Ressurs<IBehandling>>;
-    putAnnenVurdering: (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => Promise<Ressurs<IBehandling>>;
     postVilkår: (personIdent: string, vilkårType: VilkårType) => Promise<Ressurs<IBehandling>>;
     erVilkårsvurderingenGyldig: () => boolean;
     hentVilkårMedFeil: () => IVilkårResultat[];
-    hentAndreVurderingerMedFeil: () => IAnnenVurdering[];
+    hentAndreVurderingerMedFeil: () => IRestAnnenVurdering[];
 }
 
 const VilkårsvurderingContext = createContext<VilkårsvurderingContextValue | undefined>(undefined);
@@ -93,25 +92,6 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
         });
     };
 
-    const putAnnenVurdering = (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => {
-        settVilkårSubmit(VilkårSubmit.PUT);
-
-        return request<IRestAnnenVurdering, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
-            data: {
-                id: redigerbartAnnenVurdering.verdi.id,
-                begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
-                behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
-                endretAv: redigerbartAnnenVurdering.verdi.endretAv,
-                endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
-                erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
-                resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
-                type: redigerbartAnnenVurdering.verdi.type,
-            },
-        });
-    };
-
     const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
         settVilkårSubmit(VilkårSubmit.DELETE);
 
@@ -130,10 +110,7 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
                         (vilkårResultat: FeltState<IVilkårResultat>) =>
                             vilkårResultat.valideringsstatus !== Valideringsstatus.OK
                     ).length > 0 ||
-                    personResultat.andreVurderinger.filter(
-                        (annenVurdering: FeltState<IAnnenVurdering>) =>
-                            annenVurdering.valideringsstatus !== Valideringsstatus.OK
-                    ).length > 0
+                    personResultat.andreVurderinger.some(annenVurdering => !erAnnenVurderingGyldig(annenVurdering))
                 );
             }).length === 0
         );
@@ -153,20 +130,9 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
         }, []);
     };
 
-    const hentAndreVurderingerMedFeil = (): IAnnenVurdering[] => {
-        return vilkårsvurdering.reduce(
-            (accAndreVurderingerMedFeil: IAnnenVurdering[], personResultat: IPersonResultat) => {
-                return [
-                    ...accAndreVurderingerMedFeil,
-                    ...personResultat.andreVurderinger
-                        .filter(
-                            (vilkårResultat: FeltState<IAnnenVurdering>) =>
-                                vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
-                        )
-                        .map((annenVurdering: FeltState<IAnnenVurdering>) => annenVurdering.verdi),
-                ];
-            },
-            []
+    const hentAndreVurderingerMedFeil = (): IRestAnnenVurdering[] => {
+        return vilkårsvurdering.flatMap((personResultat: IPersonResultat) =>
+            personResultat.andreVurderinger.filter(annenVurdering => !erAnnenVurderingGyldig(annenVurdering))
         );
     };
 
@@ -179,7 +145,6 @@ export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
                 hentAndreVurderingerMedFeil,
                 vilkårSubmit,
                 putVilkår,
-                putAnnenVurdering,
                 settVilkårSubmit,
                 settVilkårsvurdering,
                 vilkårsvurdering,
