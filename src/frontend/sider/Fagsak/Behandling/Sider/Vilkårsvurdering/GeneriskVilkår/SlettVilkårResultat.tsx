@@ -1,58 +1,45 @@
 import { useSlettVilkårResultat } from '@hooks/useSlettVilkårResultat';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { mapTilFeltStateVilkårResultat } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/utils';
-import { validerVilkår } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/validering';
-import type { IVilkårResultat } from '@typer/vilkår';
 
 interface Props {
     personIdent: string;
     vilkårResultatId: number;
-    settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
 }
 
-export function SlettVilkårResultat({ personIdent, vilkårResultatId, settRedigerbartVilkår }: Props) {
+export function SlettVilkårResultat({ personIdent, vilkårResultatId }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultatId);
 
     const { mutate: slettVilkårResultat, isPending: slettVilkårResultatIsPending } = useSlettVilkårResultat({
-        onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+        onSuccess: oppdatertBehandling => {
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
 
-            const personResultat = behandling.personResultater.find(pr =>
-                pr.vilkårResultater.some(vr => vr.id === vilkårResultatId)
-            );
+            const finnesFortsatt = oppdatertBehandling.personResultater
+                .flatMap(personResultat => personResultat.vilkårResultater)
+                .some(vilkårResultat => vilkårResultat.id === vilkårResultatId);
 
-            const nullstiltVilkårResultat = personResultat?.vilkårResultater.find(vr => vr.id === vilkårResultatId);
-            const person = behandling.personer.find(p => p.personIdent === personResultat?.personIdent);
-
-            if (nullstiltVilkårResultat) {
-                const feltStateVilkårResultat = mapTilFeltStateVilkårResultat(nullstiltVilkårResultat);
-                const validertFeltStateVilkårResultat = validerVilkår(feltStateVilkårResultat, { person });
-                settRedigerbartVilkår(validertFeltStateVilkårResultat);
-            } else {
+            if (!finnesFortsatt) {
                 kollapsRad();
             }
         },
     });
 
-    function onSlettClicked() {
-        slettVilkårResultat({
-            behandlingId: behandling.behandlingId,
-            vilkårResultatId: vilkårResultatId,
-            personIdent: personIdent,
-        });
-    }
-
     return (
         <Button
+            type={'button'}
             variant={'tertiary'}
-            onClick={() => onSlettClicked()}
+            onClick={() =>
+                slettVilkårResultat({
+                    behandlingId: behandling.behandlingId,
+                    vilkårResultatId,
+                    personIdent,
+                })
+            }
             loading={slettVilkårResultatIsPending}
             size={'medium'}
             icon={<TrashIcon />}

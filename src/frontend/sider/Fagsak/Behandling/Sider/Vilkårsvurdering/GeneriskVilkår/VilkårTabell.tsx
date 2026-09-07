@@ -1,32 +1,22 @@
 import { Box, Table } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 import type { IGrunnlagPerson } from '@typer/person';
-import type { IVilkårConfig, IVilkårResultat } from '@typer/vilkår';
+import type { IRestVilkårResultat, IVilkårConfig } from '@typer/vilkår';
 
 import Styles from './VilkårTabell.module.css';
 import { VilkårTabellRad } from './VilkårTabellRad';
 
-export const vilkårFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
+export const vilkårFeilmeldingId = (vilkårResultat: IRestVilkårResultat) =>
     `vilkår_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
 
-export const vilkårResultatFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-resultat_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-export const vilkårBegrunnelseFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-begrunnelse_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-export const vilkårPeriodeFeilmeldingId = (vilkårResultat: IVilkårResultat) =>
-    `vilkår-periode_${vilkårResultat.vilkårType}_${vilkårResultat.id}`;
-
-interface IProps {
+interface Props {
     person: IGrunnlagPerson;
-    vilkårResultater: FeltState<IVilkårResultat>[];
+    vilkårResultater: IRestVilkårResultat[];
     vilkårFraConfig: IVilkårConfig;
     visFeilmeldinger: boolean;
     settFokusPåKnapp: () => void;
 }
 
-const VilkårTabell = ({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, settFokusPåKnapp }: IProps) => {
+export function VilkårTabell({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, settFokusPåKnapp }: Props) {
     return (
         <Box className={Styles.wrapper}>
             <Table className={Styles.table}>
@@ -51,22 +41,18 @@ const VilkårTabell = ({ person, vilkårFraConfig, vilkårResultater, visFeilmel
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {vilkårResultater.map((vilkårResultat: FeltState<IVilkårResultat>) => {
-                        return (
-                            <VilkårTabellRad
-                                key={vilkårResultat.verdi.id}
-                                vilkårFraConfig={vilkårFraConfig}
-                                person={person}
-                                vilkårResultat={vilkårResultat}
-                                visFeilmeldinger={visFeilmeldinger}
-                                settFokusPåKnapp={settFokusPåKnapp}
-                            />
-                        );
-                    })}
+                    {vilkårResultater.map(vilkårResultat => (
+                        <VilkårTabellRad
+                            key={vilkårResultat.id}
+                            vilkårFraConfig={vilkårFraConfig}
+                            person={person}
+                            vilkårResultat={vilkårResultat}
+                            visFeilmeldinger={visFeilmeldinger}
+                            settFokusPåKnapp={settFokusPåKnapp}
+                        />
+                    ))}
                 </Table.Body>
             </Table>
         </Box>
     );
-};
-
-export default VilkårTabell;
+}

@@ -1,5 +1,4 @@
-import type { FeltState } from '@navikt/familie-skjema';
-import type { IIsoDatoPeriode, IsoDatoString } from '@utils/dato';
+import type { IsoDatoString } from '@utils/dato';
 
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';
@@ -46,29 +45,9 @@ export enum Regelverk {
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
-    vilkårResultater: FeltState<IVilkårResultat>[];
+    vilkårResultater: IRestVilkårResultat[];
     andreVurderinger: IRestAnnenVurdering[];
     person: IGrunnlagPerson;
-}
-
-export interface IVilkårResultat {
-    begrunnelse: FeltState<string>;
-    behandlingId: number;
-    endretAv: string;
-    endretTidspunkt: string;
-    erAutomatiskVurdert: boolean;
-    erVurdert: boolean;
-    id: number;
-    periode: FeltState<IIsoDatoPeriode>;
-    resultat: FeltState<Resultat>;
-    vilkårType: VilkårType;
-    erEksplisittAvslagPåSøknad?: boolean;
-    avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
-    vurderesEtter: Regelverk | null;
-    utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
-    resultatBegrunnelse: ResultatBegrunnelse | null;
-    begrunnelseForManuellKontroll: string | null;
-    erOpprinneligPreutfyltIBehandling: number | null;
 }
 
 // Vilkårsvurdering typer for api

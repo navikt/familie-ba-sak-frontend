@@ -93,7 +93,7 @@ export const sider: Record<SideId, Side> = {
                     skjermesForBruker: personResultat.person.skjermesForBruker,
                     antallAksjonspunkter: () => {
                         const vilkårSomErIkkeVurdert = personResultat.vilkårResultater.filter(
-                            vilkårResultat => vilkårResultat.verdi.resultat.verdi === Resultat.IKKE_VURDERT
+                            vilkårResultat => vilkårResultat.resultat === Resultat.IKKE_VURDERT
                         );
                         return vilkårSomErIkkeVurdert.length;
                     },
