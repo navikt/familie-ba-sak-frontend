@@ -56,6 +56,12 @@ describe('Sider', () => {
             expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.REGISTRERE_SØKNAD);
         });
 
+        test('skal vise registrer søknad når årsaken er automatisk behandling av søknad', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.REGISTRERE_SØKNAD);
+        });
+
         test('skal ikke vise registrer søknad når årsaken ikke er søknad', () => {
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
 

@@ -59,7 +59,9 @@ export function Vilkårsvurdering() {
     return (
         <Skjemasteg
             skalViseForrigeKnapp={
-                behandling.årsak === BehandlingÅrsak.SØKNAD || behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
+                behandling.årsak === BehandlingÅrsak.SØKNAD ||
+                behandling.årsak === BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD ||
+                behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE
             }
             tittel={'Vilkårsvurdering'}
             forrigeOnClick={() => {
