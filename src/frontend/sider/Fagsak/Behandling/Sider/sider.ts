@@ -1,5 +1,10 @@
-import type { IBehandling } from '@typer/behandling';
-import { BehandlingSteg, BehandlingStegStatus, BehandlingÅrsak, hentStegNummer } from '@typer/behandling';
+import {
+    BehandlingSteg,
+    BehandlingStegStatus,
+    BehandlingÅrsak,
+    hentStegNummer,
+    type IBehandling,
+} from '@typer/behandling';
 import { Resultat } from '@typer/vilkår';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './Vilkårsvurdering/utils';
@@ -62,7 +67,10 @@ export const sider: Record<SideId, Side> = {
         navn: 'Registrer søknad',
         steg: BehandlingSteg.REGISTRERE_SØKNAD,
         visSide: behandling => {
-            return behandling.årsak === BehandlingÅrsak.SØKNAD;
+            return (
+                behandling.årsak === BehandlingÅrsak.SØKNAD ||
+                behandling.årsak === BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD
+            );
         },
     },
     FILTRERING_FØDSELSHENDELSER: {

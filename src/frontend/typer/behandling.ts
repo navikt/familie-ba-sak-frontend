@@ -57,6 +57,7 @@ export const henleggÅrsak: Record<HenleggÅrsak, string> = {
 
 export enum BehandlingÅrsak {
     SØKNAD = 'SØKNAD',
+    AUTOMATISK_BEHANDLING_AV_SØKNAD = 'AUTOMATISK_BEHANDLING_AV_SØKNAD',
     FØDSELSHENDELSE = 'FØDSELSHENDELSE',
     ÅRLIG_KONTROLL = 'ÅRLIG_KONTROLL',
     DØDSFALL_BRUKER = 'DØDSFALL_BRUKER',
@@ -83,6 +84,7 @@ export enum BehandlingÅrsak {
 
 export const behandlingÅrsak: Record<BehandlingÅrsak | TilbakekrevingsbehandlingÅrsak | KlageÅrsak, string> = {
     SØKNAD: 'Søknad',
+    AUTOMATISK_BEHANDLING_AV_SØKNAD: 'Automatisk behandling av søknad',
     FØDSELSHENDELSE: 'Fødselshendelse',
     ÅRLIG_KONTROLL: 'Årlig kontroll',
     DØDSFALL_BRUKER: 'Dødsfall bruker',
