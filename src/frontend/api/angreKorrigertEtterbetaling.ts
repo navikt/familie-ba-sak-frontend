@@ -1,12 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function angreKorrigertEtterbetaling(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<null, IBehandling>({
-        method: 'PATCH',
+export async function angreKorrigertEtterbetaling(behandlingId: number) {
+    return apiClient.patch<null, IBehandling>({
         url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

@@ -1,5 +1,5 @@
 import { hentAlleBegrunnelser } from '@api/hentAlleBegrunnelser';
-import { useHttp } from '@navikt/familie-http';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
 
 export const HentAlleBegrunnelserQueryKeyFactory = {
@@ -7,9 +7,9 @@ export const HentAlleBegrunnelserQueryKeyFactory = {
 };
 
 export function useHentAlleBegrunnelser() {
-    const { request } = useHttp();
     return useQuery({
         queryKey: HentAlleBegrunnelserQueryKeyFactory.alleBegrunnelser(),
-        queryFn: () => hentAlleBegrunnelser(request),
+        queryFn: () => hentAlleBegrunnelser(),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });
 }

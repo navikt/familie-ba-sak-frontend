@@ -1,22 +1,14 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-import type { HenleggÅrsak, IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { HenleggÅrsak, IBehandling } from '@typer/behandling';
 
 export interface HenleggBehandlingPayload {
     årsak: HenleggÅrsak;
     begrunnelse: string;
 }
 
-export async function henleggBehandling(
-    request: FamilieRequest,
-    behandling: IBehandling,
-    payload: HenleggBehandlingPayload
-) {
-    const ressurs = await request<HenleggBehandlingPayload, IBehandling>({
+export async function henleggBehandling(behandling: IBehandling, payload: HenleggBehandlingPayload) {
+    return apiClient.put<HenleggBehandlingPayload, IBehandling>({
         data: payload,
-        method: 'PUT',
         url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/henlegg`,
-        påvirkerSystemLaster: false,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
