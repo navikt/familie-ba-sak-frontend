@@ -1,7 +1,5 @@
-import { useHttp } from '@navikt/familie-http';
+import { oppdaterBehandlendeEnhet } from '@api/oppdaterBehandlendeEnhet';
 import { useMutation } from '@tanstack/react-query';
-
-import { oppdaterBehandlendeEnhet } from '../api/oppdaterBehandlendeEnhet';
 
 interface Parameters {
     enhetId: string;
@@ -9,10 +7,7 @@ interface Parameters {
 }
 
 export function useOppdaterBehandlendeEnhet(behandlingId: number) {
-    const { request } = useHttp();
     return useMutation({
-        mutationFn: (parameters: Parameters) => {
-            return oppdaterBehandlendeEnhet(request, behandlingId, parameters);
-        },
+        mutationFn: (payload: Parameters) => oppdaterBehandlendeEnhet(behandlingId, payload),
     });
 }
