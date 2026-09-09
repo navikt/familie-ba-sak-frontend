@@ -169,10 +169,7 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         },
     });
 
-    const { watch, setValue, getValues, setError, reset } = form;
-
-    const brevmalVerdi = watch('brevmal');
-    const fritekstKulepunkterLength = watch('fritekstKulepunkter').length;
+    const { setValue, getValues, setError, reset } = form;
 
     /**
      * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
@@ -185,14 +182,24 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         setValue('barnBrevetGjelder', hentBarnBrevetGjelder());
     }, [behandling]);
 
+    const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
+        const fritekstKulepunkter = getValues('fritekstKulepunkter');
+        setValue('fritekstKulepunkter', [
+            ...fritekstKulepunkter,
+            lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter), valideringsmelding),
+        ]);
+    };
+
     /**
-     * Nullstill relevante felter når brevmal endres. Vi bruker reset (fremfor setValue) slik at
+     * Nullstiller relevante felter når brevmal endres, og legger til et initielt obligatorisk
+     * fritekstpunkt for brevmaler som krever det. Vi bruker reset (fremfor setValue) slik at
      * innsendt-tilstanden og eventuelle valideringsfeil også nullstilles. Ellers ville feilmeldinger
      * fra en tidligere innsending/forhåndsvisning blitt vist umiddelbart på de tomme feltene i den nye brevmalen.
      */
-    useEffect(() => {
+    const onEndreBrevmal = (nyBrevmal: Brevmal | '') => {
         reset({
             ...getValues(),
+            brevmal: nyBrevmal,
             dokumenter: [],
             fritekstKulepunkter: [],
             fritekstAvsnitt: undefined,
@@ -203,29 +210,11 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
             mottakerlandSed: [],
             barnBrevetGjelder: hentBarnBrevetGjelder(),
         });
-    }, [brevmalVerdi]);
 
-    const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
-        const fritekstKulepunkter = getValues('fritekstKulepunkter');
-        setValue('fritekstKulepunkter', [
-            ...fritekstKulepunkter,
-            lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter), valideringsmelding),
-        ]);
-    };
-
-    /**
-     * Legger til initielt fritekstpunkt for brevmaler med obligatorisk fritekst
-     */
-    useEffect(() => {
-        if (
-            fritekstKulepunkterLength === 0 &&
-            brevmalVerdi !== '' &&
-            erBrevmalMedObligatoriskFritekstKulepunkt(brevmalVerdi)
-        ) {
-            const valideringsmelding = 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
-            leggTilFritekstKulepunkt(valideringsmelding);
+        if (nyBrevmal !== '' && erBrevmalMedObligatoriskFritekstKulepunkt(nyBrevmal)) {
+            leggTilFritekstKulepunkt('Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.');
         }
-    }, [brevmalVerdi, fritekstKulepunkterLength]);
+    };
 
     const mottakersMålform = (mottakerIdent: string): Målform =>
         mottakersMålformImplementering(
@@ -305,6 +294,7 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         onSubmit,
         hentSkjemaData,
         hentMuligeBrevMaler,
+        onEndreBrevmal,
         mottakersMålform,
         leggTilFritekstKulepunkt,
         institusjon,
