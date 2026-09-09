@@ -4,11 +4,13 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const maksSvarfristUker = 4 * 5;
 
 export function AntallUkerSvarfristField() {
     const { control } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field,
@@ -37,6 +39,7 @@ export function AntallUkerSvarfristField() {
             label={'Antall uker svarfrist'}
             size={'small'}
             className={styles.textField}
+            readOnly={skjemaErLåst}
             value={field.value === '' ? '' : field.value}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 field.onChange(event.target.value === '' ? '' : Number(event.target.value))

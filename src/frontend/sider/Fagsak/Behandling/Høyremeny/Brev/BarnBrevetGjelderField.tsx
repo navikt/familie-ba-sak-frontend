@@ -3,6 +3,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 interface Props {
     behandlingSteg?: BehandlingSteg;
@@ -10,6 +11,7 @@ interface Props {
 
 export function BarnBrevetGjelderField({ behandlingSteg }: Props) {
     const { control } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field,
@@ -27,6 +29,7 @@ export function BarnBrevetGjelderField({ behandlingSteg }: Props) {
             barnBrevetGjelder={field.value}
             onChange={field.onChange}
             behandlingsSteg={behandlingSteg}
+            readOnly={skjemaErLåst}
             error={error?.message}
         />
     );

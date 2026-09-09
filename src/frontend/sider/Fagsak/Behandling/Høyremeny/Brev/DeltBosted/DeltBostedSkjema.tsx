@@ -3,6 +3,7 @@ import { sorterBarnEtterFødselsdato } from '@utils/formatter';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
@@ -15,6 +16,7 @@ const DeltBostedSkjema = ({ error }: IProps) => {
         setValue,
         formState: { isSubmitted },
     } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const barnMedDeltBosted = useWatch({ control, name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED });
     const avtalerOmDeltBostedPerBarn = useWatch({ control, name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN });
@@ -51,6 +53,7 @@ const DeltBostedSkjema = ({ error }: IProps) => {
         <CheckboxGroup
             legend={'Hvilke barn har delt bosted?'}
             error={error}
+            readOnly={skjemaErLåst}
             value={barnMedDeltBosted.filter(barn => barn.merket).map(barn => barn.ident)}
             onChange={(barnaSomErMerket: string[]) => {
                 oppdaterAvtalerOmDeltBostedPerBarn(barnaSomErMerket);

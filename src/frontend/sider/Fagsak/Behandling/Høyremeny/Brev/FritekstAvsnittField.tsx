@@ -6,6 +6,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const maksLengdeFritekstAvsnitt = 1000;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
@@ -18,6 +19,7 @@ interface Props {
 export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks }: Props) {
     const { control } = useFormContext<BrevModulFormValues>();
     const erLesevisning = useErLesevisning();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field,
@@ -54,6 +56,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                             className={styles.textarea}
                             value={field.value ?? ''}
                             maxLength={maksLengdeFritekstAvsnitt}
+                            readOnly={skjemaErLåst}
                             onChange={(event: ChangeEvent<HTMLTextAreaElement>) => field.onChange(event.target.value)}
                             error={error?.message}
                             autoFocus
@@ -68,6 +71,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                             }}
                             id={`fjern_fritekst`}
                             size={'small'}
+                            disabled={skjemaErLåst}
                             aria-label={'Fjern fritekst'}
                             icon={<TrashIcon />}
                             className={styles.removeButton}
@@ -84,6 +88,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                         onClick={() => settVisFritekstAvsnittTekstboks(true)}
                         id={`legg-til-fritekst-avsnitt`}
                         size={'small'}
+                        disabled={skjemaErLåst}
                         icon={<PlusCircleIcon />}
                         className={styles.addButton}
                     >

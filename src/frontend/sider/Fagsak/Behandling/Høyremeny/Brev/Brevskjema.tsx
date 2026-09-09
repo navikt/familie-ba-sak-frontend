@@ -84,7 +84,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const avtalerOmDeltBostedPerBarn = watch(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN);
 
     const brevMaler = hentMuligeBrevMaler();
-    const skjemaErLåst = isSubmitting || opprettManueltBrevPdfIsPending;
+    const skjemaErLåst = erLesevisning || isSubmitting || opprettManueltBrevPdfIsPending;
 
     const behandlingSteg = behandling.steg;
 
