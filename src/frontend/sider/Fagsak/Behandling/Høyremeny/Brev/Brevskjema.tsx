@@ -35,6 +35,7 @@ import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import { FritekstAvsnittField } from './FritekstAvsnittField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
 import type { BrevtypeSelect } from './typer';
@@ -73,7 +74,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         mottakersMålform,
         hentMuligeBrevMaler,
         makslengdeFritekstHvertKulepunkt,
-        maksLengdeFritekstAvsnitt,
         maksAntallKulepunkter,
         leggTilFritekstKulepunkt,
         erBrevmalMedObligatoriskFritekstKulepunkt,
@@ -342,79 +342,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             />
                         )}
                         {skalViseFritekstAvsnitt(brevmal) && (
-                            <Controller
-                                name="fritekstAvsnitt"
-                                control={control}
-                                rules={{
-                                    validate: verdi => {
-                                        if (verdi === undefined) {
-                                            return true;
-                                        }
-                                        if (verdi.trim() === '') {
-                                            return 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.';
-                                        }
-                                        if (verdi.length > maksLengdeFritekstAvsnitt) {
-                                            return `Du har nådd maks antall tegn: ${maksLengdeFritekstAvsnitt}`;
-                                        }
-                                        return true;
-                                    },
-                                }}
-                                render={({ field, fieldState }) => (
-                                    <div>
-                                        <Label htmlFor={fritekstSkjemaGruppeId}>Legg til fritekst avsnitt</Label>
-                                        {visFritekstAvsnittTekstboks ? (
-                                            <Fieldset
-                                                legend="Legg til fritekst avsnitt"
-                                                hideLegend
-                                                id={fritekstSkjemaGruppeId}
-                                            >
-                                                <HStack>
-                                                    <Textarea
-                                                        label="Skriv inn fritekstavsnitt"
-                                                        hideLabel
-                                                        size={'small'}
-                                                        className={styles.textarea}
-                                                        value={field.value ?? ''}
-                                                        maxLength={maksLengdeFritekstAvsnitt}
-                                                        onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-                                                            field.onChange(event.target.value)
-                                                        }
-                                                        error={fieldState.error?.message}
-                                                        autoFocus
-                                                    />
-
-                                                    <Button
-                                                        variant={'tertiary'}
-                                                        onClick={() => {
-                                                            field.onChange(undefined);
-                                                            settVisFritekstAvsnittTekstboks(false);
-                                                        }}
-                                                        id={`fjern_fritekst`}
-                                                        size={'small'}
-                                                        aria-label={'Fjern fritekst'}
-                                                        icon={<TrashIcon />}
-                                                        className={styles.removeButton}
-                                                    >
-                                                        {'Fjern'}
-                                                    </Button>
-                                                </HStack>
-                                            </Fieldset>
-                                        ) : (
-                                            !erLesevisning && (
-                                                <Button
-                                                    variant={'tertiary'}
-                                                    onClick={() => settVisFritekstAvsnittTekstboks(true)}
-                                                    id={`legg-til-fritekst-avsnitt`}
-                                                    size={'small'}
-                                                    icon={<PlusCircleIcon />}
-                                                    className={styles.addButton}
-                                                >
-                                                    {'Legg til fritekst avsnitt'}
-                                                </Button>
-                                            )
-                                        )}
-                                    </div>
-                                )}
+                            <FritekstAvsnittField
+                                visFritekstAvsnittTekstboks={visFritekstAvsnittTekstboks}
+                                settVisFritekstAvsnittTekstboks={settVisFritekstAvsnittTekstboks}
                             />
                         )}
                         {skalViseBarnBrevetGjelder(brevmal) && (
