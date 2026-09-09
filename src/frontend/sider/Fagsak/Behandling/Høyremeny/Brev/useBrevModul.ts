@@ -173,7 +173,7 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         },
     });
 
-    const { watch, setValue, getValues, setError } = form;
+    const { watch, setValue, getValues, setError, reset } = form;
 
     const brevmalVerdi = watch('brevmal');
     const fritekstKulepunkterLength = watch('fritekstKulepunkter').length;
@@ -189,16 +189,24 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         setValue('barnBrevetGjelder', hentBarnBrevetGjelder());
     }, [behandling]);
 
+    /**
+     * Nullstill relevante felter når brevmal endres. Vi bruker reset (fremfor setValue) slik at
+     * innsendt-tilstanden og eventuelle valideringsfeil også nullstilles. Ellers ville feilmeldinger
+     * fra en tidligere innsending/forhåndsvisning blitt vist umiddelbart på de tomme feltene i den nye brevmalen.
+     */
     useEffect(() => {
-        setValue('dokumenter', []);
-        setValue('fritekstKulepunkter', []);
-        setValue('fritekstAvsnitt', undefined);
-        setValue('datoAvtale', undefined);
-        setValue('antallUkerSvarfrist', behandlingKategori === BehandlingKategori.EØS ? 8 : 3);
-        setValue('avtalerOmDeltBostedPerBarn', {});
-        setValue('barnMedDeltBosted', hentBarnMedOpplysningerFraBruker(bruker));
-        setValue('mottakerlandSed', []);
-        setValue('barnBrevetGjelder', hentBarnBrevetGjelder());
+        reset({
+            ...getValues(),
+            dokumenter: [],
+            fritekstKulepunkter: [],
+            fritekstAvsnitt: undefined,
+            datoAvtale: undefined,
+            antallUkerSvarfrist: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+            avtalerOmDeltBostedPerBarn: {},
+            barnMedDeltBosted: hentBarnMedOpplysningerFraBruker(bruker),
+            mottakerlandSed: [],
+            barnBrevetGjelder: hentBarnBrevetGjelder(),
+        });
     }, [brevmalVerdi]);
 
     const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
