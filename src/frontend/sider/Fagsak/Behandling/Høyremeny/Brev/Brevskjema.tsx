@@ -15,7 +15,6 @@ import {
     Loader,
     Select,
     Tag,
-    UNSAFE_Combobox,
     VStack,
 } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
@@ -33,12 +32,13 @@ import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import { DokumenterField } from './DokumenterField';
 import { FritekstAvsnittField } from './FritekstAvsnittField';
 import { FritekstKulepunkterField } from './FritekstKulepunkterField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
 import type { BrevtypeSelect } from './typer';
-import { brevmaler, leggTilValuePåOption, opplysningsdokumenter, opplysningsdokumenterTilInstitusjon } from './typer';
+import { brevmaler } from './typer';
 import {
     skalViseAntallUkerSvarfrist,
     skalViseBarnBrevetGjelder,
@@ -111,10 +111,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
             samhandlerRessurs.status === RessursStatus.SUKSESS ? samhandlerRessurs.data.navn : institusjon.navn;
     }
 
-    const muligeDokumenterÅVelge = institusjon
-        ? opplysningsdokumenterTilInstitusjon.map(leggTilValuePåOption)
-        : opplysningsdokumenter.map(leggTilValuePåOption);
-
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
         setValue('barnMedDeltBosted', [...barnMedDeltBosted, barn], { shouldValidate: isSubmitted });
         if (barn.erFolkeregistrert) {
@@ -175,42 +171,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 </Select>
                             )}
                         />
-                        {skalViseDokumenter(brevmal) && (
-                            <Controller
-                                name="dokumenter"
-                                control={control}
-                                rules={{
-                                    validate: (verdi, values) =>
-                                        verdi.length === 0 &&
-                                        values.fritekstKulepunkter.length === 0 &&
-                                        values.fritekstAvsnitt === undefined
-                                            ? 'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt eller avsnitt med fritekst'
-                                            : true,
-                                }}
-                                render={({ field, fieldState }) => (
-                                    <UNSAFE_Combobox
-                                        label={'Velg dokumenter'}
-                                        readOnly={erLesevisning}
-                                        isMultiSelect
-                                        options={muligeDokumenterÅVelge}
-                                        selectedOptions={field.value}
-                                        onToggleSelected={(optionValue: string, isSelected: boolean) => {
-                                            if (isSelected) {
-                                                const nyttValg = muligeDokumenterÅVelge.find(
-                                                    valg => valg.value === optionValue
-                                                );
-                                                if (nyttValg) {
-                                                    field.onChange([...field.value, nyttValg]);
-                                                }
-                                            } else {
-                                                field.onChange(field.value.filter(valg => valg.value !== optionValue));
-                                            }
-                                        }}
-                                        error={fieldState.error?.message}
-                                    />
-                                )}
-                            />
-                        )}
+                        {skalViseDokumenter(brevmal) && <DokumenterField />}
                         {skalViseFritekstKulepunkter(brevmal) && (
                             <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
                         )}
