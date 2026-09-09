@@ -1,6 +1,5 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
@@ -37,6 +36,7 @@ import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
+import { MottakerlandSedField } from './MottakerlandSedField';
 import type { BrevtypeSelect } from './typer';
 import {
     Brevmal,
@@ -506,31 +506,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                 )}
                             />
                         )}
-                        {skalViseMottakerlandSed(brevmal, behandlingKategori) && (
-                            <Controller
-                                name="mottakerlandSed"
-                                control={control}
-                                rules={{
-                                    validate: (verdi, values) =>
-                                        values.brevmal === Brevmal.SVARTIDSBREV
-                                            ? true
-                                            : verdi.length
-                                              ? true
-                                              : 'Velg land SED er sendt/skal sendes til',
-                                }}
-                                render={({ field, fieldState }) => (
-                                    <RegionCombobox
-                                        label={'SED er sendt til'}
-                                        value={(field.value ?? []) as Regionkode[]}
-                                        options={EØS_LAND_REGIONKODER}
-                                        onChange={value => field.onChange(value ?? [])}
-                                        readOnly={false}
-                                        error={fieldState.error?.message ?? ''}
-                                        isMulti={true}
-                                    />
-                                )}
-                            />
-                        )}
+                        {skalViseMottakerlandSed(brevmal, behandlingKategori) && <MottakerlandSedField />}
                     </VStack>
                 </Fieldset>
                 <Knapperekke>
