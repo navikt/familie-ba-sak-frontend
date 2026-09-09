@@ -10,9 +10,10 @@ import type { BrevModulFormValues } from './useBrevModul';
 interface Props {
     brevMaler: Brevmal[];
     mottakersMålform: (mottakerIdent: string) => Målform;
+    onEndreBrevmal: (nyBrevmal: Brevmal | '') => void;
 }
 
-export function BrevmalSelect({ brevMaler, mottakersMålform }: Props) {
+export function BrevmalSelect({ brevMaler, mottakersMålform, onEndreBrevmal }: Props) {
     const { control, watch } = useFormContext<BrevModulFormValues>();
     const mottakerIdent = watch('mottakerIdent');
 
@@ -39,7 +40,7 @@ export function BrevmalSelect({ brevMaler, mottakersMålform }: Props) {
                     </Tag>
                 </HStack>
             }
-            onChange={(event: ChangeEvent<BrevtypeSelect>): void => field.onChange(event.target.value)}
+            onChange={(event: ChangeEvent<BrevtypeSelect>): void => onEndreBrevmal(event.target.value as Brevmal | '')}
         >
             <option value={''}>Velg</option>
             {brevMaler.map(mal => (

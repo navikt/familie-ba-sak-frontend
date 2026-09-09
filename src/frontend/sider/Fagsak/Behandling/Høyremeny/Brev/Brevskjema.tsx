@@ -52,6 +52,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         hentSkjemaData,
         mottakersMålform,
         hentMuligeBrevMaler,
+        onEndreBrevmal,
         leggTilFritekstKulepunkt,
         institusjon,
         brevmottakere,
@@ -125,7 +126,11 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         <Label>Brev sendes til</Label>
                         <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
                         <VStack gap={'space-16'}>
-                            <BrevmalSelect brevMaler={brevMaler} mottakersMålform={mottakersMålform} />
+                            <BrevmalSelect
+                                brevMaler={brevMaler}
+                                mottakersMålform={mottakersMålform}
+                                onEndreBrevmal={onEndreBrevmal}
+                            />
                             {skalViseDokumenter(brevmal) && <DokumenterField />}
                             {skalViseFritekstKulepunkter(brevmal) && (
                                 <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
