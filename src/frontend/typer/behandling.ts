@@ -6,7 +6,6 @@ import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
 import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
-import type { IFødselshendelsefiltreringResultat } from './fødselshendelser';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import { type IGrunnlagPerson, PersonType } from './person';
@@ -311,7 +310,6 @@ export interface IBehandling {
     søknadsgrunnlag?: ISøknadDTO;
     totrinnskontroll?: ITotrinnskontroll;
     type: Behandlingstype;
-    fødselshendelsefiltreringResultater: IFødselshendelsefiltreringResultat[];
     vedtak?: IVedtakForBehandling;
     utbetalingsperioder: Utbetalingsperiode[];
     endretUtbetalingAndeler: IRestEndretUtbetalingAndel[];
