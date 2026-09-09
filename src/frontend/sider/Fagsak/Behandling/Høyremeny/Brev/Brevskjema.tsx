@@ -16,7 +16,6 @@ import {
     Select,
     Tag,
     Textarea,
-    TextField,
     UNSAFE_Combobox,
     VStack,
 } from '@navikt/ds-react';
@@ -31,6 +30,7 @@ import { Controller, FormProvider } from 'react-hook-form';
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import Knapperekke from '../../../../../komponenter/Knapperekke';
 import { useBehandlingContext } from '../../context/BehandlingContext';
+import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
@@ -112,8 +112,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const skjemaErLåst = isSubmitting || opprettManueltBrevPdfIsPending;
 
     const fritekstSkjemaGruppeId = 'Fritekster-brev';
-
-    const maksSvarfristUker = 4 * 5;
 
     const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
         'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
@@ -473,39 +471,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             </>
                         )}
                         {skalViseDatoAvtale(brevmal) && <DatoAvtaleField />}
-                        {skalViseAntallUkerSvarfrist(brevmal) && (
-                            <Controller
-                                name="antallUkerSvarfrist"
-                                control={control}
-                                rules={{
-                                    validate: verdi => {
-                                        if (verdi === '') {
-                                            return 'Antall uker svarfrist er ikke satt';
-                                        }
-                                        if (Number.isNaN(verdi) || verdi < 1) {
-                                            return 'Antall uker svarfrist må være et positivt tall';
-                                        }
-                                        if (verdi > maksSvarfristUker) {
-                                            return `Du kan ikke sette antall uker svartid til mer enn ${maksSvarfristUker} uker (5 måneder)`;
-                                        }
-                                        return true;
-                                    },
-                                }}
-                                render={({ field, fieldState }) => (
-                                    <TextField
-                                        label={'Antall uker svarfrist'}
-                                        size={'small'}
-                                        className={styles.textField}
-                                        value={field.value === '' ? '' : field.value}
-                                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                                            field.onChange(event.target.value === '' ? '' : Number(event.target.value))
-                                        }
-                                        onBlur={field.onBlur}
-                                        error={fieldState.error?.message}
-                                    />
-                                )}
-                            />
-                        )}
+                        {skalViseAntallUkerSvarfrist(brevmal) && <AntallUkerSvarfristField />}
                         {skalViseMottakerlandSed(brevmal, behandlingKategori) && <MottakerlandSedField />}
                     </VStack>
                 </Fieldset>
