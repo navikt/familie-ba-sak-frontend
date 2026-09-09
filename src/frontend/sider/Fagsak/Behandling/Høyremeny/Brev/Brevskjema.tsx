@@ -118,8 +118,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 {!erLesevisning && <LeggTilBarnModal />}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
-                        {/* Skjult felt som kun registrerer validering av mottaker – selve mottakervalget
-                            gjøres via brevmottaker-flyten, men verdien må valideres før innsending. */}
+                        {/* Skjult valideringsfelt: mottaker velges via brevmottaker-flyten, men
+                            mottakerIdent må valideres før innsending. Feltet har ingen egen UI, derfor
+                            returnerer render en tom fragment (<></>) – kun valideringsregelen brukes. */}
                         <Controller
                             name={BrevmodulFeltnavn.MOTTAKER_IDENT}
                             control={control}
