@@ -1,88 +1,67 @@
-import type {
-    IRestBrevmottaker,
-    SkjemaBrevmottaker,
-} from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { CheckboxGroup } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
-import type { IBarnMedOpplysninger } from '@typer/søknad';
-import { isoStringTilDate } from '@utils/dato';
-import { differenceInMilliseconds } from 'date-fns';
+import { sorterBarnEtterFødselsdato } from '@utils/formatter';
+import { useFormContext, useWatch } from 'react-hook-form';
 
+import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 import BarnCheckbox from './BarnCheckbox';
 
 interface IProps {
-    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
-    visFeilmeldinger: boolean;
-    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
-    manuelleBrevmottakere: SkjemaBrevmottaker[] | IRestBrevmottaker[];
-    vurderErLesevisning: () => boolean;
+    error?: string;
 }
 
-const DeltBostedSkjema = (props: IProps) => {
-    const { barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger, settVisFeilmeldinger } = props;
+const DeltBostedSkjema = ({ error }: IProps) => {
+    const {
+        control,
+        setValue,
+        formState: { isSubmitted },
+    } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
-    const sorterteBarn = barnMedDeltBostedFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-        if (!a.fødselsdato) {
-            return 1;
-        }
+    const barnMedDeltBosted = useWatch({ control, name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED });
+    const avtalerOmDeltBostedPerBarn = useWatch({ control, name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN });
 
-        if (!b.fødselsdato) {
-            return -1;
-        }
-
-        return !a.ident
-            ? 1
-            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
-    });
+    const sorterteBarn = sorterBarnEtterFødselsdato(barnMedDeltBosted);
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
-        barnMedDeltBostedFelt.validerOgSettFelt(
-            barnMedDeltBostedFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
-                ...barnMedOpplysninger,
-                merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
-            }))
+        setValue(
+            BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
+            barnMedDeltBosted.map(barn => ({ ...barn, merket: barnaSomErMerket.includes(barn.ident) })),
+            { shouldValidate: isSubmitted }
         );
     };
 
     const oppdaterAvtalerOmDeltBostedPerBarn = (barnaSomErMerket: string[]) => {
-        const barnHvorMerkingErFjernet = barnMedDeltBostedFelt.verdi
-            .filter((barn: IBarnMedOpplysninger) => barn.merket && !barnaSomErMerket.includes(barn.ident))
-            .map((barn: IBarnMedOpplysninger) => barn.ident);
-        const barnHvorMerkingErLagtTil = barnMedDeltBostedFelt.verdi
-            .filter((barn: IBarnMedOpplysninger) => !barn.merket && barnaSomErMerket.includes(barn.ident))
-            .map((barn: IBarnMedOpplysninger) => barn.ident);
+        const barnHvorMerkingErFjernet = barnMedDeltBosted
+            .filter(barn => barn.merket && !barnaSomErMerket.includes(barn.ident))
+            .map(barn => barn.ident);
+        const barnHvorMerkingErLagtTil = barnMedDeltBosted
+            .filter(barn => !barn.merket && barnaSomErMerket.includes(barn.ident))
+            .map(barn => barn.ident);
 
-        barnHvorMerkingErFjernet.forEach((ident: string) =>
-            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                [ident]: [],
-            })
-        );
-
-        barnHvorMerkingErLagtTil.forEach((ident: string) =>
-            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                [ident]: [''],
-            })
-        );
+        const nyeAvtaler = { ...avtalerOmDeltBostedPerBarn };
+        barnHvorMerkingErFjernet.forEach(ident => {
+            nyeAvtaler[ident] = [];
+        });
+        barnHvorMerkingErLagtTil.forEach(ident => {
+            nyeAvtaler[ident] = [''];
+        });
+        setValue(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN, nyeAvtaler, { shouldValidate: isSubmitted });
     };
 
     return (
         <CheckboxGroup
-            {...barnMedDeltBostedFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={'Hvilke barn har delt bosted?'}
-            value={barnMedDeltBostedFelt.verdi
-                .filter((barn: IBarnMedOpplysninger) => barn.merket)
-                .map((barn: IBarnMedOpplysninger) => barn.ident)}
+            error={error}
+            readOnly={skjemaErLåst}
+            value={barnMedDeltBosted.filter(barn => barn.merket).map(barn => barn.ident)}
             onChange={(barnaSomErMerket: string[]) => {
                 oppdaterAvtalerOmDeltBostedPerBarn(barnaSomErMerket);
-                settVisFeilmeldinger(false);
                 oppdaterBarnMedNyMerketStatus(barnaSomErMerket);
             }}
         >
-            {sorterteBarn.map((barnMedOpplysninger: IBarnMedOpplysninger) => (
-                <BarnCheckbox key={barnMedOpplysninger.ident} barn={barnMedOpplysninger} {...props} />
+            {sorterteBarn.map(barn => (
+                <BarnCheckbox key={barn.ident} barn={barn} />
             ))}
         </CheckboxGroup>
     );

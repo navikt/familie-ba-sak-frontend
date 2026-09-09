@@ -1,21 +1,39 @@
 import DatovelgerForGammelSkjemaløsning from '@komponenter/Datovelger/DatovelgerForGammelSkjemaløsning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { erIsoStringGyldig, type IsoDatoString } from '@utils/dato';
+import { useFormContext, useWatch } from 'react-hook-form';
+
+import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
-    visFeilmeldinger: boolean;
 }
 
-const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
-    const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarnFelt.verdi[barn.ident] ?? [];
+const DeltBostedAvtaler = ({ barn }: IProps) => {
+    const {
+        control,
+        getValues,
+        setValue,
+        formState: { isSubmitted },
+    } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
+
+    const avtalerOmDeltBostedPerBarn = useWatch({ control, name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN });
+    const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarn[barn.ident] ?? [];
+
+    const oppdaterAvtalerForBarn = (nyeAvtaler: string[]) => {
+        setValue(
+            BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN,
+            { ...getValues(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN), [barn.ident]: nyeAvtaler },
+            { shouldValidate: isSubmitted }
+        );
+    };
 
     const hentFeilmelding = (avtaleDato?: IsoDatoString) => {
-        if (!visFeilmeldinger) return undefined;
+        if (!isSubmitted) return undefined;
 
         if (avtaleDato === '') {
             return 'Du må fylle inn dato for avtale';
@@ -38,43 +56,28 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
                                 label={'Dato for avtale om delt bosted'}
                                 minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}
                                 value={avtaleDato}
+                                readOnly={skjemaErLåst}
                                 visFeilmeldinger={feilmelding !== undefined}
                                 feilmelding={feilmelding}
                                 onDateChange={(dato?: IsoDatoString) => {
-                                    avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                        ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                                        [barn.ident]: avtalerOmDeltBosted.reduce(
-                                            (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
-                                                if (index === reduceIndex) {
-                                                    return [...acc, dato ?? ''];
-                                                } else {
-                                                    return [...acc, forrigeAvtaleDato];
-                                                }
-                                            },
-                                            []
-                                        ),
-                                    });
+                                    oppdaterAvtalerForBarn(
+                                        avtalerOmDeltBosted.map((forrigeAvtaleDato, reduceIndex) =>
+                                            index === reduceIndex ? (dato ?? '') : forrigeAvtaleDato
+                                        )
+                                    );
                                 }}
                             />
                             {index !== 0 && (
                                 <Button
+                                    type={'button'}
                                     variant={'tertiary'}
                                     id={`fjern_avtale__${barn.ident}`}
                                     size={'small'}
+                                    disabled={skjemaErLåst}
                                     onClick={() => {
-                                        avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                            ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                                            [barn.ident]: avtalerOmDeltBosted.reduce(
-                                                (acc: string[], forrigeAvtaleDato: string, reduceIndex: number) => {
-                                                    if (index === reduceIndex) {
-                                                        return acc;
-                                                    } else {
-                                                        return [...acc, forrigeAvtaleDato];
-                                                    }
-                                                },
-                                                []
-                                            ),
-                                        });
+                                        oppdaterAvtalerForBarn(
+                                            avtalerOmDeltBosted.filter((_, reduceIndex) => reduceIndex !== index)
+                                        );
                                     }}
                                     icon={<TrashIcon />}
                                 >
@@ -89,15 +92,12 @@ const DeltBostedAvtaler = ({ barn, avtalerOmDeltBostedPerBarnFelt, visFeilmeldin
             {barn.merket && (
                 <Box marginBlock={'space-0 space-16'}>
                     <Button
+                        type={'button'}
                         variant={'tertiary'}
                         id={`legg_til_avtale__${barn.ident}`}
                         size={'small'}
-                        onClick={() =>
-                            avtalerOmDeltBostedPerBarnFelt.validerOgSettFelt({
-                                ...avtalerOmDeltBostedPerBarnFelt.verdi,
-                                [barn.ident]: [...avtalerOmDeltBosted, ''],
-                            })
-                        }
+                        disabled={skjemaErLåst}
+                        onClick={() => oppdaterAvtalerForBarn([...avtalerOmDeltBosted, ''])}
                         icon={<PlusCircleIcon />}
                     >
                         {'Legg til dato for avtale'}

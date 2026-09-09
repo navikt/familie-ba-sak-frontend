@@ -1,20 +1,39 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { lagBarnLabel } from '@utils/formatter';
+import { useFormContext } from 'react-hook-form';
 
+import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    barnMedDeltBostedFelt: Felt<IBarnMedOpplysninger[]>;
-    avtalerOmDeltBostedPerBarnFelt: Felt<Record<string, string[]>>;
-    visFeilmeldinger: boolean;
 }
 
-const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnFelt, visFeilmeldinger }: IProps) => {
+const BarnCheckbox = ({ barn }: IProps) => {
+    const {
+        getValues,
+        setValue,
+        formState: { isSubmitted },
+    } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
+
     const navnOgIdentTekst = lagBarnLabel(barn);
+
+    const fjernBarn = () => {
+        setValue(
+            BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
+            getValues(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED).filter(
+                barnMedDeltBosted =>
+                    barnMedDeltBosted.ident !== barn.ident ||
+                    barnMedDeltBosted.navn !== barn.navn ||
+                    barnMedDeltBosted.fødselsdato !== barn.fødselsdato
+            ),
+            { shouldValidate: isSubmitted }
+        );
+    };
 
     return (
         <Box marginInline="space-16 space-0">
@@ -24,19 +43,12 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
                 </Checkbox>
                 {barn.manueltRegistrert && (
                     <Button
+                        type={'button'}
                         variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
                         size={'small'}
-                        onClick={() => {
-                            barnMedDeltBostedFelt.validerOgSettFelt([
-                                ...barnMedDeltBostedFelt.verdi.filter(
-                                    barnMedDeltBosted =>
-                                        barnMedDeltBosted.ident !== barn.ident ||
-                                        barnMedDeltBosted.navn !== barn.navn ||
-                                        barnMedDeltBosted.fødselsdato !== barn.fødselsdato
-                                ),
-                            ]);
-                        }}
+                        disabled={skjemaErLåst}
+                        onClick={fjernBarn}
                         icon={<TrashIcon />}
                     >
                         {'Fjern barn'}
@@ -44,11 +56,7 @@ const BarnCheckbox = ({ barn, barnMedDeltBostedFelt, avtalerOmDeltBostedPerBarnF
                 )}
             </HStack>
 
-            <DeltBostedAvtaler
-                barn={barn}
-                avtalerOmDeltBostedPerBarnFelt={avtalerOmDeltBostedPerBarnFelt}
-                visFeilmeldinger={visFeilmeldinger}
-            />
+            <DeltBostedAvtaler barn={barn} />
         </Box>
     );
 };

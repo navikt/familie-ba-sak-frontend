@@ -1,8 +1,9 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useFagsak } from '@hooks/useFagsak';
-import type { Avhengigheter, FeltState } from '@navikt/familie-skjema';
-import { feil, ok, useFelt, useSkjema, Valideringsstatus } from '@navikt/familie-skjema';
-import type { IBehandling } from '@typer/behandling';
+import { useSendBehandlingBrev } from '@hooks/useSendBehandlingBrev';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBrukerContext } from '@sider/Fagsak/BrukerContext';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
 import { FagsakType } from '@typer/fagsak';
@@ -10,23 +11,55 @@ import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
 import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
 import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '@utils/brevmal';
-import type { IsoDatoString } from '@utils/dato';
-import { dateTilIsoDatoStringEllerUndefined, validerGyldigDato } from '@utils/dato';
-import { useDeltBostedFelter } from '@utils/deltBostedSkjemaFelter';
+import { dateTilIsoDatoStringEllerUndefined } from '@utils/dato';
+import {
+    hentBarnMedOpplysningerFraBruker,
+    hentDeltBostedMulitiselectVerdierForBarn,
+} from '@utils/deltBostedSkjemaFelter';
 import type { IFritekstFelt } from '@utils/fritekstfelter';
 import { genererIdBasertPåAndreFritekstKulepunkter, lagInitiellFritekst } from '@utils/fritekstfelter';
 import { useEffect, useState } from 'react';
-
+import { useForm } from 'react-hook-form';
+import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
 
-export const useBrevModul = () => {
-    const fagsak = useFagsak();
-    const behandling = useBehandling();
+export enum BrevmodulFeltnavn {
+    MOTTAKER_IDENT = 'mottakerIdent',
+    BREVMAL = 'brevmal',
+    DOKUMENTER = 'dokumenter',
+    FRITEKST_KULEPUNKTER = 'fritekstKulepunkter',
+    FRITEKST_AVSNITT = 'fritekstAvsnitt',
+    BARN_MED_DELT_BOSTED = 'barnMedDeltBosted',
+    BARN_BREVET_GJELDER = 'barnBrevetGjelder',
+    AVTALER_OM_DELT_BOSTED_PER_BARN = 'avtalerOmDeltBostedPerBarn',
+    DATO_AVTALE = 'datoAvtale',
+    ANTALL_UKER_SVARFRIST = 'antallUkerSvarfrist',
+    MOTTAKERLAND_SED = 'mottakerlandSed',
+}
 
-    const maksAntallKulepunkter = 20;
-    const makslengdeFritekstHvertKulepunkt = 220;
-    const maksLengdeFritekstAvsnitt = 1000;
+export interface BrevModulFormValues {
+    [BrevmodulFeltnavn.MOTTAKER_IDENT]: string;
+    [BrevmodulFeltnavn.BREVMAL]: Brevmal | '';
+    [BrevmodulFeltnavn.DOKUMENTER]: ISelectOptionMedBrevtekst[];
+    [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: IFritekstFelt[];
+    [BrevmodulFeltnavn.FRITEKST_AVSNITT]: string | undefined;
+    [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: IBarnMedOpplysninger[];
+    [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];
+    [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: Record<string, string[]>;
+    [BrevmodulFeltnavn.DATO_AVTALE]: Date | undefined;
+    [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: number | '';
+    [BrevmodulFeltnavn.MOTTAKERLAND_SED]: string[];
+}
+
+interface Props {
+    onSubmitSuccess: () => void;
+}
+
+export const useBrevModul = ({ onSubmitSuccess }: Props) => {
+    const fagsak = useFagsak();
+    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { bruker } = useBrukerContext();
 
     const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = useState(false);
 
@@ -46,236 +79,8 @@ export const useBrevModul = () => {
         return personer.find(person => person.type === PersonType.SØKER)?.personIdent;
     };
 
-    const mottakerIdent = useFelt({
-        verdi: velgMottaker() || '',
-        valideringsfunksjon: (felt: FeltState<string>) =>
-            felt.verdi.length >= 1 ? ok(felt) : feil(felt, 'Du må velge en mottaker'),
-    });
-    const brevmal = useFelt({
-        verdi: '',
-        valideringsfunksjon: (felt: FeltState<Brevmal | ''>) =>
-            felt.verdi ? ok(felt) : feil(felt, 'Du må velge en brevmal'),
-    });
-
-    const fritekstKulepunkter = useFelt<FeltState<IFritekstFelt>[]>({
-        verdi: [],
-        valideringsfunksjon: (felt: FeltState<FeltState<IFritekstFelt>[]>) => {
-            return felt.verdi.some(
-                fritekst => fritekst.valideringsstatus === Valideringsstatus.FEIL || fritekst.verdi.tekst.length === 0
-            )
-                ? feil(felt, '')
-                : ok(felt);
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return (
-                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                ![
-                    Brevmal.SVARTIDSBREV,
-                    Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
-                    Brevmal.VARSEL_OM_REVURDERING_SAMBOER,
-                    Brevmal.SVARTIDSBREV_INSTITUSJON,
-                    Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
-                    Brevmal.UTBETALING_ETTER_KA_VEDTAK,
-                    Brevmal.UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON,
-                ].includes(avhengigheter.brevmal.verdi)
-            );
-        },
-        avhengigheter: { brevmal },
-    });
-
-    const fritekstAvsnitt = useFelt<string | undefined>({
-        verdi: undefined,
-        valideringsfunksjon: fritekst => {
-            if (fritekst.verdi === undefined) {
-                return ok(fritekst);
-            }
-
-            if (fritekst.verdi.trim() === '') {
-                return feil(fritekst, 'Du må skrive tekst i feltet, eller fjerne det om du ikke skal ha fritekst.');
-            }
-
-            if (fritekst.verdi.length > maksLengdeFritekstAvsnitt) {
-                return feil(fritekst, `Du har nådd maks antall tegn: ${maksLengdeFritekstAvsnitt}`);
-            }
-
-            return ok(fritekst);
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return (
-                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [
-                    Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
-                    Brevmal.INNHENTE_OPPLYSNINGER,
-                    Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
-                    Brevmal.UTBETALING_ETTER_KA_VEDTAK,
-                    Brevmal.UTBETALING_ETTER_KA_VEDTAK_INSTITUSJON,
-                ].includes(avhengigheter.brevmal.verdi)
-            );
-        },
-        avhengigheter: { brevmal },
-    });
-
-    const antallUkerSvarfrist = useFelt({
-        verdi: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
-        valideringsfunksjon: (felt: FeltState<number | ''>) => {
-            if (felt.verdi === '') return feil(felt, 'Antall uker svarfrist er ikke satt');
-
-            if (isNaN(felt.verdi) || felt.verdi < 1) {
-                return feil(felt, 'Antall uker svarfrist må være et positivt tall');
-            }
-
-            // Maksimal saksbehandlingstid er 5 måneder. Svarfristen må derfor være mindre enn dette.
-            const maksSvarfristUker = 4 * 5;
-            if (felt.verdi > maksSvarfristUker) {
-                return feil(
-                    felt,
-                    `Du kan ikke sette antall uker svartid til mer enn ${maksSvarfristUker} uker (5 måneder)`
-                );
-            }
-
-            return ok(felt);
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return (
-                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [Brevmal.FORLENGET_SVARTIDSBREV, Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON].includes(
-                    avhengigheter.brevmal.verdi
-                )
-            );
-        },
-        avhengigheter: { brevmal },
-    });
-
-    const datoAvtale = useFelt<Date | undefined>({
-        verdi: undefined,
-        valideringsfunksjon: validerGyldigDato,
-        skalFeltetVises: avhengigheter => {
-            return (
-                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_SAMBOER
-            );
-        },
-        avhengigheter: { brevmal },
-    });
-
-    const dokumenter = useFelt({
-        verdi: [],
-        valideringsfunksjon: (felt: FeltState<ISelectOptionMedBrevtekst[]>, avhengigheter?: Avhengigheter) => {
-            if (
-                felt.verdi.length === 0 &&
-                avhengigheter?.fritekstKulepunkter.verdi.length === 0 &&
-                avhengigheter?.fritekstAvsnitt.verdi === undefined
-            ) {
-                return feil(
-                    felt,
-                    'Brevmalen krever at du enten velger dokumenter fra listen over, eller legger til et kulepunkt eller avsnitt med fritekst'
-                );
-            }
-
-            return ok(felt);
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return (
-                avhengigheter?.brevmal.valideringsstatus === Valideringsstatus.OK &&
-                [
-                    Brevmal.INNHENTE_OPPLYSNINGER,
-                    Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
-                    Brevmal.INNHENTE_OPPLYSNINGER_INSTITUSJON,
-                    Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
-                    Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
-                ].includes(avhengigheter?.brevmal.verdi)
-            );
-        },
-        avhengigheter: { brevmal, fritekstKulepunkter, fritekstAvsnitt },
-        nullstillVedAvhengighetEndring: false,
-    });
-
-    const barnBrevetGjelder = useFelt<IBarnMedOpplysninger[]>({
-        verdi: [],
-        valideringsfunksjon: (felt: FeltState<IBarnMedOpplysninger[]>) => {
-            return felt.verdi.some((barn: IBarnMedOpplysninger) => barn.merket)
-                ? ok(felt)
-                : feil(felt, 'Du må velge hvilke barn brevet gjelder');
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            return [
-                Brevmal.INNHENTE_OPPLYSNINGER_ETTER_SØKNAD_I_SED,
-                Brevmal.INNHENTE_OPPLYSNINGER_OG_INFORMASJON_OM_AT_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_HAR_SØKT,
-                Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
-                Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
-            ].includes(avhengigheter?.brevmal.verdi);
-        },
-        avhengigheter: { brevmal },
-        nullstillVedAvhengighetEndring: false,
-    });
-
-    const mottakerlandSed = useFelt<string[]>({
-        verdi: [],
-        valideringsfunksjon: (felt: FeltState<string[]>, avhengigheter?: Avhengigheter) => {
-            // På svartidsbrev er det valgfritt å oppgi land SED er sendt til.
-            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
-                return ok(felt);
-            }
-            return felt.verdi.length ? ok(felt) : feil(felt, 'Velg land SED er sendt/skal sendes til');
-        },
-        skalFeltetVises: (avhengigheter: Avhengigheter) => {
-            // På svartidsbrev vises feltet kun for EØS-behandlinger.
-            if (avhengigheter?.brevmal.verdi === Brevmal.SVARTIDSBREV) {
-                return behandlingKategori === BehandlingKategori.EØS;
-            }
-            return [
-                Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS,
-                Brevmal.VARSEL_OM_ÅRLIG_REVURDERING_EØS_MED_INNHENTING_AV_OPPLYSNINGER,
-            ].includes(avhengigheter?.brevmal.verdi);
-        },
-        avhengigheter: { brevmal },
-    });
-
-    const {
-        barnMedDeltBosted,
-        avtalerOmDeltBostedPerBarn,
-        nullstillDeltBosted,
-        hentDeltBostedMulitiselectVerdierForBarn,
-    } = useDeltBostedFelter({
-        avhengigheter: { brevmal: brevmal },
-        skalFeltetVises: avhengigheter =>
-            avhengigheter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
-    });
-
-    const { kanSendeSkjema, onSubmit, skjema, settVisfeilmeldinger } = useSkjema<
-        {
-            mottakerIdent: string;
-            brevmal: Brevmal | '';
-            dokumenter: ISelectOptionMedBrevtekst[];
-            fritekstKulepunkter: FeltState<IFritekstFelt>[];
-            fritekstAvsnitt: string | undefined;
-            barnMedDeltBosted: IBarnMedOpplysninger[];
-            barnBrevetGjelder: IBarnMedOpplysninger[];
-            avtalerOmDeltBostedPerBarn: Record<string, IsoDatoString[]>;
-            datoAvtale: Date | undefined;
-            antallUkerSvarfrist: number | '';
-            mottakerlandSed: string[];
-        },
-        IBehandling
-    >({
-        felter: {
-            mottakerIdent,
-            brevmal,
-            dokumenter,
-            fritekstKulepunkter,
-            fritekstAvsnitt,
-            barnMedDeltBosted,
-            barnBrevetGjelder,
-            avtalerOmDeltBostedPerBarn,
-            datoAvtale,
-            antallUkerSvarfrist,
-            mottakerlandSed,
-        },
-        skjemanavn: 'brevmodul',
-    });
-
-    const nullstillBarnBrevetGjelder = () => {
-        const barn = personer
+    const hentBarnBrevetGjelder = (): IBarnMedOpplysninger[] =>
+        personer
             .filter(person => person.type === PersonType.BARN)
             .map(
                 (person: IGrunnlagPerson): IBarnMedOpplysninger => ({
@@ -287,130 +92,151 @@ export const useBrevModul = () => {
                     erFolkeregistrert: true,
                 })
             );
-        skjema.felter.barnBrevetGjelder.validerOgSettFelt(barn);
-    };
+
+    const form = useForm<BrevModulFormValues>({
+        defaultValues: {
+            [BrevmodulFeltnavn.MOTTAKER_IDENT]: velgMottaker() || '',
+            [BrevmodulFeltnavn.BREVMAL]: '',
+            [BrevmodulFeltnavn.DOKUMENTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_AVSNITT]: undefined,
+            [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: [],
+            [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: [],
+            [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: {},
+            [BrevmodulFeltnavn.DATO_AVTALE]: undefined,
+            [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+            [BrevmodulFeltnavn.MOTTAKERLAND_SED]: [],
+        },
+    });
+
+    const { setValue, getValues, setError, reset } = form;
 
     /**
      * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        skjema.felter.dokumenter.nullstill();
-        nullstillDeltBosted();
-        nullstillBarnBrevetGjelder();
+        setValue(BrevmodulFeltnavn.DOKUMENTER, []);
+        setValue(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN, {});
+        setValue(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED, hentBarnMedOpplysningerFraBruker(bruker));
+        setValue(BrevmodulFeltnavn.BARN_BREVET_GJELDER, hentBarnBrevetGjelder());
     }, [behandling]);
 
-    useEffect(() => {
-        nullstillDeltBosted();
-        skjema.felter.mottakerlandSed.nullstill();
-        nullstillBarnBrevetGjelder();
-    }, [skjema.felter.brevmal.verdi]);
+    const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
+        const fritekstKulepunkter = getValues(BrevmodulFeltnavn.FRITEKST_KULEPUNKTER);
+        setValue(BrevmodulFeltnavn.FRITEKST_KULEPUNKTER, [
+            ...fritekstKulepunkter,
+            lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter), valideringsmelding),
+        ]);
+    };
 
-    const mottakersMålform = (): Målform =>
+    /**
+     * Nullstiller relevante felter når brevmal endres, og legger til et initielt obligatorisk
+     * fritekstpunkt for brevmaler som krever det. Vi bruker reset (fremfor setValue) slik at
+     * innsendt-tilstanden og eventuelle valideringsfeil også nullstilles. Ellers ville feilmeldinger
+     * fra en tidligere innsending/forhåndsvisning blitt vist umiddelbart på de tomme feltene i den nye brevmalen.
+     */
+    const onEndreBrevmal = (nyBrevmal: Brevmal | '') => {
+        reset({
+            ...getValues(),
+            [BrevmodulFeltnavn.BREVMAL]: nyBrevmal,
+            [BrevmodulFeltnavn.DOKUMENTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_AVSNITT]: undefined,
+            [BrevmodulFeltnavn.DATO_AVTALE]: undefined,
+            [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+            [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: {},
+            [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: hentBarnMedOpplysningerFraBruker(bruker),
+            [BrevmodulFeltnavn.MOTTAKERLAND_SED]: [],
+            [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: hentBarnBrevetGjelder(),
+        });
+
+        if (nyBrevmal !== '' && erBrevmalMedObligatoriskFritekstKulepunkt(nyBrevmal)) {
+            leggTilFritekstKulepunkt('Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.');
+        }
+    };
+
+    const mottakersMålform = (mottakerIdent: string): Målform =>
         mottakersMålformImplementering(
             personer,
-            skjema.felter.mottakerIdent.valideringsstatus,
-            skjema.felter.mottakerIdent.verdi
+            mottakerIdent.length >= 1 ? Valideringsstatus.OK : Valideringsstatus.IKKE_VALIDERT,
+            mottakerIdent
         );
 
     const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(behandling, !!institusjon);
 
-    const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
-        skjema.felter.fritekstKulepunkter.validerOgSettFelt([
-            ...skjema.felter.fritekstKulepunkter.verdi,
-            lagInitiellFritekst(
-                '',
-                genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter),
-                makslengdeFritekstHvertKulepunkt,
-                valideringsmelding
+    const hentVarselOmRevurderingDeltBostedSkjemaData = (
+        values: BrevModulFormValues
+    ): IManueltBrevRequestPåBehandling => {
+        const merkedeBarn = values.barnMedDeltBosted.filter(barn => barn.merket);
+
+        return {
+            multiselectVerdier: merkedeBarn.flatMap(barn =>
+                hentDeltBostedMulitiselectVerdierForBarn(barn, values.avtalerOmDeltBostedPerBarn)
             ),
-        ]);
+            barnIBrev: merkedeBarn.map(barn => barn.ident),
+            brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
+            behandlingKategori,
+            antallUkerSvarfrist: Number(values.antallUkerSvarfrist),
+        };
     };
 
-    const erBrevmalMedObligatoriskFritekstKulepunkt = (brevmal: Brevmal) =>
-        [
-            Brevmal.VARSEL_OM_REVURDERING,
-            Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON,
-            Brevmal.VARSEL_OM_REVURDERING_FRA_NASJONAL_TIL_EØS,
-            Brevmal.VARSEL_OM_VEDTAK_ETTER_SØKNAD_I_SED,
-            Brevmal.FORLENGET_SVARTIDSBREV,
-            Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
-            Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
-        ].includes(brevmal);
-
-    /**
-     * Legger til initielt fritekstpunkt for brevmaler med obligatorisk fritekst
-     */
-    useEffect(() => {
-        if (
-            fritekstKulepunkter.verdi.length === 0 &&
-            erBrevmalMedObligatoriskFritekstKulepunkt(brevmal.verdi as Brevmal)
-        ) {
-            const valideringsmelding = 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
-            leggTilFritekstKulepunkt(valideringsmelding);
-        }
-    }, [brevmal, fritekstKulepunkter]);
-
-    const hentSkjemaData = (): IManueltBrevRequestPåBehandling => {
+    const hentSkjemaData = (values: BrevModulFormValues): IManueltBrevRequestPåBehandling => {
         const erVarselOmRevurderingDeltBosted =
-            skjema.felter.brevmal.verdi === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
+            values.brevmal === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
 
         if (erVarselOmRevurderingDeltBosted) {
-            return hentVarselOmRevurderingDeltBostedSkjemaData();
+            return hentVarselOmRevurderingDeltBostedSkjemaData(values);
         } else {
             const multiselectVerdier = [
-                ...skjema.felter.dokumenter.verdi.map((selectOption: ISelectOptionMedBrevtekst) => {
+                ...values.dokumenter.map((selectOption: ISelectOptionMedBrevtekst) => {
                     if (selectOption.brevtekst) {
-                        return selectOption.brevtekst[mottakersMålform()];
+                        return selectOption.brevtekst[mottakersMålform(values.mottakerIdent)];
                     } else {
                         return selectOption.value;
                     }
                 }),
-                ...skjema.felter.fritekstKulepunkter.verdi.map(f => f.verdi.tekst),
+                ...values.fritekstKulepunkter.map(fritekst => fritekst.tekst),
             ];
 
-            const barnBrevetGjelder = skjema.felter.barnBrevetGjelder.verdi.filter(barn => barn.merket);
+            const barnBrevetGjelder = values.barnBrevetGjelder.filter(barn => barn.merket);
 
             return {
                 multiselectVerdier: multiselectVerdier,
-                brevmal: skjema.felter.brevmal.verdi as Brevmal,
+                brevmal: values.brevmal as Brevmal,
                 barnIBrev: [],
                 barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-                datoAvtale: dateTilIsoDatoStringEllerUndefined(skjema.felter.datoAvtale.verdi),
+                datoAvtale: dateTilIsoDatoStringEllerUndefined(values.datoAvtale),
                 behandlingKategori,
-                antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
-                mottakerMålform: mottakersMålform(),
-                mottakerlandSed: mottakerlandSed.verdi,
-                fritekstAvsnitt: skjema.felter.fritekstAvsnitt.verdi,
+                antallUkerSvarfrist: Number(values.antallUkerSvarfrist),
+                mottakerMålform: mottakersMålform(values.mottakerIdent),
+                mottakerlandSed: values.mottakerlandSed,
+                fritekstAvsnitt: values.fritekstAvsnitt,
             };
         }
     };
 
-    const hentVarselOmRevurderingDeltBostedSkjemaData = (): IManueltBrevRequestPåBehandling => {
-        const merkedeBarn = skjema.felter.barnMedDeltBosted.verdi.filter(barn => barn.merket);
+    const { mutateAsync: sendBrev } = useSendBehandlingBrev(behandling.behandlingId);
 
-        return {
-            multiselectVerdier: merkedeBarn.flatMap(hentDeltBostedMulitiselectVerdierForBarn),
-            barnIBrev: merkedeBarn.map(barn => barn.ident),
-            brevmal: Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14,
-            behandlingKategori,
-            antallUkerSvarfrist: Number(skjema.felter.antallUkerSvarfrist.verdi),
-        };
+    const onSubmit = async (values: BrevModulFormValues) => {
+        try {
+            const oppdatertBehandling = await sendBrev(hentSkjemaData(values));
+            onSubmitSuccess();
+            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message });
+        }
     };
 
     return {
-        skjema,
-        hentMuligeBrevMaler,
-        hentSkjemaData,
-        kanSendeSkjema,
-        mottakersMålform,
+        form,
         onSubmit,
+        hentSkjemaData,
+        hentMuligeBrevMaler,
+        onEndreBrevmal,
+        mottakersMålform,
         leggTilFritekstKulepunkt,
-        makslengdeFritekstHvertKulepunkt,
-        maksLengdeFritekstAvsnitt,
-        maksAntallKulepunkter,
-        settVisfeilmeldinger,
-        erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
         visFritekstAvsnittTekstboks,

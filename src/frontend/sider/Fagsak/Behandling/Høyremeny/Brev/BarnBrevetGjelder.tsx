@@ -1,44 +1,34 @@
 import { Checkbox, CheckboxGroup, InlineMessage } from '@navikt/ds-react';
-import type { Felt } from '@navikt/familie-skjema';
-import { differenceInMilliseconds } from 'date-fns';
 import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../../utils/dato';
-import { lagBarnLabel } from '../../../../../utils/formatter';
+import { lagBarnLabel, sorterBarnEtterFødselsdato } from '../../../../../utils/formatter';
 import styles from './BarnBrevetGjelder.module.css';
 
 interface IProps {
-    barnBrevetGjelderFelt: Felt<IBarnMedOpplysninger[]>;
+    barnBrevetGjelder: IBarnMedOpplysninger[];
+    onChange: (barn: IBarnMedOpplysninger[]) => void;
     behandlingsSteg?: BehandlingSteg;
-    visFeilmeldinger: boolean;
-    settVisFeilmeldinger: (visFeilmeldinger: boolean) => void;
+    readOnly?: boolean;
+    error?: string;
 }
 
-export const BarnBrevetGjelder = (props: IProps) => {
-    const { barnBrevetGjelderFelt, behandlingsSteg, visFeilmeldinger, settVisFeilmeldinger } = props;
-
+export const BarnBrevetGjelder = ({
+    barnBrevetGjelder,
+    onChange,
+    behandlingsSteg,
+    readOnly = false,
+    error,
+}: IProps) => {
     const skalViseVarselOmManglendeBarn =
         behandlingsSteg &&
         hentStegNummer(behandlingsSteg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
-        barnBrevetGjelderFelt.verdi.length === 0;
+        barnBrevetGjelder.length === 0;
 
-    const sorterteBarn = barnBrevetGjelderFelt.verdi.sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-        if (!a.fødselsdato || a.fødselsdato === '') {
-            return 1;
-        }
-
-        if (!b.fødselsdato || b.fødselsdato === '') {
-            return -1;
-        }
-
-        return !a.ident
-            ? 1
-            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
-    });
+    const sorterteBarn = sorterBarnEtterFødselsdato(barnBrevetGjelder);
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
-        barnBrevetGjelderFelt.validerOgSettFelt(
-            barnBrevetGjelderFelt.verdi.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
+        onChange(
+            barnBrevetGjelder.map((barnMedOpplysninger: IBarnMedOpplysninger) => ({
                 ...barnMedOpplysninger,
                 merket: barnaSomErMerket.includes(barnMedOpplysninger.ident),
             }))
@@ -47,15 +37,13 @@ export const BarnBrevetGjelder = (props: IProps) => {
 
     return (
         <CheckboxGroup
-            {...barnBrevetGjelderFelt.hentNavBaseSkjemaProps(visFeilmeldinger)}
             legend={'Hvilke barn gjelder brevet?'}
-            value={barnBrevetGjelderFelt.verdi
+            error={error}
+            readOnly={readOnly}
+            value={barnBrevetGjelder
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .map((barn: IBarnMedOpplysninger) => barn.ident)}
-            onChange={(barnaSomErMerket: string[]) => {
-                oppdaterBarnMedNyMerketStatus(barnaSomErMerket);
-                settVisFeilmeldinger(false);
-            }}
+            onChange={(barnaSomErMerket: string[]) => oppdaterBarnMedNyMerketStatus(barnaSomErMerket)}
         >
             {sorterteBarn.map((barn: IBarnMedOpplysninger, index: number) => {
                 const barnLabel = lagBarnLabel(barn);
