@@ -1,3 +1,4 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
 import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -5,7 +6,11 @@ import { Brevmal } from './typer';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 export function MottakerlandSedField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const erLesevisning = useErLesevisning();
+    const {
+        control,
+        formState: { isSubmitting },
+    } = useFormContext<BrevModulFormValues>();
 
     const {
         field,
@@ -29,7 +34,7 @@ export function MottakerlandSedField() {
             value={(field.value ?? []) as Regionkode[]}
             options={EØS_LAND_REGIONKODER}
             onChange={value => field.onChange(value ?? [])}
-            readOnly={false}
+            readOnly={erLesevisning || isSubmitting}
             error={error?.message ?? ''}
             isMulti={true}
         />
