@@ -123,7 +123,6 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
 
     const maksAntallKulepunkter = 20;
     const makslengdeFritekstHvertKulepunkt = 220;
-    const maksLengdeFritekstAvsnitt = 1000;
 
     const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = useState(false);
 
@@ -313,7 +312,6 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         leggTilFritekstKulepunkt,
         erBrevmalMedObligatoriskFritekstKulepunkt,
         makslengdeFritekstHvertKulepunkt,
-        maksLengdeFritekstAvsnitt,
         maksAntallKulepunkter,
         institusjon,
         brevmottakere,
