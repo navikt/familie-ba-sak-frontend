@@ -16,7 +16,7 @@ import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/Brevmotta
 import Knapperekke from '../../../../../komponenter/Knapperekke';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
-import { BarnBrevetGjelder } from './BarnBrevetGjelder';
+import { BarnBrevetGjelderField } from './BarnBrevetGjelderField';
 import { BrevmalSelect } from './BrevmalSelect';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
@@ -138,24 +138,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             />
                         )}
                         {skalViseBarnBrevetGjelder(brevmal) && (
-                            <Controller
-                                name="barnBrevetGjelder"
-                                control={control}
-                                rules={{
-                                    validate: verdi =>
-                                        verdi.some(barn => barn.merket)
-                                            ? true
-                                            : 'Du må velge hvilke barn brevet gjelder',
-                                }}
-                                render={({ field, fieldState }) => (
-                                    <BarnBrevetGjelder
-                                        barnBrevetGjelder={field.value}
-                                        onChange={field.onChange}
-                                        behandlingsSteg={behandlingSteg}
-                                        error={fieldState.error?.message}
-                                    />
-                                )}
-                            />
+                            <BarnBrevetGjelderField behandlingSteg={behandlingSteg} />
                         )}
                         {skalViseDeltBosted(brevmal) && (
                             <>
