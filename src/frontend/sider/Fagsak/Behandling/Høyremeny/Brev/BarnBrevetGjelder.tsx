@@ -1,9 +1,7 @@
 import { Checkbox, CheckboxGroup, InlineMessage } from '@navikt/ds-react';
-import { differenceInMilliseconds } from 'date-fns';
 import { BehandlingSteg, hentStegNummer } from '../../../../../typer/behandling';
 import type { IBarnMedOpplysninger } from '../../../../../typer/søknad';
-import { isoStringTilDate } from '../../../../../utils/dato';
-import { lagBarnLabel } from '../../../../../utils/formatter';
+import { lagBarnLabel, sorterBarnEtterFødselsdato } from '../../../../../utils/formatter';
 import styles from './BarnBrevetGjelder.module.css';
 
 interface IProps {
@@ -19,19 +17,7 @@ export const BarnBrevetGjelder = ({ barnBrevetGjelder, onChange, behandlingsSteg
         hentStegNummer(behandlingsSteg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
         barnBrevetGjelder.length === 0;
 
-    const sorterteBarn = [...barnBrevetGjelder].sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-        if (!a.fødselsdato || a.fødselsdato === '') {
-            return 1;
-        }
-
-        if (!b.fødselsdato || b.fødselsdato === '') {
-            return -1;
-        }
-
-        return !a.ident
-            ? 1
-            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
-    });
+    const sorterteBarn = sorterBarnEtterFødselsdato(barnBrevetGjelder);
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         onChange(
