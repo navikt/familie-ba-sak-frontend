@@ -88,6 +88,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
                             />
                             {!(erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) && index === 0) && (
                                 <Button
+                                    type={'button'}
                                     variant={'tertiary'}
                                     onClick={() =>
                                         field.onChange(field.value.filter(kulepunkt => kulepunkt.id !== fritekstId))
@@ -108,6 +109,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
 
             {!erMaksAntallKulepunkter && !erLesevisning && (
                 <Button
+                    type={'button'}
                     variant={'tertiary'}
                     onClick={() => leggTilFritekstKulepunkt()}
                     id={`legg-til-fritekst`}
