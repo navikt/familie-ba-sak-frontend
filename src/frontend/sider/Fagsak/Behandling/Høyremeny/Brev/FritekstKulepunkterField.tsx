@@ -6,8 +6,9 @@ import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
+import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
 import { Brevmal } from './typer';
-import { type BrevModulFormValues, BrevmodulFeltnavn, erBrevmalMedObligatoriskFritekstKulepunkt } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 const makslengdeFritekstHvertKulepunkt = 220;
 const maksAntallKulepunkter = 20;

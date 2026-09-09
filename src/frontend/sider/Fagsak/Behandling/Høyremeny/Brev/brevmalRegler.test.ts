@@ -1,7 +1,5 @@
 import { BehandlingKategori } from '@typer/behandlingstema';
 import { describe, expect, test } from 'vitest';
-
-import { Brevmal } from './typer';
 import {
     erBrevmalMedObligatoriskFritekstKulepunkt,
     skalViseAntallUkerSvarfrist,
@@ -12,7 +10,8 @@ import {
     skalViseFritekstAvsnitt,
     skalViseFritekstKulepunkter,
     skalViseMottakerlandSed,
-} from './useBrevModul';
+} from './brevmalRegler';
+import { Brevmal } from './typer';
 
 describe('skalViseFritekstKulepunkter', () => {
     test('er false når ingen brevmal er valgt', () => {
