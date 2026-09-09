@@ -2,27 +2,36 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { lagBarnLabel } from '@utils/formatter';
+import { useFormContext } from 'react-hook-form';
 
+import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
-    barnMedDeltBosted: IBarnMedOpplysninger[];
-    settBarnMedDeltBosted: (barn: IBarnMedOpplysninger[]) => void;
-    avtalerOmDeltBostedPerBarn: Record<string, string[]>;
-    settAvtalerOmDeltBostedPerBarn: (avtaler: Record<string, string[]>) => void;
-    visFeilmeldinger: boolean;
 }
 
-const BarnCheckbox = ({
-    barn,
-    barnMedDeltBosted,
-    settBarnMedDeltBosted,
-    avtalerOmDeltBostedPerBarn,
-    settAvtalerOmDeltBostedPerBarn,
-    visFeilmeldinger,
-}: IProps) => {
+const BarnCheckbox = ({ barn }: IProps) => {
+    const {
+        getValues,
+        setValue,
+        formState: { isSubmitted },
+    } = useFormContext<BrevModulFormValues>();
+
     const navnOgIdentTekst = lagBarnLabel(barn);
+
+    const fjernBarn = () => {
+        setValue(
+            BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
+            getValues(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED).filter(
+                barnMedDeltBosted =>
+                    barnMedDeltBosted.ident !== barn.ident ||
+                    barnMedDeltBosted.navn !== barn.navn ||
+                    barnMedDeltBosted.fødselsdato !== barn.fødselsdato
+            ),
+            { shouldValidate: isSubmitted }
+        );
+    };
 
     return (
         <Box marginInline="space-16 space-0">
@@ -36,16 +45,7 @@ const BarnCheckbox = ({
                         variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
                         size={'small'}
-                        onClick={() => {
-                            settBarnMedDeltBosted(
-                                barnMedDeltBosted.filter(
-                                    barnMedDeltBosted =>
-                                        barnMedDeltBosted.ident !== barn.ident ||
-                                        barnMedDeltBosted.navn !== barn.navn ||
-                                        barnMedDeltBosted.fødselsdato !== barn.fødselsdato
-                                )
-                            );
-                        }}
+                        onClick={fjernBarn}
                         icon={<TrashIcon />}
                     >
                         {'Fjern barn'}
@@ -53,12 +53,7 @@ const BarnCheckbox = ({
                 )}
             </HStack>
 
-            <DeltBostedAvtaler
-                barn={barn}
-                avtalerOmDeltBostedPerBarn={avtalerOmDeltBostedPerBarn}
-                settAvtalerOmDeltBostedPerBarn={settAvtalerOmDeltBostedPerBarn}
-                visFeilmeldinger={visFeilmeldinger}
-            />
+            <DeltBostedAvtaler barn={barn} />
         </Box>
     );
 };
