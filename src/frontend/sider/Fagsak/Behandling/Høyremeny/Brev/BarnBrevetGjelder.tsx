@@ -8,10 +8,17 @@ interface IProps {
     barnBrevetGjelder: IBarnMedOpplysninger[];
     onChange: (barn: IBarnMedOpplysninger[]) => void;
     behandlingsSteg?: BehandlingSteg;
+    readOnly?: boolean;
     error?: string;
 }
 
-export const BarnBrevetGjelder = ({ barnBrevetGjelder, onChange, behandlingsSteg, error }: IProps) => {
+export const BarnBrevetGjelder = ({
+    barnBrevetGjelder,
+    onChange,
+    behandlingsSteg,
+    readOnly = false,
+    error,
+}: IProps) => {
     const skalViseVarselOmManglendeBarn =
         behandlingsSteg &&
         hentStegNummer(behandlingsSteg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
@@ -32,6 +39,7 @@ export const BarnBrevetGjelder = ({ barnBrevetGjelder, onChange, behandlingsSteg
         <CheckboxGroup
             legend={'Hvilke barn gjelder brevet?'}
             error={error}
+            readOnly={readOnly}
             value={barnBrevetGjelder
                 .filter((barn: IBarnMedOpplysninger) => barn.merket)
                 .map((barn: IBarnMedOpplysninger) => barn.ident)}

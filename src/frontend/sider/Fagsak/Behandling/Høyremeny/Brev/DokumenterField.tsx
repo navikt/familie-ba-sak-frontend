@@ -1,14 +1,14 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { leggTilValuePåOption, opplysningsdokumenter, opplysningsdokumenterTilInstitusjon } from './typer';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function DokumenterField() {
     const { control } = useFormContext<BrevModulFormValues>();
-    const erLesevisning = useErLesevisning();
+    const skjemaErLåst = useSkjemaErLåst();
     const institusjon = useFagsak().institusjon;
 
     const muligeDokumenterÅVelge = institusjon
@@ -32,7 +32,7 @@ export function DokumenterField() {
     return (
         <UNSAFE_Combobox
             label={'Velg dokumenter'}
-            readOnly={erLesevisning}
+            readOnly={skjemaErLåst}
             isMultiSelect
             options={muligeDokumenterÅVelge}
             selectedOptions={field.value}

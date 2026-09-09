@@ -1,16 +1,13 @@
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Brevmal } from './typer';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function MottakerlandSedField() {
-    const erLesevisning = useErLesevisning();
-    const {
-        control,
-        formState: { isSubmitting },
-    } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
+    const { control } = useFormContext<BrevModulFormValues>();
 
     const {
         field,
@@ -34,7 +31,7 @@ export function MottakerlandSedField() {
             value={(field.value ?? []) as Regionkode[]}
             options={EØS_LAND_REGIONKODER}
             onChange={value => field.onChange(value ?? [])}
-            readOnly={erLesevisning || isSubmitting}
+            readOnly={skjemaErLåst}
             error={error?.message ?? ''}
             isMulti={true}
         />

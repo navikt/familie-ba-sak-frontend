@@ -9,6 +9,7 @@ import styles from './Brevskjema.module.css';
 import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
 import { Brevmal } from './typer';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const makslengdeFritekstHvertKulepunkt = 220;
 const maksAntallKulepunkter = 20;
@@ -28,6 +29,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
         formState: { isSubmitted },
     } = useFormContext<BrevModulFormValues>();
     const erLesevisning = useErLesevisning();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const valgtBrevmal = watch(BrevmodulFeltnavn.BREVMAL) as Brevmal;
 
@@ -72,6 +74,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
                                 value={fritekst.tekst}
                                 maxLength={makslengdeFritekstHvertKulepunkt}
                                 description={hjelpetekst}
+                                readOnly={skjemaErLåst}
                                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
                                     field.onChange(
                                         field.value.map(kulepunkt =>
@@ -96,6 +99,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
                                     }
                                     id={`fjern_fritekst-${fritekstId}`}
                                     size={'small'}
+                                    disabled={skjemaErLåst}
                                     aria-label={'Fjern fritekst'}
                                     icon={<TrashIcon />}
                                     className={styles.removeButton}
@@ -115,6 +119,7 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
                     onClick={() => leggTilFritekstKulepunkt()}
                     id={`legg-til-fritekst`}
                     size={'small'}
+                    disabled={skjemaErLåst}
                     icon={<PlusCircleIcon />}
                     className={styles.addButton}
                 >

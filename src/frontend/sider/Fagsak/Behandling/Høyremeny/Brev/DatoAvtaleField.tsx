@@ -4,13 +4,11 @@ import { isValid } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
-interface Props {
-    readOnly?: boolean;
-}
-
-export function DatoAvtaleField({ readOnly = false }: Props) {
+export function DatoAvtaleField() {
     const { control } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field: { value, onChange },
@@ -36,7 +34,7 @@ export function DatoAvtaleField({ readOnly = false }: Props) {
                 {...inputProps}
                 label={'Samboer fra'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
-                readOnly={readOnly}
+                readOnly={skjemaErLåst}
                 error={error?.message}
             />
         </DatePicker>

@@ -6,6 +6,7 @@ import { erIsoStringGyldig, type IsoDatoString } from '@utils/dato';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 
 interface IProps {
     barn: IBarnMedOpplysninger;
@@ -18,6 +19,7 @@ const DeltBostedAvtaler = ({ barn }: IProps) => {
         setValue,
         formState: { isSubmitted },
     } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const avtalerOmDeltBostedPerBarn = useWatch({ control, name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN });
     const avtalerOmDeltBosted: IsoDatoString[] = avtalerOmDeltBostedPerBarn[barn.ident] ?? [];
@@ -54,6 +56,7 @@ const DeltBostedAvtaler = ({ barn }: IProps) => {
                                 label={'Dato for avtale om delt bosted'}
                                 minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}
                                 value={avtaleDato}
+                                readOnly={skjemaErLåst}
                                 visFeilmeldinger={feilmelding !== undefined}
                                 feilmelding={feilmelding}
                                 onDateChange={(dato?: IsoDatoString) => {
@@ -70,6 +73,7 @@ const DeltBostedAvtaler = ({ barn }: IProps) => {
                                     variant={'tertiary'}
                                     id={`fjern_avtale__${barn.ident}`}
                                     size={'small'}
+                                    disabled={skjemaErLåst}
                                     onClick={() => {
                                         oppdaterAvtalerForBarn(
                                             avtalerOmDeltBosted.filter((_, reduceIndex) => reduceIndex !== index)
@@ -92,6 +96,7 @@ const DeltBostedAvtaler = ({ barn }: IProps) => {
                         variant={'tertiary'}
                         id={`legg_til_avtale__${barn.ident}`}
                         size={'small'}
+                        disabled={skjemaErLåst}
                         onClick={() => oppdaterAvtalerForBarn([...avtalerOmDeltBosted, ''])}
                         icon={<PlusCircleIcon />}
                     >

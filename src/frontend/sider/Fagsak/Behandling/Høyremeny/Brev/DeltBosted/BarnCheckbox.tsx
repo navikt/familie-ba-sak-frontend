@@ -5,6 +5,7 @@ import { lagBarnLabel } from '@utils/formatter';
 import { useFormContext } from 'react-hook-form';
 
 import { type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 interface IProps {
@@ -17,6 +18,7 @@ const BarnCheckbox = ({ barn }: IProps) => {
         setValue,
         formState: { isSubmitted },
     } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
     const navnOgIdentTekst = lagBarnLabel(barn);
 
@@ -45,6 +47,7 @@ const BarnCheckbox = ({ barn }: IProps) => {
                         variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
                         size={'small'}
+                        disabled={skjemaErLåst}
                         onClick={fjernBarn}
                         icon={<TrashIcon />}
                     >

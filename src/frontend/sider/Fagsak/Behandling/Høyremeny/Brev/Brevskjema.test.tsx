@@ -2,7 +2,7 @@ import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagGrunnlagPerson, lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
-import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import type { IPersonInfo } from '@typer/person';
 import { Adressebeskyttelsegradering, ForelderBarnRelasjonRolle } from '@typer/person';
 import type { ReactNode } from 'react';
@@ -21,13 +21,13 @@ const behandling = lagBehandling({
     personer: [lagGrunnlagPerson()],
 });
 
-function lagWrapper(bruker: IPersonInfo) {
+function lagWrapper(bruker: IPersonInfo, behandlingForVisning = behandling) {
     return function Wrapper({ children }: { children: ReactNode }) {
         return (
             <TestProviders>
                 <FagsakProvider fagsak={lagFagsak()}>
                     <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandling}>
+                        <BehandlingProvider behandling={behandlingForVisning}>
                             <BrukerProvider bruker={bruker}>{children}</BrukerProvider>
                         </BehandlingProvider>
                     </HentOgSettBehandlingProvider>
@@ -114,5 +114,24 @@ describe('Brevskjema delt bosted', () => {
         // Ingen valideringsfeil skal vises før innsending
         expect(screen.queryByText('Du må velge barn')).not.toBeInTheDocument();
         expect(screen.queryByText('Du må fylle inn dato for avtale')).not.toBeInTheDocument();
+    });
+});
+
+describe('Brevskjema lesevisning', () => {
+    const avsluttetBehandling = lagBehandling({
+        type: Behandlingstype.REVURDERING,
+        årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+        personer: [lagGrunnlagPerson()],
+        status: BehandlingStatus.AVSLUTTET,
+    });
+
+    test('skal låse knappene under lesevisning', () => {
+        const { screen } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={lagPerson()} />, {
+            wrapper: lagWrapper(lagPerson(), avsluttetBehandling),
+        });
+
+        // «Send brev» skal være deaktivert og «Forhåndsvis» skal ikke vises under lesevisning
+        expect(screen.getByRole('button', { name: 'Send brev' })).toBeDisabled();
+        expect(screen.queryByRole('button', { name: 'Forhåndsvis' })).not.toBeInTheDocument();
     });
 });
