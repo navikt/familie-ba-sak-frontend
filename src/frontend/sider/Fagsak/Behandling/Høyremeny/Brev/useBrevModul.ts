@@ -121,9 +121,6 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { bruker } = useBrukerContext();
 
-    const maksAntallKulepunkter = 20;
-    const makslengdeFritekstHvertKulepunkt = 220;
-
     const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = useState(false);
 
     const behandlingKategori = behandling?.kategori;
@@ -310,9 +307,6 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         hentMuligeBrevMaler,
         mottakersMålform,
         leggTilFritekstKulepunkt,
-        erBrevmalMedObligatoriskFritekstKulepunkt,
-        makslengdeFritekstHvertKulepunkt,
-        maksAntallKulepunkter,
         institusjon,
         brevmottakere,
         behandlingKategori,
