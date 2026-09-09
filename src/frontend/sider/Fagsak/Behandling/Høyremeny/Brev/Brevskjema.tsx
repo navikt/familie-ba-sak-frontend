@@ -3,7 +3,7 @@ import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { FileTextIcon, PlusCircleIcon, TrashIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import {
     Button,
     Dialog,
@@ -15,7 +15,6 @@ import {
     Loader,
     Select,
     Tag,
-    Textarea,
     UNSAFE_Combobox,
     VStack,
 } from '@navikt/ds-react';
@@ -23,7 +22,6 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { IPersonInfo } from '@typer/person';
 import { type IBarnMedOpplysninger, målform } from '@typer/søknad';
 import { validerAvtalerOmDeltBostedPerBarn, validerBarnMedDeltBosted } from '@utils/deltBostedSkjemaFelter';
-import { validerFritekstKulepunkt } from '@utils/fritekstfelter';
 import { type ChangeEvent, useState } from 'react';
 import { Controller, FormProvider } from 'react-hook-form';
 
@@ -36,16 +34,11 @@ import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
 import { FritekstAvsnittField } from './FritekstAvsnittField';
+import { FritekstKulepunkterField } from './FritekstKulepunkterField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
 import type { BrevtypeSelect } from './typer';
-import {
-    Brevmal,
-    brevmaler,
-    leggTilValuePåOption,
-    opplysningsdokumenter,
-    opplysningsdokumenterTilInstitusjon,
-} from './typer';
+import { brevmaler, leggTilValuePåOption, opplysningsdokumenter, opplysningsdokumenterTilInstitusjon } from './typer';
 import {
     skalViseAntallUkerSvarfrist,
     skalViseBarnBrevetGjelder,
@@ -73,10 +66,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         hentSkjemaData,
         mottakersMålform,
         hentMuligeBrevMaler,
-        makslengdeFritekstHvertKulepunkt,
-        maksAntallKulepunkter,
         leggTilFritekstKulepunkt,
-        erBrevmalMedObligatoriskFritekstKulepunkt,
         institusjon,
         brevmottakere,
         behandlingKategori,
@@ -110,11 +100,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = isSubmitting || opprettManueltBrevPdfIsPending;
-
-    const fritekstSkjemaGruppeId = 'Fritekster-brev';
-
-    const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
-        'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
     const behandlingSteg = behandling.steg;
 
@@ -227,119 +212,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             />
                         )}
                         {skalViseFritekstKulepunkter(brevmal) && (
-                            <Controller
-                                name="fritekstKulepunkter"
-                                control={control}
-                                rules={{
-                                    validate: kulepunkter =>
-                                        !kulepunkter.some(
-                                            kulepunkt =>
-                                                validerFritekstKulepunkt(
-                                                    kulepunkt,
-                                                    makslengdeFritekstHvertKulepunkt
-                                                ) !== undefined
-                                        ),
-                                }}
-                                render={({ field }) => {
-                                    const erMaksAntallKulepunkter = field.value.length >= maksAntallKulepunkter;
-                                    const valgtBrevmal = brevmal as Brevmal;
-
-                                    return (
-                                        <div>
-                                            <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
-                                            <Fieldset
-                                                legend="Legg til kulepunkt"
-                                                hideLegend
-                                                id={fritekstSkjemaGruppeId}
-                                            >
-                                                {field.value.map((fritekst, index) => {
-                                                    const fritekstId = fritekst.id;
-
-                                                    const hjelpetekst =
-                                                        index === 0 &&
-                                                        valgtBrevmal ===
-                                                            Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT
-                                                            ? hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt
-                                                            : '';
-
-                                                    const feilmelding = isSubmitted
-                                                        ? validerFritekstKulepunkt(
-                                                              fritekst,
-                                                              makslengdeFritekstHvertKulepunkt
-                                                          )
-                                                        : undefined;
-
-                                                    return (
-                                                        <HStack key={`fritekst-${fritekstId}`}>
-                                                            <Textarea
-                                                                key={`fritekst-${fritekstId}`}
-                                                                id={`${fritekstId}`}
-                                                                className={styles.textarea}
-                                                                label="Skriv inn kulepunkt"
-                                                                hideLabel
-                                                                size={'small'}
-                                                                value={fritekst.tekst}
-                                                                maxLength={makslengdeFritekstHvertKulepunkt}
-                                                                description={hjelpetekst}
-                                                                onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-                                                                    field.onChange(
-                                                                        field.value.map(kulepunkt =>
-                                                                            kulepunkt.id === fritekstId
-                                                                                ? {
-                                                                                      ...kulepunkt,
-                                                                                      tekst: event.target.value,
-                                                                                  }
-                                                                                : kulepunkt
-                                                                        )
-                                                                    )
-                                                                }
-                                                                error={feilmelding}
-                                                                autoFocus
-                                                            />
-                                                            {!(
-                                                                erBrevmalMedObligatoriskFritekstKulepunkt(
-                                                                    valgtBrevmal
-                                                                ) && index === 0
-                                                            ) && (
-                                                                <Button
-                                                                    variant={'tertiary'}
-                                                                    onClick={() =>
-                                                                        field.onChange(
-                                                                            field.value.filter(
-                                                                                kulepunkt => kulepunkt.id !== fritekstId
-                                                                            )
-                                                                        )
-                                                                    }
-                                                                    id={`fjern_fritekst-${fritekstId}`}
-                                                                    size={'small'}
-                                                                    aria-label={'Fjern fritekst'}
-                                                                    icon={<TrashIcon />}
-                                                                    className={styles.removeButton}
-                                                                >
-                                                                    {'Fjern'}
-                                                                </Button>
-                                                            )}
-                                                        </HStack>
-                                                    );
-                                                })}
-                                            </Fieldset>
-
-                                            {!erMaksAntallKulepunkter && !erLesevisning && (
-                                                <Button
-                                                    variant={'tertiary'}
-                                                    onClick={() => leggTilFritekstKulepunkt()}
-                                                    id={`legg-til-fritekst`}
-                                                    size={'small'}
-                                                    icon={<PlusCircleIcon />}
-                                                    className={styles.addButton}
-                                                >
-                                                    {'Legg til kulepunkt'}
-                                                </Button>
-                                            )}
-                                        </div>
-                                    );
-                                }}
-                            />
+                            <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
                         )}
                         {skalViseFritekstAvsnitt(brevmal) && (
                             <FritekstAvsnittField
