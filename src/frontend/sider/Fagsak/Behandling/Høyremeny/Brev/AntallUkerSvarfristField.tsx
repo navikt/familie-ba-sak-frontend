@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 const maksSvarfristUker = 4 * 5;
 
@@ -14,7 +14,7 @@ export function AntallUkerSvarfristField() {
         field,
         fieldState: { error },
     } = useController({
-        name: 'antallUkerSvarfrist',
+        name: BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST,
         control,
         rules: {
             validate: verdi => {

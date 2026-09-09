@@ -2,7 +2,7 @@ import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@kompone
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Brevmal } from './typer';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 export function MottakerlandSedField() {
     const { control } = useFormContext<BrevModulFormValues>();
@@ -11,7 +11,7 @@ export function MottakerlandSedField() {
         field,
         fieldState: { error },
     } = useController({
-        name: 'mottakerlandSed',
+        name: BrevmodulFeltnavn.MOTTAKERLAND_SED,
         control,
         rules: {
             validate: (verdi, values) =>

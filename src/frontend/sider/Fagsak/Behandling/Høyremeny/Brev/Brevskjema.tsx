@@ -26,6 +26,7 @@ import { FritekstKulepunkterField } from './FritekstKulepunkterField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
 import {
+    BrevmodulFeltnavn,
     skalViseAntallUkerSvarfrist,
     skalViseBarnBrevetGjelder,
     skalViseDatoAvtale,
@@ -79,9 +80,9 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     const erLesevisning = useErLesevisning();
 
-    const brevmal = watch('brevmal');
-    const barnMedDeltBosted = watch('barnMedDeltBosted');
-    const avtalerOmDeltBostedPerBarn = watch('avtalerOmDeltBostedPerBarn');
+    const brevmal = watch(BrevmodulFeltnavn.BREVMAL);
+    const barnMedDeltBosted = watch(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED);
+    const avtalerOmDeltBostedPerBarn = watch(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN);
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = isSubmitting || opprettManueltBrevPdfIsPending;
@@ -97,10 +98,10 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     }
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
-        setValue('barnMedDeltBosted', [...barnMedDeltBosted, barn], { shouldValidate: isSubmitted });
+        setValue(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED, [...barnMedDeltBosted, barn], { shouldValidate: isSubmitted });
         if (barn.erFolkeregistrert) {
             setValue(
-                'avtalerOmDeltBostedPerBarn',
+                BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN,
                 { ...avtalerOmDeltBostedPerBarn, [barn.ident]: [''] },
                 { shouldValidate: isSubmitted }
             );
@@ -118,7 +119,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
                         <Controller
-                            name="mottakerIdent"
+                            name={BrevmodulFeltnavn.MOTTAKER_IDENT}
                             control={control}
                             rules={{ validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker' }}
                             render={() => <></>}

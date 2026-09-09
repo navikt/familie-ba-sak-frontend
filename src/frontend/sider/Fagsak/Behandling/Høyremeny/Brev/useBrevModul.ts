@@ -24,18 +24,32 @@ import { useForm } from 'react-hook-form';
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
 
+export enum BrevmodulFeltnavn {
+    MOTTAKER_IDENT = 'mottakerIdent',
+    BREVMAL = 'brevmal',
+    DOKUMENTER = 'dokumenter',
+    FRITEKST_KULEPUNKTER = 'fritekstKulepunkter',
+    FRITEKST_AVSNITT = 'fritekstAvsnitt',
+    BARN_MED_DELT_BOSTED = 'barnMedDeltBosted',
+    BARN_BREVET_GJELDER = 'barnBrevetGjelder',
+    AVTALER_OM_DELT_BOSTED_PER_BARN = 'avtalerOmDeltBostedPerBarn',
+    DATO_AVTALE = 'datoAvtale',
+    ANTALL_UKER_SVARFRIST = 'antallUkerSvarfrist',
+    MOTTAKERLAND_SED = 'mottakerlandSed',
+}
+
 export interface BrevModulFormValues {
-    mottakerIdent: string;
-    brevmal: Brevmal | '';
-    dokumenter: ISelectOptionMedBrevtekst[];
-    fritekstKulepunkter: IFritekstFelt[];
-    fritekstAvsnitt: string | undefined;
-    barnMedDeltBosted: IBarnMedOpplysninger[];
-    barnBrevetGjelder: IBarnMedOpplysninger[];
-    avtalerOmDeltBostedPerBarn: Record<string, string[]>;
-    datoAvtale: Date | undefined;
-    antallUkerSvarfrist: number | '';
-    mottakerlandSed: string[];
+    [BrevmodulFeltnavn.MOTTAKER_IDENT]: string;
+    [BrevmodulFeltnavn.BREVMAL]: Brevmal | '';
+    [BrevmodulFeltnavn.DOKUMENTER]: ISelectOptionMedBrevtekst[];
+    [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: IFritekstFelt[];
+    [BrevmodulFeltnavn.FRITEKST_AVSNITT]: string | undefined;
+    [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: IBarnMedOpplysninger[];
+    [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];
+    [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: Record<string, string[]>;
+    [BrevmodulFeltnavn.DATO_AVTALE]: Date | undefined;
+    [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: number | '';
+    [BrevmodulFeltnavn.MOTTAKERLAND_SED]: string[];
 }
 
 export const skalViseFritekstKulepunkter = (brevmal: Brevmal | ''): boolean =>
@@ -155,17 +169,17 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
 
     const form = useForm<BrevModulFormValues>({
         defaultValues: {
-            mottakerIdent: velgMottaker() || '',
-            brevmal: '',
-            dokumenter: [],
-            fritekstKulepunkter: [],
-            fritekstAvsnitt: undefined,
-            barnMedDeltBosted: [],
-            barnBrevetGjelder: [],
-            avtalerOmDeltBostedPerBarn: {},
-            datoAvtale: undefined,
-            antallUkerSvarfrist: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
-            mottakerlandSed: [],
+            [BrevmodulFeltnavn.MOTTAKER_IDENT]: velgMottaker() || '',
+            [BrevmodulFeltnavn.BREVMAL]: '',
+            [BrevmodulFeltnavn.DOKUMENTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_AVSNITT]: undefined,
+            [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: [],
+            [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: [],
+            [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: {},
+            [BrevmodulFeltnavn.DATO_AVTALE]: undefined,
+            [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+            [BrevmodulFeltnavn.MOTTAKERLAND_SED]: [],
         },
     });
 
@@ -176,15 +190,15 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
      * Dette fordi at man kan ha gjort endring på målform
      */
     useEffect(() => {
-        setValue('dokumenter', []);
-        setValue('avtalerOmDeltBostedPerBarn', {});
-        setValue('barnMedDeltBosted', hentBarnMedOpplysningerFraBruker(bruker));
-        setValue('barnBrevetGjelder', hentBarnBrevetGjelder());
+        setValue(BrevmodulFeltnavn.DOKUMENTER, []);
+        setValue(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN, {});
+        setValue(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED, hentBarnMedOpplysningerFraBruker(bruker));
+        setValue(BrevmodulFeltnavn.BARN_BREVET_GJELDER, hentBarnBrevetGjelder());
     }, [behandling]);
 
     const leggTilFritekstKulepunkt = (valideringsmelding?: string) => {
-        const fritekstKulepunkter = getValues('fritekstKulepunkter');
-        setValue('fritekstKulepunkter', [
+        const fritekstKulepunkter = getValues(BrevmodulFeltnavn.FRITEKST_KULEPUNKTER);
+        setValue(BrevmodulFeltnavn.FRITEKST_KULEPUNKTER, [
             ...fritekstKulepunkter,
             lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fritekstKulepunkter), valideringsmelding),
         ]);
@@ -199,16 +213,16 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
     const onEndreBrevmal = (nyBrevmal: Brevmal | '') => {
         reset({
             ...getValues(),
-            brevmal: nyBrevmal,
-            dokumenter: [],
-            fritekstKulepunkter: [],
-            fritekstAvsnitt: undefined,
-            datoAvtale: undefined,
-            antallUkerSvarfrist: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
-            avtalerOmDeltBostedPerBarn: {},
-            barnMedDeltBosted: hentBarnMedOpplysningerFraBruker(bruker),
-            mottakerlandSed: [],
-            barnBrevetGjelder: hentBarnBrevetGjelder(),
+            [BrevmodulFeltnavn.BREVMAL]: nyBrevmal,
+            [BrevmodulFeltnavn.DOKUMENTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: [],
+            [BrevmodulFeltnavn.FRITEKST_AVSNITT]: undefined,
+            [BrevmodulFeltnavn.DATO_AVTALE]: undefined,
+            [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: behandlingKategori === BehandlingKategori.EØS ? 8 : 3,
+            [BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN]: {},
+            [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: hentBarnMedOpplysningerFraBruker(bruker),
+            [BrevmodulFeltnavn.MOTTAKERLAND_SED]: [],
+            [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: hentBarnBrevetGjelder(),
         });
 
         if (nyBrevmal !== '' && erBrevmalMedObligatoriskFritekstKulepunkt(nyBrevmal)) {

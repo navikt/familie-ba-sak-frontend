@@ -3,7 +3,7 @@ import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { isValid } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 interface Props {
     readOnly?: boolean;
@@ -16,7 +16,7 @@ export function DatoAvtaleField({ readOnly = false }: Props) {
         field: { value, onChange },
         fieldState: { error },
     } = useController({
-        name: 'datoAvtale',
+        name: BrevmodulFeltnavn.DATO_AVTALE,
         control,
         rules: {
             validate: value => (value && isValid(value) ? undefined : 'Du må velge en gyldig dato'),
