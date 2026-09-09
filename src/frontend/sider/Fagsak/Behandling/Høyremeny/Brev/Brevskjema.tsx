@@ -4,24 +4,12 @@ import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModa
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
 import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import {
-    Button,
-    Dialog,
-    ErrorMessage,
-    Fieldset,
-    Heading,
-    HStack,
-    Label,
-    Loader,
-    Select,
-    Tag,
-    VStack,
-} from '@navikt/ds-react';
+import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import type { IPersonInfo } from '@typer/person';
-import { type IBarnMedOpplysninger, målform } from '@typer/søknad';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
 import { validerAvtalerOmDeltBostedPerBarn, validerBarnMedDeltBosted } from '@utils/deltBostedSkjemaFelter';
-import { type ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { Controller, FormProvider } from 'react-hook-form';
 
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
@@ -29,6 +17,7 @@ import Knapperekke from '../../../../../komponenter/Knapperekke';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
+import { BrevmalSelect } from './BrevmalSelect';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
@@ -37,8 +26,6 @@ import { FritekstAvsnittField } from './FritekstAvsnittField';
 import { FritekstKulepunkterField } from './FritekstKulepunkterField';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
-import type { BrevtypeSelect } from './typer';
-import { brevmaler } from './typer';
 import {
     skalViseAntallUkerSvarfrist,
     skalViseBarnBrevetGjelder,
@@ -94,7 +81,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
     const erLesevisning = useErLesevisning();
 
     const brevmal = watch('brevmal');
-    const mottakerIdent = watch('mottakerIdent');
     const barnMedDeltBosted = watch('barnMedDeltBosted');
     const avtalerOmDeltBostedPerBarn = watch('avtalerOmDeltBostedPerBarn');
 
@@ -140,37 +126,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                     <Label>Brev sendes til</Label>
                     <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
                     <VStack gap={'space-16'}>
-                        <Controller
-                            name="brevmal"
-                            control={control}
-                            rules={{ validate: verdi => (verdi ? true : 'Du må velge en brevmal') }}
-                            render={({ field, fieldState }) => (
-                                <Select
-                                    id={'velg-brevmal'}
-                                    value={field.value}
-                                    error={fieldState.error?.message}
-                                    className={styles.select}
-                                    label={
-                                        <HStack marginBlock={'space-16 space-8'} justify={'space-between'}>
-                                            <Label htmlFor={'velg-brevmal'}>Velg brevmal</Label>
-                                            <Tag variant="neutral" size="small">
-                                                {målform[mottakersMålform(mottakerIdent)]}
-                                            </Tag>
-                                        </HStack>
-                                    }
-                                    onChange={(event: ChangeEvent<BrevtypeSelect>): void =>
-                                        field.onChange(event.target.value)
-                                    }
-                                >
-                                    <option value={''}>Velg</option>
-                                    {brevMaler.map(mal => (
-                                        <option aria-selected={mal === field.value} key={mal} value={mal}>
-                                            {brevmaler[mal]}
-                                        </option>
-                                    ))}
-                                </Select>
-                            )}
-                        />
+                        <BrevmalSelect brevMaler={brevMaler} mottakersMålform={mottakersMålform} />
                         {skalViseDokumenter(brevmal) && <DokumenterField />}
                         {skalViseFritekstKulepunkter(brevmal) && (
                             <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
