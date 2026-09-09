@@ -32,6 +32,7 @@ const BarnCheckbox = ({
                 </Checkbox>
                 {barn.manueltRegistrert && (
                     <Button
+                        type={'button'}
                         variant={'tertiary'}
                         id={`fjern__${barn.ident}`}
                         size={'small'}

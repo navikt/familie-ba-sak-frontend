@@ -63,6 +63,7 @@ const DeltBostedAvtaler = ({
                             />
                             {index !== 0 && (
                                 <Button
+                                    type={'button'}
                                     variant={'tertiary'}
                                     id={`fjern_avtale__${barn.ident}`}
                                     size={'small'}
@@ -94,6 +95,7 @@ const DeltBostedAvtaler = ({
             {barn.merket && (
                 <Box marginBlock={'space-0 space-16'}>
                     <Button
+                        type={'button'}
                         variant={'tertiary'}
                         id={`legg_til_avtale__${barn.ident}`}
                         size={'small'}

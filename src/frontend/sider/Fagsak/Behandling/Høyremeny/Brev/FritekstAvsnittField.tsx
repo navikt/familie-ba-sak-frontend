@@ -60,6 +60,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                         />
 
                         <Button
+                            type={'button'}
                             variant={'tertiary'}
                             onClick={() => {
                                 field.onChange(undefined);
@@ -78,6 +79,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
             ) : (
                 !erLesevisning && (
                     <Button
+                        type={'button'}
                         variant={'tertiary'}
                         onClick={() => settVisFritekstAvsnittTekstboks(true)}
                         id={`legg-til-fritekst-avsnitt`}

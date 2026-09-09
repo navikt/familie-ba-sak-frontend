@@ -115,101 +115,118 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 harBrevmottaker={brevmottakere.length > 0}
             >
                 {!erLesevisning && <LeggTilBarnModal />}
-                <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
-                    <Controller
-                        name="mottakerIdent"
-                        control={control}
-                        rules={{ validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker' }}
-                        render={() => <></>}
-                    />
-                    <Label>Brev sendes til</Label>
-                    <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
-                    <VStack gap={'space-16'}>
-                        <BrevmalSelect brevMaler={brevMaler} mottakersMålform={mottakersMålform} />
-                        {skalViseDokumenter(brevmal) && <DokumenterField />}
-                        {skalViseFritekstKulepunkter(brevmal) && (
-                            <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
-                        )}
-                        {skalViseFritekstAvsnitt(brevmal) && (
-                            <FritekstAvsnittField
-                                visFritekstAvsnittTekstboks={visFritekstAvsnittTekstboks}
-                                settVisFritekstAvsnittTekstboks={settVisFritekstAvsnittTekstboks}
-                            />
-                        )}
-                        {skalViseBarnBrevetGjelder(brevmal) && (
-                            <BarnBrevetGjelderField behandlingSteg={behandlingSteg} />
-                        )}
-                        {skalViseDeltBosted(brevmal) && (
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
+                        <Controller
+                            name="mottakerIdent"
+                            control={control}
+                            rules={{ validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker' }}
+                            render={() => <></>}
+                        />
+                        <Label>Brev sendes til</Label>
+                        <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
+                        <VStack gap={'space-16'}>
+                            <BrevmalSelect brevMaler={brevMaler} mottakersMålform={mottakersMålform} />
+                            {skalViseDokumenter(brevmal) && <DokumenterField />}
+                            {skalViseFritekstKulepunkter(brevmal) && (
+                                <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
+                            )}
+                            {skalViseFritekstAvsnitt(brevmal) && (
+                                <FritekstAvsnittField
+                                    visFritekstAvsnittTekstboks={visFritekstAvsnittTekstboks}
+                                    settVisFritekstAvsnittTekstboks={settVisFritekstAvsnittTekstboks}
+                                />
+                            )}
+                            {skalViseBarnBrevetGjelder(brevmal) && (
+                                <BarnBrevetGjelderField behandlingSteg={behandlingSteg} />
+                            )}
+                            {skalViseDeltBosted(brevmal) && (
+                                <>
+                                    <DeltBostedField />
+                                    {!erLesevisning && <LeggTilBarnKnapp />}
+                                </>
+                            )}
+                            {skalViseDatoAvtale(brevmal) && <DatoAvtaleField />}
+                            {skalViseAntallUkerSvarfrist(brevmal) && <AntallUkerSvarfristField />}
+                            {skalViseMottakerlandSed(brevmal, behandlingKategori) && <MottakerlandSedField />}
+                        </VStack>
+                    </Fieldset>
+                    <Knapperekke>
+                        {!erLesevisning && (
                             <>
-                                <DeltBostedField />
-                                {!erLesevisning && <LeggTilBarnKnapp />}
+                                <Button
+                                    type={'button'}
+                                    variant={'secondary'}
+                                    id={'forhandsvis-vedtaksbrev'}
+                                    size={'small'}
+                                    disabled={skjemaErLåst}
+                                    onClick={handleSubmit(values => {
+                                        opprettManueltBrevPdf({
+                                            behandlingId: behandling.behandlingId,
+                                            payload: hentSkjemaData(values),
+                                        });
+                                        settVisForhåndsvisningDialog(true);
+                                    })}
+                                    icon={<FileTextIcon />}
+                                >
+                                    Forhåndsvis
+                                </Button>
+                                <Dialog open={visForhåndsvisningDialog} onOpenChange={settVisForhåndsvisningDialog}>
+                                    <Dialog.Popup width={'max(100rem, 60vw)'} height={'80vh'}>
+                                        <Dialog.Header>
+                                            <Dialog.Title>Forhåndsvisning av brev</Dialog.Title>
+                                        </Dialog.Header>
+                                        <Dialog.Body className={styles.body}>
+                                            {opprettManueltBrevPdfIsPending && (
+                                                <HStack
+                                                    height={'100%'}
+                                                    justify={'center'}
+                                                    align={'center'}
+                                                    gap={'space-8'}
+                                                >
+                                                    <Loader size={'small'} title={'Laster dokument...'} />
+                                                    <Heading size={'small'} level={'2'}>
+                                                        Laster dokument...
+                                                    </Heading>
+                                                </HStack>
+                                            )}
+                                            {opprettManueltBrevPdfError && (
+                                                <HStack
+                                                    height={'100%'}
+                                                    justify={'center'}
+                                                    align={'center'}
+                                                    gap={'space-8'}
+                                                >
+                                                    <XMarkOctagonFillIcon
+                                                        color={'var(--ax-text-danger-subtle)'}
+                                                        fontSize={'1.2rem'}
+                                                    />
+                                                    <ErrorMessage>{opprettManueltBrevPdfError.message}</ErrorMessage>
+                                                </HStack>
+                                            )}
+                                            {!opprettManueltBrevPdfIsPending && !opprettManueltBrevPdfError && (
+                                                <iframe
+                                                    className={styles.iframe}
+                                                    title={'Dokument'}
+                                                    src={manueltBrevPdf}
+                                                />
+                                            )}
+                                        </Dialog.Body>
+                                    </Dialog.Popup>
+                                </Dialog>
                             </>
                         )}
-                        {skalViseDatoAvtale(brevmal) && <DatoAvtaleField />}
-                        {skalViseAntallUkerSvarfrist(brevmal) && <AntallUkerSvarfristField />}
-                        {skalViseMottakerlandSed(brevmal, behandlingKategori) && <MottakerlandSedField />}
-                    </VStack>
-                </Fieldset>
-                <Knapperekke>
-                    {!erLesevisning && (
-                        <>
-                            <Button
-                                variant={'secondary'}
-                                id={'forhandsvis-vedtaksbrev'}
-                                size={'small'}
-                                disabled={skjemaErLåst}
-                                onClick={handleSubmit(values => {
-                                    opprettManueltBrevPdf({
-                                        behandlingId: behandling.behandlingId,
-                                        payload: hentSkjemaData(values),
-                                    });
-                                    settVisForhåndsvisningDialog(true);
-                                })}
-                                icon={<FileTextIcon />}
-                            >
-                                Forhåndsvis
-                            </Button>
-                            <Dialog open={visForhåndsvisningDialog} onOpenChange={settVisForhåndsvisningDialog}>
-                                <Dialog.Popup width={'max(100rem, 60vw)'} height={'80vh'}>
-                                    <Dialog.Header>
-                                        <Dialog.Title>Forhåndsvisning av brev</Dialog.Title>
-                                    </Dialog.Header>
-                                    <Dialog.Body className={styles.body}>
-                                        {opprettManueltBrevPdfIsPending && (
-                                            <HStack height={'100%'} justify={'center'} align={'center'} gap={'space-8'}>
-                                                <Loader size={'small'} title={'Laster dokument...'} />
-                                                <Heading size={'small'} level={'2'}>
-                                                    Laster dokument...
-                                                </Heading>
-                                            </HStack>
-                                        )}
-                                        {opprettManueltBrevPdfError && (
-                                            <HStack height={'100%'} justify={'center'} align={'center'} gap={'space-8'}>
-                                                <XMarkOctagonFillIcon
-                                                    color={'var(--ax-text-danger-subtle)'}
-                                                    fontSize={'1.2rem'}
-                                                />
-                                                <ErrorMessage>{opprettManueltBrevPdfError.message}</ErrorMessage>
-                                            </HStack>
-                                        )}
-                                        {!opprettManueltBrevPdfIsPending && !opprettManueltBrevPdfError && (
-                                            <iframe className={styles.iframe} title={'Dokument'} src={manueltBrevPdf} />
-                                        )}
-                                    </Dialog.Body>
-                                </Dialog.Popup>
-                            </Dialog>
-                        </>
-                    )}
-                    <Button
-                        variant={'primary'}
-                        size={'small'}
-                        loading={isSubmitting}
-                        disabled={skjemaErLåst}
-                        onClick={handleSubmit(onSubmit)}
-                    >
-                        Send brev
-                    </Button>
-                </Knapperekke>
+                        <Button
+                            type={'submit'}
+                            variant={'primary'}
+                            size={'small'}
+                            loading={isSubmitting}
+                            disabled={skjemaErLåst}
+                        >
+                            Send brev
+                        </Button>
+                    </Knapperekke>
+                </form>
             </LeggTilBarnModalContextProvider>
         </FormProvider>
     );
