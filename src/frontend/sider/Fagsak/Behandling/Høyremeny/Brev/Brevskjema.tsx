@@ -8,7 +8,6 @@ import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader,
 import { RessursStatus } from '@navikt/familie-typer';
 import type { IPersonInfo } from '@typer/person';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
-import { validerAvtalerOmDeltBostedPerBarn, validerBarnMedDeltBosted } from '@utils/deltBostedSkjemaFelter';
 import { useState } from 'react';
 import { Controller, FormProvider } from 'react-hook-form';
 
@@ -20,7 +19,7 @@ import { BarnBrevetGjelderField } from './BarnBrevetGjelderField';
 import { BrevmalSelect } from './BrevmalSelect';
 import styles from './Brevskjema.module.css';
 import { DatoAvtaleField } from './DatoAvtaleField';
-import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import { DeltBostedField } from './DeltBostedField';
 import { DokumenterField } from './DokumenterField';
 import { FritekstAvsnittField } from './FritekstAvsnittField';
 import { FritekstKulepunkterField } from './FritekstKulepunkterField';
@@ -142,34 +141,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         )}
                         {skalViseDeltBosted(brevmal) && (
                             <>
-                                <Controller
-                                    name="barnMedDeltBosted"
-                                    control={control}
-                                    rules={{ validate: verdi => validerBarnMedDeltBosted(verdi) ?? true }}
-                                    render={({ field: barnField, fieldState: barnState }) => (
-                                        <Controller
-                                            name="avtalerOmDeltBostedPerBarn"
-                                            control={control}
-                                            rules={{
-                                                validate: (verdi, values) =>
-                                                    validerAvtalerOmDeltBostedPerBarn(
-                                                        verdi,
-                                                        values.barnMedDeltBosted
-                                                    ) ?? true,
-                                            }}
-                                            render={({ field: avtaleField }) => (
-                                                <DeltBostedSkjema
-                                                    barnMedDeltBosted={barnField.value}
-                                                    settBarnMedDeltBosted={barnField.onChange}
-                                                    avtalerOmDeltBostedPerBarn={avtaleField.value}
-                                                    settAvtalerOmDeltBostedPerBarn={avtaleField.onChange}
-                                                    visFeilmeldinger={isSubmitted}
-                                                    error={barnState.error?.message}
-                                                />
-                                            )}
-                                        />
-                                    )}
-                                />
+                                <DeltBostedField />
                                 {!erLesevisning && <LeggTilBarnKnapp />}
                             </>
                         )}
