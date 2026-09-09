@@ -7,7 +7,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { Brevmal } from './typer';
-import { type BrevModulFormValues, erBrevmalMedObligatoriskFritekstKulepunkt } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn, erBrevmalMedObligatoriskFritekstKulepunkt } from './useBrevModul';
 
 const makslengdeFritekstHvertKulepunkt = 220;
 const maksAntallKulepunkter = 20;
@@ -28,10 +28,10 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
     } = useFormContext<BrevModulFormValues>();
     const erLesevisning = useErLesevisning();
 
-    const valgtBrevmal = watch('brevmal') as Brevmal;
+    const valgtBrevmal = watch(BrevmodulFeltnavn.BREVMAL) as Brevmal;
 
     const { field } = useController({
-        name: 'fritekstKulepunkter',
+        name: BrevmodulFeltnavn.FRITEKST_KULEPUNKTER,
         control,
         rules: {
             validate: kulepunkter =>

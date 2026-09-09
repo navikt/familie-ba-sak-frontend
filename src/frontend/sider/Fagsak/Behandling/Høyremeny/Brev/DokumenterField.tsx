@@ -4,7 +4,7 @@ import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { leggTilValuePåOption, opplysningsdokumenter, opplysningsdokumenterTilInstitusjon } from './typer';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 export function DokumenterField() {
     const { control } = useFormContext<BrevModulFormValues>();
@@ -19,7 +19,7 @@ export function DokumenterField() {
         field,
         fieldState: { error },
     } = useController({
-        name: 'dokumenter',
+        name: BrevmodulFeltnavn.DOKUMENTER,
         control,
         rules: {
             validate: (verdi, values) =>

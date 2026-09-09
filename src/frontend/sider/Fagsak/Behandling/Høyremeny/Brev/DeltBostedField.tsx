@@ -2,7 +2,7 @@ import { validerAvtalerOmDeltBostedPerBarn, validerBarnMedDeltBosted } from '@ut
 import { useController, useFormContext } from 'react-hook-form';
 
 import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 export function DeltBostedField() {
     const {
@@ -14,13 +14,13 @@ export function DeltBostedField() {
         field: barnField,
         fieldState: { error },
     } = useController({
-        name: 'barnMedDeltBosted',
+        name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
         control,
         rules: { validate: verdi => validerBarnMedDeltBosted(verdi) ?? true },
     });
 
     const { field: avtaleField } = useController({
-        name: 'avtalerOmDeltBostedPerBarn',
+        name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN,
         control,
         rules: {
             validate: (verdi, values) => validerAvtalerOmDeltBostedPerBarn(verdi, values.barnMedDeltBosted) ?? true,

@@ -2,7 +2,7 @@ import type { BehandlingSteg } from '@typer/behandling';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { BarnBrevetGjelder } from './BarnBrevetGjelder';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 interface Props {
     behandlingSteg?: BehandlingSteg;
@@ -15,7 +15,7 @@ export function BarnBrevetGjelderField({ behandlingSteg }: Props) {
         field,
         fieldState: { error },
     } = useController({
-        name: 'barnBrevetGjelder',
+        name: BrevmodulFeltnavn.BARN_BREVET_GJELDER,
         control,
         rules: {
             validate: verdi => (verdi.some(barn => barn.merket) ? true : 'Du må velge hvilke barn brevet gjelder'),

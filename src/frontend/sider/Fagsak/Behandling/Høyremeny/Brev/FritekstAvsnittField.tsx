@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 const maksLengdeFritekstAvsnitt = 1000;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
@@ -23,7 +23,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
         field,
         fieldState: { error },
     } = useController({
-        name: 'fritekstAvsnitt',
+        name: BrevmodulFeltnavn.FRITEKST_AVSNITT,
         control,
         rules: {
             validate: verdi => {

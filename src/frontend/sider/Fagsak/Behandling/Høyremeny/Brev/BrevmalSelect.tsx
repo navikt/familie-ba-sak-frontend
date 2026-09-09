@@ -5,7 +5,7 @@ import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { type Brevmal, type BrevtypeSelect, brevmaler } from './typer';
-import type { BrevModulFormValues } from './useBrevModul';
+import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
 
 interface Props {
     brevMaler: Brevmal[];
@@ -15,13 +15,13 @@ interface Props {
 
 export function BrevmalSelect({ brevMaler, mottakersMålform, onEndreBrevmal }: Props) {
     const { control, watch } = useFormContext<BrevModulFormValues>();
-    const mottakerIdent = watch('mottakerIdent');
+    const mottakerIdent = watch(BrevmodulFeltnavn.MOTTAKER_IDENT);
 
     const {
         field,
         fieldState: { error },
     } = useController({
-        name: 'brevmal',
+        name: BrevmodulFeltnavn.BREVMAL,
         control,
         rules: { validate: verdi => (verdi ? true : 'Du må velge en brevmal') },
     });
