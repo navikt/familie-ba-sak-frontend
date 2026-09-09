@@ -18,15 +18,7 @@ import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
 import { BarnBrevetGjelderField } from './BarnBrevetGjelderField';
 import { BrevmalSelect } from './BrevmalSelect';
 import styles from './Brevskjema.module.css';
-import { DatoAvtaleField } from './DatoAvtaleField';
-import { DeltBostedField } from './DeltBostedField';
-import { DokumenterField } from './DokumenterField';
-import { FritekstAvsnittField } from './FritekstAvsnittField';
-import { FritekstKulepunkterField } from './FritekstKulepunkterField';
-import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
-import { MottakerlandSedField } from './MottakerlandSedField';
 import {
-    BrevmodulFeltnavn,
     skalViseAntallUkerSvarfrist,
     skalViseBarnBrevetGjelder,
     skalViseDatoAvtale,
@@ -35,8 +27,15 @@ import {
     skalViseFritekstAvsnitt,
     skalViseFritekstKulepunkter,
     skalViseMottakerlandSed,
-    useBrevModul,
-} from './useBrevModul';
+} from './brevmalRegler';
+import { DatoAvtaleField } from './DatoAvtaleField';
+import { DeltBostedField } from './DeltBostedField';
+import { DokumenterField } from './DokumenterField';
+import { FritekstAvsnittField } from './FritekstAvsnittField';
+import { FritekstKulepunkterField } from './FritekstKulepunkterField';
+import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
+import { MottakerlandSedField } from './MottakerlandSedField';
+import { BrevmodulFeltnavn, useBrevModul } from './useBrevModul';
 
 interface IProps {
     onSubmitSuccess: () => void;
