@@ -55,7 +55,6 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
         leggTilFritekstKulepunkt,
         institusjon,
         brevmottakere,
-        behandlingKategori,
         visFritekstAvsnittTekstboks,
         settVisFritekstAvsnittTekstboks,
     } = useBrevModul({ onSubmitSuccess });
@@ -148,7 +147,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             )}
                             {skalViseDatoAvtale(brevmal) && <DatoAvtaleField />}
                             {skalViseAntallUkerSvarfrist(brevmal) && <AntallUkerSvarfristField />}
-                            {skalViseMottakerlandSed(brevmal, behandlingKategori) && <MottakerlandSedField />}
+                            {skalViseMottakerlandSed(brevmal, behandling.kategori) && <MottakerlandSedField />}
                         </VStack>
                     </Fieldset>
                     <Knapperekke>

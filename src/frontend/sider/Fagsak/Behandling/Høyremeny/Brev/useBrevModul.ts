@@ -309,7 +309,6 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         leggTilFritekstKulepunkt,
         institusjon,
         brevmottakere,
-        behandlingKategori,
         visFritekstAvsnittTekstboks,
         settVisFritekstAvsnittTekstboks,
     };
