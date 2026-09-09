@@ -1,7 +1,6 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
-import { isoStringTilDate } from '@utils/dato';
-import { differenceInMilliseconds } from 'date-fns';
+import { sorterBarnEtterFødselsdato } from '@utils/formatter';
 
 import BarnCheckbox from './BarnCheckbox';
 
@@ -22,19 +21,7 @@ const DeltBostedSkjema = ({
     visFeilmeldinger,
     error,
 }: IProps) => {
-    const sorterteBarn = [...barnMedDeltBosted].sort((a: IBarnMedOpplysninger, b: IBarnMedOpplysninger) => {
-        if (!a.fødselsdato) {
-            return 1;
-        }
-
-        if (!b.fødselsdato) {
-            return -1;
-        }
-
-        return !a.ident
-            ? 1
-            : differenceInMilliseconds(isoStringTilDate(b.fødselsdato), isoStringTilDate(a.fødselsdato));
-    });
+    const sorterteBarn = sorterBarnEtterFødselsdato(barnMedDeltBosted);
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {
         settBarnMedDeltBosted(
