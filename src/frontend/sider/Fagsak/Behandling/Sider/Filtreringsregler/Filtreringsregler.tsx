@@ -1,16 +1,13 @@
-import { useBehandling } from '@hooks/useBehandling';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useFagsakId } from '@hooks/useFagsakId';
-import { BodyShort, List } from '@navikt/ds-react';
 import { BehandlingSteg } from '@typer/behandling';
-import { Filtreringsregel, filtreringsregler } from '@typer/fødselshendelser';
 import { useNavigate } from 'react-router';
-
-import VilkårResultatIkon from '../../../../../ikoner/VilkårResultatIkon';
 import Skjemasteg from '../Skjemasteg';
+import { Filtreringsreglerliste } from './Filtreringsreglerliste';
 
 const Filtreringsregler = () => {
     const fagsakId = useFagsakId();
-    const behandling = useBehandling();
+    const behandlingId = useBehandlingId();
     const navigate = useNavigate();
 
     return (
@@ -18,33 +15,13 @@ const Filtreringsregler = () => {
             skalViseForrigeKnapp={false}
             tittel={'Filtreringsregler'}
             nesteOnClick={() => {
-                navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vilkaarsvurdering`);
+                navigate(`/fagsak/${fagsakId}/${behandlingId}/vilkaarsvurdering`);
             }}
             maxWidthStyle={'80rem'}
             senderInn={false}
             steg={BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING}
         >
-            <List>
-                {Object.keys(Filtreringsregel).map(filtreringsregel => {
-                    const fødselshendelsefiltreringResultat = behandling.fødselshendelsefiltreringResultater.find(
-                        it => it.filtreringsregel === filtreringsregel
-                    );
-
-                    if (!fødselshendelsefiltreringResultat) return null;
-
-                    return (
-                        <List.Item
-                            aria-hidden
-                            icon={<VilkårResultatIkon resultat={fødselshendelsefiltreringResultat.resultat} />}
-                            key={filtreringsregel}
-                        >
-                            <BodyShort>
-                                {filtreringsregler[fødselshendelsefiltreringResultat.filtreringsregel]}
-                            </BodyShort>
-                        </List.Item>
-                    );
-                })}
-            </List>
+            <Filtreringsreglerliste />
         </Skjemasteg>
     );
 };

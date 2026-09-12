@@ -46,7 +46,6 @@ export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
         søknadsgrunnlag: undefined,
         totrinnskontroll: undefined,
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
-        fødselshendelsefiltreringResultater: [],
         vedtak: undefined,
         utbetalingsperioder: [],
         endretUtbetalingAndeler: [],
