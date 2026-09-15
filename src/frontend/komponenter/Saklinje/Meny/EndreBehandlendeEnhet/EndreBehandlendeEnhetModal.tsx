@@ -49,16 +49,18 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
                         </Fieldset>
                     </Modal.Body>
                     <Modal.Footer>
+                        {!erRedigeringDeaktivert && (
+                            <Button type={'submit'} variant={'primary'} size={'small'} loading={isSubmitting}>
+                                Bekreft
+                            </Button>
+                        )}
                         <Button
-                            type={'submit'}
-                            variant={'primary'}
+                            type={'button'}
+                            variant={'secondary'}
                             size={'small'}
-                            loading={isSubmitting}
-                            disabled={erRedigeringDeaktivert}
+                            onClick={lukkModal}
+                            disabled={isSubmitting}
                         >
-                            Bekreft
-                        </Button>
-                        <Button variant={'secondary'} size={'small'} onClick={lukkModal} disabled={isSubmitting}>
                             Avbryt
                         </Button>
                     </Modal.Footer>

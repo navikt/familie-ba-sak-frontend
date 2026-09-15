@@ -1,6 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { Select } from '@navikt/ds-react';
-import { behandlendeEnheter } from '@typer/enhet';
+import { behandlendeEnheter, UKJENT_ENHET } from '@typer/enhet';
 import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -22,7 +22,17 @@ export function VelgNyEnhetField({ readOnly }: Props) {
     } = useController({
         name: EndreBehandlendeEnhetFormFields.ENHET_ID,
         control,
-        rules: { required: 'Enhet må velges.' },
+        rules: {
+            required: 'Enhet må velges.',
+            validate: value => {
+                const erValgbarEnhet = behandlendeEnheter
+                    .map(arbeidsfordelingsenhet => arbeidsfordelingsenhet.enhetId)
+                    .some(enhetId => enhetId === value);
+                if (value === UKJENT_ENHET || !erValgbarEnhet) {
+                    return 'Enhet må velges.';
+                }
+            },
+        },
     });
 
     function handleOnChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -38,6 +48,9 @@ export function VelgNyEnhetField({ readOnly }: Props) {
             readOnly={readOnly || isSubmitting}
             error={error?.message}
         >
+            <option value={UKJENT_ENHET} aria-selected={value === UKJENT_ENHET} disabled={true}>
+                - Velg enhet -
+            </option>
             {behandlendeEnheter.map(enhet => {
                 return (
                     <option

@@ -1,4 +1,6 @@
-import { erProd } from '../utils/miljø';
+import { erProd } from '@utils/miljø';
+
+export const UKJENT_ENHET = 'UKJENT_ENHET';
 
 export const behandlendeEnheter: IArbeidsfordelingsenhet[] = [
     { enhetId: '2103', enhetNavn: 'NAV Vikafossen' },
