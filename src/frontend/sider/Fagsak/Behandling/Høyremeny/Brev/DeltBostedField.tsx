@@ -1,29 +1,52 @@
-import { validerAvtalerOmDeltBostedPerBarn, validerBarnMedDeltBosted } from '@utils/deltBostedSkjemaFelter';
-import { useController, useFormContext } from 'react-hook-form';
+import { CheckboxGroup } from '@navikt/ds-react';
+import { sorterBarnEtterFødselsdato } from '@utils/formatter';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import DeltBostedSkjema from './DeltBosted/DeltBostedSkjema';
+import BarnCheckbox from './DeltBosted/BarnCheckbox';
 import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function DeltBostedField() {
-    const { control } = useFormContext<BrevModulFormValues>();
-
     const {
-        fieldState: { error },
-    } = useController({
-        name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
         control,
-        rules: { validate: verdi => validerBarnMedDeltBosted(verdi) ?? true },
-    });
+        clearErrors,
+        formState: { errors },
+    } = useFormContext<BrevModulFormValues>();
+    const skjemaErLåst = useSkjemaErLåst();
 
-    // Registrerer validering av avtalene slik at innsending blokkeres ved ugyldige datoer.
-    // Selve feilmeldingene vises inline per dato i DeltBostedAvtaler.
-    useController({
-        name: BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN,
+    const { fields, update, remove } = useFieldArray({
         control,
+        name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
         rules: {
-            validate: (verdi, values) => validerAvtalerOmDeltBostedPerBarn(verdi, values.barnMedDeltBosted) ?? true,
+            validate: barna => (barna.some(barn => barn.merket) ? undefined : 'Du må velge barn'),
         },
     });
 
-    return <DeltBostedSkjema error={error?.message} />;
+    const sorterteBarn = sorterBarnEtterFødselsdato(fields);
+    const merkedeIdenter = fields.filter(barn => barn.merket).map(barn => barn.ident);
+
+    const oppdaterBarnMedNyMerketStatus = (identerSomErMerket: string[]) => {
+        fields.forEach((barn, index) => {
+            const merket = identerSomErMerket.includes(barn.ident);
+            if (merket !== barn.merket) {
+                update(index, { ...barn, merket, avtalerOmDeltBosted: merket ? [{ dato: '' }] : [] });
+            }
+        });
+        clearErrors(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED);
+    };
+
+    return (
+        <CheckboxGroup
+            legend={'Hvilke barn har delt bosted?'}
+            error={errors[BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]?.root?.message}
+            readOnly={skjemaErLåst}
+            value={merkedeIdenter}
+            onChange={oppdaterBarnMedNyMerketStatus}
+        >
+            {sorterteBarn.map(barn => {
+                const index = fields.indexOf(barn);
+                return <BarnCheckbox key={barn.id} barn={barn} index={index} onFjern={() => remove(index)} />;
+            })}
+        </CheckboxGroup>
+    );
 }
