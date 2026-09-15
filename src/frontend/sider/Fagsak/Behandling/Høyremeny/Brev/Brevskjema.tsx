@@ -1,4 +1,6 @@
+import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useFagsak } from '@hooks/useFagsak';
 import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
@@ -8,15 +10,13 @@ import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader,
 import { RessursStatus } from '@navikt/familie-typer';
 import type { IPersonInfo } from '@typer/person';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
-import { useState } from 'react';
-import { Controller, FormProvider } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { FormProvider, useFieldArray } from 'react-hook-form';
 
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
-import Knapperekke from '../../../../../komponenter/Knapperekke';
-import { useBehandlingContext } from '../../context/BehandlingContext';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
 import { BarnBrevetGjelderField } from './BarnBrevetGjelderField';
-import { BrevmalSelect } from './BrevmalSelect';
+import { BrevmalField } from './BrevmalField';
 import styles from './Brevskjema.module.css';
 import {
     skalViseAntallUkerSvarfrist,
@@ -43,29 +43,18 @@ interface IProps {
 }
 
 const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
-    const { behandling } = useBehandlingContext();
+    const behandling = useBehandling();
+    const fagsak = useFagsak();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
-    const {
-        form,
-        onSubmit,
-        hentSkjemaData,
-        mottakersMålform,
-        hentMuligeBrevMaler,
-        onEndreBrevmal,
-        leggTilFritekstKulepunkt,
-        institusjon,
-        brevmottakere,
-        visFritekstAvsnittTekstboks,
-        settVisFritekstAvsnittTekstboks,
-    } = useBrevModul({ onSubmitSuccess });
+    const { form, onSubmit, hentSkjemaData, hentMuligeBrevMaler, brevmottakere } = useBrevModul({ onSubmitSuccess });
 
     const {
         control,
+        register,
         handleSubmit,
         watch,
-        setValue,
-        formState: { isSubmitting, isSubmitted, errors },
+        formState: { isSubmitting, errors },
     } = form;
 
     const [visForhåndsvisningDialog, settVisForhåndsvisningDialog] = useState(false);
@@ -81,30 +70,30 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     const brevmal = watch(BrevmodulFeltnavn.BREVMAL);
     const barnMedDeltBosted = watch(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED);
-    const avtalerOmDeltBostedPerBarn = watch(BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN);
 
     const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = erLesevisning || isSubmitting || opprettManueltBrevPdfIsPending;
 
-    const behandlingSteg = behandling.steg;
+    const institusjon = fagsak.institusjon;
+    const institusjonNavn =
+        samhandlerRessurs.status === RessursStatus.SUKSESS ? samhandlerRessurs.data.navn : institusjon?.navn;
 
-    if (institusjon) {
-        if (!institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
+    useEffect(() => {
+        if (institusjon && !institusjon.navn && samhandlerRessurs.status === RessursStatus.IKKE_HENTET) {
             hentOgSettSamhandler(behandling.behandlingId);
         }
-        institusjon.navn =
-            samhandlerRessurs.status === RessursStatus.SUKSESS ? samhandlerRessurs.data.navn : institusjon.navn;
-    }
+    }, [institusjon, samhandlerRessurs.status, behandling.behandlingId, hentOgSettSamhandler]);
+
+    const { append: leggTilBarnMedDeltBosted } = useFieldArray({
+        control,
+        name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
+    });
 
     function onLeggTilBarn(barn: IBarnMedOpplysninger) {
-        setValue(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED, [...barnMedDeltBosted, barn], { shouldValidate: isSubmitted });
-        if (barn.erFolkeregistrert) {
-            setValue(
-                BrevmodulFeltnavn.AVTALER_OM_DELT_BOSTED_PER_BARN,
-                { ...avtalerOmDeltBostedPerBarn, [barn.ident]: [''] },
-                { shouldValidate: isSubmitted }
-            );
-        }
+        leggTilBarnMedDeltBosted({
+            ...barn,
+            avtalerOmDeltBosted: barn.erFolkeregistrert ? [{ dato: '' }] : [],
+        });
     }
 
     return (
@@ -117,36 +106,24 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                 {!erLesevisning && <LeggTilBarnModal />}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
-                        {/* Skjult valideringsfelt: mottaker velges via brevmottaker-flyten, men
-                            mottakerIdent må valideres før innsending. Feltet har ingen egen UI, derfor
-                            returnerer render en tom fragment (<></>) – kun valideringsregelen brukes. */}
-                        <Controller
-                            name={BrevmodulFeltnavn.MOTTAKER_IDENT}
-                            control={control}
-                            rules={{ validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker' }}
-                            render={() => <></>}
+                        <input
+                            type={'hidden'}
+                            {...register(BrevmodulFeltnavn.MOTTAKER_IDENT, {
+                                validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker',
+                            })}
                         />
                         <Label>Brev sendes til</Label>
-                        <BrevmottakerListe bruker={bruker} brevmottakere={brevmottakere} />
+                        <BrevmottakerListe
+                            bruker={bruker}
+                            brevmottakere={brevmottakere}
+                            institusjonNavn={institusjonNavn}
+                        />
                         <VStack gap={'space-16'}>
-                            <BrevmalSelect
-                                brevMaler={brevMaler}
-                                mottakersMålform={mottakersMålform}
-                                onEndreBrevmal={onEndreBrevmal}
-                            />
+                            <BrevmalField brevMaler={brevMaler} />
                             {skalViseDokumenter(brevmal) && <DokumenterField />}
-                            {skalViseFritekstKulepunkter(brevmal) && (
-                                <FritekstKulepunkterField leggTilFritekstKulepunkt={leggTilFritekstKulepunkt} />
-                            )}
-                            {skalViseFritekstAvsnitt(brevmal) && (
-                                <FritekstAvsnittField
-                                    visFritekstAvsnittTekstboks={visFritekstAvsnittTekstboks}
-                                    settVisFritekstAvsnittTekstboks={settVisFritekstAvsnittTekstboks}
-                                />
-                            )}
-                            {skalViseBarnBrevetGjelder(brevmal) && (
-                                <BarnBrevetGjelderField behandlingSteg={behandlingSteg} />
-                            )}
+                            {skalViseFritekstKulepunkter(brevmal) && <FritekstKulepunkterField />}
+                            {skalViseFritekstAvsnitt(brevmal) && <FritekstAvsnittField />}
+                            {skalViseBarnBrevetGjelder(brevmal) && <BarnBrevetGjelderField />}
                             {skalViseDeltBosted(brevmal) && (
                                 <>
                                     <DeltBostedField />
@@ -158,13 +135,12 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                             {skalViseMottakerlandSed(brevmal, behandling.kategori) && <MottakerlandSedField />}
                         </VStack>
                     </Fieldset>
-                    <Knapperekke>
+                    <HStack marginBlock={'space-16 space-0'} justify={'space-between'}>
                         {!erLesevisning && (
                             <>
                                 <Button
                                     type={'button'}
                                     variant={'secondary'}
-                                    id={'forhandsvis-vedtaksbrev'}
                                     size={'small'}
                                     disabled={skjemaErLåst}
                                     onClick={handleSubmit(values => {
@@ -232,7 +208,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         >
                             Send brev
                         </Button>
-                    </Knapperekke>
+                    </HStack>
                 </form>
             </LeggTilBarnModalContextProvider>
         </FormProvider>

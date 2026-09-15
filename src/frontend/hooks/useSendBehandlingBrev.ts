@@ -8,13 +8,8 @@ type Options = Omit<
     'mutationKey' | 'mutationFn'
 >;
 
-export const SendBehandlingBrevMutationKeyFactory = {
-    sendBrev: (behandlingId: number) => ['sendBehandlingBrev', behandlingId],
-};
-
 export function useSendBehandlingBrev(behandlingId: number, options?: Options) {
     return useMutation({
-        mutationKey: SendBehandlingBrevMutationKeyFactory.sendBrev(behandlingId),
         mutationFn: (payload: IManueltBrevRequestPåBehandling) => sendBehandlingBrev(behandlingId, payload),
         ...options,
     });
