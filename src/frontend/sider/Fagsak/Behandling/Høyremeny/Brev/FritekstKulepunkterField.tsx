@@ -1,9 +1,12 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, HStack, Label, Textarea } from '@navikt/ds-react';
-import { validerFritekstKulepunkt } from '@utils/fritekstfelter';
-import type { ChangeEvent } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import {
+    genererIdBasertPåAndreFritekstKulepunkter,
+    lagInitiellFritekst,
+    validerFritekstKulepunkt,
+} from '@utils/fritekstfelter';
+import { useController, useFieldArray, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
@@ -18,93 +21,92 @@ const fritekstSkjemaGruppeId = 'Fritekster-brev';
 const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
     'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
-interface Props {
-    leggTilFritekstKulepunkt: () => void;
+interface TekstfeltProps {
+    index: number;
+    valideringsmelding?: string;
+    hjelpetekst: string;
+    skjemaErLåst: boolean;
 }
 
-export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
-    const {
+function FritekstKulepunktTekstfelt({ index, valideringsmelding, hjelpetekst, skjemaErLåst }: TekstfeltProps) {
+    const { control } = useFormContext<BrevModulFormValues>();
+
+    const { field, fieldState } = useController({
+        name: `${BrevmodulFeltnavn.FRITEKST_KULEPUNKTER}.${index}.tekst`,
         control,
-        watch,
-        formState: { isSubmitted },
-    } = useFormContext<BrevModulFormValues>();
+        rules: {
+            validate: (tekst: string) =>
+                validerFritekstKulepunkt({ tekst, id: 0, valideringsmelding }, makslengdeFritekstHvertKulepunkt),
+        },
+    });
+
+    return (
+        <Textarea
+            {...field}
+            className={styles.textarea}
+            label="Skriv inn kulepunkt"
+            hideLabel
+            size={'small'}
+            maxLength={makslengdeFritekstHvertKulepunkt}
+            description={hjelpetekst}
+            readOnly={skjemaErLåst}
+            error={fieldState.error?.message}
+            autoFocus
+        />
+    );
+}
+
+export function FritekstKulepunkterField() {
+    const { control, watch } = useFormContext<BrevModulFormValues>();
     const erLesevisning = useErLesevisning();
     const skjemaErLåst = useSkjemaErLåst();
 
     const valgtBrevmal = watch(BrevmodulFeltnavn.BREVMAL) as Brevmal;
 
-    const { field } = useController({
-        name: BrevmodulFeltnavn.FRITEKST_KULEPUNKTER,
+    const { fields, append, remove } = useFieldArray({
         control,
-        rules: {
-            validate: kulepunkter =>
-                !kulepunkter.some(
-                    kulepunkt => validerFritekstKulepunkt(kulepunkt, makslengdeFritekstHvertKulepunkt) !== undefined
-                ),
-        },
+        name: BrevmodulFeltnavn.FRITEKST_KULEPUNKTER,
+        keyName: 'key',
     });
 
-    const erMaksAntallKulepunkter = field.value.length >= maksAntallKulepunkter;
+    const erMaksAntallKulepunkter = fields.length >= maksAntallKulepunkter;
+
+    const leggTilKulepunkt = () => {
+        append(lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fields)));
+    };
 
     return (
         <div>
             <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
             <Fieldset legend="Legg til kulepunkt" hideLegend id={fritekstSkjemaGruppeId}>
-                {field.value.map((fritekst, index) => {
-                    const fritekstId = fritekst.id;
-
+                {fields.map((field, index) => {
                     const hjelpetekst =
                         index === 0 && valgtBrevmal === Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT
                             ? hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt
                             : '';
 
-                    const feilmelding = isSubmitted
-                        ? validerFritekstKulepunkt(fritekst, makslengdeFritekstHvertKulepunkt)
-                        : undefined;
+                    const kanFjernes = !(erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) && index === 0);
 
                     return (
-                        <HStack key={`fritekst-${fritekstId}`}>
-                            <Textarea
-                                key={`fritekst-${fritekstId}`}
-                                id={`${fritekstId}`}
-                                className={styles.textarea}
-                                label="Skriv inn kulepunkt"
-                                hideLabel
-                                size={'small'}
-                                value={fritekst.tekst}
-                                maxLength={makslengdeFritekstHvertKulepunkt}
-                                description={hjelpetekst}
-                                readOnly={skjemaErLåst}
-                                onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-                                    field.onChange(
-                                        field.value.map(kulepunkt =>
-                                            kulepunkt.id === fritekstId
-                                                ? {
-                                                      ...kulepunkt,
-                                                      tekst: event.target.value,
-                                                  }
-                                                : kulepunkt
-                                        )
-                                    )
-                                }
-                                error={feilmelding}
-                                autoFocus
+                        <HStack key={field.key}>
+                            <FritekstKulepunktTekstfelt
+                                index={index}
+                                valideringsmelding={field.valideringsmelding}
+                                hjelpetekst={hjelpetekst}
+                                skjemaErLåst={skjemaErLåst}
                             />
-                            {!(erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) && index === 0) && (
+                            {kanFjernes && (
                                 <Button
                                     type={'button'}
                                     variant={'tertiary'}
-                                    onClick={() =>
-                                        field.onChange(field.value.filter(kulepunkt => kulepunkt.id !== fritekstId))
-                                    }
-                                    id={`fjern_fritekst-${fritekstId}`}
+                                    onClick={() => remove(index)}
                                     size={'small'}
                                     disabled={skjemaErLåst}
                                     aria-label={'Fjern fritekst'}
                                     icon={<TrashIcon />}
                                     className={styles.removeButton}
                                 >
-                                    {'Fjern'}
+                                    Fjern
                                 </Button>
                             )}
                         </HStack>
@@ -116,14 +118,13 @@ export function FritekstKulepunkterField({ leggTilFritekstKulepunkt }: Props) {
                 <Button
                     type={'button'}
                     variant={'tertiary'}
-                    onClick={() => leggTilFritekstKulepunkt()}
-                    id={`legg-til-fritekst`}
+                    onClick={leggTilKulepunkt}
                     size={'small'}
                     disabled={skjemaErLåst}
                     icon={<PlusCircleIcon />}
                     className={styles.addButton}
                 >
-                    {'Legg til kulepunkt'}
+                    Legg til kulepunkt
                 </Button>
             )}
         </div>

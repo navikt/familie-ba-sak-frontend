@@ -2,6 +2,7 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, HStack, Label, Textarea } from '@navikt/ds-react';
 import type { ChangeEvent } from 'react';
+import { useState } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
@@ -11,12 +12,7 @@ import { useSkjemaErLåst } from './useSkjemaErLåst';
 const maksLengdeFritekstAvsnitt = 1000;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
-interface Props {
-    visFritekstAvsnittTekstboks: boolean;
-    settVisFritekstAvsnittTekstboks: (vis: boolean) => void;
-}
-
-export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks }: Props) {
+export function FritekstAvsnittField() {
     const { control } = useFormContext<BrevModulFormValues>();
     const erLesevisning = useErLesevisning();
     const skjemaErLåst = useSkjemaErLåst();
@@ -29,7 +25,7 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
         control,
         rules: {
             validate: verdi => {
-                if (verdi === undefined) {
+                if (verdi === null) {
                     return true;
                 }
                 if (verdi.trim() === '') {
@@ -42,6 +38,8 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
             },
         },
     });
+
+    const [visFritekstAvsnittTekstboks, settVisFritekstAvsnittTekstboks] = useState(field.value !== null);
 
     return (
         <div>
@@ -66,17 +64,16 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                             type={'button'}
                             variant={'tertiary'}
                             onClick={() => {
-                                field.onChange(undefined);
+                                field.onChange(null);
                                 settVisFritekstAvsnittTekstboks(false);
                             }}
-                            id={`fjern_fritekst`}
                             size={'small'}
                             disabled={skjemaErLåst}
                             aria-label={'Fjern fritekst'}
                             icon={<TrashIcon />}
                             className={styles.removeButton}
                         >
-                            {'Fjern'}
+                            Fjern
                         </Button>
                     </HStack>
                 </Fieldset>
@@ -86,13 +83,12 @@ export function FritekstAvsnittField({ visFritekstAvsnittTekstboks, settVisFrite
                         type={'button'}
                         variant={'tertiary'}
                         onClick={() => settVisFritekstAvsnittTekstboks(true)}
-                        id={`legg-til-fritekst-avsnitt`}
                         size={'small'}
                         disabled={skjemaErLåst}
                         icon={<PlusCircleIcon />}
                         className={styles.addButton}
                     >
-                        {'Legg til fritekst avsnitt'}
+                        Legg til fritekst avsnitt
                     </Button>
                 )
             )}
