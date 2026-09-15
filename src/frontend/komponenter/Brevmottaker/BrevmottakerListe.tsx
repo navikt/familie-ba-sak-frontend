@@ -8,12 +8,14 @@ import { Mottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBre
 interface IProps {
     bruker: IPersonInfo;
     brevmottakere: SkjemaBrevmottaker[];
+    institusjonNavn?: string;
 }
 
-const BrevmottakerListe = ({ bruker, brevmottakere }: IProps) => {
+const BrevmottakerListe = ({ bruker, brevmottakere, institusjonNavn }: IProps) => {
     const { fagsak } = useFagsakContext();
     const institusjon = fagsak.institusjon;
     const fagsakType = fagsak.fagsakType;
+    const vistInstitusjonNavn = institusjonNavn ?? institusjon?.navn;
 
     const skalViseInstitusjon = !!institusjon;
     const harUtenlandskAdresse = brevmottakere.some(
@@ -40,7 +42,7 @@ const BrevmottakerListe = ({ bruker, brevmottakere }: IProps) => {
             {harManuellDødsboadresse && <li key="dødsbo">{bruker.navn} | Dødsbo</li>}
             {skalViseInstitusjon && (
                 <li key="institusjon">{`Institusjon | ${
-                    institusjon.navn?.concat(' |') || ''
+                    vistInstitusjonNavn?.concat(' |') || ''
                 } ${formaterIdent(institusjon.orgNummer)}`}</li>
             )}
             {harFullmektig &&

@@ -16,12 +16,15 @@ export function MottakerlandSedField() {
         name: BrevmodulFeltnavn.MOTTAKERLAND_SED,
         control,
         rules: {
-            validate: (verdi, values) =>
-                values.brevmal === Brevmal.SVARTIDSBREV
-                    ? true
-                    : verdi.length
-                      ? true
-                      : 'Velg land SED er sendt/skal sendes til',
+            validate: (verdi, values) => {
+                if (values.brevmal === Brevmal.SVARTIDSBREV) {
+                    return true;
+                }
+                if (verdi.length) {
+                    return true;
+                }
+                return 'Velg land SED er sendt/skal sendes til';
+            },
         },
     });
 

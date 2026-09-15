@@ -22,8 +22,8 @@ export function DatoAvtaleField() {
     });
 
     const { datepickerProps, inputProps } = useDatepicker({
-        defaultSelected: value,
-        onDateChange: (dato?: Date) => onChange(dato),
+        defaultSelected: value ?? undefined,
+        onDateChange: (dato?: Date) => onChange(dato ?? null),
         fromDate: tidligsteRelevanteDato,
         toDate: senesteRelevanteDato,
     });

@@ -40,7 +40,7 @@ export function AntallUkerSvarfristField() {
             size={'small'}
             className={styles.textField}
             readOnly={skjemaErLåst}
-            value={field.value === '' ? '' : field.value}
+            value={field.value}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 field.onChange(event.target.value === '' ? '' : Number(event.target.value))
             }
