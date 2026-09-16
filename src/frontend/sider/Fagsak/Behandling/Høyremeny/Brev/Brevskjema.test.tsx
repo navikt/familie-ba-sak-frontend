@@ -1,12 +1,16 @@
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { waitFor } from '@testing-library/react';
+import { BehandlingTestdata, lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagGrunnlagPerson, lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import type { IPersonInfo } from '@typer/person';
 import { Adressebeskyttelsegradering, ForelderBarnRelasjonRolle } from '@typer/person';
+import { HttpResponse, http } from 'msw';
 import type { ReactNode } from 'react';
 import { describe, expect, test, vi } from 'vitest';
+import { server } from '../../../../../testutils/mocks/node';
 import { BrukerProvider } from '../../../BrukerContext';
 import { FagsakProvider } from '../../../FagsakContext';
 import { BehandlingProvider } from '../../context/BehandlingContext';
@@ -77,6 +81,28 @@ describe('Brevskjema validering', () => {
         // Ved bytte av brevmal skal skjemaet nullstilles slik at feilen ikke lenger vises
         await user.selectOptions(brevmalvelger, 'VARSEL_OM_REVURDERING');
         expect(screen.queryByText(OBLIGATORISK_FEILMELDING)).not.toBeInTheDocument();
+    });
+
+    test('skal kunne sende brev for en brevmal uten delt bosted', async () => {
+        server.use(
+            http.post('/familie-ba-sak/api/dokument/send-brev/:behandlingId', () =>
+                HttpResponse.json(byggSuksessRessurs(BehandlingTestdata.lagBehandling()))
+            )
+        );
+
+        const onSubmitSuccess = vi.fn();
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={onSubmitSuccess} bruker={lagPerson()} />, {
+            wrapper: Wrapper,
+        });
+
+        await user.selectOptions(screen.getByRole('combobox', { name: /Velg brevmal/ }), 'VARSEL_OM_REVURDERING');
+        await user.type(screen.getByLabelText('Skriv inn kulepunkt'), 'Et kulepunkt');
+
+        await user.click(screen.getByRole('button', { name: 'Send brev' }));
+
+        // Innsending skal ikke blokkeres av delt bosted-validering når brevmalen ikke gjelder delt bosted
+        expect(screen.queryByText('Du må velge barn')).not.toBeInTheDocument();
+        await waitFor(() => expect(onSubmitSuccess).toHaveBeenCalledOnce());
     });
 });
 
