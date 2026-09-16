@@ -8,27 +8,30 @@ import { JournalpostSkjema } from './JournalpostSkjema';
 import styles from './ManuellJournalføring.module.css';
 import { ManuellJournalføringProvider, useManuellJournalføringContext } from './ManuellJournalføringContext';
 
-const ManuellJournalføringContent = () => {
+function JournalføringAlert({ status, tekst }: { status: 'warning' | 'error'; tekst: string }) {
+    return (
+        <GlobalAlert status={status}>
+            <GlobalAlert.Header>
+                <GlobalAlert.Title>{tekst}</GlobalAlert.Title>
+            </GlobalAlert.Header>
+        </GlobalAlert>
+    );
+}
+
+export function ManuellJournalføringContent() {
     const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalføringContext();
 
     switch (dataForManuellJournalføring.status) {
         case RessursStatus.SUKSESS: {
             const viserAlert = dataForManuellJournalføring.data.journalpost.journalstatus !== Journalstatus.MOTTATT;
+            const alertTekst = `Journalposten har status ${dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede journalført.`;
             return (
                 <>
                     <Personlinje bruker={skjema.felter.bruker.verdi} fagsak={minimalFagsak} />
 
                     {viserAlert && (
                         <>
-                            <GlobalAlert status="warning">
-                                <GlobalAlert.Header>
-                                    <GlobalAlert.Title>
-                                        Journalposten har status{' '}
-                                        {dataForManuellJournalføring.data.journalpost.journalstatus} og er allerede
-                                        journalført.
-                                    </GlobalAlert.Title>
-                                </GlobalAlert.Header>
-                            </GlobalAlert>
+                            <JournalføringAlert status="warning" tekst={alertTekst} />
                             <br />
                         </>
                     )}
@@ -43,35 +46,21 @@ const ManuellJournalføringContent = () => {
 
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
-            return (
-                <GlobalAlert status="error">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>{dataForManuellJournalføring.frontendFeilmelding}</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
-            );
-        case RessursStatus.IKKE_TILGANG:
-            return (
-                <GlobalAlert status="error">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>
-                            Kan ikke vise journalføringsoppgave. Personer relatert til journalpost har
-                            adressebeskyttelse. Krever ekstra tilganger.
-                        </GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
-            );
+            return <JournalføringAlert status="error" tekst={dataForManuellJournalføring.frontendFeilmelding} />;
+        case RessursStatus.IKKE_TILGANG: {
+            const alertTekst =
+                'Kan ikke vise journalføringsoppgave. Personer relatert til journalpost har adressebeskyttelse. Krever ekstra tilganger.';
+            return <JournalføringAlert status="error" tekst={alertTekst} />;
+        }
         default:
             return <div />;
     }
-};
+}
 
-const ManuellJournalføring = () => {
+export function ManuellJournalføring() {
     return (
         <ManuellJournalføringProvider>
             <ManuellJournalføringContent />
         </ManuellJournalføringProvider>
     );
-};
-
-export default ManuellJournalføring;
+}

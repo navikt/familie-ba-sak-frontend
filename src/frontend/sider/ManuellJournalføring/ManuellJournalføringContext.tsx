@@ -82,7 +82,6 @@ interface ManuellJournalføringContextValue {
     knyttTilNyBehandling: Felt<boolean>;
     nullstillSkjema: () => void;
     skjema: ISkjema<ManuellJournalføringSkjemaFelter, string>;
-    tilbakestillData: () => void;
     valgtDokumentId: string | undefined;
     velgOgHentDokumentData: (dokumentInfoId: string) => void;
     settAvsenderLikBruker: () => void;
@@ -266,10 +265,6 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
             settKlagebehandlinger(klagebehandlinger)
         );
     }, [minimalFagsak]);
-
-    const tilbakestillData = () => {
-        nullstillSkjema();
-    };
 
     const settMinimalFagsakTilInstitusjonsfagsak = (orgNummer: string) => {
         if (institusjonsfagsaker.status === RessursStatus.SUKSESS) {
@@ -635,7 +630,6 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
                 knyttTilNyBehandling,
                 nullstillSkjema,
                 skjema,
-                tilbakestillData,
                 valgtDokumentId,
                 velgOgHentDokumentData,
                 settAvsenderLikBruker,

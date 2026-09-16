@@ -17,13 +17,17 @@ import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import {
+    ManuellJournalføringFelter,
+    type ManuellJournalføringFormValues,
+} from '@sider/ManuellJournalføring/useManuellJournalføringSkjema';
 import { FagsakType, fagsakStatus } from '@typer/fagsak';
 import type { ISamhandlerInfo } from '@typer/samhandler';
 import { formaterIdent } from '@utils/formatter';
 import { identValidator } from '@utils/validators';
 import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
-
+import { useFormContext } from 'react-hook-form';
 import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
@@ -49,6 +53,12 @@ export const BrukerPanel = () => {
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
     const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
     const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
+
+    const { watch } = useFormContext<ManuellJournalføringFormValues>();
+    const bruker = watch(ManuellJournalføringFelter.BRUKER);
+    const samhandler = watch(ManuellJournalføringFelter.SAMHANDLER);
+    const fagsakType = watch(ManuellJournalføringFelter.FAGSAK_TYPE);
+    const erBrukerPåInstitusjon = fagsakType === FagsakType.INSTITUSJON;
 
     useEffect(() => {
         settFeilMelding('');
@@ -77,8 +87,6 @@ export const BrukerPanel = () => {
             skjema.felter.samhandler.nullstill();
         }
     }, [valgtInstitusjon]);
-
-    const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
 
     const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
         skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
@@ -111,9 +119,9 @@ export const BrukerPanel = () => {
                                 <KontoSirkel filled={åpen} width={48} height={48} />
                             )
                         }
-                        navn={skjema.felter.bruker.verdi?.navn || 'Ukjent bruker'}
+                        navn={bruker?.navn || 'Ukjent bruker'}
                         undertittel={erBrukerPåInstitusjon ? 'Søker/Bruker er på institusjon' : 'Søker/Bruker'}
-                        ident={formaterIdent(skjema.felter.bruker.verdi?.personIdent ?? '')}
+                        ident={formaterIdent(bruker?.personIdent ?? '')}
                     />
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
@@ -238,9 +246,9 @@ export const BrukerPanel = () => {
                         <InlineMessage status="warning">{samhandlerFeilmelding}</InlineMessage>
                     </Box>
                 )}
-                {skjema.felter.samhandler.verdi !== undefined && (
+                {samhandler !== undefined && (
                     <Box marginBlock={'space-32 space-0'}>
-                        <SamhandlerTabell samhandler={skjema.felter.samhandler.verdi} />
+                        <SamhandlerTabell samhandler={samhandler} />
                     </Box>
                 )}
             </ExpansionCard.Content>

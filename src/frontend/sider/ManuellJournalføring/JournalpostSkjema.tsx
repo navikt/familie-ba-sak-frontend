@@ -1,16 +1,18 @@
 import { ChevronLeftIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage, ErrorSummary, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import { Journalpost } from '@sider/ManuellJournalføring/Journalpost';
+import { useManuellJournalføringSkjema } from '@sider/ManuellJournalføring/useManuellJournalføringSkjema';
 import { FagsakType } from '@typer/fagsak';
 import type { OppgavetypeFilter } from '@typer/oppgave';
 import { oppgaveTypeFilter } from '@typer/oppgave';
 import { useState } from 'react';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import Knapperekke from '../../komponenter/Knapperekke';
 import { AvsenderPanel } from './AvsenderPanel';
 import { BrukerPanel } from './BrukerPanel';
 import { Dokumenter } from './Dokument/Dokumenter';
-import Journalpost from './Journalpost';
 import { KnyttJournalpostTilBehandling } from './KnyttJournalpostTilBehandling';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
@@ -24,6 +26,8 @@ export const JournalpostSkjema = () => {
         lukkOppgaveOgKnyttJournalpostTilBehandling,
         kanKnytteJournalpostTilBehandling,
     } = useManuellJournalføringContext();
+
+    const { form } = useManuellJournalføringSkjema();
 
     const navigate = useNavigate();
     const [valideringsfeilmelding, settValideringsfeilmelding] = useState<string>('');
@@ -40,85 +44,92 @@ export const JournalpostSkjema = () => {
 
     return (
         <Box padding={'space-32'} overflowY={'scroll'}>
-            {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
-                <Heading spacing size="medium" level="2">
-                    {
-                        oppgaveTypeFilter[
-                            dataForManuellJournalføring.data.oppgave.oppgavetype as keyof typeof OppgavetypeFilter
-                        ].navn
-                    }
-                </Heading>
-            )}
-            <Journalpost />
-            <Box marginBlock={'space-40 space-0'}>
-                <Heading size={'small'} level={'2'}>
-                    Dokumenter
-                </Heading>
-                <Dokumenter />
-            </Box>
-            <VStack marginBlock={'space-40 space-0'} gap={'space-16'}>
-                <Heading size={'small'} level={'2'}>
-                    Bruker og avsender
-                </Heading>
-                <BrukerPanel />
-                <AvsenderPanel />
-            </VStack>
+            <FormProvider {...form}>
+                <form>
+                    {dataForManuellJournalføring.status === RessursStatus.SUKSESS && (
+                        <Heading spacing size="medium" level="2">
+                            {
+                                oppgaveTypeFilter[
+                                    dataForManuellJournalføring.data.oppgave
+                                        .oppgavetype as keyof typeof OppgavetypeFilter
+                                ].navn
+                            }
+                        </Heading>
+                    )}
+                    <Journalpost />
+                    <Box marginBlock={'space-40 space-0'}>
+                        <Heading size={'small'} level={'2'}>
+                            Dokumenter
+                        </Heading>
+                        <Dokumenter />
+                    </Box>
+                    <VStack marginBlock={'space-40 space-0'} gap={'space-16'}>
+                        <Heading size={'small'} level={'2'}>
+                            Bruker og avsender
+                        </Heading>
+                        <BrukerPanel />
+                        <AvsenderPanel />
+                    </VStack>
 
-            <Box marginBlock={'space-40 space-0'}>
-                {kanKnytteJournalpostTilBehandling() && <KnyttJournalpostTilBehandling />}
-                <br />
-                {(skjema.submitRessurs.status === RessursStatus.FEILET ||
-                    skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                    skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
-                        </LocalAlert.Header>
-                    </LocalAlert>
-                )}
-                {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
-                    <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">
-                        {hentFeilTilOppsummering().map(item => (
-                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
-                        ))}
-                    </ErrorSummary>
-                )}
-            </Box>
+                    <Box marginBlock={'space-40 space-0'}>
+                        {kanKnytteJournalpostTilBehandling() && <KnyttJournalpostTilBehandling />}
+                        <br />
+                        {(skjema.submitRessurs.status === RessursStatus.FEILET ||
+                            skjema.submitRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                            skjema.submitRessurs.status === RessursStatus.IKKE_TILGANG) && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{skjema.submitRessurs.frontendFeilmelding}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        )}
+                        {skjema.visFeilmeldinger && hentFeilTilOppsummering().length > 0 && (
+                            <ErrorSummary heading={'For å gå videre må du rette opp følgende'} size="small">
+                                {hentFeilTilOppsummering().map(item => (
+                                    <ErrorSummary.Item href={`#${item.skjemaelementId}`}>
+                                        {item.feilmelding}
+                                    </ErrorSummary.Item>
+                                ))}
+                            </ErrorSummary>
+                        )}
+                    </Box>
 
-            <Knapperekke>
-                <Button
-                    size="small"
-                    variant={'secondary'}
-                    onClick={() => navigate(`/oppgaver`)}
-                    disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    icon={erLesevisning() && <ChevronLeftIcon />}
-                >
-                    {erLesevisning() ? 'Tilbake' : 'Avbryt'}
-                </Button>
-                {!erLesevisning() && (
-                    <Button
-                        size="small"
-                        variant="primary"
-                        onClick={validerOgJournalfør}
-                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    >
-                        Journalfør
-                    </Button>
-                )}
-                {erLesevisning() && kanKnytteJournalpostTilBehandling() && (
-                    <Button
-                        size="small"
-                        variant="primary"
-                        onClick={lukkOppgaveOgKnyttJournalpostTilBehandling}
-                        loading={skjema.submitRessurs.status === RessursStatus.HENTER}
-                        disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
-                    >
-                        Ferdigstill oppgave
-                    </Button>
-                )}
-            </Knapperekke>
-            {valideringsfeilmelding && <ErrorMessage>{valideringsfeilmelding}</ErrorMessage>}
+                    <Knapperekke>
+                        <Button
+                            size="small"
+                            variant={'secondary'}
+                            onClick={() => navigate(`/oppgaver`)}
+                            disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            icon={erLesevisning() && <ChevronLeftIcon />}
+                        >
+                            {erLesevisning() ? 'Tilbake' : 'Avbryt'}
+                        </Button>
+                        {!erLesevisning() && (
+                            <Button
+                                size="small"
+                                variant="primary"
+                                onClick={validerOgJournalfør}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            >
+                                Journalfør
+                            </Button>
+                        )}
+                        {erLesevisning() && kanKnytteJournalpostTilBehandling() && (
+                            <Button
+                                size="small"
+                                variant="primary"
+                                onClick={lukkOppgaveOgKnyttJournalpostTilBehandling}
+                                loading={skjema.submitRessurs.status === RessursStatus.HENTER}
+                                disabled={skjema.submitRessurs.status === RessursStatus.HENTER}
+                            >
+                                Ferdigstill oppgave
+                            </Button>
+                        )}
+                    </Knapperekke>
+                    {valideringsfeilmelding && <ErrorMessage>{valideringsfeilmelding}</ErrorMessage>}
+                </form>
+            </FormProvider>
         </Box>
     );
 };

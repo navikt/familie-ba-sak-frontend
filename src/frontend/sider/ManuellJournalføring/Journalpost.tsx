@@ -1,49 +1,30 @@
-import { BodyShort, Box, ExpansionCard, UNSAFE_Combobox } from '@navikt/ds-react';
+import { BodyShort, Box, ExpansionCard } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import { JournalpostTittel } from '../../typer/manuell-journalføring';
-import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
+import { JournalpostTittelFelt } from '@sider/ManuellJournalføring/felter/JournalpostTittelFelt';
+import {
+    ManuellJournalføringFelter,
+    type ManuellJournalføringFormValues,
+} from '@sider/ManuellJournalføring/useManuellJournalføringSkjema';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
+import { useFormContext } from 'react-hook-form';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
-const EndreJournalpost = () => {
-    const { skjema, erLesevisning } = useManuellJournalføringContext();
-    const navInputProps = skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger);
+export function Journalpost() {
+    const { dataForManuellJournalføring } = useManuellJournalføringContext();
+    const { watch } = useFormContext<ManuellJournalføringFormValues>();
+    const journalpostTittelVerdi = watch(ManuellJournalføringFelter.JOURNALPOST_TITTEL);
 
-    return (
-        <UNSAFE_Combobox
-            error={navInputProps.feil}
-            id={navInputProps.id}
-            allowNewValues
-            readOnly={erLesevisning()}
-            label={'Endre journalposttittel'}
-            placeholder={'Skriv fritekst for å endre tittel...'}
-            isMultiSelect={false}
-            options={Object.values(JournalpostTittel)}
-            selectedOptions={
-                skjema.felter.journalpostTittel.verdi === '' ? [] : [skjema.felter.journalpostTittel.verdi]
-            }
-            onToggleSelected={(value, isSelected) => {
-                if (isSelected) {
-                    skjema.felter.journalpostTittel.validerOgSettFelt(value);
-                } else {
-                    skjema.felter.journalpostTittel.nullstill();
-                }
-            }}
-        />
-    );
-};
-
-const Journalpost = () => {
-    const { dataForManuellJournalføring, skjema } = useManuellJournalføringContext();
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
 
     return (
-        <ExpansionCard id={skjema.felter.journalpostTittel.id} size="small" aria-label="journalpost">
+        // TODO: må det være id for ExpansionCard?
+        <ExpansionCard size="small" aria-label="journalpost">
             <ExpansionCard.Header>
                 <ExpansionCard.Title size={'small'} as={'h2'}>
-                    {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
+                    {journalpostTittelVerdi || 'Ingen tittel'}
                 </ExpansionCard.Title>
             </ExpansionCard.Header>
             <ExpansionCard.Content>
@@ -57,10 +38,8 @@ const Journalpost = () => {
                         })}
                     </BodyShort>
                 </Box>
-                <EndreJournalpost />
+                <JournalpostTittelFelt />
             </ExpansionCard.Content>
         </ExpansionCard>
     );
-};
-
-export default Journalpost;
+}
