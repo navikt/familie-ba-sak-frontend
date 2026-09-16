@@ -1,19 +1,19 @@
-import { EØS_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '@komponenter/FlaggCombobox';
+import { EØS_LAND_REGIONKODER, RegionCombobox } from '@komponenter/FlaggCombobox';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Brevmal } from './typer';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function MottakerlandSedField() {
     const skjemaErLåst = useSkjemaErLåst();
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
 
     const {
         field,
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.MOTTAKERLAND_SED,
+        name: SendManueltBrevFeltnavn.MOTTAKERLAND_SED,
         control,
         rules: {
             validate: (verdi, values) => {
@@ -31,7 +31,7 @@ export function MottakerlandSedField() {
     return (
         <RegionCombobox
             label={'SED er sendt til'}
-            value={(field.value ?? []) as Regionkode[]}
+            value={field.value}
             options={EØS_LAND_REGIONKODER}
             onChange={value => field.onChange(value ?? [])}
             readOnly={skjemaErLåst}

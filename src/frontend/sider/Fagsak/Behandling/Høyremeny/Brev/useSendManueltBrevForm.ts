@@ -1,8 +1,7 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { useSendBehandlingBrev } from '@hooks/useSendBehandlingBrev';
-import { Valideringsstatus } from '@navikt/familie-skjema';
+import type { Regionkode } from '@komponenter/FlaggCombobox';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IBehandling } from '@typer/behandling';
@@ -12,17 +11,16 @@ import type { IMinimalFagsak } from '@typer/fagsak';
 import { FagsakType } from '@typer/fagsak';
 import type { IGrunnlagPerson, IPersonInfo } from '@typer/person';
 import { PersonType } from '@typer/person';
-import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
-import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } from '@utils/brevmal';
+import type { IBarnMedOpplysninger } from '@typer/søknad';
 import type { IsoDatoString } from '@utils/dato';
 import { Datoformat, dateTilIsoDatoStringEllerUndefined, isoStringTilFormatertString } from '@utils/dato';
 import { hentBarnMedOpplysningerFraBruker } from '@utils/deltBostedSkjemaFelter';
-import { useEffect } from 'react';
-import { useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import type { ISelectOptionMedBrevtekst } from './typer';
 import { Brevmal } from './typer';
+import { hentMottakersMålform } from './useMottakersMålform';
 
-export enum BrevmodulFeltnavn {
+export enum SendManueltBrevFeltnavn {
     MOTTAKER_IDENT = 'mottakerIdent',
     BREVMAL = 'brevmal',
     DOKUMENTER = 'dokumenter',
@@ -48,17 +46,17 @@ export type BarnMedDeltBosted = IBarnMedOpplysninger & {
     avtalerOmDeltBosted: BrevAvtaleOmDeltBosted[];
 };
 
-export interface BrevModulFormValues {
-    [BrevmodulFeltnavn.MOTTAKER_IDENT]: string;
-    [BrevmodulFeltnavn.BREVMAL]: Brevmal | '';
-    [BrevmodulFeltnavn.DOKUMENTER]: ISelectOptionMedBrevtekst[];
-    [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: FritekstKulepunkt[];
-    [BrevmodulFeltnavn.FRITEKST_AVSNITT]: string | null;
-    [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: BarnMedDeltBosted[];
-    [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];
-    [BrevmodulFeltnavn.DATO_AVTALE]: Date | null;
-    [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: number | '';
-    [BrevmodulFeltnavn.MOTTAKERLAND_SED]: string[];
+export interface SendManueltBrevFormValues {
+    [SendManueltBrevFeltnavn.MOTTAKER_IDENT]: string;
+    [SendManueltBrevFeltnavn.BREVMAL]: Brevmal | '';
+    [SendManueltBrevFeltnavn.DOKUMENTER]: ISelectOptionMedBrevtekst[];
+    [SendManueltBrevFeltnavn.FRITEKST_KULEPUNKTER]: FritekstKulepunkt[];
+    [SendManueltBrevFeltnavn.FRITEKST_AVSNITT]: string | null;
+    [SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED]: BarnMedDeltBosted[];
+    [SendManueltBrevFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];
+    [SendManueltBrevFeltnavn.DATO_AVTALE]: Date | null;
+    [SendManueltBrevFeltnavn.ANTALL_UKER_SVARFRIST]: number | '';
+    [SendManueltBrevFeltnavn.MOTTAKERLAND_SED]: Regionkode[];
 }
 
 const velgMottaker = (fagsak: IMinimalFagsak, personer: IGrunnlagPerson[]): string | undefined => {
@@ -88,40 +86,26 @@ const hentBarnBrevetGjelder = (personer: IGrunnlagPerson[]): IBarnMedOpplysninge
 const hentBarnMedDeltBosted = (bruker: IPersonInfo): BarnMedDeltBosted[] =>
     hentBarnMedOpplysningerFraBruker(bruker).map(barn => ({ ...barn, avtalerOmDeltBosted: [] }));
 
-export const brevModulSkjemaStandardverdier = (
+export const sendManueltBrevSkjemaStandardverdier = (
     behandling: IBehandling,
     fagsak: IMinimalFagsak,
     bruker: IPersonInfo
-): BrevModulFormValues => {
-    const personer = behandling.personer ?? [];
+): SendManueltBrevFormValues => {
+    const personer = behandling.personer;
 
     return {
-        [BrevmodulFeltnavn.MOTTAKER_IDENT]: velgMottaker(fagsak, personer) ?? '',
-        [BrevmodulFeltnavn.BREVMAL]: '',
-        [BrevmodulFeltnavn.DOKUMENTER]: [],
-        [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: [],
-        [BrevmodulFeltnavn.FRITEKST_AVSNITT]: null,
-        [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: hentBarnMedDeltBosted(bruker),
-        [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: hentBarnBrevetGjelder(personer),
-        [BrevmodulFeltnavn.DATO_AVTALE]: null,
-        [BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST]: behandling.kategori === BehandlingKategori.EØS ? 8 : 3,
-        [BrevmodulFeltnavn.MOTTAKERLAND_SED]: [],
+        [SendManueltBrevFeltnavn.MOTTAKER_IDENT]: velgMottaker(fagsak, personer) ?? '',
+        [SendManueltBrevFeltnavn.BREVMAL]: '',
+        [SendManueltBrevFeltnavn.DOKUMENTER]: [],
+        [SendManueltBrevFeltnavn.FRITEKST_KULEPUNKTER]: [],
+        [SendManueltBrevFeltnavn.FRITEKST_AVSNITT]: null,
+        [SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED]: hentBarnMedDeltBosted(bruker),
+        [SendManueltBrevFeltnavn.BARN_BREVET_GJELDER]: hentBarnBrevetGjelder(personer),
+        [SendManueltBrevFeltnavn.DATO_AVTALE]: null,
+        [SendManueltBrevFeltnavn.ANTALL_UKER_SVARFRIST]: behandling.kategori === BehandlingKategori.EØS ? 8 : 3,
+        [SendManueltBrevFeltnavn.MOTTAKERLAND_SED]: [],
     };
 };
-
-const hentMottakersMålform = (personer: IGrunnlagPerson[], mottakerIdent: string): Målform =>
-    mottakersMålformImplementering(
-        personer,
-        mottakerIdent.length >= 1 ? Valideringsstatus.OK : Valideringsstatus.IKKE_VALIDERT,
-        mottakerIdent
-    );
-
-export function useMottakersMålform(): Målform {
-    const behandling = useBehandling();
-    const { watch } = useFormContext<BrevModulFormValues>();
-    const mottakerIdent = watch(BrevmodulFeltnavn.MOTTAKER_IDENT);
-    return hentMottakersMålform(behandling.personer ?? [], mottakerIdent);
-}
 
 const hentDeltBostedMultiselectVerdierForBarn = (barn: BarnMedDeltBosted): string[] =>
     barn.avtalerOmDeltBosted.map(
@@ -139,36 +123,24 @@ interface Props {
     onSubmitSuccess: () => void;
 }
 
-export const useBrevModul = ({ onSubmitSuccess }: Props) => {
+export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
     const fagsak = useFagsak();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const bruker = useBruker();
 
-    const personer = behandling.personer ?? [];
-    const brevmottakere = behandling.brevmottakere ?? [];
-    const institusjon = fagsak.institusjon;
+    const personer = behandling.personer;
 
-    const form = useForm<BrevModulFormValues>({
-        defaultValues: brevModulSkjemaStandardverdier(behandling, fagsak, bruker),
+    const form = useForm<SendManueltBrevFormValues>({
+        values: sendManueltBrevSkjemaStandardverdier(behandling, fagsak, bruker),
+        resetOptions: {
+            keepDirtyValues: true,
+        },
     });
 
-    const { setValue, setError } = form;
-
-    /**
-     * Nullstill enkelte felter i skjemaet ved oppdatering av åpenbehandling i staten.
-     * Dette fordi at man kan ha gjort endring på målform.
-     */
-    // biome-ignore lint/correctness/useExhaustiveDependencies: skal kun kjøre når behandlingen endres
-    useEffect(() => {
-        setValue(BrevmodulFeltnavn.DOKUMENTER, []);
-        setValue(BrevmodulFeltnavn.BARN_MED_DELT_BOSTED, hentBarnMedDeltBosted(bruker));
-        setValue(BrevmodulFeltnavn.BARN_BREVET_GJELDER, hentBarnBrevetGjelder(personer));
-    }, [behandling]);
-
-    const hentMuligeBrevMaler = (): Brevmal[] => hentMuligeBrevmalerImplementering(behandling, !!institusjon);
+    const { setError } = form;
 
     const hentVarselOmRevurderingDeltBostedSkjemaData = (
-        values: BrevModulFormValues
+        values: SendManueltBrevFormValues
     ): IManueltBrevRequestPåBehandling => {
         const merkedeBarn = values.barnMedDeltBosted.filter(barn => barn.merket);
 
@@ -181,7 +153,7 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         };
     };
 
-    const hentSkjemaData = (values: BrevModulFormValues): IManueltBrevRequestPåBehandling => {
+    const hentSkjemaData = (values: SendManueltBrevFormValues): IManueltBrevRequestPåBehandling => {
         const erVarselOmRevurderingDeltBosted =
             values.brevmal === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
 
@@ -216,7 +188,7 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
 
     const { mutateAsync: sendBrev } = useSendBehandlingBrev(behandling.behandlingId);
 
-    const onSubmit = async (values: BrevModulFormValues) => {
+    const onSubmit = async (values: SendManueltBrevFormValues) => {
         try {
             const oppdatertBehandling = await sendBrev(hentSkjemaData(values));
             onSubmitSuccess();
@@ -231,7 +203,5 @@ export const useBrevModul = ({ onSubmitSuccess }: Props) => {
         form,
         onSubmit,
         hentSkjemaData,
-        hentMuligeBrevMaler,
-        brevmottakere,
     };
 };

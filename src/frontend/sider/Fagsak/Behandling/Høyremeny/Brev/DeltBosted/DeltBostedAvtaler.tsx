@@ -2,9 +2,13 @@ import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { type BarnMedDeltBosted, type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import {
+    type BarnMedDeltBosted,
+    SendManueltBrevFeltnavn,
+    type SendManueltBrevFormValues,
+} from '../useSendManueltBrevForm';
 import { useSkjemaErLåst } from '../useSkjemaErLåst';
-import { AvtaleDatoInput } from './AvtaleDatoInput';
+import { AvtaleDatoField } from './AvtaleDatoField';
 
 interface IProps {
     barn: BarnMedDeltBosted;
@@ -12,20 +16,20 @@ interface IProps {
 }
 
 const DeltBostedAvtaler = ({ barn, index }: IProps) => {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: `${BrevmodulFeltnavn.BARN_MED_DELT_BOSTED}.${index}.avtalerOmDeltBosted`,
+        name: `${SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED}.${index}.avtalerOmDeltBosted`,
     });
 
     return (
         <HStack marginInline={'space-32 space-0'} gap={'space-16'}>
             {fields.map((field, avtaleIndex) => (
                 <HStack key={field.id} gap={'space-16'} align={'end'}>
-                    <AvtaleDatoInput
-                        name={`${BrevmodulFeltnavn.BARN_MED_DELT_BOSTED}.${index}.avtalerOmDeltBosted.${avtaleIndex}.dato`}
+                    <AvtaleDatoField
+                        name={`${SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED}.${index}.avtalerOmDeltBosted.${avtaleIndex}.dato`}
                         avtaleDatoErPåkrevd={barn.merket}
                         minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}
                     />

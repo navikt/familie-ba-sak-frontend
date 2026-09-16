@@ -5,11 +5,11 @@ import { lagBarnLabel, sorterBarnEtterFødselsdato } from '@utils/formatter';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './BarnBrevetGjelder.module.css';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function BarnBrevetGjelderField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const behandling = useBehandling();
     const skjemaErLåst = useSkjemaErLåst();
 
@@ -17,7 +17,7 @@ export function BarnBrevetGjelderField() {
         field,
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.BARN_BREVET_GJELDER,
+        name: SendManueltBrevFeltnavn.BARN_BREVET_GJELDER,
         control,
         rules: {
             validate: verdi => (verdi.some(barn => barn.merket) ? true : 'Du må velge hvilke barn brevet gjelder'),

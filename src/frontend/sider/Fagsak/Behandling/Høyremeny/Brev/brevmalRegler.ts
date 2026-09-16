@@ -65,7 +65,7 @@ export const skalViseMottakerlandSed = (brevmal: Brevmal | '', behandlingKategor
 export const skalViseDeltBosted = (brevmal: Brevmal | ''): boolean =>
     brevmal === Brevmal.VARSEL_OM_REVURDERING_DELT_BOSTED_PARAGRAF_14;
 
-export const erBrevmalMedObligatoriskFritekstKulepunkt = (brevmal: Brevmal): boolean =>
+export const erBrevmalMedObligatoriskFritekstKulepunkt = (brevmal: Brevmal | ''): boolean =>
     [
         Brevmal.VARSEL_OM_REVURDERING,
         Brevmal.VARSEL_OM_REVURDERING_INSTITUSJON,
@@ -74,4 +74,4 @@ export const erBrevmalMedObligatoriskFritekstKulepunkt = (brevmal: Brevmal): boo
         Brevmal.FORLENGET_SVARTIDSBREV,
         Brevmal.FORLENGET_SVARTIDSBREV_INSTITUSJON,
         Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT,
-    ].includes(brevmal);
+    ].some(mal => mal === brevmal);

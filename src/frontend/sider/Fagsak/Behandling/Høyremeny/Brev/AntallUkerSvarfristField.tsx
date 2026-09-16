@@ -3,20 +3,20 @@ import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const maksSvarfristUker = 4 * 5;
 
 export function AntallUkerSvarfristField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field,
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.ANTALL_UKER_SVARFRIST,
+        name: SendManueltBrevFeltnavn.ANTALL_UKER_SVARFRIST,
         control,
         rules: {
             validate: verdi => {

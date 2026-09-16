@@ -6,14 +6,14 @@ import { useState } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const maksLengdeFritekstAvsnitt = 1000;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
 export function FritekstAvsnittField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const erLesevisning = useErLesevisning();
     const skjemaErLåst = useSkjemaErLåst();
 
@@ -21,7 +21,7 @@ export function FritekstAvsnittField() {
         field,
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.FRITEKST_AVSNITT,
+        name: SendManueltBrevFeltnavn.FRITEKST_AVSNITT,
         control,
         rules: {
             validate: verdi => {

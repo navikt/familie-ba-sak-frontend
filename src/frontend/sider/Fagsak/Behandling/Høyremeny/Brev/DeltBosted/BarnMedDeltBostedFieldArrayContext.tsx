@@ -10,10 +10,14 @@ import {
 } from 'react-hook-form';
 
 import { skalViseDeltBosted } from '../brevmalRegler';
-import { type BarnMedDeltBosted, type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
+import {
+    type BarnMedDeltBosted,
+    SendManueltBrevFeltnavn,
+    type SendManueltBrevFormValues,
+} from '../useSendManueltBrevForm';
 
 export interface BarnMedDeltBostedFieldArray {
-    barnMedDeltBosted: FieldArrayWithId<BrevModulFormValues, BrevmodulFeltnavn.BARN_MED_DELT_BOSTED>[];
+    barnMedDeltBosted: FieldArrayWithId<SendManueltBrevFormValues, SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED>[];
     leggTilBarn: (barn: IBarnMedOpplysninger, options?: FieldArrayMethodProps) => void;
     oppdaterBarn: (index: number, barn: BarnMedDeltBosted) => void;
     fjernBarn: (index: number) => void;
@@ -22,15 +26,15 @@ export interface BarnMedDeltBostedFieldArray {
 const BarnMedDeltBostedFieldArrayContext = createContext<BarnMedDeltBostedFieldArray | undefined>(undefined);
 
 interface Props {
-    control: Control<BrevModulFormValues>;
+    control: Control<SendManueltBrevFormValues>;
     children: ReactNode | ((fieldArray: BarnMedDeltBostedFieldArray) => ReactNode);
 }
 
 export function BarnMedDeltBostedFieldArrayProvider({ control, children }: Props) {
-    const brevmal = useWatch({ control, name: BrevmodulFeltnavn.BREVMAL });
+    const brevmal = useWatch({ control, name: SendManueltBrevFeltnavn.BREVMAL });
     const { fields, append, update, remove } = useFieldArray({
         control,
-        name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
+        name: SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED,
         rules: {
             validate: barna =>
                 !skalViseDeltBosted(brevmal) || barna.some(barn => barn.merket) ? undefined : 'Du må velge barn',
