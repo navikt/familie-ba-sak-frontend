@@ -1,4 +1,5 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
@@ -8,9 +9,8 @@ import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
 import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import type { IPersonInfo } from '@typer/person';
 import { useEffect, useState } from 'react';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useController } from 'react-hook-form';
 
 import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
@@ -27,36 +27,43 @@ import {
     skalViseFritekstKulepunkter,
     skalViseMottakerlandSed,
 } from './brevmalRegler';
-import { DatoAvtaleField } from './DatoAvtaleField';
 import { BarnMedDeltBostedFieldArrayProvider } from './DeltBosted/BarnMedDeltBostedFieldArrayContext';
 import { DeltBostedField } from './DeltBostedField';
 import { DokumenterField } from './DokumenterField';
 import { FritekstAvsnittField } from './FritekstAvsnittField';
-import { FritekstKulepunkterField } from './FritekstKulepunkterField';
+import { FritekstKulepunkter } from './FritekstKulepunkter';
 import { LeggTilBarnKnapp } from './LeggTilBarnKnapp';
 import { MottakerlandSedField } from './MottakerlandSedField';
-import { BrevmodulFeltnavn, useBrevModul } from './useBrevModul';
+import { SamboerFraDatoField } from './SamboerFraDatoField';
+import { SendManueltBrevFeltnavn, useSendManueltBrevForm } from './useSendManueltBrevForm';
 
 interface IProps {
     onSubmitSuccess: () => void;
-    bruker: IPersonInfo;
 }
 
-const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
+const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const behandling = useBehandling();
     const fagsak = useFagsak();
+    const bruker = useBruker();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
-    const { form, onSubmit, hentSkjemaData, hentMuligeBrevMaler, brevmottakere } = useBrevModul({ onSubmitSuccess });
+    const { form, onSubmit, hentSkjemaData } = useSendManueltBrevForm({ onSubmitSuccess });
+
+    const brevmottakere = behandling.brevmottakere;
 
     const {
         control,
-        register,
         handleSubmit,
         getValues,
         watch,
         formState: { isSubmitting, errors },
     } = form;
+
+    const { fieldState: mottakerIdentState } = useController({
+        name: SendManueltBrevFeltnavn.MOTTAKER_IDENT,
+        control,
+        rules: { validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker' },
+    });
 
     const [visForhåndsvisningDialog, settVisForhåndsvisningDialog] = useState(false);
 
@@ -69,9 +76,8 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
 
     const erLesevisning = useErLesevisning();
 
-    const brevmal = watch(BrevmodulFeltnavn.BREVMAL);
+    const brevmal = watch(SendManueltBrevFeltnavn.BREVMAL);
 
-    const brevMaler = hentMuligeBrevMaler();
     const skjemaErLåst = erLesevisning || isSubmitting || opprettManueltBrevPdfIsPending;
 
     const institusjon = fagsak.institusjon;
@@ -96,22 +102,19 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                         {!erLesevisning && <LeggTilBarnModal />}
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
-                                <input
-                                    type={'hidden'}
-                                    {...register(BrevmodulFeltnavn.MOTTAKER_IDENT, {
-                                        validate: verdi => verdi.length >= 1 || 'Du må velge en mottaker',
-                                    })}
-                                />
                                 <Label>Brev sendes til</Label>
                                 <BrevmottakerListe
                                     bruker={bruker}
                                     brevmottakere={brevmottakere}
                                     institusjonNavn={institusjonNavn}
                                 />
+                                {mottakerIdentState.error && (
+                                    <ErrorMessage>{mottakerIdentState.error.message}</ErrorMessage>
+                                )}
                                 <VStack gap={'space-16'}>
-                                    <BrevmalField brevMaler={brevMaler} />
+                                    <BrevmalField />
                                     {skalViseDokumenter(brevmal) && <DokumenterField />}
-                                    {skalViseFritekstKulepunkter(brevmal) && <FritekstKulepunkterField />}
+                                    {skalViseFritekstKulepunkter(brevmal) && <FritekstKulepunkter />}
                                     {skalViseFritekstAvsnitt(brevmal) && <FritekstAvsnittField />}
                                     {skalViseBarnBrevetGjelder(brevmal) && <BarnBrevetGjelderField />}
                                     {skalViseDeltBosted(brevmal) && (
@@ -120,7 +123,7 @@ const Brevskjema = ({ onSubmitSuccess, bruker }: IProps) => {
                                             {!erLesevisning && <LeggTilBarnKnapp />}
                                         </>
                                     )}
-                                    {skalViseDatoAvtale(brevmal) && <DatoAvtaleField />}
+                                    {skalViseDatoAvtale(brevmal) && <SamboerFraDatoField />}
                                     {skalViseAntallUkerSvarfrist(brevmal) && <AntallUkerSvarfristField />}
                                     {skalViseMottakerlandSed(brevmal, behandling.kategori) && <MottakerlandSedField />}
                                 </VStack>

@@ -6,17 +6,17 @@ import { isValid, parseISO } from 'date-fns';
 import type { Path } from 'react-hook-form';
 import { useController, useFormContext } from 'react-hook-form';
 
-import type { BrevModulFormValues } from '../useBrevModul';
+import type { SendManueltBrevFormValues } from '../useSendManueltBrevForm';
 import { useSkjemaErLåst } from '../useSkjemaErLåst';
 
 interface Props {
-    name: Path<BrevModulFormValues>;
+    name: Path<SendManueltBrevFormValues>;
     avtaleDatoErPåkrevd: boolean;
     minDatoAvgrensning?: Date;
 }
 
-export function AvtaleDatoInput({ name, avtaleDatoErPåkrevd, minDatoAvgrensning }: Props) {
-    const { clearErrors, control } = useFormContext<BrevModulFormValues>();
+export function AvtaleDatoField({ name, avtaleDatoErPåkrevd, minDatoAvgrensning }: Props) {
+    const { clearErrors, control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
 
     const { field, fieldState } = useController({

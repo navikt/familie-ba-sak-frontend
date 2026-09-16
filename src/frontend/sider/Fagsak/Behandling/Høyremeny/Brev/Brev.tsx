@@ -1,14 +1,12 @@
 import { Button, Modal, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useBrukerContext } from '../../../BrukerContext';
 import { useFagsakContext } from '../../../FagsakContext';
 import { Tab, useTabContext } from '../TabContextProvider';
 import Brevskjema from './Brevskjema';
 
 export function Brev() {
     const { fagsak } = useFagsakContext();
-    const { bruker } = useBrukerContext();
     const { settTab } = useTabContext();
 
     const navigate = useNavigate();
@@ -32,7 +30,7 @@ export function Brev() {
 
     return (
         <VStack marginBlock={'space-16'} marginInline={'space-20'}>
-            <Brevskjema onSubmitSuccess={() => settVisInnsendtBrevModal(true)} bruker={bruker} />
+            <Brevskjema onSubmitSuccess={() => settVisInnsendtBrevModal(true)} />
             {visInnsendtBrevModal && (
                 <Modal open={true} onClose={onClose} header={{ heading: 'Brevet er sendt' }} portal={true}>
                     <Modal.Footer>

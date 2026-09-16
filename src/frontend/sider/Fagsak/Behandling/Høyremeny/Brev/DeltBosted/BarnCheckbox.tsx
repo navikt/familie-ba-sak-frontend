@@ -2,18 +2,19 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Checkbox, HStack } from '@navikt/ds-react';
 import { lagBarnLabel } from '@utils/formatter';
 
-import type { BarnMedDeltBosted } from '../useBrevModul';
+import type { BarnMedDeltBosted } from '../useSendManueltBrevForm';
 import { useSkjemaErLåst } from '../useSkjemaErLåst';
+import { useBarnMedDeltBostedFieldArray } from './BarnMedDeltBostedFieldArrayContext';
 import DeltBostedAvtaler from './DeltBostedAvtaler';
 
 interface IProps {
     barn: BarnMedDeltBosted;
     index: number;
-    onFjern: () => void;
 }
 
-const BarnCheckbox = ({ barn, index, onFjern }: IProps) => {
+const BarnCheckbox = ({ barn, index }: IProps) => {
     const skjemaErLåst = useSkjemaErLåst();
+    const { fjernBarn } = useBarnMedDeltBostedFieldArray();
 
     return (
         <Box marginInline="space-16 space-0">
@@ -27,7 +28,7 @@ const BarnCheckbox = ({ barn, index, onFjern }: IProps) => {
                         variant={'tertiary'}
                         size={'small'}
                         disabled={skjemaErLåst}
-                        onClick={onFjern}
+                        onClick={() => fjernBarn(index)}
                         icon={<TrashIcon />}
                     >
                         Fjern barn

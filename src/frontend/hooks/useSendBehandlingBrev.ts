@@ -3,10 +3,7 @@ import { type DefaultError, type UseMutationOptions, useMutation } from '@tansta
 import type { IBehandling } from '@typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
 
-type Options = Omit<
-    UseMutationOptions<IBehandling, DefaultError, IManueltBrevRequestPåBehandling>,
-    'mutationKey' | 'mutationFn'
->;
+type Options = Omit<UseMutationOptions<IBehandling, DefaultError, IManueltBrevRequestPåBehandling>, 'mutationFn'>;
 
 export function useSendBehandlingBrev(behandlingId: number, options?: Options) {
     return useMutation({

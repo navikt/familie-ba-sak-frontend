@@ -3,18 +3,18 @@ import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { isValid } from 'date-fns';
 import { useController, useFormContext } from 'react-hook-form';
 
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
-export function DatoAvtaleField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+export function SamboerFraDatoField() {
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
 
     const {
         field: { value, onChange },
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.DATO_AVTALE,
+        name: SendManueltBrevFeltnavn.DATO_AVTALE,
         control,
         rules: {
             validate: value => (value && isValid(value) ? undefined : 'Du må velge en gyldig dato'),

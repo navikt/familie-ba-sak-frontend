@@ -3,39 +3,38 @@ import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { HStack, Label, Select, Tag } from '@navikt/ds-react';
 import { målform } from '@typer/søknad';
+import { hentMuligeBrevmalerImplementering } from '@utils/brevmal';
 import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 import styles from './Brevskjema.module.css';
 import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
 import { type Brevmal, type BrevtypeSelect, brevmaler } from './typer';
+import { useMottakersMålform } from './useMottakersMålform';
 import {
-    type BrevModulFormValues,
-    BrevmodulFeltnavn,
-    brevModulSkjemaStandardverdier,
-    useMottakersMålform,
-} from './useBrevModul';
+    SendManueltBrevFeltnavn,
+    type SendManueltBrevFormValues,
+    sendManueltBrevSkjemaStandardverdier,
+} from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const OBLIGATORISK_FRITEKST_KULEPUNKT_VALIDERINGSMELDING =
     'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
 
-interface Props {
-    brevMaler: Brevmal[];
-}
-
-export function BrevmalField({ brevMaler }: Props) {
+export function BrevmalField() {
     const behandling = useBehandling();
     const fagsak = useFagsak();
     const bruker = useBruker();
-    const { control, getValues, reset } = useFormContext<BrevModulFormValues>();
+    const { control, getValues, reset } = useFormContext<SendManueltBrevFormValues>();
     const mottakersMålform = useMottakersMålform();
     const skjemaErLåst = useSkjemaErLåst();
+
+    const brevMaler = hentMuligeBrevmalerImplementering(behandling, !!fagsak.institusjon);
 
     const {
         field: { value },
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.BREVMAL,
+        name: SendManueltBrevFeltnavn.BREVMAL,
         control,
         rules: { validate: verdi => (verdi ? true : 'Du må velge en brevmal') },
     });
@@ -48,10 +47,10 @@ export function BrevmalField({ brevMaler }: Props) {
      */
     const onEndreBrevmal = (nyBrevmal: Brevmal | '') => {
         reset({
-            ...brevModulSkjemaStandardverdier(behandling, fagsak, bruker),
-            [BrevmodulFeltnavn.MOTTAKER_IDENT]: getValues(BrevmodulFeltnavn.MOTTAKER_IDENT),
-            [BrevmodulFeltnavn.BREVMAL]: nyBrevmal,
-            [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]:
+            ...sendManueltBrevSkjemaStandardverdier(behandling, fagsak, bruker),
+            [SendManueltBrevFeltnavn.MOTTAKER_IDENT]: getValues(SendManueltBrevFeltnavn.MOTTAKER_IDENT),
+            [SendManueltBrevFeltnavn.BREVMAL]: nyBrevmal,
+            [SendManueltBrevFeltnavn.FRITEKST_KULEPUNKTER]:
                 nyBrevmal !== '' && erBrevmalMedObligatoriskFritekstKulepunkt(nyBrevmal)
                     ? [{ tekst: '', valideringsmelding: OBLIGATORISK_FRITEKST_KULEPUNKT_VALIDERINGSMELDING }]
                     : [],

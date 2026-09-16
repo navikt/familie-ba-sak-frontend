@@ -47,7 +47,7 @@ function Wrapper({ children }: { children: ReactNode }) {
 
 describe('Brevskjema validering', () => {
     test('skal ikke vise valideringsfeil når brevskjemaet lastes', () => {
-        const { screen } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={lagPerson()} />, {
+        const { screen } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
             wrapper: Wrapper,
         });
 
@@ -56,7 +56,7 @@ describe('Brevskjema validering', () => {
     });
 
     test('skal ikke vise valideringsfeil når brevmal velges', async () => {
-        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={lagPerson()} />, {
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
             wrapper: Wrapper,
         });
 
@@ -67,7 +67,7 @@ describe('Brevskjema validering', () => {
     });
 
     test('skal skjule valideringsfeil igjen når brevmal endres etter en innsending', async () => {
-        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={lagPerson()} />, {
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
             wrapper: Wrapper,
         });
 
@@ -91,7 +91,7 @@ describe('Brevskjema validering', () => {
         );
 
         const onSubmitSuccess = vi.fn();
-        const { screen, user } = render(<Brevskjema onSubmitSuccess={onSubmitSuccess} bruker={lagPerson()} />, {
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={onSubmitSuccess} />, {
             wrapper: Wrapper,
         });
 
@@ -120,7 +120,7 @@ describe('Brevskjema delt bosted', () => {
     });
 
     test('skal vise avtalefelt når et barn velges, uten valideringsfeil før innsending', async () => {
-        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={brukerMedBarn} />, {
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
             wrapper: lagWrapper(brukerMedBarn),
         });
 
@@ -152,7 +152,7 @@ describe('Brevskjema lesevisning', () => {
     });
 
     test('skal låse knappene under lesevisning', () => {
-        const { screen } = render(<Brevskjema onSubmitSuccess={vi.fn()} bruker={lagPerson()} />, {
+        const { screen } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
             wrapper: lagWrapper(lagPerson(), avsluttetBehandling),
         });
 

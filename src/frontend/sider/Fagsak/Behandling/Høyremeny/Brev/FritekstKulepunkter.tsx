@@ -1,67 +1,31 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, HStack, Label, Textarea } from '@navikt/ds-react';
-import { validerFritekstKulepunkt } from '@utils/fritekstfelter';
-import { useController, useFieldArray, useFormContext } from 'react-hook-form';
+import { Button, Fieldset, HStack, Label } from '@navikt/ds-react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
 import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
+import { FritekstKulepunktField } from './FritekstKulepunktField';
 import { Brevmal } from './typer';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
-const makslengdeFritekstHvertKulepunkt = 220;
 const maksAntallKulepunkter = 20;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
 
 const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
     'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
-interface TekstfeltProps {
-    index: number;
-    valideringsmelding?: string;
-    hjelpetekst: string;
-    skjemaErLåst: boolean;
-}
-
-function FritekstKulepunktTekstfelt({ index, valideringsmelding, hjelpetekst, skjemaErLåst }: TekstfeltProps) {
-    const { control } = useFormContext<BrevModulFormValues>();
-
-    const { field, fieldState } = useController({
-        name: `${BrevmodulFeltnavn.FRITEKST_KULEPUNKTER}.${index}.tekst`,
-        control,
-        rules: {
-            validate: (tekst: string) =>
-                validerFritekstKulepunkt({ tekst, valideringsmelding }, makslengdeFritekstHvertKulepunkt),
-        },
-    });
-
-    return (
-        <Textarea
-            {...field}
-            className={styles.textarea}
-            label="Skriv inn kulepunkt"
-            hideLabel
-            size={'small'}
-            maxLength={makslengdeFritekstHvertKulepunkt}
-            description={hjelpetekst}
-            readOnly={skjemaErLåst}
-            error={fieldState.error?.message}
-            autoFocus
-        />
-    );
-}
-
-export function FritekstKulepunkterField() {
-    const { control, watch } = useFormContext<BrevModulFormValues>();
+export function FritekstKulepunkter() {
+    const { control, watch } = useFormContext<SendManueltBrevFormValues>();
     const erLesevisning = useErLesevisning();
     const skjemaErLåst = useSkjemaErLåst();
 
-    const valgtBrevmal = watch(BrevmodulFeltnavn.BREVMAL) as Brevmal;
+    const valgtBrevmal = watch(SendManueltBrevFeltnavn.BREVMAL);
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: BrevmodulFeltnavn.FRITEKST_KULEPUNKTER,
+        name: SendManueltBrevFeltnavn.FRITEKST_KULEPUNKTER,
     });
 
     const erMaksAntallKulepunkter = fields.length >= maksAntallKulepunkter;
@@ -84,11 +48,10 @@ export function FritekstKulepunkterField() {
 
                     return (
                         <HStack key={field.id}>
-                            <FritekstKulepunktTekstfelt
+                            <FritekstKulepunktField
                                 index={index}
                                 valideringsmelding={field.valideringsmelding}
                                 hjelpetekst={hjelpetekst}
-                                skjemaErLåst={skjemaErLåst}
                             />
                             {kanFjernes && (
                                 <Button

@@ -3,11 +3,11 @@ import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { leggTilValuePåOption, opplysningsdokumenter, opplysningsdokumenterTilInstitusjon } from './typer';
-import { type BrevModulFormValues, BrevmodulFeltnavn } from './useBrevModul';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 export function DokumenterField() {
-    const { control } = useFormContext<BrevModulFormValues>();
+    const { control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
     const { institusjon } = useFagsak();
 
@@ -19,7 +19,7 @@ export function DokumenterField() {
         field,
         fieldState: { error },
     } = useController({
-        name: BrevmodulFeltnavn.DOKUMENTER,
+        name: SendManueltBrevFeltnavn.DOKUMENTER,
         control,
         rules: {
             validate: (verdi, values) =>
