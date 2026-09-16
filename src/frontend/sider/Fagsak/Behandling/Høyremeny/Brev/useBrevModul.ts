@@ -17,7 +17,6 @@ import { hentMuligeBrevmalerImplementering, mottakersMålformImplementering } fr
 import type { IsoDatoString } from '@utils/dato';
 import { Datoformat, dateTilIsoDatoStringEllerUndefined, isoStringTilFormatertString } from '@utils/dato';
 import { hentBarnMedOpplysningerFraBruker } from '@utils/deltBostedSkjemaFelter';
-import type { IFritekstFelt } from '@utils/fritekstfelter';
 import { useEffect } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 import type { ISelectOptionMedBrevtekst } from './typer';
@@ -40,6 +39,11 @@ export interface BrevAvtaleOmDeltBosted {
     dato: IsoDatoString;
 }
 
+export interface FritekstKulepunkt {
+    tekst: string;
+    valideringsmelding?: string;
+}
+
 export type BarnMedDeltBosted = IBarnMedOpplysninger & {
     avtalerOmDeltBosted: BrevAvtaleOmDeltBosted[];
 };
@@ -48,7 +52,7 @@ export interface BrevModulFormValues {
     [BrevmodulFeltnavn.MOTTAKER_IDENT]: string;
     [BrevmodulFeltnavn.BREVMAL]: Brevmal | '';
     [BrevmodulFeltnavn.DOKUMENTER]: ISelectOptionMedBrevtekst[];
-    [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: IFritekstFelt[];
+    [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]: FritekstKulepunkt[];
     [BrevmodulFeltnavn.FRITEKST_AVSNITT]: string | null;
     [BrevmodulFeltnavn.BARN_MED_DELT_BOSTED]: BarnMedDeltBosted[];
     [BrevmodulFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];

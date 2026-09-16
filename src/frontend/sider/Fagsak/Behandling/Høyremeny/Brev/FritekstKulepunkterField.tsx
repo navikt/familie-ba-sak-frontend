@@ -1,11 +1,7 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Fieldset, HStack, Label, Textarea } from '@navikt/ds-react';
-import {
-    genererIdBasertPåAndreFritekstKulepunkter,
-    lagInitiellFritekst,
-    validerFritekstKulepunkt,
-} from '@utils/fritekstfelter';
+import { validerFritekstKulepunkt } from '@utils/fritekstfelter';
 import { useController, useFieldArray, useFormContext } from 'react-hook-form';
 
 import styles from './Brevskjema.module.css';
@@ -36,7 +32,7 @@ function FritekstKulepunktTekstfelt({ index, valideringsmelding, hjelpetekst, sk
         control,
         rules: {
             validate: (tekst: string) =>
-                validerFritekstKulepunkt({ tekst, id: 0, valideringsmelding }, makslengdeFritekstHvertKulepunkt),
+                validerFritekstKulepunkt({ tekst, valideringsmelding }, makslengdeFritekstHvertKulepunkt),
         },
     });
 
@@ -66,13 +62,12 @@ export function FritekstKulepunkterField() {
     const { fields, append, remove } = useFieldArray({
         control,
         name: BrevmodulFeltnavn.FRITEKST_KULEPUNKTER,
-        keyName: 'key',
     });
 
     const erMaksAntallKulepunkter = fields.length >= maksAntallKulepunkter;
 
     const leggTilKulepunkt = () => {
-        append(lagInitiellFritekst('', genererIdBasertPåAndreFritekstKulepunkter(fields)));
+        append({ tekst: '', valideringsmelding: undefined });
     };
 
     return (
@@ -88,7 +83,7 @@ export function FritekstKulepunkterField() {
                     const kanFjernes = !(erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) && index === 0);
 
                     return (
-                        <HStack key={field.key}>
+                        <HStack key={field.id}>
                             <FritekstKulepunktTekstfelt
                                 index={index}
                                 valideringsmelding={field.valideringsmelding}
