@@ -3,7 +3,6 @@ import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { HStack, Label, Select, Tag } from '@navikt/ds-react';
 import { målform } from '@typer/søknad';
-import { lagInitiellFritekst } from '@utils/fritekstfelter';
 import type { ChangeEvent } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 import styles from './Brevskjema.module.css';
@@ -54,7 +53,7 @@ export function BrevmalField({ brevMaler }: Props) {
             [BrevmodulFeltnavn.BREVMAL]: nyBrevmal,
             [BrevmodulFeltnavn.FRITEKST_KULEPUNKTER]:
                 nyBrevmal !== '' && erBrevmalMedObligatoriskFritekstKulepunkt(nyBrevmal)
-                    ? [lagInitiellFritekst('', 1, OBLIGATORISK_FRITEKST_KULEPUNKT_VALIDERINGSMELDING)]
+                    ? [{ tekst: '', valideringsmelding: OBLIGATORISK_FRITEKST_KULEPUNKT_VALIDERINGSMELDING }]
                     : [],
         });
     };
