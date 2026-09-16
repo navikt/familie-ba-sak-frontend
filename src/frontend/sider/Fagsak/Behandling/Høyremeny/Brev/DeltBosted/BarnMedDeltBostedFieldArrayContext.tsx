@@ -1,8 +1,15 @@
 import type { IBarnMedOpplysninger } from '@typer/søknad';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useMemo } from 'react';
-import { type Control, type FieldArrayMethodProps, type FieldArrayWithId, useFieldArray } from 'react-hook-form';
+import {
+    type Control,
+    type FieldArrayMethodProps,
+    type FieldArrayWithId,
+    useFieldArray,
+    useWatch,
+} from 'react-hook-form';
 
+import { skalViseDeltBosted } from '../brevmalRegler';
 import { type BarnMedDeltBosted, type BrevModulFormValues, BrevmodulFeltnavn } from '../useBrevModul';
 
 export interface BarnMedDeltBostedFieldArray {
@@ -20,11 +27,13 @@ interface Props {
 }
 
 export function BarnMedDeltBostedFieldArrayProvider({ control, children }: Props) {
+    const brevmal = useWatch({ control, name: BrevmodulFeltnavn.BREVMAL });
     const { fields, append, update, remove } = useFieldArray({
         control,
         name: BrevmodulFeltnavn.BARN_MED_DELT_BOSTED,
         rules: {
-            validate: barna => (barna.some(barn => barn.merket) ? undefined : 'Du må velge barn'),
+            validate: barna =>
+                !skalViseDeltBosted(brevmal) || barna.some(barn => barn.merket) ? undefined : 'Du må velge barn',
         },
     });
 
