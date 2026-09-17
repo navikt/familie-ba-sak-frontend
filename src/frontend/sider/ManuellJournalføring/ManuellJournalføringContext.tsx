@@ -99,7 +99,7 @@ interface ManuellJournalføringContextValue {
 
 const ManuellJournalføringContext = createContext<ManuellJournalføringContextValue | undefined>(undefined);
 
-export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
+export function ManuellJournalføringProvider(props: PropsWithChildren) {
     const saksbehandler = useSaksbehandler();
 
     const navigate = useNavigate();
@@ -653,9 +653,9 @@ export const ManuellJournalføringProvider = (props: PropsWithChildren) => {
             {props.children}
         </ManuellJournalføringContext.Provider>
     );
-};
+}
 
-export const useManuellJournalføringContext = () => {
+export function useManuellJournalføringContext() {
     const context = useContext(ManuellJournalføringContext);
 
     if (context === undefined) {
@@ -663,4 +663,4 @@ export const useManuellJournalføringContext = () => {
     }
 
     return context;
-};
+}
