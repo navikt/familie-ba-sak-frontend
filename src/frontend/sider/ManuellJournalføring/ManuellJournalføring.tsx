@@ -8,7 +8,7 @@ import { JournalpostSkjema } from './JournalpostSkjema';
 import styles from './ManuellJournalføring.module.css';
 import { ManuellJournalføringProvider, useManuellJournalføringContext } from './ManuellJournalføringContext';
 
-const ManuellJournalføringContent = () => {
+function ManuellJournalføringContent() {
     const { dataForManuellJournalføring, minimalFagsak, skjema } = useManuellJournalføringContext();
 
     switch (dataForManuellJournalføring.status) {
@@ -64,14 +64,12 @@ const ManuellJournalføringContent = () => {
         default:
             return <div />;
     }
-};
+}
 
-const ManuellJournalføring = () => {
+export function ManuellJournalføring() {
     return (
         <ManuellJournalføringProvider>
             <ManuellJournalføringContent />
         </ManuellJournalføringProvider>
     );
-};
-
-export default ManuellJournalføring;
+}

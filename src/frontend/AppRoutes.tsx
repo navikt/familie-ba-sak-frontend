@@ -3,11 +3,10 @@ import { RouteError } from '@komponenter/Error/RouteError';
 import { Fagsak } from '@sider/Fagsak/Fagsak';
 import { fagsakRoutes } from '@sider/Fagsak/FagsakRoutes';
 import { Infotrygd } from '@sider/Infotrygd/Infotrygd';
-import ManuellJournalføring from '@sider/ManuellJournalføring/ManuellJournalføring';
+import { ManuellJournalføring } from '@sider/ManuellJournalføring/ManuellJournalføring';
 import { Oppgavebenk } from '@sider/Oppgavebenk/Oppgavebenk';
 import { Samhandler } from '@sider/Samhandler/Samhandler';
 import { createBrowserRouter, Navigate } from 'react-router';
-
 import { AppContainer } from './AppContainer';
 
 export const appRoutes = createBrowserRouter([
