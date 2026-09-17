@@ -10,6 +10,7 @@ export function FødselsdatoField() {
     const { field, fieldState, formState } = useController({
         name: Fields.FØDSELSDATO,
         control,
+        rules: { required: 'Fødselsdato er påkrevd.' },
     });
 
     const { datepickerProps, inputProps } = useDatepicker({
@@ -21,7 +22,7 @@ export function FødselsdatoField() {
         <DatePicker {...datepickerProps}>
             <DatePicker.Input
                 {...inputProps}
-                label={'Fødselsdato (valgfri)'}
+                label={'Fødselsdato'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
                 ref={field.ref}
                 name={field.name}

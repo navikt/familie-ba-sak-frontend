@@ -44,8 +44,8 @@ export function LeggTilBarnModal() {
                                 </BodyLong>
                                 <BodyLong size={'small'} spacing>
                                     Hvis barnet ikke er folkeregistrert innen angitt frist, kan du registrere barnet med
-                                    fødselsdato og/eller navn. Det vil føre til et avslag, uten at vilkårene skal
-                                    vurderes. Har du ikke navnet på barnet kan du skrive “ukjent”.
+                                    fødselsdato og navn. Det vil føre til et avslag, uten at vilkårene skal vurderes.
+                                    Har du ikke navnet på barnet kan du skrive “ukjent”.
                                 </BodyLong>
                                 <Heading level={'3'} size={'xsmall'}>
                                     EØS-saker:
