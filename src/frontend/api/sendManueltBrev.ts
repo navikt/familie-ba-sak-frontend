@@ -2,7 +2,7 @@ import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
 
-export async function sendBehandlingBrev(
+export async function sendManueltBrev(
     behandlingId: number,
     payload: IManueltBrevRequestPåBehandling
 ): Promise<IBehandling> {

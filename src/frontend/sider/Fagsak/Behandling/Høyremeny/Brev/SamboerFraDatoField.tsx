@@ -14,7 +14,7 @@ export function SamboerFraDatoField() {
         field: { value, onChange },
         fieldState: { error },
     } = useController({
-        name: SendManueltBrevFeltnavn.DATO_AVTALE,
+        name: SendManueltBrevFeltnavn.SAMBOER_FRA_DATO,
         control,
         rules: {
             validate: value => (value && isValid(value) ? undefined : 'Du må velge en gyldig dato'),
