@@ -28,7 +28,7 @@ import {
     skalViseMottakerlandSed,
 } from './brevmalRegler';
 import { BarnMedDeltBostedFieldArrayProvider } from './DeltBosted/BarnMedDeltBostedFieldArrayContext';
-import { DeltBostedField } from './DeltBostedField';
+import { DeltBostedField } from './DeltBosted/DeltBostedField';
 import { DokumenterField } from './DokumenterField';
 import { FritekstAvsnittField } from './FritekstAvsnittField';
 import { FritekstKulepunkter } from './FritekstKulepunkter';

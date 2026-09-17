@@ -6,15 +6,11 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import styles from './Brevskjema.module.css';
 import { erBrevmalMedObligatoriskFritekstKulepunkt } from './brevmalRegler';
 import { FritekstKulepunktField } from './FritekstKulepunktField';
-import { Brevmal } from './typer';
 import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 
 const maksAntallKulepunkter = 20;
 const fritekstSkjemaGruppeId = 'Fritekster-brev';
-
-const hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt =
-    'Skriv her hvilke opplysninger vi har som er av betydning for saken. For eksempel: Vi har fått opplyst at barnet bor fast sammen med den andre forelderen.';
 
 export function FritekstKulepunkter() {
     const { control, watch } = useFormContext<SendManueltBrevFormValues>();
@@ -39,20 +35,11 @@ export function FritekstKulepunkter() {
             <Label htmlFor={fritekstSkjemaGruppeId}>Legg til kulepunkt</Label>
             <Fieldset legend="Legg til kulepunkt" hideLegend id={fritekstSkjemaGruppeId}>
                 {fields.map((field, index) => {
-                    const hjelpetekst =
-                        index === 0 && valgtBrevmal === Brevmal.VARSEL_ANNEN_FORELDER_MED_SELVSTENDIG_RETT_SØKT
-                            ? hjelpetekstVarselAnnenForelderMedSelvstendigRettSøkt
-                            : '';
-
                     const kanFjernes = !(erBrevmalMedObligatoriskFritekstKulepunkt(valgtBrevmal) && index === 0);
 
                     return (
                         <HStack key={field.id}>
-                            <FritekstKulepunktField
-                                index={index}
-                                valideringsmelding={field.valideringsmelding}
-                                hjelpetekst={hjelpetekst}
-                            />
+                            <FritekstKulepunktField index={index} valideringsmelding={field.valideringsmelding} />
                             {kanFjernes && (
                                 <Button
                                     type={'button'}

@@ -8,7 +8,7 @@ import {
     type SendManueltBrevFormValues,
 } from '../useSendManueltBrevForm';
 import { useSkjemaErLåst } from '../useSkjemaErLåst';
-import { AvtaleDatoField } from './AvtaleDatoField';
+import { DeltBostedDatoField } from './DeltBostedDatoField';
 
 interface IProps {
     barn: BarnMedDeltBosted;
@@ -28,7 +28,7 @@ const DeltBostedAvtaler = ({ barn, index }: IProps) => {
         <HStack marginInline={'space-32 space-0'} gap={'space-16'}>
             {fields.map((field, avtaleIndex) => (
                 <HStack key={field.id} gap={'space-16'} align={'end'}>
-                    <AvtaleDatoField
+                    <DeltBostedDatoField
                         name={`${SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED}.${index}.avtalerOmDeltBosted.${avtaleIndex}.dato`}
                         avtaleDatoErPåkrevd={barn.merket}
                         minDatoAvgrensning={barn.fødselsdato ? new Date(barn.fødselsdato) : undefined}

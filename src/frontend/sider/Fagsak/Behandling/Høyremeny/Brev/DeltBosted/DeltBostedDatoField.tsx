@@ -15,7 +15,7 @@ interface Props {
     minDatoAvgrensning?: Date;
 }
 
-export function AvtaleDatoField({ name, avtaleDatoErPåkrevd, minDatoAvgrensning }: Props) {
+export function DeltBostedDatoField({ name, avtaleDatoErPåkrevd, minDatoAvgrensning }: Props) {
     const { clearErrors, control } = useFormContext<SendManueltBrevFormValues>();
     const skjemaErLåst = useSkjemaErLåst();
 

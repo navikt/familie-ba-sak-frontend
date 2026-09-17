@@ -1,11 +1,10 @@
 import { CheckboxGroup } from '@navikt/ds-react';
 import { sorterBarnEtterFødselsdato } from '@utils/formatter';
 import { useFormContext } from 'react-hook-form';
-
-import BarnCheckbox from './DeltBosted/BarnCheckbox';
-import { useBarnMedDeltBostedFieldArray } from './DeltBosted/BarnMedDeltBostedFieldArrayContext';
-import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
-import { useSkjemaErLåst } from './useSkjemaErLåst';
+import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from '../useSendManueltBrevForm';
+import { useSkjemaErLåst } from '../useSkjemaErLåst';
+import BarnCheckbox from './BarnCheckbox';
+import { useBarnMedDeltBostedFieldArray } from './BarnMedDeltBostedFieldArrayContext';
 
 export function DeltBostedField() {
     const {

@@ -1,6 +1,6 @@
 import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
-import { useSendBehandlingBrev } from '@hooks/useSendBehandlingBrev';
+import { useSendManueltBrev } from '@hooks/useSendManueltBrev';
 import type { Regionkode } from '@komponenter/FlaggCombobox';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
@@ -28,7 +28,7 @@ export enum SendManueltBrevFeltnavn {
     FRITEKST_AVSNITT = 'fritekstAvsnitt',
     BARN_MED_DELT_BOSTED = 'barnMedDeltBosted',
     BARN_BREVET_GJELDER = 'barnBrevetGjelder',
-    DATO_AVTALE = 'datoAvtale',
+    SAMBOER_FRA_DATO = 'samboerFraDato',
     ANTALL_UKER_SVARFRIST = 'antallUkerSvarfrist',
     MOTTAKERLAND_SED = 'mottakerlandSed',
 }
@@ -54,7 +54,7 @@ export interface SendManueltBrevFormValues {
     [SendManueltBrevFeltnavn.FRITEKST_AVSNITT]: string | null;
     [SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED]: BarnMedDeltBosted[];
     [SendManueltBrevFeltnavn.BARN_BREVET_GJELDER]: IBarnMedOpplysninger[];
-    [SendManueltBrevFeltnavn.DATO_AVTALE]: Date | null;
+    [SendManueltBrevFeltnavn.SAMBOER_FRA_DATO]: Date | null;
     [SendManueltBrevFeltnavn.ANTALL_UKER_SVARFRIST]: number | '';
     [SendManueltBrevFeltnavn.MOTTAKERLAND_SED]: Regionkode[];
 }
@@ -101,7 +101,7 @@ export const sendManueltBrevSkjemaStandardverdier = (
         [SendManueltBrevFeltnavn.FRITEKST_AVSNITT]: null,
         [SendManueltBrevFeltnavn.BARN_MED_DELT_BOSTED]: hentBarnMedDeltBosted(bruker),
         [SendManueltBrevFeltnavn.BARN_BREVET_GJELDER]: hentBarnBrevetGjelder(personer),
-        [SendManueltBrevFeltnavn.DATO_AVTALE]: null,
+        [SendManueltBrevFeltnavn.SAMBOER_FRA_DATO]: null,
         [SendManueltBrevFeltnavn.ANTALL_UKER_SVARFRIST]: behandling.kategori === BehandlingKategori.EØS ? 8 : 3,
         [SendManueltBrevFeltnavn.MOTTAKERLAND_SED]: [],
     };
@@ -177,7 +177,7 @@ export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
             brevmal: values.brevmal as Brevmal,
             barnIBrev: [],
             barnasFødselsdager: barnBrevetGjelder.map(barn => barn.fødselsdato || ''),
-            datoAvtale: dateTilIsoDatoStringEllerUndefined(values.datoAvtale),
+            datoAvtale: dateTilIsoDatoStringEllerUndefined(values.samboerFraDato),
             behandlingKategori: behandling.kategori,
             antallUkerSvarfrist: Number(values.antallUkerSvarfrist),
             mottakerMålform: mottakerMålform,
@@ -186,7 +186,7 @@ export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
         };
     };
 
-    const { mutateAsync: sendBrev } = useSendBehandlingBrev(behandling.behandlingId);
+    const { mutateAsync: sendBrev } = useSendManueltBrev(behandling.behandlingId);
 
     const onSubmit = async (values: SendManueltBrevFormValues) => {
         try {

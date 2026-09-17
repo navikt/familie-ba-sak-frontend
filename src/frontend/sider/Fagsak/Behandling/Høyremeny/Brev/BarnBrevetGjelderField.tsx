@@ -4,7 +4,7 @@ import { BehandlingSteg, hentStegNummer } from '@typer/behandling';
 import { lagBarnLabel, sorterBarnEtterFødselsdato } from '@utils/formatter';
 import { useController, useFormContext } from 'react-hook-form';
 
-import styles from './BarnBrevetGjelder.module.css';
+import styles from './BarnBrevetGjelderField.module.css';
 import { SendManueltBrevFeltnavn, type SendManueltBrevFormValues } from './useSendManueltBrevForm';
 import { useSkjemaErLåst } from './useSkjemaErLåst';
 

@@ -1,4 +1,4 @@
-import { sendBehandlingBrev } from '@api/sendBehandlingBrev';
+import { sendManueltBrev } from '@api/sendManueltBrev';
 import { Brevmal } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
@@ -6,9 +6,9 @@ import type { IBehandling } from '@typer/behandling';
 import { Målform } from '@typer/søknad';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { useSendBehandlingBrev } from './useSendBehandlingBrev';
+import { useSendManueltBrev } from './useSendManueltBrev';
 
-vi.mock('@api/sendBehandlingBrev');
+vi.mock('@api/sendManueltBrev');
 
 afterEach(() => {
     vi.clearAllMocks();
@@ -23,25 +23,25 @@ const payload = {
 
 const behandling = { behandlingId: 123456 } as IBehandling;
 
-describe('useSendBehandlingBrev', () => {
-    test('kaller sendBehandlingBrev med behandlingId og payload', async () => {
-        vi.mocked(sendBehandlingBrev).mockResolvedValue(behandling);
+describe('useSendManueltBrev', () => {
+    test('kaller sendManueltBrev med behandlingId og payload', async () => {
+        vi.mocked(sendManueltBrev).mockResolvedValue(behandling);
 
-        const { result } = renderHook(() => useSendBehandlingBrev(123456), {
+        const { result } = renderHook(() => useSendManueltBrev(123456), {
             wrapper: TestProviders,
         });
 
         result.current.mutate(payload);
 
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(sendBehandlingBrev).toHaveBeenCalledWith(123456, payload);
+        expect(sendManueltBrev).toHaveBeenCalledWith(123456, payload);
     });
 
     test('kaller onSuccess-callback ved vellykket sending', async () => {
-        vi.mocked(sendBehandlingBrev).mockResolvedValue(behandling);
+        vi.mocked(sendManueltBrev).mockResolvedValue(behandling);
         const onSuccess = vi.fn();
 
-        const { result } = renderHook(() => useSendBehandlingBrev(123456, { onSuccess }), {
+        const { result } = renderHook(() => useSendManueltBrev(123456, { onSuccess }), {
             wrapper: TestProviders,
         });
 
@@ -51,9 +51,9 @@ describe('useSendBehandlingBrev', () => {
     });
 
     test('setter isError ved feil fra api-funksjon', async () => {
-        vi.mocked(sendBehandlingBrev).mockRejectedValue(new Error('Noe gikk galt'));
+        vi.mocked(sendManueltBrev).mockRejectedValue(new Error('Noe gikk galt'));
 
-        const { result } = renderHook(() => useSendBehandlingBrev(123456), {
+        const { result } = renderHook(() => useSendManueltBrev(123456), {
             wrapper: TestProviders,
         });
 
