@@ -8,7 +8,7 @@ import OpprettBehandlingValg from './OpprettBehandlingValg';
  * så kan man kanskje sjekke hvilken behandling
  * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
  */
-export const KnyttTilNyBehandling = () => {
+export function KnyttTilNyBehandling() {
     const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } = useManuellJournalføringContext();
     const { knyttTilNyBehandling, behandlingstype } = skjema.felter;
     return (
@@ -26,7 +26,7 @@ export const KnyttTilNyBehandling = () => {
                     }}
                     readOnly={!kanKnytteJournalpostTilBehandling()}
                 >
-                    {'Knytt til ny behandling'}
+                    Knytt til ny behandling
                 </Checkbox>
                 {behandlingstype.erSynlig && (
                     <OpprettBehandlingValg
@@ -39,4 +39,4 @@ export const KnyttTilNyBehandling = () => {
             </Fieldset>
         </Box>
     );
-};
+}

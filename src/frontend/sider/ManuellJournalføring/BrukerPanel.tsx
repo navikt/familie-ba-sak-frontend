@@ -28,7 +28,7 @@ import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
-export const BrukerPanel = () => {
+export function BrukerPanel() {
     const {
         skjema,
         endreBrukerOgSettNormalFagsak,
@@ -246,4 +246,4 @@ export const BrukerPanel = () => {
             </ExpansionCard.Content>
         </ExpansionCard>
     );
-};
+}
