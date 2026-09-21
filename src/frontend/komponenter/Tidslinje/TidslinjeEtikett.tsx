@@ -1,8 +1,7 @@
+import { FamilieBaseKnapp } from '@komponenter/FamilieBaseKnapp';
 import type { Etikett } from '@navikt/familie-tidslinje';
-
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import FamilieBaseKnapp from '../FamilieBaseKnapp';
 import { TidslinjeVindu, useTidslinjeContext } from './TidslinjeContext';
 import styles from './TidslinjeEtikett.module.css';
 
