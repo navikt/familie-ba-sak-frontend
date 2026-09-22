@@ -2,7 +2,7 @@ import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useHentFiltreringsresultater } from '@hooks/useHentFiltreringsresultater';
 import VilkårResultatIkon from '@ikoner/VilkårResultatIkon';
 import { BodyShort, ErrorMessage, List, LocalAlert, VStack } from '@navikt/ds-react';
-import { Filtreringsregel, filtreringsregler } from '@typer/fødselshendelser';
+import { filtreringsregler } from '@typer/filtreringsregler';
 
 export function Filtreringsreglerliste() {
     const behandlingId = useBehandlingId();
@@ -32,21 +32,15 @@ export function Filtreringsreglerliste() {
 
     return (
         <List>
-            {Object.keys(Filtreringsregel).map(filtreringsregel => {
-                const filtreringsresultat = filtreringsresultater.find(it => it.filtreringsregel === filtreringsregel);
-
-                if (!filtreringsresultat) return null;
-
-                return (
-                    <List.Item
-                        aria-hidden
-                        icon={<VilkårResultatIkon resultat={filtreringsresultat.resultat} />}
-                        key={filtreringsregel}
-                    >
-                        <BodyShort>{filtreringsregler[filtreringsresultat.filtreringsregel]}</BodyShort>
-                    </List.Item>
-                );
-            })}
+            {filtreringsresultater.map(filtreringsresultat => (
+                <List.Item
+                    aria-hidden
+                    icon={<VilkårResultatIkon resultat={filtreringsresultat.resultat} />}
+                    key={filtreringsresultat.filtreringsregel}
+                >
+                    <BodyShort>{filtreringsregler[filtreringsresultat.filtreringsregel]}</BodyShort>
+                </List.Item>
+            ))}
         </List>
     );
 }
