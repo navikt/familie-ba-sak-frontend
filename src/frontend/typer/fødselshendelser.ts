@@ -36,5 +36,5 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     FAGSAK_IKKE_MIGRERT_UT_AV_INFOTRYGD_ETTER_BARN_FØDT:
         'Fagsaken har ikke blitt migrert fra infotrygd etter barn ble født',
     MOR_HAR_IKKE_OPPFYLT_UTVIDET_VILKÅR_VED_FØDSELSDATO: 'Mor oppfyller ikke vilkår for utvidet barnetrygd',
-    MOR_HAR_IKKE_OPPHØRT_BARNETRYGD: 'Mor har ikke opphørt barnetrgyd',
+    MOR_HAR_IKKE_OPPHØRT_BARNETRYGD: 'Mor har ikke opphørt barnetrygd',
 };
