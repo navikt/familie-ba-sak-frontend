@@ -2,7 +2,6 @@ import './konfigurerApp.js';
 
 import type { IApp } from '@navikt/familie-backend';
 import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie-backend';
-import { logInfo, logWarn } from '@navikt/familie-logging';
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import path from 'path';
@@ -10,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { appConfig, frontendPath, sessionConfig } from './config.js';
 import { erLokal } from './env.js';
+import { logger } from './logger.js';
 import { prometheusTellere } from './metrikker.js';
 import { attachToken, doProxy, doRedirectProxy } from './proxy.js';
 import setupRouter from './router.js';
@@ -42,12 +42,12 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
             return _next(err); // delegate to Express's default handler to close the connection
         }
         if (err.message?.includes('did not find expected authorization request details in session')) {
-            logWarn(`OIDC-sesjon mangler ved callback - brukeren omdirigeres til login. Detaljer: ${err.message}`);
+            logger.warn(`OIDC-sesjon mangler ved callback - brukeren omdirigeres til login. Detaljer: ${err.message}`);
             res.redirect('/login');
         }
     });
 
     app.listen(port, '0.0.0.0', () => {
-        logInfo(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
+        logger.info(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
     });
 });

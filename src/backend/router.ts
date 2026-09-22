@@ -1,7 +1,6 @@
 import { renderNaisMetaTags } from '@nais/apm';
 import type { Client } from '@navikt/familie-backend';
-import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
-import { LOG_LEVEL } from '@navikt/familie-logging';
+import { ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import type { NextFunction, Request, Response, Router } from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -9,6 +8,7 @@ import type { ViteDevServer } from 'vite';
 
 import { frontendPath } from './config.js';
 import { erLokal, erPreprod } from './env.js';
+import { logRequest } from './logger.js';
 import { prometheusTellere } from './metrikker.js';
 
 const redirectHvisInternUrlIPreprod = () => {
@@ -42,7 +42,7 @@ export default async (authClient: Client, router: Router) => {
 
     // Feilhåndtering
     router.post('/logg-feil', (req: Request, res: Response) => {
-        logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
+        logRequest(req, req.body.melding, 'error');
         res.status(200).send();
     });
 

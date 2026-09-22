@@ -1,9 +1,9 @@
-import { logError } from '@navikt/familie-logging';
+import { logger } from './logger.js';
 
 export const envVar = (navn: string, påkrevd = true, defaultVerdi?: string): string => {
     const envVariabel = process.env[navn];
     if (!envVariabel && påkrevd && !defaultVerdi) {
-        logError(`Mangler påkrevd miljøvariabel: '${navn}'`);
+        logger.error(`Mangler påkrevd miljøvariabel: '${navn}'`);
         process.exit(1);
     }
     if (!envVariabel && defaultVerdi) {
