@@ -1,7 +1,8 @@
-import { BodyShort, Box, ExpansionCard, UNSAFE_Combobox } from '@navikt/ds-react';
+import { BodyShort, Box, ExpansionCard, Heading, UNSAFE_Combobox } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import { JournalpostTittel } from '../../typer/manuell-journalføring';
-import { Datoformat, isoStringTilFormatertString } from '../../utils/dato';
+import { JournalpostTittel } from '@typer/manuell-journalføring';
+import { type OppgavetypeFilter, oppgaveTypeFilter } from '@typer/oppgave';
+import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
 const EndreJournalpost = () => {
@@ -32,35 +33,44 @@ const EndreJournalpost = () => {
     );
 };
 
-const Journalpost = () => {
+export function Journalpost() {
     const { dataForManuellJournalføring, skjema } = useManuellJournalføringContext();
+
+    const journalpostOverskrift =
+        dataForManuellJournalføring.status === RessursStatus.SUKSESS
+            ? oppgaveTypeFilter[dataForManuellJournalføring.data.oppgave.oppgavetype as keyof typeof OppgavetypeFilter]
+                  .navn
+            : undefined;
     const datoMottatt =
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.datoMottatt
             : undefined;
 
     return (
-        <ExpansionCard id={skjema.felter.journalpostTittel.id} size="small" aria-label="journalpost">
-            <ExpansionCard.Header>
-                <ExpansionCard.Title size={'small'} as={'h2'}>
-                    {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
-                </ExpansionCard.Title>
-            </ExpansionCard.Header>
-            <ExpansionCard.Content>
-                <Box marginBlock={'space-0 space-20'}>
-                    <BodyShort>
-                        Mottatt:{' '}
-                        {isoStringTilFormatertString({
-                            isoString: datoMottatt,
-                            tilFormat: Datoformat.DATO,
-                            defaultString: 'Ingen mottatt dato',
-                        })}
-                    </BodyShort>
-                </Box>
-                <EndreJournalpost />
-            </ExpansionCard.Content>
-        </ExpansionCard>
+        <>
+            <Heading spacing size={'medium'} level={'2'}>
+                {journalpostOverskrift}
+            </Heading>
+            <ExpansionCard id={skjema.felter.journalpostTittel.id} size="small" aria-label="journalpost">
+                <ExpansionCard.Header>
+                    <ExpansionCard.Title size={'small'} as={'h2'}>
+                        {skjema.felter.journalpostTittel.verdi || 'Ingen tittel'}
+                    </ExpansionCard.Title>
+                </ExpansionCard.Header>
+                <ExpansionCard.Content>
+                    <Box marginBlock={'space-0 space-20'}>
+                        <BodyShort>
+                            Mottatt:{' '}
+                            {isoStringTilFormatertString({
+                                isoString: datoMottatt,
+                                tilFormat: Datoformat.DATO,
+                                defaultString: 'Ingen mottatt dato',
+                            })}
+                        </BodyShort>
+                    </Box>
+                    <EndreJournalpost />
+                </ExpansionCard.Content>
+            </ExpansionCard>
+        </>
     );
-};
-
-export default Journalpost;
+}

@@ -1,9 +1,8 @@
 import { DokumentIkon } from '@ikoner/DokumentIkon';
 import { EksternLenke } from '@ikoner/EksternLenke';
-
+import { FamilieBaseKnapp } from '@komponenter/FamilieBaseKnapp';
 import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
-import FamilieBaseKnapp from '../../../komponenter/FamilieBaseKnapp';
 import styles from './DokumentInfoStripe.module.css';
 
 interface IDokumentInfoStripeProps {
@@ -12,7 +11,7 @@ interface IDokumentInfoStripeProps {
     dokument: IDokumentInfo;
 }
 
-export const DokumentInfoStripe = ({ valgt, journalpostId, dokument }: IDokumentInfoStripeProps) => {
+export function DokumentInfoStripe({ valgt, journalpostId, dokument }: IDokumentInfoStripeProps) {
     return (
         <HStack>
             <Box minHeight={'48px'} minWidth={'48px'} marginInline={'space-0 space-16'}>
@@ -38,4 +37,4 @@ export const DokumentInfoStripe = ({ valgt, journalpostId, dokument }: IDokument
             </VStack>
         </HStack>
     );
-};
+}

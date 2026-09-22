@@ -1,7 +1,7 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { IDokumentInfo, ILogiskVedlegg } from '@navikt/familie-typer';
 
-import { BrevkodeMap, DokumentTittel, JournalpostTittel } from '../../../typer/manuell-journalføring';
+import { BrevkodeMap, DokumentTittel, JournalpostTittel } from '@typer/manuell-journalføring';
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
 const tittelList = (Object.values(JournalpostTittel) as string[]).concat(Object.values(DokumentTittel));
@@ -11,20 +11,20 @@ interface IProps {
     visFeilmeldinger: boolean;
 }
 
-export const EndreDokumentInfoPanel = ({ dokument, visFeilmeldinger }: IProps) => {
+export function EndreDokumentInfoPanel({ dokument, visFeilmeldinger }: IProps) {
     const { skjema, erLesevisning } = useManuellJournalføringContext();
 
     const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
         findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
     );
 
-    const hentVedleggList = (): string[] => {
+    function hentVedleggList(): string[] {
         return dokumentFraSkjema
             ? dokumentFraSkjema.logiskeVedlegg.map((vedlegg: ILogiskVedlegg) => vedlegg.tittel)
             : [];
-    };
+    }
 
-    const settDokumentTittel = (nyVerdi: string) => {
+    function settDokumentTittel(nyVerdi: string) {
         skjema.felter.dokumenter.validerOgSettFelt([
             ...skjema.felter.dokumenter.verdi.map((dokument: IDokumentInfo) => {
                 return dokumentFraSkjema && dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
@@ -36,9 +36,9 @@ export const EndreDokumentInfoPanel = ({ dokument, visFeilmeldinger }: IProps) =
                     : dokument;
             }),
         ]);
-    };
+    }
 
-    const settLogiskeVedlegg = (logiskeVedleggNavn: string[]) => {
+    function settLogiskeVedlegg(logiskeVedleggNavn: string[]) {
         skjema.felter.dokumenter.validerOgSettFelt([
             ...skjema.felter.dokumenter.verdi.map(dokument => {
                 return dokumentFraSkjema && dokument.dokumentInfoId === dokumentFraSkjema?.dokumentInfoId
@@ -52,7 +52,7 @@ export const EndreDokumentInfoPanel = ({ dokument, visFeilmeldinger }: IProps) =
                     : dokument;
             }),
         ]);
-    };
+    }
 
     return (
         <>
@@ -95,4 +95,4 @@ export const EndreDokumentInfoPanel = ({ dokument, visFeilmeldinger }: IProps) =
             />
         </>
     );
-};
+}

@@ -3,7 +3,7 @@ import { RessursStatus } from '@navikt/familie-typer';
 
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 
-export const DokumentPanel = () => {
+export function DokumentPanel() {
     const { hentetDokument } = useManuellJournalføringContext();
     return (
         <Box height={'100%'} width={'100%'}>
@@ -31,4 +31,4 @@ export const DokumentPanel = () => {
             )}
         </Box>
     );
-};
+}
