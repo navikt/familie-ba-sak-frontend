@@ -71,17 +71,19 @@ describe('Sider', () => {
         test('skal vise filtreringsregler når årsaken er fødselshendelse', () => {
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.FØDSELSHENDELSE });
 
-            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(
-                SideId.FILTRERING_FØDSELSHENDELSER
-            );
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.FILTRERINGSREGLER);
         });
 
-        test('skal ikke vise filtreringsregler når årsaken ikke er fødselshendelse', () => {
+        test('skal vise filtreringsregler når årsaken er automatisk behandling av søknad', () => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.FILTRERINGSREGLER);
+        });
+
+        test('skal ikke vise filtreringsregler når årsaken ikke er fødselshendelse eller automatisk behandling av søknad', () => {
             const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD });
 
-            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(
-                SideId.FILTRERING_FØDSELSHENDELSER
-            );
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.FILTRERINGSREGLER);
         });
 
         test('skal vise simulering når behandlingen ikke skal behandles automatisk', () => {
@@ -120,7 +122,7 @@ describe('Sider', () => {
             const sider = [
                 SideId.REGISTRER_INSTITUSJON,
                 SideId.REGISTRERE_SØKNAD,
-                SideId.FILTRERING_FØDSELSHENDELSER,
+                SideId.FILTRERINGSREGLER,
                 SideId.VILKÅRSVURDERING,
                 SideId.BEHANDLINGRESULTAT,
                 SideId.SIMULERING,
@@ -148,7 +150,7 @@ describe('Sider', () => {
             expect(erViPåUlovligSteg('vedtak', sider.REGISTRERE_SØKNAD)).toBeTruthy();
         });
         test('Skal returnere false dersom vi ikke er på ulovlig steg', () => {
-            expect(erViPåUlovligSteg('registrer-soknad', sider.FILTRERING_FØDSELSHENDELSER)).toBeFalsy();
+            expect(erViPåUlovligSteg('registrer-soknad', sider.FILTRERINGSREGLER)).toBeFalsy();
         });
     });
 
