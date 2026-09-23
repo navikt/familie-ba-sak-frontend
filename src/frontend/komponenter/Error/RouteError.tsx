@@ -1,6 +1,7 @@
 import { captureException } from '@nais/apm';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
+import { logger, tilLoggFeil } from '@utils/logger';
 import { useEffect } from 'react';
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 
@@ -17,9 +18,11 @@ function captureRouteException(error: unknown) {
                 statusText: error.statusText,
             },
         });
+        logger.error(`Route-feil ${error.status}: ${error.statusText}`);
         return;
     }
     captureException(error, { context: { type: 'route-error' } });
+    logger.error(`Route-feil: ${error instanceof Error ? error.message : 'ukjent feil'}`, tilLoggFeil(error));
 }
 
 function utledFeilmelding(error: unknown) {

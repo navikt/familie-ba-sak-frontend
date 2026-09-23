@@ -1,5 +1,6 @@
 import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { logger, tilLoggFeil } from '@utils/logger';
 
 import { hentFeatureToggles } from '../api/hentFeatureToggles';
 import { FeatureToggle, type FeatureToggles } from '../typer/featureToggles';
@@ -33,7 +34,10 @@ export function useHentFeatureToggles(options?: Options) {
                 return await hentFeatureToggles(request, påvirkerSystemLaster);
             } catch (e: unknown) {
                 const errorMessage = e instanceof Error ? e.message : 'En feil oppstod under innlasting av toggles.';
-                console.error(errorMessage, e);
+                logger.warn(
+                    `Kunne ikke laste feature toggles, faller tilbake til alle av: ${errorMessage}`,
+                    tilLoggFeil(e)
+                );
                 return skruAvAlleToggles();
             }
         },

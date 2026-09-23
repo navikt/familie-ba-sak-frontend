@@ -5,6 +5,9 @@ interface LoggFeil {
     stack?: string;
 }
 
+export const tilLoggFeil = (feil: unknown): LoggFeil =>
+    feil instanceof Error ? { name: feil.name, stack: feil.stack } : {};
+
 const LOGG_ENDEPUNKT = '/logg';
 
 const sendLogg = (loglevel: LoggNivå, message: string, feil?: LoggFeil): void => {

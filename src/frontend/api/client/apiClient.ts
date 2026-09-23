@@ -1,4 +1,4 @@
-import { logger } from '@utils/logger';
+import { logger, tilLoggFeil } from '@utils/logger';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 type OnFulfilled = (response: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>;
@@ -203,7 +203,7 @@ export class ApiClient {
         // Logg aldri request-/response-body – de kan inneholde fødselsnummer og andre personopplysninger.
         logger.warn(
             `API-kall feilet: ${metode} ${url} (HTTP ${httpStatus}, ressursstatus ${ressursStatus}) – ${feil.message}`,
-            { name: feil.name, stack: feil.stack }
+            tilLoggFeil(feil)
         );
     }
 
