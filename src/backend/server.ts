@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { appConfig, frontendPath, sessionConfig } from './config.js';
 import { erLokal } from './env.js';
 import { logger } from './logger.js';
+import { loggRouter } from './loggRouter.js';
 import { prometheusTellere } from './metrikker.js';
 import { attachToken, doProxy, doRedirectProxy } from './proxy.js';
 import setupRouter from './router.js';
@@ -31,6 +32,8 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
     app.use('/familie-ba-sak/api', ensureAuthenticated(azureAuthClient, true), attachToken(azureAuthClient), doProxy());
 
     app.use('/redirect', doRedirectProxy());
+
+    app.use(loggRouter);
 
     app.use(express.json({ limit: '200mb' }));
     app.use(express.urlencoded({ limit: '200mb', extended: true }));

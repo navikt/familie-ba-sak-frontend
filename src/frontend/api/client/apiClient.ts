@@ -1,3 +1,4 @@
+import { logger } from '@utils/logger';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 type OnFulfilled = (response: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>;
@@ -150,13 +151,16 @@ export class ApiClient {
             });
             return this.pakkUtRessursResponse(response);
         } catch (error) {
-            if (error instanceof ApiFeil) {
-                throw error;
-            }
-            if (axios.isAxiosError<Ressurs<R>>(error)) {
-                throw ApiFeil.fraAxiosError(error);
-            }
-            throw ApiFeil.fraFeilmelding(DEFAULT_FALLBACK_FEILMELDING);
+            const apiFeil =
+                error instanceof ApiFeil
+                    ? error
+                    : axios.isAxiosError<Ressurs<R>>(error)
+                      ? ApiFeil.fraAxiosError(error)
+                      : ApiFeil.fraFeilmelding(DEFAULT_FALLBACK_FEILMELDING);
+
+            ApiClient.loggApiFeil(config, apiFeil);
+
+            throw apiFeil;
         }
     }
 
@@ -186,6 +190,34 @@ export class ApiClient {
 
     removeResponseInterceptor(id: number): void {
         this.client.interceptors.response.eject(id);
+    }
+
+    private static loggApiFeil<T>(config: AxiosRequestConfig<T>, feil: ApiFeil): void {
+        if (ApiClient.erForventetFeil(feil)) {
+            return;
+        }
+        const metode = (config.method ?? 'UKJENT').toUpperCase();
+        const url = config.url ?? 'ukjent url';
+        const httpStatus = feil.status ?? 'ukjent';
+        const ressursStatus = feil.ressursStatus ?? 'ukjent';
+        // Logg aldri request-/response-body – de kan inneholde fødselsnummer og andre personopplysninger.
+        logger.warn(
+            `API-kall feilet: ${metode} ${url} (HTTP ${httpStatus}, ressursstatus ${ressursStatus}) – ${feil.message}`,
+            { name: feil.name, stack: feil.stack }
+        );
+    }
+
+    /**
+     * Forventede feil som allerede håndteres i UI (utløpt sesjon, manglende tilgang og
+     * funksjonelle feil vist til saksbehandler). Disse logges ikke for å unngå støy.
+     */
+    private static erForventetFeil(feil: ApiFeil): boolean {
+        if (feil.status === 401 || feil.status === 403) {
+            return true;
+        }
+        return (
+            feil.ressursStatus === RessursStatus.IKKE_TILGANG || feil.ressursStatus === RessursStatus.FUNKSJONELL_FEIL
+        );
     }
 
     private pakkUtRessursResponse<T>(response: AxiosResponse<Ressurs<T>>): T {

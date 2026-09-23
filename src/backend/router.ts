@@ -8,7 +8,6 @@ import type { ViteDevServer } from 'vite';
 
 import { frontendPath } from './config.js';
 import { erLokal, erPreprod } from './env.js';
-import { logRequest } from './logger.js';
 import { prometheusTellere } from './metrikker.js';
 
 const redirectHvisInternUrlIPreprod = () => {
@@ -38,12 +37,6 @@ export default async (authClient: Client, router: Router) => {
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
-    });
-
-    // Feilhåndtering
-    router.post('/logg-feil', (req: Request, res: Response) => {
-        logRequest(req, req.body.melding, 'error');
-        res.status(200).send();
     });
 
     let viteDevServer: ViteDevServer | undefined;
