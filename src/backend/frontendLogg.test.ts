@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'vitest';
 
-import { FrontendLogg, type LoggNivå } from './frontendLogg.js';
+import type { LoggNivå } from '../shared/logg.js';
+
+import { FrontendLogg } from './frontendLogg.js';
 import type { LoggSanitizer } from './loggSanitizer.js';
 
 /**

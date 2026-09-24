@@ -1,4 +1,4 @@
-type LoggNivå = 'error' | 'warn' | 'info' | 'debug' | 'trace';
+import type { LoggNivå, LoggPayload } from '../../shared/logg';
 
 interface LoggFeil {
     name?: string;
@@ -12,10 +12,11 @@ const LOGG_ENDEPUNKT = '/logg';
 
 const sendLogg = (loglevel: LoggNivå, message: string, feil?: LoggFeil): void => {
     // Fire-and-forget: logging skal aldri kaste eller blokkere applikasjonen.
+    const payload: LoggPayload = { loglevel, message, name: feil?.name, stack: feil?.stack };
     void fetch(LOGG_ENDEPUNKT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ loglevel, message, name: feil?.name, stack: feil?.stack }),
+        body: JSON.stringify(payload),
         keepalive: true,
     }).catch(() => undefined);
 };

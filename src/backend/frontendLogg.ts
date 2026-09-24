@@ -1,6 +1,6 @@
-import type { LoggSanitizer } from './loggSanitizer.js';
+import type { LoggNivå } from '../shared/logg.js';
 
-export type LoggNivå = 'error' | 'warn' | 'info' | 'debug' | 'trace';
+import type { LoggSanitizer } from './loggSanitizer.js';
 
 export interface Loggpost {
     nivå: LoggNivå;
@@ -8,7 +8,7 @@ export interface Loggpost {
     meta: Record<string, unknown>;
 }
 
-const GYLDIGE_NIVÅER: readonly LoggNivå[] = ['error', 'warn', 'info', 'debug', 'trace'];
+const GYLDIGE_NIVÅER = ['error', 'warn', 'info', 'debug', 'trace'] as const satisfies readonly LoggNivå[];
 
 const erGyldigNivå = (verdi: unknown): verdi is LoggNivå =>
     typeof verdi === 'string' && (GYLDIGE_NIVÅER as readonly string[]).includes(verdi);
