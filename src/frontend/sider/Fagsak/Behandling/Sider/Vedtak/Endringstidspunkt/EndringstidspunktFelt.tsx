@@ -1,37 +1,31 @@
+import { useErLesevisning } from '@hooks/useErLesevisning';
 import { tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
 import { DatePicker, type DateValidationT, useDatepicker } from '@navikt/ds-react';
-import { Datoformat, dateTilFormatertString } from '@utils/dato';
+import { dateTilIsoDatoString } from '@utils/dato';
 import { format, parseISO, startOfToday } from 'date-fns';
 import { useRef } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Feltnavn, type FormValues } from './useEndringstidspunktForm';
 
-interface Props {
-    readOnly: boolean;
-}
-
-export function EndringstidspunktFelt({ readOnly }: Props) {
+export function EndringstidspunktFelt() {
     const { control, clearErrors, trigger } = useFormContext<FormValues>();
 
     const dateValidationRef = useRef<DateValidationT | undefined>(undefined);
-
-    const fomDato = tidligsteRelevanteDato;
-    const tomDato = startOfToday();
+    const erLesevisning = useErLesevisning();
 
     const {
         field: { onChange, value },
         fieldState: { error },
-        formState: { isSubmitting },
+        formState: { isSubmitting, isSubmitted },
     } = useController({
         name: Feltnavn.ENDRINGSTIDSPUNKT,
         control,
         rules: {
-            required: `Nytt endringstidspunkt er påkrevd.`,
             validate: dato => {
                 const dateValidation = dateValidationRef.current;
                 if (dateValidation && dateValidation.isBefore) {
-                    return `Du må velge en dato som er senere enn 1. ${format(fomDato, 'MMMM yyyy')}.`;
+                    return `Du må velge en dato som er senere enn 1. ${format(tidligsteRelevanteDato, 'MMMM yyyy')}.`;
                 }
                 if (dateValidation && dateValidation.isAfter) {
                     return 'Du kan ikke sette en dato som er frem i tid.';
@@ -54,20 +48,16 @@ export function EndringstidspunktFelt({ readOnly }: Props) {
         defaultSelected: value ? parseISO(value) : undefined,
         onDateChange: dato => {
             clearErrors('root');
-            onChange(
-                dateTilFormatertString({
-                    date: dato,
-                    tilFormat: Datoformat.ISO_DAG,
-                    defaultString: inputProps.value?.toString(),
-                })
-            );
+            onChange(dato ? dateTilIsoDatoString(dato) : null);
         },
         onValidate: validation => {
             dateValidationRef.current = validation;
-            trigger(Feltnavn.ENDRINGSTIDSPUNKT);
+            if (isSubmitted) {
+                trigger(Feltnavn.ENDRINGSTIDSPUNKT);
+            }
         },
-        fromDate: fomDato,
-        toDate: tomDato,
+        fromDate: tidligsteRelevanteDato,
+        toDate: startOfToday(),
     });
 
     return (
@@ -77,7 +67,7 @@ export function EndringstidspunktFelt({ readOnly }: Props) {
                 label={'Nytt endringstidspunkt'}
                 placeholder={'DD.MM.ÅÅÅÅ'}
                 error={error?.message}
-                readOnly={readOnly || isSubmitting}
+                readOnly={erLesevisning || isSubmitting}
             />
         </DatePicker>
     );
