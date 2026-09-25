@@ -1,13 +1,12 @@
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
+import { useEndringstidspunktDialogContext } from './EndringstidspunktDialogContext';
 
-interface Props {
-    åpneModal: () => void;
-}
+export function Endringstidspunkt() {
+    const { åpneDialog } = useEndringstidspunktDialogContext();
 
-export function EndreEndringstidspunkt({ åpneModal }: Props) {
     return (
-        <ActionMenu.Item onSelect={åpneModal}>
+        <ActionMenu.Item onSelect={åpneDialog}>
             <CalendarIcon fontSize={'1.4rem'} />
             Oppdater endringstidspunkt
         </ActionMenu.Item>
