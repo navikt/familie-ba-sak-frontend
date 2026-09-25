@@ -27,8 +27,8 @@ importers:
         specifier: 8.16.1
         version: 8.16.1
       '@navikt/familie-backend':
-        specifier: 10.1.27
-        version: 10.1.27(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+        specifier: 10.1.29-alpha.7.sha-96746d0
+        version: 10.1.29-alpha.7.sha-96746d0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@navikt/familie-form-elements':
         specifier: 22.0.2
         version: 22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)
@@ -562,8 +562,8 @@ packages:
   '@navikt/ds-tokens@8.16.1':
     resolution: {integrity: sha512-PTLN5EWkfprObW3sJfRqcZvYOTMpG2l92VrMYeVX272hPlKn7an9eodZ6ggIMTEeNoQ+MuOhN0wEVk6Cbs77SA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.16.1/f1ac550ff75679021d1c3a21997f33a9728a6a01}
 
-  '@navikt/familie-backend@10.1.27':
-    resolution: {integrity: sha512-MM2GwEj9PSObGdXEeEoKFS9aP518z6vgySi80vJoM51T80D58BzjTze+jbpobctooy1Z9CwpgauJPxhJ3j0DNQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/10.1.27/1d5531a703b4f78063de82ce18767745c2d1cbed}
+  '@navikt/familie-backend@10.1.29-alpha.7.sha-96746d0':
+    resolution: {integrity: sha512-U67Ri5wi3Ujl0lJEAg23iNEo4wkjoHB6WcQwvnSDtN1oqDmb8ur3NG41zKJtrnq1iKcE6RqkWDSYMF3WVgqNxw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/10.1.29-alpha.7.sha-96746d0/837e24a3e79c064578ae0bf65537391e4ab36bfa}
 
   '@navikt/familie-form-elements@22.0.2':
     resolution: {integrity: sha512-uirfS+DntZA8wjVyTND3Taqp0SL9eAo78IAcFiF6qMcVeeQH0IOW+3Gh0MG9OEJmaMpT8KGe+6Wjjuq673a/iQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-form-elements/22.0.2/c6580331e0de052c14993d84835442dec6e48c49}
@@ -595,6 +595,9 @@ packages:
 
   '@navikt/familie-logging@7.0.8':
     resolution: {integrity: sha512-0EgMimD6krmSresqyQHPymzNlWq5I8Swc9xwm6np7yh0NJuCy/KuGSDvuuJ4Zm422K5kUfZyyls08tkUUUQGeg==, tarball: https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.8/fed8592d83b87d72c534df709c12f88ec3c9f48b}
+
+  '@navikt/familie-logging@7.0.9':
+    resolution: {integrity: sha512-cjWPBbn4XHru3505dDigRIYkPS0JDyl3p8mfvGXXm8bJzLd+2Vpcr8hgJ4DkPkC5yr/Dv+QhoUanA2Lu7GvW0w==, tarball: https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.9/b04f087f02a78f865e8263c79085dd4ab11b87d6}
 
   '@navikt/familie-skjema@8.2.50':
     resolution: {integrity: sha512-eZJKBv/PEhaqomjPDVAoACdwlpzLzNXrjA6O3NakRap9Ryca0kkVo7cFYq/pVFds80Gb1PGjjve4MU8joT8PdQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.50/63b1c6e9e040fe8aa75cb3ee2de9809e2f555930}
@@ -772,15 +775,15 @@ packages:
   '@piotrgorecki/i18n-currency-name@1.3.0':
     resolution: {integrity: sha512-Txbw0UmGgyvkZEFzjycmh7hEwYeRftILvx4G72PrMBHoS18PGnPODWbZvw7bi+KoV+buMezEHy8ezojc0f7YvQ==}
 
-  '@redis/bloom@5.12.1':
-    resolution: {integrity: sha512-PUUfv+ms7jgPSBVoo/DN4AkPHj4D5TZSd6SbJX7egzBplkYUcKmHRE8RKia7UtZ8bSQbLguLvxVO+asKtQfZWA==}
-    engines: {node: '>= 18.19.0'}
+  '@redis/bloom@6.2.1':
+    resolution: {integrity: sha512-huQgNLaCIZfQ9SeLn4q9124uOUd8HbZDYHwwUzNcRgHqCHiHKl2dDxMqJCeWh8cMqZAoWuHR8XnWbDMIf+o7ag==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
-      '@redis/client': ^5.12.1
+      '@redis/client': ^6.2.1
 
-  '@redis/client@5.12.1':
-    resolution: {integrity: sha512-7aPGWeqA3uFm43o19umzdl16CEjK/JQGtSXVPevplTaOU3VJA/rseBC1QvYUz9lLDIMBimc4SW/zrW4S89BaCA==}
-    engines: {node: '>= 18.19.0'}
+  '@redis/client@6.2.1':
+    resolution: {integrity: sha512-LzxBY7SIBvvJiyCgcaJZZakE3fJrZZ++i24+EDW9fKpCl68D35uJcKFpZZwCfOoG9WZTbyZlMzMeM0gtOAMU9Q==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
       '@node-rs/xxhash': ^1.1.0
       '@opentelemetry/api': '>=1 <2'
@@ -790,23 +793,23 @@ packages:
       '@opentelemetry/api':
         optional: true
 
-  '@redis/json@5.12.1':
-    resolution: {integrity: sha512-eOze75esLve4vfqDel7aMX08CNaiLLQS2fV8mpRN9NxPe1rVR4vQyYiW/OgtGUysF6QOr9ANhfxABKNOJfXdKg==}
-    engines: {node: '>= 18.19.0'}
+  '@redis/json@6.2.1':
+    resolution: {integrity: sha512-AFIUJ8Gj0DaaSBHYuSt8+O0oYWM+50OK1c0OmodB7XERIA8+BbyV3O4v76f9iccWasd1/7qjfZTpuzexUaZtrQ==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
-      '@redis/client': ^5.12.1
+      '@redis/client': ^6.2.1
 
-  '@redis/search@5.12.1':
-    resolution: {integrity: sha512-ItlxbxC9cKI6IU1TLWoczwJCRb6TdmkEpWv05UrPawqaAnWGRu3rcIqsc5vN483T2fSociuyV1UkWIL5I4//2w==}
-    engines: {node: '>= 18.19.0'}
+  '@redis/search@6.2.1':
+    resolution: {integrity: sha512-2vfOAOyYFE7UUw3sBBlkqqruBtOUS4HRY5MtW4hp83llrwvtrTE4r22CEqXddlV+54zkLxBE4nmsIJ/dpezQrQ==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
-      '@redis/client': ^5.12.1
+      '@redis/client': ^6.2.1
 
-  '@redis/time-series@5.12.1':
-    resolution: {integrity: sha512-c6JL6E3EcZJuNqKFz+KM+l9l5mpcQiKvTwgA3blt5glWJ8hjDk0yeHN3beE/MpqYIQ8UEX44ItQzgkE/gCBELQ==}
-    engines: {node: '>= 18.19.0'}
+  '@redis/time-series@6.2.1':
+    resolution: {integrity: sha512-kiYniph04dJOole+L359B6C9E+jYS2uDP7hca6Onj0xF38ZIpyxARO0Iq0W4ZRn1e8Q6vqW00QFZVSMRA/2Ijw==}
+    engines: {node: '>= 20.0.0'}
     peerDependencies:
-      '@redis/client': ^5.12.1
+      '@redis/client': ^6.2.1
 
   '@rolldown/binding-android-arm64@1.2.4':
     resolution: {integrity: sha512-jHC2cnyKz5xU2fhECtFl8OZ83cYNt13GZQD+0uMJ/X3o+ijmd56okHhTUwxVSHPx1IRVIJEZ1/1pPzeLCU6XKA==}
@@ -1298,9 +1301,9 @@ packages:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
 
-  connect-redis@9.0.0:
-    resolution: {integrity: sha512-QwzyvUePTMvEzG1hy45gZYw3X3YHrjmEdSkayURlcZft7hqadQ3X39wYkmCqblK2rGlw+XItELYt6GnyG6DEIQ==}
-    engines: {node: '>=18'}
+  connect-redis@10.0.0:
+    resolution: {integrity: sha512-x6EotIY20pvocamMtcOsgxFzYufAMfipE+rjWa0cZMeSx+3K0yoHi4Nv4sfMlgF+Z5KnUbMFxyCx9pDZP39p0Q==}
+    engines: {node: '>=22'}
     peerDependencies:
       express-session: '>=1'
       redis: '>=5'
@@ -2220,6 +2223,7 @@ packages:
   prom-client@15.1.3:
     resolution: {integrity: sha512-6ZiOBfCywsD4k1BN9IX0uZhF+tJkV8q8llP64G5Hajs4JOeVLPCwpPVcpXy3BwYiUGgyJzsJJQeOIv7+hDSq8g==}
     engines: {node: ^16 || ^18 || >=20}
+    deprecated: prom-client has been replaced by @prometheus-io/client
 
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
@@ -2339,9 +2343,9 @@ packages:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
     engines: {node: '>=8'}
 
-  redis@5.12.1:
-    resolution: {integrity: sha512-LDsoVvb/CpoV9EN3FXvgvSHNJWuCIzl9MiO3ppOevuGLpSGJhwfQjpEwfFJcQvNSddHADDdZaWx0HnmMxRXG7g==}
-    engines: {node: '>= 18.19.0'}
+  redis@6.2.1:
+    resolution: {integrity: sha512-Z9VHtgYs48PiQC77X9O2Er8Hj4T+5BtFjT91/vi5Is1D04N72cA946ZslM1ImJw8ZctFBZWAVjM7S5wJNeHMpg==}
+    engines: {node: '>= 20.0.0'}
 
   regexp.prototype.flags@1.5.4:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
@@ -3299,14 +3303,14 @@ snapshots:
 
   '@navikt/ds-tokens@8.16.1': {}
 
-  '@navikt/familie-backend@10.1.27(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
+  '@navikt/familie-backend@10.1.29-alpha.7.sha-96746d0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
-      '@navikt/familie-logging': 7.0.8
+      '@navikt/familie-logging': 7.0.9
       '@types/cookie-parser': 1.4.8(@types/express@5.0.6)
       '@types/express': 5.0.6
       '@types/express-session': 1.19.0
       '@types/passport': 1.0.17
-      connect-redis: 9.0.0(express-session@1.19.0(supports-color@7.2.0))(redis@5.12.1(@opentelemetry/api@1.9.1))
+      connect-redis: 10.0.0(express-session@1.19.0(supports-color@7.2.0))(redis@6.2.1(@opentelemetry/api@1.9.1))
       cookie-parser: 1.4.7
       express: 5.2.1(supports-color@7.2.0)
       express-session: 1.19.0(supports-color@7.2.0)
@@ -3315,7 +3319,7 @@ snapshots:
       openid-client: 5.7.1
       passport: 0.7.0
       prom-client: 15.1.3
-      redis: 5.12.1(@opentelemetry/api@1.9.1)
+      redis: 6.2.1(@opentelemetry/api@1.9.1)
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@opentelemetry/api'
@@ -3357,6 +3361,10 @@ snapshots:
       react: 19.2.8
 
   '@navikt/familie-logging@7.0.8':
+    dependencies:
+      winston: 3.19.0
+
+  '@navikt/familie-logging@7.0.9':
     dependencies:
       winston: 3.19.0
 
@@ -3557,27 +3565,27 @@ snapshots:
 
   '@piotrgorecki/i18n-currency-name@1.3.0': {}
 
-  '@redis/bloom@5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))':
+  '@redis/bloom@6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))':
     dependencies:
-      '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
+      '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
 
-  '@redis/client@5.12.1(@opentelemetry/api@1.9.1)':
+  '@redis/client@6.2.1(@opentelemetry/api@1.9.1)':
     dependencies:
       cluster-key-slot: 1.1.2
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
 
-  '@redis/json@5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))':
+  '@redis/json@6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))':
     dependencies:
-      '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
+      '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
 
-  '@redis/search@5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))':
+  '@redis/search@6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))':
     dependencies:
-      '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
+      '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
 
-  '@redis/time-series@5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))':
+  '@redis/time-series@6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))':
     dependencies:
-      '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
+      '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
 
   '@rolldown/binding-android-arm64@1.2.4':
     optional: true
@@ -4028,10 +4036,10 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  connect-redis@9.0.0(express-session@1.19.0(supports-color@7.2.0))(redis@5.12.1(@opentelemetry/api@1.9.1)):
+  connect-redis@10.0.0(express-session@1.19.0(supports-color@7.2.0))(redis@6.2.1(@opentelemetry/api@1.9.1)):
     dependencies:
       express-session: 1.19.0(supports-color@7.2.0)
-      redis: 5.12.1(@opentelemetry/api@1.9.1)
+      redis: 6.2.1(@opentelemetry/api@1.9.1)
 
   consola@3.4.2: {}
 
@@ -5041,13 +5049,13 @@ snapshots:
       indent-string: 4.0.0
       strip-indent: 3.0.0
 
-  redis@5.12.1(@opentelemetry/api@1.9.1):
+  redis@6.2.1(@opentelemetry/api@1.9.1):
     dependencies:
-      '@redis/bloom': 5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))
-      '@redis/client': 5.12.1(@opentelemetry/api@1.9.1)
-      '@redis/json': 5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))
-      '@redis/search': 5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))
-      '@redis/time-series': 5.12.1(@redis/client@5.12.1(@opentelemetry/api@1.9.1))
+      '@redis/bloom': 6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))
+      '@redis/client': 6.2.1(@opentelemetry/api@1.9.1)
+      '@redis/json': 6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))
+      '@redis/search': 6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))
+      '@redis/time-series': 6.2.1(@redis/client@6.2.1(@opentelemetry/api@1.9.1))
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@opentelemetry/api'
