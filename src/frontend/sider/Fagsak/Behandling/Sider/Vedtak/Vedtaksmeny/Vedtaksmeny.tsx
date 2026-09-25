@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button, Stack } from '@navikt/ds-react';
-import { EndreEndringstidspunkt } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/EndreEndringstidspunkt';
-import { OppdaterEndringstidspunktModal } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/OppdaterEndringstidspunktModal';
+import { Endringstidspunkt } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/Endringstidspunkt';
+import { EndringstidspunktDialog } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/EndringstidspunktDialog';
 import { FeilutbetaltValuta } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValuta';
 import { useSkalViseFeilutbetaltValutaMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/useSkalViseFeilutbetaltValutaMenyvalg';
 import { KorrigerVedtak } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigerVedtak';
@@ -24,14 +24,11 @@ export function Vedtaksmeny() {
     const visSammensattKontrollsakMenyvalg = useSkalViseSammensattKontrollsakMenyvalg();
 
     const [visKorrigerVedtakModal, settVisKorrigerVedtakModal] = useState<boolean>(false);
-    const [visEndreEndringstidspunktModal, settVisEndreEndringstidspunktModal] = useState(false);
 
     return (
         <Stack width={'100%'} justify={'end'} align={'center'}>
             {visKorrigerVedtakModal && <KorrigerVedtakModal lukkModal={() => settVisKorrigerVedtakModal(false)} />}
-            {visEndreEndringstidspunktModal && (
-                <OppdaterEndringstidspunktModal lukkModal={() => settVisEndreEndringstidspunktModal(false)} />
-            )}
+            <EndringstidspunktDialog />
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button size={'small'} variant={'secondary'} icon={<ChevronDownIcon />} iconPosition={'right'}>
@@ -41,7 +38,7 @@ export function Vedtaksmeny() {
                 <ActionMenu.Content className={Styles.menu}>
                     <KorrigerEtterbetaling />
                     <KorrigerVedtak åpneModal={() => settVisKorrigerVedtakModal(true)} />
-                    <EndreEndringstidspunkt åpneModal={() => settVisEndreEndringstidspunktModal(true)} />
+                    <Endringstidspunkt />
                     {visFeilutbetaltValutaMenyvalg && <FeilutbetaltValuta />}
                     {visRefusjonEøsMenyvalg && <RefusjonEøs />}
                     {visSammensattKontrollsakMenyvalg &&
