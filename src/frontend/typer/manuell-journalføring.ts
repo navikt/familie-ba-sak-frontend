@@ -18,7 +18,6 @@ export interface IRestJournalpostDokument {
     dokumentInfoId: string;
     brevkode?: string;
     logiskeVedlegg?: ILogiskVedlegg[];
-    eksisterendeLogiskeVedlegg?: ILogiskVedlegg[];
 }
 
 export interface IRestJournalføring {
