@@ -4,6 +4,8 @@
 # topp-nivå-oppslag, noe som gjør at Node ikke finner f.eks. 'express'
 # fra dist_backend/server.js i containeren.
 nodeLinker: hoisted
+overrides:
+  qs: ^6.16.0
 # Avhengigheter får ikke kjøre (pre|post)install-scripts (sikkerhetstiltak).
 # Tilsvarer 'ignore-scripts true' som lå i .yarnrc.
 allowBuilds:
