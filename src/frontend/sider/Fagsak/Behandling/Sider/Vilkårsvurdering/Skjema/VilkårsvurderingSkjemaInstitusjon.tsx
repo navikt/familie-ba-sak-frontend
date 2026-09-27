@@ -10,16 +10,12 @@ import { AnnenVurderingType, annenVurderingConfig, vilkårConfigInstitusjon } fr
 
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface Props {
-    visFeilmeldinger: boolean;
-}
-
-export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) {
+export function VilkårsvurderingSkjemaInstitusjon() {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
@@ -95,10 +91,9 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                             generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
                             person={personResultat.person}
                             vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                vilkårResultat => vilkårResultat.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
                         />
                     );
                 })}
