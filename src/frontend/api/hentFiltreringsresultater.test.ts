@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { hentFiltreringsresultater } from '@api/hentFiltreringsresultater';
-import { Filtreringsregel, type IFødselshendelsefiltreringResultat } from '@typer/fødselshendelser';
+import { Filtreringsregel, type IFiltreringResultat } from '@typer/filtreringsregler';
 import { Resultat } from '@typer/vilkår';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -16,7 +16,7 @@ afterEach(() => {
 
 const behandlingId = 1;
 
-const filtreringsresultater: IFødselshendelsefiltreringResultat[] = [
+const filtreringsresultater: IFiltreringResultat[] = [
     {
         filtreringsregel: Filtreringsregel.MOR_LEVER,
         resultat: Resultat.OPPFYLT,

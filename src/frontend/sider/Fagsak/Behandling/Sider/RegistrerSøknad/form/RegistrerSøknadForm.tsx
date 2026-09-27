@@ -16,6 +16,7 @@ import {
     RegistrerSøknadFormField,
     useRegistrerSøknadForm,
 } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
+import { BehandlingÅrsak } from '@typer/behandling';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -54,7 +55,11 @@ export function RegistrerSøknadForm() {
     function submitEllerNaviger(event: React.FormEvent<HTMLFormElement>) {
         if (erLesevisning) {
             event.preventDefault();
-            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/vilkaarsvurdering`);
+            const nesteSide =
+                behandling.årsak === BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD
+                    ? 'filtreringsregler'
+                    : 'vilkaarsvurdering';
+            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/${nesteSide}`);
             return;
         }
         return handleSubmit(data => onSubmit(data, 'ubekreftet'))(event);

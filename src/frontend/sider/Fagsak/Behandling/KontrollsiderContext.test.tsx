@@ -276,7 +276,7 @@ describe('KontrollbareSiderProvider', () => {
 
             const ider = result.current.kontrollsider.map(side => side.id);
             expect(ider).not.toContain(SideId.REGISTRERE_SØKNAD);
-            expect(ider).toContain(SideId.FILTRERING_FØDSELSHENDELSER);
+            expect(ider).toContain(SideId.FILTRERINGSREGLER);
             expect(statusForSide(result.current.kontrollsider, SideId.VILKÅRSVURDERING)).toBe(
                 KontrollertStatus.KONTROLLERT
             );

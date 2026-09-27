@@ -41,7 +41,7 @@ export enum KontrollertStatus {
 export enum SideId {
     REGISTRER_INSTITUSJON = 'REGISTRER_INSTITUSJON',
     REGISTRERE_SØKNAD = 'REGISTRERE_SØKNAD',
-    FILTRERING_FØDSELSHENDELSER = 'FILTRERING_FØDSELSHENDELSER',
+    FILTRERINGSREGLER = 'FILTRERINGSREGLER',
     VILKÅRSVURDERING = 'VILKÅRSVURDERING',
     BEHANDLINGRESULTAT = 'BEHANDLINGRESULTAT',
     SIMULERING = 'SIMULERING',
@@ -73,13 +73,16 @@ export const sider: Record<SideId, Side> = {
             );
         },
     },
-    FILTRERING_FØDSELSHENDELSER: {
-        id: SideId.FILTRERING_FØDSELSHENDELSER,
+    FILTRERINGSREGLER: {
+        id: SideId.FILTRERINGSREGLER,
         href: 'filtreringsregler',
         navn: 'Filtreringsregler',
         steg: BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING,
         visSide: behandling => {
-            return behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE;
+            return (
+                behandling.årsak === BehandlingÅrsak.FØDSELSHENDELSE ||
+                behandling.årsak === BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD
+            );
         },
     },
     VILKÅRSVURDERING: {
