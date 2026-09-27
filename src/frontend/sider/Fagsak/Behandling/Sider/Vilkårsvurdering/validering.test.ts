@@ -1,52 +1,18 @@
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import { genererPerson, genererPersonresultat } from '../../../../../testutils/testdata/vilkårsvurderingTestdata';
-import { mapFraRestPersonResultatTilPersonResultat } from './utils';
-import { kjørValidering } from './validering';
+import { lagAnnenVurdering } from '@testutils/testdata/annenVurderingTestdata';
+import { Resultat } from '@typer/vilkår';
+import { describe, expect, test } from 'vitest';
+
+import { erAnnenVurderingGyldig } from './validering';
 
 describe('vilkårsvurdering/validering', () => {
-    describe('validering', () => {
-        test('List med to andrevurderinger som begge validerer OK', () => {
-            const p = mapFraRestPersonResultatTilPersonResultat(
-                [genererPersonresultat('OPPFYLT', 'IKKE_OPPFYLT')],
-                [genererPerson]
-            );
-            const validert = kjørValidering(p);
-            expect(!!validert).toBe(true);
-
-            const anneVurderingMedOKValidering = validert
-                ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
-
-            expect(anneVurderingMedOKValidering?.length).toBe(2);
+    describe('erAnnenVurderingGyldig', () => {
+        test('vurdert annen vurdering er gyldig', () => {
+            expect(erAnnenVurderingGyldig(lagAnnenVurdering({ resultat: Resultat.OPPFYLT }))).toBe(true);
+            expect(erAnnenVurderingGyldig(lagAnnenVurdering({ resultat: Resultat.IKKE_OPPFYLT }))).toBe(true);
         });
 
-        test('List med to andrevurderinger som begge validerer FEIL', () => {
-            const p = mapFraRestPersonResultatTilPersonResultat(
-                [genererPersonresultat('IKKE_VURDERT', 'IKKE_VURDERT')],
-                [genererPerson]
-            );
-            const validert = kjørValidering(p);
-            expect(!!validert).toBe(true);
-            const anneVurderingMedOKValidering = validert
-                ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
-
-            expect(anneVurderingMedOKValidering?.length).toBe(0);
-        });
-
-        test('List med to andrevurderinger hvor en validerer FEIL og en OK', () => {
-            const p = mapFraRestPersonResultatTilPersonResultat(
-                [genererPersonresultat('OPPFYLT', 'IKKE_VURDERT')],
-                [genererPerson]
-            );
-            const validert = kjørValidering(p);
-            expect(!!validert).toBe(true);
-
-            const anneVurderingMedOKValidering = validert
-                ?.flatMap(personResultat => personResultat.andreVurderinger)
-                .filter(annenVurdering => annenVurdering.valideringsstatus !== Valideringsstatus.FEIL);
-
-            expect(anneVurderingMedOKValidering?.length).toBe(1);
+        test('ikke vurdert annen vurdering er ugyldig', () => {
+            expect(erAnnenVurderingGyldig(lagAnnenVurdering({ resultat: Resultat.IKKE_VURDERT }))).toBe(false);
         });
     });
 });

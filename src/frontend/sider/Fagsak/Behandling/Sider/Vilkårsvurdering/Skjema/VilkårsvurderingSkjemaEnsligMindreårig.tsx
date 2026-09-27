@@ -5,7 +5,7 @@ import { PersonType } from '@typer/person';
 import type { IPersonResultat } from '@typer/vilkår';
 import { AnnenVurderingType, annenVurderingConfig, VilkårType, vilkårConfigEnsligMindreårig } from '@typer/vilkår';
 
-import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
@@ -23,7 +23,7 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
     const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
     const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
     const opplysningsplikt = personResultat?.andreVurderinger.find(
-        value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
+        value => value.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
 
     if (!personResultat) {
@@ -64,7 +64,6 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
                         person={personResultat.person}
                         andreVurderinger={personResultat.andreVurderinger}
                         annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                        visFeilmeldinger={visFeilmeldinger}
                     />
                 )}
                 {Object.values(vilkårConfigEnsligMindreårig).map(vilkårConfig => {

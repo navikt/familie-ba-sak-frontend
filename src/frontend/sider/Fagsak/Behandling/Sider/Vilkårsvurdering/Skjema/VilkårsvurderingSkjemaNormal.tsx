@@ -17,7 +17,7 @@ import { PersonType } from '@typer/person';
 import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår';
 import { Activity } from 'react';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
-import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
@@ -208,7 +208,6 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                         person={personResultat.person}
                                                         andreVurderinger={personResultat.andreVurderinger}
                                                         annenVurderingConfig={annenVurderingConfig}
-                                                        visFeilmeldinger={visFeilmeldinger}
                                                     />
                                                 ))}
                                         {skalViseKopierVilkårFraSøkerTilBarna && <KopierVilkårFraSøkerTilBarna />}
