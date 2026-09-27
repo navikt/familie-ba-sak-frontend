@@ -7,7 +7,6 @@ import type { IGrunnlagPerson } from '@typer/person';
 import { type IRestVilkårResultat, type IVilkårConfig, Resultat, resultatVisningsnavn } from '@typer/vilkår';
 import { isoDatoPeriodeTilFormatertString, nyIsoDatoPeriode } from '@utils/dato';
 import { alleRegelverk } from '@utils/vilkår';
-import { useEffect } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
 import { useVilkårResultatSkjema, VilkårResultatFelt } from './useVilkårResultatSkjema';
 import { vilkårFeilmeldingId } from './VilkårTabell';
@@ -18,38 +17,24 @@ interface Props {
     person: IGrunnlagPerson;
     vilkårFraConfig: IVilkårConfig;
     vilkårResultat: IRestVilkårResultat;
-    visFeilmeldinger: boolean;
     settFokusPåKnapp: () => void;
 }
 
-export function VilkårTabellRad({
-    person,
-    vilkårFraConfig,
-    vilkårResultat,
-    visFeilmeldinger,
-    settFokusPåKnapp,
-}: Props) {
+export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, settFokusPåKnapp }: Props) {
     const behandlingId = useBehandlingId();
 
     const { erRadEkspandert, toggleRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.id);
 
-    const { form, onSubmit } = useVilkårResultatSkjema({ vilkårResultat, person, visFeilmeldinger, settFokusPåKnapp });
+    const { form, onSubmit } = useVilkårResultatSkjema({ vilkårResultat, person, settFokusPåKnapp });
 
     const {
         control,
         handleSubmit,
         reset,
-        trigger,
         formState: { isDirty },
     } = form;
 
     const vurderesEtter = useWatch({ control, name: VilkårResultatFelt.VURDERES_ETTER });
-
-    useEffect(() => {
-        if (visFeilmeldinger && erRadEkspandert) {
-            trigger();
-        }
-    }, [visFeilmeldinger, erRadEkspandert, trigger]);
 
     const periodeErTom = !vilkårResultat.periodeFom && !vilkårResultat.periodeTom;
 

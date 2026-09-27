@@ -3,7 +3,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 
 interface Props {
     personIdent: string;
@@ -13,19 +13,29 @@ interface Props {
 export function SlettVilkårResultat({ personIdent, vilkårResultatId }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultatId);
+    const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
 
     const { mutate: slettVilkårResultat, isPending: slettVilkårResultatIsPending } = useSlettVilkårResultat({
-        onSuccess: oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
-
-            const finnesFortsatt = oppdatertBehandling.personResultater
+        onSuccess: nyBehandling => {
+            const iderFraNyBehandling = nyBehandling.personResultater
                 .flatMap(personResultat => personResultat.vilkårResultater)
-                .some(vilkårResultat => vilkårResultat.id === vilkårResultatId);
+                .map(vilkårResultat => vilkårResultat.id);
 
-            if (!finnesFortsatt) {
-                kollapsRad();
+            const iderFraGammelBehandling = behandling.personResultater
+                .flatMap(personResultat => personResultat.vilkårResultater)
+                .map(vilkårResultat => vilkårResultat.id);
+
+            // Backend nullstiller siste periode av en vilkårtype med samme id i stedet for å slette den, og da skal raden forbli åpen.
+            if (!iderFraNyBehandling.includes(vilkårResultatId)) {
+                kollapsRad(vilkårResultatId);
             }
+
+            const nylagedeIder = iderFraNyBehandling.filter(id => !iderFraGammelBehandling.includes(id));
+            for (const id of nylagedeIder) {
+                ekspanderRad(id);
+            }
+
+            settÅpenBehandling(byggSuksessRessurs(nyBehandling));
         },
     });
 

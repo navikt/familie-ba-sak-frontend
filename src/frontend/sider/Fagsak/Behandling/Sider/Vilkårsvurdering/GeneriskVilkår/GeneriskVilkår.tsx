@@ -18,17 +18,10 @@ interface Props {
     person: IGrunnlagPerson;
     vilkårResultater: IRestVilkårResultat[];
     vilkårFraConfig: IVilkårConfig;
-    visFeilmeldinger: boolean;
     generiskVilkårKey: string;
 }
 
-export function GeneriskVilkår({
-    person,
-    vilkårFraConfig,
-    vilkårResultater,
-    visFeilmeldinger,
-    generiskVilkårKey,
-}: Props) {
+export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, generiskVilkårKey }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
     const erLesevisning = useErLesevisning();
@@ -92,7 +85,6 @@ export function GeneriskVilkår({
                     person={person}
                     vilkårFraConfig={vilkårFraConfig}
                     vilkårResultater={vilkårResultater}
-                    visFeilmeldinger={visFeilmeldinger}
                     settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
                 />
                 {skalViseLeggTilKnapp && (

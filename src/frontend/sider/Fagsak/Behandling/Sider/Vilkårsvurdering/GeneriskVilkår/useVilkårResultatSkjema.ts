@@ -76,18 +76,16 @@ export function tilRestVilkårResultat(
 interface Props {
     vilkårResultat: IRestVilkårResultat;
     person: IGrunnlagPerson;
-    visFeilmeldinger: boolean;
     settFokusPåKnapp: () => void;
 }
 
-export function useVilkårResultatSkjema({ vilkårResultat, person, visFeilmeldinger, settFokusPåKnapp }: Props) {
+export function useVilkårResultatSkjema({ vilkårResultat, person, settFokusPåKnapp }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.id);
     const { mutateAsync: oppdaterVilkårResultat } = useOppdaterVilkårResultat();
 
     const form = useForm<VilkårResultatFormValues>({
         values: lagVilkårResultatFormValues(vilkårResultat, person),
-        mode: visFeilmeldinger ? 'onChange' : 'onSubmit',
     });
 
     const {

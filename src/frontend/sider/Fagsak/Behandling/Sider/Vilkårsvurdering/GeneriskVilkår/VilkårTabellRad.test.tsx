@@ -32,14 +32,13 @@ function lagBehandlingMedVilkår(vilkårResultat: IRestVilkårResultat): IBehand
     });
 }
 
-function renderRad(vilkårResultat: IRestVilkårResultat, visFeilmeldinger = false) {
+function renderRad(vilkårResultat: IRestVilkårResultat) {
     const behandling = lagBehandlingMedVilkår(vilkårResultat);
     return renderIVilkårsvurdering(
         <VilkårTabellRad
             person={barn}
             vilkårFraConfig={vilkårConfig[vilkårResultat.vilkårType]}
             vilkårResultat={vilkårResultat}
-            visFeilmeldinger={visFeilmeldinger}
             settFokusPåKnapp={vi.fn()}
         />,
         { behandling }
@@ -168,22 +167,6 @@ describe('VilkårTabellRad', () => {
         expect(personResultat.vilkårResultater[0]).toEqual(
             expect.objectContaining({ periodeFom: '2020-01-01', periodeTom: undefined })
         );
-    });
-
-    test('feil vises uten innsending når siden viser feilmeldinger, og forsvinner når feltet rettes', async () => {
-        // Arrange
-        const { screen, user } = renderRad(
-            lagVilkårResultat({ resultat: Resultat.IKKE_VURDERT, vilkårType: VilkårType.UNDER_18_ÅR, begrunnelse: '' }),
-            true
-        );
-        expect(await screen.findByText('Resultat er ikke satt')).toBeInTheDocument();
-
-        // Act
-        await user.click(screen.getByRole('radio', { name: 'Ja' }));
-
-        // Assert
-        await waitFor(() => expect(screen.queryByText('Resultat er ikke satt')).not.toBeInTheDocument());
-        expect(oppdaterVilkårResultat).not.toHaveBeenCalled();
     });
 
     test('avslag fjerner periodefeilen uten ny innsending', async () => {

@@ -15,11 +15,7 @@ import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface Props {
-    visFeilmeldinger: boolean;
-}
-
-export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) {
+export function VilkårsvurderingSkjemaInstitusjon() {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
@@ -98,7 +94,6 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                                 vilkårResultat => vilkårResultat.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
                         />
                     );
                 })}
