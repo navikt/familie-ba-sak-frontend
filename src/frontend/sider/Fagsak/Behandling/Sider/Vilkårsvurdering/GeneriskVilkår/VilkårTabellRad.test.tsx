@@ -1,4 +1,5 @@
 import { oppdaterVilkårResultat } from '@api/oppdaterVilkårResultat';
+import { slettVilkårResultat } from '@api/slettVilkårResultat';
 import { renderIVilkårsvurdering } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/testutils/renderIVilkårsvurdering';
 import { waitFor } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -12,6 +13,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import { VilkårTabellRad } from './VilkårTabellRad';
 
 vi.mock('@api/oppdaterVilkårResultat');
+vi.mock('@api/slettVilkårResultat');
 vi.mock('@api/hentAlleBegrunnelser', () => ({
     hentAlleBegrunnelser: vi.fn().mockResolvedValue({
         AVSLAG: [{ id: 'AVSLAG_BOR_IKKE_MED_SØKER', navn: 'Bor ikke med søker', vilkår: 'BOR_MED_SØKER' }],
@@ -222,5 +224,31 @@ describe('VilkårTabellRad', () => {
                 vurderesEtter: Regelverk.EØS_FORORDNINGEN,
             })
         );
+    });
+
+    test('fjern tilbakestiller ulagrede endringer når backend nullstiller vilkåret uten endringer', async () => {
+        // Arrange
+        const vilkårResultat = lagVilkårResultat({
+            id: 42,
+            resultat: Resultat.IKKE_VURDERT,
+            vilkårType: VilkårType.UNDER_18_ÅR,
+            begrunnelse: '',
+        });
+        const behandling = lagBehandlingMedVilkår(vilkårResultat);
+        vi.mocked(slettVilkårResultat).mockResolvedValue(behandling);
+        const { screen, user } = renderRad(vilkårResultat);
+
+        await user.click(screen.getByRole('radio', { name: 'Ja' }));
+        await user.type(screen.getByLabelText('F.o.m'), '01.01.2020');
+        await user.type(screen.getByLabelText('Begrunnelse (valgfri)'), 'Ulagret begrunnelse');
+
+        // Act
+        await user.click(screen.getByRole('button', { name: 'Fjern' }));
+
+        // Assert
+        await waitFor(() => expect(screen.getByLabelText('Begrunnelse (valgfri)')).toHaveValue(''));
+        expect(slettVilkårResultat).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('radio', { name: 'Ja' })).not.toBeChecked();
+        expect(screen.getByLabelText('F.o.m')).toHaveValue('');
     });
 });
