@@ -33,7 +33,6 @@ function renderRad() {
             person={søker}
             annenVurderingConfig={annenVurderingConfig.OPPLYSNINGSPLIKT}
             annenVurdering={annenVurdering}
-            visFeilmeldinger={false}
         />,
         { behandling }
     );
