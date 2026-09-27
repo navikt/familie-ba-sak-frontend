@@ -1,26 +1,22 @@
+import { useTømPersonopplysningerCacheITestmiljø } from '@hooks/useTømPersonopplysningerCacheITestmiljø';
 import { Button } from '@navikt/ds-react';
-import { useHttp } from '@navikt/familie-http';
+import { erProd } from '@utils/miljø';
 
-import { erProd } from '../../../../../utils/miljø';
+export function TømPersonopplysningerCacheITestmiljøKnapp() {
+    const { mutate: tømCache, isPending } = useTømPersonopplysningerCacheITestmiljø({
+        onError: () => alert('Klarte ikke å tømme personopplysninger-cache'),
+    });
 
-export const TømPersonopplysningerCacheITestmiljøKnapp = () => {
-    const { request } = useHttp();
-
-    const tømCache = () => {
+    function onTømCacheClicked() {
         if (erProd()) {
             return;
         }
-
-        request<undefined, string>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/preprod/clear-personopplysninger-cache`,
-            påvirkerSystemLaster: true,
-        }).catch(() => alert('Klarte ikke å tømme personopplysninger-cache'));
-    };
+        tømCache();
+    }
 
     return (
-        <Button size={'small'} onClick={tømCache}>
+        <Button size={'small'} loading={isPending} onClick={onTømCacheClicked}>
             Tøm personopplysninger-cache
         </Button>
     );
-};
+}
