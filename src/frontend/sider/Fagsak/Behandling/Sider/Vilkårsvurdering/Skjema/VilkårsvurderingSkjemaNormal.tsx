@@ -208,7 +208,6 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                         person={personResultat.person}
                                                         andreVurderinger={personResultat.andreVurderinger}
                                                         annenVurderingConfig={annenVurderingConfig}
-                                                        visFeilmeldinger={visFeilmeldinger}
                                                     />
                                                 ))}
                                         {skalViseKopierVilkårFraSøkerTilBarna && <KopierVilkårFraSøkerTilBarna />}

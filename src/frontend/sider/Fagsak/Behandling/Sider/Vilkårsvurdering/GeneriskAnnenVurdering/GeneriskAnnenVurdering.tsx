@@ -9,10 +9,9 @@ interface Props {
     person: IGrunnlagPerson;
     andreVurderinger: IRestAnnenVurdering[];
     annenVurderingConfig: IAnnenVurderingConfig;
-    visFeilmeldinger: boolean;
 }
 
-export function GeneriskAnnenVurdering({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }: Props) {
+export function GeneriskAnnenVurdering({ person, annenVurderingConfig, andreVurderinger }: Props) {
     return (
         <div className={styles.container}>
             <Heading size="medium" level="3">
@@ -22,7 +21,6 @@ export function GeneriskAnnenVurdering({ person, annenVurderingConfig, andreVurd
                 person={person}
                 annenVurderingConfig={annenVurderingConfig}
                 andreVurderinger={andreVurderinger}
-                visFeilmeldinger={visFeilmeldinger}
             />
         </div>
     );

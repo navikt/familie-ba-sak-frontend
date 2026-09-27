@@ -3,8 +3,7 @@ import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterAnnenVurdering } from '@hooks/useOppdaterAnnenVurdering';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import type { IRestAnnenVurdering } from '@typer/vilkår';
-import { Resultat } from '@typer/vilkår';
+import type { IRestAnnenVurdering, Resultat } from '@typer/vilkår';
 import { useForm } from 'react-hook-form';
 
 export enum AnnenVurderingFelt {
@@ -19,11 +18,10 @@ export interface AnnenVurderingFormValues {
 
 interface Props {
     annenVurdering: IRestAnnenVurdering;
-    visFeilmeldinger: boolean;
     lukkSkjema: () => void;
 }
 
-export function useAnnenVurderingSkjema({ annenVurdering, visFeilmeldinger, lukkSkjema }: Props) {
+export function useAnnenVurderingSkjema({ annenVurdering, lukkSkjema }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: oppdaterAnnenVurdering } = useOppdaterAnnenVurdering();
 
@@ -32,7 +30,6 @@ export function useAnnenVurderingSkjema({ annenVurdering, visFeilmeldinger, lukk
             [AnnenVurderingFelt.RESULTAT]: annenVurdering.resultat,
             [AnnenVurderingFelt.BEGRUNNELSE]: annenVurdering.begrunnelse,
         },
-        mode: visFeilmeldinger ? 'onChange' : 'onSubmit',
     });
 
     const {
@@ -50,12 +47,7 @@ export function useAnnenVurderingSkjema({ annenVurdering, visFeilmeldinger, lukk
         try {
             const oppdatertBehandling = await oppdaterAnnenVurdering({
                 behandlingId: behandling.behandlingId,
-                annenVurdering: {
-                    ...annenVurdering,
-                    erVurdert: annenVurdering.resultat !== Resultat.IKKE_VURDERT,
-                    resultat: values.resultat,
-                    begrunnelse: values.begrunnelse,
-                },
+                annenVurdering: { ...annenVurdering, resultat: values.resultat, begrunnelse: values.begrunnelse },
             });
             settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
             lukkSkjema();

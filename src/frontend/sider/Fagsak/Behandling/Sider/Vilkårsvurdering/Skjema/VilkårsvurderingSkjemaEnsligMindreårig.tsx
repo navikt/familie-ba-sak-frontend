@@ -64,7 +64,6 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
                         person={personResultat.person}
                         andreVurderinger={personResultat.andreVurderinger}
                         annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                        visFeilmeldinger={visFeilmeldinger}
                     />
                 )}
                 {Object.values(vilkårConfigEnsligMindreårig).map(vilkårConfig => {

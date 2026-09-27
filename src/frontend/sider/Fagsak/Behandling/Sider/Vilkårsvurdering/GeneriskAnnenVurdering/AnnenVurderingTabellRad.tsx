@@ -5,7 +5,7 @@ import { BodyShort, HStack, Table } from '@navikt/ds-react';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IAnnenVurderingConfig, IRestAnnenVurdering } from '@typer/vilkår';
 import { Resultat, resultatVisningsnavn } from '@typer/vilkår';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { AnnenVurderingRadEndre } from './AnnenVurderingRadEndre';
 import { annenVurderingFeilmeldingId } from './AnnenVurderingTabell';
@@ -16,10 +16,9 @@ interface Props {
     person: IGrunnlagPerson;
     annenVurderingConfig: IAnnenVurderingConfig;
     annenVurdering: IRestAnnenVurdering;
-    visFeilmeldinger: boolean;
 }
 
-export function AnnenVurderingTabellRad({ person, annenVurderingConfig, visFeilmeldinger, annenVurdering }: Props) {
+export function AnnenVurderingTabellRad({ person, annenVurderingConfig, annenVurdering }: Props) {
     const erLesevisning = useErLesevisning();
 
     const [erEkspandert, settErEkspandert] = useState(
@@ -28,22 +27,14 @@ export function AnnenVurderingTabellRad({ person, annenVurderingConfig, visFeilm
 
     const { form, onSubmit } = useAnnenVurderingSkjema({
         annenVurdering,
-        visFeilmeldinger,
         lukkSkjema: () => settErEkspandert(false),
     });
 
     const {
         handleSubmit,
         reset,
-        trigger,
         formState: { isDirty },
     } = form;
-
-    useEffect(() => {
-        if (visFeilmeldinger && erEkspandert) {
-            trigger();
-        }
-    }, [visFeilmeldinger, erEkspandert, trigger]);
 
     const toggleForm = (visAlert: boolean) => {
         if (erEkspandert && visAlert && isDirty) {
@@ -53,8 +44,6 @@ export function AnnenVurderingTabellRad({ person, annenVurderingConfig, visFeilm
             reset();
         }
     };
-
-    const erVurdert = annenVurdering.resultat !== Resultat.IKKE_VURDERT;
 
     return (
         <Table.ExpandableRow
@@ -86,7 +75,7 @@ export function AnnenVurderingTabellRad({ person, annenVurderingConfig, visFeilm
                 <BodyShort className={Styles.beskrivelse}>{annenVurdering.begrunnelse}</BodyShort>
             </Table.DataCell>
             <Table.DataCell>
-                {erVurdert && (
+                {annenVurdering.resultat !== Resultat.IKKE_VURDERT && (
                     <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
                         <PersonIcon title={'Manuell vurdering'} className={Styles.ikon} />
                         <BodyShort>Vurdert i denne behandlingen</BodyShort>

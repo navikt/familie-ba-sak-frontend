@@ -67,7 +67,6 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                                 person={personResultat.person}
                                 andreVurderinger={personResultat.andreVurderinger}
                                 annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                                visFeilmeldinger={visFeilmeldinger}
                             />
                         </Box>
                     </Bleed>

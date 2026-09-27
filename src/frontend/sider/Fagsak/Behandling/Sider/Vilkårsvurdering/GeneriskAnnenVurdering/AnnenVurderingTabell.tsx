@@ -12,10 +12,9 @@ interface Props {
     person: IGrunnlagPerson;
     andreVurderinger: IRestAnnenVurdering[];
     annenVurderingConfig: IAnnenVurderingConfig;
-    visFeilmeldinger: boolean;
 }
 
-export function AnnenVurderingTabell({ person, annenVurderingConfig, andreVurderinger, visFeilmeldinger }: Props) {
+export function AnnenVurderingTabell({ person, annenVurderingConfig, andreVurderinger }: Props) {
     return (
         <Table className={Styles.table}>
             <Table.Header>
@@ -33,7 +32,6 @@ export function AnnenVurderingTabell({ person, annenVurderingConfig, andreVurder
                         annenVurderingConfig={annenVurderingConfig}
                         person={person}
                         annenVurdering={annenVurdering}
-                        visFeilmeldinger={visFeilmeldinger}
                     />
                 ))}
             </Table.Body>
