@@ -8,6 +8,7 @@ import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon } from '@typ
 import type { IGrunnlagPerson } from '@typer/person';
 import { type IRestVilkårResultat, type IVilkårConfig, Resultat, VilkårType } from '@typer/vilkår';
 import { nyIsoDatoPeriode } from '@utils/dato/periode';
+import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { SkjemaRamme } from '../SkjemaRamme';
@@ -37,8 +38,11 @@ export function VilkårTabellRadEndre({ person, vilkårFraConfig, vilkårResulta
 
     const slettVilkårResultatError = useSlettVilkårResultatError(vilkårResultat.id);
 
+    const [antallNullstillinger, settAntallNullstillinger] = useState(0);
+
     const {
         control,
+        reset,
         formState: { isSubmitting, errors },
     } = useFormContext<VilkårResultatFormValues>();
 
@@ -56,6 +60,11 @@ export function VilkårTabellRadEndre({ person, vilkårFraConfig, vilkårResulta
         { id: 'lagre', feilmelding: errors.root?.message },
         { id: 'slett', feilmelding: slettVilkårResultatError?.message },
     ].filter(({ feilmelding }) => !!feilmelding);
+
+    const onNullstilt = () => {
+        reset();
+        settAntallNullstillinger(antall => antall + 1);
+    };
 
     return (
         <Fieldset
@@ -94,7 +103,7 @@ export function VilkårTabellRadEndre({ person, vilkårFraConfig, vilkårResulta
                     </>
                 )}
                 <PeriodeFelt
-                    key={`${vilkårResultat.endretTidspunkt}_${vilkårResultat.periodeFom}_${vilkårResultat.periodeTom}`}
+                    key={`${vilkårResultat.endretTidspunkt}_${vilkårResultat.periodeFom}_${vilkårResultat.periodeTom}_${antallNullstillinger}`}
                     person={person}
                     vilkårType={vilkårResultat.vilkårType}
                     lagretPeriode={nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom)}
@@ -110,7 +119,11 @@ export function VilkårTabellRadEndre({ person, vilkårFraConfig, vilkårResulta
                                 Avbryt
                             </Button>
                         </HStack>
-                        <SlettVilkårResultat personIdent={person.personIdent} vilkårResultatId={vilkårResultat.id} />
+                        <SlettVilkårResultat
+                            personIdent={person.personIdent}
+                            vilkårResultatId={vilkårResultat.id}
+                            onNullstilt={onNullstilt}
+                        />
                     </HStack>
                 )}
             </SkjemaRamme>

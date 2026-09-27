@@ -8,9 +8,10 @@ import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/S
 interface Props {
     personIdent: string;
     vilkårResultatId: number;
+    onNullstilt: () => void;
 }
 
-export function SlettVilkårResultat({ personIdent, vilkårResultatId }: Props) {
+export function SlettVilkårResultat({ personIdent, vilkårResultatId, onNullstilt }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
@@ -25,8 +26,11 @@ export function SlettVilkårResultat({ personIdent, vilkårResultatId }: Props) 
                 .flatMap(personResultat => personResultat.vilkårResultater)
                 .map(vilkårResultat => vilkårResultat.id);
 
-            // Backend nullstiller siste periode av en vilkårtype med samme id i stedet for å slette den, og da skal raden forbli åpen.
-            if (!iderFraNyBehandling.includes(vilkårResultatId)) {
+            // Backend nullstiller siste periode av en vilkårtype med samme id i stedet for å slette den, og da skal raden
+            // forbli åpen. Skjemaet nullstilles eksplisitt fordi responsen kan være identisk med det som allerede er lagret.
+            if (iderFraNyBehandling.includes(vilkårResultatId)) {
+                onNullstilt();
+            } else {
                 kollapsRad(vilkårResultatId);
             }
 
