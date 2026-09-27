@@ -1,15 +1,14 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { senesteRelevanteDato, tidligsteRelevanteDato } from '@komponenter/Datovelger/utils';
-import { DatePicker, type DateValidationT, Fieldset, HelpText, HStack, Label, useDatepicker } from '@navikt/ds-react';
+import { type DateValidationT, Fieldset, HelpText, HStack, Label } from '@navikt/ds-react';
 import type { IGrunnlagPerson } from '@typer/person';
-import { Resultat, VilkårType } from '@typer/vilkår';
-import { dagensDato, dateTilIsoDatoStringEllerUndefined, isoStringTilDateEllerUndefined } from '@utils/dato';
+import { VilkårType } from '@typer/vilkår';
 import type { IIsoDatoPeriode } from '@utils/dato/periode';
-import { endOfMonth } from 'date-fns';
 import { useRef } from 'react';
-import { useController, useFormContext, useWatch } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { validerPeriode } from '../validering';
+import { FomDatoFelt } from './FomDatoFelt';
+import { TomDatoFelt } from './TomDatoFelt';
 import { VilkårResultatFelt, type VilkårResultatFormValues } from './useVilkårResultatSkjema';
 
 const harUgyldigDatoInput = (validation: DateValidationT | undefined) =>
@@ -26,13 +25,8 @@ export function PeriodeFelt({ person, vilkårType, lagretPeriode }: Props) {
 
     const { control } = useFormContext<VilkårResultatFormValues>();
 
-    const resultat = useWatch({ control, name: VilkårResultatFelt.RESULTAT });
-    const erEksplisittAvslagPåSøknad = useWatch({ control, name: VilkårResultatFelt.ER_EKSPLISITT_AVSLAG_PÅ_SØKNAD });
-
     const fomValidationRef = useRef<DateValidationT | undefined>(undefined);
     const tomValidationRef = useRef<DateValidationT | undefined>(undefined);
-    const ventendeFom = useRef<{ dato: Date | undefined } | null>(null);
-    const ventendeTom = useRef<{ dato: Date | undefined } | null>(null);
 
     const er18ÅrsVilkår = vilkårType === VilkårType.UNDER_18_ÅR;
 
@@ -66,39 +60,7 @@ export function PeriodeFelt({ person, vilkårType, lagretPeriode }: Props) {
         },
     });
 
-    const fom = useDatepicker({
-        defaultSelected: isoStringTilDateEllerUndefined(lagretPeriode.fom),
-        fromDate: tidligsteRelevanteDato,
-        toDate: endOfMonth(dagensDato),
-        onDateChange: dato => {
-            ventendeFom.current = { dato };
-        },
-        onValidate: validation => {
-            fomValidationRef.current = validation;
-            if (ventendeFom.current) {
-                onChange({ ...value, fom: dateTilIsoDatoStringEllerUndefined(ventendeFom.current.dato) });
-                ventendeFom.current = null;
-            }
-        },
-    });
-
-    const tom = useDatepicker({
-        defaultSelected: isoStringTilDateEllerUndefined(lagretPeriode.tom),
-        fromDate: tidligsteRelevanteDato,
-        toDate: senesteRelevanteDato,
-        onDateChange: dato => {
-            ventendeTom.current = { dato };
-        },
-        onValidate: validation => {
-            tomValidationRef.current = validation;
-            if (ventendeTom.current) {
-                onChange({ ...value, tom: dateTilIsoDatoStringEllerUndefined(ventendeTom.current.dato) });
-                ventendeTom.current = null;
-            }
-        },
-    });
-
-    const fomErValgfri = resultat === Resultat.IKKE_OPPFYLT && erEksplisittAvslagPåSøknad;
+    const readOnly = erLesevisning || isSubmitting;
 
     return (
         <Fieldset legend={'Periode for vurderingen'} hideLegend error={error?.message}>
@@ -112,23 +74,23 @@ export function PeriodeFelt({ person, vilkårType, lagretPeriode }: Props) {
                 </HStack>
             )}
             <HStack gap={'space-16'}>
-                <DatePicker dropdownCaption {...fom.datepickerProps}>
-                    <DatePicker.Input
-                        {...fom.inputProps}
-                        ref={ref}
-                        label={fomErValgfri ? 'F.o.m (valgfri)' : 'F.o.m'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                        readOnly={erLesevisning || isSubmitting}
-                    />
-                </DatePicker>
-                <DatePicker dropdownCaption {...tom.datepickerProps}>
-                    <DatePicker.Input
-                        {...tom.inputProps}
-                        label={'T.o.m (valgfri)'}
-                        placeholder={'DD.MM.ÅÅÅÅ'}
-                        readOnly={erLesevisning || isSubmitting}
-                    />
-                </DatePicker>
+                <FomDatoFelt
+                    lagretFom={lagretPeriode.fom}
+                    readOnly={readOnly}
+                    inputRef={ref}
+                    onValidert={validation => {
+                        fomValidationRef.current = validation;
+                    }}
+                    onEndret={fom => onChange({ ...value, fom })}
+                />
+                <TomDatoFelt
+                    lagretTom={lagretPeriode.tom}
+                    readOnly={readOnly}
+                    onValidert={validation => {
+                        tomValidationRef.current = validation;
+                    }}
+                    onEndret={tom => onChange({ ...value, tom })}
+                />
             </HStack>
         </Fieldset>
     );

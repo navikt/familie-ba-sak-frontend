@@ -12,11 +12,10 @@ interface Props {
     person: IGrunnlagPerson;
     vilkårResultater: IRestVilkårResultat[];
     vilkårFraConfig: IVilkårConfig;
-    visFeilmeldinger: boolean;
     settFokusPåKnapp: () => void;
 }
 
-export function VilkårTabell({ person, vilkårFraConfig, vilkårResultater, visFeilmeldinger, settFokusPåKnapp }: Props) {
+export function VilkårTabell({ person, vilkårFraConfig, vilkårResultater, settFokusPåKnapp }: Props) {
     return (
         <Box className={Styles.wrapper}>
             <Table className={Styles.table}>
@@ -47,7 +46,6 @@ export function VilkårTabell({ person, vilkårFraConfig, vilkårResultater, vis
                             vilkårFraConfig={vilkårFraConfig}
                             person={person}
                             vilkårResultat={vilkårResultat}
-                            visFeilmeldinger={visFeilmeldinger}
                             settFokusPåKnapp={settFokusPåKnapp}
                         />
                     ))}

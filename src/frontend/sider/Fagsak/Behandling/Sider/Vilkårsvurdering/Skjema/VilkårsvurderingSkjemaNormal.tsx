@@ -23,11 +23,7 @@ import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface Props {
-    visFeilmeldinger: boolean;
-}
-
-export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
+export function VilkårsvurderingSkjemaNormal() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { erPanelEkspandert, togglePanel } = useEkspanderbareVilkårsvurderingPaneler();
@@ -199,7 +195,6 @@ export function VilkårsvurderingSkjemaNormal({ visFeilmeldinger }: Props) {
                                                             person={personResultat.person}
                                                             vilkårResultater={vilkårResultater}
                                                             vilkårFraConfig={vc}
-                                                            visFeilmeldinger={visFeilmeldinger}
                                                         />
                                                     );
                                             })}

@@ -100,7 +100,7 @@ export function Vilkårsvurdering() {
                 </HStack>
             )}
             <VStack gap="space-40">
-                <VilkårsvurderingSkjema visFeilmeldinger={visFeilmeldinger} />
+                <VilkårsvurderingSkjema />
                 {uregistrerteBarn.length > 0 && (
                     <InfoCard data-color="info">
                         <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>

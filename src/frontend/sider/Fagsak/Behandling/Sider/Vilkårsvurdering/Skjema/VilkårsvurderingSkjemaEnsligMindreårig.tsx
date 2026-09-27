@@ -11,11 +11,7 @@ import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface Props {
-    visFeilmeldinger: boolean;
-}
-
-export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: Props) {
+export function VilkårsvurderingSkjemaEnsligMindreårig() {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const skjermstørrelse = useSkjermstørrelse();
@@ -85,7 +81,6 @@ export function VilkårsvurderingSkjemaEnsligMindreårig({ visFeilmeldinger }: P
                                 vilkårResultat => vilkårResultat.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
                         />
                     );
                 })}
