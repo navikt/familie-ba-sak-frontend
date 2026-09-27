@@ -34,11 +34,15 @@ function EkspanderteRader({ ider }: { ider: number[] }) {
     return <span data-testid={'ekspanderte-rader'}>{ider.filter(id => erRadEkspandert(id)).join(',')}</span>;
 }
 
-function renderSlett(behandling: IBehandling, vilkårResultatId: number, ider: number[]) {
+function renderSlett(behandling: IBehandling, vilkårResultatId: number, ider: number[], onNullstilt = vi.fn()) {
     return renderIVilkårsvurdering(
         <Table.Row>
             <Table.DataCell>
-                <SlettVilkårResultat personIdent={barn.personIdent} vilkårResultatId={vilkårResultatId} />
+                <SlettVilkårResultat
+                    personIdent={barn.personIdent}
+                    vilkårResultatId={vilkårResultatId}
+                    onNullstilt={onNullstilt}
+                />
                 <EkspanderteRader ider={ider} />
             </Table.DataCell>
         </Table.Row>,
@@ -54,10 +58,12 @@ describe('SlettVilkårResultat', () => {
         const nyopprettet = lagVilkårResultat({ id: 3, resultat: Resultat.IKKE_VURDERT });
         vi.mocked(slettVilkårResultat).mockResolvedValue(lagBehandlingMedVilkårResultater([uendret, nyopprettet]));
 
+        const onNullstilt = vi.fn();
         const { screen, user } = renderSlett(
             lagBehandlingMedVilkårResultater([slettet, uendret]),
             slettet.id,
-            [1, 2, 3]
+            [1, 2, 3],
+            onNullstilt
         );
         expect(screen.getByTestId('ekspanderte-rader')).toHaveTextContent(/^1$/);
 
@@ -70,6 +76,7 @@ describe('SlettVilkårResultat', () => {
             { behandlingId: expect.any(Number), vilkårResultatId: slettet.id },
             { personIdent: barn.personIdent }
         );
+        expect(onNullstilt).not.toHaveBeenCalled();
     });
 
     test('skal holde raden åpen når backend nullstiller vilkårresultatet med samme id', async () => {
@@ -80,10 +87,12 @@ describe('SlettVilkårResultat', () => {
             lagBehandlingMedVilkårResultater([vilkårResultat, nyopprettet])
         );
 
+        const onNullstilt = vi.fn();
         const { screen, user } = renderSlett(
             lagBehandlingMedVilkårResultater([vilkårResultat]),
             vilkårResultat.id,
-            [1, 4]
+            [1, 4],
+            onNullstilt
         );
         expect(screen.getByTestId('ekspanderte-rader')).toHaveTextContent(/^1$/);
 
@@ -92,5 +101,6 @@ describe('SlettVilkårResultat', () => {
 
         // Assert
         await waitFor(() => expect(screen.getByTestId('ekspanderte-rader')).toHaveTextContent(/^1,4$/));
+        expect(onNullstilt).toHaveBeenCalledTimes(1);
     });
 });
