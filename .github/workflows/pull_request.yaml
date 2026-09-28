@@ -16,4 +16,6 @@ jobs:
     uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-pnpm.yaml@main # ratchet:exclude
     with:
       node-version: '24'
-    secrets: inherit
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

@@ -17,7 +17,7 @@ updates:
           - "25"
           - "26"
     cooldown:
-      default-days: 4
+      default-days: 7
     open-pull-requests-limit: 20
     registries: "*"
     groups:
@@ -95,4 +95,4 @@ updates:
     schedule:
       interval: daily
     cooldown:
-      default-days: 4
+      default-days: 7
