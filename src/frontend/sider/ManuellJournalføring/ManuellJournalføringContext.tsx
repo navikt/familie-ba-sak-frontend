@@ -50,6 +50,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import useDokument from '../../hooks/useDokument';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
+import { lagJournalpostDokumenterForJournalføring } from './Dokument/journalpostDokumentUtils';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
@@ -430,11 +431,7 @@ export function ManuellJournalføringProvider(props: PropsWithChildren) {
                             id: skjema.felter.avsenderIdent.verdi,
                         },
                         datoMottatt: dataForManuellJournalføring.data.journalpost.datoMottatt,
-                        dokumenter: skjema.felter.dokumenter.verdi.map(dokument => ({
-                            dokumentTittel: dokument.tittel,
-                            dokumentInfoId: dokument.dokumentInfoId || '0',
-                            logiskeVedlegg: dokument.logiskeVedlegg,
-                        })),
+                        dokumenter: lagJournalpostDokumenterForJournalføring(skjema.felter.dokumenter.verdi),
                         tilknyttedeBehandlinger: skjema.felter.tilknyttedeBehandlinger.verdi,
                         opprettOgKnyttTilNyBehandling: skjema.felter.knyttTilNyBehandling.verdi,
                         // TODO her bør vi forbedre APIET slik at disse verdiene ikke er påkrevd. Blir kun brukt om opprettOgKnyttTilNyBehandling=true
