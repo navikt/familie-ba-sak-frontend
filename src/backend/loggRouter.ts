@@ -23,7 +23,7 @@ export const createLoggRouter = (azureAuthClient: Client): Router => {
                 return res.sendStatus(400);
             }
 
-            const { nivå, meta, melding } = logg.tilLoggpost(sanitizer, req.header('nav-call-id'));
+            const { nivå, meta, melding } = FrontendLogg.tilLoggpost(logg, sanitizer, req.header('nav-call-id'));
             logger[nivå](meta, melding);
             return res.sendStatus(204);
         }

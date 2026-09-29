@@ -44,7 +44,7 @@ describe('FrontendLogg', () => {
         });
 
         test.each<LoggNivå>(['error', 'warn', 'info', 'debug', 'trace'])('godtar gyldig nivå: %s', loglevel => {
-            expect(FrontendLogg.fraBody({ message: 'hei', loglevel })).toBeInstanceOf(FrontendLogg);
+            expect(FrontendLogg.fraBody({ message: 'hei', loglevel })).toEqual({ message: 'hei', loglevel });
         });
     });
 
@@ -57,7 +57,7 @@ describe('FrontendLogg', () => {
                 stack: 'at foo (bar.ts:1)',
             });
 
-            const loggpost = logg?.tilLoggpost(stubSanitizer, 'call-123');
+            const loggpost = logg && FrontendLogg.tilLoggpost(logg, stubSanitizer, 'call-123');
 
             expect(loggpost).toEqual({
                 nivå: 'error',
@@ -74,7 +74,7 @@ describe('FrontendLogg', () => {
         test('utelater x_callId når callId mangler', () => {
             const logg = FrontendLogg.fraBody({ message: 'hei', loglevel: 'info' });
 
-            const loggpost = logg?.tilLoggpost(stubSanitizer);
+            const loggpost = logg && FrontendLogg.tilLoggpost(logg, stubSanitizer);
 
             expect(loggpost?.meta).not.toHaveProperty('x_callId');
         });
@@ -82,7 +82,7 @@ describe('FrontendLogg', () => {
         test('utelater name og stack når de ikke er oppgitt', () => {
             const logg = FrontendLogg.fraBody({ message: 'hei', loglevel: 'info' });
 
-            const loggpost = logg?.tilLoggpost(stubSanitizer, 'call-123');
+            const loggpost = logg && FrontendLogg.tilLoggpost(logg, stubSanitizer, 'call-123');
 
             expect(loggpost?.meta).toEqual({ frontend: true, x_callId: 'call-123' });
         });
