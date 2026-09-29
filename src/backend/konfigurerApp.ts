@@ -1,11 +1,10 @@
 import dotenvx from '@dotenvx/dotenvx';
 
-import { logInfo } from '@navikt/familie-logging';
-
 import { envVar } from './env.js';
+import { logger } from './logger.js';
 
 const konfigurerApp = () => {
-    logInfo(`NODE_ENV=${envVar('NODE_ENV')} ENV=${envVar('ENV')}`);
+    logger.info(`NODE_ENV=${envVar('NODE_ENV')} ENV=${envVar('ENV')}`);
 
     dotenvx.config({
         path: ['.env', '.secrets.env', `.env.${envVar('ENV')}`],

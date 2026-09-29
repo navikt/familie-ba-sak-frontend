@@ -1,6 +1,7 @@
 import { captureException } from '@nais/apm';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
+import { logger, tilLoggFeil } from '@utils/logger';
 import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
 
 interface State {
@@ -25,6 +26,7 @@ export class ErrorBoundary extends Component<PropsWithChildren, State> {
                 componentStack: info.componentStack,
             },
         });
+        logger.error(`Ubehandlet feil fanget av ErrorBoundary: ${error.message}`, tilLoggFeil(error));
     }
 
     render(): ReactNode {

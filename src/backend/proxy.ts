@@ -1,11 +1,11 @@
 import type { Client } from '@navikt/familie-backend';
 import { getOnBehalfOfAccessToken } from '@navikt/familie-backend';
-import { stdoutLogger } from '@navikt/familie-logging';
 import type { NextFunction, Request, Response } from 'express';
 import type { ClientRequest } from 'http';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { oboConfig, proxyUrl, redirectRecords } from './config.js';
+import { logger } from './logger.js';
 
 const restream = (proxyReq: ClientRequest, req: Request, _res: Response) => {
     if (req.body) {
@@ -22,7 +22,7 @@ export const doProxy: any = () => {
         on: { proxyReq: restream },
         secure: true,
         target: `${proxyUrl}`,
-        logger: stdoutLogger,
+        logger,
     });
 };
 
@@ -32,10 +32,10 @@ export const doRedirectProxy = () => {
         if (urlKey) {
             const basePath = redirectRecords[urlKey];
             const path = req.originalUrl.replace(urlKey, '');
-            stdoutLogger.info(`Redirect ${urlKey} -> ${redirectRecords[urlKey]}`);
+            logger.info(`Redirect ${urlKey} -> ${redirectRecords[urlKey]}`);
             res.redirect(basePath + path);
         } else {
-            console.log(`Ustøttet redirect: ${req.originalUrl}`);
+            logger.warn(`Ustøttet redirect: ${req.originalUrl}`);
             res.sendStatus(404);
         }
     };

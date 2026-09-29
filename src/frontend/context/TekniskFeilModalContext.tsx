@@ -1,5 +1,6 @@
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { logger, tilLoggFeil } from '@utils/logger';
 import { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
 function finnFeilmeldingstekst(error: unknown): string {
@@ -34,9 +35,9 @@ export function TekniskFeilModalProvider({ initielleTekniskeFeil = [], children 
     const [tekniskeFeil, settTekniskeFeil] = useState<TekniskFeil[]>(initielleTekniskeFeil);
 
     const visTekniskFeilModal = useCallback((error: unknown) => {
-        const nyTekniskFeil = { id: crypto.randomUUID(), tekst: finnFeilmeldingstekst(error) };
-        settTekniskeFeil(prev => [...prev, nyTekniskFeil]);
-        console.error(error);
+        const tekst = finnFeilmeldingstekst(error);
+        settTekniskeFeil(prev => [...prev, { id: crypto.randomUUID(), tekst }]);
+        logger.error(`Teknisk feil vist til bruker: ${tekst}`, tilLoggFeil(error));
     }, []);
 
     const lukk = useCallback(() => {
