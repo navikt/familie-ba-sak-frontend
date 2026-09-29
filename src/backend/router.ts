@@ -1,5 +1,5 @@
 import { renderNaisMetaTags } from '@nais/apm';
-import type { Client } from '@navikt/familie-backend';
+import type { Configuration } from '@navikt/familie-backend';
 import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
 import { LOG_LEVEL } from '@navikt/familie-logging';
 import type { NextFunction, Request, Response, Router } from 'express';
@@ -21,7 +21,7 @@ const redirectHvisInternUrlIPreprod = () => {
     };
 };
 
-export default async (authClient: Client, router: Router) => {
+export default async (authClient: Configuration, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
             .send({

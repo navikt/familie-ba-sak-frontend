@@ -1,4 +1,4 @@
-import type { Client } from '@navikt/familie-backend';
+import type { Configuration } from '@navikt/familie-backend';
 import { getOnBehalfOfAccessToken } from '@navikt/familie-backend';
 import { stdoutLogger } from '@navikt/familie-logging';
 import type { NextFunction, Request, Response } from 'express';
@@ -41,7 +41,7 @@ export const doRedirectProxy = () => {
     };
 };
 
-export const attachToken = (authClient: Client) => {
+export const attachToken = (authClient: Configuration) => {
     return async (req: Request, _res: Response, next: NextFunction) => {
         getOnBehalfOfAccessToken(authClient, req, oboConfig).then((accessToken: string) => {
             req.headers.Authorization = `Bearer ${accessToken}`;
