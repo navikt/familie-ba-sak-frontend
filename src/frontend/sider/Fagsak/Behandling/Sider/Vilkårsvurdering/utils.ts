@@ -1,29 +1,10 @@
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonTypeVisningsRangering } from '@typer/person';
-import {
-    type IPersonResultat,
-    type IRestPersonResultat,
-    type IRestVilkårResultat,
-    type IVilkårResultat,
-    Resultat,
-} from '@typer/vilkår';
+import type { IPersonResultat, IRestPersonResultat, IRestVilkårResultat } from '@typer/vilkår';
 import type { IIsoDatoPeriode } from '@utils/dato';
 import { isoStringTilDate, isoStringTilDateMedFallback, nyIsoDatoPeriode, tidenesEnde } from '@utils/dato';
-import {
-    erAvslagBegrunnelserGyldig,
-    erBegrunnelseGyldig,
-    erPeriodeGyldig,
-    erResultatGyldig,
-    erUtdypendeVilkårsvurderingerGyldig,
-    ikkeValider,
-    lagInitiellFelt,
-} from '@utils/validators';
 import { differenceInMilliseconds } from 'date-fns';
-
-import { kjørValidering, validerAnnenVurdering, validerVilkår } from './validering';
 
 const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     if (!periodeA.fom && !periodeA.tom) {
@@ -35,13 +16,11 @@ const periodeDiff = (periodeA: IIsoDatoPeriode, periodeB: IIsoDatoPeriode) => {
     );
 };
 
-const sorterVilkårsvurderingForPerson = (
-    vilkårResultater: FeltState<IVilkårResultat>[]
-): FeltState<IVilkårResultat>[] => {
-    return vilkårResultater.sort(
+const sorterVilkårsvurderingForPerson = (vilkårResultater: IRestVilkårResultat[]): IRestVilkårResultat[] => {
+    return [...vilkårResultater].sort(
         (a, b) =>
-            a.verdi.vilkårType.localeCompare(b.verdi.vilkårType) ||
-            periodeDiff(a.verdi.periode.verdi, b.verdi.periode.verdi)
+            a.vilkårType.localeCompare(b.vilkårType) ||
+            periodeDiff(nyIsoDatoPeriode(a.periodeFom, a.periodeTom), nyIsoDatoPeriode(b.periodeFom, b.periodeTom))
     );
 };
 
@@ -51,49 +30,10 @@ const sorterVilkårsvurderingForPerson = (
  * @param personResultater perioder fra api
  * @param personer personer på behandlingen
  */
-
-export const mapFraRestVilkårsvurderingTilUi = (
+export function mapFraRestPersonResultatTilPersonResultat(
     personResultater: IRestPersonResultat[],
     personer: IGrunnlagPerson[]
-): IPersonResultat[] => {
-    return kjørValidering(mapFraRestPersonResultatTilPersonResultat(personResultater, personer));
-};
-
-export function mapTilFeltStateVilkårResultat(vilkårResultat: IRestVilkårResultat) {
-    return lagInitiellFelt(
-        {
-            begrunnelse: lagInitiellFelt(vilkårResultat.begrunnelse, erBegrunnelseGyldig),
-            id: vilkårResultat.id,
-            periode: lagInitiellFelt(
-                nyIsoDatoPeriode(vilkårResultat.periodeFom, vilkårResultat.periodeTom),
-                erPeriodeGyldig
-            ),
-            resultat: lagInitiellFelt(vilkårResultat.resultat, erResultatGyldig),
-            resultatBegrunnelse: vilkårResultat.resultatBegrunnelse,
-            vilkårType: vilkårResultat.vilkårType,
-            endretAv: vilkårResultat.endretAv,
-            erVurdert: vilkårResultat.erVurdert,
-            erAutomatiskVurdert: vilkårResultat.erAutomatiskVurdert,
-            erEksplisittAvslagPåSøknad: vilkårResultat.erEksplisittAvslagPåSøknad,
-            avslagBegrunnelser: lagInitiellFelt(vilkårResultat.avslagBegrunnelser, erAvslagBegrunnelserGyldig),
-            endretTidspunkt: vilkårResultat.endretTidspunkt,
-            behandlingId: vilkårResultat.behandlingId,
-            vurderesEtter: vilkårResultat.vurderesEtter,
-            utdypendeVilkårsvurderinger: lagInitiellFelt(
-                vilkårResultat.utdypendeVilkårsvurderinger,
-                erUtdypendeVilkårsvurderingerGyldig
-            ),
-            begrunnelseForManuellKontroll: vilkårResultat.begrunnelseForManuellKontroll,
-            erOpprinneligPreutfyltIBehandling: vilkårResultat.erOpprinneligPreutfyltIBehandling,
-        },
-        validerVilkår
-    );
-}
-
-export const mapFraRestPersonResultatTilPersonResultat = (
-    personResultater: IRestPersonResultat[],
-    personer: IGrunnlagPerson[]
-): IPersonResultat[] => {
+): IPersonResultat[] {
     const mappedPersonIdenter = new Set(personResultater.map(pr => pr.personIdent));
 
     const personerSomSkalSkjermesForBruker: IPersonResultat[] = personer
@@ -107,44 +47,19 @@ export const mapFraRestPersonResultatTilPersonResultat = (
         }));
 
     return personResultater
-        .map((personResultat: IRestPersonResultat) => {
-            const person: IGrunnlagPerson | undefined = personer.find(
-                (person: IGrunnlagPerson) => person.personIdent === personResultat.personIdent
-            );
+        .map((personResultat: IRestPersonResultat): IPersonResultat => {
+            const person = personer.find(person => person.personIdent === personResultat.personIdent);
 
             if (person === undefined) {
                 throw new Error('Finner ikke person ved validering av vilkårsvurdering');
-            } else {
-                return {
-                    person,
-                    personIdent: personResultat.personIdent,
-                    vilkårResultater: sorterVilkårsvurderingForPerson(
-                        personResultat.vilkårResultater.map((vilkårResultat: IRestVilkårResultat) =>
-                            mapTilFeltStateVilkårResultat(vilkårResultat)
-                        )
-                    ),
-                    andreVurderinger: personResultat.andreVurderinger.map(annenVurdering =>
-                        lagInitiellFelt(
-                            {
-                                begrunnelse: {
-                                    feilmelding: '',
-                                    valider: ikkeValider,
-                                    valideringsstatus: Valideringsstatus.OK,
-                                    verdi: annenVurdering.begrunnelse,
-                                },
-                                id: annenVurdering.id,
-                                resultat: lagInitiellFelt(annenVurdering.resultat, erResultatGyldig),
-                                endretAv: annenVurdering.endretAv,
-                                erVurdert: annenVurdering.resultat !== Resultat.IKKE_VURDERT,
-                                endretTidspunkt: annenVurdering.endretTidspunkt,
-                                behandlingId: annenVurdering.behandlingId,
-                                type: annenVurdering.type,
-                            },
-                            validerAnnenVurdering
-                        )
-                    ),
-                };
             }
+
+            return {
+                person,
+                personIdent: personResultat.personIdent,
+                vilkårResultater: sorterVilkårsvurderingForPerson(personResultat.vilkårResultater),
+                andreVurderinger: personResultat.andreVurderinger,
+            };
         })
         .sort((a: IPersonResultat, b: IPersonResultat) => {
             if (PersonTypeVisningsRangering[a.person.type] > PersonTypeVisningsRangering[b.person.type]) {
@@ -161,13 +76,13 @@ export const mapFraRestPersonResultatTilPersonResultat = (
             );
         })
         .concat(personerSomSkalSkjermesForBruker);
-};
+}
 
-export const utledVilkårSomMåKontrolleresPerPerson = (
+export function utledVilkårSomMåKontrolleresPerPerson(
     behandling: IBehandling,
     vilkårsvurdering: IPersonResultat[]
-): Record<string, string[]> =>
-    vilkårsvurdering.reduce((acc: Record<string, string[]>, personResultat) => {
+): Record<string, string[]> {
+    return vilkårsvurdering.reduce((acc: Record<string, string[]>, personResultat) => {
         const navn = personResultat.person.navn;
 
         if (
@@ -180,8 +95,8 @@ export const utledVilkårSomMåKontrolleresPerPerson = (
         }
 
         const vilkårSomMåKontrolleres = personResultat.vilkårResultater
-            .filter(v => v.verdi.erOpprinneligPreutfyltIBehandling === behandling.behandlingId)
-            .map(v => v.verdi.begrunnelseForManuellKontroll)
+            .filter(v => v.erOpprinneligPreutfyltIBehandling === behandling.behandlingId)
+            .map(v => v.begrunnelseForManuellKontroll)
             .filter(bfmk => bfmk !== null);
 
         if (vilkårSomMåKontrolleres.length > 0) {
@@ -191,3 +106,4 @@ export const utledVilkårSomMåKontrolleresPerPerson = (
 
         return acc;
     }, {});
+}

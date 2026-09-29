@@ -1,200 +1,54 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useHttp } from '@navikt/familie-http';
-import type { FeltState } from '@navikt/familie-skjema';
-import { Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import type { IBehandling } from '@typer/behandling';
-import type {
-    IAnnenVurdering,
-    IPersonResultat,
-    IRestAnnenVurdering,
-    IRestNyttVilkår,
-    IRestPersonResultat,
-    IVilkårResultat,
-    VilkårType,
-} from '@typer/vilkår';
-import type { Dispatch, PropsWithChildren, SetStateAction } from 'react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import type { IPersonResultat, IRestAnnenVurdering, IRestVilkårResultat } from '@typer/vilkår';
+import { createContext, type PropsWithChildren, useContext, useMemo } from 'react';
 
-import { mapFraRestVilkårsvurderingTilUi } from './utils';
-
-export enum VilkårSubmit {
-    PUT,
-    POST,
-    DELETE,
-    NONE,
-}
+import { mapFraRestPersonResultatTilPersonResultat } from './utils';
+import { erAnnenVurderingGyldig, erVilkårResultatGyldig } from './validering';
 
 interface VilkårsvurderingContextValue {
-    settVilkårsvurdering: Dispatch<SetStateAction<IPersonResultat[]>>;
     vilkårsvurdering: IPersonResultat[];
-    vilkårSubmit: VilkårSubmit;
-    settVilkårSubmit: Dispatch<SetStateAction<VilkårSubmit>>;
-    putVilkår: (
-        vilkårsvurderingForPerson: IPersonResultat,
-        redigerbartVilkår: FeltState<IVilkårResultat>
-    ) => Promise<Ressurs<IBehandling>>;
-    putAnnenVurdering: (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => Promise<Ressurs<IBehandling>>;
-    postVilkår: (personIdent: string, vilkårType: VilkårType) => Promise<Ressurs<IBehandling>>;
-    erVilkårsvurderingenGyldig: () => boolean;
-    hentVilkårMedFeil: () => IVilkårResultat[];
-    hentAndreVurderingerMedFeil: () => IAnnenVurdering[];
+    vilkårMedFeil: IRestVilkårResultat[];
+    andreVurderingerMedFeil: IRestAnnenVurdering[];
+    erVilkårsvurderingenGyldig: boolean;
 }
 
 const VilkårsvurderingContext = createContext<VilkårsvurderingContextValue | undefined>(undefined);
 
-export const VilkårsvurderingProvider = ({ children }: PropsWithChildren) => {
-    const { request } = useHttp();
-
+export function VilkårsvurderingProvider({ children }: PropsWithChildren) {
     const behandling = useBehandling();
 
-    const [vilkårSubmit, settVilkårSubmit] = useState(VilkårSubmit.NONE);
+    const value = useMemo<VilkårsvurderingContextValue>(() => {
+        const vilkårsvurdering = mapFraRestPersonResultatTilPersonResultat(
+            behandling.personResultater,
+            behandling.personer
+        );
 
-    const [vilkårsvurdering, settVilkårsvurdering] = useState<IPersonResultat[]>(
-        mapFraRestVilkårsvurderingTilUi(behandling.personResultater, behandling.personer)
-    );
+        const vilkårMedFeil = vilkårsvurdering.flatMap(personResultat =>
+            personResultat.vilkårResultater.filter(
+                vilkårResultat => !erVilkårResultatGyldig(vilkårResultat, personResultat.person)
+            )
+        );
 
-    useEffect(() => {
-        settVilkårsvurdering(mapFraRestVilkårsvurderingTilUi(behandling.personResultater, behandling.personer));
+        const andreVurderingerMedFeil = vilkårsvurdering.flatMap(personResultat =>
+            personResultat.andreVurderinger.filter(annenVurdering => !erAnnenVurderingGyldig(annenVurdering))
+        );
+
+        return {
+            vilkårsvurdering,
+            vilkårMedFeil,
+            andreVurderingerMedFeil,
+            erVilkårsvurderingenGyldig: vilkårMedFeil.length === 0 && andreVurderingerMedFeil.length === 0,
+        };
     }, [behandling]);
 
-    const putVilkår = (vilkårsvurderingForPerson: IPersonResultat, redigerbartVilkår: FeltState<IVilkårResultat>) => {
-        settVilkårSubmit(VilkårSubmit.PUT);
+    return <VilkårsvurderingContext.Provider value={value}>{children}</VilkårsvurderingContext.Provider>;
+}
 
-        return request<IRestPersonResultat, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/${redigerbartVilkår.verdi.id}`,
-            data: {
-                personIdent: vilkårsvurderingForPerson.personIdent,
-                vilkårResultater: [
-                    {
-                        begrunnelse: redigerbartVilkår.verdi.begrunnelse.verdi,
-                        behandlingId: redigerbartVilkår.verdi.behandlingId,
-                        endretAv: redigerbartVilkår.verdi.endretAv,
-                        endretTidspunkt: redigerbartVilkår.verdi.endretTidspunkt,
-                        erAutomatiskVurdert: redigerbartVilkår.verdi.erAutomatiskVurdert,
-                        erVurdert: redigerbartVilkår.verdi.erVurdert,
-                        id: redigerbartVilkår.verdi.id,
-                        periodeFom: redigerbartVilkår.verdi.periode.verdi.fom,
-                        periodeTom: redigerbartVilkår.verdi.periode.verdi.tom,
-                        resultat: redigerbartVilkår.verdi.resultat.verdi,
-                        resultatBegrunnelse: redigerbartVilkår.verdi.resultatBegrunnelse,
-                        erEksplisittAvslagPåSøknad: redigerbartVilkår.verdi.erEksplisittAvslagPåSøknad,
-                        avslagBegrunnelser: redigerbartVilkår.verdi.avslagBegrunnelser.verdi,
-                        vilkårType: redigerbartVilkår.verdi.vilkårType,
-                        vurderesEtter: redigerbartVilkår.verdi.vurderesEtter,
-                        utdypendeVilkårsvurderinger: redigerbartVilkår.verdi.utdypendeVilkårsvurderinger.verdi,
-                        begrunnelseForManuellKontroll: redigerbartVilkår.verdi.begrunnelseForManuellKontroll,
-                        erOpprinneligPreutfyltIBehandling: redigerbartVilkår.verdi.erOpprinneligPreutfyltIBehandling,
-                    },
-                ],
-                andreVurderinger: [],
-            },
-        });
-    };
-
-    const putAnnenVurdering = (redigerbartAnnenVurdering: FeltState<IAnnenVurdering>) => {
-        settVilkårSubmit(VilkårSubmit.PUT);
-
-        return request<IRestAnnenVurdering, IBehandling>({
-            method: 'PUT',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}/annenvurdering/${redigerbartAnnenVurdering.verdi.id}`,
-            data: {
-                id: redigerbartAnnenVurdering.verdi.id,
-                begrunnelse: redigerbartAnnenVurdering.verdi.begrunnelse.verdi,
-                behandlingId: redigerbartAnnenVurdering.verdi.behandlingId,
-                endretAv: redigerbartAnnenVurdering.verdi.endretAv,
-                endretTidspunkt: redigerbartAnnenVurdering.verdi.endretTidspunkt,
-                erVurdert: redigerbartAnnenVurdering.verdi.erVurdert,
-                resultat: redigerbartAnnenVurdering.verdi.resultat.verdi,
-                type: redigerbartAnnenVurdering.verdi.type,
-            },
-        });
-    };
-
-    const postVilkår = (personIdent: string, vilkårType: VilkårType) => {
-        settVilkårSubmit(VilkårSubmit.DELETE);
-
-        return request<IRestNyttVilkår, IBehandling>({
-            method: 'POST',
-            url: `/familie-ba-sak/api/vilkaarsvurdering/${behandling.behandlingId}`,
-            data: { personIdent, vilkårType },
-        });
-    };
-
-    const erVilkårsvurderingenGyldig = (): boolean => {
-        return (
-            vilkårsvurdering.filter((personResultat: IPersonResultat) => {
-                return (
-                    personResultat.vilkårResultater.filter(
-                        (vilkårResultat: FeltState<IVilkårResultat>) =>
-                            vilkårResultat.valideringsstatus !== Valideringsstatus.OK
-                    ).length > 0 ||
-                    personResultat.andreVurderinger.filter(
-                        (annenVurdering: FeltState<IAnnenVurdering>) =>
-                            annenVurdering.valideringsstatus !== Valideringsstatus.OK
-                    ).length > 0
-                );
-            }).length === 0
-        );
-    };
-
-    const hentVilkårMedFeil = (): IVilkårResultat[] => {
-        return vilkårsvurdering.reduce((accVilkårMedFeil: IVilkårResultat[], personResultat: IPersonResultat) => {
-            return [
-                ...accVilkårMedFeil,
-                ...personResultat.vilkårResultater
-                    .filter(
-                        (vilkårResultat: FeltState<IVilkårResultat>) =>
-                            vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
-                    )
-                    .map((vilkårResultat: FeltState<IVilkårResultat>) => vilkårResultat.verdi),
-            ];
-        }, []);
-    };
-
-    const hentAndreVurderingerMedFeil = (): IAnnenVurdering[] => {
-        return vilkårsvurdering.reduce(
-            (accAndreVurderingerMedFeil: IAnnenVurdering[], personResultat: IPersonResultat) => {
-                return [
-                    ...accAndreVurderingerMedFeil,
-                    ...personResultat.andreVurderinger
-                        .filter(
-                            (vilkårResultat: FeltState<IAnnenVurdering>) =>
-                                vilkårResultat.valideringsstatus === Valideringsstatus.FEIL
-                        )
-                        .map((annenVurdering: FeltState<IAnnenVurdering>) => annenVurdering.verdi),
-                ];
-            },
-            []
-        );
-    };
-
-    return (
-        <VilkårsvurderingContext.Provider
-            value={{
-                postVilkår,
-                erVilkårsvurderingenGyldig,
-                hentVilkårMedFeil,
-                hentAndreVurderingerMedFeil,
-                vilkårSubmit,
-                putVilkår,
-                putAnnenVurdering,
-                settVilkårSubmit,
-                settVilkårsvurdering,
-                vilkårsvurdering,
-            }}
-        >
-            {children}
-        </VilkårsvurderingContext.Provider>
-    );
-};
-
-export const useVilkårsvurderingContext = () => {
+export function useVilkårsvurderingContext() {
     const context = useContext(VilkårsvurderingContext);
 
     if (context === undefined) {
         throw new Error('useVilkårsvurderingContext må brukes innenfor en VilkårsvurderingProvider');
     }
     return context;
-};
+}

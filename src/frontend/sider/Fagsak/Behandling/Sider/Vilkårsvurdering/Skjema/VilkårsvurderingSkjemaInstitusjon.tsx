@@ -9,17 +9,13 @@ import type { IPersonResultat } from '@typer/vilkår';
 import { AnnenVurderingType, annenVurderingConfig, vilkårConfigInstitusjon } from '@typer/vilkår';
 
 import SamhandlerInformasjon from '../../../../../../komponenter/Samhandler/SamhandlerInformasjon';
-import GeneriskAnnenVurdering from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
-import GeneriskVilkår from '../GeneriskVilkår/GeneriskVilkår';
+import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
+import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
-interface Props {
-    visFeilmeldinger: boolean;
-}
-
-export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) {
+export function VilkårsvurderingSkjemaInstitusjon() {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
@@ -33,7 +29,7 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
     const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
     const personResultat = vilkårsvurdering.find((value: IPersonResultat) => value.person.type === PersonType.BARN);
     const opplysningsplikt = personResultat?.andreVurderinger.find(
-        value => value.verdi.type === AnnenVurderingType.OPPLYSNINGSPLIKT
+        value => value.type === AnnenVurderingType.OPPLYSNINGSPLIKT
     );
 
     if (!personResultat) {
@@ -67,7 +63,6 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                                 person={personResultat.person}
                                 andreVurderinger={personResultat.andreVurderinger}
                                 annenVurderingConfig={annenVurderingConfig[AnnenVurderingType.OPPLYSNINGSPLIKT]}
-                                visFeilmeldinger={visFeilmeldinger}
                             />
                         </Box>
                     </Bleed>
@@ -96,10 +91,9 @@ export function VilkårsvurderingSkjemaInstitusjon({ visFeilmeldinger }: Props) 
                             generiskVilkårKey={`${personResultat.person.fødselsdato}_${vilkårConfig.key}`}
                             person={personResultat.person}
                             vilkårResultater={personResultat.vilkårResultater.filter(
-                                vilkårResultat => vilkårResultat.verdi.vilkårType === vilkårConfig.key
+                                vilkårResultat => vilkårResultat.vilkårType === vilkårConfig.key
                             )}
                             vilkårFraConfig={vilkårConfig}
-                            visFeilmeldinger={visFeilmeldinger}
                         />
                     );
                 })}

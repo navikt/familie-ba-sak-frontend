@@ -1,58 +1,59 @@
 import { useSlettVilkårResultat } from '@hooks/useSlettVilkårResultat';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import type { FeltState } from '@navikt/familie-skjema';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
-import { mapTilFeltStateVilkårResultat } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/utils';
-import { validerVilkår } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/validering';
-import type { IVilkårResultat } from '@typer/vilkår';
+import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 
 interface Props {
     personIdent: string;
     vilkårResultatId: number;
-    settRedigerbartVilkår: (redigerbartVilkår: FeltState<IVilkårResultat>) => void;
+    onNullstilt: () => void;
 }
 
-export function SlettVilkårResultat({ personIdent, vilkårResultatId, settRedigerbartVilkår }: Props) {
+export function SlettVilkårResultat({ personIdent, vilkårResultatId, onNullstilt }: Props) {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
-    const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultatId);
+    const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
 
     const { mutate: slettVilkårResultat, isPending: slettVilkårResultatIsPending } = useSlettVilkårResultat({
-        onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+        onSuccess: nyBehandling => {
+            const iderFraNyBehandling = nyBehandling.personResultater
+                .flatMap(personResultat => personResultat.vilkårResultater)
+                .map(vilkårResultat => vilkårResultat.id);
 
-            const personResultat = behandling.personResultater.find(pr =>
-                pr.vilkårResultater.some(vr => vr.id === vilkårResultatId)
-            );
+            const iderFraGammelBehandling = behandling.personResultater
+                .flatMap(personResultat => personResultat.vilkårResultater)
+                .map(vilkårResultat => vilkårResultat.id);
 
-            const nullstiltVilkårResultat = personResultat?.vilkårResultater.find(vr => vr.id === vilkårResultatId);
-            const person = behandling.personer.find(p => p.personIdent === personResultat?.personIdent);
-
-            if (nullstiltVilkårResultat) {
-                const feltStateVilkårResultat = mapTilFeltStateVilkårResultat(nullstiltVilkårResultat);
-                const validertFeltStateVilkårResultat = validerVilkår(feltStateVilkårResultat, { person });
-                settRedigerbartVilkår(validertFeltStateVilkårResultat);
+            // Backend nullstiller siste periode av en vilkårtype med samme id i stedet for å slette den, og da skal raden
+            // forbli åpen. Skjemaet nullstilles eksplisitt fordi responsen kan være identisk med det som allerede er lagret.
+            if (iderFraNyBehandling.includes(vilkårResultatId)) {
+                onNullstilt();
             } else {
-                kollapsRad();
+                kollapsRad(vilkårResultatId);
             }
+
+            const nylagedeIder = iderFraNyBehandling.filter(id => !iderFraGammelBehandling.includes(id));
+            for (const id of nylagedeIder) {
+                ekspanderRad(id);
+            }
+
+            settÅpenBehandling(byggSuksessRessurs(nyBehandling));
         },
     });
 
-    function onSlettClicked() {
-        slettVilkårResultat({
-            behandlingId: behandling.behandlingId,
-            vilkårResultatId: vilkårResultatId,
-            personIdent: personIdent,
-        });
-    }
-
     return (
         <Button
+            type={'button'}
             variant={'tertiary'}
-            onClick={() => onSlettClicked()}
+            onClick={() =>
+                slettVilkårResultat({
+                    behandlingId: behandling.behandlingId,
+                    vilkårResultatId,
+                    personIdent,
+                })
+            }
             loading={slettVilkårResultatIsPending}
             size={'medium'}
             icon={<TrashIcon />}

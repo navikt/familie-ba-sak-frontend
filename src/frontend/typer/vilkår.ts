@@ -1,5 +1,4 @@
-import type { FeltState } from '@navikt/familie-skjema';
-import type { IIsoDatoPeriode, IsoDatoString } from '@utils/dato';
+import type { IsoDatoString } from '@utils/dato';
 
 import type { BehandlingSteg, BehandlingStegStatus } from './behandling';
 import type { IGrunnlagPerson } from './person';
@@ -25,12 +24,6 @@ export const resultatVisningsnavn: Record<ResultatUI, string> = {
     IKKE_AKTUELT: 'Ikke aktuelt',
 };
 
-export const resultater: Record<Resultat, string> = {
-    OPPFYLT: 'Ja',
-    IKKE_OPPFYLT: 'Nei',
-    IKKE_VURDERT: 'Kanskje',
-};
-
 export enum AnnenVurderingType {
     OPPLYSNINGSPLIKT = 'OPPLYSNINGSPLIKT',
 }
@@ -52,40 +45,9 @@ export enum Regelverk {
 // Vilkårsvurdering typer for ui
 export interface IPersonResultat {
     personIdent: string;
-    vilkårResultater: FeltState<IVilkårResultat>[];
-    andreVurderinger: FeltState<IAnnenVurdering>[];
+    vilkårResultater: IRestVilkårResultat[];
+    andreVurderinger: IRestAnnenVurdering[];
     person: IGrunnlagPerson;
-}
-
-export interface IAnnenVurdering {
-    id: number;
-    begrunnelse: FeltState<string>;
-    behandlingId: number;
-    endretAv: string;
-    endretTidspunkt: string;
-    erVurdert: boolean;
-    resultat: FeltState<Resultat>;
-    type: AnnenVurderingType;
-}
-
-export interface IVilkårResultat {
-    begrunnelse: FeltState<string>;
-    behandlingId: number;
-    endretAv: string;
-    endretTidspunkt: string;
-    erAutomatiskVurdert: boolean;
-    erVurdert: boolean;
-    id: number;
-    periode: FeltState<IIsoDatoPeriode>;
-    resultat: FeltState<Resultat>;
-    vilkårType: VilkårType;
-    erEksplisittAvslagPåSøknad?: boolean;
-    avslagBegrunnelser: FeltState<VedtakBegrunnelse[]>;
-    vurderesEtter: Regelverk | null;
-    utdypendeVilkårsvurderinger: FeltState<UtdypendeVilkårsvurdering[]>;
-    resultatBegrunnelse: ResultatBegrunnelse | null;
-    begrunnelseForManuellKontroll: string | null;
-    erOpprinneligPreutfyltIBehandling: number | null;
 }
 
 // Vilkårsvurdering typer for api
