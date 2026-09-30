@@ -1,6 +1,7 @@
 import type { IDokumentInfo } from '@navikt/familie-typer';
 import { screen, within } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
+import { lagDokumentInfo } from '@testutils/testdata/dokumentInfoTestdata';
 import { render } from '@testutils/testrender';
 import { DokumentTittel } from '@typer/manuell-journalføring';
 import { afterEach, describe, expect, test, vi } from 'vitest';
@@ -21,16 +22,6 @@ function mockManuellJournalføringContext(dokumenter: IDokumentInfo[]) {
     } as unknown as ReturnType<typeof useManuellJournalføringContext>);
 }
 
-function lagDokument(dokument: Partial<IDokumentInfo> = {}): IDokumentInfo {
-    return {
-        dokumentInfoId: '1',
-        tittel: 'Klage',
-        brevkode: 'NAV 90-00.08 K',
-        logiskeVedlegg: [],
-        ...dokument,
-    };
-}
-
 async function velgAlternativ(user: UserEvent, comboboxNavn: string, alternativ: string) {
     const combobox = screen.getByRole('combobox', { name: comboboxNavn });
     await user.click(combobox);
@@ -48,7 +39,7 @@ afterEach(() => {
 describe('EndreDokumentInfoPanel', () => {
     test('skal vise eksisterende logiske vedlegg som valgt innhold', () => {
         // Arrange
-        const dokument = lagDokument({
+        const dokument = lagDokumentInfo({
             logiskeVedlegg: [
                 { logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST },
                 { logiskVedleggId: '12', tittel: DokumentTittel.UTTALELSE },
@@ -66,10 +57,10 @@ describe('EndreDokumentInfoPanel', () => {
 
     test('skal legge til valgt innhold som logisk vedlegg uten å endre dokumenttittelen', async () => {
         // Arrange
-        const dokument = lagDokument({
+        const dokument = lagDokumentInfo({
             logiskeVedlegg: [{ logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST }],
         });
-        const annetDokument = lagDokument({ dokumentInfoId: '2', tittel: 'Ekstra vedlegg' });
+        const annetDokument = lagDokumentInfo({ dokumentInfoId: '2', tittel: 'Ekstra vedlegg' });
         mockManuellJournalføringContext([dokument, annetDokument]);
 
         const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
@@ -94,7 +85,7 @@ describe('EndreDokumentInfoPanel', () => {
 
     test('skal legge til fritekst som logisk vedlegg', async () => {
         // Arrange
-        const dokument = lagDokument();
+        const dokument = lagDokumentInfo();
         mockManuellJournalføringContext([dokument]);
 
         const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
@@ -116,7 +107,7 @@ describe('EndreDokumentInfoPanel', () => {
 
     test('skal fjerne innhold fra logiske vedlegg', async () => {
         // Arrange
-        const dokument = lagDokument({
+        const dokument = lagDokumentInfo({
             logiskeVedlegg: [
                 { logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST },
                 { logiskVedleggId: '12', tittel: DokumentTittel.UTTALELSE },
@@ -140,7 +131,7 @@ describe('EndreDokumentInfoPanel', () => {
 
     test('skal sette tom liste med logiske vedlegg når siste innhold fjernes', async () => {
         // Arrange
-        const dokument = lagDokument({
+        const dokument = lagDokumentInfo({
             logiskeVedlegg: [{ logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST }],
         });
         mockManuellJournalføringContext([dokument]);
@@ -157,7 +148,7 @@ describe('EndreDokumentInfoPanel', () => {
     test('skal beholde logiske vedlegg når dokumenttittelen endres', async () => {
         // Arrange
         const logiskeVedlegg = [{ logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST }];
-        const dokument = lagDokument({ tittel: '', logiskeVedlegg });
+        const dokument = lagDokumentInfo({ tittel: '', logiskeVedlegg });
         mockManuellJournalføringContext([dokument]);
 
         const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);

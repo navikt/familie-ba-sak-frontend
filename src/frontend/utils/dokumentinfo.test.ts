@@ -1,17 +1,7 @@
-import type { IDokumentInfo } from '@navikt/familie-typer';
+import { lagDokumentInfo } from '@testutils/testdata/dokumentInfoTestdata';
 import { describe, expect, test } from 'vitest';
 
-import { lagJournalpostDokumenterForJournalføring } from './journalpostDokumentUtils';
-
-function lagDokument(dokument: Partial<IDokumentInfo> = {}): IDokumentInfo {
-    return {
-        dokumentInfoId: '123',
-        tittel: 'Klage',
-        brevkode: 'NAV 90-00.08 K',
-        logiskeVedlegg: [],
-        ...dokument,
-    };
-}
+import { lagJournalpostDokumenterForJournalføring } from './dokumentinfo';
 
 describe('lagJournalpostDokumenterForJournalføring', () => {
     test('skal sende valgte titler som logiske vedlegg og beholde dokumenttittelen uendret', () => {
@@ -20,7 +10,7 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
             { logiskVedleggId: '0', tittel: 'Vigselsattest' },
             { logiskVedleggId: '0', tittel: 'Pass/ID-papirer' },
         ];
-        const dokument = lagDokument({ tittel: 'Klage', logiskeVedlegg });
+        const dokument = lagDokumentInfo({ dokumentInfoId: '123', tittel: 'Klage', logiskeVedlegg });
 
         // Act
         const [journalpostDokument] = lagJournalpostDokumenterForJournalføring([dokument]);
@@ -39,7 +29,7 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
             logiskVedleggId: '0',
             tittel: `Brev fra skatt om registrering av sivilstatus nummer ${index + 1}`,
         }));
-        const dokument = lagDokument({ tittel: 'Klage', logiskeVedlegg });
+        const dokument = lagDokumentInfo({ tittel: 'Klage', logiskeVedlegg });
 
         // Act
         const [journalpostDokument] = lagJournalpostDokumenterForJournalføring([dokument]);
@@ -52,7 +42,7 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
 
     test('skal sende tom liste når alle logiske vedlegg er fjernet', () => {
         // Arrange
-        const dokument = lagDokument({ logiskeVedlegg: [] });
+        const dokument = lagDokumentInfo({ logiskeVedlegg: [] });
 
         // Act
         const [journalpostDokument] = lagJournalpostDokumenterForJournalføring([dokument]);
@@ -64,12 +54,12 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
     test('skal mappe hvert dokument med sine egne logiske vedlegg', () => {
         // Arrange
         const dokumenter = [
-            lagDokument({
+            lagDokumentInfo({
                 dokumentInfoId: '1',
                 tittel: 'Søknad om barnetrygd ordinær',
                 logiskeVedlegg: [{ logiskVedleggId: '11', tittel: 'Fødselsattest' }],
             }),
-            lagDokument({
+            lagDokumentInfo({
                 dokumentInfoId: '2',
                 tittel: 'Ekstra vedlegg',
                 logiskeVedlegg: [{ logiskVedleggId: '0', tittel: 'Uttalelse' }],
@@ -96,7 +86,7 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
 
     test('skal bruke 0 som dokumentInfoId når dokumentet mangler dokumentInfoId', () => {
         // Arrange
-        const dokument = lagDokument({ dokumentInfoId: undefined });
+        const dokument = lagDokumentInfo({ dokumentInfoId: undefined });
 
         // Act
         const [journalpostDokument] = lagJournalpostDokumenterForJournalføring([dokument]);
@@ -107,7 +97,7 @@ describe('lagJournalpostDokumenterForJournalføring', () => {
 
     test('skal ikke sende eksisterende logiske vedlegg', () => {
         // Arrange
-        const dokument = lagDokument({ logiskeVedlegg: [{ logiskVedleggId: '0', tittel: 'Uttalelse' }] });
+        const dokument = lagDokumentInfo({ logiskeVedlegg: [{ logiskVedleggId: '0', tittel: 'Uttalelse' }] });
 
         // Act
         const [journalpostDokument] = lagJournalpostDokumenterForJournalføring([dokument]);

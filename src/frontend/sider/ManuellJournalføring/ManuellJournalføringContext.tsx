@@ -41,6 +41,7 @@ import type { ISamhandlerInfo } from '@typer/samhandler';
 import type { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { hentDefaultBehandlingstema } from '@utils/behandling';
 import { isoStringTilDate } from '@utils/dato';
+import { lagJournalpostDokumenterForJournalføring } from '@utils/dokumentinfo';
 import { hentAktivBehandlingPåMinimalFagsak } from '@utils/fagsak';
 import type { AxiosError } from 'axios';
 import { differenceInMilliseconds } from 'date-fns';
@@ -50,7 +51,6 @@ import { useNavigate, useParams } from 'react-router';
 
 import useDokument from '../../hooks/useDokument';
 import type { VisningBehandling } from '../Fagsak/Saksoversikt/visningBehandling';
-import { lagJournalpostDokumenterForJournalføring } from './Dokument/journalpostDokumentUtils';
 
 export interface IOpprettBehandlingSkjemaBase {
     behandlingstype: Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype | '';
