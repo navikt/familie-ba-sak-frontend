@@ -1,40 +1,13 @@
-import type { Ref } from 'react';
 import { useMemo } from 'react';
-import { FlaggCombobox } from '../FlaggCombobox';
+import { FlaggCombobox, type FlaggComboboxKodeProps } from '../FlaggCombobox';
 import { VALUTAKODE_TIL_LABEL, VALUTAKODE_TIL_REGIONKODE, type Valutakode } from './valuta';
 
-interface ValutaComboboxBaseProps {
-    options: Valutakode[];
-    label: string;
-    error?: string | Error;
-    readOnly?: boolean;
-    placeholder?: string;
-    dropdownPlacement?: 'bottom' | 'top' | 'auto';
-    className?: string;
-}
-
-interface ValutaComboboxSingleProps extends ValutaComboboxBaseProps {
-    isMulti?: false;
-    value: Valutakode | undefined | null;
-    onChange: (value: Valutakode | null) => void;
-}
-
-interface ValutaComboboxMultiProps extends ValutaComboboxBaseProps {
-    isMulti: true;
-    value: Valutakode[] | undefined;
-    onChange: (value: Valutakode[]) => void;
-}
-
-type ValutaComboboxProps = (ValutaComboboxSingleProps | ValutaComboboxMultiProps) & {
-    ref?: Ref<HTMLInputElement>;
-};
-
-export function ValutaCombobox({ options, ...rest }: ValutaComboboxProps) {
+export function ValutaCombobox({ options, ...rest }: FlaggComboboxKodeProps<Valutakode>) {
     const valutaOptions = useMemo(() => {
-        return options.map(currency => ({
-            value: currency,
-            label: VALUTAKODE_TIL_LABEL[currency],
-            regionCode: VALUTAKODE_TIL_REGIONKODE[currency],
+        return options.map(valuta => ({
+            value: valuta,
+            label: VALUTAKODE_TIL_LABEL[valuta],
+            regionCode: VALUTAKODE_TIL_REGIONKODE[valuta],
         }));
     }, [options]);
 
