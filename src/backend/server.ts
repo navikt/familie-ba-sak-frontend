@@ -16,7 +16,7 @@ import setupRouter from './router.js';
 
 const port = 8000;
 
-backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAuthClient, router }: IApp) => {
+backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAuthConfig, router }: IApp) => {
     app.use((req: Request, _res: Response, next: NextFunction) => {
         req.headers['nav-call-id'] = uuidv4();
         req.headers['nav-consumer-id'] = 'familie-ba-sak-front';
@@ -28,13 +28,13 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
         app.use('/favicon.svg', express.static(path.join(process.cwd(), frontendPath, 'favicon.svg'), {}));
     }
 
-    app.use('/familie-ba-sak/api', ensureAuthenticated(azureAuthClient, true), attachToken(azureAuthClient), doProxy());
+    app.use('/familie-ba-sak/api', ensureAuthenticated(azureAuthConfig, true), attachToken(azureAuthConfig), doProxy());
 
     app.use('/redirect', doRedirectProxy());
 
     app.use(express.json({ limit: '200mb' }));
     app.use(express.urlencoded({ limit: '200mb', extended: true }));
-    app.use('/', await setupRouter(azureAuthClient, router));
+    app.use('/', await setupRouter(azureAuthConfig, router));
 
     // Error-handling middleware - må registreres etter alle andre routes
     app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {

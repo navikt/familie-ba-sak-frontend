@@ -30,8 +30,8 @@ importers:
         specifier: 8.16.1
         version: 8.16.1
       '@navikt/familie-backend':
-        specifier: 10.1.31-alpha.4.sha-f79576d
-        version: 10.1.31-alpha.4.sha-f79576d(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+        specifier: 11.0.0
+        version: 11.0.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@navikt/familie-form-elements':
         specifier: 22.0.2
         version: 22.0.2(@navikt/ds-css@8.16.1)(@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(styled-components@6.5.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(supports-color@7.2.0)
@@ -565,8 +565,9 @@ packages:
   '@navikt/ds-tokens@8.16.1':
     resolution: {integrity: sha512-PTLN5EWkfprObW3sJfRqcZvYOTMpG2l92VrMYeVX272hPlKn7an9eodZ6ggIMTEeNoQ+MuOhN0wEVk6Cbs77SA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.16.1/f1ac550ff75679021d1c3a21997f33a9728a6a01}
 
-  '@navikt/familie-backend@10.1.31-alpha.4.sha-f79576d':
-    resolution: {integrity: sha512-cJnXGo4q6MnpgVkdQSVEaZXOGEeIW1CJgbC0ruQfjTDNip8udfCQR8jmQq976CugJSqp8Ea8lFn4hWpBbmmLeg==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/10.1.31-alpha.4.sha-f79576d/36a2ab330ba6b8320648ccfdd66c6e529e69bdfb}
+  '@navikt/familie-backend@11.0.0':
+    resolution: {integrity: sha512-WiwPChADvBNciCQtHncWRN2BJHXVtEjRHhl/kDlfsP1VDaqYexajy3cQ5vQOpUYSCgRscwZCzcGFSMgPtgl5hQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/11.0.0/b7e09a82539a32ac7676ee9e84a9e655c504383f}
+    engines: {node: '>=22.19.0'}
 
   '@navikt/familie-form-elements@22.0.2':
     resolution: {integrity: sha512-uirfS+DntZA8wjVyTND3Taqp0SL9eAo78IAcFiF6qMcVeeQH0IOW+3Gh0MG9OEJmaMpT8KGe+6Wjjuq673a/iQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-form-elements/22.0.2/c6580331e0de052c14993d84835442dec6e48c49}
@@ -3284,7 +3285,7 @@ snapshots:
 
   '@navikt/ds-tokens@8.16.1': {}
 
-  '@navikt/familie-backend@10.1.31-alpha.4.sha-f79576d(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
+  '@navikt/familie-backend@11.0.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@navikt/familie-logging': 7.0.10
       '@types/cookie-parser': 1.4.8(@types/express@5.0.6)
