@@ -1,7 +1,7 @@
+import { server } from '@testutils/mocks/node';
+import { lagISaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { HttpResponse, http } from 'msw';
 import { describe, expect, it } from 'vitest';
-import { server } from '../testutils/mocks/node';
-import { lagISaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
 import { hentSaksbehandler } from './hentSaksbehandler';
 
 describe('hentSaksbehandler', () => {
@@ -31,6 +31,6 @@ describe('hentSaksbehandler', () => {
         );
 
         // Act & assert
-        expect(hentSaksbehandler()).rejects.toThrow();
+        await expect(hentSaksbehandler()).rejects.toThrow();
     });
 });
