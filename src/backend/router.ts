@@ -1,5 +1,5 @@
 import { renderNaisMetaTags } from '@nais/apm';
-import type { Client } from '@navikt/familie-backend';
+import type { Configuration } from '@navikt/familie-backend';
 import { ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import type { NextFunction, Request, Response, Router } from 'express';
 import fs from 'fs';
@@ -20,7 +20,7 @@ const redirectHvisInternUrlIPreprod = () => {
     };
 };
 
-export default async (authClient: Client, router: Router) => {
+export default async (authConfig: Configuration, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
             .send({
@@ -58,7 +58,7 @@ export default async (authClient: Client, router: Router) => {
     router.get(
         '*splat',
         redirectHvisInternUrlIPreprod(),
-        ensureAuthenticated(authClient, false),
+        ensureAuthenticated(authConfig, false),
         async (req: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 

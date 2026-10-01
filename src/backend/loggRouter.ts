@@ -1,4 +1,4 @@
-import type { Client } from '@navikt/familie-backend';
+import type { Configuration } from '@navikt/familie-backend';
 import { ensureAuthenticated } from '@navikt/familie-backend';
 import type { NextFunction, Request, Response } from 'express';
 import express, { Router } from 'express';
@@ -9,12 +9,12 @@ import { LoggSanitizer } from './loggSanitizer.js';
 
 const sanitizer = new LoggSanitizer();
 
-export const createLoggRouter = (azureAuthClient: Client): Router => {
+export const createLoggRouter = (azureAuthConfig: Configuration): Router => {
     const loggRouter = Router();
 
     loggRouter.post(
         '/logg',
-        ensureAuthenticated(azureAuthClient, true),
+        ensureAuthenticated(azureAuthConfig, true),
         express.json({ limit: '32kb' }),
         (req: Request, res: Response) => {
             const logg = FrontendLogg.fraBody(req.body);
