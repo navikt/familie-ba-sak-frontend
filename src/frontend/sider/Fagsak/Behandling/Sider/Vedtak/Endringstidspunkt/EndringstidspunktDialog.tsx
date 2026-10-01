@@ -21,9 +21,6 @@ import { useEndringstidspunktDialogContext } from './EndringstidspunktDialogCont
 import { EndringstidspunktField } from './EndringstidspunktField';
 import { useEndringstidspunktForm } from './useEndringstidspunktForm';
 
-const FALLBACK_ERROR_MESSAGE =
-    'Systemet kan ikke hente endringstidspunktet. Prøv igjen senere eller kontakt brukerstøtte.';
-
 function formaterDato(endringstidspunkt: string) {
     return isoStringTilFormatertString({ isoString: endringstidspunkt, tilFormat: Datoformat.DATO });
 }
@@ -82,7 +79,7 @@ export function EndringstidspunktDialog() {
                                         <ErrorMessage>
                                             <HStack gap={'space-4'} align={'center'}>
                                                 <ExclamationmarkTriangleFillIcon fontSize={'0.9rem'} />
-                                                {endringstidspunktError.message ?? FALLBACK_ERROR_MESSAGE}
+                                                {endringstidspunktError.message}
                                             </HStack>
                                         </ErrorMessage>
                                     )}

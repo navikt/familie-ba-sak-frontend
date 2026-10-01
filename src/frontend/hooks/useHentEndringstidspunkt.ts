@@ -6,15 +6,10 @@ export const HentEndringstidspunktQueryKeyFactory = {
     endringstidspunkt: (behandlingId: number) => ['endringstidspunkt', behandlingId],
 };
 
-interface Options {
-    enabled?: boolean;
-}
-
-export function useHentEndringstidspunkt(behandlingId: number, options?: Options) {
+export function useHentEndringstidspunkt(behandlingId: number) {
     const { request } = useHttp();
     return useQuery({
         queryKey: HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandlingId),
         queryFn: () => hentEndringstidspunkt(request, behandlingId),
-        ...options,
     });
 }
