@@ -140,7 +140,7 @@ importers:
         version: 10.4.2
       '@testing-library/jest-dom':
         specifier: 7.0.1
-        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0)))
+        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1)))
       '@testing-library/react':
         specifier: 16.3.3
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -167,7 +167,7 @@ importers:
         version: 1.10.2(supports-color@7.2.0)
       '@vitejs/plugin-react':
         specifier: 6.0.5
-        version: 6.0.5(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))
+        version: 6.0.5(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -175,8 +175,8 @@ importers:
         specifier: 30.0.1
         version: 30.0.1(@noble/hashes@1.8.0)
       lint-staged:
-        specifier: 17.3.0
-        version: 17.3.0
+        specifier: 17.5.1
+        version: 17.5.1
       msw:
         specifier: 2.15.0
         version: 2.15.0(@types/node@24.13.6)(typescript@7.0.2)
@@ -188,10 +188,10 @@ importers:
         version: 7.0.2
       vite:
         specifier: 8.2.1
-        version: 8.2.1(@types/node@24.13.6)(yaml@2.9.0)
+        version: 8.2.1(@types/node@24.13.6)(yaml@2.9.1)
       vitest:
         specifier: 4.1.11
-        version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))
+        version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))
 
 packages:
 
@@ -2241,8 +2241,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  lint-staged@17.3.0:
-    resolution: {integrity: sha512-woZS3vNe3UKqBaLPvbLOtKRY4tLANpWQhom12MGWqC8Mh1lCOO+WgSwmX2amjJAqTY9BkXYW87fCUH5H9Ph6xw==}
+  lint-staged@17.5.1:
+    resolution: {integrity: sha512-7EDuco1xnBMeVpvAbeMq1U5KXwJGLmY8q6l+Ye78r36C4mPc+Vg1Z2SK8gHyRTyvPro90A0q5/FAZ+Au23d6QQ==}
     engines: {node: '>=22.22.1'}
     hasBin: true
 
@@ -2964,10 +2964,6 @@ packages:
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
-  tinyexec@1.3.0:
-    resolution: {integrity: sha512-QKAl9m8gWWGHV8jZcPeym6j+XULi6tOf1mT83WYJ4Lk2ytW/uwAWkrP0uFsdoYMdueVJ0qs26wZ+23xeB4ibNQ==}
-    engines: {node: '>=18'}
-
   tinyexec@1.3.1:
     resolution: {integrity: sha512-GCvB3aoys96IuDFBMcTB46JOR6mdMtAToqwiW8JlWhsoh1mhHi/xn9ss/Dg7N555GiJyEt2qzoG/NHCwM6h1EA==}
     engines: {node: '>=18'}
@@ -3244,8 +3240,8 @@ packages:
     resolution: {integrity: sha512-vIYeF1u3CjlhAFekPPAk2h/Kv4T3mAkMox5OymRiJQB0spDP10LHvt+K7G9Ny6NuuMAb25/6n1qyUjAcGNf/AA==}
     engines: {node: '>= 6'}
 
-  yaml@2.9.0:
-    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==}
     engines: {node: '>= 14.6'}
     hasBin: true
 
@@ -4237,7 +4233,7 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0)))':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1)))':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.2
@@ -4247,7 +4243,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))
+      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
@@ -4432,10 +4428,10 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vitejs/plugin-react@6.0.5(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))':
+  '@vitejs/plugin-react@6.0.5(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.1)
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -4446,14 +4442,14 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.1
 
-  '@vitest/mocker@4.1.11(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))':
+  '@vitest/mocker@4.1.11(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
       msw: 2.15.0(@types/node@24.13.6)(typescript@7.0.2)
-      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.1)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -4932,9 +4928,9 @@ snapshots:
     dependencies:
       fast-string-width: 3.0.2
 
-  fdir@6.5.0(picomatch@4.0.5):
+  fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
-      picomatch: 4.0.5
+      picomatch: 4.0.7
 
   fecha@4.2.3: {}
 
@@ -5320,13 +5316,13 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  lint-staged@17.3.0:
+  lint-staged@17.5.1:
     dependencies:
-      picomatch: 4.0.5
+      picomatch: 4.0.7
       string-argv: 0.3.2
-      tinyexec: 1.3.0
+      tinyexec: 1.3.1
     optionalDependencies:
-      yaml: 2.9.0
+      yaml: 2.9.1
 
   lodash@4.18.1: {}
 
@@ -6064,14 +6060,12 @@ snapshots:
 
   tinybench@2.9.0: {}
 
-  tinyexec@1.3.0: {}
-
   tinyexec@1.3.1: {}
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
 
   tinyrainbow@3.1.1: {}
 
@@ -6164,7 +6158,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0):
+  vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
@@ -6174,12 +6168,12 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.13.6
       fsevents: 2.3.3
-      yaml: 2.9.0
+      yaml: 2.9.1
 
-  vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0)):
+  vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.13.6)(jsdom@30.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.0))
+      '@vitest/mocker': 4.1.11(msw@2.15.0(@types/node@24.13.6)(typescript@7.0.2))(vite@8.2.1(@types/node@24.13.6)(yaml@2.9.1))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -6196,7 +6190,7 @@ snapshots:
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@24.13.6)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
@@ -6308,7 +6302,7 @@ snapshots:
 
   yaml@1.10.3: {}
 
-  yaml@2.9.0:
+  yaml@2.9.1:
     optional: true
 
   yargs-parser@21.1.1: {}
