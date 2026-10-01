@@ -69,19 +69,20 @@ export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
     }
 };
 
-export const obfuskerFagsakDeltager = (fagsakDeltager: Ressurs<IFagsakDeltager[]>) => {
-    if (fagsakDeltager.status === RessursStatus.SUKSESS) {
-        fagsakDeltager.data?.forEach(fagsakDeltager => {
-            if (fagsakDeltager.rolle == FagsakDeltagerRolle.Barn) {
-                fagsakDeltager.navn = 'Barn';
-            } else if (fagsakDeltager.rolle == FagsakDeltagerRolle.Forelder) {
-                fagsakDeltager.navn = 'Forelder';
-            } else {
-                fagsakDeltager.navn = 'Ukjent rolle';
-            }
-        });
+function obfuskertNavnForRolle(rolle: FagsakDeltagerRolle): string {
+    switch (rolle) {
+        case FagsakDeltagerRolle.Barn:
+            return 'Barn';
+        case FagsakDeltagerRolle.Forelder:
+            return 'Forelder';
+        default:
+            return 'Ukjent rolle';
     }
-};
+}
+
+export function obfuskerFagsakDeltager(fagsakDeltager: IFagsakDeltager): IFagsakDeltager {
+    return { ...fagsakDeltager, navn: obfuskertNavnForRolle(fagsakDeltager.rolle) };
+}
 
 const sammenlignFødselsdato = <T extends { fødselsdato?: string; person?: IGrunnlagPerson }>(a: T, b: T) => {
     if (a.person && b.person) return b.person.fødselsdato.localeCompare(a.person.fødselsdato);

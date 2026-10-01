@@ -1,135 +1,116 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
-import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
+import { useSøkFagsakDeltagere } from '@hooks/useSøkFagsakDeltagere';
 import { PersonIkon } from '@komponenter/PersonIkon';
-import type { ISøkeresultat } from '@navikt/familie-header';
-import { Søk } from '@navikt/familie-header';
-import { useHttp } from '@navikt/familie-http';
+import { type ISøkeresultat, Søk } from '@navikt/familie-header';
 import {
     byggFeiletRessurs,
     byggFunksjonellFeilRessurs,
     byggHenterRessurs,
+    byggSuksessRessurs,
     byggTomRessurs,
     kjønnType,
     type Ressurs,
-    RessursStatus,
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
-import { FagsakDeltagerRolle, type IFagsakDeltager, type ISøkParam } from '@typer/fagsakdeltager';
+import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
 import { erLokal } from '@utils/miljø';
-import { obfuskerFagsakDeltager } from '@utils/obfuskerData';
 import { erAdresseBeskyttet } from '@utils/validators';
-import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-function mapFagsakDeltagerTilIkon(fagsakDeltager: IFagsakDeltager): ReactNode {
+const UGYLDIG_IDENT_FEILMELDING = 'Ugyldig fødsels- eller d-nummer (11 siffer)';
+
+function erGyldigIdent(personIdent: string): boolean {
+    return idnr(personIdent).status === 'valid' || erLokal();
+}
+
+function tilSøkeresultat(fagsakDeltager: IFagsakDeltager): ISøkeresultat {
+    return {
+        adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
+        fagsakId: fagsakDeltager.fagsakId,
+        harTilgang: fagsakDeltager.harTilgang,
+        navn: fagsakDeltager.navn,
+        ident: fagsakDeltager.ident,
+        ikon: (
+            <PersonIkon
+                fagsakType={fagsakDeltager.fagsakType}
+                kjønn={fagsakDeltager.kjønn || kjønnType.UKJENT}
+                erBarn={fagsakDeltager.rolle === FagsakDeltagerRolle.Barn}
+                erAdresseBeskyttet={erAdresseBeskyttet(fagsakDeltager.adressebeskyttelseGradering)}
+                harTilgang={fagsakDeltager.harTilgang}
+                størrelse={'m'}
+                erEgenAnsatt={fagsakDeltager.erEgenAnsatt}
+            />
+        ),
+    };
+}
+
+export function FagsakDeltagerSøk() {
+    const navigate = useNavigate();
+    const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
+
+    const {
+        mutate: søkEtterFagsakDeltagere,
+        reset: nullstillSøk,
+        isPending,
+        error,
+        data: fagsakDeltagere,
+    } = useSøkFagsakDeltagere();
+    const [harUgyldigIdent, settHarUgyldigIdent] = useState(false);
+
+    function nullstillSøkeresultater() {
+        settHarUgyldigIdent(false);
+        nullstillSøk();
+    }
+
+    function søk(personIdent: string) {
+        nullstillSøkeresultater();
+        if (personIdent === '') {
+            return;
+        }
+        if (!erGyldigIdent(personIdent)) {
+            settHarUgyldigIdent(true);
+            return;
+        }
+        søkEtterFagsakDeltagere({ personIdent });
+    }
+
+    function lagSøkeresultater(): Ressurs<ISøkeresultat[]> {
+        if (harUgyldigIdent) {
+            return byggFunksjonellFeilRessurs(UGYLDIG_IDENT_FEILMELDING);
+        }
+        if (isPending) {
+            return byggHenterRessurs();
+        }
+        if (error) {
+            return byggFeiletRessurs(error.message);
+        }
+        if (fagsakDeltagere) {
+            return byggSuksessRessurs(fagsakDeltagere.map(tilSøkeresultat));
+        }
+        return byggTomRessurs();
+    }
+
     return (
-        <PersonIkon
-            fagsakType={fagsakDeltager.fagsakType}
-            kjønn={fagsakDeltager.kjønn || kjønnType.UKJENT}
-            erBarn={fagsakDeltager.rolle === FagsakDeltagerRolle.Barn}
-            erAdresseBeskyttet={erAdresseBeskyttet(fagsakDeltager.adressebeskyttelseGradering)}
-            harTilgang={fagsakDeltager.harTilgang}
-            størrelse={'m'}
-            erEgenAnsatt={fagsakDeltager.erEgenAnsatt}
+        <Søk
+            søk={søk}
+            label={'Søkefelt. Fødsels- eller D-nummer (11 siffer)'}
+            placeholder={'Fødsels- eller D-nummer (11 siffer)'}
+            nullstillSøkeresultater={nullstillSøkeresultater}
+            søkeresultater={lagSøkeresultater()}
+            søkeresultatOnClick={søkeresultat => {
+                if (!søkeresultat) {
+                    return;
+                }
+                if (søkeresultat.fagsakId) {
+                    navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
+                    return;
+                }
+                if (søkeresultat.harTilgang) {
+                    åpneModal({ ident: søkeresultat.ident });
+                }
+            }}
         />
     );
 }
-
-const FagsakDeltagerSøk = () => {
-    const { request } = useHttp();
-    const navigate = useNavigate();
-    const skalObfuskereData = useSkalObfuskereData();
-
-    const [fagsakDeltagere, settFagsakDeltagere] = useState<Ressurs<IFagsakDeltager[]>>(byggTomRessurs());
-
-    const { åpneModal } = useModal(ModalType.OPPRETT_FAGSAK);
-
-    const fnrValidator = (verdi: string): boolean => {
-        return idnr(verdi).status === 'valid';
-    };
-
-    const søk = (personIdent: string): void => {
-        if (personIdent === '') {
-            settFagsakDeltagere(byggTomRessurs);
-            return;
-        }
-
-        if (fnrValidator(personIdent) || erLokal()) {
-            settFagsakDeltagere(byggHenterRessurs());
-            request<ISøkParam, IFagsakDeltager[]>({
-                method: 'POST',
-                url: 'familie-ba-sak/api/fagsaker/sok',
-                data: {
-                    personIdent,
-                },
-            })
-                .then((response: Ressurs<IFagsakDeltager[]>) => {
-                    if (response.status === RessursStatus.SUKSESS) {
-                        if (skalObfuskereData) {
-                            obfuskerFagsakDeltager(response);
-                        }
-                        settFagsakDeltagere(response);
-                    } else if (
-                        response.status === RessursStatus.FEILET ||
-                        response.status === RessursStatus.FUNKSJONELL_FEIL ||
-                        response.status === RessursStatus.IKKE_TILGANG
-                    ) {
-                        settFagsakDeltagere(response);
-                    }
-                })
-                .catch(_ => {
-                    settFagsakDeltagere(byggFeiletRessurs('Søk feilet'));
-                });
-        } else {
-            settFagsakDeltagere(byggFunksjonellFeilRessurs('Ugyldig fødsels- eller d-nummer (11 siffer)'));
-        }
-    };
-
-    const mapTilSøkeresultater = (): Ressurs<ISøkeresultat[]> => {
-        return fagsakDeltagere.status === RessursStatus.SUKSESS
-            ? {
-                  ...fagsakDeltagere,
-                  data: fagsakDeltagere.data.map((fagsakDeltager: IFagsakDeltager) => {
-                      return {
-                          adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
-                          fagsakId: fagsakDeltager.fagsakId,
-                          harTilgang: fagsakDeltager.harTilgang,
-                          navn: fagsakDeltager.navn,
-                          ident: fagsakDeltager.ident,
-                          ikon: mapFagsakDeltagerTilIkon(fagsakDeltager),
-                      };
-                  }),
-              }
-            : fagsakDeltagere;
-    };
-
-    return (
-        <>
-            <Søk
-                søk={søk}
-                label={'Søkefelt. Fødsels- eller D-nummer (11 siffer)'}
-                placeholder={'Fødsels- eller D-nummer (11 siffer)'}
-                nullstillSøkeresultater={() => settFagsakDeltagere(byggTomRessurs())}
-                søkeresultater={mapTilSøkeresultater()}
-                søkeresultatOnClick={søkeresultat => {
-                    if (!søkeresultat) {
-                        return;
-                    }
-                    if (søkeresultat.fagsakId) {
-                        navigate(`/fagsak/${søkeresultat.fagsakId}/saksoversikt`);
-                        return;
-                    }
-                    if (søkeresultat.harTilgang) {
-                        åpneModal({ ident: søkeresultat.ident });
-                        return;
-                    }
-                    return;
-                }}
-            />
-        </>
-    );
-};
-
-export default FagsakDeltagerSøk;
