@@ -15,8 +15,8 @@ importers:
         specifier: 2.21.0
         version: 2.21.0
       '@nais/apm':
-        specifier: 0.6.3
-        version: 0.6.3(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
+        specifier: 0.7.2
+        version: 0.7.2(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
       '@navikt/aksel-icons':
         specifier: 8.16.2
         version: 8.16.2
@@ -472,6 +472,9 @@ packages:
       react-router-dom:
         optional: true
 
+  '@grafana/faro-web-sdk@2.11.0':
+    resolution: {integrity: sha512-oGwdqlFJkIrK6V45wDlPaggNXOJCcXRFobho0PBQvohAB4Y4UTyMH18Sr1Tznp3z6POr/zh7RUtB0L/iN2X+HA==}
+
   '@grafana/faro-web-sdk@2.12.1':
     resolution: {integrity: sha512-JnpZy/ztfkP3UZ3AW0DzUxVgMRTBvYz+m0oZuVi+KRpGTYz0GGF0umi0S0pAemnaUbQBo6umGdCm5CL6n8BAWQ==}
 
@@ -567,8 +570,8 @@ packages:
     resolution: {integrity: sha512-VVPPgHyQ6ShqnrmDWuxjmUIsO9gWyOZFmuOfLd9LfBGQJwZfy0gvv9pbHSJuoFNIYC7ZDX9aoFwowjcdSC4E8w==}
     engines: {node: '>=18'}
 
-  '@nais/apm@0.6.3':
-    resolution: {integrity: sha512-P+jkRHJ41sS3/t05GvLtJY2Yws33FpRr/4ep9NOfbl8I0H0LO2EZBB8V0YTfm5Rx41R31Cww+XIb2DFr0o3qlw==, tarball: https://npm.pkg.github.com/download/@nais/apm/0.6.3/2b9caf03ccbd2ff5523b0a86b59eb1c46c773a1e}
+  '@nais/apm@0.7.2':
+    resolution: {integrity: sha512-BQMOzQbcFTza9b/u40ClBWSzjO3K2dGuFO/6TgJBQAN+Gm4ITS+IU/tbTx8Z4caTWLNXBJ5StqT+UbDuQLM4MA==, tarball: https://npm.pkg.github.com/download/@nais/apm/0.7.2/7a74ca6fbbc62018f79bd9877931fb93731b5d08}
     engines: {node: '>=18'}
     peerDependencies:
       '@grafana/faro-react': ^2.8.2
@@ -3547,6 +3550,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@grafana/faro-web-sdk@2.11.0':
+    dependencies:
+      '@grafana/faro-core': 2.12.1
+      ua-parser-js: 1.0.41
+      web-vitals: 6.2.2
+
   '@grafana/faro-web-sdk@2.12.1':
     dependencies:
       '@grafana/faro-core': 2.12.1
@@ -3685,10 +3694,10 @@ snapshots:
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
 
-  '@nais/apm@0.6.3(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)':
+  '@nais/apm@0.7.2(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)':
     dependencies:
       '@grafana/faro-react': 2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.3.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
-      '@grafana/faro-web-sdk': 2.12.1
+      '@grafana/faro-web-sdk': 2.11.0
       '@grafana/faro-web-tracing': 2.11.0(supports-color@7.2.0)
       '@grafana/rrweb': 2.0.0-grafana.2
       '@grafana/rrweb-snapshot': 2.0.0-grafana.2
