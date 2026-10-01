@@ -1,7 +1,6 @@
 import { renderNaisMetaTags } from '@nais/apm';
 import type { Configuration } from '@navikt/familie-backend';
-import { ensureAuthenticated, envVar, logRequest } from '@navikt/familie-backend';
-import { LOG_LEVEL } from '@navikt/familie-logging';
+import { ensureAuthenticated, envVar } from '@navikt/familie-backend';
 import type { NextFunction, Request, Response, Router } from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -21,7 +20,7 @@ const redirectHvisInternUrlIPreprod = () => {
     };
 };
 
-export default async (authClient: Configuration, router: Router) => {
+export default async (authConfig: Configuration, router: Router) => {
     router.get('/version', (_: Request, res: Response) => {
         res.status(200)
             .send({
@@ -38,12 +37,6 @@ export default async (authClient: Configuration, router: Router) => {
     router.get('/error', (_: Request, res: Response) => {
         prometheusTellere.errorRoute.inc();
         res.sendFile('error.html', { root: path.join(`assets/`) });
-    });
-
-    // Feilhåndtering
-    router.post('/logg-feil', (req: Request, res: Response) => {
-        logRequest(req, req.body.melding, LOG_LEVEL.ERROR);
-        res.status(200).send();
     });
 
     let viteDevServer: ViteDevServer | undefined;
@@ -65,7 +58,7 @@ export default async (authClient: Configuration, router: Router) => {
     router.get(
         '*splat',
         redirectHvisInternUrlIPreprod(),
-        ensureAuthenticated(authClient, false),
+        ensureAuthenticated(authConfig, false),
         async (req: Request, res: Response) => {
             prometheusTellere.appLoad.inc();
 

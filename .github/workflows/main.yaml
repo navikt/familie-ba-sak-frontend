@@ -27,7 +27,9 @@ jobs:
       build-image: true
       push-image: true
       build-profile: 'preprod'
-    secrets: inherit
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   deploy-dev:
     name: Deploy dev
     permissions:
@@ -39,7 +41,6 @@ jobs:
       image: ${{ needs.build-dev.outputs.image }}
       cluster: dev-gcp
       resource: .nais/app-dev.yaml
-    secrets: inherit
   build-prod:
     name: Build prod
     if: github.ref == 'refs/heads/main' # Only deploy to prod from main branch
@@ -52,7 +53,9 @@ jobs:
       build-image: true
       push-image: true
       build-profile: 'prod'
-    secrets: inherit
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   deploy-prod:
     name: Deploy prod
     permissions:
@@ -64,7 +67,6 @@ jobs:
       image: ${{ needs.build-prod.outputs.image }}
       cluster: prod-gcp
       resource: .nais/app-prod.yaml
-    secrets: inherit
   varsle-slack:
     name: Slack-melding ved feil
     if: failure()
