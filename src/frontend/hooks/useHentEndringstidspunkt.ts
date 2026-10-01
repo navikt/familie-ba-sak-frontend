@@ -1,7 +1,6 @@
+import { hentEndringstidspunkt } from '@api/hentEndringstidspunkt';
 import { useHttp } from '@navikt/familie-http';
 import { useQuery } from '@tanstack/react-query';
-
-import { hentEndringstidspunkt } from '../api/hentEndringstidspunkt';
 
 export const HentEndringstidspunktQueryKeyFactory = {
     endringstidspunkt: (behandlingId: number) => ['endringstidspunkt', behandlingId],
