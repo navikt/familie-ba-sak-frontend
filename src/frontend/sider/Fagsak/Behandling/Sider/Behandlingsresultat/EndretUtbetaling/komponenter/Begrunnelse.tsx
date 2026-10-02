@@ -1,5 +1,5 @@
 import { Textarea } from '@navikt/ds-react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import {
     EndretUtbetalingAndelFeltnavn,
@@ -10,26 +10,21 @@ import {
 export const Begrunnelse = ({ erLesevisning }: StandardFeltProps) => {
     const { control } = useFormContext<EndretUtbetalingAndelFormValues>();
 
+    const { field, fieldState, formState } = useController({
+        name: EndretUtbetalingAndelFeltnavn.BEGRUNNELSE,
+        control,
+        rules: { required: 'Du må begrunne den endrede utbetalingsperioden' },
+    });
+
     return (
-        <Controller
-            name={EndretUtbetalingAndelFeltnavn.BEGRUNNELSE}
-            control={control}
-            rules={{ required: 'Du må begrunne den endrede utbetalingsperioden' }}
-            render={({
-                field: { value, onChange, onBlur, ref },
-                fieldState: { error },
-                formState: { isSubmitting },
-            }) => (
-                <Textarea
-                    label={'Begrunnelse'}
-                    value={value || ''}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    ref={ref}
-                    error={error?.message}
-                    readOnly={erLesevisning || isSubmitting}
-                />
-            )}
+        <Textarea
+            label={'Begrunnelse'}
+            value={field.value || ''}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            error={fieldState.error?.message}
+            readOnly={erLesevisning || formState.isSubmitting}
         />
     );
 };
