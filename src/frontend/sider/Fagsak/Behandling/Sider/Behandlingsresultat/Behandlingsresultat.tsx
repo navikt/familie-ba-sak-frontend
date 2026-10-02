@@ -105,7 +105,7 @@ const Behandlingsresultat = () => {
         valutakurser,
         erValutakurserGyldige,
         hentValutakurserMedFeil,
-    } = useEøs(behandling);
+    } = useEøs();
 
     const finnUtbetalingsperiodeForAktivEtikett = (
         utbetalingsperioder: Utbetalingsperiode[]
