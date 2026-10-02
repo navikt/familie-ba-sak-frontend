@@ -1,14 +1,14 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 
-import type { IMinimalFagsak } from '../typer/fagsak';
-import { RessursResolver } from '../utils/ressursResolver';
+import type { IMinimalFagsak } from '@typer/fagsak';
 
-export async function hentFagsaker(request: FamilieRequest, personIdent: string, påvirkerSystemLaster: boolean = true) {
-    const ressurs = await request<{ personIdent: string }, IMinimalFagsak[]>({
-        method: 'POST',
-        url: `/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person`,
-        data: { personIdent },
-        påvirkerSystemLaster,
+interface Payload {
+    personIdent: string;
+}
+
+export async function hentFagsaker(payload: Payload): Promise<IMinimalFagsak[]> {
+    return apiClient.post<{ personIdent: string }, IMinimalFagsak[]>({
+        url: '/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person',
+        data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
