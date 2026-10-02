@@ -1,25 +1,18 @@
-import type { IBehandling } from '../../../../../../typer/behandling';
 import { useKompetanse } from './Kompetanse/useKompetanse';
 import { useUtenlandskPeriodeBeløp } from './UtbetaltAnnetLand/useUtenlandskPeriodeBeløp';
 import { useValutakurs } from './Valutakurs/useValutakurs';
 
-export const useEøs = (åpenBehandling: IBehandling) => {
-    const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse({
-        åpenBehandling,
-    });
+export function useEøs() {
+    const { kompetanser, erKompetanserGyldige, hentKompetanserMedFeil } = useKompetanse();
 
     const { utbetaltAnnetLandBeløp, erUtbetaltAnnetLandBeløpGyldige, hentUtbetaltAnnetLandBeløpMedFeil } =
-        useUtenlandskPeriodeBeløp({
-            åpenBehandling,
-        });
+        useUtenlandskPeriodeBeløp();
 
-    const { valutakurser, erValutakurserGyldige, hentValutakurserMedFeil } = useValutakurs({
-        åpenBehandling,
-    });
+    const { valutakurser, erValutakurserGyldige, hentValutakurserMedFeil } = useValutakurs();
 
-    const erEøsInformasjonGyldig = () => {
+    function erEøsInformasjonGyldig() {
         return erKompetanserGyldige() && erUtbetaltAnnetLandBeløpGyldige() && erValutakurserGyldige();
-    };
+    }
 
     return {
         erEøsInformasjonGyldig,
@@ -32,4 +25,4 @@ export const useEøs = (åpenBehandling: IBehandling) => {
         erValutakurserGyldige,
         hentValutakurserMedFeil,
     };
-};
+}
