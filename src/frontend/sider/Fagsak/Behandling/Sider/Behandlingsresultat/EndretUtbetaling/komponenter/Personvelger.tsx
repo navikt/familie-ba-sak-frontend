@@ -2,7 +2,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import type { ComboboxOption } from '@typer/common';
 import { lagPersonLabel } from '@utils/formatter';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import {
     EndretUtbetalingAndelFeltnavn,
@@ -14,6 +14,12 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
     const behandling = useBehandling();
 
     const { control, getValues } = useFormContext<EndretUtbetalingAndelFormValues>();
+
+    const { field, fieldState, formState } = useController({
+        name: EndretUtbetalingAndelFeltnavn.PERSONER,
+        control,
+        rules: { required: 'Du må velge minst én person' },
+    });
 
     const tilgjengeligePersoner: ComboboxOption[] = behandling.personer
         .filter(person =>
@@ -27,38 +33,25 @@ export const Personvelger = ({ erLesevisning }: StandardFeltProps) => {
             label: lagPersonLabel(person.personIdent, behandling.personer),
         }));
 
-    return (
-        <Controller
-            name={EndretUtbetalingAndelFeltnavn.PERSONER}
-            control={control}
-            rules={{ required: 'Du må velge minst én person' }}
-            render={({
-                field: { value, onChange, onBlur, ref },
-                fieldState: { error },
-                formState: { isSubmitting },
-            }) => {
-                const onToggleSelected = (optionValue: string, isSelected: boolean) => {
-                    const valgtePersoner = getValues(EndretUtbetalingAndelFeltnavn.PERSONER);
-                    const oppdatertePersoner = isSelected
-                        ? [...valgtePersoner, tilgjengeligePersoner.find(p => p.value === optionValue)]
-                        : valgtePersoner.filter(p => p.value !== optionValue);
-                    onChange(oppdatertePersoner);
-                };
+    const onToggleSelected = (optionValue: string, isSelected: boolean) => {
+        const valgtePersoner = getValues(EndretUtbetalingAndelFeltnavn.PERSONER);
+        const oppdatertePersoner = isSelected
+            ? [...valgtePersoner, tilgjengeligePersoner.find(p => p.value === optionValue)]
+            : valgtePersoner.filter(p => p.value !== optionValue);
+        field.onChange(oppdatertePersoner);
+    };
 
-                return (
-                    <UNSAFE_Combobox
-                        isMultiSelect
-                        label={'Velg hvem det gjelder'}
-                        options={tilgjengeligePersoner}
-                        selectedOptions={value}
-                        onToggleSelected={onToggleSelected}
-                        onBlur={onBlur}
-                        ref={ref}
-                        readOnly={erLesevisning || isSubmitting}
-                        error={error?.message}
-                    />
-                );
-            }}
+    return (
+        <UNSAFE_Combobox
+            isMultiSelect
+            label={'Velg hvem det gjelder'}
+            options={tilgjengeligePersoner}
+            selectedOptions={field.value}
+            onToggleSelected={onToggleSelected}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            readOnly={erLesevisning || formState.isSubmitting}
+            error={fieldState.error?.message}
         />
     );
 };

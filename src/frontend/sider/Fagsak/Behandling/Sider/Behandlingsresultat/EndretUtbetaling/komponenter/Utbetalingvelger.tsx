@@ -1,5 +1,5 @@
 import { Label, Radio, RadioGroup } from '@navikt/ds-react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { erUtbetalingTillattForÅrsak, Utbetaling, utbetalingTilLabel } from '../../Utbetaling';
 import {
@@ -13,33 +13,28 @@ export const Utbetalingvelger = ({ erLesevisning }: StandardFeltProps) => {
 
     const årsak = watch(EndretUtbetalingAndelFeltnavn.ÅRSAK);
 
+    const { field, fieldState, formState } = useController({
+        name: EndretUtbetalingAndelFeltnavn.UTBETALING,
+        control,
+        rules: { required: 'Du må velge om beløpet skal utbetales' },
+    });
+
     return (
-        <Controller
-            name={EndretUtbetalingAndelFeltnavn.UTBETALING}
-            control={control}
-            rules={{ required: 'Du må velge om beløpet skal utbetales' }}
-            render={({
-                field: { value, onChange, onBlur, ref },
-                fieldState: { error },
-                formState: { isSubmitting },
-            }) => (
-                <RadioGroup
-                    legend={<Label>Utbetaling</Label>}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    readOnly={erLesevisning || isSubmitting}
-                    error={error?.message}
-                >
-                    {Object.values(Utbetaling)
-                        .filter(utbetaling => erUtbetalingTillattForÅrsak(årsak, utbetaling))
-                        .map(utbetaling => (
-                            <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling} ref={ref}>
-                                {utbetalingTilLabel(utbetaling)}
-                            </Radio>
-                        ))}
-                </RadioGroup>
-            )}
-        />
+        <RadioGroup
+            legend={<Label>Utbetaling</Label>}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            readOnly={erLesevisning || formState.isSubmitting}
+            error={fieldState.error?.message}
+        >
+            {Object.values(Utbetaling)
+                .filter(utbetaling => erUtbetalingTillattForÅrsak(årsak, utbetaling))
+                .map(utbetaling => (
+                    <Radio name={'utbetaling'} value={utbetaling} id={utbetaling} key={utbetaling} ref={field.ref}>
+                        {utbetalingTilLabel(utbetaling)}
+                    </Radio>
+                ))}
+        </RadioGroup>
     );
 };
