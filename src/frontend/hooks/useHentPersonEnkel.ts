@@ -3,15 +3,15 @@ import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/rea
 import type { IPersonInfo } from '@typer/person';
 
 export const HentPersonEnkelQueryKeyFactory = {
-    personEnkel: (personIdent: string) => ['person_enkel', personIdent],
+    personEnkel: (ident: string) => ['person_enkel', ident],
 };
 
 type Options = Omit<UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>, 'queryKey' | 'queryFn' | 'gcTime'>;
 
-export function useHentPersonEnkel(personIdent: string, options?: Options) {
+export function useHentPersonEnkel(ident: string, options?: Options) {
     return useQuery({
-        queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(personIdent),
-        queryFn: () => hentPersonEnkel({ ident: personIdent }),
+        queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(ident),
+        queryFn: () => hentPersonEnkel({ ident }),
         gcTime: 0,
         ...options,
     });
