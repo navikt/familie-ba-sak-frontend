@@ -28,7 +28,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
 
     const { data: person, isPending: personIsPending, error: personError } = useHentPersonEnkel({ personIdent });
 
-    const { data: fagsaker, isPending: fagaskerIsPending, error: fagsakerError } = useHentFagsaker({ personIdent });
+    const { data: fagsaker, isPending: fagaskerIsPending, error: fagsakerError } = useHentFagsaker(personIdent);
 
     const { form: opprettFagsakForm, onSubmit: onSubmitOpprettFagsakForm } = useOpprettFagsakForm({
         personIdent: person?.personIdent,

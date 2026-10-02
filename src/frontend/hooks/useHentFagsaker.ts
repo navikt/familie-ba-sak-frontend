@@ -1,28 +1,22 @@
-import { useHttp } from '@navikt/familie-http';
+import { hentFagsaker } from '@api/hentFagsaker';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
-
-import { hentFagsaker } from '../api/hentFagsaker';
-import { type IBaseFagsak, type IMinimalFagsak, mapMinimalFagsakTilBaseFagsak } from '../typer/fagsak';
+import { type IBaseFagsak, type IMinimalFagsak, mapMinimalFagsakTilBaseFagsak } from '@typer/fagsak';
 
 export const HentFagsakerQueryKeyFactory = {
     fagsaker: (personIdent: string) => ['fagsaker', personIdent],
 };
 
-type Parameters = Omit<
+type Options = Omit<
     UseQueryOptions<IMinimalFagsak[], DefaultError, IBaseFagsak[]>,
-    'queryKey' | 'queryFn' | 'select'
-> & {
-    personIdent: string;
-    påvirkerSystemLaster?: boolean;
-};
+    'queryKey' | 'queryFn' | 'select' | 'gcTime'
+>;
 
-export function useHentFagsaker({ personIdent, påvirkerSystemLaster = false, ...rest }: Parameters) {
-    const { request } = useHttp();
+export function useHentFagsaker(personIdent: string, options?: Options) {
     return useQuery({
         queryKey: HentFagsakerQueryKeyFactory.fagsaker(personIdent),
-        queryFn: () => hentFagsaker(request, personIdent, påvirkerSystemLaster),
+        queryFn: () => hentFagsaker({ personIdent }),
         select: fagsaker => fagsaker.map(mapMinimalFagsakTilBaseFagsak),
-        gcTime: 0, // deaktiver cache da "påvirkerSystemLaster" er false (kan overskrives).
-        ...rest,
+        gcTime: 0,
+        ...options,
     });
 }
