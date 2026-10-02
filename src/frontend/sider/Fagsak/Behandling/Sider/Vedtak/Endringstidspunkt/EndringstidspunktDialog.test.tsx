@@ -86,9 +86,7 @@ describe('EndringstidspunktDialog', () => {
 
         await screen.findByRole('dialog');
 
-        expect(
-            await screen.findByText(/Systemet kan ikke hente endringstidspunktet|En feil har oppstått/i)
-        ).toBeInTheDocument();
+        expect(await screen.findByText(/Får ikke kontakt med serveren/i)).toBeInTheDocument();
     });
 
     test('deaktiverer Oppdater-knappen mens endringstidspunktet hentes', async () => {
@@ -222,9 +220,7 @@ describe('EndringstidspunktDialog', () => {
 
         await screen.findByRole('dialog');
 
-        expect(
-            await screen.findByText(/Systemet kan ikke hente endringstidspunktet|En feil har oppstått/i)
-        ).toBeInTheDocument();
+        expect(await screen.findByText(/Får ikke kontakt med serveren/i)).toBeInTheDocument();
         expect(screen.queryByText('01.01.2024')).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Oppdater' })).toBeDisabled();
     });
