@@ -1,7 +1,6 @@
 import { hentPersonEnkel } from '@api/hentPersonEnkel';
 import { HentPersonEnkelQueryKeyFactory } from '@hooks/useHentPersonEnkel';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
-import { useHttp } from '@navikt/familie-http';
 import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
 import { adressebeskyttelsestyper } from '@typer/person';
@@ -49,7 +48,6 @@ export enum Fields {
 
 export function useLeggTilBarnForm() {
     const queryClient = useQueryClient();
-    const { request } = useHttp();
     const { lukkModal, onLeggTilBarn, harBrevmottaker } = useLeggTilBarnModalContext();
 
     const form = useForm<FormValues, unknown, TransformedFormValues>({
@@ -82,7 +80,7 @@ export function useLeggTilBarnForm() {
             try {
                 const person = await queryClient.fetchQuery({
                     queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(fødselsnummer),
-                    queryFn: () => hentPersonEnkel(request, fødselsnummer),
+                    queryFn: () => hentPersonEnkel({ ident: fødselsnummer }),
                 });
                 if (
                     harBrevmottakerOgHarStrengtFortroligAdressebeskyttelse(
