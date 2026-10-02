@@ -1,12 +1,9 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+
 import type { IsoDatoString } from '@utils/dato';
 
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function hentEndringstidspunkt(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<void, IsoDatoString>({
-        method: 'GET',
+export async function hentEndringstidspunkt(behandlingId: number): Promise<IsoDatoString> {
+    return apiClient.get<void, IsoDatoString>({
         url: `/familie-ba-sak/api/behandlinger/${behandlingId}/endringstidspunkt`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
