@@ -493,5 +493,5 @@ export function erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandl
     const erRevurdering = behandling.type === Behandlingstype.REVURDERING;
     const erSøknad = behandling.årsak === BehandlingÅrsak.SØKNAD;
     const harMinstEttNyttBarn = behandling.personer.some(it => it.erNyttBarn);
-    return erEøs && (erFørstegangsbehandling || (erRevurdering && erSøknad && harMinstEttNyttBarn));
+    return erEøs && harMinstEttNyttBarn && (erFørstegangsbehandling || (erRevurdering && erSøknad));
 }
