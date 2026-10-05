@@ -19,10 +19,13 @@ pnpm start:hybrid                                                               
 
 # Validate before finishing a task
 pnpm validate                                                                        # typecheck + biome check
-pnpm typecheck                                                                       # tsc --noEmit on both src/backend and src/frontend
+pnpm typecheck                                                                       # tsc --noEmit on src/backend, src/frontend and playwright
 pnpm test                                                                            # test:backend + test:frontend (vitest)
 pnpm test:frontend                                                                   # vitest -c src/frontend/vitest.config.ts --run
 pnpm exec vitest --config src/frontend/vitest.config.ts --run path/to/file.test.tsx  # single file
+pnpm exec playwright install chromium                                                # one-time: download browser for Playwright
+pnpm test:playwright                                                                 # Playwright UI tests (builds frontend, mocked API)
+pnpm test:playwright:ui                                                              # Playwright in interactive UI mode
 pnpm check:fix                                                                       # biome lint + format fix
 
 # Build
@@ -56,6 +59,11 @@ src/frontend/
   ikoner/                          # SVG icon components
   public/                          # Static assets (favicon)
   App.tsx                          # QueryClient + context providers + RouterProvider
+
+playwright/                        # Playwright UI tests, run against `vite preview` with mocked API (config in playwright.config.ts)
+  fixtures.ts                      # `test`/`expect` with the auto `apiMock` fixture — import from here, not @playwright/test
+  apiMock.ts                       # page.route() -> msw getResponse() with handlers from testutils/mocks/handlers
+  tester/                          # *.spec.ts test files
 ```
 
 Path aliases (use these in new code): `@api/*`, `@context/*`, `@hooks/*`, `@ikoner/*`, `@komponenter/*`,
@@ -127,6 +135,15 @@ the "Legacy" column exists in older files and is being phased out — do not ext
 - Test data comes from `lagX()` factory functions in `testutils/testdata/` (e.g. `lagBehandling({ ... })`).
 - Style: Norwegian `describe('<navn>')` / `test('skal ...')`, role-based queries
   (`getByRole('button', { name: '...' })`), interactions via `await user.click(...)`.
+
+### Playwright (UI tests)
+
+- Files: `playwright/tester/*.spec.ts`. Import `test`/`expect` from `../fixtures`, not from `@playwright/test`.
+- The frontend is built with `--mode playwright` and served by `vite preview` on port 8100 — no BFF, no auth.
+- API calls (`/familie-ba-sak/**`, `/user/**`, `/version`, `/logg`, `/redirect/**`) are answered by the same msw
+  handlers as vitest (`testutils/mocks/handlers/`). Unmocked API calls fail the test; other external requests are
+  blocked (except Aksel fonts). Override per test with `apiMock.use(http.get(...))`, like `server.use()` in vitest.
+- Inspect request payloads with `page.waitForRequest(...)`, and reuse `lagX()` factories from `testutils/testdata/`.
 
 ## CI & Deploy
 

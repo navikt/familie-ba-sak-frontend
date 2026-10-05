@@ -4,6 +4,7 @@ import { fagsakHandlers } from './fagsakHandlers';
 import { featureToggleHandlers } from './featureToggleHandlers';
 import { klageHandlers } from './klageHandlers';
 import { loggHandlers } from './loggHandlers';
+import { oppgaveHandlers } from './oppgaveHandlers';
 import { personHandlers } from './personHandlers';
 import { saksbehandlerHandlers } from './saksbehandlerHandlers';
 import { tilbakekrevingHandlers } from './tilbakekrevingHandlers';
@@ -20,4 +21,5 @@ export const handlers = [
     ...ainntektHandlers,
     ...saksbehandlerHandlers,
     ...loggHandlers,
+    ...oppgaveHandlers,
 ];

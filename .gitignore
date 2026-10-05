@@ -8,4 +8,7 @@ pnpm-debug.log
 .secrets.env
 secure.log
 ci-tests/reports
+playwright/.bygg
+playwright/resultater
+playwright/rapport
 *.iml
