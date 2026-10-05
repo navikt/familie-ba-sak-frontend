@@ -2,6 +2,7 @@ import { useBehandlingIdParam } from '@hooks/useBehandlingIdParam';
 import { useFagsak } from '@hooks/useFagsak';
 import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
 import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
+import { HentPersonerMedUgyldigEtterbetalingsperiodeQueryKeyFactory } from '@hooks/useHentPersonerMedUgyldigEtterbetalingsperiode';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { useHttp } from '@navikt/familie-http';
@@ -46,6 +47,12 @@ export function HentOgSettBehandlingProvider({ children }: PropsWithChildren) {
         if (behandling.status === RessursStatus.SUKSESS) {
             queryClient.invalidateQueries({
                 queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandling.data.behandlingId),
+            });
+            queryClient.invalidateQueries({
+                queryKey:
+                    HentPersonerMedUgyldigEtterbetalingsperiodeQueryKeyFactory.personerMedUgyldigEtterbetalingsperiode(
+                        behandling.data.behandlingId
+                    ),
             });
         }
         queryClient.invalidateQueries({

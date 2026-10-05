@@ -24,7 +24,7 @@ import { EøsPeriodeStatus, KompetanseResultat } from '@typer/eøsPerioder';
 import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
 import { Datoformat, dateTilFormatertString } from '@utils/dato';
 import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
-import { type PropsWithChildren, useEffect, useState } from 'react';
+import { type PropsWithChildren, useState } from 'react';
 import styled from 'styled-components';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
@@ -107,7 +107,6 @@ const Oppsummeringsboks = ({
 
     const erLesevisning = useErLesevisning();
 
-    const [utbetalingsBeløpStatusMap, setUtbetalingsBeløpStatusMap] = useState(new Map<string, boolean>());
     const [restFeil, settRestFeil] = useState<string | undefined>(undefined);
 
     const aktivÅrOgMåned = dateTilFormatertString({
@@ -148,11 +147,12 @@ const Oppsummeringsboks = ({
 
     const justererSmåbarnstillegg = fjernerSmåbarnstillegg || leggerTilSmåbarnstillegg;
 
-    useEffect(() => {
-        setUtbetalingsBeløpStatusMap(
-            finnUtbetalingsBeløpStatusMap(utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser)
-        );
-    }, [utbetalingsperiode, kompetanser, utbetaltAnnetLandBeløp, valutakurser]);
+    const utbetalingsBeløpStatusMap = finnUtbetalingsBeløpStatusMap(
+        utbetalingsperiode,
+        kompetanser,
+        utbetaltAnnetLandBeløp,
+        valutakurser
+    );
 
     return (
         <Box borderColor="neutral-strong" borderWidth="1" padding="space-40">
