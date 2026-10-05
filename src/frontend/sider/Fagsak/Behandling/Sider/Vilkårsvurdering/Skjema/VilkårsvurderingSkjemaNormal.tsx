@@ -99,7 +99,7 @@ export function VilkårsvurderingSkjemaNormal() {
                     !erLesevisning && erSøker && !harUtvidet && kanLeggeTilUtvidetVilkår(behandling);
 
                 const skalViseKopierVilkårFraSøkerTilBarna =
-                    erSøker && erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+                    !erLesevisning && erSøker && erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
 
                 const erEkspandert = erPanelEkspandert(ident);
 

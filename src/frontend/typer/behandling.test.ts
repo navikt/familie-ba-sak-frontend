@@ -141,7 +141,7 @@ describe('behandling', () => {
     });
 
     describe('erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna', () => {
-        test('skal returnere true for eøs førstegangsbehandling', () => {
+        test('skal returnere true for eøs førstegangsbehandling med minst ett nytt barn', () => {
             // Arrange
             const behandling = lagBehandling({
                 kategori: BehandlingKategori.EØS,
@@ -170,6 +170,37 @@ describe('behandling', () => {
 
             // Assert
             expect(erRiktigBehandling).toBe(true);
+        });
+
+        test('skal returnere false for eøs førstegangsbehandling uten nytt barn', () => {
+            // Arrange
+            const behandling = lagBehandling({
+                kategori: BehandlingKategori.EØS,
+                type: Behandlingstype.FØRSTEGANGSBEHANDLING,
+                årsak: BehandlingÅrsak.SØKNAD,
+                personer: [
+                    lagGrunnlagPerson({
+                        personIdent: '12345678901',
+                        navn: 'Søker Søkeresen',
+                        fødselsdato: '1990-01-01',
+                        type: PersonType.SØKER,
+                        erNyttBarn: false,
+                    }),
+                    lagGrunnlagPerson({
+                        personIdent: '12345678902',
+                        navn: 'Barn Barnesen',
+                        fødselsdato: '2020-01-01',
+                        type: PersonType.BARN,
+                        erNyttBarn: false,
+                    }),
+                ],
+            });
+
+            // Act
+            const erRiktigBehandling = erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
+
+            // Assert
+            expect(erRiktigBehandling).toBe(false);
         });
 
         test('skal returnere true for eøs revurdering søknad med minst ett nytt barn', () => {
