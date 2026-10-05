@@ -1,22 +1,18 @@
 import { hentPersonEnkel } from '@api/hentPersonEnkel';
-import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { IPersonInfo } from '@typer/person';
 
 export const HentPersonEnkelQueryKeyFactory = {
-    personEnkel: (personIdent: string) => ['person_enkel', personIdent],
+    personEnkel: (ident: string) => ['person_enkel', ident],
 };
 
-type Parameters = Omit<UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>, 'queryKey' | 'queryFn' | 'gcTime'> & {
-    personIdent: string;
-};
+type Options = Omit<UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>, 'queryKey' | 'queryFn' | 'gcTime'>;
 
-export function useHentPersonEnkel({ personIdent, ...rest }: Parameters) {
-    const { request } = useHttp();
+export function useHentPersonEnkel(ident: string, options?: Options) {
     return useQuery({
-        queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(personIdent),
-        queryFn: () => hentPersonEnkel(request, personIdent),
+        queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(ident),
+        queryFn: () => hentPersonEnkel({ ident }),
         gcTime: 0,
-        ...rest,
+        ...options,
     });
 }
