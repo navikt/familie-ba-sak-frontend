@@ -1,14 +1,7 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function hentGenererteBrevbegrunnelser(
-    request: FamilieRequest,
-    vedtaksperiodeId: number
-): Promise<string[]> {
-    const ressurs = await request<void, string[]>({
-        method: 'GET',
+export async function hentGenererteBrevbegrunnelser(vedtaksperiodeId: number): Promise<string[]> {
+    return apiClient.get<void, string[]>({
         url: `/familie-ba-sak/api/vedtaksperioder/brevbegrunnelser/${vedtaksperiodeId}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
