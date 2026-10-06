@@ -35,7 +35,7 @@ async function svarMedMock(route: Route, handlers: RequestHandler[], appOrigin: 
     const respons = await getResponse(handlers, await tilFetchRequest(request), { baseUrl: appOrigin });
 
     if (!respons) {
-        const kall = `${request.method()} ${new URL(request.url()).pathname}`;
+        const kall = `${request.method()} ${decodeURIComponent(new URL(request.url()).pathname)}`;
         ubehandledeKall.push(kall);
         return route.fulfill({ status: 501, body: `Mangler mock-handler for ${kall}` });
     }

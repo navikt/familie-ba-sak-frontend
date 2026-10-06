@@ -144,6 +144,7 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   handlers as vitest (`testutils/mocks/handlers/`). Unmocked API calls fail the test; other external requests are
   blocked (except Aksel fonts). Override per test with `apiMock.use(http.get(...))`, like `server.use()` in vitest.
 - Inspect request payloads with `page.waitForRequest(...)`, and reuse `lagX()` factories from `testutils/testdata/`.
+- msw matches against the URL-encoded path, so handler paths containing æøå must be wrapped in `encodeURI(...)`.
 
 ## CI & Deploy
 

@@ -1,6 +1,13 @@
 import { kjønnType } from '@navikt/familie-typer';
 import { type IPersonMedAndelerTilkjentYtelse, YtelseType } from '@typer/beregning';
-import { Adressebeskyttelsegradering, type IGrunnlagPerson, type IPersonInfo, PersonType } from '@typer/person';
+import {
+    Adressebeskyttelsegradering,
+    ForelderBarnRelasjonRolle,
+    type IForelderBarnRelasjon,
+    type IGrunnlagPerson,
+    type IPersonInfo,
+    PersonType,
+} from '@typer/person';
 import { Målform } from '@typer/søknad';
 
 export function lagPerson(person: Partial<IPersonInfo> = {}): IPersonInfo {
@@ -20,6 +27,17 @@ export function lagPerson(person: Partial<IPersonInfo> = {}): IPersonInfo {
         erEgenAnsatt: false,
         harFalskIdentitet: false,
         ...person,
+    };
+}
+
+export function lagForelderBarnRelasjon(relasjon: Partial<IForelderBarnRelasjon> = {}): IForelderBarnRelasjon {
+    return {
+        adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
+        fødselsdato: '2020-02-10',
+        navn: 'Barn Testersen',
+        personIdent: '10022012345',
+        relasjonRolle: ForelderBarnRelasjonRolle.BARN,
+        ...relasjon,
     };
 }
 

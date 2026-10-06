@@ -8,3 +8,5 @@ export function lagPersonResultat(personResultat: Partial<IRestPersonResultat>):
         ...personResultat,
     };
 }
+
+export * as PersonResultatTestdata from './personResultatTestdata';
