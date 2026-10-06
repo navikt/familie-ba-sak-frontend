@@ -150,6 +150,8 @@ the "Legacy" column exists in older files and is being phased out — do not ext
 
 - Pull requests run a reusable pnpm workflow from `navikt/familie-baks-gha-workflows@main`
   (`pull-request-pnpm.yaml`, Node 24) — the actual build/test steps live in that external repo, not here.
+  A separate `playwright` job in `pull_request.yaml` runs `pnpm test:playwright` (Chromium) and uploads the
+  HTML report as the `playwright-rapport` artifact.
 - Pushing to `main` runs two independent chains **in parallel**, with no manual gate or approval step:
   build+deploy to dev-gcp (`.nais/app-dev.yaml`) and build+deploy to prod-gcp (`.nais/app-prod.yaml`).
   A `varsle-slack` job notifies on failure of either chain.
