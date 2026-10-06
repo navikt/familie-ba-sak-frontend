@@ -7,9 +7,9 @@ import { useSyncModiaContext } from '@hooks/useSyncModiaContext';
 import { NotFound } from '@komponenter/Error/NotFound';
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
 import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { FagsakType } from '@typer/fagsak';
 import { Outlet } from 'react-router';
-
 import { BrukerProvider } from './BrukerContext';
 import { DistribusjonskanalProvider } from './DistribusjonskanalProvider';
 import Styles from './Fagsak.module.css';
@@ -97,13 +97,15 @@ export function Fagsak() {
 
     return (
         <Box className={Styles.container}>
-            <FagsakProvider fagsak={fagsak}>
-                <BrukerProvider bruker={bruker}>
+            <FagsakProvider key={fagsak.id} fagsak={fagsak}>
+                <BrukerProvider key={bruker.personIdent} bruker={bruker}>
                     <DistribusjonskanalProvider context={distribusjonskanalContext}>
-                        <ManuelleBrevmottakerePåFagsakProvider key={fagsak.id}>
-                            <Personlinje bruker={bruker} fagsak={fagsak} />
-                            <Outlet />
-                        </ManuelleBrevmottakerePåFagsakProvider>
+                        <BrevmottakereFagsakProvider>
+                            <ManuelleBrevmottakerePåFagsakProvider>
+                                <Personlinje bruker={bruker} fagsak={fagsak} />
+                                <Outlet />
+                            </ManuelleBrevmottakerePåFagsakProvider>
+                        </BrevmottakereFagsakProvider>
                     </DistribusjonskanalProvider>
                 </BrukerProvider>
             </FagsakProvider>

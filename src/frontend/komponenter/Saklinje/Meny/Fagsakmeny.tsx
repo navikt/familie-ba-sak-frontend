@@ -1,12 +1,13 @@
 import { useFagsak } from '@hooks/useFagsak';
+import { BrevmottakerDialog } from '@komponenter/Saklinje/Meny/Brevmottaker/Fagsak/BrevmottakerDialog';
+import { useBrevmottakerDialogContext } from '@komponenter/Saklinje/Meny/Brevmottaker/Fagsak/BrevmottakerDialogContext';
+import { LeggTilEllerFjernBrevmottaker } from '@komponenter/Saklinje/Meny/Brevmottaker/Fagsak/LeggTilEllerFjernBrevmottaker';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { FagsakStatus } from '@typer/fagsak';
 import { useState } from 'react';
-
+import { useLocation } from 'react-router';
 import Styles from './Fagsakmeny.module.css';
-import { LeggTilBrevmottakerModalFagsak } from './LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
-import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåFagsak';
 import { LåsOppFagsak } from './LåsOppFagsak/LåsOppFagsak';
 import { LåsOppFagsakModal } from './LåsOppFagsak/LåsOppFagsakModal';
 import { OpprettBehandling } from './OpprettBehandling/OpprettBehandling';
@@ -16,13 +17,17 @@ import { OpprettFagsak } from './OpprettFagsak/OpprettFagsak';
 import { SendInformasjonsbrev } from './SendInformasjonsbrev/SendInformasjonsbrev';
 
 export function Fagsakmeny() {
+    const location = useLocation();
     const fagsak = useFagsak();
     const fagsakErLåst = fagsak.status === FagsakStatus.LÅST;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
         useState(false);
-    const [visLeggTilBrevmottakerModal, settVisLeggTilBrevmottakerModal] = useState(false);
+
+    const { erDialogÅpen: erBrevmottakerDialogÅpen } = useBrevmottakerDialogContext();
+
+    const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
 
     return (
         <>
@@ -37,9 +42,7 @@ export function Fagsakmeny() {
                     lukkModal={() => settVisTilbakekrevingsbehandlingOpprettetModal(false)}
                 />
             )}
-            {visLeggTilBrevmottakerModal && (
-                <LeggTilBrevmottakerModalFagsak lukkModal={() => settVisLeggTilBrevmottakerModal(false)} />
-            )}
+            {erBrevmottakerDialogÅpen && <BrevmottakerDialog />}
             <LåsOppFagsakModal />
             <ActionMenu>
                 <ActionMenu.Trigger>
@@ -53,9 +56,7 @@ export function Fagsakmeny() {
                             <>
                                 <OpprettBehandling åpneModal={() => settVisOpprettBehandlingModal(true)} />
                                 <OpprettFagsak />
-                                <LeggTilEllerFjernBrevmottakerePåFagsak
-                                    åpneModal={() => settVisLeggTilBrevmottakerModal(true)}
-                                />
+                                {erPåDokumentutsending && <LeggTilEllerFjernBrevmottaker />}
                                 <SendInformasjonsbrev />
                             </>
                         )}

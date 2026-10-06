@@ -1,8 +1,9 @@
+import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { BrevmottakerDialogProvider } from '@komponenter/Saklinje/Meny/Brevmottaker/Fagsak/BrevmottakerDialogContext';
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
+import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { Link as ReactRouterLink, useLocation } from 'react-router';
-import { useSaksbehandler } from '../../hooks/useSaksbehandler';
-import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
 import { Fagsakmeny } from './Meny/Fagsakmeny';
 
 function lagAktivFaneStyle(fanenavn: string, pathname: string) {
@@ -51,7 +52,11 @@ export function Fagsaklinje() {
                         Dokumenter
                     </Button>
                 </HStack>
-                {saksbehandler.harSkrivetilgang && <Fagsakmeny />}
+                {saksbehandler.harSkrivetilgang && (
+                    <BrevmottakerDialogProvider>
+                        <Fagsakmeny />
+                    </BrevmottakerDialogProvider>
+                )}
             </HStack>
         </Box>
     );
