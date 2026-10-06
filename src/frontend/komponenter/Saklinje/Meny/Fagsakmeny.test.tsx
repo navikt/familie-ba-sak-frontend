@@ -1,5 +1,6 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Fagsak/Dialog/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
@@ -31,21 +32,23 @@ function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], children }: Wra
             <FagsakProvider fagsak={FagsakTestdata.lagFagsak()}>
                 <BrukerProvider bruker={PersonTestdata.lagPerson()}>
                     <BrevmottakereFagsakProvider>
-                        <OpprettFagsakModalWrapper />
-                        <Routes>
-                            <Route
-                                path={'/fagsak/:fagsakId/dokumentutsending'}
-                                element={
-                                    <>
-                                        <Heading level={'1'} size={'medium'}>
-                                            Dokumentutsending
-                                        </Heading>
-                                        {children}
-                                    </>
-                                }
-                            />
-                            <Route path={'/fagsak/:fagsakId'} element={<>{children}</>} />
-                        </Routes>
+                        <BrevmottakerDialogProvider>
+                            <OpprettFagsakModalWrapper />
+                            <Routes>
+                                <Route
+                                    path={'/fagsak/:fagsakId/dokumentutsending'}
+                                    element={
+                                        <>
+                                            <Heading level={'1'} size={'medium'}>
+                                                Dokumentutsending
+                                            </Heading>
+                                            {children}
+                                        </>
+                                    }
+                                />
+                                <Route path={'/fagsak/:fagsakId'} element={<>{children}</>} />
+                            </Routes>
+                        </BrevmottakerDialogProvider>
                     </BrevmottakereFagsakProvider>
                 </BrukerProvider>
             </FagsakProvider>
@@ -139,6 +142,6 @@ describe('Fagsakmeny', () => {
         const menuitem = screen.getByRole('menuitem', { name: 'Legg til brevmottaker' });
         await user.click(menuitem);
 
-        expect(screen.getByRole('dialog', { name: 'Legg til brevmottaker' })).toBeInTheDocument();
+        expect(screen.getByRole('dialog', { name: 'Brevmottaker' })).toBeInTheDocument();
     });
 });
