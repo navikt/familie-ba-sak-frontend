@@ -1,5 +1,6 @@
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { waitFor } from '@testing-library/react';
+import { server } from '@testutils/mocks/node';
 import { BehandlingTestdata, lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagGrunnlagPerson, lagPerson } from '@testutils/testdata/personTestdata';
@@ -10,7 +11,6 @@ import { Adressebeskyttelsegradering, ForelderBarnRelasjonRolle } from '@typer/p
 import { HttpResponse, http } from 'msw';
 import type { ReactNode } from 'react';
 import { describe, expect, test, vi } from 'vitest';
-import { server } from '../../../../../testutils/mocks/node';
 import { BrukerProvider } from '../../../BrukerContext';
 import { FagsakProvider } from '../../../FagsakContext';
 import { BehandlingProvider } from '../../context/BehandlingContext';
@@ -25,16 +25,16 @@ const behandling = lagBehandling({
     personer: [lagGrunnlagPerson()],
 });
 
-function lagWrapper(bruker: IPersonInfo, behandlingForVisning = behandling) {
+function lagWrapper(bruker: IPersonInfo = lagPerson(), behandlingForVisning = behandling) {
     return function Wrapper({ children }: { children: ReactNode }) {
         return (
             <TestProviders>
                 <FagsakProvider fagsak={lagFagsak()}>
-                    <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandlingForVisning}>
-                            <BrukerProvider bruker={bruker}>{children}</BrukerProvider>
-                        </BehandlingProvider>
-                    </HentOgSettBehandlingProvider>
+                    <BrukerProvider bruker={bruker}>
+                        <HentOgSettBehandlingProvider>
+                            <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
+                        </HentOgSettBehandlingProvider>
+                    </BrukerProvider>
                 </FagsakProvider>
             </TestProviders>
         );
@@ -42,7 +42,7 @@ function lagWrapper(bruker: IPersonInfo, behandlingForVisning = behandling) {
 }
 
 function Wrapper({ children }: { children: ReactNode }) {
-    return lagWrapper(lagPerson())({ children });
+    return lagWrapper()({ children });
 }
 
 describe('Brevskjema validering', () => {

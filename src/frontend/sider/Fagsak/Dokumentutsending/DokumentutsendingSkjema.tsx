@@ -1,7 +1,6 @@
-import { useBruker } from '@hooks/useBruker';
 import { useErLesevisningFagsak } from '@hooks/useErLesevisningFagsak';
 import { useFagsak } from '@hooks/useFagsak';
-import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereFagsakAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereFagsakAdvarsel';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
@@ -34,7 +33,6 @@ interface Props {
 }
 
 export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvisningUrl }: Props) {
-    const bruker = useBruker();
     const navigate = useNavigate();
     const fagsak = useFagsak();
 
@@ -83,13 +81,7 @@ export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvis
                                     Send informasjonsbrev
                                 </Heading>
                                 {!brukerHarUtenlandskAdresse && <DistribusjonskanalInfo />}
-                                {manuelleBrevmottakerePåFagsak.length > 0 && (
-                                    <BrevmottakereAlert
-                                        erPåBehandling={false}
-                                        brevmottakere={manuelleBrevmottakerePåFagsak}
-                                        bruker={bruker}
-                                    />
-                                )}
+                                <BrevmottakereFagsakAdvarsel />
                                 <Box maxWidth="30rem" marginBlock="space-32 space-0">
                                     <Fieldset
                                         error={errors.root?.message}

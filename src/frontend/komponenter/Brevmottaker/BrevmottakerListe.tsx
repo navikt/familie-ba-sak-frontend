@@ -1,18 +1,19 @@
-import { useFagsakContext } from '../../sider/Fagsak/FagsakContext';
-import { FagsakType } from '../../typer/fagsak';
-import type { IPersonInfo } from '../../typer/person';
-import { formaterIdent, lagBrukerLabel } from '../../utils/formatter';
+import { useBruker } from '@hooks/useBruker';
+import { useFagsak } from '@hooks/useFagsak';
+import { FagsakType } from '@typer/fagsak';
+import { formaterIdent, lagBrukerLabel } from '@utils/formatter';
 import type { SkjemaBrevmottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { Mottaker } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 
-interface IProps {
-    bruker: IPersonInfo;
+interface Props {
     brevmottakere: SkjemaBrevmottaker[];
     institusjonNavn?: string;
 }
 
-const BrevmottakerListe = ({ bruker, brevmottakere, institusjonNavn }: IProps) => {
-    const { fagsak } = useFagsakContext();
+export function BrevmottakerListe({ brevmottakere, institusjonNavn }: Props) {
+    const fagsak = useFagsak();
+    const bruker = useBruker();
+
     const institusjon = fagsak.institusjon;
     const fagsakType = fagsak.fagsakType;
     const vistInstitusjonNavn = institusjonNavn ?? institusjon?.navn;
@@ -55,6 +56,4 @@ const BrevmottakerListe = ({ bruker, brevmottakere, institusjonNavn }: IProps) =
                     .map(mottaker => <li key={`verge-${mottaker.navn}`}>{mottaker.navn} | Verge</li>)}
         </ul>
     );
-};
-
-export default BrevmottakerListe;
+}

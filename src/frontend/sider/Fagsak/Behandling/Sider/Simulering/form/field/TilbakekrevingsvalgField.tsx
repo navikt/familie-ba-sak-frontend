@@ -1,7 +1,5 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useBruker } from '@hooks/useBruker';
-import { useErLesevisning } from '@hooks/useErLesevisning';
-import { BrevmottakereAlert } from '@komponenter/Brevmottaker/BrevmottakereAlert';
+import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
 import { BodyLong, Box, Heading, HelpText, HStack, Radio, RadioGroup } from '@navikt/ds-react';
 import { FritekstVarselField } from '@sider/Fagsak/Behandling/Sider/Simulering/form/field/FritekstVarselField';
 import styles from '@sider/Fagsak/Behandling/Sider/Simulering/form/TilbakekrevingForm.module.css';
@@ -13,9 +11,7 @@ import { Tilbakekrevingsvalg } from '@typer/simulering';
 import { useController, useFormContext } from 'react-hook-form';
 
 export function TilbakekrevingsvalgField() {
-    const behandling = useBehandling();
     const bruker = useBruker();
-    const erLesevisning = useErLesevisning();
 
     const { control, clearErrors } = useFormContext<TilbakekrevingFormValues>();
 
@@ -31,8 +27,6 @@ export function TilbakekrevingsvalgField() {
                 'Resultatet medfører en feilutbetaling. Du må velge om det skal opprettes tilbakekrevingsbehandling.',
         },
     });
-
-    const brevmottakere = behandling.brevmottakere ?? [];
 
     return (
         <RadioGroup
@@ -76,20 +70,16 @@ export function TilbakekrevingsvalgField() {
                 </HStack>
             }
         >
-            {bruker && !bruker.dødsfallDato && (
+            {!bruker.dødsfallDato && (
                 <>
                     <Radio value={Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL}>
                         Opprett tilbakekreving, send varsel
                     </Radio>
                     {value === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
                         <>
-                            <BrevmottakereAlert
+                            <BrevmottakereBehandlingAdvarsel
+                                kilde={'simulering'}
                                 className={styles.brevmottakereAlert}
-                                bruker={bruker}
-                                erPåBehandling={true}
-                                brevmottakere={brevmottakere}
-                                erLesevisning={erLesevisning}
-                                åpenBehandling={behandling}
                             />
                             <FritekstVarselField />
                         </>
