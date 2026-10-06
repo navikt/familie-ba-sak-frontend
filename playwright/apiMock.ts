@@ -6,8 +6,25 @@ const TILLATTE_EKSTERNE_RESSURSER = ['https://cdn.nav.no/aksel/'];
 const NAIS_META_TAGS_PLASSHOLDER = '{{{NAIS_META_TAGS}}}';
 
 export interface ApiMock {
-    /** Legger til handlers som overstyrer standardhandlerne for resten av testen, tilsvarende server.use() i vitest. */
+    /**
+     * Overstyrer svaret fra ett eller flere endepunkter i resten av testen, tilsvarende server.use() i vitest.
+     *
+     * De nye handlerne legges foran standardhandlerne fra `testutils/mocks/handlers`. msw bruker den første handleren
+     * som matcher metode og URL, så en handler for samme endepunkt vinner over standardhandleren. Standardhandleren
+     * fjernes ikke, og endepunkter som ikke overstyres svarer som før.
+     *
+     * Overstyringen gjelder bare requester som sendes etter kallet, så kall `use` før `page.goto` eller handlingen som
+     * utløser requesten. Hver test får sin egen `apiMock`, så overstyringer lekker ikke mellom tester.
+     *
+     * @example
+     * apiMock.use(
+     *     http.get('/familie-ba-sak/api/fagsaker/minimal/:fagsakId', () =>
+     *         HttpResponse.json(byggFeiletRessurs('Fant ikke fagsak.'))
+     *     )
+     * );
+     */
     use: (...handlers: RequestHandler[]) => void;
+    /** API-kall (`METODE /sti`) som ingen handler matchet. Fixturen feiler testen hvis listen ikke er tom. */
     ubehandledeKall: string[];
 }
 
