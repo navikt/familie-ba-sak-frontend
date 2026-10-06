@@ -1,9 +1,8 @@
-import { useHttp } from '@navikt/familie-http';
+import { hentFeatureToggles } from '@api/hentFeatureToggles';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { logger, tilLoggFeil } from '@utils/logger';
-
-import { hentFeatureToggles } from '../api/hentFeatureToggles';
-import { FeatureToggle, type FeatureToggles } from '../typer/featureToggles';
 
 function skruAvAlleToggles(): FeatureToggles {
     const toggles = Object.values(FeatureToggle);
@@ -20,18 +19,14 @@ export const HentFeatureTogglesQueryKeyFactory = {
 type Options = Omit<
     UseQueryOptions<FeatureToggles, DefaultError, FeatureToggles>,
     'queryKey' | 'queryFn' | 'gcTime' | 'staleTime'
-> & {
-    påvirkerSystemLaster?: boolean;
-};
+>;
 
 export function useHentFeatureToggles(options?: Options) {
-    const { påvirkerSystemLaster = true, ...rest } = options ?? {};
-    const { request } = useHttp();
     return useQuery({
         queryKey: HentFeatureTogglesQueryKeyFactory.toggles(),
         queryFn: async () => {
             try {
-                return await hentFeatureToggles(request, påvirkerSystemLaster);
+                return await hentFeatureToggles();
             } catch (e: unknown) {
                 const errorMessage = e instanceof Error ? e.message : 'En feil oppstod under innlasting av toggles.';
                 logger.warn(
@@ -45,6 +40,7 @@ export function useHentFeatureToggles(options?: Options) {
         staleTime: 0,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
-        ...rest,
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
+        ...options,
     });
 }

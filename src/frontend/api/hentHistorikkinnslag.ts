@@ -1,8 +1,7 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 
-import type { BehandlerRolle } from '../typer/behandling';
-import type { LoggType } from '../typer/logg';
-import { RessursResolver } from '../utils/ressursResolver';
+import type { BehandlerRolle } from '@typer/behandling';
+import type { LoggType } from '@typer/logg';
 
 export interface HistorikkinnslagDto {
     id: number;
@@ -15,10 +14,8 @@ export interface HistorikkinnslagDto {
     tekst: string;
 }
 
-export async function hentHistorikkinnslag(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<void, HistorikkinnslagDto[]>({
-        method: 'GET',
+export async function hentHistorikkinnslag(behandlingId: number): Promise<HistorikkinnslagDto[]> {
+    return apiClient.get<void, HistorikkinnslagDto[]>({
         url: `/familie-ba-sak/api/logg/${behandlingId}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
