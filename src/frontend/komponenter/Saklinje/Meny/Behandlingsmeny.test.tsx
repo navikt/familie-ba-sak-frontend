@@ -1,13 +1,18 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
+import { RegistrerteBrevmottakereBehandling } from '@komponenter/Brevmottaker/Behandling/RegistrerteBrevmottakereBehandling';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
+import { server } from '@testutils/mocks/node';
 import { lagBehandling, lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
@@ -20,7 +25,8 @@ import {
     SettPåVentÅrsak,
 } from '@typer/behandling';
 import type { IMinimalFagsak } from '@typer/fagsak';
-import type { FeatureToggles } from '@typer/featureToggles';
+import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
+import { HttpResponse, http } from 'msw';
 import type { PropsWithChildren } from 'react';
 import { Route, Routes } from 'react-router';
 import { describe, expect, type MockInstance } from 'vitest';
@@ -73,8 +79,7 @@ function Wrapper({
                                     <HentOgSettBehandlingProvider>
                                         <BehandlingProvider behandling={behandling}>
                                             <HenleggBehandlingModal />
-
-                                            {children}
+                                            <BrevmottakerDialogProvider>{children}</BrevmottakerDialogProvider>
                                         </BehandlingProvider>
                                     </HentOgSettBehandlingProvider>
                                 }
@@ -345,8 +350,17 @@ describe('Behandlingsmeny', () => {
         expect(screen.getByRole('dialog', { name: 'Fortsett behandling' })).toBeInTheDocument();
     });
 
-    test('skal kunne åpne legg til brevmottakere modal', async () => {
-        const { screen, user } = render(<Behandlingsmeny />, { wrapper: Wrapper });
+    test.each([true, false, undefined])('skal velge brevmottakerdialog med toggle %s', async brukNyBrevmottaker => {
+        const featureToggles: FeatureToggles =
+            brukNyBrevmottaker === undefined ? {} : { [FeatureToggle.brukNyttBrevmottakerSkjema]: brukNyBrevmottaker };
+        server.use(
+            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () =>
+                HttpResponse.json(byggSuksessRessurs(featureToggles))
+            )
+        );
+        const { screen, user } = render(<Behandlingsmeny />, {
+            wrapper: props => <Wrapper {...props} featureToggles={featureToggles} />,
+        });
 
         const meny = screen.getByRole('button', { name: 'Meny' });
         await user.click(meny);
@@ -354,7 +368,35 @@ describe('Behandlingsmeny', () => {
         const menuitem = screen.getByRole('menuitem', { name: 'Legg til brevmottaker' });
         await user.click(menuitem);
 
-        expect(screen.getByRole('dialog', { name: 'Legg til brevmottaker' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('dialog', { name: brukNyBrevmottaker ? 'Brevmottaker' : 'Legg til brevmottaker' })
+        ).toBeInTheDocument();
+    });
+
+    test.each([true, false])('skal velge brevmottakerdialog fra detaljer med toggle %s', async brukNyBrevmottaker => {
+        const featureToggles = { [FeatureToggle.brukNyttBrevmottakerSkjema]: brukNyBrevmottaker };
+        server.use(
+            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () =>
+                HttpResponse.json(byggSuksessRessurs(featureToggles))
+            )
+        );
+        const { screen, user } = render(<RegistrerteBrevmottakereBehandling kilde={'vedtak'} />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    behandling={lagBehandling({ brevmottakere: [lagBrevmottakerBehandling()] })}
+                    featureToggles={featureToggles}
+                />
+            ),
+        });
+
+        await user.click(screen.getByRole('button', { name: 'Se detaljer' }));
+
+        expect(
+            screen.getByRole('dialog', {
+                name: brukNyBrevmottaker ? 'Brevmottaker' : 'Legg til eller fjern brevmottaker',
+            })
+        ).toBeInTheDocument();
     });
 
     test('skal kunne åpne a-inntekt', async () => {

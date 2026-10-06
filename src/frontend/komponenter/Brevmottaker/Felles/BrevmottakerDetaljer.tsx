@@ -1,5 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage, Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
 import _CountryData from '@navikt/land-verktoy';
 import { type Brevmottaker, brevmottakertypeVisningsnavn } from '@typer/brevmottaker';
 import styles from './BrevmottakerDetaljer.module.css';
@@ -17,7 +17,15 @@ interface Props {
 
 export function BrevmottakerDetaljer({ brevmottaker, erLesevisning, onSlett, sletter, slettFeilmelding }: Props) {
     return (
-        <VStack gap={'space-2'}>
+        <VStack gap={'space-8'}>
+            {slettFeilmelding && (
+                <LocalAlert status="error">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>En feil oppstod ved sletting av brevmottaker</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{slettFeilmelding}</LocalAlert.Content>
+                </LocalAlert>
+            )}
             <HStack justify={'space-between'}>
                 <Heading level={'2'} size={'small'}>
                     {brevmottakertypeVisningsnavn[brevmottaker.type]}
@@ -35,7 +43,6 @@ export function BrevmottakerDetaljer({ brevmottaker, erLesevisning, onSlett, sle
                     </Button>
                 )}
             </HStack>
-            {slettFeilmelding && <ErrorMessage size={'small'}>{slettFeilmelding}</ErrorMessage>}
             <dl className={styles.definitionList}>
                 <dt>Navn</dt>
                 <dd>{brevmottaker.navn}</dd>

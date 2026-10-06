@@ -9,6 +9,7 @@ export enum FeatureToggle {
     skalSkjuleTestmiljøknapper = 'familie-ba-sak.skal-skjule-testmiljoknapper',
 
     // Release
+    brukNyttBrevmottakerSkjema = 'familie-ba-sak.bruk-nytt-brevmottaker-skjema',
     selvstendigRettInfobrev = 'familie-ba-sak.selvstendig-rett-infobrev',
     tillattOpprettingAvSkjermetBarnFagsak = 'familie-ba-sak.tillatt-oppretting-av-skjermet-barn-fagsak',
     preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',

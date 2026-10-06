@@ -1,10 +1,19 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
+import { RegistrerteBrevmottakereFagsak } from '@komponenter/Brevmottaker/Fagsak/RegistrerteBrevmottakereFagsak';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
+import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
+import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
+import { server } from '@testutils/mocks/node';
+import { lagBrevmottakerFagsak } from '@testutils/testdata/brevmottakerTestdata';
 import { render, TestProviders } from '@testutils/testrender';
+import type { BrevmottakerFagsak } from '@typer/brevmottaker';
+import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
+import { HttpResponse, http } from 'msw';
 import type { PropsWithChildren } from 'react';
 import { Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
@@ -23,29 +32,38 @@ function OpprettFagsakModalWrapper() {
 
 interface WrapperProps extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];
+    featureToggles?: FeatureToggles;
+    brevmottakere?: BrevmottakerFagsak[];
 }
 
-function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], children }: WrapperProps) {
+function Wrapper({
+    initialEntries = [{ pathname: '/fagsak/1' }],
+    featureToggles = skruPåAlleToggles(),
+    brevmottakere = [],
+    children,
+}: WrapperProps) {
     return (
-        <TestProviders initialEntries={initialEntries}>
+        <TestProviders initialEntries={initialEntries} featureToggles={featureToggles}>
             <FagsakProvider fagsak={FagsakTestdata.lagFagsak()}>
                 <BrukerProvider bruker={PersonTestdata.lagPerson()}>
-                    <BrevmottakereFagsakProvider>
-                        <OpprettFagsakModalWrapper />
-                        <Routes>
-                            <Route
-                                path={'/fagsak/:fagsakId/dokumentutsending'}
-                                element={
-                                    <>
-                                        <Heading level={'1'} size={'medium'}>
-                                            Dokumentutsending
-                                        </Heading>
-                                        {children}
-                                    </>
-                                }
-                            />
-                            <Route path={'/fagsak/:fagsakId'} element={<>{children}</>} />
-                        </Routes>
+                    <BrevmottakereFagsakProvider initielleBrevmottakere={brevmottakere}>
+                        <BrevmottakerDialogProvider>
+                            <OpprettFagsakModalWrapper />
+                            <Routes>
+                                <Route
+                                    path={'/fagsak/:fagsakId/dokumentutsending'}
+                                    element={
+                                        <>
+                                            <Heading level={'1'} size={'medium'}>
+                                                Dokumentutsending
+                                            </Heading>
+                                            {children}
+                                        </>
+                                    }
+                                />
+                                <Route path={'/fagsak/:fagsakId'} element={<>{children}</>} />
+                            </Routes>
+                        </BrevmottakerDialogProvider>
                     </BrevmottakereFagsakProvider>
                 </BrukerProvider>
             </FagsakProvider>
@@ -128,9 +146,22 @@ describe('Fagsakmeny', () => {
         expect(screen.getByRole('heading', { name: 'Dokumentutsending' })).toBeInTheDocument();
     });
 
-    test('skal kunne åpne legg til brevmottaker modal på dokumentutsending siden', async () => {
+    test.each([true, false, undefined])('skal velge brevmottakerdialog med toggle %s', async brukNyBrevmottaker => {
+        const featureToggles: FeatureToggles =
+            brukNyBrevmottaker === undefined ? {} : { [FeatureToggle.brukNyttBrevmottakerSkjema]: brukNyBrevmottaker };
+        server.use(
+            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () =>
+                HttpResponse.json(byggSuksessRessurs(featureToggles))
+            )
+        );
         const { screen, user } = render(<Fagsakmeny />, {
-            wrapper: props => <Wrapper {...props} initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]} />,
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]}
+                    featureToggles={featureToggles}
+                />
+            ),
         });
 
         const meny = screen.getByRole('button', { name: 'Meny' });
@@ -139,6 +170,35 @@ describe('Fagsakmeny', () => {
         const menuitem = screen.getByRole('menuitem', { name: 'Legg til brevmottaker' });
         await user.click(menuitem);
 
-        expect(screen.getByRole('dialog', { name: 'Legg til brevmottaker' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('dialog', { name: brukNyBrevmottaker ? 'Brevmottaker' : 'Legg til brevmottaker' })
+        ).toBeInTheDocument();
+    });
+
+    test.each([true, false])('skal velge brevmottakerdialog fra detaljer med toggle %s', async brukNyBrevmottaker => {
+        const featureToggles = { [FeatureToggle.brukNyttBrevmottakerSkjema]: brukNyBrevmottaker };
+        server.use(
+            http.post('/familie-ba-sak/api/feature/er-toggler-enabled', () =>
+                HttpResponse.json(byggSuksessRessurs(featureToggles))
+            )
+        );
+        const { screen, user } = render(<RegistrerteBrevmottakereFagsak />, {
+            wrapper: props => (
+                <Wrapper
+                    {...props}
+                    initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]}
+                    brevmottakere={[lagBrevmottakerFagsak()]}
+                    featureToggles={featureToggles}
+                />
+            ),
+        });
+
+        await user.click(screen.getByRole('button', { name: 'Se detaljer' }));
+
+        expect(
+            screen.getByRole('dialog', {
+                name: brukNyBrevmottaker ? 'Brevmottaker' : 'Legg til eller fjern brevmottaker',
+            })
+        ).toBeInTheDocument();
     });
 });

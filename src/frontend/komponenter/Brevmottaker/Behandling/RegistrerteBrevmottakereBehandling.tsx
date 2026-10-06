@@ -1,6 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { RegistrerteBrevmottakere } from '@komponenter/Brevmottaker/Felles/RegistrerteBrevmottakere';
+import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { LeggTilBrevmottakerModalBehandling } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { FeatureToggle } from '@typer/featureToggles';
+import { RegistrerteBrevmottakere } from '../Felles/RegistrerteBrevmottakere';
+import { BrevmottakerDialogBehandling } from './BrevmottakerDialogBehandling';
 
 type Kilde = 'vedtak' | 'simulering';
 
@@ -18,12 +21,19 @@ interface Props {
 
 export function RegistrerteBrevmottakereBehandling({ kilde, className }: Props) {
     const { brevmottakere } = useBehandling();
+    const toggles = useFeatureToggles();
 
     return (
         <RegistrerteBrevmottakere
             brevmottakere={brevmottakere}
             beskrivelse={hentBeskrivelse(kilde)}
-            dialog={lukkDialog => <LeggTilBrevmottakerModalBehandling lukkModal={lukkDialog} />}
+            dialog={lukkDialog =>
+                toggles[FeatureToggle.brukNyttBrevmottakerSkjema] ? (
+                    <BrevmottakerDialogBehandling />
+                ) : (
+                    <LeggTilBrevmottakerModalBehandling lukkModal={lukkDialog} />
+                )
+            }
             className={className}
         />
     );
