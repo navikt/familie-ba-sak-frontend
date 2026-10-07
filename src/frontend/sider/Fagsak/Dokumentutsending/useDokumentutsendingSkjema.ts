@@ -3,8 +3,8 @@ import { useFagsak } from '@hooks/useFagsak';
 import { useForhåndsvisBrevPåFagsak } from '@hooks/useForhåndsvisBrevPåFagsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSendInformasjonsbrev } from '@hooks/useSendInformasjonsbrev';
+import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import type { DokumentÅrsak } from '@sider/Fagsak/Dokumentutsending/dokumentÅrsakTyper';
-import { useManuelleBrevmottakerePåFagsakContext } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
 import type { IPersonInfo } from '@typer/person';
 import { ForelderBarnRelasjonRolle } from '@typer/person';
@@ -78,8 +78,7 @@ export function useDokumentutsendingSkjema({ åpneBrevSendtDialog, settForhånds
     const bruker = useBruker();
     const fagsak = useFagsak();
 
-    const { manuelleBrevmottakerePåFagsak, settManuelleBrevmottakerePåFagsak } =
-        useManuelleBrevmottakerePåFagsakContext();
+    const { brevmottakere, slettAlleBrevmottakere } = useBrevmottakereFagsakContext();
 
     const form = useForm<DokumentutsendingFormValues>({
         defaultValues: dokumentutsendingSkjemaStandardverdier(bruker),
@@ -96,7 +95,7 @@ export function useDokumentutsendingSkjema({ åpneBrevSendtDialog, settForhånds
     const { mutateAsync: sendInformasjonsbrev } = useSendInformasjonsbrev(fagsak.id);
 
     const byggBrevRequest = (skjemaverdier: DokumentutsendingFormValues) =>
-        transformerSkjemaData({ skjemaverdier, manuelleBrevmottakerePåFagsak });
+        transformerSkjemaData({ skjemaverdier, brevmottakere });
 
     const hentForhåndsvisning = () =>
         trigger().then(skjemaErGyldig => {
@@ -114,7 +113,7 @@ export function useDokumentutsendingSkjema({ åpneBrevSendtDialog, settForhånds
         return sendInformasjonsbrev(byggBrevRequest(skjemaverdier))
             .then(() => {
                 åpneBrevSendtDialog();
-                settManuelleBrevmottakerePåFagsak([]);
+                slettAlleBrevmottakere();
                 settSistForhåndsvisteBrevRequest(undefined);
             })
             .catch(error => setError('root', { message: error.message }));

@@ -1,18 +1,18 @@
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, InfoCard, VStack } from '@navikt/ds-react';
-import { useManuelleBrevmottakerePåFagsakContext } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
+import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { useState } from 'react';
 import { LeggTilBrevmottakerModalFagsak } from '../Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalFagsak';
 import { BrevmottakerListe } from './BrevmottakerListe';
 
 export function BrevmottakereFagsakAdvarsel() {
-    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
+    const { brevmottakere } = useBrevmottakereFagsakContext();
 
     const [visManuelleMottakereModal, settVisManuelleMottakereModal] = useState(false);
 
     return (
         <>
-            {manuelleBrevmottakerePåFagsak.length !== 0 && (
+            {brevmottakere.length !== 0 && (
                 <VStack marginBlock={'space-40 space-24'}>
                     <InfoCard data-color={'info'}>
                         <InfoCard.Header icon={<InformationSquareIcon aria-hidden={true} />}>
@@ -20,7 +20,7 @@ export function BrevmottakereFagsakAdvarsel() {
                         </InfoCard.Header>
                         <InfoCard.Content>
                             <BodyShort> Informasjonsbrev sendes til: </BodyShort>
-                            <BrevmottakerListe brevmottakere={manuelleBrevmottakerePåFagsak} />
+                            <BrevmottakerListe brevmottakere={brevmottakere} />
                             <Button
                                 variant={'tertiary'}
                                 type={'button'}

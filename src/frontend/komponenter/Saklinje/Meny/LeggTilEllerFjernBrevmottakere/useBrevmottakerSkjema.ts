@@ -1,10 +1,11 @@
 import type { FieldDictionary } from '@navikt/familie-skjema';
 import { feil, ok, useFelt, useSkjema } from '@navikt/familie-skjema';
 import type { Avhengigheter, UseSkjemaVerdi } from '@navikt/familie-skjema/dist/typer';
+import { useBrukerContext } from '@sider/Fagsak/BrukerContext';
+import type { IBehandling } from '@typer/behandling';
+import type { Brevmottaker, BrevmottakerBehandling } from '@typer/brevmottaker';
+import { Brevmottakertype, brevmottakertypeVisningsnavn } from '@typer/brevmottaker';
 import { useEffect, useState } from 'react';
-
-import { useBrukerContext } from '../../../../sider/Fagsak/BrukerContext';
-import type { IBehandling } from '../../../../typer/behandling';
 
 export type BrevmottakerUseSkjema = UseSkjemaVerdi<ILeggTilFjernBrevmottakerSkjemaFelter, IBehandling>;
 
@@ -12,19 +13,9 @@ interface Props {
     eksisterendeMottakere: SkjemaBrevmottaker[];
 }
 
-export enum Mottaker {
-    BRUKER_MED_UTENLANDSK_ADRESSE = 'BRUKER_MED_UTENLANDSK_ADRESSE',
-    FULLMEKTIG = 'FULLMEKTIG',
-    VERGE = 'VERGE',
-    DØDSBO = 'DØDSBO',
-}
-
-export const mottakerVisningsnavn: Record<Mottaker, string> = {
-    BRUKER_MED_UTENLANDSK_ADRESSE: 'Bruker med utenlandsk adresse',
-    FULLMEKTIG: 'Fullmektig',
-    VERGE: 'Verge',
-    DØDSBO: 'Dødsbo',
-};
+export const Mottaker = Brevmottakertype;
+export type Mottaker = Brevmottakertype;
+export const mottakerVisningsnavn = brevmottakertypeVisningsnavn;
 
 interface ILeggTilFjernBrevmottakerSkjemaFelter {
     mottaker: Mottaker | '';
@@ -36,19 +27,8 @@ interface ILeggTilFjernBrevmottakerSkjemaFelter {
     land: string;
 }
 
-export interface SkjemaBrevmottaker {
-    type: Mottaker;
-    navn: string;
-    adresselinje1: string;
-    adresselinje2?: string;
-    postnummer?: string;
-    poststed?: string;
-    landkode: string;
-}
-
-export interface IRestBrevmottaker extends SkjemaBrevmottaker {
-    id: number;
-}
+export type SkjemaBrevmottaker = Brevmottaker;
+export type IRestBrevmottaker = BrevmottakerBehandling;
 
 const preutfyltNavnFixed = (mottaker: Mottaker | '', land: string, navn: string) => {
     if (mottaker === Mottaker.DØDSBO) {

@@ -1,15 +1,15 @@
+import { ModalType } from '@context/ModalContext';
+import { useModal } from '@hooks/useModal';
 import { Heading } from '@navikt/ds-react';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
+import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
+import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
+import { render, TestProviders } from '@testutils/testrender';
 import type { PropsWithChildren } from 'react';
 import { Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
-import { ModalType } from '../../../context/ModalContext';
-import { useModal } from '../../../hooks/useModal';
-import { BrukerProvider } from '../../../sider/Fagsak/BrukerContext';
-import { FagsakProvider } from '../../../sider/Fagsak/FagsakContext';
-import { ManuelleBrevmottakerePåFagsakProvider } from '../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { FagsakTestdata } from '../../../testutils/testdata/fagsakTestdata';
 import { PersonTestdata } from '../../../testutils/testdata/personTestdata';
-import { render, TestProviders } from '../../../testutils/testrender';
 import { OpprettFagsakModal } from '../../Modal/fagsak/OpprettFagsakModal';
 import { Fagsakmeny } from './Fagsakmeny';
 
@@ -30,7 +30,7 @@ function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], children }: Wra
         <TestProviders initialEntries={initialEntries}>
             <FagsakProvider fagsak={FagsakTestdata.lagFagsak()}>
                 <BrukerProvider bruker={PersonTestdata.lagPerson()}>
-                    <ManuelleBrevmottakerePåFagsakProvider>
+                    <BrevmottakereFagsakProvider>
                         <OpprettFagsakModalWrapper />
                         <Routes>
                             <Route
@@ -46,7 +46,7 @@ function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], children }: Wra
                             />
                             <Route path={'/fagsak/:fagsakId'} element={<>{children}</>} />
                         </Routes>
-                    </ManuelleBrevmottakerePåFagsakProvider>
+                    </BrevmottakereFagsakProvider>
                 </BrukerProvider>
             </FagsakProvider>
         </TestProviders>
