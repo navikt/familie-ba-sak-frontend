@@ -12,7 +12,7 @@ import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } f
 import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
 import { periodeOverlapperMedValgtDato } from '@utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { useBehandlingContext } from '../../context/BehandlingContext';
@@ -52,21 +52,9 @@ const Behandlingsresultat = () => {
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
 
-    const {
-        data: personerMedUgyldigEtterbetalingsperiode = [],
-        refetch: refetchPersonerMedUgyldigEtterbetalingsperiode,
-    } = useHentPersonerMedUgyldigEtterbetalingsperiode(behandling.behandlingId);
-
-    // Behandlingen kan endres på dette steget (f.eks. småbarnstillegg og endret utbetaling),
-    // og hvilke personer som har ugyldig etterbetalingsperiode må da hentes på nytt.
-    const erFørsteRender = useRef(true);
-    useEffect(() => {
-        if (erFørsteRender.current) {
-            erFørsteRender.current = false;
-            return;
-        }
-        refetchPersonerMedUgyldigEtterbetalingsperiode();
-    }, [behandling, refetchPersonerMedUgyldigEtterbetalingsperiode]);
+    const { data: personerMedUgyldigEtterbetalingsperiode = [] } = useHentPersonerMedUgyldigEtterbetalingsperiode(
+        behandling.behandlingId
+    );
 
     const {
         mutate: oppdaterBehandlingsresultat,
