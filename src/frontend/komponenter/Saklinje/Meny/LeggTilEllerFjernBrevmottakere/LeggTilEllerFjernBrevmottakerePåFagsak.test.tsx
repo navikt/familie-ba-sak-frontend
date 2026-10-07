@@ -1,22 +1,22 @@
 import { ActionMenu, Heading } from '@navikt/ds-react';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
+import { lagBrevmottakerFagsak } from '@testutils/testdata/brevmottakerTestdata';
+import { render, TestProviders } from '@testutils/testrender';
+import type { BrevmottakerFagsak } from '@typer/brevmottaker';
 import type { PropsWithChildren } from 'react';
 import { Route, Routes } from 'react-router';
 import { describe, expect } from 'vitest';
-import { ManuelleBrevmottakerePåFagsakProvider } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
-import { BrevmottakerTestdata } from '../../../../testutils/testdata/brevmottakerTestdata';
-import { render, TestProviders } from '../../../../testutils/testrender';
 import { LeggTilEllerFjernBrevmottakerePåFagsak } from './LeggTilEllerFjernBrevmottakerePåFagsak';
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 
 interface WrapperProps extends PropsWithChildren {
     initialEntries?: [{ pathname: string }];
-    brevmottakere?: SkjemaBrevmottaker[];
+    brevmottakere?: BrevmottakerFagsak[];
 }
 
 function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], brevmottakere = [], children }: WrapperProps) {
     return (
         <TestProviders initialEntries={initialEntries}>
-            <ManuelleBrevmottakerePåFagsakProvider brevmottakere={brevmottakere}>
+            <BrevmottakereFagsakProvider initielleBrevmottakere={brevmottakere}>
                 <Routes>
                     <Route
                         path={'/fagsak/:fagsakId/dokumentutsending'}
@@ -40,7 +40,7 @@ function Wrapper({ initialEntries = [{ pathname: '/fagsak/1' }], brevmottakere =
                         }
                     />
                 </Routes>
-            </ManuelleBrevmottakerePåFagsakProvider>
+            </BrevmottakereFagsakProvider>
         </TestProviders>
     );
 }
@@ -76,7 +76,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsak', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]}
-                    brevmottakere={[BrevmottakerTestdata.lagBrevmottaker()]}
+                    brevmottakere={[lagBrevmottakerFagsak()]}
                 />
             ),
         });
@@ -92,7 +92,7 @@ describe('LeggTilEllerFjernBrevmottakerePåFagsak', () => {
                 <Wrapper
                     {...props}
                     initialEntries={[{ pathname: '/fagsak/1/dokumentutsending' }]}
-                    brevmottakere={[BrevmottakerTestdata.lagBrevmottaker(), BrevmottakerTestdata.lagBrevmottaker()]}
+                    brevmottakere={[lagBrevmottakerFagsak(), lagBrevmottakerFagsak()]}
                 />
             ),
         });
