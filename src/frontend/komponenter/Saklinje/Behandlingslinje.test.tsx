@@ -1,21 +1,20 @@
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
+import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
+import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
+import { lagBehandling, lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
+import { lagPerson } from '@testutils/testdata/personTestdata';
+import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
+import { render, TestProviders } from '@testutils/testrender';
+import type { IBehandling } from '@typer/behandling';
+import type { IMinimalFagsak } from '@typer/fagsak';
+import type { IPersonInfo } from '@typer/person';
+import type { Saksbehandler } from '@typer/saksbehandler';
 import type { PropsWithChildren } from 'react';
-
 import { Route, Routes } from 'react-router';
 import { describe, expect, test } from 'vitest';
-import { BehandlingProvider } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
-import { BrukerProvider } from '../../sider/Fagsak/BrukerContext';
-import { FagsakProvider } from '../../sider/Fagsak/FagsakContext';
-import { ManuelleBrevmottakerePåFagsakProvider } from '../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
-import { lagBehandling, lagVisningBehandling } from '../../testutils/testdata/behandlingTestdata';
-import { lagFagsak } from '../../testutils/testdata/fagsakTestdata';
-import { lagPerson } from '../../testutils/testdata/personTestdata';
-import { lagSaksbehandler } from '../../testutils/testdata/saksbehandlerTestdata';
-import { render, TestProviders } from '../../testutils/testrender';
-import type { IBehandling } from '../../typer/behandling';
-import type { IMinimalFagsak } from '../../typer/fagsak';
-import type { IPersonInfo } from '../../typer/person';
-import type { Saksbehandler } from '../../typer/saksbehandler';
 import { Behandlingslinje } from './Behandlingslinje';
 
 interface WrapperProps extends PropsWithChildren {
@@ -43,11 +42,11 @@ function Wrapper({
                     element={
                         <FagsakProvider fagsak={fagsak}>
                             <BrukerProvider bruker={bruker}>
-                                <ManuelleBrevmottakerePåFagsakProvider>
+                                <BrevmottakereFagsakProvider>
                                     <HentOgSettBehandlingProvider>
                                         <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
                                     </HentOgSettBehandlingProvider>
-                                </ManuelleBrevmottakerePåFagsakProvider>
+                                </BrevmottakereFagsakProvider>
                             </BrukerProvider>
                         </FagsakProvider>
                     }

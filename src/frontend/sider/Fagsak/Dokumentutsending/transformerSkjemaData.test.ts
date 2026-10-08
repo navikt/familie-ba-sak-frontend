@@ -1,4 +1,4 @@
-import { lagBrevmottaker } from '@testutils/testdata/brevmottakerTestdata';
+import { lagBrevmottakerFagsak } from '@testutils/testdata/brevmottakerTestdata';
 import { Målform } from '@typer/søknad';
 import { setDefaultOptions } from 'date-fns';
 import { nb } from 'date-fns/locale';
@@ -12,7 +12,7 @@ beforeAll(() => {
     setDefaultOptions({ locale: nb });
 });
 
-const manuelleBrevmottakerePåFagsak = [lagBrevmottaker()];
+const brevmottakereFagsak = [lagBrevmottakerFagsak()];
 
 const merketBarn: DokumentutsendingBarn = {
     ident: '01011012345',
@@ -44,7 +44,7 @@ describe('transformerSkjemaData', () => {
         expect(() =>
             transformerSkjemaData({
                 skjemaverdier: standardSkjemaverdier,
-                manuelleBrevmottakerePåFagsak,
+                brevmottakere: brevmottakereFagsak,
             })
         ).toThrowError('Årsak er ikke valgt og vi kan ikke sende inn skjema');
     });
@@ -56,13 +56,13 @@ describe('transformerSkjemaData', () => {
                 årsak: DokumentÅrsak.DELT_BOSTED,
                 valgteBarn: [{ ...merketBarn, avtalerOmDeltBosted: [{ dato: '2020-06-01' }] }, ikkeMerketBarn],
             },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.brevmal).toBe(Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED);
         expect(request.barnIBrev).toEqual([merketBarn.ident]);
         expect(request.multiselectVerdier).toEqual(['Barn født 01.01.2010. Avtalen gjelder fra 1. juni 2020.']);
-        expect(request.manuelleBrevmottakere).toBe(manuelleBrevmottakerePåFagsak);
+        expect(request.manuelleBrevmottakere).toBe(brevmottakereFagsak);
     });
 
     test('KAN_SØKE: multiselectVerdier inneholder dokumenttekster før fritekster', () => {
@@ -75,7 +75,7 @@ describe('transformerSkjemaData', () => {
                 dokumenter: [førsteDokument.label],
                 fritekster: [{ tekst: 'En fritekst' }],
             },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.brevmal).toBe(Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE);
@@ -91,7 +91,7 @@ describe('transformerSkjemaData', () => {
                     årsak: DokumentÅrsak.KAN_SØKE,
                     dokumenter: ['Et dokument som ikke finnes'],
                 },
-                manuelleBrevmottakerePåFagsak,
+                brevmottakere: brevmottakereFagsak,
             })
         ).toThrowError();
     });
@@ -128,7 +128,7 @@ describe('transformerSkjemaData', () => {
                 årsak,
                 valgteBarn: [merketBarn, ikkeMerketBarn],
             },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.brevmal).toBe(forventetBrevmal);
@@ -149,7 +149,7 @@ describe('transformerSkjemaData', () => {
                 årsak,
                 fritekstAvsnitt: 'Et avsnitt med fritekst',
             },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.brevmal).toBe(forventetBrevmal);
@@ -166,7 +166,7 @@ describe('transformerSkjemaData', () => {
     ])('enkeltbrev-årsak %s gir riktig brevmal og tomme lister', (årsak, forventetBrevmal) => {
         const request = transformerSkjemaData({
             skjemaverdier: { ...standardSkjemaverdier, årsak },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.brevmal).toBe(forventetBrevmal);
@@ -181,7 +181,7 @@ describe('transformerSkjemaData', () => {
                 årsak: DokumentÅrsak.FØDSEL_GENERELL,
                 målform: null,
             },
-            manuelleBrevmottakerePåFagsak,
+            brevmottakere: brevmottakereFagsak,
         });
 
         expect(request.mottakerMålform).toBe(Målform.NB);
