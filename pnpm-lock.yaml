@@ -39,8 +39,8 @@ importers:
         specifier: 17.0.7
         version: 17.0.7(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@navikt/familie-http':
-        specifier: 8.0.28
-        version: 8.0.28(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
+        specifier: 8.0.29
+        version: 8.0.29(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
       '@navikt/familie-ikoner':
         specifier: 9.1.7
         version: 9.1.7(react@19.3.0)
@@ -48,8 +48,8 @@ importers:
         specifier: 7.0.10
         version: 7.0.10
       '@navikt/familie-skjema':
-        specifier: 8.2.54
-        version: 8.2.54(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
+        specifier: 8.2.55
+        version: 8.2.55(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
       '@navikt/familie-tidslinje':
         specifier: 11.0.7
         version: 11.0.7(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(dayjs@1.11.23)(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
@@ -617,10 +617,10 @@ packages:
       react: 18.x || 19.x
       styled-components: 5.x || 6.x
 
-  '@navikt/familie-http@8.0.28':
-    resolution: {integrity: sha512-HeC3LmfwJ+7tOnLkaR7C+tVRBKfl6bTI25AzxH3yDHIJAUeyWa6PWVGMmomk/VmIR1KU+2S9c8jzAhXqVNB8bA==, tarball: https://npm.pkg.github.com/download/@navikt/familie-http/8.0.28/393da127c2d34a18841d9e034e03bcc6030cdec6}
+  '@navikt/familie-http@8.0.29':
+    resolution: {integrity: sha512-83ZtO8fX5TBYJUC01dtlq1Kyloiye1mVGy8JfQQaJ7PGoT2ZpXZ+hORTyLH8Wpk6VN0i7EpAUxnDt8nzo13pjg==, tarball: https://npm.pkg.github.com/download/@navikt/familie-http/8.0.29/481f13858449f040d9e1e1e56ab8479bf1837801}
     peerDependencies:
-      axios: '>=1.18.0 <2.0.0'
+      axios: '>=1.20.0 <2.0.0'
       react: 18.x || 19.x
 
   '@navikt/familie-ikoner@9.1.7':
@@ -631,8 +631,8 @@ packages:
   '@navikt/familie-logging@7.0.10':
     resolution: {integrity: sha512-vwt7UohN0l7TOHpxyRTbLESEfThbdj9PRCAXey9k5qBk5Mk6hnZv7VG7PIIW4WbPZCmbvCDaXMSP81YITY6u0w==, tarball: https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.10/d4e494fc6973f32357ce095393122aaf7eadbc13}
 
-  '@navikt/familie-skjema@8.2.54':
-    resolution: {integrity: sha512-1JZ1u3lmHpQSWZmoyeOtLIQTqwnL3hk5LY5f+8vA9Ii/J3Rbq5DBTokRcFr5gGpVzZWu+xb2a2WED+xDuPcAzw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.54/05a382fbe921bf4114a819b3eef714a593429206}
+  '@navikt/familie-skjema@8.2.55':
+    resolution: {integrity: sha512-2t/UR9uSfGtI15eGxgM4NlYUVkF5sITB8ICIXNuwZWm971VoTz/DV906ywxcCHuab6yaLpwHlNc72vMddcOwyA==, tarball: https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.55/e0d7756ca1757c2842d9732ec671c4b03962f3bc}
     peerDependencies:
       react: 18.x || 19.x
 
@@ -3782,7 +3782,7 @@ snapshots:
       react: 19.3.0
       styled-components: 6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
-  '@navikt/familie-http@8.0.28(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)':
+  '@navikt/familie-http@8.0.29(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)':
     dependencies:
       '@navikt/familie-typer': 8.0.8
       axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
@@ -3797,9 +3797,9 @@ snapshots:
     dependencies:
       winston: 3.19.0
 
-  '@navikt/familie-skjema@8.2.54(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)':
+  '@navikt/familie-skjema@8.2.55(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)':
     dependencies:
-      '@navikt/familie-http': 8.0.28(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
+      '@navikt/familie-http': 8.0.29(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
       '@navikt/familie-typer': 8.0.8
       '@types/deep-equal': 1.0.4
       deep-equal: 2.2.3
