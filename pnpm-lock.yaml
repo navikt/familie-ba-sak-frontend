@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@dotenvx/dotenvx':
-        specifier: 2.32.2
-        version: 2.32.2
+        specifier: 2.32.3
+        version: 2.32.3
       '@nais/apm':
         specifier: 0.7.2
         version: 0.7.2(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
@@ -370,8 +370,8 @@ packages:
   '@date-fns/tz@1.5.0':
     resolution: {integrity: sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==}
 
-  '@dotenvx/dotenvx@2.32.2':
-    resolution: {integrity: sha512-JwF1VUWhDJyU92S7CGX44Gm/cr9pFYqmo1SqfzhIoChmnQ/1sDV4O+UVmd6extES4FmU5N58NFn7S4k/Jin0wg==}
+  '@dotenvx/dotenvx@2.32.3':
+    resolution: {integrity: sha512-UNFIHshsxON+DVnq+sDpGvhSmHZCQEaQ0C7PTBa1NAA+L94TtRkYGhjttsiIvs6jyYnZJXy5tn9go77+ossGmA==}
     hasBin: true
 
   '@dotenvx/primitives@3.0.3':
@@ -3432,7 +3432,7 @@ snapshots:
 
   '@date-fns/tz@1.5.0': {}
 
-  '@dotenvx/dotenvx@2.32.2':
+  '@dotenvx/dotenvx@2.32.3':
     dependencies:
       '@dotenvx/primitives': 3.0.3
       '@dotenvx/tooling': 1.0.3
