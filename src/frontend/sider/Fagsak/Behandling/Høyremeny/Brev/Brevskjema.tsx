@@ -1,8 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useBruker } from '@hooks/useBruker';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
+import { BrevmottakerListe } from '@komponenter/Brevmottaker/BrevmottakerListe';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
@@ -11,8 +11,6 @@ import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader,
 import { RessursStatus } from '@navikt/familie-typer';
 import { useEffect, useState } from 'react';
 import { FormProvider, useController } from 'react-hook-form';
-
-import BrevmottakerListe from '../../../../../komponenter/Brevmottaker/BrevmottakerListe';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
 import { BarnBrevetGjelderField } from './BarnBrevetGjelderField';
 import { BrevmalField } from './BrevmalField';
@@ -44,7 +42,6 @@ interface IProps {
 const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const behandling = useBehandling();
     const fagsak = useFagsak();
-    const bruker = useBruker();
     const { hentOgSettSamhandler, samhandlerRessurs } = useSamhandlerRequest(true);
 
     const { form, onSubmit, hentSkjemaData } = useSendManueltBrevForm({ onSubmitSuccess });
@@ -103,11 +100,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Fieldset error={errors.root?.message} legend="Send brev" hideLegend>
                                 <Label>Brev sendes til</Label>
-                                <BrevmottakerListe
-                                    bruker={bruker}
-                                    brevmottakere={brevmottakere}
-                                    institusjonNavn={institusjonNavn}
-                                />
+                                <BrevmottakerListe brevmottakere={brevmottakere} institusjonNavn={institusjonNavn} />
                                 {mottakerIdentState.error && (
                                     <ErrorMessage>{mottakerIdentState.error.message}</ErrorMessage>
                                 )}

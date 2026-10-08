@@ -1,9 +1,8 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useBruker } from '@hooks/useBruker';
-import BrevmottakerListe from '@komponenter/Brevmottaker/BrevmottakerListe';
+import { BrevmottakerListe } from '@komponenter/Brevmottaker/BrevmottakerListe';
 import { LeggTilBrevmottakerModalBehandling } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Button, InfoCard } from '@navikt/ds-react';
+import { BodyShort, Button, InfoCard } from '@navikt/ds-react';
 import { useState } from 'react';
 
 type Kilde = 'vedtak' | 'simulering';
@@ -17,10 +16,10 @@ function hentBrevtypetekst(kilde: Kilde) {
 
 interface Props {
     kilde: Kilde;
+    className?: string;
 }
 
-export function BrevmottakereBehandlingAdvarsel({ kilde }: Props) {
-    const bruker = useBruker();
+export function BrevmottakereBehandlingAdvarsel({ kilde, className }: Props) {
     const behandling = useBehandling();
 
     const brevmottakere = behandling.brevmottakere || [];
@@ -30,15 +29,16 @@ export function BrevmottakereBehandlingAdvarsel({ kilde }: Props) {
     return (
         <>
             {brevmottakere.length !== 0 && (
-                <InfoCard data-color={'info'}>
+                <InfoCard data-color={'info'} className={className}>
                     <InfoCard.Header icon={<InformationSquareIcon aria-hidden={true} />}>
                         <InfoCard.Title>Brevmottaker(e) er endret</InfoCard.Title>
                     </InfoCard.Header>
                     <InfoCard.Content>
-                        {hentBrevtypetekst(kilde)} sendes til:
-                        <BrevmottakerListe brevmottakere={brevmottakere} bruker={bruker} />
+                        <BodyShort>{hentBrevtypetekst(kilde)} sendes til:</BodyShort>
+                        <BrevmottakerListe brevmottakere={brevmottakere} />
                         <Button
                             variant={'tertiary'}
+                            type={'button'}
                             onClick={() => settVisBrevmottakereModal(true)}
                             icon={<MagnifyingGlassIcon aria-hidden={true} />}
                             size={'xsmall'}
