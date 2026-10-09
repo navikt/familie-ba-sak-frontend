@@ -1,27 +1,26 @@
-import { ExternalLinkIcon, FileTextIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, VStack } from '@navikt/ds-react';
+import { DokumentIkon } from '@ikoner/DokumentIkon';
+import { EksternLenke } from '@ikoner/EksternLenke';
+import { FamilieBaseKnapp } from '@komponenter/FamilieBaseKnapp';
+import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
-import classNames from 'classnames';
 import styles from './DokumentInfoStripe.module.css';
 
-interface DokumentInfoStripeProps {
+interface IDokumentInfoStripeProps {
     valgt: boolean;
     journalpostId: string;
     dokument: IDokumentInfo;
 }
 
-// TODO: sjekk hva som skjer ved flere dokumenter - mtp. valgt - fill ikonet
-export function DokumentInfoStripe({ valgt, journalpostId, dokument }: DokumentInfoStripeProps) {
+export function DokumentInfoStripe({ valgt, journalpostId, dokument }: IDokumentInfoStripeProps) {
     return (
         <HStack>
             <Box minHeight={'48px'} minWidth={'48px'} marginInline={'space-0 space-16'}>
-                <FileTextIcon width={48} height={48} />
+                <DokumentIkon filled={valgt} width={48} height={48} />
             </Box>
             <VStack>
                 <HStack gap={'space-8'} marginBlock={'space-0 space-8'} className={styles.tittel}>
                     {dokument.tittel || 'Ukjent'}
-                    <Button
-                        className={classNames(styles.visDokumentKnapp)}
+                    <FamilieBaseKnapp
                         onClick={() => {
                             window.open(
                                 `/familie-ba-sak/api/journalpost/${journalpostId}/dokument/${dokument.dokumentInfoId}`,
@@ -29,8 +28,8 @@ export function DokumentInfoStripe({ valgt, journalpostId, dokument }: DokumentI
                             );
                         }}
                     >
-                        <ExternalLinkIcon />
-                    </Button>
+                        <EksternLenke />
+                    </FamilieBaseKnapp>
                 </HStack>
                 {dokument.logiskeVedlegg.map((it, index) => (
                     <BodyShort key={index}>{it.tittel}</BodyShort>
