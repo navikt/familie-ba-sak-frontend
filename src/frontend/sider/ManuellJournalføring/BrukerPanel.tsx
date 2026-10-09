@@ -1,58 +1,25 @@
 import { KontoSirkel } from '@ikoner/KontoSirkel';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
-import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { ArrowUndoIcon, Buildings3FillIcon } from '@navikt/aksel-icons';
-import {
-    Box,
-    Button,
-    ExpansionCard,
-    Heading,
-    HStack,
-    InlineMessage,
-    ReadMore,
-    Select,
-    TextField,
-} from '@navikt/ds-react';
+import { Buildings3FillIcon } from '@navikt/aksel-icons';
+import { Box, ExpansionCard, InlineMessage, ReadMore } from '@navikt/ds-react';
 import { BgAccentStrong } from '@navikt/ds-tokens/dist/tokens';
-import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
-import type { Ressurs } from '@navikt/familie-typer';
-import { RessursStatus } from '@navikt/familie-typer';
-import { FagsakType, fagsakStatus } from '@typer/fagsak';
-import type { ISamhandlerInfo } from '@typer/samhandler';
+import { Valideringsstatus } from '@navikt/familie-skjema';
+import { EndreBrukerSkjema } from '@sider/ManuellJournalføring/EndreBrukerSkjema';
+import { EndreFagsaktypeSkjema } from '@sider/ManuellJournalføring/EndreFagsaktypeSkjema';
+import { FagsakType } from '@typer/fagsak';
 import { formaterIdent } from '@utils/formatter';
-import { identValidator } from '@utils/validators';
-import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
-
 import styles from './BrukerPanel.module.css';
 import { DeltagerInfo } from './DeltagerInfo';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
 
 export function BrukerPanel() {
-    const {
-        skjema,
-        endreBrukerOgSettNormalFagsak,
-        erLesevisning,
-        institusjonsfagsaker,
-        settMinimalFagsakTilInstitusjonsfagsak,
-        settMinimalFagsakTilNormalFagsakForPerson,
-        kanKnyttesTilInstitusjonsfagsak,
-    } = useManuellJournalføringContext();
+    const { skjema, erLesevisning, kanKnyttesTilInstitusjonsfagsak } = useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);
-    const [feilMelding, settFeilMelding] = useState<string | undefined>('');
-    const [spinner, settSpinner] = useState(false);
-    const nyIdent = useFelt({
-        verdi: '',
-        valideringsfunksjon: identValidator,
-    });
-    const { hentSamhandler } = useSamhandlerRequest(false);
+
     const [valgtInstitusjon, settValgtInstitusjon] = useState<string>('');
     const [samhandlerFeilmelding, settSamhandlerFeilmelding] = useState<string>('');
     const [erFagsaktypePanelÅpnet, settErFagsaktypePanelÅpnet] = useState<boolean>(false);
-
-    useEffect(() => {
-        settFeilMelding('');
-    }, [nyIdent.verdi]);
 
     useEffect(() => {
         if (skjema.visFeilmeldinger && skjema.felter.bruker.valideringsstatus === Valideringsstatus.FEIL) {
@@ -60,35 +27,11 @@ export function BrukerPanel() {
         }
     }, [skjema.visFeilmeldinger, skjema.felter.bruker.valideringsstatus]);
 
-    useEffect(() => {
-        settSamhandlerFeilmelding('');
-        if (valgtInstitusjon !== '' && valgtInstitusjon !== 'ny-institusjon') {
-            settMinimalFagsakTilInstitusjonsfagsak(valgtInstitusjon);
-            hentSamhandler(valgtInstitusjon).then((ressurs: Ressurs<ISamhandlerInfo>) => {
-                if (ressurs.status === RessursStatus.SUKSESS) {
-                    skjema.felter.samhandler.validerOgSettFelt(ressurs.data);
-                } else {
-                    skjema.felter.samhandler.nullstill();
-                    settSamhandlerFeilmelding('Kan ikke hente opplysninger om institusjon');
-                }
-            });
-        } else {
-            settMinimalFagsakTilNormalFagsakForPerson(skjema.felter.bruker.verdi?.personIdent);
-            skjema.felter.samhandler.nullstill();
-        }
-    }, [valgtInstitusjon]);
-
     const erBrukerPåInstitusjon = skjema.felter.fagsakType.verdi === FagsakType.INSTITUSJON;
 
-    const oppdaterFagsaktype = (nyFagsakType: FagsakType) => {
-        skjema.felter.fagsakType.validerOgSettFelt(nyFagsakType);
-        if (nyFagsakType !== FagsakType.INSTITUSJON) {
-            settValgtInstitusjon('');
-        }
-    };
-
     const nullstillFagsaktype = () => {
-        oppdaterFagsaktype(FagsakType.NORMAL);
+        skjema.felter.fagsakType.validerOgSettFelt(FagsakType.NORMAL);
+        settValgtInstitusjon('');
         settErFagsaktypePanelÅpnet(false);
     };
 
@@ -120,43 +63,7 @@ export function BrukerPanel() {
             <ExpansionCard.Content className={styles.innerContent}>
                 {!erLesevisning() && (
                     <>
-                        <HStack marginBlock={'space-0 space-24'} wrap={false}>
-                            <TextField
-                                {...nyIdent.hentNavInputProps(!!feilMelding)}
-                                error={nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding}
-                                label={'Endre bruker'}
-                                description={'Skriv inn brukers/søkers fødselsnummer eller D-nummer'}
-                                size="small"
-                            />
-                            <Box
-                                marginInline={'space-16 space-0'}
-                                width={'10rem'}
-                                marginBlock={
-                                    nyIdent.hentNavInputProps(!!feilMelding).feil || feilMelding
-                                        ? 'auto space-28'
-                                        : 'auto space-0'
-                                }
-                            >
-                                <Button
-                                    onClick={() => {
-                                        if (nyIdent.valideringsstatus === Valideringsstatus.OK) {
-                                            settSpinner(true);
-                                            nullstillFagsaktype();
-                                            endreBrukerOgSettNormalFagsak(nyIdent.verdi).finally(() => {
-                                                settSpinner(false);
-                                            });
-                                        } else {
-                                            settFeilMelding('Personident er ugyldig');
-                                        }
-                                    }}
-                                    loading={spinner}
-                                    size="small"
-                                    variant="secondary"
-                                >
-                                    Endre bruker
-                                </Button>
-                            </Box>
-                        </HStack>
+                        <EndreBrukerSkjema nullstillFagsaktype={nullstillFagsaktype} />
                         {kanKnyttesTilInstitusjonsfagsak() && (
                             <ReadMore
                                 size="medium"
@@ -164,72 +71,13 @@ export function BrukerPanel() {
                                 open={erFagsaktypePanelÅpnet}
                                 onClick={() => settErFagsaktypePanelÅpnet(!erFagsaktypePanelÅpnet)}
                             >
-                                <Box marginBlock={'space-12 space-20'}>
-                                    <Select
-                                        label="Fagsaktype"
-                                        size="small"
-                                        onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                                            oppdaterFagsaktype(event.target.value as FagsakType)
-                                        }
-                                        value={skjema.felter.fagsakType.verdi}
-                                    >
-                                        <option value={FagsakType.NORMAL}>Velg</option>
-                                        <option value={FagsakType.INSTITUSJON}>Institusjon</option>
-                                        {<option value={FagsakType.BARN_ENSLIG_MINDREÅRIG}>Enslig mindreårig</option>}
-                                    </Select>
-                                </Box>
-                                {erBrukerPåInstitusjon && (
-                                    <Box marginBlock={'space-12 space-20'}>
-                                        <Select
-                                            label="Institusjon"
-                                            size="small"
-                                            onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                                                settValgtInstitusjon(event.target.value)
-                                            }
-                                            value={valgtInstitusjon}
-                                        >
-                                            <option value="">Velg</option>
-                                            {institusjonsfagsaker.status === RessursStatus.SUKSESS &&
-                                                institusjonsfagsaker.data.map(({ institusjon, status }) => {
-                                                    return (
-                                                        institusjon && (
-                                                            <option
-                                                                value={institusjon.orgNummer}
-                                                                key={institusjon.orgNummer}
-                                                            >
-                                                                {formaterIdent(institusjon.orgNummer)} |{' '}
-                                                                {fagsakStatus[status].navn}
-                                                            </option>
-                                                        )
-                                                    );
-                                                })}
-                                            <option value="ny-institusjon">Ny institusjon</option>
-                                        </Select>
-                                    </Box>
-                                )}
-                                {skjema.felter.fagsakType.verdi !== FagsakType.NORMAL && (
-                                    <Button
-                                        variant="tertiary"
-                                        size="xsmall"
-                                        onClick={nullstillFagsaktype}
-                                        icon={<ArrowUndoIcon />}
-                                    >
-                                        Tilbakestill
-                                    </Button>
-                                )}
+                                <EndreFagsaktypeSkjema
+                                    nullstillFagsaktype={nullstillFagsaktype}
+                                    valgtInstitusjon={valgtInstitusjon}
+                                    settValgtInstitusjon={settValgtInstitusjon}
+                                    settSamhandlerFeilmelding={settSamhandlerFeilmelding}
+                                />
                             </ReadMore>
-                        )}
-                        {valgtInstitusjon === 'ny-institusjon' && (
-                            <Box marginBlock={'space-32 space-0'}>
-                                <InlineMessage status="warning">
-                                    <Heading size="xsmall" level="3">
-                                        Institusjonssak på bruker må opprettes
-                                    </Heading>
-                                    For å journalføre dokumentet, må ny fagsak av typen institusjon opprettes via
-                                    saksbehandlerløsningen. Når fagsaken er tilknyttet godkjent institusjon, kan
-                                    dokumentet journalføres.
-                                </InlineMessage>
-                            </Box>
                         )}
                     </>
                 )}
