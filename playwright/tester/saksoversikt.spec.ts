@@ -25,7 +25,7 @@ test.describe('Saksoversikt', () => {
                                                 personIdent: '10022012345',
                                                 type: PersonType.BARN,
                                             }),
-                                            utbetaltPerMnd: 1968,
+                                            utbetaltPerMnd: 2012,
                                         }),
                                     ],
                                 }),
@@ -44,7 +44,7 @@ test.describe('Saksoversikt', () => {
         await expect(page.getByText(/Barn Testersen/)).toBeVisible();
         await expect(page.getByText('Totalt utbetalt/mnd')).toBeVisible();
         // Beløpet vises både for barnet og som totalsum.
-        await expect(page.getByText(/^1\s968 kr$/)).toHaveCount(2);
+        await expect(page.getByText(/^2\s012 kr$/)).toHaveCount(2);
 
         const behandlinger = page.getByRole('table').filter({ has: page.getByRole('columnheader', { name: 'Årsak' }) });
         await expect(behandlinger.getByRole('row', { name: /Førstegangsbehandling/ })).toBeVisible();

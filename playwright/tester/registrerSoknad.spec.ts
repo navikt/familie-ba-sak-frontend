@@ -15,6 +15,10 @@ const BARN_IDENT = '10022012345';
 const REGISTRER_SØKNAD_URL = encodeURI('/familie-ba-sak/api/behandlinger/:behandlingId/steg/registrer-søknad');
 
 const SØKER_IDENT = '12345678910';
+// Slik backend lager advarselen når vilkår for personer som tas ut av behandlingen blir fjernet.
+const FJERN_VILKÅR_ADVARSEL =
+    'Du har gjort endringer i behandlingsgrunnlaget. Dersom du går videre vil vilkår for følgende personer fjernes:' +
+    '\n01012212345:\n   - Er under 18 år\n   - Bor med søker\n';
 
 function lagBehandlingIVilkårsvurdering(): IBehandling {
     return BehandlingTestdata.lagBehandling({
@@ -108,9 +112,7 @@ test.describe('Registrer søknad', () => {
                 const { bekreftEndringerViaFrontend } = await request.json();
                 mottatteBekreftelser.push(bekreftEndringerViaFrontend);
                 if (!bekreftEndringerViaFrontend) {
-                    return HttpResponse.json(
-                        byggFunksjonellFeilRessurs('Barnet er allerede registrert i en annen sak.')
-                    );
+                    return HttpResponse.json(byggFunksjonellFeilRessurs(FJERN_VILKÅR_ADVARSEL));
                 }
                 return HttpResponse.json(byggSuksessRessurs(lagBehandlingIVilkårsvurdering()));
             })
@@ -121,7 +123,7 @@ test.describe('Registrer søknad', () => {
         await page.getByRole('button', { name: 'Bekreft og fortsett' }).click();
 
         const modal = page.getByRole('dialog', { name: 'Er du sikker på at du vil gå videre?' });
-        await expect(modal.getByText('Barnet er allerede registrert i en annen sak.')).toBeVisible();
+        await expect(modal.getByText('Dersom du går videre vil vilkår for følgende personer fjernes:')).toBeVisible();
 
         await modal.getByRole('button', { name: 'Ja' }).click();
 
