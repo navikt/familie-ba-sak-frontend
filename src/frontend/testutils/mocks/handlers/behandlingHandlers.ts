@@ -11,4 +11,10 @@ export const behandlingHandlers = [
         const behandlingId = Number(params.behandlingId);
         return HttpResponse.json(byggSuksessRessurs(BehandlingTestdata.lagBehandling({ behandlingId })));
     }),
+    http.get<{ behandlingId: string }>(
+        '/familie-ba-sak/api/behandlinger/:behandlingId/personer-med-ugyldig-etterbetalingsperiode',
+        () => {
+            return HttpResponse.json(byggSuksessRessurs<string[]>([]));
+        }
+    ),
 ];

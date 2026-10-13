@@ -12,7 +12,9 @@ import { oppgaveHandlers } from './oppgaveHandlers';
 import { personHandlers } from './personHandlers';
 import { saksbehandlerHandlers } from './saksbehandlerHandlers';
 import { samhandlerHandlers } from './samhandlerHandlers';
+import { simuleringHandlers } from './simuleringHandlers';
 import { tilbakekrevingHandlers } from './tilbakekrevingHandlers';
+import { vedtakHandlers } from './vedtakHandlers';
 import { versionHandlers } from './versionHandlers';
 
 export const handlers = [
@@ -32,4 +34,6 @@ export const handlers = [
     ...journalpostHandlers,
     ...historikkinnslagHandlers,
     ...samhandlerHandlers,
+    ...simuleringHandlers,
+    ...vedtakHandlers,
 ];

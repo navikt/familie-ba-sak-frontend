@@ -1,12 +1,24 @@
 import { YtelseType } from '@typer/beregning';
+import { VedtakBegrunnelseType } from '@typer/vedtak';
 import type {
     IUtbetalingsperiodeDetalj,
     IVedtaksperiodeMedBegrunnelser,
     Utbetalingsperiode,
 } from '@typer/vedtaksperiode';
 import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import type { AlleBegrunnelser } from '@typer/vilkår';
 
 import { lagGrunnlagPerson } from './personTestdata';
+
+export function lagAlleBegrunnelser(begrunnelser: Partial<AlleBegrunnelser> = {}): AlleBegrunnelser {
+    const tomListePerType = Object.fromEntries(
+        Object.values(VedtakBegrunnelseType).map(type => [type, []])
+    ) as unknown as AlleBegrunnelser;
+    return {
+        ...tomListePerType,
+        ...begrunnelser,
+    };
+}
 
 export function lagVedtaksperiodeMedBegrunnelser(
     vedtaksperiode?: Partial<IVedtaksperiodeMedBegrunnelser>
