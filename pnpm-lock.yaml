@@ -30,8 +30,8 @@ importers:
         specifier: 8.17.2
         version: 8.17.2
       '@navikt/familie-backend':
-        specifier: 11.0.0
-        version: 11.0.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+        specifier: 11.0.2
+        version: 11.0.2(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@navikt/familie-form-elements':
         specifier: 22.0.4
         version: 22.0.4(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)
@@ -596,8 +596,8 @@ packages:
   '@navikt/ds-tokens@8.17.2':
     resolution: {integrity: sha512-oDKFZxlgt/L2zNPCma03fo1sls5E9bUTybMh8/ELh7btS3Kurv7fvwlF7CMW8mWTa+/yh1oqLXY/ONp4+/mPTg==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.17.2/6d44d329afac5ae8d729cdf2f1c83d009dfd2c80}
 
-  '@navikt/familie-backend@11.0.0':
-    resolution: {integrity: sha512-WiwPChADvBNciCQtHncWRN2BJHXVtEjRHhl/kDlfsP1VDaqYexajy3cQ5vQOpUYSCgRscwZCzcGFSMgPtgl5hQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/11.0.0/b7e09a82539a32ac7676ee9e84a9e655c504383f}
+  '@navikt/familie-backend@11.0.2':
+    resolution: {integrity: sha512-rkR+faJWC79uIhFmYRRMHCG+M/fsS6V+ddDHChknl8/04YFfY/D2NN8I8oNjtgaHyaO+FWR5zeIE138ds6kKLw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/11.0.2/798115dc1d8859cc4db3f9bc9fbe37bdf47906be}
     engines: {node: '>=22.19.0'}
 
   '@navikt/familie-form-elements@22.0.4':
@@ -630,6 +630,9 @@ packages:
 
   '@navikt/familie-logging@7.0.10':
     resolution: {integrity: sha512-vwt7UohN0l7TOHpxyRTbLESEfThbdj9PRCAXey9k5qBk5Mk6hnZv7VG7PIIW4WbPZCmbvCDaXMSP81YITY6u0w==, tarball: https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.10/d4e494fc6973f32357ce095393122aaf7eadbc13}
+
+  '@navikt/familie-logging@7.0.11':
+    resolution: {integrity: sha512-E0vCWqaMvs3HVU/lOLfwVloyUMvFOA+Glnz+sh0qFvRhfbu1QmqSVqteAEzv+CNGCBNLPLdNgtWo0U11f68Ykw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-logging/7.0.11/6a93ff637c245f46e488d364e026d26738e26f67}
 
   '@navikt/familie-skjema@8.2.54':
     resolution: {integrity: sha512-1JZ1u3lmHpQSWZmoyeOtLIQTqwnL3hk5LY5f+8vA9Ii/J3Rbq5DBTokRcFr5gGpVzZWu+xb2a2WED+xDuPcAzw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-skjema/8.2.54/05a382fbe921bf4114a819b3eef714a593429206}
@@ -3737,9 +3740,9 @@ snapshots:
 
   '@navikt/ds-tokens@8.17.2': {}
 
-  '@navikt/familie-backend@11.0.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
+  '@navikt/familie-backend@11.0.2(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
-      '@navikt/familie-logging': 7.0.10
+      '@navikt/familie-logging': 7.0.11
       '@types/cookie-parser': 1.4.8(@types/express@5.0.6)
       '@types/express': 5.0.6
       '@types/express-session': 1.19.0
@@ -3794,6 +3797,10 @@ snapshots:
       react: 19.3.0
 
   '@navikt/familie-logging@7.0.10':
+    dependencies:
+      winston: 3.19.0
+
+  '@navikt/familie-logging@7.0.11':
     dependencies:
       winston: 3.19.0
 
