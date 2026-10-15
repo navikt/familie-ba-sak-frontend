@@ -27,6 +27,7 @@ jobs:
       build-image: true
       push-image: true
       build-profile: 'preprod'
+      cdn-miljo: 'dev'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -53,6 +54,7 @@ jobs:
       build-image: true
       push-image: true
       build-profile: 'prod'
+      cdn-miljo: 'prod'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

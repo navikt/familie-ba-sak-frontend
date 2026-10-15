@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig(() => {
     try {
         return {
+            base: process.env.CDN_BASE_URL || '/',
             build: {
                 outDir: '../../dist_frontend/',
                 sourcemap: true,
