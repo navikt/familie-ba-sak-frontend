@@ -482,7 +482,7 @@ export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
     );
 }
 
-export function erRevurderingEtterKlage(behandling: IBehandling) {
+export function erRevurderingKlage(behandling: IBehandling) {
     return behandling.type === Behandlingstype.REVURDERING && behandling.årsak === BehandlingÅrsak.KLAGE;
 }
 

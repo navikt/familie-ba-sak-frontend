@@ -2,7 +2,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
-import { BehandlingÅrsak, erRevurderingEtterKlage, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
+import { BehandlingÅrsak, erRevurderingKlage, sjekkErBehandleneEnhetMidlertidig } from '@typer/behandling';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
 
@@ -38,8 +38,7 @@ export function Behandlingsmeny() {
 
     const erPåBehandlingsresultatside = location.pathname.includes(sider[SideId.BEHANDLINGRESULTAT].href);
     const kanEndreSøknadstidspunkt =
-        (behandling.årsak === BehandlingÅrsak.SØKNAD || erRevurderingEtterKlage(behandling)) &&
-        erPåBehandlingsresultatside;
+        (behandling.årsak === BehandlingÅrsak.SØKNAD || erRevurderingKlage(behandling)) && erPåBehandlingsresultatside;
 
     const [visOpprettBehandlingModal, settVisOpprettBehandlingModal] = useState(false);
     const [visTilbakekrevingsbehandlingOpprettetModal, settVisTilbakekrevingsbehandlingOpprettetModal] =
