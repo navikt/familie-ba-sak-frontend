@@ -2,10 +2,19 @@ import { captureException } from '@nais/apm';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 import { logger, tilLoggFeil } from '@utils/logger';
-import { useEffect } from 'react';
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 
-function captureRouteException(error: unknown) {
+function medComponentStack(error: unknown, componentStack?: string | null) {
+    if (!(error instanceof Error) || !componentStack) {
+        return { feil: error, opprinneligStack: undefined };
+    }
+    const feil = new Error(error.message);
+    feil.name = error.name;
+    feil.stack = `${error.name}: ${error.message}${componentStack}`;
+    return { feil, opprinneligStack: error.stack };
+}
+
+export function captureRouteException(error: unknown, componentStack?: string | null, rute?: string) {
     if (isRouteErrorResponse(error)) {
         if (error.status === 404) {
             return undefined;
@@ -21,7 +30,8 @@ function captureRouteException(error: unknown) {
         logger.error(`Route-feil ${error.status}: ${error.statusText}`);
         return;
     }
-    captureException(error, { context: { type: 'route-error' } });
+    const { feil, opprinneligStack } = medComponentStack(error, componentStack);
+    captureException(feil, { context: { type: 'route-error', componentStack, opprinneligStack, rute } });
     logger.error(`Route-feil: ${error instanceof Error ? error.message : 'ukjent feil'}`, tilLoggFeil(error));
 }
 
@@ -37,11 +47,6 @@ function utledFeilmelding(error: unknown) {
 
 export function RouteError() {
     const error = useRouteError();
-
-    useEffect(() => {
-        captureRouteException(error);
-    }, [error]);
-
     const feilmelding = utledFeilmelding(error);
 
     return (

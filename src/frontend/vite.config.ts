@@ -9,6 +9,9 @@ export default defineConfig(() => {
                 outDir: '../../dist_frontend/',
                 sourcemap: true,
                 emptyOutDir: true,
+                rolldownOptions: {
+                    output: { keepNames: true },
+                },
             },
             envDir: '../../',
             define: {
