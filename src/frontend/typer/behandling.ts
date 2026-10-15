@@ -482,11 +482,8 @@ export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
     );
 }
 
-export function erRevurderingKlage(behandling: IBehandling) {
-    return (
-        behandling.type === Behandlingstype.REVURDERING &&
-        (behandling.årsak === BehandlingÅrsak.KLAGE || behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK)
-    );
+export function erRevurderingEtterKlage(behandling: IBehandling) {
+    return behandling.type === Behandlingstype.REVURDERING && behandling.årsak === BehandlingÅrsak.KLAGE;
 }
 
 export function utledSøkersMålform(behandling: IBehandling) {

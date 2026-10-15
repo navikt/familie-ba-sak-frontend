@@ -143,7 +143,7 @@ describe('useEndreSøknadstidspunktForm', () => {
     test('viser også søker i en revurdering etter klage når behandlingen gjelder utvidet barnetrygd', () => {
         mockBehandling = lagBehandling({
             type: Behandlingstype.REVURDERING,
-            årsak: BehandlingÅrsak.IVERKSETTE_KA_VEDTAK,
+            årsak: BehandlingÅrsak.KLAGE,
             underkategori: BehandlingUnderkategori.UTVIDET,
             personer: [søker, barnUtenPersistertVerdi],
         });

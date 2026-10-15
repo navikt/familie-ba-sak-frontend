@@ -4,7 +4,7 @@ import { HentRegistrerteSøknadstidspunkterQueryKeyFactory } from '@hooks/useHen
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
-import { erRevurderingKlage, type IBehandling } from '@typer/behandling';
+import { erRevurderingEtterKlage, type IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
 import { type IGrunnlagPerson, PersonType } from '@typer/person';
 import { dateTilIsoDatoString, isoStringTilDateEllerUndefined } from '@utils/dato';
@@ -28,7 +28,7 @@ interface Props {
 
 function kanRegistrereNyttSøknadstidspunkt(person: IGrunnlagPerson, behandling: IBehandling) {
     return (
-        erRevurderingKlage(behandling) &&
+        erRevurderingEtterKlage(behandling) &&
         !person.skjermesForBruker &&
         (person.type === PersonType.BARN ||
             (person.type === PersonType.SØKER && behandling.underkategori === BehandlingUnderkategori.UTVIDET))
