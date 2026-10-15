@@ -13,6 +13,7 @@ import { lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import {
     BehandlingSteg,
+    Behandlingstype,
     BehandlingÅrsak,
     type IBehandling,
     MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
@@ -139,6 +140,29 @@ describe('Behandlingsmeny', () => {
 
         expect(screen.getByRole('menuitem', { name: 'Endre søknadstidspunkt' })).toBeInTheDocument();
     });
+
+    test.each([BehandlingÅrsak.KLAGE, BehandlingÅrsak.IVERKSETTE_KA_VEDTAK])(
+        'skal vise "Endre søknadstidspunkt" i menyen for en revurdering med årsak %s på behandlingsresultat-siden',
+        async årsak => {
+            const { screen, user } = render(<Behandlingsmeny />, {
+                wrapper: props => (
+                    <Wrapper
+                        {...props}
+                        initialEntries={[{ pathname: '/fagsak/1/1/tilkjent-ytelse' }]}
+                        behandling={lagBehandling({
+                            type: Behandlingstype.REVURDERING,
+                            årsak,
+                            steg: BehandlingSteg.BEHANDLINGSRESULTAT,
+                        })}
+                    />
+                ),
+            });
+
+            await user.click(screen.getByRole('button', { name: 'Meny' }));
+
+            expect(screen.getByRole('menuitem', { name: 'Endre søknadstidspunkt' })).toBeInTheDocument();
+        }
+    );
 
     test('skal ikke vise "Endre søknadstidspunkt" i menyen når man ikke er på behandlingsresultat-siden', async () => {
         const { screen, user } = render(<Behandlingsmeny />, {

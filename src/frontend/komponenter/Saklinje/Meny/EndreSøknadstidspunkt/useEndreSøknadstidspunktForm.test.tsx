@@ -3,7 +3,8 @@ import { kjønnType } from '@navikt/familie-typer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import type { IBehandling } from '@typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
+import { BehandlingUnderkategori } from '@typer/behandlingstema';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
 import { dateTilIsoDatoString } from '@utils/dato';
@@ -116,6 +117,63 @@ describe('useEndreSøknadstidspunktForm', () => {
         const personer = result.current.form.getValues('personer');
 
         expect(personer).toHaveLength(0);
+    });
+
+    test('viser alle barn i en revurdering etter klage, forhåndsutfylt der søknadstidspunkt er registrert', () => {
+        mockBehandling = lagBehandling({
+            type: Behandlingstype.REVURDERING,
+            årsak: BehandlingÅrsak.KLAGE,
+            personer: [søker, barnMedPersistertVerdi, barnUtenPersistertVerdi],
+        });
+
+        const { result } = renderForm([
+            { personIdent: barnMedPersistertVerdi.personIdent, søknadstidspunkt: '2024-03-10' },
+        ]);
+
+        const personer = result.current.form.getValues('personer');
+
+        expect(personer.map(person => person.personIdent)).toEqual([
+            barnMedPersistertVerdi.personIdent,
+            barnUtenPersistertVerdi.personIdent,
+        ]);
+        expect(dateTilIsoDatoString(personer[0].søknadstidspunkt ?? undefined)).toBe('2024-03-10');
+        expect(personer[1].søknadstidspunkt).toBeNull();
+    });
+
+    test('viser også søker i en revurdering etter klage når behandlingen gjelder utvidet barnetrygd', () => {
+        mockBehandling = lagBehandling({
+            type: Behandlingstype.REVURDERING,
+            årsak: BehandlingÅrsak.IVERKSETTE_KA_VEDTAK,
+            underkategori: BehandlingUnderkategori.UTVIDET,
+            personer: [søker, barnUtenPersistertVerdi],
+        });
+
+        const { result } = renderForm([]);
+
+        expect(result.current.form.getValues('personer').map(person => person.personIdent)).toEqual([
+            søker.personIdent,
+            barnUtenPersistertVerdi.personIdent,
+        ]);
+    });
+
+    test('viser ikke barn som skjermes for saksbehandler i en revurdering etter klage', () => {
+        const skjermetBarn = {
+            ...barnUtenPersistertVerdi,
+            personIdent: 'SKJERMET BARN 1',
+            navn: 'SKJERMET BARN 1',
+            skjermesForBruker: true,
+        };
+        mockBehandling = lagBehandling({
+            type: Behandlingstype.REVURDERING,
+            årsak: BehandlingÅrsak.KLAGE,
+            personer: [søker, barnUtenPersistertVerdi, skjermetBarn],
+        });
+
+        const { result } = renderForm([]);
+
+        expect(result.current.form.getValues('personer').map(person => person.personIdent)).toEqual([
+            barnUtenPersistertVerdi.personIdent,
+        ]);
     });
 
     test('onSubmit sender kun barn med dato (ISO-format), oppdaterer behandling og lukker modal', async () => {

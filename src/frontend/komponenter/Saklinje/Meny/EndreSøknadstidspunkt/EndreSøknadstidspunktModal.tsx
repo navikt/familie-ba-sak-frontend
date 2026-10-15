@@ -2,6 +2,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useHentRegistrerteSøknadstidspunkter } from '@hooks/useHentRegistrerteSøknadstidspunkter';
 
 import { Alert, BodyShort, Button, Loader, Modal, VStack } from '@navikt/ds-react';
+import { erRevurderingKlage } from '@typer/behandling';
 
 import { EndreSøknadstidspunktSkjema } from './EndreSøknadstidspunktSkjema';
 
@@ -61,7 +62,7 @@ export const EndreSøknadstidspunktModal = ({ lukkModal }: Props) => {
         );
     }
 
-    if (søknadstidspunkter.length === 0) {
+    if (søknadstidspunkter.length === 0 && !erRevurderingKlage(behandling)) {
         return (
             <Modal {...modalProps(lukkModal)}>
                 <Modal.Body>

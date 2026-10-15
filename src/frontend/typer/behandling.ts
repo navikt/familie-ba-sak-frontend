@@ -482,6 +482,13 @@ export function kanLeggeTilUtvidetVilkår(behandling: IBehandling) {
     );
 }
 
+export function erRevurderingKlage(behandling: IBehandling) {
+    return (
+        behandling.type === Behandlingstype.REVURDERING &&
+        (behandling.årsak === BehandlingÅrsak.KLAGE || behandling.årsak === BehandlingÅrsak.IVERKSETTE_KA_VEDTAK)
+    );
+}
+
 export function utledSøkersMålform(behandling: IBehandling) {
     const søker = behandling.personer.find(person => person.type === PersonType.SØKER);
     return søker?.målform ?? Målform.NB;
