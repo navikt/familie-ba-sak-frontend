@@ -2,10 +2,14 @@ import { captureException } from '@nais/apm';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, ErrorMessage, Heading, HStack, VStack } from '@navikt/ds-react';
 import { logger, tilLoggFeil } from '@utils/logger';
-import { useEffect } from 'react';
 import { isRouteErrorResponse, useRouteError } from 'react-router';
 
-function captureRouteException(error: unknown) {
+/**
+ * Rapporterer feil fra React Router til APM. Kalles fra `onError` på `RouterProvider`, som kjører én gang per feil
+ * og gir Reacts komponentstakk ved renderfeil. Stakken viser hvilken komponent som feilet, også når
+ * JavaScript-stacktracen bare inneholder React-interne funksjoner (f.eks. «Minified React error #31»).
+ */
+export function captureRouteException(error: unknown, componentStack?: string | null, rute?: string) {
     if (isRouteErrorResponse(error)) {
         if (error.status === 404) {
             return undefined;
@@ -21,7 +25,7 @@ function captureRouteException(error: unknown) {
         logger.error(`Route-feil ${error.status}: ${error.statusText}`);
         return;
     }
-    captureException(error, { context: { type: 'route-error' } });
+    captureException(error, { context: { type: 'route-error', componentStack, rute } });
     logger.error(`Route-feil: ${error instanceof Error ? error.message : 'ukjent feil'}`, tilLoggFeil(error));
 }
 
@@ -37,11 +41,6 @@ function utledFeilmelding(error: unknown) {
 
 export function RouteError() {
     const error = useRouteError();
-
-    useEffect(() => {
-        captureRouteException(error);
-    }, [error]);
-
     const feilmelding = utledFeilmelding(error);
 
     return (
