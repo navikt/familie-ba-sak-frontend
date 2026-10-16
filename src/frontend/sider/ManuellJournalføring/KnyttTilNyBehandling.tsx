@@ -1,16 +1,14 @@
 import { Box, Checkbox, Fieldset, Heading } from '@navikt/ds-react';
-
+import { BehandlingstemaFelt } from '@sider/ManuellJournalføring/felter/BehandlingstemaFelt';
+import { BehandlingstypeFelt } from '@sider/ManuellJournalføring/felter/BehandlingstypeFelt';
+import { BehandlingsårsakFelt } from '@sider/ManuellJournalføring/felter/BehandlingsårsakFelt';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-import OpprettBehandlingValg from './OpprettBehandlingValg';
 
-/**
- * Legger inn lesevisning slik at på sikt
- * så kan man kanskje sjekke hvilken behandling
- * journalposten er journalført på slik at man kan klikke seg inn på behandlingen
- */
 export function KnyttTilNyBehandling() {
-    const { skjema, minimalFagsak, kanKnytteJournalpostTilBehandling } = useManuellJournalføringContext();
-    const { knyttTilNyBehandling, behandlingstype } = skjema.felter;
+    const { skjema, kanKnytteJournalpostTilBehandling } = useManuellJournalføringContext();
+    const { knyttTilNyBehandling, behandlingstype, behandlingsårsak, behandlingstema } = skjema.felter;
+    const erLesevisning = !kanKnytteJournalpostTilBehandling();
+
     return (
         <Box marginBlock={'space-32 space-0'}>
             <Fieldset legend="Knytt til ny behandling" hideLegend>
@@ -24,18 +22,14 @@ export function KnyttTilNyBehandling() {
                     onChange={() => {
                         knyttTilNyBehandling.validerOgSettFelt(!knyttTilNyBehandling.verdi);
                     }}
-                    readOnly={!kanKnytteJournalpostTilBehandling()}
+                    readOnly={erLesevisning}
                 >
                     Knytt til ny behandling
                 </Checkbox>
-                {behandlingstype.erSynlig && (
-                    <OpprettBehandlingValg
-                        skjema={skjema}
-                        minimalFagsak={minimalFagsak}
-                        erLesevisning={!kanKnytteJournalpostTilBehandling()}
-                        manuellJournalfør
-                    />
-                )}
+
+                {behandlingstype.erSynlig && <BehandlingstypeFelt erLesevisning={erLesevisning} />}
+                {behandlingsårsak.erSynlig && <BehandlingsårsakFelt erLesevisning={erLesevisning} />}
+                {behandlingstema.erSynlig && <BehandlingstemaFelt erLesevisning={erLesevisning} />}
             </Fieldset>
         </Box>
     );
