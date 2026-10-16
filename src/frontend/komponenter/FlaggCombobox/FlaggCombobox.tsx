@@ -1,10 +1,23 @@
-import { ExclamationmarkTriangleFillIcon, PadlockLockedFillIcon } from '@navikt/aksel-icons';
+import { useMergedRef } from '@hooks/useMergedRef';
+import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 import { ErrorMessage, HStack, Label, VStack } from '@navikt/ds-react';
 import _Flag from '@navikt/flagg-ikoner';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import classNames from 'classnames';
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useMergedRef } from '../../hooks/useMergedRef';
+import {
+    type ChangeEvent,
+    type KeyboardEvent,
+    type MouseEvent,
+    type PointerEvent,
+    type Ref,
+    useEffect,
+    useEffectEvent,
+    useId,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import styles from './FlaggCombobox.module.css';
 import type { Regionkode } from './RegionCombobox/region';
 
@@ -41,8 +54,29 @@ export interface FlaggComboboxMultiProps<T extends string> extends FlaggCombobox
 }
 
 export type FlaggComboboxProps<T extends string> = (FlaggComboboxSingleProps<T> | FlaggComboboxMultiProps<T>) & {
-    ref?: React.Ref<HTMLInputElement>;
+    ref?: Ref<HTMLInputElement>;
 };
+
+// Omit som bevarer unionen mellom enkeltvalg og flervalg
+type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
+
+export type FlaggComboboxKodeProps<T extends string> = DistributiveOmit<FlaggComboboxProps<T>, 'options'> & {
+    options: T[];
+};
+
+interface FlagIconProps {
+    regionCode: Regionkode;
+    size: 'XS' | 'S';
+    className?: string;
+}
+
+function FlagIcon({ regionCode, size, className }: FlagIconProps) {
+    return (
+        <span aria-hidden={'true'} className={classNames(styles.flag, className)}>
+            <Flag country={regionCode} type={'circle'} size={size} animate={false} wave={false} tooltip={false} />
+        </span>
+    );
+}
 
 export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
     const {
@@ -57,8 +91,12 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
     } = props;
 
     const inputId = useId();
+    const labelId = `${inputId}-label`;
+    const listboxId = `${inputId}-listbox`;
+    const errorId = `${inputId}-error`;
 
     const [isOpen, setIsOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
     const [highlightedIndex, setHighlightedIndex] = useState(0);
     const [internalDropdownPlacement, setInternalDropdownPlacement] = useState<'bottom' | 'top'>('bottom');
 
@@ -68,83 +106,67 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
 
     const activeDropdownPlacement = dropdownPlacement === 'auto' ? internalDropdownPlacement : dropdownPlacement;
 
-    const [inputValue, setInputValue] = useState(() => {
-        if (props.isMulti) return '';
-        const opt = options.find(o => o.value === singleValue);
-        return opt ? opt.label : '';
-    });
-
     const internalInputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const listboxRef = useRef<HTMLDivElement>(null);
-    const preventScrollRef = useRef(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const isKeyboardNavRef = useRef(false);
     const anchorRef = useRef<HTMLDivElement>(null);
 
-    const optionsMap = useMemo(() => {
-        const map = new Map<T, FlaggComboboxOption<T>>();
-        options.forEach(opt => map.set(opt.value, opt));
-        return map;
-    }, [options]);
+    const optionsMap = useMemo(
+        () => new Map<T, FlaggComboboxOption<T>>(options.map(option => [option.value, option])),
+        [options]
+    );
+
+    const selectedSingleOption =
+        singleValue !== null && singleValue !== undefined ? optionsMap.get(singleValue) : undefined;
+
+    const inputValue = isOpen ? searchValue : (selectedSingleOption?.label ?? '');
 
     const filteredOptions = useMemo(() => {
         return options.filter(option => {
-            if (inputValue === '') return true;
-            return option.label.toLowerCase().includes(inputValue.toLowerCase());
+            if (searchValue === '') return true;
+            return option.label.toLowerCase().includes(searchValue.toLowerCase());
         });
-    }, [options, inputValue]);
+    }, [options, searchValue]);
 
     const rowVirtualizer = useVirtualizer({
         count: filteredOptions.length,
-        getScrollElement: () => listboxRef.current,
+        getScrollElement: () => dropdownRef.current,
         estimateSize: estimateVirtualizerSize,
         overscan: 5,
     });
 
     const mergedInputRef = useMergedRef(ref, internalInputRef);
 
+    const scrollToHighlightedOption = useEffectEvent(() => {
+        rowVirtualizer.scrollToIndex(highlightedIndex, { align: 'auto' });
+    });
+
     useEffect(() => {
         if (!isOpen) {
             return;
         }
 
-        function handleOutsideClick(event: MouseEvent | TouchEvent) {
+        // Lytter på pointerdown fordi mousedown ikke sendes når et annet felt kaller preventDefault på pointerdown
+        function handleOutsidePointerDown(event: Event) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
                 setHighlightedIndex(0);
             }
         }
 
-        document.addEventListener('mousedown', handleOutsideClick);
-        document.addEventListener('touchstart', handleOutsideClick);
+        document.addEventListener('pointerdown', handleOutsidePointerDown);
         return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-            document.removeEventListener('touchstart', handleOutsideClick);
+            document.removeEventListener('pointerdown', handleOutsidePointerDown);
         };
     }, [isOpen]);
 
+    // Listen finnes ikke i DOM-en før den er rendret, så rullingen ved åpning må skje i en effekt
     useEffect(() => {
-        if (!isOpen) {
-            if (!props.isMulti) {
-                const selectedOpt = options.find(o => o.value === props.value);
-                setInputValue(selectedOpt ? selectedOpt.label : '');
-            } else {
-                setInputValue('');
-            }
+        if (isOpen) {
+            scrollToHighlightedOption();
         }
-    }, [isOpen, props.isMulti, props.value, options]);
-
-    useEffect(() => {
-        if (isOpen && listboxRef.current) {
-            if (preventScrollRef.current) {
-                preventScrollRef.current = false;
-                return;
-            }
-            requestAnimationFrame(() => {
-                rowVirtualizer.scrollToIndex(highlightedIndex, { align: 'auto' });
-            });
-        }
-    }, [isOpen, highlightedIndex, rowVirtualizer]);
+    }, [isOpen]);
 
     useLayoutEffect(() => {
         if (!isOpen || !anchorRef.current || dropdownPlacement !== 'auto') return;
@@ -176,20 +198,29 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         };
     }, [isOpen, dropdownPlacement]);
 
-    function handleOnWrapperPointerDown(event: React.PointerEvent<HTMLDivElement>) {
-        if (event.target === event.currentTarget) {
-            event.preventDefault();
-            if (readOnly) {
-                return;
-            }
-            internalInputRef.current?.focus();
-            handleInputInteraction();
+    function handleOnWrapperPointerDown(event: PointerEvent<HTMLDivElement>) {
+        const target = event.target as Element;
+        if (target === internalInputRef.current || target.closest('button')) {
+            return;
         }
+        // Hindrer at input-feltet mister fokus ved klikk på flagg, chips eller tom plass i feltet
+        event.preventDefault();
+        if (readOnly) {
+            return;
+        }
+        internalInputRef.current?.focus();
+        handleInputInteraction();
     }
 
-    function handleOnInputChanged(event: React.ChangeEvent<HTMLInputElement>) {
-        setInputValue(event.target.value);
+    function handleOnDropdownPointerDown(event: PointerEvent<HTMLDivElement>) {
+        // Beholder fokus i input-feltet ved klikk i listen
+        event.preventDefault();
+    }
+
+    function handleOnInputChanged(event: ChangeEvent<HTMLInputElement>) {
+        setSearchValue(event.target.value);
         setHighlightedIndex(0);
+        rowVirtualizer.scrollToOffset(0);
         if (!isOpen) {
             setIsOpen(true);
         }
@@ -200,35 +231,42 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
             const isSelected = multiValues.includes(option.value);
             const newValues = isSelected ? multiValues.filter(v => v !== option.value) : [...multiValues, option.value];
             props.onChange(newValues);
-            setInputValue('');
-            internalInputRef.current?.focus();
+            setSearchValue('');
         } else {
             if (singleValue === option.value) {
                 props.onChange(null);
-                setInputValue('');
+                setSearchValue('');
             } else {
                 props.onChange(option.value);
                 setIsOpen(false);
             }
         }
+        internalInputRef.current?.focus();
     }
 
     function handleOnOptionMouseEntered(index: number) {
         if (isKeyboardNavRef.current) {
             return;
         }
-        preventScrollRef.current = true;
         setHighlightedIndex(index);
     }
 
-    function handleOnClearClicked(event: React.MouseEvent) {
+    function highlightOptionWithKeyboard(index: number) {
+        isKeyboardNavRef.current = true;
+        setHighlightedIndex(index);
+        rowVirtualizer.scrollToIndex(index, { align: 'auto' });
+    }
+
+    function handleOnClearClicked(event: MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
-        if (props.isMulti) {
-            props.onChange([]);
-        } else {
-            props.onChange(null);
+        if (hasValue) {
+            if (props.isMulti) {
+                props.onChange([]);
+            } else {
+                props.onChange(null);
+            }
         }
-        setInputValue('');
+        setSearchValue('');
         internalInputRef.current?.focus();
     }
 
@@ -236,11 +274,10 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         if (readOnly) {
             return;
         }
-        preventScrollRef.current = false;
         if (!isOpen) {
             setIsOpen(true);
+            setSearchValue('');
             if (!props.isMulti) {
-                setInputValue('');
                 const index = options.findIndex(opt => opt.value === singleValue);
                 setHighlightedIndex(index !== -1 ? index : 0);
             } else {
@@ -250,7 +287,7 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         }
     }
 
-    function handleOnKeyDownPressed(event: React.KeyboardEvent<HTMLInputElement>) {
+    function handleOnKeyDownPressed(event: KeyboardEvent<HTMLInputElement>) {
         if (readOnly) {
             return;
         }
@@ -264,15 +301,15 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         switch (event.key) {
             case 'ArrowDown':
                 event.preventDefault();
-                preventScrollRef.current = false;
-                isKeyboardNavRef.current = true;
-                setHighlightedIndex(prev => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
+                if (highlightedIndex < filteredOptions.length - 1) {
+                    highlightOptionWithKeyboard(highlightedIndex + 1);
+                }
                 break;
             case 'ArrowUp':
                 event.preventDefault();
-                preventScrollRef.current = false;
-                isKeyboardNavRef.current = true;
-                setHighlightedIndex(prev => (prev > 0 ? prev - 1 : prev));
+                if (highlightedIndex > 0) {
+                    highlightOptionWithKeyboard(highlightedIndex - 1);
+                }
                 break;
             case 'Enter':
                 event.preventDefault();
@@ -297,21 +334,21 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         }
     }
 
-    function handleOnDropdownArrowClicked(event: React.MouseEvent<HTMLButtonElement>) {
+    function handleOnDropdownArrowClicked(event: MouseEvent<HTMLButtonElement>) {
         if (readOnly) {
             return;
         }
         event.stopPropagation();
         event.preventDefault();
+        internalInputRef.current?.focus();
         if (isOpen) {
             setIsOpen(false);
         } else {
-            internalInputRef.current?.focus();
             handleInputInteraction();
         }
     }
 
-    function handleOnChipRemoved(event: React.MouseEvent, valToRemove: T) {
+    function handleOnChipRemoved(event: MouseEvent<HTMLButtonElement>, valToRemove: T) {
         if (!props.isMulti || readOnly) {
             return;
         }
@@ -320,23 +357,26 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
         internalInputRef.current?.focus();
     }
 
-    const selectedSingleOption = !props.isMulti ? options.find(opt => opt.value === singleValue) : null;
+    function getOptionId(value: T) {
+        return `${inputId}-option-${value}`;
+    }
+
     const errorMessage = error instanceof Error ? error.message : error;
+    const showError = !!errorMessage && !readOnly;
+    const highlightedOption = isOpen ? filteredOptions[highlightedIndex] : undefined;
 
     return (
         <VStack gap={'space-4'} className={classNames(styles.container, className)} ref={containerRef}>
             <HStack wrap={false} align={'center'} gap={'space-4'} paddingBlock={'space-2'}>
-                {readOnly && <PadlockLockedFillIcon />}
-                <Label size={'medium'} htmlFor={inputId}>
+                {readOnly && <PadlockLockedFillIcon aria-hidden={'true'} />}
+                <Label id={labelId} size={'medium'} htmlFor={inputId}>
                     {label}
                 </Label>
             </HStack>
             <div className={styles.relativeAnchor} ref={anchorRef}>
                 <div
                     className={classNames(styles.inputWrapper, {
-                        [styles.inputWrapperMulti]: props.isMulti,
-                        [styles.inputWrapperSingle]: !props.isMulti,
-                        [styles.inputWrapperError]: errorMessage && !readOnly,
+                        [styles.inputWrapperError]: showError,
                         [styles.inputWrapperReadOnly]: readOnly,
                     })}
                     onPointerDown={handleOnWrapperPointerDown}
@@ -347,16 +387,12 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                             props.isMulti ? styles.valueContainerMulti : styles.valueContainerSingle
                         )}
                     >
-                        {selectedSingleOption?.regionCode && (
-                            <div className={styles.selectedFlag}>
-                                <Flag
-                                    country={selectedSingleOption.regionCode.toString()}
-                                    type={'circle'}
-                                    size={'S'}
-                                    animate={false}
-                                    wave={false}
-                                />
-                            </div>
+                        {selectedSingleOption && (
+                            <FlagIcon
+                                regionCode={selectedSingleOption.regionCode}
+                                size={'S'}
+                                className={styles.selectedFlag}
+                            />
                         )}
 
                         {props.isMulti &&
@@ -368,15 +404,7 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                                 }
                                 return (
                                     <span key={val} className={styles.chip}>
-                                        <Flag
-                                            label={opt.label}
-                                            country={opt.regionCode.toString()}
-                                            type={'circle'}
-                                            size={'XS'}
-                                            animate={false}
-                                            wave={false}
-                                            className={styles.chipFlag}
-                                        />
+                                        <FlagIcon regionCode={opt.regionCode} size={'XS'} />
                                         {opt.label}
                                         {!readOnly && (
                                             <button
@@ -414,21 +442,18 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                             className={styles.input}
                             value={inputValue}
                             onChange={handleOnInputChanged}
+                            onClick={handleInputInteraction}
                             onFocus={handleInputInteraction}
                             onKeyDown={handleOnKeyDownPressed}
                             readOnly={readOnly}
                             tabIndex={readOnly ? 0 : undefined}
                             role={'combobox'}
                             aria-expanded={isOpen}
-                            aria-controls={isOpen ? `${inputId}-listbox` : undefined}
+                            aria-controls={isOpen ? listboxId : undefined}
                             aria-autocomplete={'list'}
-                            aria-invalid={!!errorMessage && !readOnly}
-                            aria-errormessage={errorMessage && !readOnly ? `${inputId}-error` : undefined}
-                            aria-activedescendant={
-                                isOpen && filteredOptions[highlightedIndex]
-                                    ? `${inputId}-option-${filteredOptions[highlightedIndex].value}`
-                                    : undefined
-                            }
+                            aria-invalid={showError}
+                            aria-describedby={showError ? errorId : undefined}
+                            aria-activedescendant={highlightedOption ? getOptionId(highlightedOption.value) : undefined}
                             placeholder={
                                 !props.isMulti && selectedSingleOption
                                     ? selectedSingleOption.label
@@ -465,6 +490,7 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                             aria-label={'Vis valgmuligheter'}
                             className={styles.arrowButton}
                             disabled={readOnly}
+                            tabIndex={-1}
                             onClick={handleOnDropdownArrowClicked}
                         >
                             <svg
@@ -485,101 +511,83 @@ export function FlaggCombobox<T extends string>(props: FlaggComboboxProps<T>) {
                 </div>
                 {isOpen && (
                     <div
-                        id={`${inputId}-listbox`}
+                        ref={dropdownRef}
                         className={classNames(
                             styles.dropdown,
                             activeDropdownPlacement === 'top' ? styles.dropdownTop : styles.dropdownBottom
                         )}
-                        role={'listbox'}
-                        ref={listboxRef}
-                        onMouseMove={() => (isKeyboardNavRef.current = false)}
+                        onPointerDown={handleOnDropdownPointerDown}
                     >
-                        {filteredOptions.length > 0 ? (
-                            <div
-                                role={'presentation'}
-                                style={{
-                                    height: `${rowVirtualizer.getTotalSize()}px`,
-                                    width: '100%',
-                                    position: 'relative',
-                                }}
-                            >
-                                {rowVirtualizer.getVirtualItems().map(virtualRow => {
-                                    const option = filteredOptions[virtualRow.index];
-                                    const index = virtualRow.index;
-                                    const isSelected = props.isMulti
-                                        ? multiValues.includes(option.value)
-                                        : singleValue === option.value;
-                                    return (
-                                        // biome-ignore lint/a11y/useKeyWithClickEvents: <Det går bra her>
-                                        // biome-ignore lint/a11y/useFocusableInteractive: <Det går bra her>
-                                        <div
-                                            key={option.value}
-                                            id={`${inputId}-option-${option.value}`}
-                                            role={'option'}
-                                            aria-selected={isSelected}
-                                            className={classNames(styles.option, {
-                                                [styles.optionFocused]: highlightedIndex === index,
-                                                [styles.selectedOption]: isSelected,
-                                            })}
-                                            onClick={() => handleOnOptionSelected(option)}
-                                            onMouseEnter={() => handleOnOptionMouseEntered(index)}
-                                            style={{
-                                                height: `${virtualRow.size}px`,
-                                                transform: `translateY(${virtualRow.start}px)`,
-                                            }}
-                                        >
-                                            <div className={styles.optionFlagContainer} aria-hidden={'true'}>
-                                                <Flag
-                                                    country={option.regionCode.toString()}
-                                                    type={'circle'}
-                                                    size={'S'}
-                                                    animate={false}
-                                                    wave={false}
-                                                    className={styles.optionFlag}
+                        <div
+                            id={listboxId}
+                            role={'listbox'}
+                            aria-labelledby={labelId}
+                            aria-multiselectable={props.isMulti}
+                            className={styles.listbox}
+                            style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+                            onMouseMove={() => (isKeyboardNavRef.current = false)}
+                        >
+                            {rowVirtualizer.getVirtualItems().map(virtualRow => {
+                                const option = filteredOptions[virtualRow.index];
+                                const index = virtualRow.index;
+                                const isSelected = props.isMulti
+                                    ? multiValues.includes(option.value)
+                                    : singleValue === option.value;
+                                return (
+                                    // biome-ignore lint/a11y/useKeyWithClickEvents: Tastaturet håndteres i input-feltet via aria-activedescendant
+                                    <div
+                                        key={option.value}
+                                        id={getOptionId(option.value)}
+                                        role={'option'}
+                                        aria-selected={isSelected}
+                                        aria-setsize={filteredOptions.length}
+                                        aria-posinset={index + 1}
+                                        tabIndex={-1}
+                                        className={classNames(styles.option, {
+                                            [styles.optionFocused]: highlightedIndex === index,
+                                            [styles.selectedOption]: isSelected,
+                                        })}
+                                        onClick={() => handleOnOptionSelected(option)}
+                                        onMouseEnter={() => handleOnOptionMouseEntered(index)}
+                                        style={{
+                                            height: `${virtualRow.size}px`,
+                                            transform: `translateY(${virtualRow.start}px)`,
+                                        }}
+                                    >
+                                        <FlagIcon regionCode={option.regionCode} size={'S'} />
+                                        <span className={styles.optionText}>{option.label}</span>
+                                        {isSelected && (
+                                            <svg
+                                                aria-hidden={'true'}
+                                                focusable={'false'}
+                                                width={'20'}
+                                                height={'20'}
+                                                viewBox={'0 0 24 24'}
+                                                fill={'none'}
+                                                stroke={'currentColor'}
+                                                strokeWidth={'2.5'}
+                                                className={styles.checkmarkSvg}
+                                            >
+                                                <path
+                                                    strokeLinecap={'round'}
+                                                    strokeLinejoin={'round'}
+                                                    d={'M5 13l4 4L19 7'}
                                                 />
-                                            </div>
-                                            <span className={styles.optionText}>{option.label}</span>
-                                            {isSelected && (
-                                                <svg
-                                                    aria-hidden={'true'}
-                                                    focusable={'false'}
-                                                    width={'20'}
-                                                    height={'20'}
-                                                    viewBox={'0 0 24 24'}
-                                                    fill={'none'}
-                                                    stroke={'currentColor'}
-                                                    strokeWidth={'2.5'}
-                                                    className={styles.checkmarkSvg}
-                                                >
-                                                    <path
-                                                        strokeLinecap={'round'}
-                                                        strokeLinejoin={'round'}
-                                                        d={'M5 13l4 4L19 7'}
-                                                    />
-                                                </svg>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div role={'status'} className={styles.noResults}>
-                                Fant ingen treff
-                            </div>
-                        )}
+                                            </svg>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div role={'status'} className={styles.noResults}>
+                            {filteredOptions.length === 0 && 'Fant ingen treff'}
+                        </div>
                     </div>
                 )}
             </div>
-            {errorMessage && !readOnly && (
-                <HStack align={'center'} gap={'space-6'} marginBlock={'space-4 space-0'} wrap={false}>
-                    <ExclamationmarkTriangleFillIcon
-                        title={'feil'}
-                        fontSize={'1.05rem'}
-                        className={styles.errorMessageIcon}
-                    />
-                    <ErrorMessage id={`${inputId}-error`}>{errorMessage}</ErrorMessage>
-                </HStack>
-            )}
+            <div id={errorId} aria-live={'polite'} aria-relevant={'additions removals'} className={styles.error}>
+                {showError && <ErrorMessage showIcon>{errorMessage}</ErrorMessage>}
+            </div>
         </VStack>
     );
 }
