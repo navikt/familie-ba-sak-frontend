@@ -25,7 +25,7 @@ jobs:
       skip-tests: ${{ inputs.skip-tests }}
       skip-validation: ${{ inputs.skip-validation }}
       build-profile: 'preprod'
-      cdn-miljo: 'dev'
+      cdn-kilde: 'dist_frontend/assets'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
