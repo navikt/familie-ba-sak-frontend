@@ -3,9 +3,9 @@ import { useFagsak } from '@hooks/useFagsak';
 import { BrevmottakereFagsakAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereFagsakAdvarsel';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
-import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack, InfoCard, VStack } from '@navikt/ds-react';
+import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { useDistribusjonskanalContext } from '@sider/Fagsak/DistribusjonskanalProvider';
 import { finnBarnIBrevÅrsak } from '@sider/Fagsak/Dokumentutsending/barnIBrevÅrsak';
 import { DistribusjonskanalInfo } from '@sider/Fagsak/Dokumentutsending/DistribusjonskanalInfo';
@@ -22,7 +22,7 @@ import {
     DokumentutsendingFeltnavn,
     useDokumentutsendingSkjema,
 } from '@sider/Fagsak/Dokumentutsending/useDokumentutsendingSkjema';
-import { useManuelleBrevmottakerePåFagsakContext } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
+import { Brevmottakertype } from '@typer/brevmottaker';
 import { Distribusjonskanal } from '@typer/dokument';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -36,7 +36,7 @@ export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvis
     const navigate = useNavigate();
     const fagsak = useFagsak();
 
-    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
+    const { brevmottakere } = useBrevmottakereFagsakContext();
     const { distribusjonskanal, distribusjonskanalError } = useDistribusjonskanalContext();
 
     const { form, onSubmit, hentForhåndsvisning, forhåndsvisningLaster, visForhåndsvisningBeskjed } =
@@ -49,8 +49,8 @@ export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvis
         formState: { isSubmitting, errors },
     } = form;
 
-    const brukerHarUtenlandskAdresse = manuelleBrevmottakerePåFagsak.some(
-        mottaker => mottaker.type === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE
+    const brukerHarUtenlandskAdresse = brevmottakere.some(
+        mottaker => mottaker.type === Brevmottakertype.BRUKER_MED_UTENLANDSK_ADRESSE
     );
 
     const brukerHarUkjentAdresse =
@@ -71,7 +71,7 @@ export function DokumentutsendingSkjema({ åpneBrevSendtDialog, settForhåndsvis
                 <LeggTilBarnModalContextProvider
                     barn={valgteBarn}
                     onLeggTilBarn={barn => leggTilBarn(barn, { shouldFocus: false })}
-                    harBrevmottaker={manuelleBrevmottakerePåFagsak.length > 0}
+                    harBrevmottaker={brevmottakere.length > 0}
                 >
                     <LeggTilBarnModal />
                     <Box padding="space-32" overflow="auto">

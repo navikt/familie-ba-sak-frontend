@@ -1,6 +1,6 @@
-import type { SkjemaBrevmottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { finnBarnIBrevÅrsak } from '@sider/Fagsak/Dokumentutsending/barnIBrevÅrsak';
 import { DokumentÅrsak } from '@sider/Fagsak/Dokumentutsending/dokumentÅrsakTyper';
+import type { BrevmottakerFagsak } from '@typer/brevmottaker';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
 import { Målform } from '@typer/søknad';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
@@ -13,7 +13,7 @@ import type { DokumentutsendingBarn, DokumentutsendingFormValues } from './useDo
 
 interface SkjemaDataInput {
     skjemaverdier: DokumentutsendingFormValues;
-    manuelleBrevmottakerePåFagsak: SkjemaBrevmottaker[];
+    brevmottakere: BrevmottakerFagsak[];
 }
 
 const brevmalPerÅrsak: Partial<Record<DokumentÅrsak, Informasjonsbrev>> = {
@@ -52,20 +52,17 @@ export const hentDeltBostedMultiselectVerdierForBarn = (barn: DokumentutsendingB
 
 const hentEnkeltInformasjonsbrevRequest = ({
     skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
+    brevmottakere,
     brevmal,
 }: SkjemaDataInput & { brevmal: Informasjonsbrev }): IManueltBrevRequestPåFagsak => ({
     multiselectVerdier: [],
     barnIBrev: [],
     mottakerMålform: skjemaverdier.målform ?? Målform.NB,
     brevmal: brevmal,
-    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+    manuelleBrevmottakere: brevmottakere,
 });
 
-const hentDeltBostedSkjemaData = ({
-    skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
-}: SkjemaDataInput): IManueltBrevRequestPåFagsak => {
+const hentDeltBostedSkjemaData = ({ skjemaverdier, brevmottakere }: SkjemaDataInput): IManueltBrevRequestPåFagsak => {
     const merkedeBarn = skjemaverdier.valgteBarn.filter(barn => barn.merket);
 
     return {
@@ -73,13 +70,13 @@ const hentDeltBostedSkjemaData = ({
         barnIBrev: merkedeBarn.map(barn => barn.ident),
         mottakerMålform: skjemaverdier.målform ?? Målform.NB,
         brevmal: Informasjonsbrev.INFORMASJONSBREV_DELT_BOSTED,
-        manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+        manuelleBrevmottakere: brevmottakere,
     };
 };
 
 const hentBarnIBrevSkjemaData = ({
     skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
+    brevmottakere,
     brevmal,
 }: SkjemaDataInput & {
     brevmal: Informasjonsbrev;
@@ -97,14 +94,11 @@ const hentBarnIBrevSkjemaData = ({
         barnIBrev: merkedeBarn.map(barn => barn.ident),
         mottakerMålform: skjemaverdier.målform ?? Målform.NB,
         brevmal: brevmal,
-        manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+        manuelleBrevmottakere: brevmottakere,
     };
 };
 
-const hentKanSøkeSkjemaData = ({
-    skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
-}: SkjemaDataInput): IManueltBrevRequestPåFagsak => {
+const hentKanSøkeSkjemaData = ({ skjemaverdier, brevmottakere }: SkjemaDataInput): IManueltBrevRequestPåFagsak => {
     const målform = skjemaverdier.målform ?? Målform.NB;
     const fritekster = skjemaverdier.fritekster.map(fritekst => fritekst.tekst);
 
@@ -123,13 +117,13 @@ const hentKanSøkeSkjemaData = ({
         barnIBrev: [],
         mottakerMålform: målform,
         brevmal: Informasjonsbrev.INFORMASJONSBREV_KAN_SØKE,
-        manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+        manuelleBrevmottakere: brevmottakere,
     };
 };
 
 const hentInnhenteOpplysningerKlageSkjemaData = ({
     skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
+    brevmottakere,
     brevmal,
 }: SkjemaDataInput & {
     brevmal: Informasjonsbrev;
@@ -138,13 +132,13 @@ const hentInnhenteOpplysningerKlageSkjemaData = ({
     barnIBrev: [],
     mottakerMålform: skjemaverdier.målform ?? Målform.NB,
     brevmal: brevmal,
-    manuelleBrevmottakere: manuelleBrevmottakerePåFagsak,
+    manuelleBrevmottakere: brevmottakere,
     fritekstAvsnitt: skjemaverdier.fritekstAvsnitt,
 });
 
 export const transformerSkjemaData = ({
     skjemaverdier,
-    manuelleBrevmottakerePåFagsak,
+    brevmottakere,
 }: SkjemaDataInput): IManueltBrevRequestPåFagsak => {
     const { årsak } = skjemaverdier;
     if (!årsak) {
@@ -153,10 +147,10 @@ export const transformerSkjemaData = ({
 
     switch (årsak) {
         case DokumentÅrsak.DELT_BOSTED:
-            return hentDeltBostedSkjemaData({ skjemaverdier, manuelleBrevmottakerePåFagsak });
+            return hentDeltBostedSkjemaData({ skjemaverdier, brevmottakere });
 
         case DokumentÅrsak.KAN_SØKE:
-            return hentKanSøkeSkjemaData({ skjemaverdier, manuelleBrevmottakerePåFagsak });
+            return hentKanSøkeSkjemaData({ skjemaverdier, brevmottakere });
 
         default: {
             const brevmal = brevmalPerÅrsak[årsak];
@@ -171,13 +165,13 @@ export const transformerSkjemaData = ({
                 return hentInnhenteOpplysningerKlageSkjemaData({
                     skjemaverdier,
                     brevmal,
-                    manuelleBrevmottakerePåFagsak,
+                    brevmottakere,
                 });
             }
 
             return finnBarnIBrevÅrsak(årsak) !== undefined
-                ? hentBarnIBrevSkjemaData({ skjemaverdier, brevmal, manuelleBrevmottakerePåFagsak })
-                : hentEnkeltInformasjonsbrevRequest({ skjemaverdier, brevmal, manuelleBrevmottakerePåFagsak });
+                ? hentBarnIBrevSkjemaData({ skjemaverdier, brevmal, brevmottakere })
+                : hentEnkeltInformasjonsbrevRequest({ skjemaverdier, brevmal, brevmottakere });
         }
     }
 };

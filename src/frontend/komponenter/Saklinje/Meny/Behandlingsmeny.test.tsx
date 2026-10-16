@@ -3,9 +3,9 @@ import { useModal } from '@hooks/useModal';
 import { Heading } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
-import { ManuelleBrevmottakerePåFagsakProvider } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
 import { lagBehandling, lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
@@ -53,7 +53,7 @@ function Wrapper({
         <TestProviders initialEntries={initialEntries} featureToggles={featureToggles}>
             <FagsakProvider fagsak={fagsak}>
                 <BrukerProvider bruker={lagPerson()}>
-                    <ManuelleBrevmottakerePåFagsakProvider>
+                    <BrevmottakereFagsakProvider>
                         <OpprettFagsakModalWrapper />
                         <Routes>
                             <Route
@@ -79,7 +79,7 @@ function Wrapper({
                                 }
                             />
                         </Routes>
-                    </ManuelleBrevmottakerePåFagsakProvider>
+                    </BrevmottakereFagsakProvider>
                 </BrukerProvider>
             </FagsakProvider>
         </TestProviders>

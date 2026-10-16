@@ -1,9 +1,9 @@
 import { ActionMenu } from '@navikt/ds-react';
+import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
+import type { BrevmottakerFagsak } from '@typer/brevmottaker';
 import { useLocation } from 'react-router';
-import { useManuelleBrevmottakerePåFagsakContext } from '../../../../sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
 
-const utledLabel = (brevmottakere: SkjemaBrevmottaker[]) => {
+const utledLabel = (brevmottakere: BrevmottakerFagsak[]) => {
     if (brevmottakere.length === 0) {
         return 'Legg til brevmottaker';
     }
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function LeggTilEllerFjernBrevmottakerePåFagsak({ åpneModal }: Props) {
-    const { manuelleBrevmottakerePåFagsak } = useManuelleBrevmottakerePåFagsakContext();
+    const { brevmottakere } = useBrevmottakereFagsakContext();
     const location = useLocation();
 
     const erPåDokumentutsending = location.pathname.includes('dokumentutsending');
@@ -27,7 +27,7 @@ export function LeggTilEllerFjernBrevmottakerePåFagsak({ åpneModal }: Props) {
         return null;
     }
 
-    const label = utledLabel(manuelleBrevmottakerePåFagsak);
+    const label = utledLabel(brevmottakere);
 
     return <ActionMenu.Item onClick={åpneModal}>{label}</ActionMenu.Item>;
 }
