@@ -8,7 +8,7 @@ import {
     MANUELLE_BEHANDLINGSÅRSAKER,
     type ManuellBehandlingÅrsak,
 } from '@typer/behandling';
-import { behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';
+import { BehandlingKategori, behandlingstemaer, type IBehandlingstema } from '@typer/behandlingstema';
 import { FagsakStatus, FagsakType, type IMinimalFagsak } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import type { IGrunnlagPerson } from '@typer/person';
@@ -39,7 +39,11 @@ export function hentDefaultBehandlingstema(fagsakType: FagsakType | undefined): 
     return fagsakType === FagsakType.INSTITUSJON ? behandlingstemaer.NASJONAL_INSTITUSJON : undefined;
 }
 
-export function hentTilgjengeligeBehandlingstyper(fagsak: IMinimalFagsak, saksbehandler: Saksbehandler) {
+export function hentTilgjengeligeBehandlingstyper(
+    fagsak: IMinimalFagsak | undefined,
+    saksbehandler: Saksbehandler,
+    erManuellJournalføring?: boolean
+): (Behandlingstype | Tilbakekrevingsbehandlingstype | Klagebehandlingstype)[] {
     const behandling = fagsak ? hentAktivBehandlingPåMinimalFagsak(fagsak) : undefined;
     const harIkkeAktivBehandling = !behandling || behandling?.status === BehandlingStatus.AVSLUTTET;
 
@@ -50,15 +54,17 @@ export function hentTilgjengeligeBehandlingstyper(fagsak: IMinimalFagsak, saksbe
         (fagsak?.behandlinger.some(behandling => !erBehandlingHenlagt(behandling.resultat)) ?? false);
     const kanOppretteTekniskEndring = harIkkeAktivBehandling && saksbehandler.harSuperbrukertilgang;
     const kanOppretteKlagebehandling = fagsak !== undefined && !fagsak.finnesStrengtFortroligPersonIFagsak;
+    const kanOppretteTilbakekreving = !erManuellJournalføring;
+    const kanOppretteMigreringFraInfotrygd = !erManuellJournalføring && harIkkeAktivBehandling;
 
     return TILGJENGELIGE_BEHANDLINGSTYPER.filter(
         type =>
             (kanOppretteFørstegangsbehandling && type === Behandlingstype.FØRSTEGANGSBEHANDLING) ||
             (kanOppretteRevurdering && type === Behandlingstype.REVURDERING) ||
             (kanOppretteTekniskEndring && type === Behandlingstype.TEKNISK_ENDRING) ||
-            type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING ||
+            (kanOppretteTilbakekreving && type === Tilbakekrevingsbehandlingstype.TILBAKEKREVING) ||
             (kanOppretteKlagebehandling && type === Klagebehandlingstype.KLAGE) ||
-            (harIkkeAktivBehandling && type === Behandlingstype.MIGRERING_FRA_INFOTRYGD)
+            (kanOppretteMigreringFraInfotrygd && type === Behandlingstype.MIGRERING_FRA_INFOTRYGD)
     );
 }
 
@@ -76,6 +82,12 @@ export const hentTilgjengeligeBehandlingsårsaker = (
         : MANUELLE_BEHANDLINGSÅRSAKER.filter(
               årsak => årsak !== BehandlingÅrsak.ENDRE_MIGRERINGSDATO && årsak !== BehandlingÅrsak.HELMANUELL_MIGRERING
           );
+
+export function hentTilgjengeligeBehandlingstemaer(fagsakType: FagsakType | undefined): IBehandlingstema[] {
+    return Object.values(behandlingstemaer)
+        .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
+        .filter(it => it.kategori !== BehandlingKategori.EØS || fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG);
+}
 
 export const forrigeBehandlingVarTekniskEndringMedOpphør = (minimalFagsak?: IMinimalFagsak) => {
     const behandling = hentSisteIkkeHenlagteBehandling(minimalFagsak);
