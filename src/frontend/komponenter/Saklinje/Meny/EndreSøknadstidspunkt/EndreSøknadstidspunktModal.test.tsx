@@ -1,7 +1,7 @@
 import { kjønnType } from '@navikt/familie-typer';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { render } from '@testutils/testrender';
-import type { IBehandling } from '@typer/behandling';
+import { Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -77,6 +77,20 @@ describe('EndreSøknadstidspunktModal', () => {
             screen.getByText('Det er ikke registrert søknadstidspunkt for noen barn på denne behandlingen.')
         ).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
+    });
+
+    test('viser skjema i en revurdering etter klage selv om ingen barn har registrert søknadstidspunkt', () => {
+        mockQuery.data = [];
+        mockBehandling = lagBehandling({
+            type: Behandlingstype.REVURDERING,
+            årsak: BehandlingÅrsak.KLAGE,
+            personer: [barn],
+        });
+
+        const { screen } = render(<EndreSøknadstidspunktModal lukkModal={vi.fn()} />);
+
+        expect(screen.getByRole('textbox', { name: 'Søknadstidspunkt for Barn 1' })).toHaveValue('');
+        expect(screen.getByRole('button', { name: 'Bekreft' })).toBeInTheDocument();
     });
 
     test('viser skjema med datofelt per barn når data er hentet, med barnspesifikt tilgjengelig navn', () => {
