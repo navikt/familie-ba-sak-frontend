@@ -1,26 +1,12 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { CogRotationIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack } from '@navikt/ds-react';
+import { BodyShort, Box, HStack } from '@navikt/ds-react';
 import { type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { mapEøsPeriodeStatusTilStatus } from '@utils/eøs';
 import { lagPersonLabel } from '@utils/formatter';
-import styled from 'styled-components';
-
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
-
-const BlåPencilIcon = styled(PencilWritingIcon)`
-    min-width: 1.5rem;
-    color: var(--ax-accent-800);
-`;
-const StyledCogRotationIcon = styled(CogRotationIcon)`
-    min-width: 1.5rem;
-`;
-
-const BarnDiv = styled.div`
-    display: inline-block;
-    margin-top: 1px;
-`;
+import Styles from './StatusOgBarnValutakurs.module.css';
 
 interface Props {
     valutakurs: IRestValutakurs;
@@ -35,17 +21,25 @@ interface StatusProps {
 const PeriodeStatus = ({ valutakurs, vurderingsstrategiForValutakurser }: StatusProps) => {
     const erLesevisning = useErLesevisning();
 
-    if (valutakurs.vurderingsform === Vurderingsform.AUTOMATISK) {
+    if (valutakurs.vurderingsform == Vurderingsform.AUTOMATISK) {
         if (!erLesevisning && vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL) {
             return (
-                <BlåPencilIcon
+                <PencilWritingIcon
+                    className={Styles.pencilIcon}
                     title="Automatisk vurdert valutakurs åpen for redigering"
                     fontSize="1.5rem"
                     width="1.5rem"
                 />
             );
         } else {
-            return <StyledCogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />;
+            return (
+                <CogRotationIcon
+                    className={Styles.cogIcon}
+                    title="Automatisk vurdert"
+                    fontSize="1.5rem"
+                    width="1.5rem"
+                />
+            );
         }
     } else {
         return <StatusIkon status={mapEøsPeriodeStatusTilStatus[valutakurs.status]} />;
@@ -58,12 +52,12 @@ export const StatusOgBarnValutakurs = ({ valutakurs, åpenBehandling }: Props) =
             valutakurs={valutakurs}
             vurderingsstrategiForValutakurser={åpenBehandling.vurderingsstrategiForValutakurser}
         />
-        <BarnDiv>
+        <Box marginBlock={'space-1 space-0'}>
             {valutakurs.barnIdenter.map(barn => (
                 <BodyShort size="small" key={barn}>
                     {lagPersonLabel(barn, åpenBehandling.personer)}
                 </BodyShort>
             ))}
-        </BarnDiv>
+        </Box>
     </HStack>
 );

@@ -64,7 +64,7 @@ export const EndretUtbetalingAndelRad = () => {
             }
         >
             <Table.DataCell>
-                <HStack gap={'space-16'}>
+                <HStack gap={'space-16'} wrap={false}>
                     <StatusIkon status={endretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL} />
                     {endretUtbetalingAndel.personIdenter.length > 0 ? (
                         <VStack>

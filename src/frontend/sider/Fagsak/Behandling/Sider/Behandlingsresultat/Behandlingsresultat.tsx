@@ -5,7 +5,7 @@ import { useOppdaterBehandlingsresultat } from '@hooks/useOppdaterBehandlingsres
 import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetalingAndel';
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Box, Button, ErrorMessage, ErrorSummary, Label, LocalAlert } from '@navikt/ds-react';
+import { Box, Button, ErrorMessage, ErrorSummary, HStack, Label, LocalAlert } from '@navikt/ds-react';
 import { byggDataRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingResultat, BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '@typer/eøsPerioder';
@@ -14,7 +14,6 @@ import { periodeOverlapperMedValgtDato } from '@utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { useBehandlingContext } from '../../context/BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
@@ -28,20 +27,6 @@ import Valutakurser from './Eøs/Valutakurs/Valutakurser';
 import MigreringInfoboks from './MigreringInfoboks';
 import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
-
-const EndretUtbetalingAndel = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-`;
-
-const StyledEditIkon = styled(PencilIcon)`
-    font-size: 1.5rem;
-`;
-
-const StyledErrorSummary = styled(ErrorSummary)`
-    margin-top: 5rem;
-`;
 
 const Behandlingsresultat = () => {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -168,12 +153,12 @@ const Behandlingsresultat = () => {
                 fagsakType={fagsak.fagsakType}
             />
             {!erLesevisning && (
-                <EndretUtbetalingAndel>
+                <HStack marginBlock={'space-0 space-16'} justify="end">
                     <Button
                         variant="tertiary"
                         size="small"
                         onClick={() => opprettEndretUtbetalingAndel()}
-                        icon={<StyledEditIkon />}
+                        icon={<PencilIcon />}
                         disabled={isOpprettEndretUtbetalingAndelPending}
                         loading={isOpprettEndretUtbetalingAndelPending}
                     >
@@ -182,7 +167,7 @@ const Behandlingsresultat = () => {
                     {isOpprettEndretUtbetalingAndelError && (
                         <ErrorMessage>{opprettEndretUtbetalingAndelError.message}</ErrorMessage>
                     )}
-                </EndretUtbetalingAndel>
+                </HStack>
             )}
             {aktivEtikett && (
                 <Oppsummeringsboks
@@ -220,26 +205,28 @@ const Behandlingsresultat = () => {
                 />
             )}
             {visFeilmeldinger && !erEøsInformasjonGyldig() && (
-                <StyledErrorSummary heading={'For å gå videre må du rette opp følgende:'}>
-                    {[
-                        ...hentKompetanserMedFeil().map((kompetanse: IRestKompetanse) => ({
-                            feilmelding: `Kompetanse barn: ${kompetanse.barnIdenter}, f.o.m.: ${kompetanse.fom} er ikke fullstendig.`,
-                            skjemaelementId: kompetanseFeilmeldingId(kompetanse),
-                        })),
-                        ...hentUtbetaltAnnetLandBeløpMedFeil().map(
-                            (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp) => ({
-                                feilmelding: `Utenlandsk beløp barn: ${utenlandskPeriodeBeløp.barnIdenter}, f.o.m.: ${utenlandskPeriodeBeløp.fom} er ikke fullstendig.`,
-                                skjemaelementId: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
-                            })
-                        ),
-                        ...hentValutakurserMedFeil().map((valutakurs: IRestValutakurs) => ({
-                            feilmelding: `Valutakurs barn: ${valutakurs.barnIdenter}, f.o.m.: ${valutakurs.fom} er ikke fullstendig.`,
-                            skjemaelementId: valutakursFeilmeldingId(valutakurs),
-                        })),
-                    ].map(item => (
-                        <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
-                    ))}
-                </StyledErrorSummary>
+                <Box asChild marginBlock={'space-80 space-0'}>
+                    <ErrorSummary heading={'For å gå videre må du rette opp følgende:'}>
+                        {[
+                            ...hentKompetanserMedFeil().map((kompetanse: IRestKompetanse) => ({
+                                feilmelding: `Kompetanse barn: ${kompetanse.barnIdenter}, f.o.m.: ${kompetanse.fom} er ikke fullstendig.`,
+                                skjemaelementId: kompetanseFeilmeldingId(kompetanse),
+                            })),
+                            ...hentUtbetaltAnnetLandBeløpMedFeil().map(
+                                (utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp) => ({
+                                    feilmelding: `Utenlandsk beløp barn: ${utenlandskPeriodeBeløp.barnIdenter}, f.o.m.: ${utenlandskPeriodeBeløp.fom} er ikke fullstendig.`,
+                                    skjemaelementId: utenlandskPeriodeBeløpFeilmeldingId(utenlandskPeriodeBeløp),
+                                })
+                            ),
+                            ...hentValutakurserMedFeil().map((valutakurs: IRestValutakurs) => ({
+                                feilmelding: `Valutakurs barn: ${valutakurs.barnIdenter}, f.o.m.: ${valutakurs.fom} er ikke fullstendig.`,
+                                skjemaelementId: valutakursFeilmeldingId(valutakurs),
+                            })),
+                        ].map(item => (
+                            <ErrorSummary.Item href={`#${item.skjemaelementId}`}>{item.feilmelding}</ErrorSummary.Item>
+                        ))}
+                    </ErrorSummary>
+                </Box>
             )}
         </Skjemasteg>
     );

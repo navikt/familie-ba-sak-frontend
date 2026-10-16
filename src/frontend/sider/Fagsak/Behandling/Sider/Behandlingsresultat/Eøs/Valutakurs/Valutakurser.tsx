@@ -18,39 +18,9 @@ import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import Styles from './Valutakurser.module.css';
 import ValutakursTabellRad from './ValutakursTabellRad';
-
-const ValutakurserContainer = styled.div`
-    margin-top: 5rem;
-`;
-
-const StyledTable = styled(Table)`
-    margin-top: 2rem;
-
-    & fieldset.skjemagruppe {
-        margin-bottom: 1.5rem;
-    }
-`;
-
-const StyledHeaderCell = styled(Table.HeaderCell)`
-    &:nth-of-type(2) {
-        width: 11rem;
-    }
-
-    &:nth-of-type(3) {
-        width: 7.5rem;
-    }
-
-    &:nth-of-type(4) {
-        width: 14rem;
-    }
-
-    &:nth-of-type(5) {
-        width: 2.25rem;
-    }
-`;
 
 interface IProps {
     valutakurser: IRestValutakurs[];
@@ -98,14 +68,14 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
     const finnesValutaperioderSomKanSkjules = valutakurser.length > 1;
     const [visAlleValutaperioder, setVisAlleValutaperioder] = useState(false);
     const erValutakursSomErVurdertAutomatisk = valutakurser.some(
-        restValutakurs => restValutakurs.vurderingsform == Vurderingsform.AUTOMATISK
+        restValutakurs => restValutakurs.vurderingsform === Vurderingsform.AUTOMATISK
     );
 
     const erManuellVurderingsstrategiForValutakurser =
         åpenBehandling.vurderingsstrategiForValutakurser === VurderingsstrategiForValutakurser.MANUELL;
 
     return (
-        <ValutakurserContainer>
+        <Box marginBlock={'space-80 space-0'}>
             <HStack gap="space-12" wrap={false}>
                 <Heading spacing size="medium" level="3">
                     Valuta
@@ -156,14 +126,14 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
                     </LocalAlert>
                 </Box>
             )}
-            <StyledTable>
+            <Table className={Styles.table}>
                 <Table.Header>
-                    <Table.Row>
-                        <StyledHeaderCell scope="col">Barn</StyledHeaderCell>
-                        <StyledHeaderCell scope="col">Periode</StyledHeaderCell>
-                        <StyledHeaderCell scope="col">Valutakursdato</StyledHeaderCell>
-                        <StyledHeaderCell scope="col">Valuta</StyledHeaderCell>
-                        <StyledHeaderCell></StyledHeaderCell>
+                    <Table.Row className={Styles.headerRow}>
+                        <Table.HeaderCell scope="col">Barn</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Valutakursdato</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Valuta</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -183,7 +153,7 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
                             />
                         ))}
                 </Table.Body>
-            </StyledTable>
+            </Table>
 
             {erGjenopprettAutomatiskeValutakurserModalÅpen && (
                 <Modal
@@ -217,7 +187,7 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
                     </Modal.Footer>
                 </Modal>
             )}
-        </ValutakurserContainer>
+        </Box>
     );
 };
 
