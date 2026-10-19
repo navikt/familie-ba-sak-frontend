@@ -1,6 +1,7 @@
+import { lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
-import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { Behandlingstema, behandlingstemaer } from '@typer/behandlingstema';
 import { FagsakStatus, FagsakType } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
@@ -102,7 +103,7 @@ describe('hentTilgjengeligeBehandlingstyper', () => {
         expect(tilgjengeligeBehandlingstyper).not.toContain(Klagebehandlingstype.KLAGE);
     });
 
-    test('skal inneholde forventede behandlingstyper ved manuell journalføring med fagsak', () => {
+    test('skal inneholde forventede behandlingstyper ved manuell journalføring med fagsak uten aktiv behandling', () => {
         const fagsak = lagFagsak({ status: FagsakStatus.OPPRETTET, behandlinger: [] });
         const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
         const erManuellJournalføring = true;
@@ -121,7 +122,25 @@ describe('hentTilgjengeligeBehandlingstyper', () => {
         expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
     });
 
-    test('skal inneholde forventede behandlingstyper ved manuell journalføring uten fagsak', () => {
+    test('skal kun inneholde klage ved manuell journalføring med fagsak med aktiv behandling', () => {
+        const fagsak = lagFagsak({
+            status: FagsakStatus.OPPRETTET,
+            behandlinger: [lagVisningBehandling({ status: BehandlingStatus.UTREDES })],
+        });
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+        const erManuellJournalføring = true;
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(
+            fagsak,
+            saksbehandler,
+            erManuellJournalføring
+        );
+        const forventedeBehandlingstyper = [Klagebehandlingstype.KLAGE];
+
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
+    });
+
+    test('skal kun inneholde førstegangsbehandling og teknisk endring ved manuell journalføring uten fagsak', () => {
         const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
 
         const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(undefined, saksbehandler, true);
