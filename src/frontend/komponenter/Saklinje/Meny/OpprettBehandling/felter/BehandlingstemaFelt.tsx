@@ -4,8 +4,8 @@ import {
     type OpprettBehandlingFormValues,
 } from '@komponenter/Saklinje/Meny/OpprettBehandling/useOpprettBehandlingSkjema';
 import { Select } from '@navikt/ds-react';
-import { BehandlingKategori, behandlingstemaer, konverterTilBehandlingstema } from '@typer/behandlingstema';
-import { FagsakType } from '@typer/fagsak';
+import { konverterTilBehandlingstema } from '@typer/behandlingstema';
+import { hentTilgjengeligeBehandlingstemaer } from '@utils/behandling';
 import { useController, useFormContext } from 'react-hook-form';
 
 export const BehandlingstemaFelt = () => {
@@ -37,18 +37,11 @@ export const BehandlingstemaFelt = () => {
             <option disabled value={''}>
                 Velg behandlingstema
             </option>
-            {Object.values(behandlingstemaer)
-                .filter(it => it.id !== 'NASJONAL_INSTITUSJON')
-                .filter(
-                    it =>
-                        it.kategori !== BehandlingKategori.EØS ||
-                        fagsak.fagsakType !== FagsakType.BARN_ENSLIG_MINDREÅRIG
-                )
-                .map(tema => (
-                    <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
-                        {tema.navn}
-                    </option>
-                ))}
+            {hentTilgjengeligeBehandlingstemaer(fagsak.fagsakType).map(tema => (
+                <option key={tema.id} aria-selected={value?.id === tema.id} value={tema.id}>
+                    {tema.navn}
+                </option>
+            ))}
         </Select>
     );
 };

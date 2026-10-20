@@ -1,12 +1,17 @@
+import { lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
-import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
-import { FagsakStatus } from '@typer/fagsak';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { Behandlingstema, behandlingstemaer } from '@typer/behandlingstema';
+import { FagsakStatus, FagsakType } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
 import { Tilbakekrevingsbehandlingstype } from '@typer/tilbakekrevingsbehandling';
 import { expect } from 'vitest';
-
-import { hentTilgjengeligeBehandlingstyper, hentTilgjengeligeBehandlingsårsaker } from './behandling';
+import {
+    hentTilgjengeligeBehandlingstemaer,
+    hentTilgjengeligeBehandlingstyper,
+    hentTilgjengeligeBehandlingsårsaker,
+} from './behandling';
 
 describe('hentTilgjengeligeBehandlingsårsaker', () => {
     test('skal ikke inneholde automatiske behandlingsårsaker ved vanlig revurdering', () => {
@@ -96,5 +101,75 @@ describe('hentTilgjengeligeBehandlingstyper', () => {
         const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(fagsak, saksbehandler);
 
         expect(tilgjengeligeBehandlingstyper).not.toContain(Klagebehandlingstype.KLAGE);
+    });
+
+    test('skal inneholde forventede behandlingstyper ved manuell journalføring med fagsak uten aktiv behandling', () => {
+        const fagsak = lagFagsak({ status: FagsakStatus.OPPRETTET, behandlinger: [] });
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+        const erManuellJournalføring = true;
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(
+            fagsak,
+            saksbehandler,
+            erManuellJournalføring
+        );
+        const forventedeBehandlingstyper = [
+            Behandlingstype.FØRSTEGANGSBEHANDLING,
+            Behandlingstype.TEKNISK_ENDRING,
+            Klagebehandlingstype.KLAGE,
+        ];
+
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
+    });
+
+    test('skal kun inneholde klage ved manuell journalføring med fagsak med aktiv behandling', () => {
+        const fagsak = lagFagsak({
+            status: FagsakStatus.OPPRETTET,
+            behandlinger: [lagVisningBehandling({ status: BehandlingStatus.UTREDES })],
+        });
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+        const erManuellJournalføring = true;
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(
+            fagsak,
+            saksbehandler,
+            erManuellJournalføring
+        );
+        const forventedeBehandlingstyper = [Klagebehandlingstype.KLAGE];
+
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
+    });
+
+    test('skal kun inneholde førstegangsbehandling og teknisk endring ved manuell journalføring uten fagsak', () => {
+        const saksbehandler = lagSaksbehandler({ harSuperbrukertilgang: true });
+
+        const tilgjengeligeBehandlingstyper = hentTilgjengeligeBehandlingstyper(undefined, saksbehandler, true);
+        const forventedeBehandlingstyper = [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.TEKNISK_ENDRING];
+
+        expect(new Set(tilgjengeligeBehandlingstyper)).toEqual(new Set(forventedeBehandlingstyper));
+    });
+});
+
+describe('hentTilgjengeligeBehandlingstemaer', () => {
+    test('skal kun inneholde behandlingstemaer for nasjonal og eøs ved normal fagsak', () => {
+        const tilgjengeligeBehandlingstemaer = hentTilgjengeligeBehandlingstemaer(FagsakType.NORMAL);
+
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.NASJONAL_ORDINÆR]);
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.NASJONAL_UTVIDET]);
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.EØS_ORDINÆR]);
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.EØS_UTVIDET]);
+
+        expect(tilgjengeligeBehandlingstemaer).not.to.contain(behandlingstemaer[Behandlingstema.NASJONAL_INSTITUSJON]);
+    });
+
+    test('skal kun inneholde behandlingstemaer for nasjonal ved enslig mindreårig fagsak', () => {
+        const tilgjengeligeBehandlingstemaer = hentTilgjengeligeBehandlingstemaer(FagsakType.BARN_ENSLIG_MINDREÅRIG);
+
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.NASJONAL_ORDINÆR]);
+        expect(tilgjengeligeBehandlingstemaer).to.contain(behandlingstemaer[Behandlingstema.NASJONAL_UTVIDET]);
+
+        expect(tilgjengeligeBehandlingstemaer).not.to.contain(behandlingstemaer[Behandlingstema.EØS_ORDINÆR]);
+        expect(tilgjengeligeBehandlingstemaer).not.to.contain(behandlingstemaer[Behandlingstema.EØS_UTVIDET]);
+        expect(tilgjengeligeBehandlingstemaer).not.to.contain(behandlingstemaer[Behandlingstema.NASJONAL_INSTITUSJON]);
     });
 });
