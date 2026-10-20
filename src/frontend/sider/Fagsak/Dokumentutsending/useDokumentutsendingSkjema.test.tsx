@@ -1,8 +1,8 @@
 import { sendInformasjonsbrev } from '@api/sendInformasjonsbrev';
+import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { DokumentÅrsak } from '@sider/Fagsak/Dokumentutsending/dokumentÅrsakTyper';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
-import { ManuelleBrevmottakerePåFagsakProvider } from '@sider/Fagsak/ManuelleBrevmottakerePåFagsakContext';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagPerson } from '@testutils/testdata/personTestdata';
@@ -79,9 +79,7 @@ describe('useDokumentutsendingSkjema', () => {
                     <TestProviders>
                         <FagsakProvider fagsak={fagsak}>
                             <BrukerProvider bruker={bruker}>
-                                <ManuelleBrevmottakerePåFagsakProvider>
-                                    {children}
-                                </ManuelleBrevmottakerePåFagsakProvider>
+                                <BrevmottakereFagsakProvider>{children}</BrevmottakereFagsakProvider>
                             </BrukerProvider>
                         </FagsakProvider>
                     </TestProviders>
