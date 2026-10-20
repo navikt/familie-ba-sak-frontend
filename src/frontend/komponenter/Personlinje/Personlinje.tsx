@@ -77,7 +77,7 @@ export function Personlinje({ bruker, fagsak }: Props) {
     return (
         <Box borderWidth={'0 0 1 0'} borderColor={'neutral'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <HStack align={'center'} gap={'space-12 space-16'}>
-                <HStack gap={'space-12 space-16'}>
+                <HStack align={'center'} gap={'space-12 space-16'}>
                     <PersonIkon
                         fagsakType={fagsak?.fagsakType}
                         kjønn={fagsakeier.kjønn}
