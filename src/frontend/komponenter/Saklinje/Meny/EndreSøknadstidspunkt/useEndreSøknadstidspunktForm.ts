@@ -4,7 +4,9 @@ import { HentRegistrerteSøknadstidspunkterQueryKeyFactory } from '@hooks/useHen
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IGrunnlagPerson } from '@typer/person';
+import { erRevurderingKlage, type IBehandling } from '@typer/behandling';
+import { BehandlingUnderkategori } from '@typer/behandlingstema';
+import { type IGrunnlagPerson, PersonType } from '@typer/person';
 import { dateTilIsoDatoString, isoStringTilDateEllerUndefined } from '@utils/dato';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -24,26 +26,32 @@ interface Props {
     søknadstidspunkter: RegistrertSøknadstidspunkt[];
 }
 
-function mapTilPerson(
-    søknadstidspunkter: RegistrertSøknadstidspunkt[],
-    grunnlagspersoner: IGrunnlagPerson[]
-): Person[] {
-    return søknadstidspunkter
-        .map(({ personIdent, søknadstidspunkt }): Person | undefined => {
-            const person = grunnlagspersoner.find(p => p.personIdent === personIdent);
+function kanRegistrereNyttSøknadstidspunkt(person: IGrunnlagPerson, behandling: IBehandling) {
+    return (
+        erRevurderingKlage(behandling) &&
+        !person.skjermesForBruker &&
+        (person.type === PersonType.BARN ||
+            (person.type === PersonType.SØKER && behandling.underkategori === BehandlingUnderkategori.UTVIDET))
+    );
+}
 
-            if (person === undefined) {
-                return undefined;
-            }
+function mapTilPerson(søknadstidspunkter: RegistrertSøknadstidspunkt[], behandling: IBehandling): Person[] {
+    const søknadstidspunktPerIdent = new Map(
+        søknadstidspunkter.map(({ personIdent, søknadstidspunkt }) => [personIdent, søknadstidspunkt])
+    );
 
-            return {
-                personIdent,
-                navn: person.navn,
-                fødselsdato: person.fødselsdato,
-                søknadstidspunkt: isoStringTilDateEllerUndefined(søknadstidspunkt) ?? null,
-            };
-        })
-        .filter((person): person is Person => person !== undefined);
+    return behandling.personer
+        .filter(
+            person =>
+                søknadstidspunktPerIdent.has(person.personIdent) ||
+                kanRegistrereNyttSøknadstidspunkt(person, behandling)
+        )
+        .map(({ personIdent, navn, fødselsdato }) => ({
+            personIdent,
+            navn,
+            fødselsdato,
+            søknadstidspunkt: isoStringTilDateEllerUndefined(søknadstidspunktPerIdent.get(personIdent)) ?? null,
+        }));
 }
 
 export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }: Props) {
@@ -67,7 +75,7 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
 
     const form = useForm<EndreSøknadstidspunktFormValues>({
         values: {
-            personer: mapTilPerson(søknadstidspunkter, behandling.personer),
+            personer: mapTilPerson(søknadstidspunkter, behandling),
         },
     });
 
