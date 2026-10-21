@@ -1,38 +1,8 @@
-import { Heading, LocalAlert, Table } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { Box, Heading, LocalAlert, Table } from '@navikt/ds-react';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import type { IRestUtenlandskPeriodeBeløp } from '../../../../../../../typer/eøsPerioder';
+import Styles from './UtbetaltAnnetLand.module.css';
 import UtenlandskPeriodeBeløpRad from './UtenlandskPeriodeBeløpTabellRad';
-
-const UtenlandskPeriodeBeløperContainer = styled.div`
-    margin-top: 5rem;
-`;
-
-const StyledTable = styled(Table)`
-    margin-top: 2rem;
-
-    & fieldset.skjemagruppe {
-        margin-bottom: 1.5rem;
-    }
-`;
-
-const TabellHeader = styled(Table.HeaderCell)`
-    &:nth-of-type(2) {
-        width: 11rem;
-    }
-
-    &:nth-of-type(3) {
-        width: 9.5rem;
-    }
-
-    &:nth-of-type(4) {
-        width: 11rem;
-    }
-
-    &:nth-of-type(5) {
-        width: 2.25rem;
-    }
-`;
 
 interface IProps {
     utbetaltAnnetLandBeløp: IRestUtenlandskPeriodeBeløp[];
@@ -48,7 +18,7 @@ const UtbetaltAnnetLand = ({
     visFeilmeldinger,
 }: IProps) => {
     return (
-        <UtenlandskPeriodeBeløperContainer>
+        <Box marginBlock={'space-80 space-0'}>
             <Heading spacing size="medium" level="3">
                 Utbetalt i det andre landet
             </Heading>
@@ -61,14 +31,14 @@ const UtbetaltAnnetLand = ({
                     </LocalAlert.Header>
                 </LocalAlert>
             )}
-            <StyledTable>
+            <Table className={Styles.table}>
                 <Table.Header>
-                    <Table.Row>
-                        <TabellHeader scope="col">Barn</TabellHeader>
-                        <TabellHeader scope="col">Periode</TabellHeader>
-                        <TabellHeader scope="col">Beløp per måned</TabellHeader>
-                        <TabellHeader scope="col">Valuta</TabellHeader>
-                        <TabellHeader></TabellHeader>
+                    <Table.Row className={Styles.headerRow}>
+                        <Table.HeaderCell scope="col">Barn</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Beløp per måned</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Valuta</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -83,8 +53,8 @@ const UtbetaltAnnetLand = ({
                         />
                     ))}
                 </Table.Body>
-            </StyledTable>
-        </UtenlandskPeriodeBeløperContainer>
+            </Table>
+        </Box>
     );
 };
 

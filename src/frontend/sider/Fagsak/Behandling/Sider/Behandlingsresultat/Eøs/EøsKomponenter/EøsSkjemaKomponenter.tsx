@@ -1,6 +1,5 @@
 import { CogRotationIcon } from '@navikt/aksel-icons';
-import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
-import styled from 'styled-components';
+import { BodyShort, Box, HStack, Table } from '@navikt/ds-react';
 
 import StatusIkon from '../../../../../../../ikoner/StatusIkon';
 import type { EøsPeriodeStatus } from '../../../../../../../typer/eøsPerioder';
@@ -10,32 +9,6 @@ import type { IIsoMånedPeriode } from '../../../../../../../utils/dato';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '../../../../../../../utils/dato';
 import { mapEøsPeriodeStatusTilStatus } from '../../../../../../../utils/eøs';
 import { lagPersonLabel } from '../../../../../../../utils/formatter';
-
-interface IEøsPeriodeSkjemaContainerProps {
-    $lesevisning: boolean;
-    $status: EøsPeriodeStatus;
-}
-
-export const EøsPeriodeSkjemaContainer = styled(VStack)<IEøsPeriodeSkjemaContainerProps>`
-    max-width: 40rem;
-    padding-left: 2rem;
-    margin-left: -3rem;
-`;
-
-export const Knapperad = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-`;
-
-const StyledCogRotationIcon = styled(CogRotationIcon)`
-    min-width: 1.5rem;
-`;
-
-const BarnDiv = styled.div`
-    display: inline-block;
-    margin-top: 1px;
-`;
 
 interface IStatusBarnCelleOgPeriodeCelleProps {
     status: EøsPeriodeStatus;
@@ -51,17 +24,19 @@ export const StatusBarnCelleOgPeriodeCelle = (props: IStatusBarnCelleOgPeriodeCe
             <Table.DataCell>
                 <HStack wrap={false} align="center" gap="space-16">
                     {props.vurderingsform === Vurderingsform.AUTOMATISK ? (
-                        <StyledCogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
+                        <Box asChild minWidth={'1.5rem'}>
+                            <CogRotationIcon title="Automatisk vurdert" fontSize="1.5rem" width="1.5rem" />
+                        </Box>
                     ) : (
                         <StatusIkon status={mapEøsPeriodeStatusTilStatus[props.status]} />
                     )}
-                    <BarnDiv>
+                    <Box marginBlock={'space-1 space-0'}>
                         {props.barnIdenter.map(barn => (
                             <BodyShort size="small" key={barn}>
                                 {lagPersonLabel(barn, props.personer)}
                             </BodyShort>
                         ))}
-                    </BarnDiv>
+                    </Box>
                 </HStack>
             </Table.DataCell>
             <Table.DataCell>

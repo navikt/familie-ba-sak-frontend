@@ -1,22 +1,14 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
 import { årsakTekst } from '@typer/utbetalingAndel';
 import { erDefinert } from '@utils/commons';
 import { Datoformat, isoMånedPeriodeTilFormatertString } from '@utils/dato';
 import { lagPersonLabel } from '@utils/formatter';
 import { useState } from 'react';
-import styled from 'styled-components';
 import StatusIkon, { Status } from '../../../../../../ikoner/StatusIkon';
 import { useEndretUtbetalingAndelContext } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
 import { useEndretUtbetalingAndel } from './useEndretUtbetalingAndel';
-
-const PersonCelle = styled.div`
-    display: flex;
-    svg {
-        margin-right: 1rem;
-    }
-`;
 
 const utbetalingsprosentTilTekst = (prosent: number): string => {
     switch (prosent) {
@@ -72,7 +64,7 @@ export const EndretUtbetalingAndelRad = () => {
             }
         >
             <Table.DataCell>
-                <PersonCelle>
+                <HStack gap={'space-16'} wrap={false}>
                     <StatusIkon status={endretUtbetalingAndel.erTilknyttetAndeler ? Status.OK : Status.ADVARSEL} />
                     {endretUtbetalingAndel.personIdenter.length > 0 ? (
                         <VStack>
@@ -85,7 +77,7 @@ export const EndretUtbetalingAndelRad = () => {
                     ) : (
                         <BodyShort size="small">Ikke satt</BodyShort>
                     )}
-                </PersonCelle>
+                </HStack>
             </Table.DataCell>
             <Table.DataCell>
                 <BodyShort size={'small'}>

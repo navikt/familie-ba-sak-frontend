@@ -1,11 +1,9 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Fieldset, HGrid, InlineMessage } from '@navikt/ds-react';
+import { Bleed, BodyShort, Button, Fieldset, HGrid, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import type { OptionType } from '@typer/common';
 import { EøsPeriodeStatus, type IRestUtenlandskPeriodeBeløp } from '@typer/eøsPerioder';
 import { useFormContext } from 'react-hook-form';
-import styled from 'styled-components';
-import { EøsPeriodeSkjemaContainer, Knapperad } from '../EøsKomponenter/EøsSkjemaKomponenter';
 import { UtenlandskPeriodeBeløpBarnFelt } from './UtenlandskPeriodeBeløpBarnFelt';
 import { UtenlandskPeriodeBeløpBeløpFelt } from './UtenlandskPeriodeBeløpBeløpFelt';
 import { UtenlandskPeriodeBeløpIntervallFelt } from './UtenlandskPeriodeBeløpIntervallFelt';
@@ -13,10 +11,6 @@ import { UtenlandskPeriodeBeløpPeriodeFelt } from './UtenlandskPeriodeBeløpPer
 import { UtenlandskPeriodeBeløpUtbetalingslandFelt } from './UtenlandskPeriodeBeløpUtbetalingslandFelt';
 import { UtenlandskPeriodeBeløpValutaFelt } from './UtenlandskPeriodeBeløpValutaFelt';
 import type { UtenlandskPeriodeBeløpFormValues } from './useUtenlandskPeriodeBeløpSkjema';
-
-const UtbetaltBeløpText = styled(BodyShort)`
-    font-weight: bold;
-`;
 
 interface Props {
     utenlandskPeriodeBeløp: IRestUtenlandskPeriodeBeløp;
@@ -50,73 +44,71 @@ const UtenlandskPeriodeBeløpTabellRadEndre = ({
 
     return (
         <Fieldset error={errors.root?.message} legend={'Utenlandsk periodebeløp'} hideLegend>
-            <EøsPeriodeSkjemaContainer
-                $lesevisning={erRedigeringDeaktivert}
-                $status={utenlandskPeriodeBeløp.status}
-                gap="space-24"
-            >
-                <InlineMessage status="info">
-                    <UtbetaltBeløpText size="small">
-                        Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
-                    </UtbetaltBeløpText>
-                </InlineMessage>
-                <UtenlandskPeriodeBeløpBarnFelt
-                    tilgjengeligeBarn={tilgjengeligeBarn}
-                    lesevisning={erRedigeringDeaktivert}
-                />
-                <UtenlandskPeriodeBeløpPeriodeFelt
-                    initiellFom={initiellFom}
-                    periodeFeilmeldingId={periodeFeilmeldingId}
-                    lesevisning={erRedigeringDeaktivert}
-                />
-                <Fieldset
-                    className={erRedigeringDeaktivert ? 'lesevisning' : ''}
-                    legend={'Utbetalt i det andre landet'}
-                    size={'medium'}
-                >
-                    <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
-                        <UtenlandskPeriodeBeløpBeløpFelt readOnly={erRedigeringDeaktivert} />
-                        <UtenlandskPeriodeBeløpValutaFelt readOnly={erRedigeringDeaktivert} />
-                        <UtenlandskPeriodeBeløpIntervallFelt readOnly={erRedigeringDeaktivert} />
-                    </HGrid>
-                    <UtenlandskPeriodeBeløpUtbetalingslandFelt readOnly={erRedigeringDeaktivert} />
-                </Fieldset>
+            <Bleed asChild marginInline={'space-48 space-0'}>
+                <VStack maxWidth={'40rem'} paddingInline={'space-32 space-0'} gap="space-24">
+                    <InlineMessage status="info">
+                        <BodyShort weight={'semibold'} size="small">
+                            Dersom det er ulike beløp per barn utbetalt i det andre landet, må barna registreres separat
+                        </BodyShort>
+                    </InlineMessage>
+                    <UtenlandskPeriodeBeløpBarnFelt
+                        tilgjengeligeBarn={tilgjengeligeBarn}
+                        lesevisning={erRedigeringDeaktivert}
+                    />
+                    <UtenlandskPeriodeBeløpPeriodeFelt
+                        initiellFom={initiellFom}
+                        periodeFeilmeldingId={periodeFeilmeldingId}
+                        lesevisning={erRedigeringDeaktivert}
+                    />
+                    <Fieldset
+                        className={erRedigeringDeaktivert ? 'lesevisning' : ''}
+                        legend={'Utbetalt i det andre landet'}
+                        size={'medium'}
+                    >
+                        <HGrid columns={'1fr 2fr 1fr'} gap={'space-12'}>
+                            <UtenlandskPeriodeBeløpBeløpFelt readOnly={erRedigeringDeaktivert} />
+                            <UtenlandskPeriodeBeløpValutaFelt readOnly={erRedigeringDeaktivert} />
+                            <UtenlandskPeriodeBeløpIntervallFelt readOnly={erRedigeringDeaktivert} />
+                        </HGrid>
+                        <UtenlandskPeriodeBeløpUtbetalingslandFelt readOnly={erRedigeringDeaktivert} />
+                    </Fieldset>
 
-                {!erRedigeringDeaktivert && (
-                    <Knapperad>
-                        <div>
-                            <Button type={'submit'} size="small" variant={'primary'} loading={isSubmitting}>
-                                Ferdig
-                            </Button>
-                            <Button
-                                type={'button'}
-                                style={{ marginLeft: '1rem' }}
-                                onClick={onAvbryt}
-                                size="small"
-                                variant="tertiary"
-                            >
-                                Avbryt
-                            </Button>
-                        </div>
+                    {!erRedigeringDeaktivert && (
+                        <HStack justify={'space-between'} marginBlock={'space-16'}>
+                            <div>
+                                <Button type={'submit'} size="small" variant={'primary'} loading={isSubmitting}>
+                                    Ferdig
+                                </Button>
+                                <Button
+                                    type={'button'}
+                                    style={{ marginLeft: '1rem' }}
+                                    onClick={onAvbryt}
+                                    size="small"
+                                    variant="tertiary"
+                                >
+                                    Avbryt
+                                </Button>
+                            </div>
 
-                        {utenlandskPeriodeBeløp.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
-                            <Button
-                                type={'button'}
-                                variant={'tertiary'}
-                                onClick={slettUtenlandskPeriodeBeløp}
-                                id={`slett_utd_beløp_${utenlandskPeriodeBeløp.barnIdenter.map(
-                                    barn => `${barn}-`
-                                )}_${initiellFom}`}
-                                loading={sletterUtenlandskPeriodeBeløp}
-                                size={'small'}
-                                icon={<TrashIcon />}
-                            >
-                                Fjern
-                            </Button>
-                        )}
-                    </Knapperad>
-                )}
-            </EøsPeriodeSkjemaContainer>
+                            {utenlandskPeriodeBeløp.status !== EøsPeriodeStatus.IKKE_UTFYLT && (
+                                <Button
+                                    type={'button'}
+                                    variant={'tertiary'}
+                                    onClick={slettUtenlandskPeriodeBeløp}
+                                    id={`slett_utd_beløp_${utenlandskPeriodeBeløp.barnIdenter.map(
+                                        barn => `${barn}-`
+                                    )}_${initiellFom}`}
+                                    loading={sletterUtenlandskPeriodeBeløp}
+                                    size={'small'}
+                                    icon={<TrashIcon />}
+                                >
+                                    Fjern
+                                </Button>
+                            )}
+                        </HStack>
+                    )}
+                </VStack>
+            </Bleed>
         </Fieldset>
     );
 };

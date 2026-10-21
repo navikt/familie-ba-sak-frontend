@@ -1,0 +1,27 @@
+.table {
+    margin-top: var(--ax-space-32);
+
+    & fieldset.skjemagruppe {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.headerRow {
+    th {
+        &:nth-of-type(2) {
+            width: 11rem;
+        }
+
+        &:nth-of-type(3) {
+            width: 9.5rem;
+        }
+
+        &:nth-of-type(4) {
+            width: 11rem;
+        }
+
+        &:nth-of-type(5) {
+            width: 2.25rem;
+        }
+    }
+}

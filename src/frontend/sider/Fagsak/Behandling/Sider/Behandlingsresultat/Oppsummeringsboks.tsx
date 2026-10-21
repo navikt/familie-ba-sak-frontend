@@ -25,24 +25,15 @@ import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
 import { Datoformat, dateTilFormatertString } from '@utils/dato';
 import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
 import { type PropsWithChildren, useState } from 'react';
-import styled from 'styled-components';
 import { useBehandlingContext } from '../../context/BehandlingContext';
+import Styles from './Oppsummeringsboks.module.css';
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
-
-const UtbetalingsbeløpStack = styled(VStack)`
-    padding: var(--ax-space-24) var(--ax-space-40) var(--ax-space-16) 0;
-`;
 
 const UtbetalingsbeløpRad = ({ children }: PropsWithChildren) => (
     <HGrid columns="1fr 8rem 5rem" gap={'space-8'}>
         {children}
     </HGrid>
 );
-
-const TotaltUtbetaltRad = styled(HGrid)`
-    border-top: 1px dashed;
-    padding-top: var(--ax-space-16);
-`;
 
 interface IProps {
     utbetalingsperiode: Utbetalingsperiode | undefined;
@@ -181,7 +172,7 @@ const Oppsummeringsboks = ({
                 <BodyShort spacing>Ingen utbetalinger</BodyShort>
             ) : (
                 <>
-                    <UtbetalingsbeløpStack gap={'space-16'}>
+                    <VStack paddingInline={'space-0 space-40'} paddingBlock={'space-24 space-16'} gap={'space-16'}>
                         <UtbetalingsbeløpRad>
                             <BodyShort>Person</BodyShort>
                             <BodyShort>Sats</BodyShort>
@@ -221,13 +212,15 @@ const Oppsummeringsboks = ({
                                 </UtbetalingsbeløpRad>
                             );
                         })}
-                        <TotaltUtbetaltRad columns="1fr 5rem">
-                            <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
-                            <BodyShort weight="semibold" align="end">
-                                {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
-                            </BodyShort>
-                        </TotaltUtbetaltRad>
-                    </UtbetalingsbeløpStack>
+                        <Box borderWidth={'1 0 0 0'} className={Styles.calculationLine} asChild>
+                            <HGrid columns="1fr 5rem" paddingBlock={'space-16 space-0'}>
+                                <BodyShort weight="semibold">Totalt utbetalt per mnd</BodyShort>
+                                <BodyShort weight="semibold" align="end">
+                                    {formaterBeløp(utbetalingsperiode.utbetaltPerMnd)}
+                                </BodyShort>
+                            </HGrid>
+                        </Box>
+                    </VStack>
 
                     {kanFjerneSmåbarnstilleggFraPeriode(utbetalingsperiode) &&
                         behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD && (
