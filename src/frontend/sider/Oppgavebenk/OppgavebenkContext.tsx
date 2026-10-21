@@ -1,5 +1,7 @@
-import { useFagsakApi } from '@api/useFagsakApi';
+import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
 import { useToastContext } from '@context/ToastContext';
+import { useHentFagsakerPåPerson } from '@hooks/useHentFagsakerPåPerson';
+import { useHentFagsakPåPerson } from '@hooks/useHentFagsakPåPerson';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import type { SortState } from '@navikt/ds-react';
@@ -7,8 +9,6 @@ import { useHttp } from '@navikt/familie-http';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
-import type { IMinimalFagsak } from '@typer/fagsak';
-import { FagsakStatus } from '@typer/fagsak';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '@typer/oppgave';
 import { BehandlingstypeFilter, EnhetFilter, OppgavetypeFilter, SaksbehandlerFilter } from '@typer/oppgave';
 import { erIsoStringGyldig } from '@utils/dato';
@@ -20,6 +20,7 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { finnFagsakÅNavigereTil } from './finnFagsakÅNavigereTil';
 import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
 import { initialOppgaveFelter } from './oppgavefelter';
 import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
@@ -54,6 +55,10 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const saksbehandler = useSaksbehandler();
     const navigate = useNavigate();
     const { request } = useHttp();
+    const visTekniskFeilModal = useVisTekniskFeilModal();
+
+    const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson();
+    const { mutateAsync: hentFagsakPåPerson } = useHentFagsakPåPerson();
 
     const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
     const [side, settSide] = useState<number>(1);
@@ -185,33 +190,32 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         settOppgaveFelter(initialOppgaveFelter(saksbehandler));
     };
 
-    const { hentFagsakerForPerson } = useFagsakApi();
+    const visFantIkkeFagsakToast = () => {
+        settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+            alertType: AlertType.WARNING,
+            tekst: 'Fant ikke fagsak',
+        });
+    };
 
     const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
-        const fagsaker = await hentFagsakerForPerson(personident);
-        if (fagsaker.status === RessursStatus.SUKSESS && fagsaker.data.length > 0) {
-            if (fagsaker.data.length === 1) {
-                navigate(`/fagsak/${fagsaker.data[0].id}/saksoversikt`);
-            } else {
-                const løpendeFagsaker = fagsaker.data.filter(fagsak => fagsak.status === FagsakStatus.LØPENDE);
-                const fagsakerUnderBehandling = fagsaker.data.filter(fagsak => fagsak.underBehandling);
-
-                if (løpendeFagsaker.length === 1) {
-                    navigate(`/fagsak/${løpendeFagsaker[0].id}/saksoversikt`);
-                } else if (fagsakerUnderBehandling.length === 1) {
-                    navigate(`/fagsak/${fagsakerUnderBehandling[0].id}/saksoversikt`);
-                } else {
-                    settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                        alertType: AlertType.WARNING,
-                        tekst: 'Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.',
-                    });
-                }
+        try {
+            const fagsaker = await hentFagsakerPåPerson({ personIdent: personident });
+            if (fagsaker.length === 0) {
+                visFantIkkeFagsakToast();
+                return;
             }
-        } else {
-            settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                alertType: AlertType.WARNING,
-                tekst: 'Fant ikke fagsak',
-            });
+
+            const fagsak = finnFagsakÅNavigereTil(fagsaker);
+            if (fagsak) {
+                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
+            } else {
+                settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                    alertType: AlertType.WARNING,
+                    tekst: 'Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.',
+                });
+            }
+        } catch (error) {
+            visTekniskFeilModal(error);
         }
     };
 
@@ -396,20 +400,20 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
             });
     };
 
-    const gåTilTilbakekreving = (oppgave: IOppgave) => {
+    const gåTilTilbakekreving = async (oppgave: IOppgave) => {
         const brukerident = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (brukerident) {
-            request<{ personIdent: string }, IMinimalFagsak | undefined>({
-                method: 'POST',
-                url: `/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person`,
-                data: {
-                    personIdent: brukerident,
-                },
-            }).then((fagsak: Ressurs<IMinimalFagsak | undefined>) => {
-                if (fagsak.status === RessursStatus.SUKSESS && fagsak.data) {
-                    window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.data.id}/behandling/${oppgave.saksreferanse}`;
-                }
-            });
+        if (!brukerident) {
+            return;
+        }
+        try {
+            const fagsak = await hentFagsakPåPerson({ personIdent: brukerident });
+            if (fagsak) {
+                window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.id}/behandling/${oppgave.saksreferanse}`;
+            } else {
+                visFantIkkeFagsakToast();
+            }
+        } catch (error) {
+            visTekniskFeilModal(error);
         }
     };
 
