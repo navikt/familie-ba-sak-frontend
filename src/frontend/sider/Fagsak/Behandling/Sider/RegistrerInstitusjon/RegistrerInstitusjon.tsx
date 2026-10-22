@@ -38,7 +38,7 @@ const RegistrerInstitusjon = () => {
             return;
         }
         registrerInstitusjon(
-            { behandlingId: behandling.behandlingId, institusjon: fagsak.institusjon },
+            { behandlingId: behandling.behandlingId },
             {
                 onSuccess: oppdatertBehandling => {
                     settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
