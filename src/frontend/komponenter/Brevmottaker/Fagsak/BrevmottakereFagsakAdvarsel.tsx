@@ -1,9 +1,9 @@
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, InfoCard, VStack } from '@navikt/ds-react';
 import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
-import { BrevmottakerListe } from '../BrevmottakerListe';
-import { BrevmottakerDialog } from './Dialog/BrevmottakerDialog';
-import { BrevmottakerDialogProvider } from './Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialogProvider } from '../Felles/BrevmottakerDialogContext';
+import { BrevmottakerListe } from '../Felles/BrevmottakerListe';
+import { BrevmottakerDialog } from './BrevmottakerDialog';
 
 export function BrevmottakereFagsakAdvarsel() {
     const { brevmottakere } = useBrevmottakereFagsakContext();
@@ -19,7 +19,7 @@ export function BrevmottakereFagsakAdvarsel() {
                                     <InfoCard.Title>Brevmottaker(e) er endret</InfoCard.Title>
                                 </InfoCard.Header>
                                 <InfoCard.Content>
-                                    <BodyShort> Informasjonsbrev sendes til: </BodyShort>
+                                    <BodyShort>Informasjonsbrev sendes til:</BodyShort>
                                     <BrevmottakerListe brevmottakere={brevmottakere} />
                                     <Button
                                         variant={'tertiary'}

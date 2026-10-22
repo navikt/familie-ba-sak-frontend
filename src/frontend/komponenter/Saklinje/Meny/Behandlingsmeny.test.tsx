@@ -1,6 +1,6 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
-import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';

@@ -1,5 +1,5 @@
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Fagsak/Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';

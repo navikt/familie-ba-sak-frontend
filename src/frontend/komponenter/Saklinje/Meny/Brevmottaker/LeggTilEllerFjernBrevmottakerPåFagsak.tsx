@@ -1,9 +1,13 @@
-import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Fagsak/Dialog/BrevmottakerDialogContext';
+import { useErLesevisningFagsak } from '@hooks/useErLesevisningFagsak';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import type { BrevmottakerFagsak } from '@typer/brevmottaker';
 
-function utledLabel(brevmottakere: BrevmottakerFagsak[]) {
+function utledLabel(brevmottakere: BrevmottakerFagsak[], erLesevisning: boolean) {
+    if (erLesevisning) {
+        return brevmottakere.length === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
+    }
     if (brevmottakere.length === 0) {
         return 'Legg til brevmottaker';
     }
@@ -14,8 +18,14 @@ function utledLabel(brevmottakere: BrevmottakerFagsak[]) {
 }
 
 export function LeggTilEllerFjernBrevmottakerPåFagsak() {
+    const erLesevisning = useErLesevisningFagsak();
+
     const { åpneDialog } = useBrevmottakerDialogContext();
     const { brevmottakere } = useBrevmottakereFagsakContext();
 
-    return <ActionMenu.Item onSelect={åpneDialog}>{utledLabel(brevmottakere)}</ActionMenu.Item>;
+    if (erLesevisning && brevmottakere.length === 0) {
+        return null;
+    }
+
+    return <ActionMenu.Item onSelect={åpneDialog}>{utledLabel(brevmottakere, erLesevisning)}</ActionMenu.Item>;
 }

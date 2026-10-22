@@ -1,6 +1,6 @@
 import { useFagsak } from '@hooks/useFagsak';
-import { BrevmottakerDialog } from '@komponenter/Brevmottaker/Fagsak/Dialog/BrevmottakerDialog';
-import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Fagsak/Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialog } from '@komponenter/Brevmottaker/Fagsak/BrevmottakerDialog';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { LeggTilEllerFjernBrevmottakerPåFagsak } from '@komponenter/Saklinje/Meny/Brevmottaker/LeggTilEllerFjernBrevmottakerPåFagsak';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';

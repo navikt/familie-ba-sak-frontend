@@ -2,7 +2,7 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOpprettManueltBrevPdf } from '@hooks/useOpprettManueltBrevPdf';
-import { BrevmottakerListe } from '@komponenter/Brevmottaker/BrevmottakerListe';
+import { BrevmottakerListe } from '@komponenter/Brevmottaker/Felles/BrevmottakerListe';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';

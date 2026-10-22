@@ -1,6 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { BrevmottakerDialog } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialog';
-import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialog } from '@komponenter/Brevmottaker/Behandling/BrevmottakerDialog';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';

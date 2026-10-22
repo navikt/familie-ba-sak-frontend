@@ -1,7 +1,7 @@
 import {
     BrevmottakerDialogProvider,
     useBrevmottakerDialogContext,
-} from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
+} from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';

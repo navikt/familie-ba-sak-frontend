@@ -1,9 +1,9 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, InfoCard } from '@navikt/ds-react';
-import { BrevmottakerListe } from '../BrevmottakerListe';
-import { BrevmottakerDialog } from './Dialog/BrevmottakerDialog';
-import { BrevmottakerDialogProvider } from './Dialog/BrevmottakerDialogContext';
+import { BrevmottakerDialogProvider } from '../Felles/BrevmottakerDialogContext';
+import { BrevmottakerListe } from '../Felles/BrevmottakerListe';
+import { BrevmottakerDialog } from './BrevmottakerDialog';
 
 type Kilde = 'vedtak' | 'simulering';
 

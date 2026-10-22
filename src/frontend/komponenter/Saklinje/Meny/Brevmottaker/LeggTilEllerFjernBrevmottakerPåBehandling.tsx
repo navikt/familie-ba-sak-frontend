@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
-import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { Behandlingstype } from '@typer/behandling';
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
