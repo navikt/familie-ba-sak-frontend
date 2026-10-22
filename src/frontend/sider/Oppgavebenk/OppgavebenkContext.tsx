@@ -407,11 +407,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         }
         try {
             const fagsak = await hentFagsakPåPerson({ personIdent: brukerident });
-            if (fagsak) {
-                window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.id}/behandling/${oppgave.saksreferanse}`;
-            } else {
-                visFantIkkeFagsakToast();
-            }
+            window.location.href = `/redirect/familie-tilbake/fagsystem/BA/fagsak/${fagsak.id}/behandling/${oppgave.saksreferanse}`;
         } catch (error) {
             visTekniskFeilModal(error);
         }

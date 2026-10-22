@@ -5,8 +5,8 @@ interface Payload {
     personIdent: string;
 }
 
-export async function hentFagsakPåPerson(payload: Payload): Promise<IMinimalFagsak | undefined> {
-    return apiClient.post<Payload, IMinimalFagsak | undefined>({
+export async function hentFagsakPåPerson(payload: Payload): Promise<IMinimalFagsak> {
+    return apiClient.post<Payload, IMinimalFagsak>({
         url: '/familie-ba-sak/api/fagsaker/hent-fagsak-paa-person',
         data: payload,
     });

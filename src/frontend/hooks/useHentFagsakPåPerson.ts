@@ -11,10 +11,7 @@ interface Parameters {
     personIdent: string;
 }
 
-type Options = Omit<
-    UseMutationOptions<IMinimalFagsak | undefined, DefaultError, Parameters>,
-    'mutationKey' | 'mutationFn'
->;
+type Options = Omit<UseMutationOptions<IMinimalFagsak, DefaultError, Parameters>, 'mutationKey' | 'mutationFn'>;
 
 export function useHentFagsakPåPerson(options?: Options) {
     return useMutation({
