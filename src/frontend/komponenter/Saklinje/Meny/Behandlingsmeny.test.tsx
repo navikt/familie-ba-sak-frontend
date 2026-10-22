@@ -1,5 +1,6 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
@@ -73,8 +74,7 @@ function Wrapper({
                                     <HentOgSettBehandlingProvider>
                                         <BehandlingProvider behandling={behandling}>
                                             <HenleggBehandlingModal />
-
-                                            {children}
+                                            <BrevmottakerDialogProvider>{children}</BrevmottakerDialogProvider>
                                         </BehandlingProvider>
                                     </HentOgSettBehandlingProvider>
                                 }
@@ -345,7 +345,7 @@ describe('Behandlingsmeny', () => {
         expect(screen.getByRole('dialog', { name: 'Fortsett behandling' })).toBeInTheDocument();
     });
 
-    test('skal kunne åpne legg til brevmottakere modal', async () => {
+    test('skal kunne åpne brevmottaker-dialog', async () => {
         const { screen, user } = render(<Behandlingsmeny />, { wrapper: Wrapper });
 
         const meny = screen.getByRole('button', { name: 'Meny' });
@@ -354,7 +354,7 @@ describe('Behandlingsmeny', () => {
         const menuitem = screen.getByRole('menuitem', { name: 'Legg til brevmottaker' });
         await user.click(menuitem);
 
-        expect(screen.getByRole('dialog', { name: 'Legg til brevmottaker' })).toBeInTheDocument();
+        expect(screen.getByRole('dialog', { name: 'Brevmottaker' })).toBeInTheDocument();
     });
 
     test('skal kunne åpne a-inntekt', async () => {

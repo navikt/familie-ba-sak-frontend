@@ -1,3 +1,4 @@
+import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
 import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { Box, Button, HStack } from '@navikt/ds-react';
 import { Link as ReactRouterLink, useLocation } from 'react-router';
@@ -52,7 +53,11 @@ export function Behandlingslinje() {
                         Dokumenter
                     </Button>
                 </HStack>
-                {saksbehandler.harSkrivetilgang && fagsak.status !== FagsakStatus.LÅST && <Behandlingsmeny />}
+                {saksbehandler.harSkrivetilgang && fagsak.status !== FagsakStatus.LÅST && (
+                    <BrevmottakerDialogProvider>
+                        <Behandlingsmeny />
+                    </BrevmottakerDialogProvider>
+                )}
             </HStack>
         </Box>
     );

@@ -1,4 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { BrevmottakerDialog } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialog';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Behandling/Dialog/BrevmottakerDialogContext';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { SideId, sider } from '@sider/Fagsak/Behandling/Sider/sider';
@@ -8,6 +10,7 @@ import { useLocation } from 'react-router';
 
 import { AInntekt } from './AInntekt/AInntekt';
 import Styles from './Behandlingsmeny.module.css';
+import { LeggTilEllerFjernBrevmottakerPåBehandling } from './Brevmottaker/LeggTilEllerFjernBrevmottakerPåBehandling';
 import { EndreBehandlendeEnhet } from './EndreBehandlendeEnhet/EndreBehandlendeEnhet';
 import { EndreBehandlendeEnhetModal } from './EndreBehandlendeEnhet/EndreBehandlendeEnhetModal';
 import { EndreBehandlingstema } from './EndreBehandling/EndreBehandlingstema';
@@ -21,8 +24,6 @@ import { TaBehandlingAvVent } from './LeggBehandlingPåVent/TaBehandlingAvVent';
 import { TaBehandlingAvVentModal } from './LeggBehandlingPåVent/TaBehandlingAvVentModal';
 import { LeggTilBarnPBehandling } from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandling';
 import { LeggTilBarnPåBehandlingModal } from './LeggTilBarnPåBehandling/LeggTilBarnPåBehandlingModal';
-import { LeggTilBrevmottakerModalBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
-import { LeggTilEllerFjernBrevmottakerePåBehandling } from './LeggTilEllerFjernBrevmottakere/LeggTilEllerFjernBrevmottakerePåBehandling';
 import { OpprettBehandling } from './OpprettBehandling/OpprettBehandling';
 import { OpprettBehandlingModal } from './OpprettBehandling/OpprettBehandlingModal';
 import { TilbakekrevingsbehandlingOpprettetModal } from './OpprettBehandling/TilbakekrevingsbehandlingOpprettetModal';
@@ -48,8 +49,9 @@ export function Behandlingsmeny() {
     const [visLeggTilBarnPåBehandlingaModal, settVisLeggTilBarnPåBehandlingaModal] = useState(false);
     const [visBehandlingPåVentModal, settVisBehandlingPåVentModal] = useState(erBehandlingPåVent);
     const [visTaBehandlingAvVentModal, settVisTaBehandlingAvVentModal] = useState(false);
-    const [visLeggTilBrevmottakerPåBehandlingModal, settVisLeggTilBrevmottakerPåBehandlingModal] = useState(false);
     const [visEndreSøknadstidspunktModal, settVisEndreSøknadstidspunktModal] = useState(false);
+
+    const { erDialogÅpen: erBrevmottakerDialogÅpen } = useBrevmottakerDialogContext();
 
     return (
         <>
@@ -79,11 +81,7 @@ export function Behandlingsmeny() {
             {visTaBehandlingAvVentModal && (
                 <TaBehandlingAvVentModal lukkModal={() => settVisTaBehandlingAvVentModal(false)} />
             )}
-            {visLeggTilBrevmottakerPåBehandlingModal && (
-                <LeggTilBrevmottakerModalBehandling
-                    lukkModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(false)}
-                />
-            )}
+            {erBrevmottakerDialogÅpen && <BrevmottakerDialog />}
             {kanEndreSøknadstidspunkt && visEndreSøknadstidspunktModal && (
                 <EndreSøknadstidspunktModal lukkModal={() => settVisEndreSøknadstidspunktModal(false)} />
             )}
@@ -109,9 +107,7 @@ export function Behandlingsmeny() {
                             <EndreSøknadstidspunkt åpneModal={() => settVisEndreSøknadstidspunktModal(true)} />
                         )}
                         <EndreBehandlendeEnhet åpneModal={() => settVisEndreBehandlendeEnhetModal(true)} />
-                        <LeggTilEllerFjernBrevmottakerePåBehandling
-                            åpneModal={() => settVisLeggTilBrevmottakerPåBehandlingModal(true)}
-                        />
+                        <LeggTilEllerFjernBrevmottakerPåBehandling />
                         <AInntekt />
                         <LeggTilBarnPBehandling åpneModal={() => settVisLeggTilBarnPåBehandlingaModal(true)} />
                     </ActionMenu.Group>
