@@ -1,5 +1,5 @@
 import { useBruker } from '@hooks/useBruker';
-import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
+import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/Behandling/BrevmottakereBehandlingAdvarsel';
 import { BodyLong, Box, Heading, HelpText, HStack, Radio, RadioGroup } from '@navikt/ds-react';
 import { FritekstVarselField } from '@sider/Fagsak/Behandling/Sider/Simulering/form/field/FritekstVarselField';
 import styles from '@sider/Fagsak/Behandling/Sider/Simulering/form/TilbakekrevingForm.module.css';

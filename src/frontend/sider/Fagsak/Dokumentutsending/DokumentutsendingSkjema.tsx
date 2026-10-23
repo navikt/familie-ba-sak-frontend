@@ -1,6 +1,6 @@
 import { useErLesevisningFagsak } from '@hooks/useErLesevisningFagsak';
 import { useFagsak } from '@hooks/useFagsak';
-import { BrevmottakereFagsakAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereFagsakAdvarsel';
+import { BrevmottakereFagsakAdvarsel } from '@komponenter/Brevmottaker/Fagsak/BrevmottakereFagsakAdvarsel';
 import { LeggTilBarnModal } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModal';
 import { LeggTilBarnModalContextProvider } from '@komponenter/Modal/LeggTilBarn/LeggTilBarnModalContext';
 import { FileTextIcon, InformationSquareIcon } from '@navikt/aksel-icons';

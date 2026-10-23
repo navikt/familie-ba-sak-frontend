@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useOpprettSammensattKontrollsakError } from '@hooks/useOpprettSammensattKontrollsakError';
 import { useSlettSammensattKontrollsakError } from '@hooks/useSlettSammensattKontrollsakError';
-import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
+import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/Behandling/BrevmottakereBehandlingAdvarsel';
 import { Box, LocalAlert, VStack } from '@navikt/ds-react';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/IngenVedtaksbrevbyggerAdvarsel';

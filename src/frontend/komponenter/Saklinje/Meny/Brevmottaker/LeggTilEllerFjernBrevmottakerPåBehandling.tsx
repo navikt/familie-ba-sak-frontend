@@ -1,13 +1,13 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
+import { useBrevmottakerDialogContext } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { Behandlingstype } from '@typer/behandling';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { FagsakType } from '@typer/fagsak';
 
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-
-function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) {
+function utledLabel(brevmottakere: BrevmottakerBehandling[], erLesevisning: boolean) {
     if (erLesevisning) {
         return brevmottakere.length === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
     }
@@ -20,19 +20,17 @@ function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean)
     return 'Se eller fjern brevmottakere';
 }
 
-const relevanteBehandlingstype = [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING];
+const relevanteBehandlingstyper = [Behandlingstype.FØRSTEGANGSBEHANDLING, Behandlingstype.REVURDERING];
 
-interface Props {
-    åpneModal: () => void;
-}
-
-export function LeggTilEllerFjernBrevmottakerePåBehandling({ åpneModal }: Props) {
+export function LeggTilEllerFjernBrevmottakerPåBehandling() {
     const fagsak = useFagsak();
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
 
+    const { åpneDialog } = useBrevmottakerDialogContext();
+
     const erInstitusjonssak = fagsak.fagsakType === FagsakType.INSTITUSJON;
-    const erRelevantBehandlingstype = relevanteBehandlingstype.includes(behandling.type);
+    const erRelevantBehandlingstype = relevanteBehandlingstyper.includes(behandling.type);
 
     if (!erRelevantBehandlingstype || erInstitusjonssak) {
         return null;
@@ -44,7 +42,7 @@ export function LeggTilEllerFjernBrevmottakerePåBehandling({ åpneModal }: Prop
         return null;
     }
 
-    const label = utledLabel(behandling.brevmottakere, erLesevisning);
-
-    return <ActionMenu.Item onSelect={åpneModal}>{label}</ActionMenu.Item>;
+    return (
+        <ActionMenu.Item onSelect={åpneDialog}>{utledLabel(behandling.brevmottakere, erLesevisning)}</ActionMenu.Item>
+    );
 }

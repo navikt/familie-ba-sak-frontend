@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { Mottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
 import { renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { Brevmottakertype } from '@typer/brevmottaker';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useHarBrevmottakerMedUtenlandskAdresse } from './useHarBrevmottakerMedUtenlandskAdresse';
 
@@ -29,7 +29,7 @@ describe('useHarBrevmottakerMedUtenlandskAdresse', () => {
                 brevmottakere: [
                     {
                         id: 1,
-                        type: Mottaker.VERGE,
+                        type: Brevmottakertype.VERGE,
                         navn: 'Verge Vergesen',
                         adresselinje1: 'Vergeveien 1',
                         landkode: 'NO',
@@ -49,7 +49,7 @@ describe('useHarBrevmottakerMedUtenlandskAdresse', () => {
                 brevmottakere: [
                     {
                         id: 1,
-                        type: Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE,
+                        type: Brevmottakertype.BRUKER_MED_UTENLANDSK_ADRESSE,
                         navn: 'Ola Nordmann',
                         adresselinje1: 'Utlandsveien 1',
                         landkode: 'SE',
