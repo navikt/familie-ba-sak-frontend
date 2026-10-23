@@ -1,37 +1,9 @@
-import { BodyShort, Box, ExpansionCard, Heading, UNSAFE_Combobox } from '@navikt/ds-react';
+import { BodyShort, Box, ExpansionCard, Heading } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import { JournalpostTittel } from '@typer/manuell-journalføring';
+import { JournalpostTittelFelt } from '@sider/ManuellJournalføring/felter/JournalpostTittelFelt';
 import { type OppgavetypeFilter, oppgaveTypeFilter } from '@typer/oppgave';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useManuellJournalføringContext } from './ManuellJournalføringContext';
-
-const EndreJournalpost = () => {
-    const { skjema, erLesevisning } = useManuellJournalføringContext();
-    const navInputProps = skjema.felter.journalpostTittel.hentNavInputProps(skjema.visFeilmeldinger);
-
-    return (
-        <UNSAFE_Combobox
-            error={navInputProps.feil}
-            id={navInputProps.id}
-            allowNewValues
-            readOnly={erLesevisning()}
-            label={'Endre journalposttittel'}
-            placeholder={'Skriv fritekst for å endre tittel...'}
-            isMultiSelect={false}
-            options={Object.values(JournalpostTittel)}
-            selectedOptions={
-                skjema.felter.journalpostTittel.verdi === '' ? [] : [skjema.felter.journalpostTittel.verdi]
-            }
-            onToggleSelected={(value, isSelected) => {
-                if (isSelected) {
-                    skjema.felter.journalpostTittel.validerOgSettFelt(value);
-                } else {
-                    skjema.felter.journalpostTittel.nullstill();
-                }
-            }}
-        />
-    );
-};
 
 export function Journalpost() {
     const { dataForManuellJournalføring, skjema } = useManuellJournalføringContext();
@@ -68,7 +40,7 @@ export function Journalpost() {
                             })}
                         </BodyShort>
                     </Box>
-                    <EndreJournalpost />
+                    <JournalpostTittelFelt />
                 </ExpansionCard.Content>
             </ExpansionCard>
         </>

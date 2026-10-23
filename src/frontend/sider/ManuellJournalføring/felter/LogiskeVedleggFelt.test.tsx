@@ -1,13 +1,12 @@
 import type { IDokumentInfo } from '@navikt/familie-typer';
+import { LogiskeVedleggFelt } from '@sider/ManuellJournalføring/felter/LogiskeVedleggFelt';
 import { screen, within } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
 import { lagDokumentInfo } from '@testutils/testdata/dokumentInfoTestdata';
 import { render } from '@testutils/testrender';
 import { DokumentTittel } from '@typer/manuell-journalføring';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
-import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
 
 vi.mock('../ManuellJournalføringContext', () => ({
     useManuellJournalføringContext: vi.fn(),
@@ -36,7 +35,7 @@ afterEach(() => {
     vi.resetAllMocks();
 });
 
-describe('EndreDokumentInfoPanel', () => {
+describe('LogiskeVedleggFelt', () => {
     test('skal vise eksisterende logiske vedlegg som valgt innhold', () => {
         // Arrange
         const dokument = lagDokumentInfo({
@@ -48,7 +47,7 @@ describe('EndreDokumentInfoPanel', () => {
         mockManuellJournalføringContext([dokument]);
 
         // Act
-        render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
+        render(<LogiskeVedleggFelt dokumentFraSkjema={dokument} />);
 
         // Assert
         expect(screen.getByRole('button', { name: `${DokumentTittel.FØDSELSATTEST} slett` })).toBeInTheDocument();
@@ -63,7 +62,7 @@ describe('EndreDokumentInfoPanel', () => {
         const annetDokument = lagDokumentInfo({ dokumentInfoId: '2', tittel: 'Ekstra vedlegg' });
         mockManuellJournalføringContext([dokument, annetDokument]);
 
-        const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
+        const { user } = render(<LogiskeVedleggFelt dokumentFraSkjema={dokument} />);
 
         // Act
         await velgAlternativ(user, 'Annet innhold', DokumentTittel.UTTALELSE);
@@ -88,7 +87,7 @@ describe('EndreDokumentInfoPanel', () => {
         const dokument = lagDokumentInfo();
         mockManuellJournalføringContext([dokument]);
 
-        const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
+        const { user } = render(<LogiskeVedleggFelt dokumentFraSkjema={dokument} />);
 
         // Act
         await user.type(
@@ -115,7 +114,7 @@ describe('EndreDokumentInfoPanel', () => {
         });
         mockManuellJournalføringContext([dokument]);
 
-        const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
+        const { user } = render(<LogiskeVedleggFelt dokumentFraSkjema={dokument} />);
 
         // Act
         await user.click(screen.getByRole('button', { name: `${DokumentTittel.FØDSELSATTEST} slett` }));
@@ -136,29 +135,12 @@ describe('EndreDokumentInfoPanel', () => {
         });
         mockManuellJournalføringContext([dokument]);
 
-        const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
+        const { user } = render(<LogiskeVedleggFelt dokumentFraSkjema={dokument} />);
 
         // Act
         await user.click(screen.getByRole('button', { name: `${DokumentTittel.FØDSELSATTEST} slett` }));
 
         // Assert
         expect(validerOgSettFelt).toHaveBeenCalledWith([{ ...dokument, logiskeVedlegg: [] }]);
-    });
-
-    test('skal beholde logiske vedlegg når dokumenttittelen endres', async () => {
-        // Arrange
-        const logiskeVedlegg = [{ logiskVedleggId: '11', tittel: DokumentTittel.FØDSELSATTEST }];
-        const dokument = lagDokumentInfo({ tittel: '', logiskeVedlegg });
-        mockManuellJournalføringContext([dokument]);
-
-        const { user } = render(<EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={false} />);
-
-        // Act
-        await velgAlternativ(user, 'Dokumenttittel', DokumentTittel.UTTALELSE);
-
-        // Assert
-        expect(validerOgSettFelt).toHaveBeenLastCalledWith([
-            expect.objectContaining({ tittel: DokumentTittel.UTTALELSE, logiskeVedlegg }),
-        ]);
     });
 });
