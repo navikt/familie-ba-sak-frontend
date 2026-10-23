@@ -21,7 +21,6 @@ jobs:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   playwright:
     name: Playwright
-    if: github.actor != 'team-baks-digestabot[bot]'
     permissions:
       contents: read
     runs-on: ubuntu-latest
