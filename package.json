@@ -26,6 +26,8 @@
         "test": "pnpm test:backend && pnpm test:frontend",
         "test:backend": "vitest --config src/backend/vitest.config.ts --run",
         "test:frontend": "vitest --config src/frontend/vitest.config.ts --run",
+        "test:playwright": "playwright test",
+        "test:playwright:ui": "playwright test --ui",
         "lint": "biome lint .",
         "lint:fix": "biome lint --write .",
         "format": "biome format .",
@@ -33,7 +35,7 @@
         "check": "biome check .",
         "check:fix": "biome check --write .",
         "prepare": "husky",
-        "typecheck": "tsc --noEmit -p src/backend/tsconfig.json && tsc --noEmit -p src/frontend/tsconfig.json",
+        "typecheck": "tsc --noEmit -p src/backend/tsconfig.json && tsc --noEmit -p src/frontend/tsconfig.json && tsc --noEmit -p playwright/tsconfig.json",
         "validate": "pnpm typecheck && pnpm check"
     },
     "lint-staged": {
@@ -85,6 +87,7 @@
     "devDependencies": {
         "@axe-core/react": "4.13.0",
         "@biomejs/biome": "2.5.14",
+        "@playwright/test": "1.63.0",
         "@testing-library/dom": "10.4.2",
         "@testing-library/jest-dom": "7.0.1",
         "@testing-library/react": "16.3.3",

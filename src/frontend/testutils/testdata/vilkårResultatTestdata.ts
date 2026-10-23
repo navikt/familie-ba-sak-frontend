@@ -23,3 +23,5 @@ export function lagVilkårResultat(vilkårResultat: Partial<IRestVilkårResultat
         ...vilkårResultat,
     };
 }
+
+export * as VilkårResultatTestdata from './vilkårResultatTestdata';
