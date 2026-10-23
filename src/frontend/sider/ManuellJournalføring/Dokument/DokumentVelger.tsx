@@ -1,10 +1,11 @@
 import { Box, ExpansionCard } from '@navikt/ds-react';
 import type { IDokumentInfo } from '@navikt/familie-typer';
 import { RessursStatus } from '@navikt/familie-typer';
+import { DokumentTittelFelt } from '@sider/ManuellJournalføring/felter/DokumentTittelFelt';
+import { LogiskeVedleggFelt } from '@sider/ManuellJournalføring/felter/LogiskeVedleggFelt';
 import { useEffect, useState } from 'react';
 import { useManuellJournalføringContext } from '../ManuellJournalføringContext';
 import { DokumentInfoStripe } from './DokumentInfoStripe';
-import { EndreDokumentInfoPanel } from './EndreDokumentInfoPanel';
 
 interface IDokumentVelgerProps {
     dokument: IDokumentInfo;
@@ -12,7 +13,8 @@ interface IDokumentVelgerProps {
 }
 
 export function DokumentVelger({ dokument, visFeilmeldinger }: IDokumentVelgerProps) {
-    const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData } = useManuellJournalføringContext();
+    const { dataForManuellJournalføring, valgtDokumentId, velgOgHentDokumentData, skjema } =
+        useManuellJournalføringContext();
     const [åpen, settÅpen] = useState(false);
 
     const valgt = dokument.dokumentInfoId === valgtDokumentId;
@@ -20,6 +22,10 @@ export function DokumentVelger({ dokument, visFeilmeldinger }: IDokumentVelgerPr
         dataForManuellJournalføring.status === RessursStatus.SUKSESS
             ? dataForManuellJournalføring.data.journalpost.journalpostId
             : '';
+
+    const dokumentFraSkjema: IDokumentInfo | undefined = skjema.felter.dokumenter.verdi.find(
+        findDokument => findDokument.dokumentInfoId === dokument.dokumentInfoId
+    );
 
     useEffect(() => {
         if (visFeilmeldinger) {
@@ -46,7 +52,9 @@ export function DokumentVelger({ dokument, visFeilmeldinger }: IDokumentVelgerPr
                     </ExpansionCard.Title>
                 </ExpansionCard.Header>
                 <ExpansionCard.Content>
-                    <EndreDokumentInfoPanel dokument={dokument} visFeilmeldinger={visFeilmeldinger} />
+                    <DokumentTittelFelt dokumentFraSkjema={dokumentFraSkjema} visFeilmeldinger={visFeilmeldinger} />
+                    <br />
+                    <LogiskeVedleggFelt dokumentFraSkjema={dokumentFraSkjema} />
                 </ExpansionCard.Content>
             </ExpansionCard>
         </Box>
