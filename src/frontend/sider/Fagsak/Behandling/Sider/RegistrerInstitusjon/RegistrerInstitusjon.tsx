@@ -2,10 +2,9 @@ import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
-import { LocalAlert } from '@navikt/ds-react';
+import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import { BehandlingSteg } from '@typer/behandling';
-import Skjemasteg from '../Skjemasteg';
+import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 import { useInstitusjon } from './useInstitusjon';
 
 const RegistrerInstitusjon = () => {
@@ -19,33 +18,33 @@ const RegistrerInstitusjon = () => {
     }
 
     return (
-        <Skjemasteg
-            className={'mottaker'}
-            tittel={'Info om institusjon'}
-            nesteOnClick={onSubmitMottaker}
-            nesteKnappTittel={erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
-            senderInn={false}
-            steg={BehandlingSteg.REGISTRERE_INSTITUSJON}
-        >
-            {samhandlerRessurs.status === RessursStatus.SUKSESS && (
-                <SamhandlerTabell samhandler={samhandlerRessurs.data} />
-            )}
-            {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
-                samhandlerRessurs.status === RessursStatus.FEILET) && (
-                <LocalAlert status="error">
-                    <LocalAlert.Header>
-                        <LocalAlert.Title>{samhandlerRessurs.frontendFeilmelding}</LocalAlert.Title>
-                    </LocalAlert.Header>
-                </LocalAlert>
-            )}
-            {submitFeilmelding && (
-                <LocalAlert status="error">
-                    <LocalAlert.Header>
-                        <LocalAlert.Title>{submitFeilmelding}</LocalAlert.Title>
-                    </LocalAlert.Header>
-                </LocalAlert>
-            )}
-        </Skjemasteg>
+        <Steg tittel={'Info om institusjon'} maxWidth={'40rem'}>
+            <VStack gap={'space-20'}>
+                {samhandlerRessurs.status === RessursStatus.SUKSESS && (
+                    <SamhandlerTabell samhandler={samhandlerRessurs.data} />
+                )}
+                {(samhandlerRessurs.status === RessursStatus.FUNKSJONELL_FEIL ||
+                    samhandlerRessurs.status === RessursStatus.FEILET) && (
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{samhandlerRessurs.frontendFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                )}
+                {submitFeilmelding && (
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>{submitFeilmelding}</LocalAlert.Title>
+                        </LocalAlert.Header>
+                    </LocalAlert>
+                )}
+                <div>
+                    <Button variant={'primary'} onClick={onSubmitMottaker}>
+                        {erLesevisning ? 'Neste' : 'Bekreft og fortsett'}
+                    </Button>
+                </div>
+            </VStack>
+        </Steg>
     );
 };
 
