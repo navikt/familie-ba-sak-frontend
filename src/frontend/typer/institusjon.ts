@@ -3,8 +3,3 @@ export interface IInstitusjon {
     orgNummer: string;
     tssEksternId: string;
 }
-
-export interface IRegistrerInstitusjon {
-    orgNummer: string;
-    tssEksternId: string;
-}

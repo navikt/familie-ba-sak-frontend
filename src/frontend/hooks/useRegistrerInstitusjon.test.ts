@@ -15,11 +15,10 @@ const behandling = lagBehandling();
 
 const parameters = {
     behandlingId: behandling.behandlingId,
-    institusjon: { orgNummer: '889640782', tssEksternId: '80000123456' },
 };
 
 describe('useRegistrerInstitusjon', () => {
-    test('skal kalle registrerInstitusjon med behandlingId og institusjon', async () => {
+    test('skal kalle registrerInstitusjon med behandlingId', async () => {
         // Arrange
         vi.mocked(registrerInstitusjon).mockResolvedValue(behandling);
 
@@ -32,10 +31,7 @@ describe('useRegistrerInstitusjon', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(registrerInstitusjon).toHaveBeenCalledWith(
-            { behandlingId: parameters.behandlingId },
-            parameters.institusjon
-        );
+        expect(registrerInstitusjon).toHaveBeenCalledWith({ behandlingId: parameters.behandlingId });
         expect(result.current.data).toEqual(behandling);
     });
 
