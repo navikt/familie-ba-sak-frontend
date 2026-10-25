@@ -1,6 +1,7 @@
 import type { kjønnType } from '@navikt/familie-typer';
 
 import type { Målform } from './søknad';
+import type { Avvisningskode } from './tilgang';
 
 export enum PersonType {
     SØKER = 'SØKER',
@@ -48,6 +49,7 @@ export interface IPersonInfo {
     kommunenummer: string;
     adressebeskyttelseGradering: Adressebeskyttelsegradering;
     harTilgang?: boolean;
+    avvisningskode?: Avvisningskode;
     forelderBarnRelasjon: IForelderBarnRelasjon[];
     forelderBarnRelasjonMaskert: IForelderBarnRelasjonMaskert[];
     fødselsdato: string;

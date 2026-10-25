@@ -2,9 +2,11 @@ import { søkFagsakDeltagere } from '@api/søkFagsakDeltagere';
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
+import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 import { render } from '@testutils/testrender';
 import generator from '@testutils/testverktøy/fnr/fnr-generator';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
+import { Avvisningskode } from '@typer/tilgang';
 import { Route, Routes } from 'react-router';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -66,6 +68,28 @@ describe('FagsakDeltagerSøk', () => {
         expect(await screen.findByText(/Søker Søkersen/)).toBeInTheDocument();
         expect(søkFagsakDeltagere).toHaveBeenCalledTimes(1);
         expect(søkFagsakDeltagere).toHaveBeenCalledWith(gyldigFnr);
+    });
+
+    test('skal forklare hvorfor saksbehandler ikke har tilgang når et treff mangler tilgang', async () => {
+        // Arrange
+        vi.mocked(søkFagsakDeltagere).mockResolvedValue([
+            lagFagsakDeltager({
+                navn: undefined,
+                harTilgang: false,
+                avvisningskode: Avvisningskode.AVVIST_HABILITET,
+                adressebeskyttelseGradering: Adressebeskyttelsegradering.UGRADERT,
+            }),
+        ]);
+        const { screen, user } = render(<FagsakDeltagerSøk />);
+
+        // Act
+        await user.type(screen.getByRole('searchbox'), gyldigFnr);
+
+        // Assert
+        expect(
+            await screen.findByText('Du kan ikke gjøre oppslag på deg selv eller dine nærstående')
+        ).toBeInTheDocument();
+        expect(screen.queryByText(/diskresjonskode/)).not.toBeInTheDocument();
     });
 
     test('skal vise feilmeldingen fra API-et når søket feiler', async () => {

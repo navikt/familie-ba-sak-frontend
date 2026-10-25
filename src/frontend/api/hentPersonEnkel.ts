@@ -1,5 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
-import { adressebeskyttelsestyper, type IPersonInfo } from '@typer/person';
+import type { IPersonInfo } from '@typer/person';
+import { lagManglerTilgangBegrunnelse } from '@typer/tilgang';
 
 interface Payload {
     ident: string;
@@ -12,7 +13,7 @@ export async function hentPersonEnkel(payload: Payload): Promise<IPersonInfo> {
     });
     if (person.harTilgang === false) {
         throw new Error(
-            `Du har ikke tilgang til denne personen. Personen har diskresjonskode ${adressebeskyttelsestyper[person.adressebeskyttelseGradering]}.`
+            `Du har ikke tilgang til denne personen. ${lagManglerTilgangBegrunnelse(person.avvisningskode, person.adressebeskyttelseGradering)}.`
         );
     }
     return person;
