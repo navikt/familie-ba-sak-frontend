@@ -36,8 +36,8 @@ importers:
         specifier: 22.0.4
         version: 22.0.4(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)
       '@navikt/familie-header':
-        specifier: 17.0.7
-        version: 17.0.7(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        specifier: 17.1.0
+        version: 17.1.0(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@navikt/familie-http':
         specifier: 8.0.28
         version: 8.0.28(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
@@ -611,8 +611,8 @@ packages:
       react: 18.x || 19.x
       styled-components: 5.x || 6.x
 
-  '@navikt/familie-header@17.0.7':
-    resolution: {integrity: sha512-69/QYlwuDDYNMZIvcEQtKN5xdxqg4bs3CQHS4CgMdIAzYX3T5oOI38BA4iiHeQd3Z0QyaQiyphWPpRD5Je4LJg==, tarball: https://npm.pkg.github.com/download/@navikt/familie-header/17.0.7/1b6c06921f1f7955fde24af664656a1d1a923947}
+  '@navikt/familie-header@17.1.0':
+    resolution: {integrity: sha512-LwfFlCB4De6SAY+L+3gNwsG01RuhTq7NCwG7UUHirab/0CVpv+NHIPpORN40zix3XvBc3/MzPU73OQCwjKFSgQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-header/17.1.0/044ede3eb55f933cbeb54501b9cf0bc530c42c66}
     peerDependencies:
       '@navikt/aksel-icons': 8.x
       '@navikt/ds-css': 8.x
@@ -628,6 +628,11 @@ packages:
 
   '@navikt/familie-ikoner@9.1.7':
     resolution: {integrity: sha512-W1RXKrjfqg4C3eX0v5lNP/xnIIulpmRO4DmIzi0MotEdDwHuxtasJ8MleGjBMHTiFG1OkwpZMPoI7Z0I/LzgsA==, tarball: https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.7/10aed84df77b734572f15fe6e26d0de358e4ffef}
+    peerDependencies:
+      react: 18.x || 19.x
+
+  '@navikt/familie-ikoner@9.1.8':
+    resolution: {integrity: sha512-V0jQNHTVHrMtb/ZVqk41ccybt9bDNlJPYLB+c/SnDMy/uao3Ds8FVxW1GDdfenekEZUCmQ2duPqLfCk67IVRpQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-ikoner/9.1.8/2c7fd2d6e6045b87dea59e78d60636076c68a5de}
     peerDependencies:
       react: 18.x || 19.x
 
@@ -654,6 +659,9 @@ packages:
 
   '@navikt/familie-typer@8.0.8':
     resolution: {integrity: sha512-kwVt8eWO17KgVpk30PZprDLdqLncQ4BWD7q/POUMcqVQSHznVVIXVNqOmEOdvP3rkEuuX/KgudUZ/L9qW1W+zA==, tarball: https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.8/2c065c34eff85003a42068c638e3542c2260b2d6}
+
+  '@navikt/familie-typer@8.0.9':
+    resolution: {integrity: sha512-bP3YfOg56PijcaB4Z9PVjZcxXMdGYzv0ynmpZ7E2tsBj1QRFc0RyWWm3qn1fwkmT7lu98P15xfyZ/wvaoEW0CQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.9/1719367c9efad063d892c02e63db74eb5c6e17e5}
 
   '@navikt/flagg-ikoner@15.1.14':
     resolution: {integrity: sha512-qtdI9M4/7HY7apgJwiW4kP/VYstoo1LC6ioQZ6fLoiewhtAnLqRqH73ltueOGM22qw2lxJ3oxR2U0k4JBApsjQ==, tarball: https://npm.pkg.github.com/download/@navikt/flagg-ikoner/15.1.14/78b075fb332db4d477c16f8b876f71b8e1287a73}
@@ -804,24 +812,28 @@ packages:
   '@opentelemetry/sdk-trace-base@2.10.0':
     resolution: {integrity: sha512-GuYQQT7QD2EeO8lcZLRQzcbOyhqAzL+6WWTKTU9mSUBYBazkEDl+VrQcXQhbB08OWM9anD1aHleVadzulpOaUQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
   '@opentelemetry/sdk-trace-base@2.11.0':
     resolution: {integrity: sha512-H19x/TX/LZdqiYOjM7fqtSxwlplC5pgelavqbQdHbhdq0q/AI/TGkM2dfGuuynTXmJPeF2HoZVoPDu+TGoW78A==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
   '@opentelemetry/sdk-trace-web@2.10.0':
     resolution: {integrity: sha512-6WqXdWSlBH0GNjDhv1gg6SLVtMtIBVhLaWqd1hiKSXS8meXXP13sVPQoYFHz1uVo0feUTUCdP9vMS54KflisAw==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
   '@opentelemetry/sdk-trace-web@2.11.0':
     resolution: {integrity: sha512-8hgLI437x8VRKzgUr+WRcHFp9AeaHmveKRsPIMNele9tethgCKprakRRqZCWyt41ilALHATfspUMl1An0OTMUQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
+    deprecated: Use @opentelemetry/sdk-trace package
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
@@ -3792,13 +3804,13 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@navikt/familie-header@17.0.7(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@navikt/familie-header@17.1.0(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
       '@navikt/aksel-icons': 8.17.2
       '@navikt/ds-css': 8.17.2
       '@navikt/ds-react': 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@navikt/familie-ikoner': 9.1.7(react@19.3.0)
-      '@navikt/familie-typer': 8.0.8
+      '@navikt/familie-ikoner': 9.1.8(react@19.3.0)
+      '@navikt/familie-typer': 8.0.9
       '@navikt/fnrvalidator': 2.2.0
       react: 19.3.0
       styled-components: 6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -3812,6 +3824,11 @@ snapshots:
   '@navikt/familie-ikoner@9.1.7(react@19.3.0)':
     dependencies:
       '@navikt/familie-typer': 8.0.8
+      react: 19.3.0
+
+  '@navikt/familie-ikoner@9.1.8(react@19.3.0)':
+    dependencies:
+      '@navikt/familie-typer': 8.0.9
       react: 19.3.0
 
   '@navikt/familie-logging@7.0.10':
@@ -3845,6 +3862,8 @@ snapshots:
       styled-components: 6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
   '@navikt/familie-typer@8.0.8': {}
+
+  '@navikt/familie-typer@8.0.9': {}
 
   '@navikt/flagg-ikoner@15.1.14(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@navikt/land-verktoy@15.1.14(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
