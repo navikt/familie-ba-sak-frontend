@@ -1,5 +1,5 @@
 import { useBruker } from '@hooks/useBruker';
-import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
+import { RegistrerteBrevmottakereBehandling } from '@komponenter/Brevmottaker/Behandling/RegistrerteBrevmottakereBehandling';
 import { BodyLong, Box, Heading, HelpText, HStack, Radio, RadioGroup } from '@navikt/ds-react';
 import { FritekstVarselField } from '@sider/Fagsak/Behandling/Sider/Simulering/form/field/FritekstVarselField';
 import styles from '@sider/Fagsak/Behandling/Sider/Simulering/form/TilbakekrevingForm.module.css';
@@ -77,7 +77,7 @@ export function TilbakekrevingsvalgField() {
                     </Radio>
                     {value === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL && (
                         <>
-                            <BrevmottakereBehandlingAdvarsel
+                            <RegistrerteBrevmottakereBehandling
                                 kilde={'simulering'}
                                 className={styles.brevmottakereAlert}
                             />

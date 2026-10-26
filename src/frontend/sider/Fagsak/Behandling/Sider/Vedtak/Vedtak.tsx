@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useOpprettSammensattKontrollsakError } from '@hooks/useOpprettSammensattKontrollsakError';
 import { useSlettSammensattKontrollsakError } from '@hooks/useSlettSammensattKontrollsakError';
-import { BrevmottakereBehandlingAdvarsel } from '@komponenter/Brevmottaker/BrevmottakereBehandlingAdvarsel';
+import { RegistrerteBrevmottakereBehandling } from '@komponenter/Brevmottaker/Behandling/RegistrerteBrevmottakereBehandling';
 import { Box, LocalAlert, VStack } from '@navikt/ds-react';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/IngenVedtaksbrevbyggerAdvarsel';
@@ -68,7 +68,7 @@ export function Vedtak() {
                     )}
                     {behandling.korrigertEtterbetaling && <KorrigertEtterbetalingAdvarsel />}
                     {behandling.korrigertVedtak && <KorrigertVedtakAdvarsel />}
-                    <BrevmottakereBehandlingAdvarsel kilde={'vedtak'} />
+                    <RegistrerteBrevmottakereBehandling kilde={'vedtak'} />
                     {!harBrevmottakerMedUtenlandskAdresse && <UkjentAdresseAlert />}
                     {!erBehandlingMedVedtaksbrevbygger && <IngenVedtaksbrevbyggerAdvarsel />}
                     {erBehandlingMedVedtaksbrevbygger && (

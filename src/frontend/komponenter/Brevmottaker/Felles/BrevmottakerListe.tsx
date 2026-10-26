@@ -1,7 +1,6 @@
 import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
-import type { Brevmottaker } from '@typer/brevmottaker';
-import { Brevmottakertype } from '@typer/brevmottaker';
+import { type Brevmottaker, Brevmottakertype } from '@typer/brevmottaker';
 import { FagsakType } from '@typer/fagsak';
 import { formaterIdent, lagBrukerLabel } from '@utils/formatter';
 
@@ -31,18 +30,16 @@ export function BrevmottakerListe({ brevmottakere, institusjonNavn }: Props) {
 
     return (
         <ul>
-            {(skalViseSøker || skalViseEnsligMindreårig) && <li key="søker">{lagBrukerLabel(bruker)}</li>}
-            {harUtenlandskAdresse && !harFullmektig && (
-                <li key="utenlandsk-adresse">{lagBrukerLabel(bruker)} | Utenlandsk adresse</li>
-            )}
+            {(skalViseSøker || skalViseEnsligMindreårig) && <li>{lagBrukerLabel(bruker)}</li>}
+            {harUtenlandskAdresse && !harFullmektig && <li>{lagBrukerLabel(bruker)} | Utenlandsk adresse</li>}
             {harUtenlandskAdresse && harFullmektig && (
-                <li key="kort-utenlandsk-adresse">
+                <li>
                     {bruker.navn} | {formaterIdent(bruker.personIdent)} | Utenlandsk adresse
                 </li>
             )}
-            {harManuellDødsboadresse && <li key="dødsbo">{bruker.navn} | Dødsbo</li>}
+            {harManuellDødsboadresse && <li>{bruker.navn} | Dødsbo</li>}
             {skalViseInstitusjon && (
-                <li key="institusjon">{`Institusjon | ${
+                <li>{`Institusjon | ${
                     vistInstitusjonNavn?.concat(' |') || ''
                 } ${formaterIdent(institusjon.orgNummer)}`}</li>
             )}

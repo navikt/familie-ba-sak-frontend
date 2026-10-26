@@ -1,30 +1,19 @@
-import { useBehandling } from '@hooks/useBehandling';
-import { BrevmottakerListe } from '@komponenter/Brevmottaker/BrevmottakerListe';
-import { LeggTilBrevmottakerModalBehandling } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/LeggTilBrevmottakerModalBehandling';
+import { useDialog } from '@hooks/useDialog';
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, InfoCard } from '@navikt/ds-react';
-import { useState } from 'react';
-
-type Kilde = 'vedtak' | 'simulering';
-
-function hentBrevtypetekst(kilde: Kilde) {
-    if (kilde === 'simulering') {
-        return 'Varsel';
-    }
-    return 'Vedtak';
-}
+import type { Brevmottaker } from '@typer/brevmottaker';
+import type { ReactNode } from 'react';
+import { BrevmottakerListe } from './BrevmottakerListe';
 
 interface Props {
-    kilde: Kilde;
+    brevmottakere: Brevmottaker[];
+    beskrivelse: string;
+    dialog: (lukkDialog: () => void) => ReactNode;
     className?: string;
 }
 
-export function BrevmottakereBehandlingAdvarsel({ kilde, className }: Props) {
-    const behandling = useBehandling();
-
-    const brevmottakere = behandling.brevmottakere || [];
-
-    const [visBrevmottakereModal, settVisBrevmottakereModal] = useState(false);
+export function RegistrerteBrevmottakere({ brevmottakere, beskrivelse, dialog, className }: Props) {
+    const { åpen: erDialogÅpen, åpne: åpneDialog, lukk: lukkDialog } = useDialog();
 
     return (
         <>
@@ -34,12 +23,12 @@ export function BrevmottakereBehandlingAdvarsel({ kilde, className }: Props) {
                         <InfoCard.Title>Brevmottaker(e) er endret</InfoCard.Title>
                     </InfoCard.Header>
                     <InfoCard.Content>
-                        <BodyShort>{hentBrevtypetekst(kilde)} sendes til:</BodyShort>
+                        <BodyShort>{beskrivelse}</BodyShort>
                         <BrevmottakerListe brevmottakere={brevmottakere} />
                         <Button
                             variant={'tertiary'}
                             type={'button'}
-                            onClick={() => settVisBrevmottakereModal(true)}
+                            onClick={åpneDialog}
                             icon={<MagnifyingGlassIcon aria-hidden={true} />}
                             size={'xsmall'}
                         >
@@ -48,9 +37,7 @@ export function BrevmottakereBehandlingAdvarsel({ kilde, className }: Props) {
                     </InfoCard.Content>
                 </InfoCard>
             )}
-            {visBrevmottakereModal && (
-                <LeggTilBrevmottakerModalBehandling lukkModal={() => settVisBrevmottakereModal(false)} />
-            )}
+            {erDialogÅpen && dialog(lukkDialog)}
         </>
     );
 }
