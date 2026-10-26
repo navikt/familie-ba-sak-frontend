@@ -32,7 +32,7 @@ describe('useSendVedtakTilBeslutter', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(sendVedtakTilBeslutter).toHaveBeenCalledWith(expect.any(Function), parameters);
+        expect(sendVedtakTilBeslutter).toHaveBeenCalledWith(parameters);
         expect(result.current.data).toEqual(behandling);
     });
 

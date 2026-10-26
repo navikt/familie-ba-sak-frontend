@@ -1,22 +1,23 @@
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
+import { apiClient } from '@api/client/apiClient';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { sendVedtakTilBeslutter } from './sendVedtakTilBeslutter';
+
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: { post: vi.fn() },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
 });
 
 describe('sendVedtakTilBeslutter', () => {
-    test('kaller request med riktig metode og URL, og får forventet resultat', async () => {
+    test('kaller POST med riktig URL, og får forventet resultat', async () => {
         // Arrange
         const behandling = lagBehandling({ behandlingId: 123 });
 
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        vi.mocked(apiClient.post).mockResolvedValue(behandling);
 
         const parameters = {
             behandlingId: behandling.behandlingId,
@@ -24,11 +25,10 @@ describe('sendVedtakTilBeslutter', () => {
         };
 
         // Act
-        const result = await sendVedtakTilBeslutter(mockRequest, parameters);
+        const result = await sendVedtakTilBeslutter(parameters);
 
         // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'POST',
+        expect(apiClient.post).toHaveBeenCalledWith({
             url: `/familie-ba-sak/api/behandlinger/${parameters.behandlingId}/steg/send-til-beslutter?behandlendeEnhet=${parameters.behandlendeEnhet}`,
         });
         expect(result).toEqual(behandling);
@@ -36,10 +36,7 @@ describe('sendVedtakTilBeslutter', () => {
 
     test('Skal håndtere feil', async () => {
         // Arrange
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
         const parameters = {
             behandlingId: 123,
@@ -47,6 +44,6 @@ describe('sendVedtakTilBeslutter', () => {
         };
 
         // Act & assert
-        await expect(sendVedtakTilBeslutter(mockRequest, parameters)).rejects.toThrow();
+        await expect(sendVedtakTilBeslutter(parameters)).rejects.toThrow('Noe gikk galt');
     });
 });
