@@ -1,4 +1,4 @@
-import type { IRestBrevmottaker } from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import type { IsoDatoString } from '@utils/dato';
 
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
@@ -329,7 +329,7 @@ export interface IBehandling {
     korrigertVedtak?: IRestKorrigertVedtak;
     feilutbetaltValuta: IRestFeilutbetaltValuta[];
     refusjonEøs: IRestRefusjonEøs[];
-    brevmottakere: IRestBrevmottaker[];
+    brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     manglendeSvalbardmerking: ManglendeFinnmarkSvalbardMerking[];

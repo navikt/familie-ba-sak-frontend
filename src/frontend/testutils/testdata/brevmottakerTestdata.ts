@@ -1,14 +1,10 @@
-import {
-    type IRestBrevmottaker,
-    Mottaker,
-    type SkjemaBrevmottaker,
-} from '@komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
-import type { BrevmottakerFagsak } from '@typer/brevmottaker';
+import type { Brevmottaker, BrevmottakerBehandling, BrevmottakerFagsak } from '@typer/brevmottaker';
+import { Brevmottakertype } from '@typer/brevmottaker';
 import { randomUUID } from '@utils/commons';
 
-export function lagBrevmottaker(brevmottaker: Partial<SkjemaBrevmottaker> = {}): SkjemaBrevmottaker {
+export function lagBrevmottaker(brevmottaker: Partial<Brevmottaker> = {}): Brevmottaker {
     return {
-        type: Mottaker.FULLMEKTIG,
+        type: Brevmottakertype.FULLMEKTIG,
         navn: 'Brev Brevmottaker',
         adresselinje1: 'Brevveien 1',
         adresselinje2: undefined,
@@ -27,10 +23,10 @@ export function lagBrevmottakerFagsak(brevmottaker: Partial<BrevmottakerFagsak> 
     };
 }
 
-export function lagRestBrevmottaker(brevmottaker: Partial<IRestBrevmottaker> = {}) {
+export function lagBrevmottakerBehandling(brevmottaker: Partial<BrevmottakerBehandling> = {}): BrevmottakerBehandling {
     return {
         id: 1,
-        type: Mottaker.FULLMEKTIG,
+        type: Brevmottakertype.FULLMEKTIG,
         navn: 'Brev Brevmottaker',
         adresselinje1: 'Brevveien 1',
         adresselinje2: undefined,
