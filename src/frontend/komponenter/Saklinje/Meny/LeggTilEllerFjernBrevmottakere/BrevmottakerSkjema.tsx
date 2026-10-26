@@ -1,22 +1,24 @@
 import { Box, Button, Fieldset, HGrid, HStack, InlineMessage, Select, TextField, VStack } from '@navikt/ds-react';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 import { RessursStatus } from '@navikt/familie-typer';
+import type { Brevmottaker } from '@typer/brevmottaker';
+import { Brevmottakertype, brevmottakertypeVisningsnavn } from '@typer/brevmottaker';
 import { hentFrontendFeilmelding } from '@utils/ressursUtils';
 import type { ChangeEvent } from 'react';
 import { useLocation } from 'react-router';
 import { ALLE_LAND_REGIONKODER, RegionCombobox, type Regionkode } from '../../../FlaggCombobox';
 import styles from './BrevmottakerSkjema.module.css';
-import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { Mottaker, mottakerVisningsnavn, useBrevmottakerSkjema } from './useBrevmottakerSkjema';
+import type { BrevmottakerUseSkjema } from './useBrevmottakerSkjema';
+import { useBrevmottakerSkjema } from './useBrevmottakerSkjema';
 
-interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+interface Props<T extends Brevmottaker> {
     lukkModal: () => void;
     brevmottakere: T[];
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
     erLesevisning: boolean;
 }
 
-const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+const BrevmottakerSkjema = <T extends Brevmottaker>({
     lukkModal,
     brevmottakere,
     lagreMottaker,
@@ -30,8 +32,8 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
     const { skjema } = verdierFraBrevmottakerUseSkjema;
 
     const gyldigeMottakerTyper = erPåDokumentutsending
-        ? Object.values(Mottaker).filter(mottakerType => mottakerType !== Mottaker.DØDSBO)
-        : Object.values(Mottaker);
+        ? Object.values(Brevmottakertype).filter(mottakerType => mottakerType !== Brevmottakertype.DØDSBO)
+        : Object.values(Brevmottakertype);
 
     return (
         <>
@@ -47,13 +49,13 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                             readOnly={erLesevisning}
                             label="Mottaker"
                             onChange={(event: ChangeEvent<HTMLSelectElement>): void => {
-                                skjema.felter.mottaker.validerOgSettFelt(event.target.value as Mottaker);
+                                skjema.felter.mottaker.validerOgSettFelt(event.target.value as Brevmottakertype);
                             }}
                         >
                             <option value="">Velg</option>
                             {gyldigeMottakerTyper.map(mottaker => (
                                 <option value={mottaker} key={mottaker}>
-                                    {mottakerVisningsnavn[mottaker]}
+                                    {brevmottakertypeVisningsnavn[mottaker]}
                                 </option>
                             ))}
                         </Select>
@@ -70,7 +72,7 @@ const BrevmottakerSkjema = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
                         label={'Land'}
                         value={(skjema.felter.land.verdi !== '' ? skjema.felter.land.verdi : undefined) as Regionkode}
                         options={ALLE_LAND_REGIONKODER.filter(regionkode => {
-                            if (skjema.felter.mottaker.verdi === Mottaker.BRUKER_MED_UTENLANDSK_ADRESSE) {
+                            if (skjema.felter.mottaker.verdi === Brevmottakertype.BRUKER_MED_UTENLANDSK_ADRESSE) {
                                 return regionkode !== 'NO' && regionkode !== 'XU';
                             }
                             return regionkode !== 'XU';

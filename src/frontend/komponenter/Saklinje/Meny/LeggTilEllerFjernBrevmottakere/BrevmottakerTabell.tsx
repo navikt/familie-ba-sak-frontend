@@ -1,30 +1,26 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import _CountryData from '@navikt/land-verktoy';
+import type { Brevmottaker } from '@typer/brevmottaker';
+import { brevmottakertypeVisningsnavn } from '@typer/brevmottaker';
 
 import styles from './BrevmottakerTabell.module.css';
-import type { IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-import { mottakerVisningsnavn } from './useBrevmottakerSkjema';
 
 const CountryData = (_CountryData as unknown as { default?: typeof _CountryData }).default ?? _CountryData;
 
-interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+interface Props<T extends Brevmottaker> {
     mottaker: T;
     fjernMottaker: (mottaker: T) => void;
     erLesevisning: boolean;
 }
 
-const BrevmottakerTabell = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
-    mottaker,
-    fjernMottaker,
-    erLesevisning,
-}: Props<T>) => {
+const BrevmottakerTabell = <T extends Brevmottaker>({ mottaker, fjernMottaker, erLesevisning }: Props<T>) => {
     const land = CountryData.getCountryInstance('nb').findByValue(mottaker.landkode);
 
     return (
         <Box marginBlock={'space-40 space-0'}>
             <HStack justify={'space-between'}>
-                <Heading size="medium">{mottakerVisningsnavn[mottaker.type]}</Heading>
+                <Heading size="medium">{brevmottakertypeVisningsnavn[mottaker.type]}</Heading>
                 {!erLesevisning && (
                     <Button
                         variant={'tertiary'}

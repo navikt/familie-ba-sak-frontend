@@ -1,4 +1,4 @@
-import type { SkjemaBrevmottaker } from '../komponenter/Saklinje/Meny/LeggTilEllerFjernBrevmottakere/useBrevmottakerSkjema';
+import type { Brevmottaker } from '@typer/brevmottaker';
 import type { Brevmal, Informasjonsbrev } from '../sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import type { IsoDatoString } from '../utils/dato';
 import type { BehandlingKategori } from './behandlingstema';
@@ -26,7 +26,7 @@ export interface IManueltBrevRequestPåFagsak extends IManueltBrevRequest {
     barnasFødselsdager?: never;
     behandlingKategori?: never;
     brevmal: Brevmal | Informasjonsbrev;
-    manuelleBrevmottakere: SkjemaBrevmottaker[];
+    manuelleBrevmottakere: Brevmottaker[];
     mottakerMålform: Målform;
     mottakerlandSed?: never;
     fritekstAvsnitt?: string;

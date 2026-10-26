@@ -1,11 +1,11 @@
 import { ActionMenu } from '@navikt/ds-react';
+import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import type { PropsWithChildren } from 'react';
 import { describe, expect } from 'vitest';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
 import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
-import { lagRestBrevmottaker } from '../../../../testutils/testdata/brevmottakerTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
 import { BehandlingStatus, Behandlingstype, type IBehandling } from '../../../../typer/behandling';
@@ -46,7 +46,7 @@ describe('LeggTilEllerFjernBrevmottakerePåBehandling', () => {
         const åpneModal = vi.fn();
         const { screen } = render(<LeggTilEllerFjernBrevmottakerePåBehandling åpneModal={åpneModal} />, {
             wrapper: props => (
-                <Wrapper {...props} behandling={lagBehandling({ brevmottakere: [lagRestBrevmottaker()] })} />
+                <Wrapper {...props} behandling={lagBehandling({ brevmottakere: [lagBrevmottakerBehandling()] })} />
             ),
         });
         expect(screen.getByRole('menuitem', { name: 'Legg til eller fjern brevmottaker' })).toBeInTheDocument();
@@ -58,7 +58,9 @@ describe('LeggTilEllerFjernBrevmottakerePåBehandling', () => {
             wrapper: props => (
                 <Wrapper
                     {...props}
-                    behandling={lagBehandling({ brevmottakere: [lagRestBrevmottaker(), lagRestBrevmottaker()] })}
+                    behandling={lagBehandling({
+                        brevmottakere: [lagBrevmottakerBehandling(), lagBrevmottakerBehandling()],
+                    })}
                 />
             ),
         });
@@ -101,7 +103,7 @@ describe('LeggTilEllerFjernBrevmottakerePåBehandling', () => {
                     {...props}
                     behandling={lagBehandling({
                         status: BehandlingStatus.SATT_PÅ_VENT,
-                        brevmottakere: [lagRestBrevmottaker()],
+                        brevmottakere: [lagBrevmottakerBehandling()],
                     })}
                 />
             ),

@@ -3,11 +3,10 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { ActionMenu } from '@navikt/ds-react';
 import { Behandlingstype } from '@typer/behandling';
+import type { Brevmottaker } from '@typer/brevmottaker';
 import { FagsakType } from '@typer/fagsak';
 
-import type { SkjemaBrevmottaker } from './useBrevmottakerSkjema';
-
-function utledLabel(brevmottakere: SkjemaBrevmottaker[], erLesevisning: boolean) {
+function utledLabel(brevmottakere: Brevmottaker[], erLesevisning: boolean) {
     if (erLesevisning) {
         return brevmottakere.length === 1 ? 'Se brevmottaker' : 'Se brevmottakere';
     }

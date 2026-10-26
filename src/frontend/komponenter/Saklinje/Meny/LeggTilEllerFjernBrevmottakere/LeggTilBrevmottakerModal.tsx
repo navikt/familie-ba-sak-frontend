@@ -1,13 +1,14 @@
 import { InformationSquareIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, InfoCard, Modal } from '@navikt/ds-react';
+import type { Brevmottaker } from '@typer/brevmottaker';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
 
 import BrevmottakerSkjema from './BrevmottakerSkjema';
 import BrevmottakerTabell from './BrevmottakerTabell';
-import type { BrevmottakerUseSkjema, IRestBrevmottaker, SkjemaBrevmottaker } from './useBrevmottakerSkjema';
+import type { BrevmottakerUseSkjema } from './useBrevmottakerSkjema';
 
-interface Props<T extends SkjemaBrevmottaker | IRestBrevmottaker> {
+interface Props<T extends Brevmottaker> {
     lukkModal: () => void;
     brevmottakere: T[];
     lagreMottaker: (useSkjema: BrevmottakerUseSkjema) => void;
@@ -27,7 +28,7 @@ const utledHeading = (antallMottakere: number, erLesevisning: boolean) => {
     }
 };
 
-export const LeggTilBrevmottakerModal = <T extends SkjemaBrevmottaker | IRestBrevmottaker>({
+export const LeggTilBrevmottakerModal = <T extends Brevmottaker>({
     lukkModal,
     brevmottakere,
     lagreMottaker,
