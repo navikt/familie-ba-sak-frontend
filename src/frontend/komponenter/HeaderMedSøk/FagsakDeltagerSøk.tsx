@@ -14,6 +14,7 @@ import {
 } from '@navikt/familie-typer';
 import { idnr } from '@navikt/fnrvalidator';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
+import { lagManglerTilgangBegrunnelse } from '@typer/tilgang';
 import { erLokal } from '@utils/miljø';
 import { erAdresseBeskyttet } from '@utils/validators';
 import { useState } from 'react';
@@ -30,6 +31,9 @@ function tilSøkeresultat(fagsakDeltager: IFagsakDeltager): ISøkeresultat {
         adressebeskyttelseGradering: fagsakDeltager.adressebeskyttelseGradering,
         fagsakId: fagsakDeltager.fagsakId,
         harTilgang: fagsakDeltager.harTilgang,
+        manglerTilgangBegrunnelse: fagsakDeltager.harTilgang
+            ? undefined
+            : lagManglerTilgangBegrunnelse(fagsakDeltager.avvisningskode, fagsakDeltager.adressebeskyttelseGradering),
         navn: fagsakDeltager.navn,
         ident: fagsakDeltager.ident,
         ikon: (
