@@ -1,5 +1,4 @@
 import { oppdaterVedtaksperiodeMedFritekster } from '@api/oppdaterVedtaksperiodeMedFritekster';
-import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 
@@ -17,12 +16,11 @@ interface Parameters {
 }
 
 export function useOppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelserId: number, options?: Options) {
-    const { request } = useHttp();
     return useMutation({
         mutationFn: (parameters: Parameters) => {
             const { fritekster } = parameters;
             const payload = { fritekster };
-            return oppdaterVedtaksperiodeMedFritekster(request, vedtaksperiodeMedBegrunnelserId, payload);
+            return oppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelserId, payload);
         },
         mutationKey: OppdaterVedtaksperiodeMedFriteksterMutationKeyFactory.vedtaksperiodeMedFritekster(
             vedtaksperiodeMedBegrunnelserId
