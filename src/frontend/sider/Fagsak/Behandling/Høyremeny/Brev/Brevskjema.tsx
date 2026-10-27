@@ -51,7 +51,6 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
     const {
         control,
         handleSubmit,
-        getValues,
         watch,
         formState: { isSubmitting, errors },
     } = form;
@@ -129,13 +128,13 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
                                             variant={'secondary'}
                                             size={'small'}
                                             disabled={skjemaErLåst}
-                                            onClick={() => {
+                                            onClick={handleSubmit(values => {
                                                 opprettManueltBrevPdf({
                                                     behandlingId: behandling.behandlingId,
-                                                    payload: hentSkjemaData(getValues()),
+                                                    payload: hentSkjemaData(values),
                                                 });
                                                 settVisForhåndsvisningDialog(true);
-                                            }}
+                                            })}
                                             icon={<FileTextIcon />}
                                         >
                                             Forhåndsvis
