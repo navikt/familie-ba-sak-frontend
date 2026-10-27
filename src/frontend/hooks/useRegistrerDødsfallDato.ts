@@ -1,8 +1,6 @@
-import { useHttp } from '@navikt/familie-http';
+import { type RegistrerDødsfallDatoPayload, registrerDødsfall } from '@api/registrerDødsfallDato';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-
-import { type RegistrerDødsfallDatoPayload, registrerDødsfall } from '../api/registrerDødsfallDato';
-import type { IBehandling } from '../typer/behandling';
+import type { IBehandling } from '@typer/behandling';
 
 interface RegistrerDødsfallDatoParameters extends RegistrerDødsfallDatoPayload {
     behandlingId: number;
@@ -11,13 +9,11 @@ interface RegistrerDødsfallDatoParameters extends RegistrerDødsfallDatoPayload
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, RegistrerDødsfallDatoParameters>, 'mutationFn'>;
 
 export function useRegistrerDødsfallDato(options?: Options) {
-    const { request } = useHttp();
-
     return useMutation<IBehandling, Error, RegistrerDødsfallDatoParameters>({
         mutationFn: (parameters: RegistrerDødsfallDatoParameters): Promise<IBehandling> => {
             const { dødsfallDato, begrunnelse, personIdent, behandlingId } = parameters;
             const payload = { dødsfallDato, begrunnelse, personIdent };
-            return registrerDødsfall(request, payload, behandlingId);
+            return registrerDødsfall(payload, behandlingId);
         },
         ...options,
     });
