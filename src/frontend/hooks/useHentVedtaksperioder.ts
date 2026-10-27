@@ -1,5 +1,5 @@
 import { hentVedtaksperioder } from '@api/hentVedtaksperioder';
-import { useHttp } from '@navikt/familie-http';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
 
 export const HentVedtaksperioderQueryKeyFactory = {
@@ -7,9 +7,9 @@ export const HentVedtaksperioderQueryKeyFactory = {
 };
 
 export function useHentVedtaksperioder(behandlingId: number) {
-    const { request } = useHttp();
     return useQuery({
         queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
-        queryFn: () => hentVedtaksperioder(request, behandlingId),
+        queryFn: () => hentVedtaksperioder(behandlingId),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });
 }

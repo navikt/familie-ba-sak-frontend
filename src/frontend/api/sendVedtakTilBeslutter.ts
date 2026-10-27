@@ -1,18 +1,14 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
 interface Parameters {
     behandlingId: number;
     behandlendeEnhet: string;
 }
 
-export async function sendVedtakTilBeslutter(request: FamilieRequest, parameters: Parameters) {
+export async function sendVedtakTilBeslutter(parameters: Parameters): Promise<IBehandling> {
     const { behandlingId, behandlendeEnhet } = parameters;
-    const ressurs = await request<void, IBehandling>({
-        method: 'POST',
+    return apiClient.post<void, IBehandling>({
         url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/send-til-beslutter?behandlendeEnhet=${behandlendeEnhet}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
