@@ -83,6 +83,26 @@ describe('Brevskjema validering', () => {
         expect(screen.queryByText(OBLIGATORISK_FEILMELDING)).not.toBeInTheDocument();
     });
 
+    test('skal ikke forhåndsvise brev når brevmal ikke er valgt', async () => {
+        const forhåndsvisBrev = vi.fn();
+        server.use(
+            http.post('/familie-ba-sak/api/dokument/forhaandsvis-brev/:behandlingId', () => {
+                forhåndsvisBrev();
+                return HttpResponse.json(byggSuksessRessurs(''));
+            })
+        );
+
+        const { screen, user } = render(<Brevskjema onSubmitSuccess={vi.fn()} />, {
+            wrapper: Wrapper,
+        });
+
+        await user.click(screen.getByRole('button', { name: 'Forhåndsvis' }));
+
+        expect(await screen.findByText('Du må velge en brevmal')).toBeInTheDocument();
+        expect(screen.queryByText('Forhåndsvisning av brev')).not.toBeInTheDocument();
+        expect(forhåndsvisBrev).not.toHaveBeenCalled();
+    });
+
     test('skal kunne sende brev for en brevmal uten delt bosted', async () => {
         server.use(
             http.post('/familie-ba-sak/api/dokument/send-brev/:behandlingId', () =>
