@@ -3,14 +3,4 @@
         margin: 0;
         overflow-x: hidden;
     }
-
-    & .personIdent {
-        &:first-child {
-            margin-top: 4.8rem;
-        }
-
-        &:not(:first-child) {
-            margin-top: 2.125rem;
-        }
-    }
 }

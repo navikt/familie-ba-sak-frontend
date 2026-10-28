@@ -1,4 +1,5 @@
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
+import type { Locator } from '@playwright/test';
 import { PersonTestdata } from '@testutils/testdata/personTestdata';
 import { BehandlingSteg } from '@typer/behandling';
 import { YtelseType } from '@typer/beregning';
@@ -24,6 +25,19 @@ const BEHANDLINGSRESULTAT_STEG_URL = encodeURI(
 );
 const UFULLSTENDIG_ENDRET_UTBETALING =
     'Du har opprettet en eller flere endrede utbetalingsperioder som er ufullstendig utfylt. Disse må enten fylles ut eller slettes før du kan gå videre.';
+
+async function vertikaltAvvik(fødselsnummer: Locator, tidslinjerad: Locator): Promise<number> {
+    const [fødselsnummerBoks, tidslinjeradBoks] = await Promise.all([
+        fødselsnummer.boundingBox(),
+        tidslinjerad.boundingBox(),
+    ]);
+    if (!fødselsnummerBoks || !tidslinjeradBoks) {
+        return Number.POSITIVE_INFINITY;
+    }
+    return Math.abs(
+        fødselsnummerBoks.y + fødselsnummerBoks.height / 2 - (tidslinjeradBoks.y + tidslinjeradBoks.height / 2)
+    );
+}
 
 test.describe('Behandlingsresultat', () => {
     test('skal vise utbetalingen for inneværende måned og gå videre til simuleringen', async ({ page, apiMock }) => {
@@ -164,15 +178,9 @@ test.describe('Behandlingsresultat', () => {
         const tidslinjerader = page.locator('.tidslinjerad');
         await expect(tidslinjerader).toHaveCount(2);
         for (const [index, navn] of [SØKER_NAVN, BARN_NAVN].entries()) {
-            const fødselsnummer = await page.getByTitle(navn, { exact: true }).boundingBox();
-            const tidslinjerad = await tidslinjerader.nth(index).boundingBox();
-            if (!fødselsnummer || !tidslinjerad) {
-                throw new Error(`Fant ikke fødselsnummer eller tidslinjerad for ${navn}`);
-            }
-            const midtenAvFødselsnummer = fødselsnummer.y + fødselsnummer.height / 2;
-
-            expect(midtenAvFødselsnummer).toBeGreaterThan(tidslinjerad.y);
-            expect(midtenAvFødselsnummer).toBeLessThan(tidslinjerad.y + tidslinjerad.height);
+            await expect
+                .poll(() => vertikaltAvvik(page.getByTitle(navn, { exact: true }), tidslinjerader.nth(index)))
+                .toBeLessThanOrEqual(4);
         }
     });
 });

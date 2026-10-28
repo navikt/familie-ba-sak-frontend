@@ -35,17 +35,15 @@ const TilkjentYtelseTidslinje = ({ grunnlagPersoner, tidslinjePersoner, fagsakTy
                 </VStack>
             </HStack>
             <HStack className={Styles.container}>
-                <Box minWidth={'7rem'}>
-                    {grunnlagPersoner.map((person, index) => {
+                <VStack minWidth={'7rem'} paddingBlock={'space-72 space-0'} gap={'space-32'}>
+                    {grunnlagPersoner.map(person => {
                         return (
-                            <Box key={index} paddingInline={'space-0 space-8'} asChild>
-                                <BodyShort className={Styles.personIdent} title={person.navn}>
-                                    {formaterIdent(person.personIdent)}
-                                </BodyShort>
+                            <Box key={person.personIdent} paddingInline={'space-0 space-8'} asChild>
+                                <BodyShort title={person.navn}>{formaterIdent(person.personIdent)}</BodyShort>
                             </Box>
                         );
                     })}
-                </Box>
+                </VStack>
                 <Tidslinje
                     rader={tidslinjeRader}
                     etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}
