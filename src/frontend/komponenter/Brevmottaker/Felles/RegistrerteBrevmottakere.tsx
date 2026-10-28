@@ -1,8 +1,8 @@
-import { useDialog } from '@hooks/useDialog';
 import { InformationSquareIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, InfoCard } from '@navikt/ds-react';
 import type { Brevmottaker } from '@typer/brevmottaker';
 import type { ReactNode } from 'react';
+import { BrevmottakerDialogProvider } from './BrevmottakerDialogContext';
 import { BrevmottakerListe } from './BrevmottakerListe';
 
 interface Props {
@@ -13,31 +13,33 @@ interface Props {
 }
 
 export function RegistrerteBrevmottakere({ brevmottakere, beskrivelse, dialog, className }: Props) {
-    const { åpen: erDialogÅpen, åpne: åpneDialog, lukk: lukkDialog } = useDialog();
-
     return (
-        <>
-            {brevmottakere.length !== 0 && (
-                <InfoCard data-color={'info'} className={className}>
-                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden={true} />}>
-                        <InfoCard.Title>Brevmottaker(e) er endret</InfoCard.Title>
-                    </InfoCard.Header>
-                    <InfoCard.Content>
-                        <BodyShort>{beskrivelse}</BodyShort>
-                        <BrevmottakerListe brevmottakere={brevmottakere} />
-                        <Button
-                            variant={'tertiary'}
-                            type={'button'}
-                            onClick={åpneDialog}
-                            icon={<MagnifyingGlassIcon aria-hidden={true} />}
-                            size={'xsmall'}
-                        >
-                            Se detaljer
-                        </Button>
-                    </InfoCard.Content>
-                </InfoCard>
+        <BrevmottakerDialogProvider>
+            {({ erDialogÅpen, åpneDialog, lukkDialog }) => (
+                <>
+                    {brevmottakere.length !== 0 && (
+                        <InfoCard data-color={'info'} className={className}>
+                            <InfoCard.Header icon={<InformationSquareIcon aria-hidden={true} />}>
+                                <InfoCard.Title>Brevmottaker(e) er endret</InfoCard.Title>
+                            </InfoCard.Header>
+                            <InfoCard.Content>
+                                <BodyShort>{beskrivelse}</BodyShort>
+                                <BrevmottakerListe brevmottakere={brevmottakere} />
+                                <Button
+                                    variant={'tertiary'}
+                                    type={'button'}
+                                    onClick={åpneDialog}
+                                    icon={<MagnifyingGlassIcon aria-hidden={true} />}
+                                    size={'xsmall'}
+                                >
+                                    Se detaljer
+                                </Button>
+                            </InfoCard.Content>
+                        </InfoCard>
+                    )}
+                    {erDialogÅpen && dialog(lukkDialog)}
+                </>
             )}
-            {erDialogÅpen && dialog(lukkDialog)}
-        </>
+        </BrevmottakerDialogProvider>
     );
 }
