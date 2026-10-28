@@ -1,7 +1,5 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
 export interface RegistrerDødsfallDatoPayload {
     dødsfallDato: string;
@@ -9,15 +7,9 @@ export interface RegistrerDødsfallDatoPayload {
     personIdent: string;
 }
 
-export async function registrerDødsfall(
-    request: FamilieRequest,
-    payload: RegistrerDødsfallDatoPayload,
-    behandlingId: number
-) {
-    const ressurs = await request<RegistrerDødsfallDatoPayload, IBehandling>({
+export async function registrerDødsfall(payload: RegistrerDødsfallDatoPayload, behandlingId: number) {
+    return apiClient.post<RegistrerDødsfallDatoPayload, IBehandling>({
         data: payload,
-        method: 'POST',
         url: `/familie-ba-sak/api/person/registrer-manuell-dodsfall/${behandlingId}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

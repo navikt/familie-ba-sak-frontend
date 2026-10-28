@@ -1,14 +1,12 @@
 import { settAktivBrukerIModiaContext } from '@api/settAktivBrukerIModiaContext';
 import { useToastContext } from '@context/ToastContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { useHttp } from '@navikt/familie-http';
 import { useMutation } from '@tanstack/react-query';
 
 export function useSettAktivBrukerIModiaContext() {
-    const { request } = useHttp();
     const { settToast } = useToastContext();
     return useMutation({
-        mutationFn: (personIdent: string) => settAktivBrukerIModiaContext(request, personIdent),
+        mutationFn: (personIdent: string) => settAktivBrukerIModiaContext(personIdent),
         onError: () => {
             settToast(ToastTyper.KLARTE_IKKE_OPPDATERE_MODIA_KONTEKST, {
                 alertType: AlertType.WARNING,

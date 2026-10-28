@@ -1,17 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function oppdaterRegisteropplysninger(
-    request: FamilieRequest,
-    behandlingId: number,
-    påvirkerSystemLaster: boolean = false
-): Promise<IBehandling> {
-    const ressurs = await request<void, IBehandling>({
-        method: 'GET', // Dette burde kanskje ikke være GET?
+export async function oppdaterRegisteropplysninger(behandlingId: number): Promise<IBehandling> {
+    return apiClient.get<void, IBehandling>({
         url: `/familie-ba-sak/api/person/oppdater-registeropplysninger/${behandlingId}`,
-        påvirkerSystemLaster: påvirkerSystemLaster,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
