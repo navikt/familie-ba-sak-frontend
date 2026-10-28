@@ -27,7 +27,7 @@ describe('useOppdaterVilkårsvurdering', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(oppdaterVilkårsvurdering).toHaveBeenCalledWith(expect.any(Function), behandling.behandlingId);
+        expect(oppdaterVilkårsvurdering).toHaveBeenCalledWith(behandling.behandlingId);
         expect(result.current.data).toEqual(behandling);
     });
 

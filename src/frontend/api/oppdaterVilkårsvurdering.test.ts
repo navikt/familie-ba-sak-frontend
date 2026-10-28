@@ -1,42 +1,36 @@
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
+import { apiClient } from '@api/client/apiClient';
+import { oppdaterVilkårsvurdering } from '@api/oppdaterVilkårsvurdering';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { oppdaterVilkårsvurdering } from './oppdaterVilkårsvurdering';
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: {
+        post: vi.fn(),
+    },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
 });
 
 describe('oppdaterVilkårsvurdering', () => {
-    test('kaller request med riktig metode og URL, og får forventet resultat', async () => {
-        // Arrange
+    test('skal sende POST-forespørsel til vilkårsvurdering-steget og returnere behandlingen', async () => {
         const behandling = lagBehandling({ behandlingId: 123 });
+        vi.mocked(apiClient.post).mockResolvedValueOnce(behandling);
 
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        const svar = await oppdaterVilkårsvurdering(behandling.behandlingId);
 
-        // Act
-        const result = await oppdaterVilkårsvurdering(mockRequest, behandling.behandlingId);
-
-        // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'POST',
+        expect(apiClient.post).toHaveBeenCalledTimes(1);
+        expect(apiClient.post).toHaveBeenCalledWith({
             url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/vilkårsvurdering`,
         });
-        expect(result).toEqual(behandling);
+        expect(svar).toEqual(behandling);
     });
 
-    test('Skal håndtere feil', async () => {
-        // Arrange
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+    test('skal kaste videre feilen dersom kallet feiler', async () => {
+        const feil = new Error('Noe gikk galt');
+        vi.mocked(apiClient.post).mockRejectedValueOnce(feil);
 
-        // Act & assert
-        await expect(oppdaterVilkårsvurdering(mockRequest, 123)).rejects.toThrow();
+        await expect(oppdaterVilkårsvurdering(123)).rejects.toBe(feil);
     });
 });

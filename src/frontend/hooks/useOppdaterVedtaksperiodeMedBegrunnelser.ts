@@ -1,5 +1,4 @@
 import { oppdaterVedtaksperiodeMedBegrunnelser } from '@api/oppdaterVedtaksperiodeMedBegrunnelser';
-import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { VedtakBegrunnelse } from '@typer/vedtak';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
@@ -18,12 +17,11 @@ interface Parameters {
 }
 
 export function useOppdaterVedtaksperiodeMedBegrunnelser(vedtaksperiodeMedBegrunnelserId: number, options?: Options) {
-    const { request } = useHttp();
     return useMutation({
         mutationFn: (parameters: Parameters) => {
             const { standardbegrunnelser } = parameters;
             const payload = { standardbegrunnelser };
-            return oppdaterVedtaksperiodeMedBegrunnelser(request, vedtaksperiodeMedBegrunnelserId, payload);
+            return oppdaterVedtaksperiodeMedBegrunnelser(vedtaksperiodeMedBegrunnelserId, payload);
         },
         mutationKey: OppdaterVedtaksperiodeMedBegrunnelserMutationKeyFactory.vedtaksperiodeMedBegrunnelser(
             vedtaksperiodeMedBegrunnelserId

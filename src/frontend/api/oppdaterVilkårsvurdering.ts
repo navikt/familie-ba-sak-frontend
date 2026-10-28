@@ -1,12 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { IBehandling } from '@typer/behandling';
 
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function oppdaterVilkårsvurdering(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<void, IBehandling>({
-        method: 'POST',
+export async function oppdaterVilkårsvurdering(behandlingId: number): Promise<IBehandling> {
+    return apiClient.post<void, IBehandling>({
         url: `/familie-ba-sak/api/behandlinger/${behandlingId}/steg/vilkårsvurdering`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
