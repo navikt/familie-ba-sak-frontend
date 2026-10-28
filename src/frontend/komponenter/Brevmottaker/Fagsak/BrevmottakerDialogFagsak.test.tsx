@@ -15,7 +15,7 @@ vi.mock('@hooks/useErLesevisningFagsak');
 
 const UTENLANDSK_ADRESSE_INFO = 'Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.';
 
-function renderDialog(brevmottakere: BrevmottakerFagsak[] = []) {
+async function renderDialog(brevmottakere: BrevmottakerFagsak[] = []) {
     function Wrapper({ children }: PropsWithChildren) {
         return (
             <TestProviders>
@@ -29,10 +29,14 @@ function renderDialog(brevmottakere: BrevmottakerFagsak[] = []) {
             </TestProviders>
         );
     }
-    return render(<BrevmottakerDialogFagsak />, { wrapper: Wrapper });
+    const resultat = render(<BrevmottakerDialogFagsak />, { wrapper: Wrapper });
+    // Dialogen flytter fokus til seg selv i en requestAnimationFrame etter åpning. Venter på dette,
+    // slik at fokus ikke blir flyttet bort fra feltet testen skriver i.
+    await waitFor(() => expect(resultat.screen.getByRole('dialog')).toHaveFocus());
+    return resultat;
 }
 
-function hentLukkKnappIFooter(screen: ReturnType<typeof renderDialog>['screen']) {
+function hentLukkKnappIFooter(screen: Awaited<ReturnType<typeof renderDialog>>['screen']) {
     // Dialog.Header har også en lukkeknapp med navnet "Lukk", footer-knappen kommer sist i DOM-en
     return screen.getAllByRole('button', { name: 'Lukk' }).at(-1) as HTMLElement;
 }
@@ -43,8 +47,8 @@ describe('BrevmottakerDialogFagsak', () => {
         vi.mocked(useErLesevisningFagsak).mockReturnValue(false);
     });
 
-    test('skal vise skjemaet direkte og deaktivere Lukk når det ikke finnes brevmottakere', () => {
-        const { screen } = renderDialog();
+    test('skal vise skjemaet direkte og deaktivere Lukk når det ikke finnes brevmottakere', async () => {
+        const { screen } = await renderDialog();
 
         expect(screen.getByRole('dialog', { name: 'Brevmottaker' })).toBeInTheDocument();
         expect(screen.getByText('Ingen brevmottakere er registrert.')).toBeInTheDocument();
@@ -53,15 +57,15 @@ describe('BrevmottakerDialogFagsak', () => {
         expect(hentLukkKnappIFooter(screen)).toBeDisabled();
     });
 
-    test('skal ikke kunne velge dødsbo på fagsak', () => {
-        const { screen } = renderDialog();
+    test('skal ikke kunne velge dødsbo på fagsak', async () => {
+        const { screen } = await renderDialog();
 
         const valg = screen.getAllByRole('option').map(option => option.textContent);
         expect(valg).toEqual(['-- Velg mottaker --', 'Bruker med utenlandsk adresse', 'Fullmektig', 'Verge']);
     });
 
-    test('skal vise registrerte brevmottakere uten skjema når det finnes brevmottakere', () => {
-        const { screen } = renderDialog([
+    test('skal vise registrerte brevmottakere uten skjema når det finnes brevmottakere', async () => {
+        const { screen } = await renderDialog([
             lagBrevmottakerFagsak({ type: Brevmottakertype.FULLMEKTIG, navn: 'Fia Fullmektig' }),
         ]);
 
@@ -73,7 +77,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal vise og skjule skjemaet med Legg til ny mottaker og Avbryt', async () => {
-        const { screen, user } = renderDialog([lagBrevmottakerFagsak({ type: Brevmottakertype.FULLMEKTIG })]);
+        const { screen, user } = await renderDialog([lagBrevmottakerFagsak({ type: Brevmottakertype.FULLMEKTIG })]);
 
         await user.click(screen.getByRole('button', { name: 'Legg til ny mottaker' }));
 
@@ -88,7 +92,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal kun kunne velge brevmottakertyper som fortsatt er tilgjengelige', async () => {
-        const { screen, user } = renderDialog([lagBrevmottakerFagsak({ type: Brevmottakertype.VERGE })]);
+        const { screen, user } = await renderDialog([lagBrevmottakerFagsak({ type: Brevmottakertype.VERGE })]);
 
         await user.click(screen.getByRole('button', { name: 'Legg til ny mottaker' }));
 
@@ -96,8 +100,8 @@ describe('BrevmottakerDialogFagsak', () => {
         expect(valg).toEqual(['-- Velg mottaker --', 'Bruker med utenlandsk adresse']);
     });
 
-    test('skal ikke kunne legge til flere enn to brevmottakere', () => {
-        const { screen } = renderDialog([
+    test('skal ikke kunne legge til flere enn to brevmottakere', async () => {
+        const { screen } = await renderDialog([
             lagBrevmottakerFagsak({ type: Brevmottakertype.FULLMEKTIG }),
             lagBrevmottakerFagsak({ type: Brevmottakertype.BRUKER_MED_UTENLANDSK_ADRESSE, landkode: 'SE' }),
         ]);
@@ -105,10 +109,10 @@ describe('BrevmottakerDialogFagsak', () => {
         expect(screen.queryByRole('button', { name: 'Legg til ny mottaker' })).not.toBeInTheDocument();
     });
 
-    test('skal verken vise skjema eller Legg til ny mottaker i lesevisning', () => {
+    test('skal verken vise skjema eller Legg til ny mottaker i lesevisning', async () => {
         vi.mocked(useErLesevisningFagsak).mockReturnValue(true);
 
-        const { screen } = renderDialog();
+        const { screen } = await renderDialog();
 
         expect(screen.queryByRole('combobox', { name: 'Mottaker' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Legg til ny mottaker' })).not.toBeInTheDocument();
@@ -116,7 +120,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal vise postnummer og poststed når Norge er valgt', async () => {
-        const { screen, user } = renderDialog();
+        const { screen, user } = await renderDialog();
 
         await user.type(screen.getByRole('combobox', { name: 'Land' }), 'Norge{Enter}');
 
@@ -126,7 +130,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal vise informasjon om utenlandsk adresse og skjule postnummer og poststed når et annet land er valgt', async () => {
-        const { screen, user } = renderDialog();
+        const { screen, user } = await renderDialog();
 
         await user.type(screen.getByRole('combobox', { name: 'Land' }), 'Sverige{Enter}');
 
@@ -136,7 +140,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal vise valideringsfeil og ikke legge til brevmottaker når skjemaet er tomt', async () => {
-        const { screen, user } = renderDialog();
+        const { screen, user } = await renderDialog();
 
         await user.click(screen.getByRole('button', { name: 'Legg til brevmottaker' }));
 
@@ -148,7 +152,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal legge til brevmottakeren i listen og skjule skjemaet', async () => {
-        const { screen, user } = renderDialog();
+        const { screen, user } = await renderDialog();
 
         await user.selectOptions(screen.getByRole('combobox', { name: 'Mottaker' }), 'Verge');
         await user.type(screen.getByRole('textbox', { name: 'Navn' }), 'Vera Verge');
@@ -167,7 +171,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal fjerne brevmottakeren fra listen når man klikker på Fjern', async () => {
-        const { screen, user } = renderDialog([
+        const { screen, user } = await renderDialog([
             lagBrevmottakerFagsak({ type: Brevmottakertype.VERGE, navn: 'Vera Verge' }),
         ]);
 
@@ -178,7 +182,7 @@ describe('BrevmottakerDialogFagsak', () => {
     });
 
     test('skal lukke dialogen når man klikker på Lukk', async () => {
-        const { screen, user } = renderDialog([lagBrevmottakerFagsak()]);
+        const { screen, user } = await renderDialog([lagBrevmottakerFagsak()]);
 
         await user.click(hentLukkKnappIFooter(screen));
 
