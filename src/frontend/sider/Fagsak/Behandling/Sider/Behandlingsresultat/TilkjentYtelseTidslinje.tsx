@@ -39,7 +39,9 @@ const TilkjentYtelseTidslinje = ({ grunnlagPersoner, tidslinjePersoner, fagsakTy
                     {grunnlagPersoner.map((person, index) => {
                         return (
                             <Box key={index} paddingInline={'space-0 space-8'} asChild>
-                                <BodyShort title={person.navn}>{formaterIdent(person.personIdent)}</BodyShort>
+                                <BodyShort className={Styles.personIdent} title={person.navn}>
+                                    {formaterIdent(person.personIdent)}
+                                </BodyShort>
                             </Box>
                         );
                     })}

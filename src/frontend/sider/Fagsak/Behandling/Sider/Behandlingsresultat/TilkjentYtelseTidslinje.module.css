@@ -1,16 +1,14 @@
 .container {
-    & .tidslinje {
+    & :global(.tidslinje) {
         margin: 0;
         overflow-x: hidden;
     }
 
-    & .aksel-body-short {
+    & .personIdent {
         &:first-child {
             margin-top: 4.8rem;
         }
-    }
 
-    & .aksel-body-short {
         &:not(:first-child) {
             margin-top: 2.125rem;
         }

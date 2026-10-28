@@ -1,11 +1,21 @@
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
+import { PersonTestdata } from '@testutils/testdata/personTestdata';
 import { BehandlingSteg } from '@typer/behandling';
+import { YtelseType } from '@typer/beregning';
 import { IEndretUtbetalingAndelÅrsak, type IRestEndretUtbetalingAndel } from '@typer/utbetalingAndel';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { HttpResponse, http } from 'msw';
 
-import { BARN_IDENT, BARN_NAVN, lagBehandlingPåSteg } from '../behandlingsdata';
+import {
+    BARN_IDENT,
+    BARN_NAVN,
+    lagBehandlingPåSteg,
+    lagTilkjentYtelse,
+    ORDINÆR_SATS,
+    SØKER_IDENT,
+    SØKER_NAVN,
+} from '../behandlingsdata';
 import { lagBehandlingsmock } from '../behandlingsmock';
 import { expect, test } from '../fixtures';
 
@@ -121,5 +131,48 @@ test.describe('Behandlingsresultat', () => {
             erTilknyttetAndeler: false,
         });
         await expect(skjema).toBeHidden();
+    });
+
+    test('skal vise fødselsnummeret på høyde med tidslinjeraden til personen', async ({ page, apiMock }) => {
+        const søkersAndeler = PersonTestdata.lagPersonMedAndelerTilkjentYtelse({
+            personIdent: SØKER_IDENT,
+            beløp: ORDINÆR_SATS,
+            stønadFom: '2020-03',
+            stønadTom: '2038-01',
+            ytelsePerioder: [
+                {
+                    beløp: ORDINÆR_SATS,
+                    stønadFom: '2020-03',
+                    stønadTom: '2038-01',
+                    ytelseType: YtelseType.UTVIDET_BARNETRYGD,
+                    skalUtbetales: true,
+                },
+            ],
+        });
+        const behandlingsmock = lagBehandlingsmock(
+            lagBehandlingPåSteg(BehandlingSteg.BEHANDLINGSRESULTAT, {
+                personerMedAndelerTilkjentYtelse: [
+                    søkersAndeler,
+                    ...lagTilkjentYtelse().personerMedAndelerTilkjentYtelse,
+                ],
+            })
+        );
+        apiMock.use(...behandlingsmock.handlers);
+
+        await page.goto('/fagsak/1/1/tilkjent-ytelse');
+
+        const tidslinjerader = page.locator('.tidslinjerad');
+        await expect(tidslinjerader).toHaveCount(2);
+        for (const [index, navn] of [SØKER_NAVN, BARN_NAVN].entries()) {
+            const fødselsnummer = await page.getByTitle(navn, { exact: true }).boundingBox();
+            const tidslinjerad = await tidslinjerader.nth(index).boundingBox();
+            if (!fødselsnummer || !tidslinjerad) {
+                throw new Error(`Fant ikke fødselsnummer eller tidslinjerad for ${navn}`);
+            }
+            const midtenAvFødselsnummer = fødselsnummer.y + fødselsnummer.height / 2;
+
+            expect(midtenAvFødselsnummer).toBeGreaterThan(tidslinjerad.y);
+            expect(midtenAvFødselsnummer).toBeLessThan(tidslinjerad.y + tidslinjerad.height);
+        }
     });
 });
