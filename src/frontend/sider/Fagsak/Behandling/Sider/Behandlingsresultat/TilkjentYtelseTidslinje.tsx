@@ -1,4 +1,4 @@
-import { BodyShort, Box, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
 import { Tidslinje } from '@navikt/familie-tidslinje';
 import { formaterIdent } from '@utils/formatter';
@@ -35,15 +35,18 @@ const TilkjentYtelseTidslinje = ({ grunnlagPersoner, tidslinjePersoner, fagsakTy
                 </VStack>
             </HStack>
             <HStack className={Styles.container}>
-                <Box minWidth={'7rem'}>
-                    {grunnlagPersoner.map((person, index) => {
-                        return (
-                            <Box key={index} paddingInline={'space-0 space-8'} asChild>
-                                <BodyShort title={person.navn}>{formaterIdent(person.personIdent)}</BodyShort>
-                            </Box>
-                        );
-                    })}
-                </Box>
+                <VStack
+                    minWidth={'7rem'}
+                    paddingInline={'space-0 space-8'}
+                    paddingBlock={'space-72 space-0'}
+                    gap={'space-32'}
+                >
+                    {grunnlagPersoner.map(person => (
+                        <BodyShort key={person.personIdent} title={person.navn}>
+                            {formaterIdent(person.personIdent)}
+                        </BodyShort>
+                    ))}
+                </VStack>
                 <Tidslinje
                     rader={tidslinjeRader}
                     etikettRender={(etikett: Etikett) => <TidslinjeEtikett etikett={etikett} />}

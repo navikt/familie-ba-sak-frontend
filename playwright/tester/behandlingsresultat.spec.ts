@@ -1,11 +1,22 @@
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
+import type { Locator } from '@playwright/test';
+import { PersonTestdata } from '@testutils/testdata/personTestdata';
 import { BehandlingSteg } from '@typer/behandling';
+import { YtelseType } from '@typer/beregning';
 import { IEndretUtbetalingAndelÅrsak, type IRestEndretUtbetalingAndel } from '@typer/utbetalingAndel';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { HttpResponse, http } from 'msw';
 
-import { BARN_IDENT, BARN_NAVN, lagBehandlingPåSteg } from '../behandlingsdata';
+import {
+    BARN_IDENT,
+    BARN_NAVN,
+    lagBehandlingPåSteg,
+    lagTilkjentYtelse,
+    ORDINÆR_SATS,
+    SØKER_IDENT,
+    SØKER_NAVN,
+} from '../behandlingsdata';
 import { lagBehandlingsmock } from '../behandlingsmock';
 import { expect, test } from '../fixtures';
 
@@ -14,6 +25,37 @@ const BEHANDLINGSRESULTAT_STEG_URL = encodeURI(
 );
 const UFULLSTENDIG_ENDRET_UTBETALING =
     'Du har opprettet en eller flere endrede utbetalingsperioder som er ufullstendig utfylt. Disse må enten fylles ut eller slettes før du kan gå videre.';
+
+function lagUtvidetBarnetrygdForSøker() {
+    return PersonTestdata.lagPersonMedAndelerTilkjentYtelse({
+        personIdent: SØKER_IDENT,
+        beløp: ORDINÆR_SATS,
+        stønadFom: '2020-03',
+        stønadTom: '2038-01',
+        ytelsePerioder: [
+            {
+                beløp: ORDINÆR_SATS,
+                stønadFom: '2020-03',
+                stønadTom: '2038-01',
+                ytelseType: YtelseType.UTVIDET_BARNETRYGD,
+                skalUtbetales: true,
+            },
+        ],
+    });
+}
+
+async function vertikaltAvvik(fødselsnummer: Locator, tidslinjerad: Locator): Promise<number> {
+    const [fødselsnummerBoks, tidslinjeradBoks] = await Promise.all([
+        fødselsnummer.boundingBox(),
+        tidslinjerad.boundingBox(),
+    ]);
+    if (!fødselsnummerBoks || !tidslinjeradBoks) {
+        return Number.POSITIVE_INFINITY;
+    }
+    return Math.abs(
+        fødselsnummerBoks.y + fødselsnummerBoks.height / 2 - (tidslinjeradBoks.y + tidslinjeradBoks.height / 2)
+    );
+}
 
 test.describe('Behandlingsresultat', () => {
     test('skal vise utbetalingen for inneværende måned og gå videre til simuleringen', async ({ page, apiMock }) => {
@@ -121,5 +163,27 @@ test.describe('Behandlingsresultat', () => {
             erTilknyttetAndeler: false,
         });
         await expect(skjema).toBeHidden();
+    });
+
+    test('skal vise fødselsnummeret på høyde med tidslinjeraden til personen', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(
+            lagBehandlingPåSteg(BehandlingSteg.BEHANDLINGSRESULTAT, {
+                personerMedAndelerTilkjentYtelse: [
+                    lagUtvidetBarnetrygdForSøker(),
+                    ...lagTilkjentYtelse().personerMedAndelerTilkjentYtelse,
+                ],
+            })
+        );
+        apiMock.use(...behandlingsmock.handlers);
+
+        await page.goto('/fagsak/1/1/tilkjent-ytelse');
+
+        const tidslinjerader = page.locator('.tidslinjerad');
+        await expect(tidslinjerader).toHaveCount(2);
+        for (const [index, navn] of [SØKER_NAVN, BARN_NAVN].entries()) {
+            await expect
+                .poll(() => vertikaltAvvik(page.getByTitle(navn, { exact: true }), tidslinjerader.nth(index)))
+                .toBeLessThanOrEqual(4);
+        }
     });
 });
