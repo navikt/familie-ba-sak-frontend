@@ -26,6 +26,24 @@ const BEHANDLINGSRESULTAT_STEG_URL = encodeURI(
 const UFULLSTENDIG_ENDRET_UTBETALING =
     'Du har opprettet en eller flere endrede utbetalingsperioder som er ufullstendig utfylt. Disse må enten fylles ut eller slettes før du kan gå videre.';
 
+function lagUtvidetBarnetrygdForSøker() {
+    return PersonTestdata.lagPersonMedAndelerTilkjentYtelse({
+        personIdent: SØKER_IDENT,
+        beløp: ORDINÆR_SATS,
+        stønadFom: '2020-03',
+        stønadTom: '2038-01',
+        ytelsePerioder: [
+            {
+                beløp: ORDINÆR_SATS,
+                stønadFom: '2020-03',
+                stønadTom: '2038-01',
+                ytelseType: YtelseType.UTVIDET_BARNETRYGD,
+                skalUtbetales: true,
+            },
+        ],
+    });
+}
+
 async function vertikaltAvvik(fødselsnummer: Locator, tidslinjerad: Locator): Promise<number> {
     const [fødselsnummerBoks, tidslinjeradBoks] = await Promise.all([
         fødselsnummer.boundingBox(),
@@ -148,25 +166,10 @@ test.describe('Behandlingsresultat', () => {
     });
 
     test('skal vise fødselsnummeret på høyde med tidslinjeraden til personen', async ({ page, apiMock }) => {
-        const søkersAndeler = PersonTestdata.lagPersonMedAndelerTilkjentYtelse({
-            personIdent: SØKER_IDENT,
-            beløp: ORDINÆR_SATS,
-            stønadFom: '2020-03',
-            stønadTom: '2038-01',
-            ytelsePerioder: [
-                {
-                    beløp: ORDINÆR_SATS,
-                    stønadFom: '2020-03',
-                    stønadTom: '2038-01',
-                    ytelseType: YtelseType.UTVIDET_BARNETRYGD,
-                    skalUtbetales: true,
-                },
-            ],
-        });
         const behandlingsmock = lagBehandlingsmock(
             lagBehandlingPåSteg(BehandlingSteg.BEHANDLINGSRESULTAT, {
                 personerMedAndelerTilkjentYtelse: [
-                    søkersAndeler,
+                    lagUtvidetBarnetrygdForSøker(),
                     ...lagTilkjentYtelse().personerMedAndelerTilkjentYtelse,
                 ],
             })
