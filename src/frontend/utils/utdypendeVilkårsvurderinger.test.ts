@@ -1,4 +1,4 @@
-import { PersonType } from '../../typer/person';
+import { PersonType } from '@typer/person';
 import {
     Regelverk,
     Resultat,
@@ -8,9 +8,9 @@ import {
     UtdypendeVilkårsvurderingGenerell,
     UtdypendeVilkårsvurderingNasjonal,
     VilkårType,
-} from '../../typer/vilkår';
-import type { UtdypendeVilkårsvurderingAvhengigheter } from '../utdypendeVilkårsvurderinger';
-import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from '../utdypendeVilkårsvurderinger';
+} from '@typer/vilkår';
+import type { UtdypendeVilkårsvurderingAvhengigheter } from './utdypendeVilkårsvurderinger';
+import { bestemFeilmeldingForUtdypendeVilkårsvurdering } from './utdypendeVilkårsvurderinger';
 
 const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     personType: PersonType.SØKER,
@@ -19,7 +19,7 @@ const avhengigheter: UtdypendeVilkårsvurderingAvhengigheter = {
     vurderesEtter: null,
 };
 
-describe('Utdypende Vilkårsvurderinger', () => {
+describe('bestemFeilmeldingForUtdypendeVilkårsvurdering', () => {
     it('Bor med søker - kan velge alternativer for delt bosted', () => {
         const actualUgyldig = bestemFeilmeldingForUtdypendeVilkårsvurdering(
             [
