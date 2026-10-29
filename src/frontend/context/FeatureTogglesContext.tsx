@@ -1,10 +1,9 @@
+import { useHentFeatureToggles } from '@hooks/useHentFeatureToggles';
 import { GlobalAlert } from '@navikt/ds-react';
+import type { FeatureToggles } from '@typer/featureToggles';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
-
-import { useHentFeatureToggles } from '../hooks/useHentFeatureToggles';
 import SystemetLaster from '../komponenter/SystemetLaster/SystemetLaster';
-import type { FeatureToggles } from '../typer/featureToggles';
 
 interface FeatureTogglesContext {
     featureToggles: FeatureToggles;

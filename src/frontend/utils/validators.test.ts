@@ -1,10 +1,10 @@
 import { useFelt, Valideringsstatus } from '@navikt/familie-skjema';
 import { act, renderHook } from '@testing-library/react';
 
-import generator from '../../testutils/testverktøy/fnr/fnr-generator';
-import { identValidator } from '../validators';
+import generator from '@testutils/testverktøy/fnr/fnr-generator';
+import { identValidator } from './validators';
 
-describe('utils/validators', () => {
+describe('identValidator', () => {
     test('Validering av ident', () => {
         const fnrGenerator = generator(new Date('10.02.2020'));
         const { result } = renderHook(() =>

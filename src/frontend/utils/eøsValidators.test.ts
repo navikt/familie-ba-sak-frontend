@@ -1,11 +1,11 @@
 import type { FeltState } from '@navikt/familie-skjema';
 import { Valideringsstatus } from '@navikt/familie-skjema';
 
-import type { IIsoMånedPeriode } from '../dato';
-import { nyIsoMånedPeriode } from '../dato';
-import { erEøsPeriodeGyldig, isEmpty, isNumeric, tellAntallDesimaler } from '../eøsValidators';
+import type { IIsoMånedPeriode } from './dato';
+import { nyIsoMånedPeriode } from './dato';
+import { erEøsPeriodeGyldig, isEmpty, isNumeric, tellAntallDesimaler } from './eøsValidators';
 
-describe('utils/eøsValidators', () => {
+describe('erEøsPeriodeGyldig', () => {
     const nyFeltState = <T>(verdi: T): FeltState<T> => ({
         feilmelding: '',
         valider: (feltState, _) => feltState,
@@ -68,13 +68,17 @@ describe('utils/eøsValidators', () => {
 
         expect(valideringsresultat.valideringsstatus).toEqual(Valideringsstatus.OK);
     });
+});
 
+describe('isNumeric', () => {
     test('isNumeric skal sjekke at string er numerisk', () => {
         expect(isNumeric('1.42')).toEqual(true);
         expect(isNumeric('1.24')).toEqual(true);
         expect(isNumeric('1b4')).toEqual(false);
     });
+});
 
+describe('isEmpty', () => {
     test('isEmpty skal sjekke at text er tom', () => {
         expect(isEmpty('')).toEqual(true);
         expect(isEmpty(undefined)).toEqual(true);
@@ -82,7 +86,9 @@ describe('utils/eøsValidators', () => {
         expect(isEmpty(Date())).toEqual(false);
         expect(isEmpty('text')).toEqual(false);
     });
+});
 
+describe('tellAntallDesimaler', () => {
     test('tellAntallDesimaler skal returnere antall desimaler i string', () => {
         expect(tellAntallDesimaler('1')).toEqual(0);
         expect(tellAntallDesimaler('1.2')).toEqual(1);

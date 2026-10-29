@@ -1,5 +1,3 @@
-import type { FeltState } from '@navikt/familie-skjema';
-import { feil, ok } from '@navikt/familie-skjema';
 import { format, isValid, parseISO, startOfToday } from 'date-fns';
 
 export type IsoDatoString = string; // Format YYYY-MM-DD (ISO)
@@ -89,9 +87,6 @@ interface IsoStringTilDateProps {
 
 export const isoStringTilDateMedFallback = ({ isoString, fallbackDate }: IsoStringTilDateProps) =>
     isoString ? isoStringTilDate(isoString) : fallbackDate;
-
-export const validerGyldigDato = (felt: FeltState<Date | undefined>) =>
-    felt.verdi && isValid(felt.verdi) ? ok(felt) : feil(felt, 'Du må velge en gyldig dato');
 
 export const erIsoStringGyldig = (isoString?: IsoDatoString): boolean => {
     if (!isoString) return false;

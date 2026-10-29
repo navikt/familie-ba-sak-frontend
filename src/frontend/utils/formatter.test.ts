@@ -1,8 +1,8 @@
 import { addDays, setDefaultOptions, subDays, subYears } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
-import { dagensDato, dateTilIsoDatoString } from '../dato';
-import { formaterIdent, formaterTekstStorForbokstav, hentAlder, kunSiffer } from '../formatter';
+import { dagensDato, dateTilIsoDatoString } from './dato';
+import { formaterIdent, formaterTekstStorForbokstav, hentAlder, kunSiffer } from './formatter';
 
 describe('formaterIdent', () => {
     beforeAll(() => {
@@ -11,15 +11,6 @@ describe('formaterIdent', () => {
     });
     test('Skal formatere ident', () => {
         expect(formaterIdent('12345678910')).toBe('123456 78910');
-    });
-
-    test('Tester at kunSiffer håndterer negative tall, desimaler og bokstaver riktig', () => {
-        expect(kunSiffer('0123')).toBe(true);
-        expect(kunSiffer('-123')).toBe(false);
-        expect(kunSiffer('123.4')).toBe(false);
-        expect(kunSiffer('123,4')).toBe(false);
-        expect(kunSiffer('abc')).toBe(false);
-        expect(kunSiffer('1a3')).toBe(false);
     });
 
     test('Skal formatere orgnr', () => {
@@ -32,6 +23,17 @@ describe('formaterIdent', () => {
 
     test('Skal returnere ukjent ident når feil lengde på numerisk ident', () => {
         expect(formaterIdent('123456789123')).toBe('Ukjent id');
+    });
+});
+
+describe('kunSiffer', () => {
+    test('Tester at kunSiffer håndterer negative tall, desimaler og bokstaver riktig', () => {
+        expect(kunSiffer('0123')).toBe(true);
+        expect(kunSiffer('-123')).toBe(false);
+        expect(kunSiffer('123.4')).toBe(false);
+        expect(kunSiffer('123,4')).toBe(false);
+        expect(kunSiffer('abc')).toBe(false);
+        expect(kunSiffer('1a3')).toBe(false);
     });
 });
 
