@@ -1,5 +1,4 @@
 import { useFagsak } from '@hooks/useFagsak';
-import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { Box, Heading, InfoCard, Link, LocalAlert, VStack } from '@navikt/ds-react';
@@ -14,12 +13,10 @@ import { Link as ReactRouterLink } from 'react-router';
 
 import { Behandlinger } from './Behandlinger';
 import { FagsakLenkepanel, SaksoversiktPanelBredde } from './FagsakLenkepanel';
-import { GjennomførValutajusteringKnapp } from './GjennomførValutajusteringKnapp';
 import Utbetalinger from './Utbetalinger';
 import type { VisningBehandling } from './visningBehandling';
 
 export function Saksoversikt() {
-    const saksbehandler = useSaksbehandler();
     const fagsak = useFagsak();
 
     const iverksatteBehandlinger = fagsak.behandlinger.filter(
@@ -124,9 +121,6 @@ export function Saksoversikt() {
                 <Heading size="large" level="1">
                     Saksoversikt
                 </Heading>
-                {saksbehandler.harSuperbrukertilgang && fagsak.løpendeKategori === BehandlingKategori.EØS && (
-                    <GjennomførValutajusteringKnapp fagsakId={fagsak.id} />
-                )}
                 <VStack gap="space-56">
                     <FagsakLenkepanel />
                     {fagsak.status === FagsakStatus.LØPENDE && (
