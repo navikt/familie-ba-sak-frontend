@@ -22,6 +22,6 @@ jobs:
       id-token: write # nais/login
     uses: navikt/familie-baks-gha-workflows/.github/workflows/scan-vulnerabilities-pnpm.yaml@main # ratchet:exclude
     with:
-      node-version: '24'
+      node-version: '26'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}

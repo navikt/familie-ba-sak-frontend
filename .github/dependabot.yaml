@@ -14,8 +14,8 @@ updates:
     ignore:
       - dependency-name: "@types/node"
         versions:
-          - "25"
-          - "26"
+          - "27"
+          - "28"
     cooldown:
       default-days: 7
     open-pull-requests-limit: 20
