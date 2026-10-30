@@ -9,6 +9,7 @@ Owned by team-baks (`teamfamilie` namespace). Only outbound API dependency: `fam
 ```bash
 # Setup
 nvm use                                                                              # Node 26
+npm install -g corepack                                                              # Corepack is no longer bundled with Node
 corepack enable                                                                      # activates pnpm version from packageManager
 pnpm install
 
