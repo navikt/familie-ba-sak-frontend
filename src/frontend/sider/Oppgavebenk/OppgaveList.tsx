@@ -15,12 +15,14 @@ import { OppgaveDirektelenke } from './OppgaveDirektelenke';
 import Styles from './OppgaveList.module.css';
 import { OppgavelisteNavigator } from './OppgavelisteNavigator';
 import { OppgavelisteSaksbehandler } from './OppgavelisteSaksbehandler';
+import { usePaginationContext } from './PaginationContext';
 import { intDatoTilNorskDato, Sorteringsnøkkel } from './utils';
 
 export function OppgaveList() {
-    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering, side } = useOppgavebenkContext();
+    const { oppgaver, sorterteOppgaverader, sortering, settOgLagreSortering } = useOppgavebenkContext();
+    const { page } = usePaginationContext();
 
-    const oppgaverPåDenneSiden = sorterteOppgaverader.slice((side - 1) * oppgaveSideLimit, side * oppgaveSideLimit);
+    const oppgaverPåDenneSiden = sorterteOppgaverader.slice((page - 1) * oppgaveSideLimit, page * oppgaveSideLimit);
 
     return (
         <Box as={'section'}>
