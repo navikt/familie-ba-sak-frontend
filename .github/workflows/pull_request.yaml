@@ -15,7 +15,7 @@ jobs:
       contents: read
     uses: navikt/familie-baks-gha-workflows/.github/workflows/pull-request-pnpm.yaml@main # ratchet:exclude
     with:
-      node-version: '24'
+      node-version: '26'
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
       - name: Set up node and install pnpm packages
         uses: navikt/familie-baks-gha-workflows/.github/actions/setup-node-pnpm@main # ratchet:exclude
         with:
-          node-version: '24'
+          node-version: '26'
           reader-token: ${{ secrets.READER_TOKEN }}
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
