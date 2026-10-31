@@ -41,11 +41,41 @@ export const doRedirectProxy = () => {
     };
 };
 
-export const attachToken = (authConfig: Configuration) => {
-    return async (req: Request, _res: Response, next: NextFunction) => {
-        getOnBehalfOfAccessToken(authConfig, req, oboConfig).then((accessToken: string) => {
-            req.headers.Authorization = `Bearer ${accessToken}`;
-            return next();
+const erInvalidGrant = (feil: unknown): boolean =>
+    typeof feil === 'object' &&
+    feil !== null &&
+    (('error' in feil && feil.error === 'invalid_grant') ||
+        ('message' in feil && typeof feil.message === 'string' && feil.message.includes('invalid_grant')));
+
+const håndterFeilVedHentingAvOboToken = (feil: unknown, req: Request, res: Response) => {
+    // ensureAuthenticated kan allerede ha svart 401 (feilet token-refresh) og likevel kalt next().
+    if (res.headersSent) {
+        return;
+    }
+    if (erInvalidGrant(feil)) {
+        logger.info(`Fikk ikke OBO-token for ${req.path}: brukeren har ikke tilgang til familie-ba-sak`);
+        res.status(403).json({
+            status: 'IKKE_TILGANG',
+            frontendFeilmelding: 'Du har ikke tilgang til familie-ba-sak.',
         });
+    } else {
+        logger.error({ err: feil }, `Uventet feil ved henting av OBO-token for ${req.path}`);
+        res.status(500).json({
+            status: 'FEILET',
+            frontendFeilmelding: 'Uventet feil ved henting av tilgangstoken. Vennligst prøv på nytt.',
+        });
+    }
+};
+
+export const attachToken = (authConfig: Configuration) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        let accessToken: string;
+        try {
+            accessToken = await getOnBehalfOfAccessToken(authConfig, req, oboConfig);
+        } catch (feil) {
+            return håndterFeilVedHentingAvOboToken(feil, req, res);
+        }
+        req.headers.Authorization = `Bearer ${accessToken}`;
+        return next();
     };
 };
