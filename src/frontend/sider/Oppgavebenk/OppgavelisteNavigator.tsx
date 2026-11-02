@@ -3,13 +3,15 @@ import { RessursStatus } from '@navikt/familie-typer';
 import type { IOppgave } from '@typer/oppgave';
 
 import { oppgaveSideLimit, useOppgavebenkContext } from './OppgavebenkContext';
+import { usePaginationContext } from './PaginationContext';
 
 function beregnAntallSider(oppgaver: IOppgave[]): number {
     return Math.ceil(oppgaver.length / oppgaveSideLimit);
 }
 
 export function OppgavelisteNavigator() {
-    const { oppgaver, side, settSide } = useOppgavebenkContext();
+    const { oppgaver } = useOppgavebenkContext();
+    const { page, setPage } = usePaginationContext();
 
     if (oppgaver.status !== RessursStatus.SUKSESS) {
         return (
@@ -40,16 +42,16 @@ export function OppgavelisteNavigator() {
             </Heading>
             <Box marginInline={'space-128 space-0'}>
                 <BodyLong>
-                    Viser {(side - 1) * oppgaveSideLimit + 1} -{' '}
-                    {side === antallSider ? oppgaver.data.oppgaver.length : side * oppgaveSideLimit} av{' '}
+                    Viser {(page - 1) * oppgaveSideLimit + 1} -{' '}
+                    {page === antallSider ? oppgaver.data.oppgaver.length : page * oppgaveSideLimit} av{' '}
                     {oppgaver.data.oppgaver.length} oppgaver (totalt {oppgaver.data.antallTreffTotalt} oppgaver)
                 </BodyLong>
             </Box>
             <Pagination
                 size={'small'}
-                page={side}
+                page={page}
                 count={antallSider}
-                onPageChange={settSide}
+                onPageChange={setPage}
                 siblingCount={1}
                 boundaryCount={1}
             />
