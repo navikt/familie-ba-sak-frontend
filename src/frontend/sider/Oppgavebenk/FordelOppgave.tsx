@@ -25,8 +25,8 @@ export function FordelOppgave({ oppgave }: Props) {
     const visManglerTilgangModal = useVisManglerTilgangModal();
 
     const { mutateAsync: sjekkSaksbehandlertilgangTilIdent } = useSjekkSaksbehandlertilgangTilIdent();
-    const { mutateAsync: hentFagsakPåPerson } = useHentFagsakPåPerson({ visSystemetLaster: false });
-    const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson({ visSystemetLaster: false });
+    const { mutateAsync: hentFagsakPåPerson } = useHentFagsakPåPerson();
+    const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson();
     const { mutateAsync: fordelOppgave } = useFordelOppgave();
 
     const [laster, settLaster] = useState(false);

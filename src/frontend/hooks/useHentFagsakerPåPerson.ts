@@ -11,15 +11,13 @@ interface Parameters {
     personIdent: string;
 }
 
-type Options = Omit<UseMutationOptions<IMinimalFagsak[], DefaultError, Parameters>, 'mutationKey' | 'mutationFn'> & {
-    visSystemetLaster?: boolean;
-};
+type Options = Omit<UseMutationOptions<IMinimalFagsak[], DefaultError, Parameters>, 'mutationKey' | 'mutationFn'>;
 
-export function useHentFagsakerPåPerson({ visSystemetLaster = true, ...rest }: Options = {}) {
+export function useHentFagsakerPåPerson(options?: Options) {
     return useMutation({
         mutationKey: HentFagsakerPåPersonMutationKeyFactory.hentFagsakerPåPerson(),
         mutationFn: ({ personIdent }: Parameters) => hentFagsaker({ personIdent }),
-        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: visSystemetLaster },
-        ...rest,
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
+        ...options,
     });
 }
