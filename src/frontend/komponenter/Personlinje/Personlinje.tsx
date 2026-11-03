@@ -3,6 +3,7 @@ import { kjønnType } from '@navikt/familie-typer';
 import type { ReactNode } from 'react';
 
 import { useHentPerson } from '../../hooks/useHentPerson';
+import { useErNyttOppsett } from '../../hooks/useKonsept';
 import type { IBehandling } from '../../typer/behandling';
 import type { IMinimalFagsak } from '../../typer/fagsak';
 import { FagsakType } from '../../typer/fagsak';
@@ -73,6 +74,7 @@ export function Personlinje({ bruker, fagsak, handlinger }: Props) {
     // TODO: Dersom bruker også er søker, som ofte er tilfelle, gjør vi et unødvendig kall for å hente person-information om søker (useHentPerson) selv om vi allerede får denne informasjonen fra `bruker`. Dett bør fikses i en senere PR ved å endre til bruk av context for å få global tilgang til bruker og søker fra context, fremfor å passere bruker som prop her, og i tillegg gjøre et kall for å hente søker.
     // TODO : Her burde man håndtere "error" og "isPending" tilstandene
     const { data: søkerData } = useHentPerson({ ident: fagsak?.søkerFødselsnummer });
+    const erNyttOppsett = useErNyttOppsett();
 
     const fagsakeier = utledFagsakeier(bruker, søkerData);
     const søker = utledSøker(fagsak, søkerData);
@@ -109,7 +111,7 @@ export function Personlinje({ bruker, fagsak, handlinger }: Props) {
                         </HStack>
                     </HStack>
                     <Divider />
-                    <BodyShort>{`Kommunenummer: ${fagsakeier.kommunenummer}`}</BodyShort>
+                    <BodyShort>{`${erNyttOppsett ? 'Kommunenummer' : 'Kommunenr'}: ${fagsakeier.kommunenummer}`}</BodyShort>
                     {søker && (
                         <>
                             <Divider />

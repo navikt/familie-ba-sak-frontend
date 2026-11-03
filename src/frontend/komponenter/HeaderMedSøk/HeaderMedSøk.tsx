@@ -2,6 +2,7 @@ import { Header } from '@navikt/familie-header';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { DeployetBranch } from './DeployetBranch';
 import { FagsakDeltagerSøk } from './FagsakDeltagerSøk';
+import { Konseptvelger } from './Konseptvelger';
 
 export function HeaderMedSøk() {
     const saksbehandler = useSaksbehandler();
@@ -25,6 +26,7 @@ export function HeaderMedSøk() {
             ]}
         >
             <DeployetBranch />
+            <Konseptvelger />
             <FagsakDeltagerSøk />
         </Header>
     );

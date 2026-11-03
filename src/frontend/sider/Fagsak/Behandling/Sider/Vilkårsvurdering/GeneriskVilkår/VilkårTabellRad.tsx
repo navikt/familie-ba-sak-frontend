@@ -1,4 +1,5 @@
 import { useBehandlingId } from '@hooks/useBehandlingId';
+import { Konsept, useKonsept } from '@hooks/useKonsept';
 import VilkårResultatIkon from '@ikoner/VilkårResultatIkon';
 import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
@@ -22,6 +23,7 @@ interface Props {
 
 export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, settFokusPåKnapp }: Props) {
     const behandlingId = useBehandlingId();
+    const konsept = useKonsept();
 
     const { erRadEkspandert, toggleRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.id);
 
@@ -70,7 +72,7 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
         >
             <Table.DataCell className={Styles.celle}>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    {vilkårResultat.resultat !== Resultat.IKKE_VURDERT && (
+                    {(konsept === Konsept.DAGENS || vilkårResultat.resultat !== Resultat.IKKE_VURDERT) && (
                         <VilkårResultatIkon
                             resultat={vilkårResultat.resultat}
                             resultatBegrunnelse={vilkårResultat.resultatBegrunnelse}

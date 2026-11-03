@@ -1,13 +1,21 @@
 import { useBehandling } from '@hooks/useBehandling';
+import { Konsept, useKonsept } from '@hooks/useKonsept';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { InfoCard } from '@navikt/ds-react';
 import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
-export function BehandlingPåVentAlert() {
-    const behandling = useBehandling();
+interface Props {
+    /** Konsept 3 viser varselet øverst i behandlingen, ikke på hvert steg */
+    plassering?: 'steg' | 'topp';
+}
 
-    if (!behandling.aktivSettPåVent) {
+export function BehandlingPåVentAlert({ plassering = 'steg' }: Props) {
+    const behandling = useBehandling();
+    const konsept = useKonsept();
+
+    const erRiktigPlassering = (konsept === Konsept.KONSEPT_3) === (plassering === 'topp');
+    if (!behandling.aktivSettPåVent || !erRiktigPlassering) {
         return null;
     }
 

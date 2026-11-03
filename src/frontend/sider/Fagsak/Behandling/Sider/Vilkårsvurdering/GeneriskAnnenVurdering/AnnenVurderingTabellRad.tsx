@@ -1,4 +1,5 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Konsept, useKonsept } from '@hooks/useKonsept';
 import VilkårResultatIkon from '@ikoner/VilkårResultatIkon';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
@@ -20,6 +21,7 @@ interface Props {
 
 export function AnnenVurderingTabellRad({ person, annenVurderingConfig, annenVurdering }: Props) {
     const erLesevisning = useErLesevisning();
+    const konsept = useKonsept();
 
     const [erEkspandert, settErEkspandert] = useState(
         erLesevisning || annenVurdering.resultat === Resultat.IKKE_VURDERT
@@ -67,7 +69,7 @@ export function AnnenVurderingTabellRad({ person, annenVurderingConfig, annenVur
         >
             <Table.DataCell>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    {annenVurdering.resultat !== Resultat.IKKE_VURDERT && (
+                    {(konsept === Konsept.DAGENS || annenVurdering.resultat !== Resultat.IKKE_VURDERT) && (
                         <VilkårResultatIkon resultat={annenVurdering.resultat} />
                     )}
                     <BodyShort>{resultatVisningsnavn[annenVurdering.resultat]}</BodyShort>

@@ -1,3 +1,13 @@
+/* Dagens */
+.container {
+    margin-top: var(--ax-space-64);
+}
+
+.container:last-child {
+    margin-bottom: var(--ax-space-20);
+}
+
+/* Konsept 2 */
 .kort {
     margin-top: var(--ax-space-28);
     border: 1px solid var(--ax-border-neutral-subtle);

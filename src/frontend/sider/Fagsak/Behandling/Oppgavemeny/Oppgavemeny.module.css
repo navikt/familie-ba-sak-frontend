@@ -1,0 +1,68 @@
+.knapp {
+    position: absolute;
+    margin-right: -20px;
+    top: 370px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    background-color: var(--ax-bg-default);
+    z-index: 10;
+}
+
+.gruppeetikett {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ax-text-neutral-subtle);
+}
+
+.liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.kort {
+    display: block;
+    padding: var(--ax-space-8) var(--ax-space-12);
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    background-color: var(--ax-bg-default);
+    color: var(--ax-text-neutral);
+    text-decoration: none;
+}
+
+.tittel {
+    text-decoration: underline;
+    overflow-wrap: anywhere;
+}
+
+.pil {
+    flex-shrink: 0;
+}
+
+.oppgave {
+    border-color: var(--ax-border-accent-subtle);
+    color: var(--ax-text-accent-subtle);
+}
+
+.kort:hover:not(.inaktiv),
+.aktiv {
+    border-color: var(--ax-border-accent);
+    box-shadow: inset 0 0 0 1px var(--ax-border-accent);
+}
+
+.kort:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: 2px;
+}
+
+.inaktiv {
+    color: var(--ax-text-neutral-subtle);
+    cursor: default;
+}
+
+.seAlle {
+    align-self: flex-start;
+}

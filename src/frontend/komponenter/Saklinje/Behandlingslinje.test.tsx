@@ -63,6 +63,8 @@ describe('Behandlingslinje', () => {
         const { screen } = render(<Behandlingslinje />, { wrapper: Wrapper });
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Infotrygd' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Dokumenter' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Meny' })).toBeInTheDocument();
     });
 
@@ -72,6 +74,14 @@ describe('Behandlingslinje', () => {
         await user.click(screen.getByRole('button', { name: 'Saksoversikt' }));
 
         expect(screen.getByRole('heading', { name: 'Saksoversikt' })).toBeInTheDocument();
+    });
+
+    test('skal kunne navigere til dokumenter', async () => {
+        const { screen, user } = render(<Behandlingslinje />, { wrapper: Wrapper });
+
+        await user.click(screen.getByRole('button', { name: 'Dokumenter' }));
+
+        expect(screen.getByRole('heading', { name: 'Dokumenter' })).toBeInTheDocument();
     });
 
     test('skal kunne åpne fagsakmeny', async () => {
@@ -103,6 +113,7 @@ describe('Behandlingslinje', () => {
         });
 
         expect(screen.getByRole('button', { name: 'Saksoversikt' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Dokumenter' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Meny' })).not.toBeInTheDocument();
     });
 });

@@ -2,6 +2,7 @@ import { useFagsakIdParam } from '@hooks/useFagsakIdParam';
 import { useHentDistribusjonskanal } from '@hooks/useHentDistribusjonskanal';
 import { useHentFagsak } from '@hooks/useHentFagsak';
 import { useHentPerson } from '@hooks/useHentPerson';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { useScrollTilAnker } from '@hooks/useScrollTilAnker';
 import { useSyncModiaContext } from '@hooks/useSyncModiaContext';
 import { NotFound } from '@komponenter/Error/NotFound';
@@ -30,7 +31,8 @@ export function Fagsak() {
         error: distribusjonskanalError,
     } = useHentDistribusjonskanal(bruker?.personIdent);
 
-    // På behandlingssidene ligger personlinjen inne i behandlingen, sammen med behandlingens handlinger
+    // I konsept 2 og 3 ligger personlinjen inne i behandlingen, sammen med behandlingens handlinger
+    const erNyttOppsett = useErNyttOppsett();
     const behandlingMatch = useMatch('/fagsak/:fagsakId/:behandlingId/*');
     const erPåBehandling = !Number.isNaN(Number(behandlingMatch?.params.behandlingId));
 
@@ -104,7 +106,7 @@ export function Fagsak() {
                 <BrukerProvider key={bruker.personIdent} bruker={bruker}>
                     <DistribusjonskanalProvider context={distribusjonskanalContext}>
                         <BrevmottakereFagsakProvider>
-                            {!erPåBehandling && <Personlinje bruker={bruker} fagsak={fagsak} />}
+                            {!(erNyttOppsett && erPåBehandling) && <Personlinje bruker={bruker} fagsak={fagsak} />}
                             <Outlet />
                         </BrevmottakereFagsakProvider>
                     </DistribusjonskanalProvider>

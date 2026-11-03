@@ -1,5 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentHistorikkinnslag } from '@hooks/useHentHistorikkinnslag';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
 import { Activity } from 'react';
 
@@ -21,6 +22,9 @@ export function Høyremeny() {
 
     const { erModalÅpen } = useTotrinnskontrollModalContext();
     const { tab, settTab } = useTabContext();
+    const erNyttOppsett = useErNyttOppsett();
+    // Dokumenter-fanen finnes bare i konsept 2 og 3
+    const aktivTab = !erNyttOppsett && tab === Tab.Dokumenter ? Tab.Historikk : tab;
 
     const [erÅpen, settErÅpen] = useHøyremeny();
 
@@ -50,7 +54,12 @@ export function Høyremeny() {
                 <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                     <VStack width={'clamp(20rem, 20vw, 25rem)'}>
                         <Behandlingskort />
-                        <Tabs value={tab} onChange={tab => settTab(tab as Tab)} iconPosition={'top'} size={'small'}>
+                        <Tabs
+                            value={aktivTab}
+                            onChange={tab => settTab(tab as Tab)}
+                            iconPosition={'top'}
+                            size={erNyttOppsett ? 'small' : undefined}
+                        >
                             <Tabvelger />
                             <Tabs.Panel value={Tab.Totrinnskontroll}>
                                 <Totrinnskontroll />
@@ -65,9 +74,11 @@ export function Høyremeny() {
                             <Tabs.Panel value={Tab.Meldinger}>
                                 <Brev />
                             </Tabs.Panel>
-                            <Tabs.Panel value={Tab.Dokumenter}>
-                                <Dokumenter />
-                            </Tabs.Panel>
+                            {erNyttOppsett && (
+                                <Tabs.Panel value={Tab.Dokumenter}>
+                                    <Dokumenter />
+                                </Tabs.Panel>
+                            )}
                         </Tabs>
                     </VStack>
                 </Activity>

@@ -1,4 +1,5 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { Konsept, useKonsept } from '@hooks/useKonsept';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { ChevronDownIcon, ChevronUpIcon, LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
@@ -35,6 +36,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
     const erLesevisning = useErLesevisning();
+    const konsept = useKonsept();
     const [erÅpen, settErÅpen] = useState(true);
 
     const vilkårstatus = utledVilkårstatus(vilkårResultater);
@@ -85,6 +87,54 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
         behandling.steg === BehandlingSteg.VILKÅRSVURDERING &&
         vilkårResultater.some(vilkårResultat => !!vilkårResultat.begrunnelseForManuellKontroll);
 
+    const tabellOgKnapper = (
+        <>
+            <VilkårTabell
+                person={person}
+                vilkårFraConfig={vilkårFraConfig}
+                vilkårResultater={vilkårResultater}
+                settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
+            />
+            {skalViseLeggTilKnapp && (
+                <Box marginBlock={'space-20 space-0'}>
+                    <Button
+                        onClick={() =>
+                            opprettVilkårResultat({
+                                behandlingId: behandling.behandlingId,
+                                personIdent: person.personIdent,
+                                vilkårType: vilkårFraConfig.key,
+                            })
+                        }
+                        id={leggTilPeriodeKnappId}
+                        loading={opprettVilkårResultatIsPending}
+                        variant="tertiary"
+                        size="medium"
+                        icon={<PlusCircleIcon />}
+                    >
+                        Legg til periode
+                    </Button>
+                </Box>
+            )}
+            {skalViseFjernUtvidetBarnetrygdKnapp && <FjernUtvidetBarnetrygdVilkår personIdent={person.personIdent} />}
+        </>
+    );
+
+    if (konsept === Konsept.DAGENS) {
+        return (
+            <div className={styles.container}>
+                <Fieldset error={opprettVilkårResultatError?.message} legend={vilkårFraConfig.tittel} hideLegend>
+                    <HStack gap="space-16" align="center">
+                        {skalViseLyspære && <LightBulbFillIcon fontSize="1.5rem" color="var(--ax-warning-500)" />}
+                        <Heading size="medium" level="3">
+                            {vilkårFraConfig.tittel}
+                        </Heading>
+                    </HStack>
+                    {tabellOgKnapper}
+                </Fieldset>
+            </div>
+        );
+    }
+
     return (
         <section id={generiskVilkårKey} className={classNames(styles.kort, statusklasse[vilkårstatus])}>
             <Heading size="small" level="3" className={styles.kortTittel}>
@@ -110,35 +160,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                 <Box padding="space-16" paddingBlock="space-8 space-16">
                     <Fieldset error={opprettVilkårResultatError?.message} legend={vilkårFraConfig.tittel} hideLegend>
-                        <VilkårTabell
-                            person={person}
-                            vilkårFraConfig={vilkårFraConfig}
-                            vilkårResultater={vilkårResultater}
-                            settFokusPåKnapp={settFokusPåLeggTilPeriodeKnapp}
-                        />
-                        {skalViseLeggTilKnapp && (
-                            <Box marginBlock={'space-20 space-0'}>
-                                <Button
-                                    onClick={() =>
-                                        opprettVilkårResultat({
-                                            behandlingId: behandling.behandlingId,
-                                            personIdent: person.personIdent,
-                                            vilkårType: vilkårFraConfig.key,
-                                        })
-                                    }
-                                    id={leggTilPeriodeKnappId}
-                                    loading={opprettVilkårResultatIsPending}
-                                    variant="tertiary"
-                                    size="medium"
-                                    icon={<PlusCircleIcon />}
-                                >
-                                    Legg til periode
-                                </Button>
-                            </Box>
-                        )}
-                        {skalViseFjernUtvidetBarnetrygdKnapp && (
-                            <FjernUtvidetBarnetrygdVilkår personIdent={person.personIdent} />
-                        )}
+                        {tabellOgKnapper}
                     </Fieldset>
                 </Box>
             </Activity>

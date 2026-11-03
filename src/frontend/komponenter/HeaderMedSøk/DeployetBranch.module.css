@@ -11,3 +11,11 @@
     order: -1;
     padding-inline: var(--ax-space-16);
 }
+
+.konseptvelger {
+    order: -1;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--ax-space-8);
+    background: transparent;
+}

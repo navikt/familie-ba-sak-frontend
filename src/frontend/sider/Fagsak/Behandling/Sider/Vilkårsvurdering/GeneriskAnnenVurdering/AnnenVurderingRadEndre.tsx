@@ -2,12 +2,12 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { Button, Fieldset, HStack } from '@navikt/ds-react';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IAnnenVurderingConfig } from '@typer/vilkår';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { SkjemaRamme } from '../SkjemaRamme';
 import { AnnenVurderingBegrunnelseFelt } from './AnnenVurderingBegrunnelseFelt';
 import { AnnenVurderingResultatFelt } from './AnnenVurderingResultatFelt';
-import type { AnnenVurderingFormValues } from './useAnnenVurderingSkjema';
+import { AnnenVurderingFelt, type AnnenVurderingFormValues } from './useAnnenVurderingSkjema';
 
 interface Props {
     person: IGrunnlagPerson;
@@ -19,8 +19,11 @@ export function AnnenVurderingRadEndre({ person, annenVurderingConfig, onAvbryt 
     const erLesevisning = useErLesevisning();
 
     const {
+        control,
         formState: { isSubmitting, errors },
     } = useFormContext<AnnenVurderingFormValues>();
+
+    const resultat = useWatch({ control, name: AnnenVurderingFelt.RESULTAT });
 
     return (
         <Fieldset
@@ -29,7 +32,7 @@ export function AnnenVurderingRadEndre({ person, annenVurderingConfig, onAvbryt 
             legend={'Skjema for å gjøre vurderingen'}
             hideLegend
         >
-            <SkjemaRamme>
+            <SkjemaRamme lesevisning={erLesevisning} resultat={resultat}>
                 <AnnenVurderingResultatFelt
                     legend={
                         annenVurderingConfig.spørsmål
