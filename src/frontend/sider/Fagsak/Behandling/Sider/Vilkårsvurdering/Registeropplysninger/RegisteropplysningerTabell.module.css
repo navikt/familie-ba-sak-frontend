@@ -1,5 +1,7 @@
 .table {
     margin-left: var(--ax-space-16);
+    /* Fast layout slik at kolonnene står likt i alle tabellene uavhengig av innholdet */
+    table-layout: fixed;
 }
 
 .opplysningsIkon {
