@@ -1,5 +1,6 @@
 import { BodyShort, Box, CopyButton, HStack, Tag } from '@navikt/ds-react';
 import { kjønnType } from '@navikt/familie-typer';
+import type { ReactNode } from 'react';
 
 import { useHentPerson } from '../../hooks/useHentPerson';
 import type { IBehandling } from '../../typer/behandling';
@@ -64,9 +65,11 @@ interface Props {
     bruker?: IPersonInfo;
     fagsak?: IMinimalFagsak;
     behandling?: IBehandling;
+    /** Vises til høyre på linjen, f.eks. lenke til saksoversikten og behandlingsmenyen */
+    handlinger?: ReactNode;
 }
 
-export function Personlinje({ bruker, fagsak }: Props) {
+export function Personlinje({ bruker, fagsak, handlinger }: Props) {
     // TODO: Dersom bruker også er søker, som ofte er tilfelle, gjør vi et unødvendig kall for å hente person-information om søker (useHentPerson) selv om vi allerede får denne informasjonen fra `bruker`. Dett bør fikses i en senere PR ved å endre til bruk av context for å få global tilgang til bruker og søker fra context, fremfor å passere bruker som prop her, og i tillegg gjøre et kall for å hente søker.
     // TODO : Her burde man håndtere "error" og "isPending" tilstandene
     const { data: søkerData } = useHentPerson({ ident: fagsak?.søkerFødselsnummer });
@@ -76,73 +79,76 @@ export function Personlinje({ bruker, fagsak }: Props) {
 
     return (
         <Box borderWidth={'0 0 1 0'} borderColor={'neutral'} paddingInline={'space-16'} paddingBlock={'space-8'}>
-            <HStack align={'center'} gap={'space-12 space-16'}>
+            <HStack align={'center'} justify={'space-between'} gap={'space-12 space-16'}>
                 <HStack align={'center'} gap={'space-12 space-16'}>
-                    <PersonIkon
-                        fagsakType={fagsak?.fagsakType}
-                        kjønn={fagsakeier.kjønn}
-                        erBarn={fagsakeier.alder < 18}
-                        erAdresseBeskyttet={erAdresseBeskyttet(
-                            utledAdressebeskyttelseGradering(fagsak?.fagsakType, bruker, søkerData)
-                        )}
-                        erEgenAnsatt={fagsakeier.erEgenAnsatt}
-                    />
                     <HStack align={'center'} gap={'space-12 space-16'}>
-                        <BodyShort as={'span'} weight={'semibold'}>
-                            {fagsakeier.navn} ({fagsakeier.alder} år)
-                        </BodyShort>
-                        <Divider />
-                        {fagsakeier.harFalskIdentitet && (
-                            <HStack align={'center'} gap={'space-12 space-16'}>
-                                <FalskIdentitet erHeading={false} />
-                                <Divider />
+                        <PersonIkon
+                            fagsakType={fagsak?.fagsakType}
+                            kjønn={fagsakeier.kjønn}
+                            erBarn={fagsakeier.alder < 18}
+                            erAdresseBeskyttet={erAdresseBeskyttet(
+                                utledAdressebeskyttelseGradering(fagsak?.fagsakType, bruker, søkerData)
+                            )}
+                            erEgenAnsatt={fagsakeier.erEgenAnsatt}
+                        />
+                        <HStack align={'center'} gap={'space-12 space-16'}>
+                            <BodyShort as={'span'} weight={'semibold'}>
+                                {fagsakeier.navn} ({fagsakeier.alder} år)
+                            </BodyShort>
+                            <Divider />
+                            {fagsakeier.harFalskIdentitet && (
+                                <HStack align={'center'} gap={'space-12 space-16'}>
+                                    <FalskIdentitet erHeading={false} />
+                                    <Divider />
+                                </HStack>
+                            )}
+                            <HStack align={'center'} gap={'space-4'}>
+                                {fagsakeier.ident}
+                                <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />
                             </HStack>
-                        )}
-                        <HStack align={'center'} gap={'space-4'}>
-                            {fagsakeier.ident}
-                            <CopyButton copyText={fagsakeier.ident.replaceAll(' ', '')} size={'small'} />
                         </HStack>
                     </HStack>
-                </HStack>
-                <Divider />
-                <BodyShort>{`Kommunenr: ${fagsakeier.kommunenummer}`}</BodyShort>
-                {søker && (
-                    <>
-                        <Divider />
-                        <HStack align={'center'} gap={'space-12 space-16'}>
-                            <span>
-                                <BodyShort as={'span'} weight={'semibold'}>
-                                    Søker:{' '}
-                                </BodyShort>
-                                {søker.navn}
-                                {søker.alder && <> ({søker.alder} år)</>}
-                            </span>
+                    <Divider />
+                    <BodyShort>{`Kommunenummer: ${fagsakeier.kommunenummer}`}</BodyShort>
+                    {søker && (
+                        <>
                             <Divider />
-                            <HStack align={'center'} gap={'space-4'}>
-                                {søker.ident}
-                                <CopyButton copyText={søker.ident.replaceAll(' ', '')} size={'small'} />
+                            <HStack align={'center'} gap={'space-12 space-16'}>
+                                <span>
+                                    <BodyShort as={'span'} weight={'semibold'}>
+                                        Søker:{' '}
+                                    </BodyShort>
+                                    {søker.navn}
+                                    {søker.alder && <> ({søker.alder} år)</>}
+                                </span>
+                                <Divider />
+                                <HStack align={'center'} gap={'space-4'}>
+                                    {søker.ident}
+                                    <CopyButton copyText={søker.ident.replaceAll(' ', '')} size={'small'} />
+                                </HStack>
                             </HStack>
-                        </HStack>
-                    </>
-                )}
-                {søkerData && søkerData.dødsfallDato && søkerData.dødsfallDato.length > 0 && (
-                    <>
-                        <Divider />
-                        <DødsfallTag dødsfallDato={søkerData.dødsfallDato} />
-                    </>
-                )}
-                {fagsak?.migreringsdato && sjekkOmMigreringsdatoErEldreEnn3År(fagsak.migreringsdato) && (
-                    <>
-                        <Divider />
-                        <Tag variant={'info'} size={'small'}>
-                            Migrert{' '}
-                            {isoStringTilFormatertString({
-                                isoString: fagsak?.migreringsdato,
-                                tilFormat: Datoformat.DATO,
-                            })}
-                        </Tag>
-                    </>
-                )}
+                        </>
+                    )}
+                    {søkerData && søkerData.dødsfallDato && søkerData.dødsfallDato.length > 0 && (
+                        <>
+                            <Divider />
+                            <DødsfallTag dødsfallDato={søkerData.dødsfallDato} />
+                        </>
+                    )}
+                    {fagsak?.migreringsdato && sjekkOmMigreringsdatoErEldreEnn3År(fagsak.migreringsdato) && (
+                        <>
+                            <Divider />
+                            <Tag variant={'info'} size={'small'}>
+                                Migrert{' '}
+                                {isoStringTilFormatertString({
+                                    isoString: fagsak?.migreringsdato,
+                                    tilFormat: Datoformat.DATO,
+                                })}
+                            </Tag>
+                        </>
+                    )}
+                </HStack>
+                {handlinger}
             </HStack>
         </Box>
     );

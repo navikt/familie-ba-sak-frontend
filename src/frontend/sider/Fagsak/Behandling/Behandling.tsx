@@ -1,5 +1,8 @@
 import { useBehandlingIdParam } from '@hooks/useBehandlingIdParam';
+import { useBruker } from '@hooks/useBruker';
+import { useFagsak } from '@hooks/useFagsak';
 import { NotFound } from '@komponenter/Error/NotFound';
+import { Personlinje } from '@komponenter/Personlinje/Personlinje';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
@@ -23,6 +26,8 @@ export function Behandling() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
 
     const behandlingIdParam = useBehandlingIdParam();
+    const fagsak = useFagsak();
+    const bruker = useBruker();
 
     if (!behandlingIdParam) {
         return <NotFound />;
@@ -39,7 +44,7 @@ export function Behandling() {
                         <KorrigerEtterbetalingModal />
                         <HStack className={Styles.skrollbarStack} wrap={false}>
                             <VStack className={classNames(Styles.skrollbarStack, Styles.hovedområde)}>
-                                <Behandlingslinje />
+                                <Personlinje bruker={bruker} fagsak={fagsak} handlinger={<Behandlingslinje />} />
                                 <Stegvelger />
                                 <HStack className={Styles.skrollbarStack} wrap={false}>
                                     {behandling.personResultater.length > 0 && (
@@ -66,22 +71,28 @@ export function Behandling() {
         }
         case RessursStatus.IKKE_TILGANG:
             return (
-                <GlobalAlert status="warning">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
+                <>
+                    <Personlinje bruker={bruker} fagsak={fagsak} />
+                    <GlobalAlert status="warning">
+                        <GlobalAlert.Header>
+                            <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
+                        </GlobalAlert.Header>
+                    </GlobalAlert>
+                </>
             );
         case RessursStatus.FEILET:
         case RessursStatus.FUNKSJONELL_FEIL:
             return (
-                <GlobalAlert status="error">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
+                <>
+                    <Personlinje bruker={bruker} fagsak={fagsak} />
+                    <GlobalAlert status="error">
+                        <GlobalAlert.Header>
+                            <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
+                        </GlobalAlert.Header>
+                    </GlobalAlert>
+                </>
             );
         default:
-            return <div />;
+            return <Personlinje bruker={bruker} fagsak={fagsak} />;
     }
 }

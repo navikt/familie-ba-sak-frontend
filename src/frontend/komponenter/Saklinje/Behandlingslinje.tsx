@@ -1,64 +1,33 @@
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
-import { FileTextIcon, HouseIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import { Box, Button, HStack } from '@navikt/ds-react';
+import { HouseIcon } from '@navikt/aksel-icons';
+import { Button, HStack } from '@navikt/ds-react';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { FagsakStatus } from '@typer/fagsak';
-import { Link as ReactRouterLink, useLocation } from 'react-router';
+import { Link as ReactRouterLink } from 'react-router';
 import { Behandlingsmeny } from './Meny/Behandlingsmeny';
 
-function lagAktivFaneStyle(fanenavn: string, pathname: string) {
-    const urlSplit = pathname.split('/');
-    const sluttenPåUrl = urlSplit[urlSplit.length - 1];
-    return sluttenPåUrl === fanenavn ? { textDecoration: 'underline' } : {};
-}
-
+/** Handlingene i behandlingen, som vises til høyre i personlinjen. */
 export function Behandlingslinje() {
     const { fagsak } = useFagsakContext();
-    const { pathname } = useLocation();
     const saksbehandler = useSaksbehandler();
 
     return (
-        <Box borderWidth={'0 0 1 0'} borderColor={'neutral-subtle'}>
-            <HStack paddingInline={'space-8 space-16'} paddingBlock={'space-4'} justify={'space-between'}>
-                <HStack>
-                    <Button
-                        as={ReactRouterLink}
-                        size={'small'}
-                        variant={'tertiary'}
-                        icon={<HouseIcon />}
-                        to={`/fagsak/${fagsak.id}/saksoversikt`}
-                        style={lagAktivFaneStyle('saksoversikt', pathname)}
-                    >
-                        Saksoversikt
-                    </Button>
-                    <Button
-                        as={ReactRouterLink}
-                        size={'small'}
-                        variant={'tertiary'}
-                        icon={<MagnifyingGlassIcon />}
-                        to={`/fagsak/${fagsak.id}/infotrygd`}
-                        style={lagAktivFaneStyle('infotrygd', pathname)}
-                    >
-                        Infotrygd
-                    </Button>
-                    <Button
-                        as={ReactRouterLink}
-                        size={'small'}
-                        variant={'tertiary'}
-                        icon={<FileTextIcon />}
-                        to={`/fagsak/${fagsak.id}/dokumenter`}
-                        style={lagAktivFaneStyle('dokumenter', pathname)}
-                    >
-                        Dokumenter
-                    </Button>
-                </HStack>
-                {saksbehandler.harSkrivetilgang && fagsak.status !== FagsakStatus.LÅST && (
-                    <BrevmottakerDialogProvider>
-                        <Behandlingsmeny />
-                    </BrevmottakerDialogProvider>
-                )}
-            </HStack>
-        </Box>
+        <HStack gap={'space-8'} align={'center'} wrap={false}>
+            <Button
+                as={ReactRouterLink}
+                size={'small'}
+                variant={'tertiary'}
+                icon={<HouseIcon aria-hidden />}
+                to={`/fagsak/${fagsak.id}/saksoversikt`}
+            >
+                Saksoversikt
+            </Button>
+            {saksbehandler.harSkrivetilgang && fagsak.status !== FagsakStatus.LÅST && (
+                <BrevmottakerDialogProvider>
+                    <Behandlingsmeny />
+                </BrevmottakerDialogProvider>
+            )}
+        </HStack>
     );
 }

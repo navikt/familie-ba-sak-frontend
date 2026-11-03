@@ -8,7 +8,7 @@ import { NotFound } from '@komponenter/Error/NotFound';
 import { Personlinje } from '@komponenter/Personlinje/Personlinje';
 import { Box, GlobalAlert, HStack, Loader } from '@navikt/ds-react';
 import { FagsakType } from '@typer/fagsak';
-import { Outlet } from 'react-router';
+import { Outlet, useMatch } from 'react-router';
 import { BrevmottakereFagsakProvider } from './BrevmottakereFagsakContext';
 import { BrukerProvider } from './BrukerContext';
 import { DistribusjonskanalProvider } from './DistribusjonskanalProvider';
@@ -29,6 +29,10 @@ export function Fagsak() {
         isPending: isPendingDistribusjonskanal,
         error: distribusjonskanalError,
     } = useHentDistribusjonskanal(bruker?.personIdent);
+
+    // På behandlingssidene ligger personlinjen inne i behandlingen, sammen med behandlingens handlinger
+    const behandlingMatch = useMatch('/fagsak/:fagsakId/:behandlingId/*');
+    const erPåBehandling = !Number.isNaN(Number(behandlingMatch?.params.behandlingId));
 
     useScrollTilAnker();
     useSyncModiaContext(bruker);
@@ -100,7 +104,7 @@ export function Fagsak() {
                 <BrukerProvider key={bruker.personIdent} bruker={bruker}>
                     <DistribusjonskanalProvider context={distribusjonskanalContext}>
                         <BrevmottakereFagsakProvider>
-                            <Personlinje bruker={bruker} fagsak={fagsak} />
+                            {!erPåBehandling && <Personlinje bruker={bruker} fagsak={fagsak} />}
                             <Outlet />
                         </BrevmottakereFagsakProvider>
                     </DistribusjonskanalProvider>
