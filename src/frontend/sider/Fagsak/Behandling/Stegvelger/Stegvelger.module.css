@@ -1,0 +1,80 @@
+.stegvelger {
+    padding: var(--ax-space-8) var(--ax-space-16) var(--ax-space-8);
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+    overflow-x: auto;
+}
+
+/* Statusstripen under hvert steg tegnes med ::after slik at den kan være stiplet for steg som pågår */
+.steg {
+    --stripefarge: var(--ax-bg-neutral-moderate);
+    --stripefarge-valgt: var(--ax-border-neutral-subtle);
+
+    position: relative;
+    flex: 1 1 0;
+    min-width: 8rem;
+    padding: var(--ax-space-6) var(--ax-space-4) var(--ax-space-12);
+    border-radius: var(--ax-radius-4) var(--ax-radius-4) 0 0;
+    color: var(--ax-text-neutral);
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: text;
+}
+
+.steg::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 5px;
+    border-radius: var(--ax-radius-full);
+    background: var(--stripefarge);
+}
+
+.steg.valgt::after {
+    background: var(--stripefarge-valgt);
+}
+
+.steg:hover:not(.ikkeStartet) {
+    background-color: var(--ax-bg-neutral-soft);
+}
+
+.steg:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: -3px;
+}
+
+.valgt .navn {
+    font-weight: var(--ax-font-weight-bold);
+}
+
+.ferdig {
+    --stripefarge: var(--ax-border-success-subtle);
+    --stripefarge-valgt: var(--ax-border-success);
+}
+
+.advarsel {
+    --stripefarge: var(--ax-border-warning-subtle);
+    --stripefarge-valgt: var(--ax-border-warning);
+}
+
+.paagaar.steg::after {
+    background: repeating-linear-gradient(-45deg, var(--ax-border-success-subtle) 0 8px, transparent 8px 13px);
+}
+
+.paagaar.steg.valgt::after {
+    background: repeating-linear-gradient(-45deg, var(--ax-border-success) 0 8px, transparent 8px 13px);
+}
+
+.ikkeStartet {
+    color: var(--ax-text-neutral-subtle);
+    cursor: default;
+}
+
+.ikonFerdig {
+    flex-shrink: 0;
+    color: var(--ax-text-success-decoration);
+}
+
+.ikonAdvarsel {
+    flex-shrink: 0;
+    color: var(--ax-text-warning-decoration);
+}

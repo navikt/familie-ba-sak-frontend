@@ -1,0 +1,118 @@
+.knapp {
+    position: absolute;
+    margin-right: -20px;
+    top: 370px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    background-color: var(--ax-bg-default);
+    z-index: 10;
+}
+
+.overskrift {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ax-text-neutral-subtle);
+    padding: var(--ax-space-16) var(--ax-space-16) var(--ax-space-8);
+}
+
+.person {
+    border-left: 4px solid transparent;
+    padding-block: var(--ax-space-6);
+    padding-inline: var(--ax-space-4) var(--ax-space-24);
+}
+
+.person.valgt {
+    background-color: var(--ax-bg-neutral-soft);
+    border-left-color: var(--ax-border-accent);
+}
+
+.personrad {
+    min-height: var(--ax-space-28);
+}
+
+.caret {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ax-space-24);
+    height: var(--ax-space-24);
+    padding: 0;
+    border: none;
+    border-radius: var(--ax-radius-4);
+    background: none;
+    color: var(--ax-text-neutral);
+    cursor: pointer;
+}
+
+.caret:hover {
+    background-color: var(--ax-bg-neutral-moderate-hover);
+}
+
+.caret:focus-visible,
+.personlenke:focus-visible,
+.underlenke:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: -3px;
+}
+
+.personlenke {
+    flex: 1;
+    min-width: 0;
+    color: var(--ax-text-neutral);
+    text-decoration: none;
+    border-radius: var(--ax-radius-4);
+}
+
+.personlenke:hover,
+.underlenke:hover {
+    text-decoration: underline;
+}
+
+.teller {
+    color: var(--ax-text-neutral-subtle);
+}
+
+.ident {
+    padding-left: var(--ax-space-28);
+}
+
+.liste {
+    list-style: none;
+    margin: var(--ax-space-4) 0 0;
+    padding: 0 0 0 var(--ax-space-28);
+}
+
+.underlenke {
+    display: block;
+    padding-block: var(--ax-space-2);
+    color: var(--ax-text-neutral);
+    text-decoration: none;
+    border-radius: var(--ax-radius-4);
+}
+
+.vurdertAv {
+    color: var(--ax-text-neutral-subtle);
+}
+
+.inaktiv {
+    color: var(--ax-text-neutral-decoration);
+}
+
+.ikonVurdert {
+    flex-shrink: 0;
+    color: var(--ax-text-success-decoration);
+}
+
+.ikonOppmerksomhet {
+    flex-shrink: 0;
+    color: var(--ax-text-warning-decoration);
+}
+
+.ikonIkkeVurdert {
+    flex-shrink: 0;
+    color: var(--ax-text-neutral-subtle);
+}

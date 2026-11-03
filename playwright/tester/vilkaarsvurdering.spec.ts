@@ -22,21 +22,25 @@ test.describe('Vilkårsvurdering', () => {
         await page.goto('/fagsak/1/1/vilkaarsvurdering');
 
         await expect(page.getByRole('heading', { name: 'Vilkårsvurdering', level: 1 })).toBeVisible();
-        await expect(page.getByRole('heading', { name: new RegExp(`^${SØKER_NAVN}`) })).toBeVisible();
-        await expect(page.getByRole('heading', { name: new RegExp(`^${BARN_NAVN}`) })).toBeVisible();
+        // Søker vises først, de andre personene velges i personmenyen til venstre
+        await expect(page.getByRole('region', { name: SØKER_NAVN })).toBeVisible();
+        await expect(page.getByRole('region', { name: BARN_NAVN })).toBeHidden();
+        await expect(page.getByRole('heading', { name: 'Bosatt i riket' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Lovlig opphold' })).toBeVisible();
+        await expect(page.getByRole('cell', { name: 'Oppfylt' })).toHaveCount(2);
 
-        // Personer der alle vilkår er vurdert vises lukket. Knappen bytter navn når den trykkes, så .first() treffer
-        // neste person hver gang.
-        const visVilkårsvurdering = page.getByRole('button', { name: 'Vis vilkårsvurdering' });
-        await expect(visVilkårsvurdering).toHaveCount(2);
-        await visVilkårsvurdering.first().click();
-        await visVilkårsvurdering.first().click();
+        await page
+            .getByRole('navigation', { name: 'Personer i behandlingen' })
+            .getByRole('link', { name: /Barn \(\d+ år\)/ })
+            .click();
 
-        await expect(page.getByRole('heading', { name: 'Bosatt i riket' })).toHaveCount(2);
-        await expect(page.getByRole('heading', { name: 'Lovlig opphold' })).toHaveCount(2);
+        await expect(page.getByRole('region', { name: BARN_NAVN })).toBeVisible();
+        await expect(page.getByRole('region', { name: SØKER_NAVN })).toBeHidden();
+        await expect(page.getByRole('heading', { name: 'Bosatt i riket' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Lovlig opphold' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Under 18 år' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Bor fast hos søker' })).toBeVisible();
-        await expect(page.getByRole('cell', { name: 'Oppfylt' })).toHaveCount(7);
+        await expect(page.getByRole('cell', { name: 'Oppfylt' })).toHaveCount(5);
     });
 
     test('skal ikke gå videre før alle vilkår er vurdert', async ({ page, apiMock }) => {

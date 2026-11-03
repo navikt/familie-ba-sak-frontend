@@ -5,3 +5,31 @@
     background-color: white;
     padding-bottom: 1rem;
 }
+
+.personkort {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    scroll-margin-top: var(--ax-space-16);
+}
+
+.personkortHeader {
+    padding: var(--ax-space-8) var(--ax-space-16);
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
+    background-color: var(--ax-bg-neutral-soft);
+}
+
+.personkortHeader[data-lukket="true"] {
+    border-bottom: none;
+    border-radius: var(--ax-radius-8);
+}
+
+.seksjonsoverskrift {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ax-text-neutral-subtle);
+}
+
+.skillelinje {
+    color: var(--ax-text-neutral-subtle);
+}

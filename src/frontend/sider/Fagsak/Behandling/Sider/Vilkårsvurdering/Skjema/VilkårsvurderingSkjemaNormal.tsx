@@ -1,11 +1,8 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
-import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
-import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
-import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, ErrorMessage, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
+import { PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Detail, ErrorMessage, Heading, HStack, List, LocalAlert, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
     BehandlingSteg,
@@ -13,25 +10,24 @@ import {
     kanLeggeTilUtvidetVilkår,
 } from '@typer/behandling';
 import { PersonType } from '@typer/person';
-import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår';
-import { Activity } from 'react';
+import { annenVurderingConfig, VilkårType } from '@typer/vilkår';
+import { useLocation } from 'react-router';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
-import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
 import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
+import { finnValgtPersonIndex, finnVilkårForPerson, lagPersonHash, lagVilkårHash } from '../vilkårstatus';
+import { Personkort } from './Personkort';
 import styles from './VilkårsvurderingSkjema.module.css';
 
 export function VilkårsvurderingSkjemaNormal() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
-    const { erPanelEkspandert, togglePanel } = useEkspanderbareVilkårsvurderingPaneler();
-
-    const skjermstørrelse = useSkjermstørrelse();
+    const { hash } = useLocation();
     const erLesevisning = useErLesevisning();
 
-    const erStorSkjerm = skjermstørrelse > Skjermstørrelse['2XL'];
+    const valgtIndex = finnValgtPersonIndex(hash, vilkårsvurdering);
 
     const {
         mutate: opprettVilkårResultat,
@@ -86,7 +82,10 @@ export function VilkårsvurderingSkjemaNormal() {
                 </LocalAlert>
             )}
             {vilkårsvurdering.map((personResultat, index) => {
-                const skrollHash = `${index}_${personResultat.person.fødselsdato}`;
+                if (index !== valgtIndex) {
+                    return null;
+                }
+                const skrollHash = lagPersonHash(index, personResultat);
                 const ident = personResultat.personIdent;
                 const erSøker = personResultat.person.type === PersonType.SØKER;
                 const andreVurderinger = personResultat.andreVurderinger;
@@ -100,8 +99,6 @@ export function VilkårsvurderingSkjemaNormal() {
 
                 const skalViseKopierVilkårFraSøkerTilBarna =
                     !erLesevisning && erSøker && erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna(behandling);
-
-                const erEkspandert = erPanelEkspandert(ident);
 
                 return (
                     <div key={personResultat.person.personIdent} id={skrollHash}>
@@ -117,106 +114,55 @@ export function VilkårsvurderingSkjemaNormal() {
                                 </Heading>
                             </HStack>
                         ) : (
-                            <>
-                                <Stack
-                                    direction={erStorSkjerm ? 'row' : 'column'}
-                                    gap={'space-8'}
-                                    justify={'space-between'}
-                                    wrap={true}
-                                    className={styles.personLinje}
-                                >
-                                    <PersonInformasjon person={personResultat.person} />
-                                    <HStack gap={'space-8'} justify={'space-between'} wrap={false}>
-                                        {erEkspandert && skalKunneLeggeTilUtvidetBarnetrygdVilkår && (
-                                            <Button
-                                                variant={'tertiary'}
-                                                size={erStorSkjerm ? 'medium' : 'small'}
-                                                onClick={() => leggTilVilkårUtvidet(ident)}
-                                                loading={opprettVilkårResultatIsPending}
-                                                icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
-                                            >
-                                                Legg til vilkår utvidet barnetrygd
-                                            </Button>
-                                        )}
+                            <VStack gap="space-16">
+                                <Personkort key={ident} person={personResultat.person} />
+                                <HStack justify="space-between" align="center" marginBlock="space-16 space-0">
+                                    <Detail className={styles.seksjonsoverskrift}>Vilkår</Detail>
+                                    {skalKunneLeggeTilUtvidetBarnetrygdVilkår && (
                                         <Button
                                             variant={'tertiary'}
-                                            size={erStorSkjerm ? 'medium' : 'small'}
-                                            onClick={() => togglePanel(ident)}
-                                            icon={
-                                                erEkspandert ? (
-                                                    <ChevronUpIcon aria-hidden />
-                                                ) : (
-                                                    <ChevronDownIcon aria-hidden />
-                                                )
-                                            }
-                                            iconPosition={'right'}
+                                            size={'small'}
+                                            onClick={() => leggTilVilkårUtvidet(ident)}
+                                            loading={opprettVilkårResultatIsPending}
+                                            icon={<PlusCircleIcon title="Legg til vilkår utvidet barnetrygd" />}
                                         >
-                                            {erEkspandert ? 'Skjul vilkårsvurdering' : 'Vis vilkårsvurdering'}
+                                            Legg til vilkår utvidet barnetrygd
                                         </Button>
-                                    </HStack>
-                                </Stack>
+                                    )}
+                                </HStack>
                                 {erSøker && opprettVilkårResultatError && (
                                     <ErrorMessage>{opprettVilkårResultatError.message}</ErrorMessage>
                                 )}
-                                <Activity mode={erEkspandert ? 'visible' : 'hidden'}>
-                                    <Box paddingInline={erStorSkjerm ? 'space-56 space-0' : 'space-0'}>
-                                        {personResultat.person.registerhistorikk ? (
-                                            <Registeropplysninger
-                                                registerHistorikk={personResultat.person.registerhistorikk}
-                                                fødselsdato={personResultat.person.fødselsdato}
+                                <div>
+                                    {finnVilkårForPerson(personResultat).map(
+                                        ({ vilkårFraConfig, vilkårResultater }) => (
+                                            <GeneriskVilkår
+                                                key={vilkårFraConfig.key}
+                                                generiskVilkårKey={lagVilkårHash(skrollHash, vilkårFraConfig)}
+                                                person={personResultat.person}
+                                                vilkårResultater={vilkårResultater}
+                                                vilkårFraConfig={vilkårFraConfig}
                                             />
-                                        ) : (
-                                            <LocalAlert status="warning">
-                                                <LocalAlert.Header>
-                                                    <LocalAlert.Title>
-                                                        Klarte ikke hente registeropplysninger
-                                                    </LocalAlert.Title>
-                                                </LocalAlert.Header>
-                                            </LocalAlert>
-                                        )}
-                                        {Object.values(vilkårConfig)
-                                            .filter(vc => vc.parterDetteGjelderFor.includes(personResultat.person.type))
-                                            .map(vc => {
-                                                const vilkårResultater = personResultat.vilkårResultater.filter(
-                                                    vilkårResultat => vilkårResultat.vilkårType === vc.key
-                                                );
-
-                                                if (
-                                                    vilkårResultater.length === 0 &&
-                                                    personResultat.person.type === PersonType.SØKER
+                                        )
+                                    )}
+                                    {andreVurderinger.length > 0 &&
+                                        Object.values(annenVurderingConfig)
+                                            .filter(annenVurderingConfig =>
+                                                annenVurderingConfig.parterDetteGjelderFor.includes(
+                                                    personResultat.person.type
                                                 )
-                                                    return undefined;
-                                                // For barn ønsker vi alltid å rendre alle vilkår slik at man evt kan legge til tom periode
-                                                else
-                                                    return (
-                                                        <GeneriskVilkår
-                                                            key={vc.key}
-                                                            generiskVilkårKey={`${index}_${personResultat.person.fødselsdato}_${vc.key}`}
-                                                            person={personResultat.person}
-                                                            vilkårResultater={vilkårResultater}
-                                                            vilkårFraConfig={vc}
-                                                        />
-                                                    );
-                                            })}
-                                        {andreVurderinger.length > 0 &&
-                                            Object.values(annenVurderingConfig)
-                                                .filter(annenVurderingConfig =>
-                                                    annenVurderingConfig.parterDetteGjelderFor.includes(
-                                                        personResultat.person.type
-                                                    )
-                                                )
-                                                .map(annenVurderingConfig => (
-                                                    <GeneriskAnnenVurdering
-                                                        key={annenVurderingConfig.key}
-                                                        person={personResultat.person}
-                                                        andreVurderinger={personResultat.andreVurderinger}
-                                                        annenVurderingConfig={annenVurderingConfig}
-                                                    />
-                                                ))}
-                                        {skalViseKopierVilkårFraSøkerTilBarna && <KopierVilkårFraSøkerTilBarna />}
-                                    </Box>
-                                </Activity>
-                            </>
+                                            )
+                                            .map(annenVurderingConfig => (
+                                                <GeneriskAnnenVurdering
+                                                    key={annenVurderingConfig.key}
+                                                    person={personResultat.person}
+                                                    andreVurderinger={personResultat.andreVurderinger}
+                                                    annenVurderingConfig={annenVurderingConfig}
+                                                />
+                                            ))}
+                                </div>
+                                {skalViseKopierVilkårFraSøkerTilBarna && <KopierVilkårFraSøkerTilBarna />}
+                            </VStack>
                         )}
                     </div>
                 );

@@ -69,7 +69,7 @@ test.describe('Behandlingsresultat', () => {
             page.getByRole('heading', { name: format(new Date(), 'MMMM yyyy', { locale: nb }) })
         ).toBeVisible();
         await expect(page.getByText(`${BARN_NAVN} (`)).toBeVisible();
-        await expect(page.getByText('Ordinær', { exact: true })).toBeVisible();
+        await expect(page.locator('#skjemasteg').getByText('Ordinær', { exact: true })).toBeVisible();
         await expect(page.getByText('Totalt utbetalt per mnd')).toBeVisible();
         await expect(page.getByText(/^2\s012 kr$/)).toHaveCount(2);
 

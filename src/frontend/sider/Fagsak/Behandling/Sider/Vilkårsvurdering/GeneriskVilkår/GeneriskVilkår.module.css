@@ -1,7 +1,64 @@
-.container {
-    margin-top: var(--ax-space-64);
+.kort {
+    margin-top: var(--ax-space-16);
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    background-color: var(--ax-bg-default);
+    scroll-margin-top: var(--ax-space-16);
 }
 
-.container:last-child {
+.kort:last-child {
     margin-bottom: var(--ax-space-20);
+}
+
+.kortTittel {
+    margin: 0;
+}
+
+.kortHeader {
+    font: inherit;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ax-space-8);
+    padding: var(--ax-space-12) var(--ax-space-16);
+    border: none;
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
+    background-color: var(--ax-bg-neutral-soft);
+    color: var(--ax-text-neutral);
+    text-align: left;
+    cursor: pointer;
+}
+
+.kortHeader[aria-expanded="false"] {
+    border-bottom: none;
+    border-radius: var(--ax-radius-8);
+}
+
+.kortHeader:hover {
+    background-color: var(--ax-bg-neutral-moderate-hover);
+}
+
+.kortHeader:focus-visible {
+    outline: 3px solid var(--ax-border-focus);
+    outline-offset: -3px;
+}
+
+.vurdert {
+    border-color: var(--ax-border-success-subtle);
+}
+
+.vurdert .kortHeader {
+    background-color: var(--ax-bg-success-soft);
+    border-bottom-color: var(--ax-border-success-subtle);
+}
+
+.trengerOppmerksomhet {
+    border-color: var(--ax-border-warning-subtle);
+}
+
+.trengerOppmerksomhet .kortHeader {
+    background-color: var(--ax-bg-warning-soft);
+    border-bottom-color: var(--ax-border-warning-subtle);
 }

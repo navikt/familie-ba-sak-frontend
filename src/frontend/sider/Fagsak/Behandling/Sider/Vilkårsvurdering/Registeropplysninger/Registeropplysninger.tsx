@@ -21,25 +21,31 @@ import RegisteropplysningerTabell from './RegisteropplysningerTabell';
 interface IRegisteropplysningerProps {
     registerHistorikk: IRestRegisterhistorikk;
     fødselsdato: string;
+    /** Skjuler overskrift og hentet-tidspunkt, og bruker full bredde. Brukes inne i personkortet. */
+    kompakt?: boolean;
 }
 
-const Registeropplysninger = ({ registerHistorikk, fødselsdato }: IRegisteropplysningerProps) => {
+const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false }: IRegisteropplysningerProps) => {
     const personErDød = registerHistorikk.dødsboadresse.length > 0;
     const toggles = useFeatureToggles();
 
     return (
         <>
-            <Heading className={styles.regularHeading} level={'3'} size="medium">
-                Registeropplysninger
-            </Heading>
-            <Box width={'32rem'}>
-                <Detail className={styles.detail}>
-                    {'Sist hentet fra Folkeregisteret ' +
-                        isoStringTilFormatertString({
-                            isoString: registerHistorikk.hentetTidspunkt,
-                            tilFormat: Datoformat.DATO_TID_SEKUNDER,
-                        })}
-                </Detail>
+            {!kompakt && (
+                <Heading className={styles.regularHeading} level={'3'} size="medium">
+                    Registeropplysninger
+                </Heading>
+            )}
+            <Box width={kompakt ? '100%' : '32rem'}>
+                {!kompakt && (
+                    <Detail className={styles.detail}>
+                        {'Sist hentet fra Folkeregisteret ' +
+                            isoStringTilFormatertString({
+                                isoString: registerHistorikk.hentetTidspunkt,
+                                tilFormat: Datoformat.DATO_TID_SEKUNDER,
+                            })}
+                    </Detail>
+                )}
                 <RegisteropplysningerTabell
                     opplysningstype={Registeropplysning.FØDSELSDATO}
                     ikon={<CalendarIcon fontSize={'1.5rem'} title="Kalender-ikon" focusable="false" />}

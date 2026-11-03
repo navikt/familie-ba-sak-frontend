@@ -24,3 +24,8 @@
     overflow-y: auto;
     border-left: 1px solid var(--ax-border-neutral);
 }
+
+.hovedområde {
+    flex: 1;
+    min-width: 0;
+}

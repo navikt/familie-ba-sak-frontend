@@ -6,6 +6,7 @@ import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/Henleg
 import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import { KontrollsiderProvider } from '@sider/Fagsak/Behandling/KontrollsiderContext';
+import classNames from 'classnames';
 import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
@@ -14,8 +15,9 @@ import { useHentOgSettBehandlingContext } from './context/HentOgSettBehandlingCo
 import { Høyremeny } from './Høyremeny/Høyremeny';
 import { TabContextProvider } from './Høyremeny/TabContextProvider';
 import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
+import { Personmeny } from './Personmeny/Personmeny';
 import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
-import { Venstremeny } from './Venstremeny/Venstremeny';
+import { Stegvelger } from './Stegvelger/Stegvelger';
 
 export function Behandling() {
     const { behandlingRessurs } = useHentOgSettBehandlingContext();
@@ -35,24 +37,29 @@ export function Behandling() {
                         <HenleggBehandlingModal />
                         <HenleggBehandlingVeivalgModal />
                         <KorrigerEtterbetalingModal />
-                        <VStack className={Styles.skrollbarStack}>
-                            <Behandlingslinje />
-                            <HStack className={Styles.skrollbarStack}>
-                                <Box className={Styles.venstreKolonne}>
-                                    <Venstremeny />
-                                </Box>
-                                <Box className={Styles.midtreKolonne}>
-                                    <Outlet />
-                                </Box>
-                                <Box className={Styles.høyreKolonne}>
-                                    <TotrinnskontrollModalContextProvider>
-                                        <TabContextProvider>
-                                            <Høyremeny />
-                                        </TabContextProvider>
-                                    </TotrinnskontrollModalContextProvider>
-                                </Box>
-                            </HStack>
-                        </VStack>
+                        <HStack className={Styles.skrollbarStack} wrap={false}>
+                            <VStack className={classNames(Styles.skrollbarStack, Styles.hovedområde)}>
+                                <Behandlingslinje />
+                                <Stegvelger />
+                                <HStack className={Styles.skrollbarStack} wrap={false}>
+                                    {behandling.personResultater.length > 0 && (
+                                        <Box className={Styles.venstreKolonne}>
+                                            <Personmeny />
+                                        </Box>
+                                    )}
+                                    <Box className={Styles.midtreKolonne}>
+                                        <Outlet />
+                                    </Box>
+                                </HStack>
+                            </VStack>
+                            <Box className={Styles.høyreKolonne}>
+                                <TotrinnskontrollModalContextProvider>
+                                    <TabContextProvider>
+                                        <Høyremeny />
+                                    </TabContextProvider>
+                                </TotrinnskontrollModalContextProvider>
+                            </Box>
+                        </HStack>
                     </KontrollsiderProvider>
                 </BehandlingProvider>
             );

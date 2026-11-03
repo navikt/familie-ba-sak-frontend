@@ -4,6 +4,15 @@ import { useLocation } from 'react-router';
 
 const MAX_OBSERVASJONSTID = 3000;
 
+/** Ankere med æøå (f.eks. vilkårtyper) ligger URL-kodet i location.hash. */
+export function dekodAnker(anker: string) {
+    try {
+        return decodeURIComponent(anker);
+    } catch {
+        return anker;
+    }
+}
+
 export function useScrollTilAnker() {
     const { hash, key } = useLocation();
 
@@ -12,7 +21,7 @@ export function useScrollTilAnker() {
             return;
         }
 
-        const targetId = hash.slice(1); // Fjerner '#
+        const targetId = dekodAnker(hash.slice(1)); // Fjerner '#'
 
         function scrollToElement() {
             const element = document.getElementById(targetId);

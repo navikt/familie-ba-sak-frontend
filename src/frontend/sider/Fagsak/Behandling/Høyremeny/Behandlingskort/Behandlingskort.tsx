@@ -1,4 +1,4 @@
-import { BodyShort, Box, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { TextDangerSubtle, TextInfoSubtle, TextNeutral, TextSuccessSubtle } from '@navikt/ds-tokens/dist/tokens';
 import type { AkselColoredBorderToken } from '@navikt/ds-tokens/types';
 import { useBehandling } from '../../../../../hooks/useBehandling';
@@ -60,10 +60,12 @@ function hentResultatfargeTekst(behandlingResultat: BehandlingResultat) {
     }
 }
 
-function utledSakstype(behandling: IBehandling) {
-    const kategori = behandling?.kategori && behandlingKategori[behandling.kategori];
-    const underkategori = behandling?.underkategori && behandlingUnderkategori[behandling.underkategori].toLowerCase();
-    return [kategori, underkategori].filter(Boolean).join(', ');
+function utledTagger(behandling: IBehandling): string[] {
+    return [
+        behandling.kategori && behandlingKategori[behandling.kategori],
+        behandling.underkategori && behandlingUnderkategori[behandling.underkategori],
+        behandlingÅrsak[behandling.årsak],
+    ].filter((tagg): tagg is string => !!tagg);
 }
 
 export function Behandlingskort() {
@@ -84,13 +86,16 @@ export function Behandlingskort() {
         >
             <Box borderWidth="0 0 1 0" borderColor="neutral-subtle">
                 <VStack gap="space-4" marginBlock="space-0 space-8">
+                    <Heading size={'xsmall'} level={'2'}>
+                        {`${behandlingstyper[behandling.type].navn} (${behandlingIndex}/${antallBehandlinger})`}
+                    </Heading>
                     <HStack gap={'space-4'}>
-                        <Heading size={'xsmall'} level={'2'}>
-                            {`${behandlingstyper[behandling.type].navn} (${behandlingIndex}/${antallBehandlinger})`}
-                        </Heading>
-                        <BodyShort>{utledSakstype(behandling)}</BodyShort>
+                        {utledTagger(behandling).map(tagg => (
+                            <Tag key={tagg} variant={'moderate'} data-color={'neutral'} size={'xsmall'}>
+                                {tagg}
+                            </Tag>
+                        ))}
                     </HStack>
-                    <BodyShort>{behandlingÅrsak[behandling.årsak]}</BodyShort>
                 </VStack>
             </Box>
             <VStack gap="space-16" marginBlock="space-12 space-0">
