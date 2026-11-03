@@ -1,558 +1,4 @@
-export type Regionkode =
-    | 'AD'
-    | 'AE'
-    | 'AF'
-    | 'AG'
-    | 'AI'
-    | 'AL'
-    | 'AM'
-    | 'AO'
-    | 'AQ'
-    | 'AR'
-    | 'AS'
-    | 'AT'
-    | 'AU'
-    | 'AW'
-    | 'AX'
-    | 'AZ'
-    | 'BA'
-    | 'BB'
-    | 'BD'
-    | 'BE'
-    | 'BF'
-    | 'BG'
-    | 'BH'
-    | 'BI'
-    | 'BJ'
-    | 'BL'
-    | 'BM'
-    | 'BN'
-    | 'BO'
-    | 'BQ'
-    | 'BR'
-    | 'BS'
-    | 'BT'
-    | 'BV'
-    | 'BW'
-    | 'BY'
-    | 'BZ'
-    | 'CA'
-    | 'CC'
-    | 'CD'
-    | 'CF'
-    | 'CG'
-    | 'CH'
-    | 'CI'
-    | 'CK'
-    | 'CL'
-    | 'CM'
-    | 'CN'
-    | 'CO'
-    | 'CR'
-    | 'CU'
-    | 'CV'
-    | 'CW'
-    | 'CX'
-    | 'CY'
-    | 'CZ'
-    | 'DE'
-    | 'DJ'
-    | 'DK'
-    | 'DM'
-    | 'DO'
-    | 'DZ'
-    | 'EC'
-    | 'EE'
-    | 'EG'
-    | 'EH'
-    | 'ER'
-    | 'ES'
-    | 'ET'
-    | 'FI'
-    | 'FJ'
-    | 'FK'
-    | 'FM'
-    | 'FO'
-    | 'FR'
-    | 'GA'
-    | 'GB'
-    | 'GD'
-    | 'GE'
-    | 'GF'
-    | 'GG'
-    | 'GH'
-    | 'GI'
-    | 'GL'
-    | 'GM'
-    | 'GN'
-    | 'GP'
-    | 'GQ'
-    | 'GR'
-    | 'GS'
-    | 'GT'
-    | 'GU'
-    | 'GW'
-    | 'GY'
-    | 'HK'
-    | 'HM'
-    | 'HN'
-    | 'HR'
-    | 'HT'
-    | 'HU'
-    | 'ID'
-    | 'IE'
-    | 'IL'
-    | 'IM'
-    | 'IN'
-    | 'IO'
-    | 'IQ'
-    | 'IR'
-    | 'IS'
-    | 'IT'
-    | 'JE'
-    | 'JM'
-    | 'JO'
-    | 'JP'
-    | 'KE'
-    | 'KG'
-    | 'KH'
-    | 'KI'
-    | 'KM'
-    | 'KN'
-    | 'KP'
-    | 'KR'
-    | 'KW'
-    | 'KY'
-    | 'KZ'
-    | 'LA'
-    | 'LB'
-    | 'LC'
-    | 'LI'
-    | 'LK'
-    | 'LR'
-    | 'LS'
-    | 'LT'
-    | 'LU'
-    | 'LV'
-    | 'LY'
-    | 'MA'
-    | 'MC'
-    | 'MD'
-    | 'ME'
-    | 'MF'
-    | 'MG'
-    | 'MH'
-    | 'MK'
-    | 'ML'
-    | 'MM'
-    | 'MN'
-    | 'MO'
-    | 'MP'
-    | 'MQ'
-    | 'MR'
-    | 'MS'
-    | 'MT'
-    | 'MU'
-    | 'MV'
-    | 'MW'
-    | 'MX'
-    | 'MY'
-    | 'MZ'
-    | 'NA'
-    | 'NC'
-    | 'NE'
-    | 'NF'
-    | 'NG'
-    | 'NI'
-    | 'NL'
-    | 'NO'
-    | 'NP'
-    | 'NR'
-    | 'NU'
-    | 'NZ'
-    | 'OM'
-    | 'PA'
-    | 'PE'
-    | 'PF'
-    | 'PG'
-    | 'PH'
-    | 'PK'
-    | 'PL'
-    | 'PM'
-    | 'PN'
-    | 'PR'
-    | 'PS'
-    | 'PT'
-    | 'PW'
-    | 'PY'
-    | 'QA'
-    | 'RE'
-    | 'RO'
-    | 'RS'
-    | 'RU'
-    | 'RW'
-    | 'SA'
-    | 'SB'
-    | 'SC'
-    | 'SD'
-    | 'SE'
-    | 'SG'
-    | 'SH'
-    | 'SI'
-    | 'SJ'
-    | 'SK'
-    | 'SL'
-    | 'SM'
-    | 'SN'
-    | 'SO'
-    | 'SR'
-    | 'SS'
-    | 'ST'
-    | 'SV'
-    | 'SX'
-    | 'SY'
-    | 'SZ'
-    | 'TC'
-    | 'TD'
-    | 'TF'
-    | 'TG'
-    | 'TH'
-    | 'TJ'
-    | 'TK'
-    | 'TL'
-    | 'TM'
-    | 'TN'
-    | 'TO'
-    | 'TR'
-    | 'TT'
-    | 'TV'
-    | 'TW'
-    | 'TZ'
-    | 'UA'
-    | 'UG'
-    | 'UM'
-    | 'US'
-    | 'UY'
-    | 'UZ'
-    | 'VA'
-    | 'VC'
-    | 'VE'
-    | 'VG'
-    | 'VI'
-    | 'VN'
-    | 'VU'
-    | 'WF'
-    | 'WS'
-    | 'XK'
-    | 'YE'
-    | 'YT'
-    | 'ZA'
-    | 'ZM'
-    | 'ZW'
-    | 'UK'
-    | 'EL'
-    | 'XU'
-    | 'XR'
-    | 'XS'
-    | 'EU';
-
-export const EØS_LAND_REGIONKODER: Regionkode[] = [
-    'DK',
-    'FI',
-    'IS',
-    'NO',
-    'SE',
-    'AT',
-    'BE',
-    'BG',
-    'CH', // Not in EEA
-    'CY',
-    'CZ',
-    'DE',
-    'EE',
-    'ES',
-    'FO', // Not in EEA
-    'FR',
-    'GB', // No longer in EEA
-    'GL', // Not in EEA
-    'GR',
-    'HR',
-    'HU',
-    'IE',
-    'IT',
-    'LI',
-    'LT',
-    'LU',
-    'LV',
-    'MT',
-    'NL',
-    'PL',
-    'PT',
-    'RO',
-    'SI',
-    'SK',
-];
-
-export const ALLE_LAND_REGIONKODER: Regionkode[] = [
-    'NO',
-    'SE',
-    'DK',
-    'FI',
-    'IS',
-    'FO',
-    'GL',
-    'AX',
-
-    'AD',
-    'AE',
-    'AF',
-    'AG',
-    'AI',
-    'AL',
-    'AM',
-    'AO',
-    'AQ',
-    'AR',
-    'AS',
-    'AT',
-    'AU',
-    'AW',
-    'AZ',
-    'BA',
-    'BB',
-    'BD',
-    'BE',
-    'BF',
-    'BG',
-    'BH',
-    'BI',
-    'BJ',
-    'BL',
-    'BM',
-    'BN',
-    'BO',
-    'BQ',
-    'BR',
-    'BS',
-    'BT',
-    'BV',
-    'BW',
-    'BY',
-    'BZ',
-    'CA',
-    'CC',
-    'CD',
-    'CF',
-    'CG',
-    'CH',
-    'CI',
-    'CK',
-    'CL',
-    'CM',
-    'CN',
-    'CO',
-    'CR',
-    'CU',
-    'CV',
-    'CW',
-    'CX',
-    'CY',
-    'CZ',
-    'DE',
-    'DJ',
-    'DM',
-    'DO',
-    'DZ',
-    'EC',
-    'EE',
-    'EG',
-    'EH',
-    'ER',
-    'ES',
-    'ET',
-    'FJ',
-    'FK',
-    'FM',
-    'FR',
-    'GA',
-    'GB',
-    'GD',
-    'GE',
-    'GF',
-    'GG',
-    'GH',
-    'GI',
-    'GM',
-    'GN',
-    'GP',
-    'GQ',
-    'GR',
-    'GS',
-    'GT',
-    'GU',
-    'GW',
-    'GY',
-    'HK',
-    'HM',
-    'HN',
-    'HR',
-    'HT',
-    'HU',
-    'ID',
-    'IE',
-    'IL',
-    'IM',
-    'IN',
-    'IO',
-    'IQ',
-    'IR',
-    'IT',
-    'JE',
-    'JM',
-    'JO',
-    'JP',
-    'KE',
-    'KG',
-    'KH',
-    'KI',
-    'KM',
-    'KN',
-    'KP',
-    'KR',
-    'KW',
-    'KY',
-    'KZ',
-    'LA',
-    'LB',
-    'LC',
-    'LI',
-    'LK',
-    'LR',
-    'LS',
-    'LT',
-    'LU',
-    'LV',
-    'LY',
-    'MA',
-    'MC',
-    'MD',
-    'ME',
-    'MF',
-    'MG',
-    'MH',
-    'MK',
-    'ML',
-    'MM',
-    'MN',
-    'MO',
-    'MP',
-    'MQ',
-    'MR',
-    'MS',
-    'MT',
-    'MU',
-    'MV',
-    'MW',
-    'MX',
-    'MY',
-    'MZ',
-    'NA',
-    'NC',
-    'NE',
-    'NF',
-    'NG',
-    'NI',
-    'NL',
-    'NP',
-    'NR',
-    'NU',
-    'NZ',
-    'OM',
-    'PA',
-    'PE',
-    'PF',
-    'PG',
-    'PH',
-    'PK',
-    'PL',
-    'PM',
-    'PN',
-    'PR',
-    'PS',
-    'PT',
-    'PW',
-    'PY',
-    'QA',
-    'RE',
-    'RO',
-    'RS',
-    'RU',
-    'RW',
-    'SA',
-    'SB',
-    'SC',
-    'SD',
-    'SG',
-    'SH',
-    'SI',
-    'SJ',
-    'SK',
-    'SL',
-    'SM',
-    'SN',
-    'SO',
-    'SR',
-    'SS',
-    'ST',
-    'SV',
-    'SX',
-    'SY',
-    'SZ',
-    'TC',
-    'TD',
-    'TF',
-    'TG',
-    'TH',
-    'TJ',
-    'TK',
-    'TL',
-    'TM',
-    'TN',
-    'TO',
-    'TR',
-    'TT',
-    'TV',
-    'TW',
-    'TZ',
-    'UA',
-    'UG',
-    'UM',
-    'US',
-    'UY',
-    'UZ',
-    'VA',
-    'VC',
-    'VE',
-    'VG',
-    'VI',
-    'VN',
-    'VU',
-    'WF',
-    'WS',
-    'XK',
-    'YE',
-    'YT',
-    'ZA',
-    'ZM',
-    'ZW',
-    'UK',
-    'EL',
-    'XU', // Flyktning
-    'XR', // Statsløs
-    'XS', // Ukjent
-];
-
-export const REGIONKODE_TIL_LABEL: Record<Regionkode, string> = {
+export const REGIONKODE_TIL_LABEL = {
     AD: 'Andorra',
     AE: 'De forente arabiske emirater',
     AF: 'Afghanistan',
@@ -804,11 +250,77 @@ export const REGIONKODE_TIL_LABEL: Record<Regionkode, string> = {
     ZM: 'Zambia',
     ZW: 'Zimbabwe',
 
-    // Tilpassede / Aliased koder
+    // Alternative og egendefinerte koder
     UK: 'Storbritannia',
     EL: 'Hellas',
     XU: 'Flyktning',
     XR: 'Statsløs',
     XS: 'Ukjent',
     EU: 'EU',
-};
+} satisfies Record<string, string>;
+
+export type Regionkode = keyof typeof REGIONKODE_TIL_LABEL;
+
+function sorterEtterNavn(regionkoder: Regionkode[]): Regionkode[] {
+    return regionkoder.toSorted((a, b) => REGIONKODE_TIL_LABEL[a].localeCompare(REGIONKODE_TIL_LABEL[b], 'nb'));
+}
+
+export const EØS_LAND_REGIONKODER: readonly Regionkode[] = [
+    'DK',
+    'FI',
+    'IS',
+    'NO',
+    'SE',
+    ...sorterEtterNavn([
+        'AT',
+        'BE',
+        'BG',
+        'CH', // Ikke i EØS
+        'CY',
+        'CZ',
+        'DE',
+        'EE',
+        'ES',
+        'FO', // Ikke i EØS
+        'FR',
+        'GB', // Ikke lenger i EØS
+        'GL', // Ikke i EØS
+        'GR',
+        'HR',
+        'HU',
+        'IE',
+        'IT',
+        'LI',
+        'LT',
+        'LU',
+        'LV',
+        'MT',
+        'NL',
+        'PL',
+        'PT',
+        'RO',
+        'SI',
+        'SK',
+    ]),
+];
+
+const NORDISKE_REGIONKODER: readonly Regionkode[] = ['NO', 'SE', 'DK', 'FI', 'IS', 'FO', 'GL', 'AX'];
+
+const SPESIELLE_REGIONKODER: readonly Regionkode[] = ['XU', 'XR', 'XS'];
+
+// GB og GR dekker de samme landene
+const ALTERNATIVE_REGIONKODER: readonly Regionkode[] = ['UK', 'EL'];
+
+export const ALLE_LAND_REGIONKODER: readonly Regionkode[] = [
+    ...NORDISKE_REGIONKODER,
+    ...sorterEtterNavn(
+        (Object.keys(REGIONKODE_TIL_LABEL) as Regionkode[]).filter(
+            regionkode =>
+                regionkode !== 'EU' &&
+                !NORDISKE_REGIONKODER.includes(regionkode) &&
+                !SPESIELLE_REGIONKODER.includes(regionkode) &&
+                !ALTERNATIVE_REGIONKODER.includes(regionkode)
+        )
+    ),
+    ...SPESIELLE_REGIONKODER,
+];
