@@ -1,12 +1,11 @@
 import type { Periode } from '@navikt/familie-tidslinje';
+import type { IYtelsePeriode } from '@typer/beregning';
+import { YtelseType } from '@typer/beregning';
 import { endOfMonth, startOfMonth } from 'date-fns';
+import { dateTilIsoDatoString, isoStringTilDate } from './dato';
+import { splittYtelseVedEndringerPåAnnenYtelse } from './tidslinje';
 
-import type { IYtelsePeriode } from '../../typer/beregning';
-import { YtelseType } from '../../typer/beregning';
-import { dateTilIsoDatoString, isoStringTilDate } from '../dato';
-import { splittYtelseVedEndringerPåAnnenYtelse } from '../tidslinje';
-
-describe('utils/tidslinje', () => {
+describe('splittYtelseVedEndringerPåAnnenYtelse', () => {
     const utvidetYtelsePeriode: IYtelsePeriode = {
         beløp: 1054,
         stønadFom: '2020-01',

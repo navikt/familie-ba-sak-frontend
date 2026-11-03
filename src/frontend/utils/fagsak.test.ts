@@ -1,15 +1,39 @@
 import { kjønnType } from '@navikt/familie-typer';
+import { lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
+import { FagsakTestdata } from '@testutils/testdata/fagsakTestdata';
+import { BehandlingResultat } from '@typer/behandling';
+import { YtelseType } from '@typer/beregning';
+import { PersonType } from '@typer/person';
+import { Målform } from '@typer/søknad';
+import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { addYears } from 'date-fns';
+import { dagensDato, dateTilIsoDatoString } from './dato';
+import { hentBarnMedLøpendeUtbetaling, hentSisteIkkeHenlagteBehandling } from './fagsak';
 
-import { FagsakTestdata } from '../../testutils/testdata/fagsakTestdata';
-import { YtelseType } from '../../typer/beregning';
-import { PersonType } from '../../typer/person';
-import { Målform } from '../../typer/søknad';
-import { Vedtaksperiodetype } from '../../typer/vedtaksperiode';
-import { dagensDato, dateTilIsoDatoString } from '../../utils/dato';
-import { hentBarnMedLøpendeUtbetaling } from '../../utils/fagsak';
+describe('hentSisteIkkeHenlagteBehandling', () => {
+    test('hent siste ikke-henlagte behandling', () => {
+        const fagsak = FagsakTestdata.lagFagsak({
+            behandlinger: [
+                lagVisningBehandling({
+                    behandlingId: 1,
+                    opprettetTidspunkt: '2023-01-06T16:11:59.065',
+                }),
+                lagVisningBehandling({
+                    behandlingId: 2,
+                    opprettetTidspunkt: '2023-01-06T16:21:59.065',
+                }),
+                lagVisningBehandling({
+                    behandlingId: 3,
+                    resultat: BehandlingResultat.HENLAGT_FEILAKTIG_OPPRETTET,
+                    opprettetTidspunkt: '2023-01-06T16:31:59.065',
+                }),
+            ],
+        });
+        expect(hentSisteIkkeHenlagteBehandling(fagsak)?.behandlingId).toBe(2);
+    });
+});
 
-describe('SøknadContext', () => {
+describe('hentBarnMedLøpendeUtbetaling', () => {
     test('Hent barn med løpende utbetalinger på fagsak', () => {
         const barnFnr = '12345678910';
         const person = {

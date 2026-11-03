@@ -1,11 +1,11 @@
 import { AuthContextProvider } from '@context/AuthContext';
+import { FeatureTogglesProvider } from '@context/FeatureTogglesContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
 import { ModalProvider } from '@context/ModalContext';
 import { SaksbehandlerProvider } from '@context/SaksbehandlerContext';
 import { TekniskFeilModalProvider } from '@context/TekniskFeilModalContext';
 import { ToastProvider } from '@context/ToastContext';
-import { FeatureTogglesProvider } from '@context/TogglesContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { type RenderOptions, render as rtlRender, screen as rtlScreen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

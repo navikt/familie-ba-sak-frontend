@@ -2,13 +2,13 @@ import '@navikt/ds-css';
 import './index.css';
 
 import { AuthContextProvider } from '@context/AuthContext';
+import { FeatureTogglesProvider } from '@context/FeatureTogglesContext';
 import { HttpContextProvider } from '@context/HttpContext';
 import { ManglerTilgangModalProvider } from '@context/ManglerTilgangModalContext';
 import { ModalProvider } from '@context/ModalContext';
 import { SaksbehandlerProvider } from '@context/SaksbehandlerContext';
 import { TekniskFeilModalProvider } from '@context/TekniskFeilModalContext';
 import { ToastProvider } from '@context/ToastContext';
-import { FeatureTogglesProvider } from '@context/TogglesContext';
 import { useStartUmami } from '@hooks/useStartUmami';
 import { ErrorBoundary } from '@komponenter/Error/ErrorBoundary';
 import { captureRouteException } from '@komponenter/Error/RouteError';

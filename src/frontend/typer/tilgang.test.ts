@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
-import { Adressebeskyttelsegradering } from '../person';
-import { Avvisningskode, lagManglerTilgangBegrunnelse } from '../tilgang';
+import { Adressebeskyttelsegradering } from './person';
+import { Avvisningskode, lagManglerTilgangBegrunnelse } from './tilgang';
 
 describe('lagManglerTilgangBegrunnelse', () => {
     test('skal forklare at man ikke kan gjøre oppslag på seg selv når avvisningen skyldes habilitet', () => {

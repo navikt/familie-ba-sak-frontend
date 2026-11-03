@@ -1,7 +1,7 @@
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
 
-import type { IKlagebehandling } from '../typer/klage';
+import type { IKlagebehandling } from '@typer/klage';
 
 export const useKlageApi = () => {
     const { request } = useHttp();
