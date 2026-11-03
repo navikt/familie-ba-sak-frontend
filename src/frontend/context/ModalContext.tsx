@@ -1,5 +1,5 @@
 import type { MutationKey } from '@tanstack/react-query';
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext, useReducer } from 'react';
 
 import type { HenleggÅrsak } from '../typer/behandling';
@@ -19,7 +19,6 @@ export enum ModalType {
     HENLEGG_BEHANDLING_VEIVALG = 'HENLEGG_BEHANDLING_VEIVALG',
     HENLEGG_BEHANDLING = 'HENLEGG_BEHANDLING',
     OPPRETT_FAGSAK = 'OPPRETT_FAGSAK',
-    FEILMELDING = 'FEILMELDING',
     KORRIGER_ETTERBETALING = 'KORRIGER_ETTERBETALING',
     FORHÅNDSVIS_OPPRETTING_AV_PDF = 'FORHÅNDSVIS_OPPRETTING_AV_PDF',
     LAAS_OPP_FAGSAK = 'LAAS_OPP_FAGSAK',
@@ -28,7 +27,6 @@ export enum ModalType {
 export interface Args {
     [ModalType.HENLEGG_BEHANDLING_VEIVALG]: { årsak: HenleggÅrsak };
     [ModalType.OPPRETT_FAGSAK]: { ident: string };
-    [ModalType.FEILMELDING]: { feilmelding: string | ReactNode };
     [ModalType.FORHÅNDSVIS_OPPRETTING_AV_PDF]: { mutationKey: MutationKey };
 }
 
@@ -56,12 +54,6 @@ const initialState: State = {
     },
     [ModalType.OPPRETT_FAGSAK]: {
         tittel: 'Opprett fagsak',
-        åpen: false,
-        bredde: '50rem',
-        args: undefined,
-    },
-    [ModalType.FEILMELDING]: {
-        tittel: 'Det har oppstått en feil',
         åpen: false,
         bredde: '50rem',
         args: undefined,
