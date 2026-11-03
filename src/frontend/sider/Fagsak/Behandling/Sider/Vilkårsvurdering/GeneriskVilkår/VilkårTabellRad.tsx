@@ -70,10 +70,12 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
         >
             <Table.DataCell className={Styles.celle}>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    <VilkårResultatIkon
-                        resultat={vilkårResultat.resultat}
-                        resultatBegrunnelse={vilkårResultat.resultatBegrunnelse}
-                    />
+                    {vilkårResultat.resultat !== Resultat.IKKE_VURDERT && (
+                        <VilkårResultatIkon
+                            resultat={vilkårResultat.resultat}
+                            resultatBegrunnelse={vilkårResultat.resultatBegrunnelse}
+                        />
+                    )}
                     <BodyShort>
                         {vilkårResultat.resultat === Resultat.OPPFYLT && vilkårResultat.resultatBegrunnelse
                             ? resultatVisningsnavn[vilkårResultat.resultatBegrunnelse]

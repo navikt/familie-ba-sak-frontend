@@ -72,7 +72,7 @@ export function Personmeny() {
                 <Box key={person.personIdent} className={classNames(Styles.person, { [Styles.valgt]: erValgt })}>
                     <HStack gap="space-8" align="center" wrap={false} className={Styles.personrad}>
                         <ShieldLockFillIcon aria-hidden fontSize="1rem" color="var(--ax-warning-500)" />
-                        {lenke(personHash, Styles.personlenke, <BodyShort size="small">{person.navn}</BodyShort>)}
+                        {lenke(personHash, Styles.personlenke, <BodyShort>{person.navn}</BodyShort>)}
                     </HStack>
                 </Box>
             );
@@ -80,9 +80,9 @@ export function Personmeny() {
 
         const vilkår = finnVilkårForPerson(personResultat).map(v => ({
             ...v,
-            status: utledVilkårstatus(v.vilkårResultater, behandling),
+            status: utledVilkårstatus(v.vilkårResultater),
         }));
-        const antallVurdert = vilkår.filter(v => v.status === Vilkårstatus.VURDERT).length;
+        const antallVurdert = vilkår.filter(v => v.status !== Vilkårstatus.IKKE_VURDERT).length;
         const personstatus = utledPersonstatus(vilkår.map(v => v.status));
 
         return (
@@ -104,14 +104,14 @@ export function Personmeny() {
                         Styles.personlenke,
                         <HStack gap="space-8" align="center" wrap={false}>
                             <Statusikon status={personstatus} variant="person" />
-                            <BodyShort size="small">{etikett}</BodyShort>
+                            <BodyShort>{etikett}</BodyShort>
                         </HStack>
                     )}
-                    <Detail className={Styles.teller}>{`${antallVurdert}/${vilkår.length}`}</Detail>
+                    <BodyShort className={Styles.teller}>{`${antallVurdert}/${vilkår.length}`}</BodyShort>
                 </HStack>
                 <HStack align="center" wrap={false} className={Styles.ident}>
-                    <Detail>{formaterIdent(person.personIdent)}</Detail>
-                    <CopyButton copyText={person.personIdent} size="xsmall" />
+                    <BodyShort>{formaterIdent(person.personIdent)}</BodyShort>
+                    <CopyButton copyText={person.personIdent} size="small" />
                 </HStack>
                 {erEkspandert && (
                     <VStack as="ul" className={Styles.liste}>
@@ -123,12 +123,12 @@ export function Personmeny() {
                                     <HStack gap="space-8" align="center" justify="space-between" wrap={false}>
                                         <HStack gap="space-8" align="center" wrap={false}>
                                             <Statusikon status={status} variant="vilkår" />
-                                            <BodyShort size="small">{vilkårFraConfig.tittel}</BodyShort>
+                                            <BodyShort>{vilkårFraConfig.tittel}</BodyShort>
                                         </HStack>
                                         {status !== Vilkårstatus.IKKE_VURDERT && (
-                                            <Detail className={Styles.vurdertAv}>
+                                            <BodyShort className={Styles.vurdertAv}>
                                                 {erAutomatiskVurdert(vilkårResultater) ? 'auto' : 'manuell'}
-                                            </Detail>
+                                            </BodyShort>
                                         )}
                                     </HStack>
                                 )}
@@ -153,7 +153,7 @@ export function Personmeny() {
                 onClick={() => settErÅpen(prev => !prev)}
             />
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box as="nav" aria-label="Personer i behandlingen" width="clamp(15rem, 16vw, 22rem)">
+                <Box as="nav" aria-label="Personer i behandlingen" width="clamp(17rem, 18vw, 24rem)">
                     <Detail className={Styles.overskrift}>Saksbehandling</Detail>
                     <VStack gap="space-8">{vilkårsvurdering.map(lagPersonnode)}</VStack>
                 </Box>

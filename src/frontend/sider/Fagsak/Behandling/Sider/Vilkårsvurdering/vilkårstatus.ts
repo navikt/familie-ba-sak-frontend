@@ -1,5 +1,4 @@
 import { dekodAnker } from '@hooks/useScrollTilAnker';
-import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
 import {
     type IPersonResultat,
@@ -12,16 +11,19 @@ import {
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
 import { vilkårFeilmeldingId } from './GeneriskVilkår/VilkårTabell';
 
+/** Samlet resultat for alle periodene til et vilkår (eller alle vilkårene til en person). */
 export enum Vilkårstatus {
     IKKE_VURDERT = 'IKKE_VURDERT',
-    TRENGER_OPPMERKSOMHET = 'TRENGER_OPPMERKSOMHET',
-    VURDERT = 'VURDERT',
+    OPPFYLT = 'OPPFYLT',
+    DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
 
 export const vilkårstatusVisningsnavn: Record<Vilkårstatus, string> = {
     IKKE_VURDERT: 'Ikke vurdert',
-    TRENGER_OPPMERKSOMHET: 'Trenger oppmerksomhet',
-    VURDERT: 'Vurdert',
+    OPPFYLT: 'Oppfylt',
+    DELVIS_OPPFYLT: 'Delvis oppfylt',
+    IKKE_OPPFYLT: 'Ikke oppfylt',
 };
 
 export interface VilkårForPerson {
@@ -50,34 +52,32 @@ export function finnVilkårForPerson(personResultat: IPersonResultat): VilkårFo
         );
 }
 
-function måKontrolleres(vilkårResultat: IRestVilkårResultat, behandling: IBehandling) {
-    return (
-        behandling.steg === BehandlingSteg.VILKÅRSVURDERING &&
-        vilkårResultat.erOpprinneligPreutfyltIBehandling === behandling.behandlingId &&
-        vilkårResultat.begrunnelseForManuellKontroll !== null
-    );
-}
-
-export function utledVilkårstatus(vilkårResultater: IRestVilkårResultat[], behandling: IBehandling): Vilkårstatus {
-    if (vilkårResultater.some(vilkårResultat => måKontrolleres(vilkårResultat, behandling))) {
-        return Vilkårstatus.TRENGER_OPPMERKSOMHET;
-    }
-    const antallIkkeVurdert = vilkårResultater.filter(vr => vr.resultat === Resultat.IKKE_VURDERT).length;
-    if (vilkårResultater.length === 0 || antallIkkeVurdert === vilkårResultater.length) {
+/**
+ * Ikke vurdert så lenge minst én periode ikke er vurdert. Ellers: kun oppfylt → oppfylt, kun ikke oppfylt → ikke oppfylt,
+ * og en blanding av oppfylte og ikke oppfylte perioder → delvis oppfylt.
+ */
+export function utledVilkårstatus(vilkårResultater: IRestVilkårResultat[]): Vilkårstatus {
+    if (vilkårResultater.length === 0 || vilkårResultater.some(vr => vr.resultat === Resultat.IKKE_VURDERT)) {
         return Vilkårstatus.IKKE_VURDERT;
     }
-    if (antallIkkeVurdert > 0) {
-        return Vilkårstatus.TRENGER_OPPMERKSOMHET;
+    const harOppfylt = vilkårResultater.some(vr => vr.resultat === Resultat.OPPFYLT);
+    const harIkkeOppfylt = vilkårResultater.some(vr => vr.resultat === Resultat.IKKE_OPPFYLT);
+    if (harOppfylt && harIkkeOppfylt) {
+        return Vilkårstatus.DELVIS_OPPFYLT;
     }
-    return Vilkårstatus.VURDERT;
+    return harIkkeOppfylt ? Vilkårstatus.IKKE_OPPFYLT : Vilkårstatus.OPPFYLT;
 }
 
+/** Den mest alvorlige statusen blant vilkårene vinner; personen er bare oppfylt når alle vilkårene er det. */
 export function utledPersonstatus(vilkårstatuser: Vilkårstatus[]): Vilkårstatus {
-    if (vilkårstatuser.every(status => status === Vilkårstatus.VURDERT)) {
-        return Vilkårstatus.VURDERT;
+    if (vilkårstatuser.some(status => status === Vilkårstatus.IKKE_OPPFYLT)) {
+        return Vilkårstatus.IKKE_OPPFYLT;
     }
-    if (vilkårstatuser.some(status => status === Vilkårstatus.TRENGER_OPPMERKSOMHET)) {
-        return Vilkårstatus.TRENGER_OPPMERKSOMHET;
+    if (vilkårstatuser.some(status => status === Vilkårstatus.DELVIS_OPPFYLT)) {
+        return Vilkårstatus.DELVIS_OPPFYLT;
+    }
+    if (vilkårstatuser.length > 0 && vilkårstatuser.every(status => status === Vilkårstatus.OPPFYLT)) {
+        return Vilkårstatus.OPPFYLT;
     }
     return Vilkårstatus.IKKE_VURDERT;
 }

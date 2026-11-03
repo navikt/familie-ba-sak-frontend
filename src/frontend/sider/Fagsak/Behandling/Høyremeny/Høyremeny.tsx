@@ -5,6 +5,7 @@ import { Activity } from 'react';
 
 import { Behandlingskort } from './Behandlingskort/Behandlingskort';
 import { Brev } from './Brev/Brev';
+import { Dokumenter } from './Dokumenter/Dokumenter';
 import { Historikk } from './Historikk/Historikk';
 import Styles from './Høyremeny.module.css';
 import { HøyremenyKnappikon } from './HøyremenyKnappikon';
@@ -49,7 +50,7 @@ export function Høyremeny() {
                 <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                     <VStack width={'clamp(20rem, 20vw, 25rem)'}>
                         <Behandlingskort />
-                        <Tabs value={tab} onChange={tab => settTab(tab as Tab)} iconPosition={'top'}>
+                        <Tabs value={tab} onChange={tab => settTab(tab as Tab)} iconPosition={'top'} size={'small'}>
                             <Tabvelger />
                             <Tabs.Panel value={Tab.Totrinnskontroll}>
                                 <Totrinnskontroll />
@@ -63,6 +64,9 @@ export function Høyremeny() {
                             </Tabs.Panel>
                             <Tabs.Panel value={Tab.Meldinger}>
                                 <Brev />
+                            </Tabs.Panel>
+                            <Tabs.Panel value={Tab.Dokumenter}>
+                                <Dokumenter />
                             </Tabs.Panel>
                         </Tabs>
                     </VStack>

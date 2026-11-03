@@ -1,5 +1,5 @@
 .kort {
-    margin-top: var(--ax-space-16);
+    margin-top: var(--ax-space-28);
     border: 1px solid var(--ax-border-neutral-subtle);
     border-radius: var(--ax-radius-8);
     background-color: var(--ax-bg-default);
@@ -45,20 +45,29 @@
     outline-offset: -3px;
 }
 
-.vurdert {
+.oppfylt {
     border-color: var(--ax-border-success-subtle);
 }
 
-.vurdert .kortHeader {
+.oppfylt .kortHeader {
     background-color: var(--ax-bg-success-soft);
     border-bottom-color: var(--ax-border-success-subtle);
 }
 
-.trengerOppmerksomhet {
+.delvisOppfylt {
     border-color: var(--ax-border-warning-subtle);
 }
 
-.trengerOppmerksomhet .kortHeader {
+.delvisOppfylt .kortHeader {
     background-color: var(--ax-bg-warning-soft);
     border-bottom-color: var(--ax-border-warning-subtle);
+}
+
+.ikkeOppfylt {
+    border-color: var(--ax-border-danger-subtle);
+}
+
+.ikkeOppfylt .kortHeader {
+    background-color: var(--ax-bg-danger-soft);
+    border-bottom-color: var(--ax-border-danger-subtle);
 }

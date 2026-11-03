@@ -1,0 +1,33 @@
+.helOversikt {
+    font-size: var(--ax-font-size-small);
+}
+
+.liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.journalpost {
+    padding-block: var(--ax-space-12);
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.journalpost:last-child {
+    border-bottom: none;
+}
+
+.dato {
+    color: var(--ax-text-neutral-subtle);
+}
+
+.tittel {
+    margin-top: var(--ax-space-4);
+    overflow-wrap: anywhere;
+}
+
+.dokumenter {
+    list-style: none;
+    margin: var(--ax-space-4) 0 0;
+    padding: 0;
+}

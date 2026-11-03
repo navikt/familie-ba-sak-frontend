@@ -81,7 +81,7 @@ export function VilkårTabellRadEndre({ person, vilkårFraConfig, vilkårResulta
             }
             errorPropagation={false}
         >
-            <SkjemaRamme lesevisning={erLesevisning} resultat={vilkårResultat.resultat}>
+            <SkjemaRamme>
                 {visRegelverkValg && (
                     <VurderesEtterFelt personType={person.type} vilkårType={vilkårResultat.vilkårType} />
                 )}

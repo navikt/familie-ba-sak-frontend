@@ -88,7 +88,7 @@
 
 .underlenke {
     display: block;
-    padding-block: var(--ax-space-2);
+    padding-block: var(--ax-space-4);
     color: var(--ax-text-neutral);
     text-decoration: none;
     border-radius: var(--ax-radius-4);
@@ -107,9 +107,14 @@
     color: var(--ax-text-success-decoration);
 }
 
-.ikonOppmerksomhet {
+.ikonDelvisOppfylt {
     flex-shrink: 0;
     color: var(--ax-text-warning-decoration);
+}
+
+.ikonIkkeOppfylt {
+    flex-shrink: 0;
+    color: var(--ax-text-danger-decoration);
 }
 
 .ikonIkkeVurdert {

@@ -67,7 +67,9 @@ export function AnnenVurderingTabellRad({ person, annenVurderingConfig, annenVur
         >
             <Table.DataCell>
                 <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    <VilkårResultatIkon resultat={annenVurdering.resultat} />
+                    {annenVurdering.resultat !== Resultat.IKKE_VURDERT && (
+                        <VilkårResultatIkon resultat={annenVurdering.resultat} />
+                    )}
                     <BodyShort>{resultatVisningsnavn[annenVurdering.resultat]}</BodyShort>
                 </HStack>
             </Table.DataCell>

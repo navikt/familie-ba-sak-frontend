@@ -19,8 +19,9 @@ import { VilkårTabell } from './VilkårTabell';
 
 const statusklasse: Record<Vilkårstatus, string> = {
     IKKE_VURDERT: styles.ikkeVurdert,
-    TRENGER_OPPMERKSOMHET: styles.trengerOppmerksomhet,
-    VURDERT: styles.vurdert,
+    OPPFYLT: styles.oppfylt,
+    DELVIS_OPPFYLT: styles.delvisOppfylt,
+    IKKE_OPPFYLT: styles.ikkeOppfylt,
 };
 
 interface Props {
@@ -36,7 +37,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
     const erLesevisning = useErLesevisning();
     const [erÅpen, settErÅpen] = useState(true);
 
-    const vilkårstatus = utledVilkårstatus(vilkårResultater, behandling);
+    const vilkårstatus = utledVilkårstatus(vilkårResultater);
 
     const leggTilPeriodeKnappId = `${generiskVilkårKey}__legg_til_periode`;
 

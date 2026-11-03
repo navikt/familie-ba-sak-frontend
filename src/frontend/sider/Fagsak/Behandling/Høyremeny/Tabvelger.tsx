@@ -1,10 +1,8 @@
+import { ClockDashedIcon, FileTextIcon, NotePencilIcon, PersonCheckmarkIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useBehandling } from '../../../../hooks/useBehandling';
 import { useErLesevisning } from '../../../../hooks/useErLesevisning';
 import { Behandlingstype } from '../../../../typer/behandling';
-import IkonHistorikk from './Ikoner/IkonHistorikk';
-import IkonMeldinger from './Ikoner/IkonMeldinger';
-import IkonTotrinnskontroll from './Ikoner/IkonTotrinnskontroll';
 import { Tab } from './TabContextProvider';
 import styles from './Tabvelger.module.css';
 import { useSkalViseTotrinnskontroll } from './useSkalViseTotrinnskontroll';
@@ -19,12 +17,29 @@ export function Tabvelger() {
     return (
         <Tabs.List className={styles.tabsListe}>
             {skalViseTotrinnskontroll && (
-                <Tabs.Tab value={Tab.Totrinnskontroll} label={Tab.Totrinnskontroll} icon={<IkonTotrinnskontroll />} />
+                <Tabs.Tab
+                    value={Tab.Totrinnskontroll}
+                    label={Tab.Totrinnskontroll}
+                    icon={<PersonCheckmarkIcon aria-hidden fontSize="1.25rem" />}
+                />
             )}
-            <Tabs.Tab value={Tab.Historikk} label={Tab.Historikk} icon={<IkonHistorikk />} />
+            <Tabs.Tab
+                value={Tab.Historikk}
+                label={Tab.Historikk}
+                icon={<ClockDashedIcon aria-hidden fontSize="1.25rem" />}
+            />
             {!erLesevisning && !erMigreringFraInfotrygd && (
-                <Tabs.Tab value={Tab.Meldinger} label={'Send brev'} icon={<IkonMeldinger />} />
+                <Tabs.Tab
+                    value={Tab.Meldinger}
+                    label={'Send brev'}
+                    icon={<NotePencilIcon aria-hidden fontSize="1.25rem" />}
+                />
             )}
+            <Tabs.Tab
+                value={Tab.Dokumenter}
+                label={Tab.Dokumenter}
+                icon={<FileTextIcon aria-hidden fontSize="1.25rem" />}
+            />
         </Tabs.List>
     );
 }
