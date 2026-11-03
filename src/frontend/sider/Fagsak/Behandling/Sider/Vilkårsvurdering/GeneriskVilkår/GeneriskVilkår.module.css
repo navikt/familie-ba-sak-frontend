@@ -25,7 +25,7 @@
     border: none;
     border-bottom: 1px solid var(--ax-border-neutral-subtle);
     border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
-    background-color: var(--ax-bg-neutral-soft);
+    background-color: var(--ax-bg-neutral-moderate);
     color: var(--ax-text-neutral);
     text-align: left;
     cursor: pointer;

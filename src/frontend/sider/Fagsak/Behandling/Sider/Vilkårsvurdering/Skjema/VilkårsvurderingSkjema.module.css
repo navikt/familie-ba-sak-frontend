@@ -16,7 +16,7 @@
     padding: var(--ax-space-8) var(--ax-space-16);
     border-bottom: 1px solid var(--ax-border-neutral-subtle);
     border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
-    background-color: var(--ax-bg-neutral-soft);
+    background-color: var(--ax-bg-neutral-moderate);
 }
 
 .personkortHeader[data-lukket="true"] {
@@ -31,5 +31,6 @@
 }
 
 .skillelinje {
+    font-weight: var(--ax-font-weight-regular);
     color: var(--ax-text-neutral-subtle);
 }

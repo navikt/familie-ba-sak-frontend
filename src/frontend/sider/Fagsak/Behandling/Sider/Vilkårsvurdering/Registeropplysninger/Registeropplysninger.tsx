@@ -47,6 +47,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                     </Detail>
                 )}
                 <RegisteropplysningerTabell
+                    kompakt={kompakt}
                     opplysningstype={Registeropplysning.FØDSELSDATO}
                     ikon={<CalendarIcon fontSize={'1.5rem'} title="Kalender-ikon" focusable="false" />}
                     historikk={[
@@ -60,6 +61,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 />
                 {registerHistorikk.historiskeIdenter && registerHistorikk.historiskeIdenter.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.HISTORISKE_IDENTER}
                         ikon={<PersonIcon fontSize={'1.5rem'} title="Person-ikon" focusable="false" />}
                         historikk={registerHistorikk.historiskeIdenter.map(ident => ({
@@ -70,6 +72,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 )}
                 {personErDød && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.DØDSBOADRESSE}
                         ikon={<FlowerPetalFallingIcon fontSize={'1.5rem'} title="Blomst-ikon" focusable="false" />}
                         historikk={registerHistorikk.dødsboadresse}
@@ -77,6 +80,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 )}
                 {registerHistorikk.sivilstand.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.SIVILSTAND}
                         ikon={<HeartIcon fontSize={'1.5rem'} title="Hjerte-ikon" focusable="false" />}
                         historikk={registerHistorikk.sivilstand}
@@ -84,23 +88,27 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 )}
                 {registerHistorikk.oppholdstillatelse.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.OPPHOLD}
                         ikon={<PassportIcon fontSize={'1.5rem'} title="Pass-ikon" focusable="false" />}
                         historikk={registerHistorikk.oppholdstillatelse}
                     />
                 )}
                 <RegisteropplysningerTabell
+                    kompakt={kompakt}
                     opplysningstype={Registeropplysning.STATSBORGERSKAP}
                     ikon={<GlobeIcon fontSize={'1.5rem'} title="Globe-ikon" focusable="false" />}
                     historikk={registerHistorikk.statsborgerskap}
                 />
                 <RegisteropplysningerTabell
+                    kompakt={kompakt}
                     opplysningstype={Registeropplysning.BOSTEDSADRESSE}
                     ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                     historikk={registerHistorikk.bostedsadresse}
                 />
                 {registerHistorikk.oppholdsadresse.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.OPPHOLDSADRESSE}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                         historikk={registerHistorikk.oppholdsadresse}
@@ -108,6 +116,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 )}
                 {registerHistorikk.deltBosted.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.DELTBOSTED}
                         ikon={<HouseIcon fontSize={'1.5rem'} title="Hjem-ikon" focusable="false" />}
                         historikk={registerHistorikk.deltBosted}
@@ -115,6 +124,7 @@ const Registeropplysninger = ({ registerHistorikk, fødselsdato, kompakt = false
                 )}
                 {toggles[FeatureToggle.preutfyllingLovligOpphold] && registerHistorikk.arbeidsforhold.length > 0 && (
                     <RegisteropplysningerTabell
+                        kompakt={kompakt}
                         opplysningstype={Registeropplysning.ARBEIDSFORHOLD}
                         ikon={<BriefcaseIcon fontSize={'1.5rem'} title="Koffert-ikon" focusable="false" />}
                         historikk={registerHistorikk.arbeidsforhold}

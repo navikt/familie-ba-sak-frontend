@@ -21,3 +21,35 @@
 .dataCell {
     white-space: pre-line;
 }
+
+.kompakt {
+    padding-block: var(--ax-space-12);
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.kompakt:first-child {
+    padding-top: 0;
+}
+
+.kompakt:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.kompaktGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--ax-space-24);
+    row-gap: var(--ax-space-8);
+}
+
+.kompaktIkon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.25rem;
+}
+
+.kompaktIkon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}

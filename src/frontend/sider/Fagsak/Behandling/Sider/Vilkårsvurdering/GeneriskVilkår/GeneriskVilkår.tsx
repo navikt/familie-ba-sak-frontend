@@ -100,9 +100,9 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
                         {vilkårFraConfig.tittel}
                     </HStack>
                     {erÅpen ? (
-                        <ChevronUpIcon aria-hidden fontSize="1.5rem" />
-                    ) : (
                         <ChevronDownIcon aria-hidden fontSize="1.5rem" />
+                    ) : (
+                        <ChevronUpIcon aria-hidden fontSize="1.5rem" />
                     )}
                 </button>
             </Heading>

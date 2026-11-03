@@ -3,7 +3,7 @@ import DødsfallTag from '@komponenter/DødsfallTag';
 import { FalskIdentitet } from '@komponenter/FalskIdentitet/FalskIdentitet';
 import RegistrerDødsfallDatoMeny from '@komponenter/PersonInformasjon/RegistrerDødsfallDatoMeny';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, CopyButton, HStack, LocalAlert } from '@navikt/ds-react';
+import { Box, Button, CopyButton, Heading, HStack, LocalAlert } from '@navikt/ds-react';
 import { type IGrunnlagPerson, personTypeMap } from '@typer/person';
 import { formaterIdent, hentAlder } from '@utils/formatter';
 import { Activity, useState } from 'react';
@@ -17,9 +17,9 @@ interface Props {
 
 function Skillelinje() {
     return (
-        <BodyShort aria-hidden className={styles.skillelinje}>
+        <Heading size="small" as="span" aria-hidden className={styles.skillelinje}>
             |
-        </BodyShort>
+        </Heading>
     );
 }
 
@@ -38,7 +38,7 @@ export function Personkort({ person }: Props) {
                 data-lukket={!erÅpen}
             >
                 <HStack gap="space-8" align="center">
-                    <BodyShort weight="semibold">{`${person.navn} (${hentAlder(person.fødselsdato)} år)`}</BodyShort>
+                    <Heading size="small" level="2">{`${person.navn} (${hentAlder(person.fødselsdato)} år)`}</Heading>
                     <Skillelinje />
                     {person.harFalskIdentitet && (
                         <>
@@ -46,26 +46,30 @@ export function Personkort({ person }: Props) {
                             <Skillelinje />
                         </>
                     )}
-                    <HStack gap="space-2" align="center" wrap={false}>
-                        <BodyShort weight="semibold">{formaterIdent(person.personIdent)}</BodyShort>
-                        <CopyButton size="xsmall" copyText={person.personIdent} />
+                    <HStack gap="space-4" align="center" wrap={false}>
+                        <Heading size="small" level="2" as="span">
+                            {formaterIdent(person.personIdent)}
+                        </Heading>
+                        <CopyButton size="small" copyText={person.personIdent} />
                     </HStack>
                     <Skillelinje />
-                    <BodyShort weight="semibold">{personTypeMap[person.type]}</BodyShort>
-                    {person.dødsfallDato ? (
-                        <DødsfallTag dødsfallDato={person.dødsfallDato} />
-                    ) : (
-                        !erLesevisning && <RegistrerDødsfallDatoMeny person={person} />
-                    )}
+                    <Heading size="small" level="2" as="span">
+                        {personTypeMap[person.type]}
+                    </Heading>
+                    {person.dødsfallDato && <DødsfallTag dødsfallDato={person.dødsfallDato} />}
                 </HStack>
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    aria-expanded={erÅpen}
-                    title={erÅpen ? 'Skjul registeropplysninger' : 'Vis registeropplysninger'}
-                    icon={erÅpen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-                    onClick={() => settErÅpen(forrige => !forrige)}
-                />
+                <HStack gap="space-4" align="center" wrap={false}>
+                    {!person.dødsfallDato && !erLesevisning && <RegistrerDødsfallDatoMeny person={person} />}
+                    <Button
+                        variant="tertiary"
+                        data-color="neutral"
+                        size="small"
+                        aria-expanded={erÅpen}
+                        title={erÅpen ? 'Skjul registeropplysninger' : 'Vis registeropplysninger'}
+                        icon={erÅpen ? <ChevronDownIcon aria-hidden /> : <ChevronUpIcon aria-hidden />}
+                        onClick={() => settErÅpen(forrige => !forrige)}
+                    />
+                </HStack>
             </HStack>
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
                 <Box padding="space-16">

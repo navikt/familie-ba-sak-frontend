@@ -1,9 +1,9 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Table } from '@navikt/ds-react';
 
 import { differenceInMilliseconds } from 'date-fns';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import type { IRestRegisteropplysning } from '../../../../../../typer/person';
 import { Registeropplysning, registeropplysning } from '../../../../../../typer/registeropplysning';
 import {
@@ -19,6 +19,8 @@ interface IRegisteropplysningerTabellProps {
     opplysningstype: Registeropplysning;
     ikon: ReactNode;
     historikk: IRestRegisteropplysning[];
+    /** Etikett over verdien og ikonet foran verdien, i to like brede kolonner uten tabellstil. */
+    kompakt?: boolean;
 }
 
 const hentDatoHeader = (opplysningstype: Registeropplysning): string => {
@@ -60,7 +62,12 @@ const sorterPerioderSynkende = (a: IRestRegisteropplysning, b: IRestRegisteroppl
 
 const GRENSE_FOR_EKSPANDERBAR_HISTORIKK = 3;
 
-const RegisteropplysningerTabell = ({ opplysningstype, ikon, historikk }: IRegisteropplysningerTabellProps) => {
+const RegisteropplysningerTabell = ({
+    opplysningstype,
+    ikon,
+    historikk,
+    kompakt = false,
+}: IRegisteropplysningerTabellProps) => {
     const [erEkspandert, settEkspandert] = useState<boolean>(false);
     const manglerOpplysninger = historikk.length === 0;
     const skalVæreEkspanderbar =
@@ -72,6 +79,50 @@ const RegisteropplysningerTabell = ({ opplysningstype, ikon, historikk }: IRegis
         !skalVæreEkspanderbar || erEkspandert
             ? historikk.sort(sorterPerioderSynkende)
             : historikk.sort(sorterPerioderSynkende).slice(0, GRENSE_FOR_EKSPANDERBAR_HISTORIKK);
+
+    const ekspanderKnapp = skalVæreEkspanderbar && (
+        <HStack justify={kompakt ? 'start' : 'end'}>
+            <Button
+                variant="tertiary"
+                size="small"
+                onClick={() => settEkspandert(nåverdi => !nåverdi)}
+                icon={erEkspandert ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                iconPosition="right"
+            >
+                {erEkspandert ? 'Skjul' : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
+            </Button>
+        </HStack>
+    );
+
+    if (kompakt) {
+        const rader = manglerOpplysninger ? [{ verdi: 'Ingen opplysninger' }] : synligHistorikk;
+        return (
+            <div className={styles.kompakt}>
+                <div className={styles.kompaktGrid}>
+                    <Label size="small" as="p">
+                        {registeropplysning[opplysningstype]}
+                    </Label>
+                    <Label size="small" as="p">
+                        {hentDatoHeader(opplysningstype)}
+                    </Label>
+                    {rader.map((periode, index) => (
+                        <Fragment key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
+                            <HStack gap="space-8" align="start" wrap={false}>
+                                <span className={styles.kompaktIkon}>{index === 0 && ikon}</span>
+                                <BodyShort size="small" className={styles.dataCell}>
+                                    {periode.verdi}
+                                </BodyShort>
+                            </HStack>
+                            <BodyShort size="small">
+                                {manglerOpplysninger ? '-' : hentDatoVerdi(opplysningstype, periode)}
+                            </BodyShort>
+                        </Fragment>
+                    ))}
+                </div>
+                {ekspanderKnapp}
+            </div>
+        );
+    }
 
     return (
         <>
@@ -109,19 +160,7 @@ const RegisteropplysningerTabell = ({ opplysningstype, ikon, historikk }: IRegis
                     </Table.Body>
                 </Table>
             </HStack>
-            {skalVæreEkspanderbar && (
-                <HStack justify={'end'}>
-                    <Button
-                        variant="tertiary"
-                        size="small"
-                        onClick={() => settEkspandert(nåverdi => !nåverdi)}
-                        icon={erEkspandert ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                        iconPosition="right"
-                    >
-                        {erEkspandert ? 'Skjul' : `Vis ${historikk.length - GRENSE_FOR_EKSPANDERBAR_HISTORIKK} flere`}
-                    </Button>
-                </HStack>
-            )}
+            {ekspanderKnapp}
         </>
     );
 };
