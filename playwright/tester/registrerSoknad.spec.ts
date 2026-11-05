@@ -2,6 +2,7 @@ import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-
 import { BehandlingTestdata } from '@testutils/testdata/behandlingTestdata';
 import { PersonResultatTestdata } from '@testutils/testdata/personResultatTestdata';
 import { PersonTestdata } from '@testutils/testdata/personTestdata';
+import { VedtaksperiodeTestdata } from '@testutils/testdata/vedtaksperiodeTestdata';
 import { VilkårResultatTestdata } from '@testutils/testdata/vilkårResultatTestdata';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import { PersonType } from '@typer/person';
@@ -13,6 +14,8 @@ import { expect, test } from '../fixtures';
 const BARN_IDENT = '10022012345';
 // msw matcher mot URL-kodet sti, så æøå må kodes.
 const REGISTRER_SØKNAD_URL = encodeURI('/familie-ba-sak/api/behandlinger/:behandlingId/steg/registrer-søknad');
+
+const GJELDENDE_UTBETALINGSPERIODER_URL = '/familie-ba-sak/api/fagsaker/:fagsakId/gjeldende-utbetalingsperioder';
 
 const SØKER_IDENT = '12345678910';
 // Slik backend lager advarselen når vilkår for personer som tas ut av behandlingen blir fjernet.
@@ -103,6 +106,41 @@ test.describe('Registrer søknad', () => {
         });
         await expect(page).toHaveURL(/\/fagsak\/1\/1\/vilkaarsvurdering$/);
         await expect(page.getByRole('heading', { name: 'Vilkårsvurdering', level: 1 })).toBeVisible();
+    });
+
+    test('skal merke barn med løpende utbetaling og registrere søknad uten avkrysset barn', async ({
+        page,
+        apiMock,
+    }) => {
+        apiMock.use(
+            http.get(GJELDENDE_UTBETALINGSPERIODER_URL, () =>
+                HttpResponse.json(
+                    byggSuksessRessurs([
+                        VedtaksperiodeTestdata.lagUtbetalingsperiode({
+                            utbetalingsperiodeDetaljer: [
+                                VedtaksperiodeTestdata.lagUtbetalingsperiodeDetalj({
+                                    person: PersonTestdata.lagGrunnlagPerson({
+                                        personIdent: BARN_IDENT,
+                                        navn: 'Barn Testersen',
+                                        type: PersonType.BARN,
+                                    }),
+                                }),
+                            ],
+                        }),
+                    ])
+                )
+            ),
+            http.post(REGISTRER_SØKNAD_URL, () =>
+                HttpResponse.json(byggSuksessRessurs(lagBehandlingIVilkårsvurdering()))
+            )
+        );
+        await page.reload();
+
+        await expect(page.getByRole('checkbox', { name: /Barn Testersen.*løpende/ })).toBeVisible();
+        await page.getByRole('radio', { name: 'Bokmål' }).check();
+        await page.getByRole('button', { name: 'Bekreft og fortsett' }).click();
+
+        await expect(page).toHaveURL(/\/fagsak\/1\/1\/vilkaarsvurdering$/);
     });
 
     test('skal be om bekreftelse når backend krever det', async ({ page, apiMock }) => {

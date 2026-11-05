@@ -64,14 +64,15 @@ export function BarnaFieldArrayProvider({ control, children }: Props) {
         [fields, watchedBarn, barnMedLøpendeUtbetaling, append, remove]
     );
 
-    if (gjeldendeUtbetalingsperioderError) {
+    // Periodene hentes på nytt når fagsaken invalideres. Feiler en slik ny henting, beholder vi skjemaet med de
+    // periodene vi allerede har, i stedet for å bytte hele skjemaet ut med en feilmelding.
+    if (gjeldendeUtbetalingsperioderError && gjeldendeUtbetalingsperioder === undefined) {
         return (
             <LocalAlert status="error">
                 <LocalAlert.Header>
-                    <LocalAlert.Title>
-                        Kunne ikke hente utbetalinger på fagsaken: {gjeldendeUtbetalingsperioderError.message}
-                    </LocalAlert.Title>
+                    <LocalAlert.Title>Kunne ikke hente utbetalinger på fagsaken</LocalAlert.Title>
                 </LocalAlert.Header>
+                <LocalAlert.Content>{gjeldendeUtbetalingsperioderError.message}</LocalAlert.Content>
             </LocalAlert>
         );
     }

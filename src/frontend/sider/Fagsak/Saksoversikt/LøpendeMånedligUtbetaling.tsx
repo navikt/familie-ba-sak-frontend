@@ -24,10 +24,9 @@ export function LøpendeMånedligUtbetaling() {
         return (
             <LocalAlert status="error" style={{ maxWidth: SaksoversiktPanelBredde }}>
                 <LocalAlert.Header>
-                    <LocalAlert.Title>
-                        Kunne ikke hente utbetalinger: {gjeldendeUtbetalingsperioderError.message}
-                    </LocalAlert.Title>
+                    <LocalAlert.Title>Kunne ikke hente utbetalinger</LocalAlert.Title>
                 </LocalAlert.Header>
+                <LocalAlert.Content>{gjeldendeUtbetalingsperioderError.message}</LocalAlert.Content>
             </LocalAlert>
         );
     }

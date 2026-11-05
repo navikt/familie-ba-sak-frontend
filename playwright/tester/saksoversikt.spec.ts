@@ -67,4 +67,19 @@ test.describe('Saksoversikt', () => {
         await expect(feilmelding.getByRole('heading', { name: /Feil oppstod ved innlasting av fagsak/ })).toBeVisible();
         await expect(feilmelding).toContainText('Fant ikke fagsak med id 1.');
     });
+
+    test('skal vise feilmelding når utbetalingene ikke kan hentes', async ({ page, apiMock }) => {
+        apiMock.use(
+            http.get(GJELDENDE_UTBETALINGSPERIODER_URL, () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente utbetalingene.'))
+            )
+        );
+
+        await page.goto('/fagsak/1/saksoversikt');
+
+        const feilmelding = page.getByRole('alert');
+        await expect(feilmelding.getByRole('heading', { name: 'Kunne ikke hente utbetalinger' })).toBeVisible();
+        await expect(feilmelding).toContainText('Klarte ikke å hente utbetalingene.');
+        await expect(page.getByRole('heading', { name: 'Saksoversikt' })).toBeVisible();
+    });
 });
