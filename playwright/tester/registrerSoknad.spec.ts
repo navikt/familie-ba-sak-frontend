@@ -136,10 +136,17 @@ test.describe('Registrer søknad', () => {
         );
         await page.reload();
 
-        await expect(page.getByRole('checkbox', { name: /Barn Testersen.*løpende/ })).toBeVisible();
+        const barnCheckbox = page.getByRole('checkbox', { name: /Barn Testersen.*løpende/ });
+        await expect(barnCheckbox).toBeVisible();
+        await expect(barnCheckbox).not.toBeChecked();
         await page.getByRole('radio', { name: 'Bokmål' }).check();
+
+        const registrerRequest = page.waitForRequest(request => request.url().includes('/steg/registrer-s'));
         await page.getByRole('button', { name: 'Bekreft og fortsett' }).click();
 
+        expect((await registrerRequest).postDataJSON()).toMatchObject({
+            søknad: { barnaMedOpplysninger: [{ ident: BARN_IDENT, inkludertISøknaden: false }] },
+        });
         await expect(page).toHaveURL(/\/fagsak\/1\/1\/vilkaarsvurdering$/);
     });
 
