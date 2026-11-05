@@ -159,9 +159,7 @@ test.describe('Registrer søknad', () => {
         await page.reload();
 
         const feilmelding = page.getByRole('alert');
-        await expect(
-            feilmelding.getByRole('heading', { name: 'Kunne ikke hente utbetalinger på fagsaken' })
-        ).toBeVisible();
+        await expect(feilmelding.getByRole('heading', { name: 'Kunne ikke hente utbetalinger' })).toBeVisible();
         await expect(feilmelding).toContainText('Klarte ikke å hente utbetalingene.');
     });
 

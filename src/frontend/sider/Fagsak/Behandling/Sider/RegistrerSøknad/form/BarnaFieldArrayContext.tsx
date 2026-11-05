@@ -70,7 +70,7 @@ export function BarnaFieldArrayProvider({ control, children }: Props) {
         return (
             <LocalAlert status="error">
                 <LocalAlert.Header>
-                    <LocalAlert.Title>Kunne ikke hente utbetalinger på fagsaken</LocalAlert.Title>
+                    <LocalAlert.Title>Kunne ikke hente utbetalinger</LocalAlert.Title>
                 </LocalAlert.Header>
                 <LocalAlert.Content>{gjeldendeUtbetalingsperioderError.message}</LocalAlert.Content>
             </LocalAlert>
