@@ -97,7 +97,7 @@ export const obfuskerUtbetalingsperioder = (utbetalingsperioder: Utbetalingsperi
         return {
             ...utbetalingsperiode,
             utbetalingsperiodeDetaljer: utbetalingsperiode.utbetalingsperiodeDetaljer
-                .toSorted((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
+                .toSorted(sammenlignFødselsdato)
                 .map(detalj => ({
                     ...detalj,
                     person: {

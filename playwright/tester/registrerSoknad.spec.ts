@@ -1,4 +1,4 @@
-import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingTestdata } from '@testutils/testdata/behandlingTestdata';
 import { PersonResultatTestdata } from '@testutils/testdata/personResultatTestdata';
 import { PersonTestdata } from '@testutils/testdata/personTestdata';
@@ -108,7 +108,7 @@ test.describe('Registrer søknad', () => {
         await expect(page.getByRole('heading', { name: 'Vilkårsvurdering', level: 1 })).toBeVisible();
     });
 
-    test('skal merke barn med løpende utbetaling og registrere søknad uten avkrysset barn', async ({
+    test('skal vise løpende på barn med løpende utbetaling og tillate registrering uten avkrysset barn', async ({
         page,
         apiMock,
     }) => {
@@ -141,6 +141,21 @@ test.describe('Registrer søknad', () => {
         await page.getByRole('button', { name: 'Bekreft og fortsett' }).click();
 
         await expect(page).toHaveURL(/\/fagsak\/1\/1\/vilkaarsvurdering$/);
+    });
+
+    test('skal vise feilmelding når utbetalingene på fagsaken ikke kan hentes', async ({ page, apiMock }) => {
+        apiMock.use(
+            http.get(GJELDENDE_UTBETALINGSPERIODER_URL, () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente utbetalingene.'))
+            )
+        );
+        await page.reload();
+
+        const feilmelding = page.getByRole('alert');
+        await expect(
+            feilmelding.getByRole('heading', { name: 'Kunne ikke hente utbetalinger på fagsaken' })
+        ).toBeVisible();
+        await expect(feilmelding).toContainText('Klarte ikke å hente utbetalingene.');
     });
 
     test('skal be om bekreftelse når backend krever det', async ({ page, apiMock }) => {
