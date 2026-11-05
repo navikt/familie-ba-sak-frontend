@@ -87,7 +87,7 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     SØKER_HAR_IKKE_KRYSSET_FOR_INSTITUSJON_I_SØKNADEN:
         'Søker har ikke krysset for at noen av barna er i barneverninstitusjon eller annen institusjon i søknaden',
     SØKER_HAR_IKKE_KRYSSET_FOR_ASYLSØKER_I_SØKNADEN:
-        'Søker har ikke krysset for at søker selv eller noen av barna er asylsøker i søknaden',
+        'Søker har ikke krysset for at søker selv er asylsøker eller at det er søkt om asyl for noen av barna i søknaden',
     SØKER_HAR_IKKE_KRYSSET_FOR_ADOPTERT_FRA_UTLANDET_I_SØKNADEN:
         'Søker har ikke krysset for at noen av barna er adoptert fra utlandet i søknaden',
     SØKNADEN_INNEHOLDER_IKKE_VEDLEGG: 'Søknaden inneholder ikke vedlegg',
