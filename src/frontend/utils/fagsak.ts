@@ -4,6 +4,7 @@ import { erBehandlingHenlagt } from '../typer/behandling';
 import type { IMinimalFagsak } from '../typer/fagsak';
 import { fagsakStatus } from '../typer/fagsak';
 import { IEndretUtbetalingAndelÅrsak } from '../typer/utbetalingAndel';
+import type { Utbetalingsperiode } from '../typer/vedtaksperiode';
 import { dagensDato, isoStringTilDate, isoStringTilDateMedFallback, tidenesEnde } from './dato';
 
 export const hentFagsakStatusVisning = (minimalFagsak: IMinimalFagsak): string =>
@@ -29,8 +30,8 @@ export const hentSisteIkkeHenlagteBehandling = (fagsak?: IMinimalFagsak): Visnin
     }
 };
 
-export const hentBarnMedLøpendeUtbetaling = (minimalFagsak: IMinimalFagsak): Set<string> =>
-    minimalFagsak.gjeldendeUtbetalingsperioder
+export const hentBarnMedLøpendeUtbetaling = (utbetalingsperioder: Utbetalingsperiode[]): Set<string> =>
+    utbetalingsperioder
         .filter(utbetalingsperiode =>
             isAfter(
                 isoStringTilDateMedFallback({

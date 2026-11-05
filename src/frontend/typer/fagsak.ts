@@ -3,7 +3,6 @@ import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehand
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { IInstitusjon } from './institusjon';
-import type { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
 export enum FagsakStatus {
@@ -48,7 +47,6 @@ export function sjekkHarBarnEnsligMindreårigFagsak(fagsaker: IBaseFagsak[] | un
 export interface IMinimalFagsak extends IBaseFagsak {
     migreringsdato?: string;
     behandlinger: VisningBehandling[];
-    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
 export function erFagsakAvTypeInstitusjon(fagsak: IMinimalFagsak) {

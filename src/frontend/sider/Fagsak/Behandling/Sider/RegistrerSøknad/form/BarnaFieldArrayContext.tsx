@@ -1,4 +1,6 @@
-import { useFagsak } from '@hooks/useFagsak';
+import { useFagsakId } from '@hooks/useFagsakId';
+import { useHentGjeldendeUtbetalingsperioder } from '@hooks/useHentGjeldendeUtbetalingsperioder';
+import { LocalAlert } from '@navikt/ds-react';
 import {
     RegistrerSøknadFormField,
     type RegistrerSøknadFormValues,
@@ -13,6 +15,7 @@ export type BarnField = IBarnMedOpplysninger & { id: string };
 
 export interface BarnaFieldArray {
     fields: BarnField[];
+    barnMedLøpendeUtbetaling: Set<string>;
     leggTilBarn: (barn: IBarnMedOpplysninger) => void;
     slettBarn: (index: number) => void;
 }
@@ -25,9 +28,15 @@ interface Props {
 }
 
 export function BarnaFieldArrayProvider({ control, children }: Props) {
-    const fagsak = useFagsak();
+    const fagsakId = useFagsakId();
 
-    const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
+    const { data: gjeldendeUtbetalingsperioder, error: gjeldendeUtbetalingsperioderError } =
+        useHentGjeldendeUtbetalingsperioder(fagsakId);
+
+    const barnMedLøpendeUtbetaling = useMemo(
+        () => hentBarnMedLøpendeUtbetaling(gjeldendeUtbetalingsperioder ?? []),
+        [gjeldendeUtbetalingsperioder]
+    );
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -48,11 +57,28 @@ export function BarnaFieldArrayProvider({ control, children }: Props) {
     const value = useMemo<BarnaFieldArray>(
         () => ({
             fields: fields.map((field, index) => ({ ...field, ...watchedBarn?.[index] })),
+            barnMedLøpendeUtbetaling,
             leggTilBarn: barn => append(barn, { shouldFocus: false }),
             slettBarn: remove,
         }),
-        [fields, watchedBarn, append, remove]
+        [fields, watchedBarn, barnMedLøpendeUtbetaling, append, remove]
     );
+
+    if (gjeldendeUtbetalingsperioderError) {
+        return (
+            <LocalAlert status="error">
+                <LocalAlert.Header>
+                    <LocalAlert.Title>
+                        Kunne ikke hente utbetalinger på fagsaken: {gjeldendeUtbetalingsperioderError.message}
+                    </LocalAlert.Title>
+                </LocalAlert.Header>
+            </LocalAlert>
+        );
+    }
+
+    if (gjeldendeUtbetalingsperioder === undefined) {
+        return null;
+    }
 
     return (
         <BarnaFieldArrayContext.Provider value={value}>
