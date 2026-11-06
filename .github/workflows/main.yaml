@@ -12,7 +12,7 @@ on:
       - '.gitignore'
       - 'CODEOWNERS'
       - 'LICENSE'
-      - 'biome.json'
+      - 'biome.jsonc'
 
 jobs:
   build-dev:
