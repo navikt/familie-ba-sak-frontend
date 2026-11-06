@@ -7,21 +7,23 @@ import { describe, expect, test } from 'vitest';
 import { BrevmottakerField, type BrevmottakerFormValues } from '../useBrevmottakerForm';
 import { useValgbareRegionkoder } from './useValgbareRegionkoder';
 
+function Wrapper({ brevmottakertype, children }: PropsWithChildren<{ brevmottakertype: Brevmottakertype | '' }>) {
+    const form = useForm<BrevmottakerFormValues>({
+        defaultValues: {
+            [BrevmottakerField.BREVMOTTAKERTYPE]: brevmottakertype,
+            [BrevmottakerField.NAVN]: '',
+            [BrevmottakerField.LAND]: null,
+            [BrevmottakerField.ADRESSELINJE_1]: '',
+            [BrevmottakerField.ADRESSELINJE_2]: '',
+            [BrevmottakerField.POSTNUMMER]: '',
+            [BrevmottakerField.POSTSTED]: '',
+        },
+    });
+    return <FormProvider {...form}>{children}</FormProvider>;
+}
+
 function lagWrapper(brevmottakertype: Brevmottakertype | '' = '') {
-    return function Wrapper({ children }: PropsWithChildren) {
-        const form = useForm<BrevmottakerFormValues>({
-            defaultValues: {
-                [BrevmottakerField.BREVMOTTAKERTYPE]: brevmottakertype,
-                [BrevmottakerField.NAVN]: '',
-                [BrevmottakerField.LAND]: null,
-                [BrevmottakerField.ADRESSELINJE_1]: '',
-                [BrevmottakerField.ADRESSELINJE_2]: '',
-                [BrevmottakerField.POSTNUMMER]: '',
-                [BrevmottakerField.POSTSTED]: '',
-            },
-        });
-        return <FormProvider {...form}>{children}</FormProvider>;
-    };
+    return ({ children }: PropsWithChildren) => <Wrapper brevmottakertype={brevmottakertype}>{children}</Wrapper>;
 }
 
 function renderUseValgbareRegionkoder(brevmottakertype: Brevmottakertype | '' = '') {
