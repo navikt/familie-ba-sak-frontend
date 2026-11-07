@@ -125,7 +125,7 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   this fully (some use `useXForm` naming, or inline defaults) — treat it as the target shape for new or
   touched forms rather than an established universal rule.
 - **Obfuscated data**: some data toggled via feature flag can be masked for demo/opplæring purposes — see
-  `useSkalObfuskereData` and the `select` option in hooks like `useHentFagsak` / `useHentPerson`.
+  `useSkalObfuskereData` and the `select` option in hooks like `useHentGjeldendeUtbetalingsperioder` / `useHentPerson`.
 
 ## Testing
 

@@ -5,6 +5,7 @@ import type { IBehandling } from '../typer/behandling';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
 import { type IGrunnlagPerson, PersonType } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
+import type { Utbetalingsperiode } from '../typer/vedtaksperiode';
 
 export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
     if (ressurs.status === RessursStatus.SUKSESS) {
@@ -89,3 +90,21 @@ const sammenlignFødselsdato = <T extends { fødselsdato?: string; person?: IGru
     if (a.fødselsdato && b.fødselsdato) return b.fødselsdato.localeCompare(a.fødselsdato);
     return 0;
 };
+
+export const obfuskerUtbetalingsperioder = (utbetalingsperioder: Utbetalingsperiode[]): Utbetalingsperiode[] =>
+    utbetalingsperioder.map(utbetalingsperiode => {
+        let indeks = 1;
+        return {
+            ...utbetalingsperiode,
+            utbetalingsperiodeDetaljer: utbetalingsperiode.utbetalingsperiodeDetaljer
+                .toSorted(sammenlignFødselsdato)
+                .map(detalj => ({
+                    ...detalj,
+                    person: {
+                        ...detalj.person,
+                        navn:
+                            detalj.person.type === PersonType.SØKER ? 'Søker Søkersen' : `[${indeks++}] Barn Barnesen`,
+                    },
+                })),
+        };
+    });
