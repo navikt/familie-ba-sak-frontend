@@ -1,5 +1,7 @@
+import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
@@ -27,8 +29,18 @@ export function OppdaterRegisteropplysninger() {
 
     const erLesevisning = useErLesevisning();
 
+    const { settToast } = useToastContext();
+
     const { mutate, isPending, error } = useOppdaterRegisteropplysninger({
-        onSuccess: behandling => settÅpenBehandling(byggSuksessRessurs(behandling)),
+        onSuccess: behandling => {
+            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settToast(ToastTyper.REGISTEROPPLYSNINGER_OPPDATERT, {
+                alertType: AlertType.SUCCESS,
+                tekst: behandling.registeropplysningerErEndret
+                    ? 'Registeropplysningene er oppdatert. Behandlingen er tilbakestilt til vilkårsvurdering.'
+                    : 'Ingen endringer i registeropplysningene.',
+            });
+        },
     });
 
     const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;

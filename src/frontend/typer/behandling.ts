@@ -334,6 +334,7 @@ export interface IBehandling {
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     manglendeSvalbardmerking: ManglendeFinnmarkSvalbardMerking[];
     manglendeFinnmarkmerking?: ManglendeFinnmarkSvalbardMerking;
+    registeropplysningerErEndret?: boolean;
 }
 
 export enum VurderingsstrategiForValutakurser {
