@@ -82,16 +82,18 @@ export function FordelOppgave({ oppgave }: Props) {
                     return;
                 }
                 const fagsaker = await hentFagsakerPåPerson({ personIdent: brukerIdent });
-                if (fagsaker.length === 0) {
-                    visTekniskFeilModal(new Error('Fant ikke fagsak å navigere til.'));
+                const fagsaknavigering = finnFagsakÅNavigereTil(fagsaker);
+                if (fagsaknavigering.status === 'INGEN_FAGSAKER') {
+                    visTekniskFeilModal(new Error('Fant ingen fagsak å navigere til.'));
                     return;
                 }
-                const fagsak = finnFagsakÅNavigereTil(fagsaker);
-                if (!fagsak) {
-                    visTekniskFeilModal(new Error('Fant ikke fagsak å navigere til.'));
+                if (fagsaknavigering.status === 'FLERE_FAGSAKER') {
+                    visTekniskFeilModal(
+                        new Error('Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.')
+                    );
                     return;
                 }
-                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
+                navigate(`/fagsak/${fagsaknavigering.fagsak.id}/saksoversikt`);
                 navigerer = true;
                 return;
             }

@@ -192,14 +192,11 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
     const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
         try {
             const fagsaker = await hentFagsakerPåPerson({ personIdent: personident });
-            if (fagsaker.length === 0) {
+            const fagsaknavigering = finnFagsakÅNavigereTil(fagsaker);
+            if (fagsaknavigering.status === 'INGEN_FAGSAKER') {
                 visFantIkkeFagsakToast();
-                return;
-            }
-
-            const fagsak = finnFagsakÅNavigereTil(fagsaker);
-            if (fagsak) {
-                navigate(`/fagsak/${fagsak.id}/saksoversikt`);
+            } else if (fagsaknavigering.status === 'FUNNET') {
+                navigate(`/fagsak/${fagsaknavigering.fagsak.id}/saksoversikt`);
             } else {
                 settToast(ToastTyper.FANT_IKKE_FAGSAK, {
                     alertType: AlertType.WARNING,
