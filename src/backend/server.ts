@@ -5,7 +5,6 @@ import { default as backend, ensureAuthenticated, envVar } from '@navikt/familie
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 import { appConfig, frontendPath, sessionConfig } from './config.js';
 import { erLokal } from './env.js';
@@ -19,7 +18,7 @@ const port = 8000;
 
 backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAuthConfig, router }: IApp) => {
     app.use((req: Request, _res: Response, next: NextFunction) => {
-        req.headers['nav-call-id'] = uuidv4();
+        req.headers['nav-call-id'] = crypto.randomUUID();
         req.headers['nav-consumer-id'] = 'familie-ba-sak-front';
         next();
     });

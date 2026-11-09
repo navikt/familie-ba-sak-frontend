@@ -1,6 +1,5 @@
 import { useBrevmottakereFagsakContext } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import type { BrevmottakerFagsak } from '@typer/brevmottaker';
-import { randomUUID } from '@utils/commons';
 import { LeggTilBrevmottakerModal } from './LeggTilBrevmottakerModal';
 import type { BrevmottakerUseSkjema } from './useBrevmottakerSkjema';
 import { felterTilSkjemaBrevmottaker } from './useBrevmottakerSkjema';
@@ -15,7 +14,7 @@ export const LeggTilBrevmottakerModalFagsak = ({ lukkModal }: IFagsakModalProps)
     const lagreMottaker = (useSkjema: BrevmottakerUseSkjema) => {
         if (useSkjema.kanSendeSkjema()) {
             const nyMottaker = {
-                uuid: randomUUID(),
+                uuid: crypto.randomUUID(),
                 ...felterTilSkjemaBrevmottaker(useSkjema.skjema.felter),
             };
             useSkjema.nullstillSkjema();
