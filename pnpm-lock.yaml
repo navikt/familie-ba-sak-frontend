@@ -125,9 +125,6 @@ importers:
       tslib:
         specifier: 2.8.1
         version: 2.8.1
-      uuid:
-        specifier: 14.0.2
-        version: 14.0.2
     devDependencies:
       '@axe-core/react':
         specifier: 4.13.0
