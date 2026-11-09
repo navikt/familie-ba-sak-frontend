@@ -15,21 +15,24 @@ vi.mock('@hooks/useErLesevisningFagsak');
 
 const UTENLANDSK_ADRESSE_INFO = 'Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.';
 
+function Wrapper({ brevmottakere, children }: PropsWithChildren<{ brevmottakere: BrevmottakerFagsak[] }>) {
+    return (
+        <TestProviders>
+            <BrukerProvider bruker={lagPerson({ navn: 'Bruker Brukersen' })}>
+                <BrevmottakereFagsakProvider initielleBrevmottakere={brevmottakere}>
+                    <BrevmottakerDialogProvider initialErÅpen={true}>
+                        {({ erDialogÅpen }) => erDialogÅpen && children}
+                    </BrevmottakerDialogProvider>
+                </BrevmottakereFagsakProvider>
+            </BrukerProvider>
+        </TestProviders>
+    );
+}
+
 async function renderDialog(brevmottakere: BrevmottakerFagsak[] = []) {
-    function Wrapper({ children }: PropsWithChildren) {
-        return (
-            <TestProviders>
-                <BrukerProvider bruker={lagPerson({ navn: 'Bruker Brukersen' })}>
-                    <BrevmottakereFagsakProvider initielleBrevmottakere={brevmottakere}>
-                        <BrevmottakerDialogProvider initialErÅpen={true}>
-                            {({ erDialogÅpen }) => erDialogÅpen && children}
-                        </BrevmottakerDialogProvider>
-                    </BrevmottakereFagsakProvider>
-                </BrukerProvider>
-            </TestProviders>
-        );
-    }
-    const resultat = render(<BrevmottakerDialogFagsak />, { wrapper: Wrapper });
+    const resultat = render(<BrevmottakerDialogFagsak />, {
+        wrapper: ({ children }) => <Wrapper brevmottakere={brevmottakere}>{children}</Wrapper>,
+    });
     // Dialogen flytter fokus til seg selv i en requestAnimationFrame etter åpning. Venter på dette,
     // slik at fokus ikke blir flyttet bort fra feltet testen skriver i.
     await waitFor(() => expect(resultat.screen.getByRole('dialog')).toHaveFocus());
