@@ -2,14 +2,7 @@ import { KontrollertStatus, type Kontrollside, SideId } from '@sider/Fagsak/Beha
 import { act, renderHook } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
-import {
-    BehandlerRolle,
-    BehandlingStatus,
-    BehandlingSteg,
-    BehandlingStegStatus,
-    BehandlingÅrsak,
-    type IBehandling,
-} from '@typer/behandling';
+import { BehandlerRolle, BehandlingStatus, BehandlingÅrsak } from '@typer/behandling';
 import type { PropsWithChildren } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -38,13 +31,6 @@ function renderHookWithProvider() {
         wrapper: ({ children }: PropsWithChildren) => <KontrollsiderProvider>{children}</KontrollsiderProvider>,
     });
 }
-
-const stegTilstandMedInstitusjon: IBehandling['stegTilstand'] = [
-    {
-        behandlingSteg: BehandlingSteg.REGISTRERE_INSTITUSJON,
-        behandlingStegStatus: BehandlingStegStatus.UTFØRT,
-    },
-];
 
 const defaultLocation = { pathname: lagPathname('vilkaarsvurdering') };
 
@@ -217,35 +203,37 @@ describe('KontrollbareSiderProvider', () => {
 
     describe('Synkronisering når sidelisten endres', () => {
         test('legger til nye sider som ikke kontrollert', () => {
+            useBehandlingMock.mockReturnValue(
+                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, skalBehandlesAutomatisk: true })
+            );
+
             const { result, rerender } = renderHookWithProvider();
 
-            expect(statusForSide(result.current.kontrollsider, SideId.REGISTRER_INSTITUSJON)).toBeUndefined();
+            expect(statusForSide(result.current.kontrollsider, SideId.SIMULERING)).toBeUndefined();
 
             useBehandlingMock.mockReturnValue(
-                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, stegTilstand: stegTilstandMedInstitusjon })
+                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, skalBehandlesAutomatisk: false })
             );
             rerender();
 
-            expect(statusForSide(result.current.kontrollsider, SideId.REGISTRER_INSTITUSJON)).toBe(
+            expect(statusForSide(result.current.kontrollsider, SideId.SIMULERING)).toBe(
                 KontrollertStatus.IKKE_KONTROLLERT
             );
         });
 
         test('fjerner sider som ikke lenger vises', () => {
-            useBehandlingMock.mockReturnValue(
-                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, stegTilstand: stegTilstandMedInstitusjon })
-            );
-
             const { result, rerender } = renderHookWithProvider();
 
-            expect(result.current.kontrollsider.map(side => side.id)).toContain(SideId.REGISTRER_INSTITUSJON);
-            expect(result.current.kontrollsider).toHaveLength(6);
+            expect(result.current.kontrollsider.map(side => side.id)).toContain(SideId.SIMULERING);
+            expect(result.current.kontrollsider).toHaveLength(5);
 
-            useBehandlingMock.mockReturnValue(lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK }));
+            useBehandlingMock.mockReturnValue(
+                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, skalBehandlesAutomatisk: true })
+            );
             rerender();
 
-            expect(result.current.kontrollsider.map(side => side.id)).not.toContain(SideId.REGISTRER_INSTITUSJON);
-            expect(result.current.kontrollsider).toHaveLength(5);
+            expect(result.current.kontrollsider.map(side => side.id)).not.toContain(SideId.SIMULERING);
+            expect(result.current.kontrollsider).toHaveLength(4);
         });
 
         test('bevarer kontrollert-status for sider som fortsatt vises', () => {
@@ -253,7 +241,7 @@ describe('KontrollbareSiderProvider', () => {
                 lagBehandling({
                     status: BehandlingStatus.FATTER_VEDTAK,
                     endretAv: 'saksbehandler@nav.no',
-                    stegTilstand: stegTilstandMedInstitusjon,
+                    skalBehandlesAutomatisk: true,
                 })
             );
 
@@ -263,7 +251,9 @@ describe('KontrollbareSiderProvider', () => {
                 KontrollertStatus.KONTROLLERT
             );
 
-            useBehandlingMock.mockReturnValue(lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK }));
+            useBehandlingMock.mockReturnValue(
+                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, skalBehandlesAutomatisk: false })
+            );
             rerender();
 
             expect(statusForSide(result.current.kontrollsider, SideId.VILKÅRSVURDERING)).toBe(
@@ -293,24 +283,25 @@ describe('KontrollbareSiderProvider', () => {
         });
 
         test('markerer en nylig tillagt side som kontrollert dersom den er den åpne siden', () => {
-            useLocationMock.mockReturnValue({ pathname: lagPathname('registrer-institusjon') });
+            useLocationMock.mockReturnValue({ pathname: lagPathname('simulering') });
+            useBehandlingMock.mockReturnValue(
+                lagBehandling({ status: BehandlingStatus.FATTER_VEDTAK, skalBehandlesAutomatisk: true })
+            );
 
             const { result, rerender } = renderHookWithProvider();
 
-            expect(result.current.kontrollsider.find(side => side.id === SideId.REGISTRER_INSTITUSJON)).toBeUndefined();
+            expect(result.current.kontrollsider.find(side => side.id === SideId.SIMULERING)).toBeUndefined();
 
             useBehandlingMock.mockReturnValue(
                 lagBehandling({
                     status: BehandlingStatus.FATTER_VEDTAK,
                     endretAv: 'saksbehandler@nav.no',
-                    stegTilstand: stegTilstandMedInstitusjon,
+                    skalBehandlesAutomatisk: false,
                 })
             );
             rerender();
 
-            expect(statusForSide(result.current.kontrollsider, SideId.REGISTRER_INSTITUSJON)).toBe(
-                KontrollertStatus.KONTROLLERT
-            );
+            expect(statusForSide(result.current.kontrollsider, SideId.SIMULERING)).toBe(KontrollertStatus.KONTROLLERT);
         });
     });
 

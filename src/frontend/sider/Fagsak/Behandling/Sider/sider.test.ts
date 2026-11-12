@@ -92,8 +92,17 @@ describe('Sider', () => {
             expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.SIMULERING);
         });
 
-        test('skal vise simulering når behandlingen skal behandles automatisk', () => {
+        test('skal ikke vise simulering når behandlingen skal behandles automatisk', () => {
             const behandling = lagBehandling({ skalBehandlesAutomatisk: true });
+
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.SIMULERING);
+        });
+
+        test('skal vise simulering når behandlingen er automatisk behandling av søknad', () => {
+            const behandling = lagBehandling({
+                skalBehandlesAutomatisk: true,
+                årsak: BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD,
+            });
 
             expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.SIMULERING);
         });
@@ -188,7 +197,6 @@ describe('Sider', () => {
                 const behandling = lagBehandling({
                     årsak: BehandlingÅrsak.SATSENDRING,
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
-                    skalBehandlesAutomatisk: true,
                 });
                 expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.SIMULERING);
             }
