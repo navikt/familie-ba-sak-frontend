@@ -92,10 +92,10 @@ describe('Sider', () => {
             expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.SIMULERING);
         });
 
-        test('skal ikke vise simulering når behandlingen skal behandles automatisk', () => {
+        test('skal vise simulering når behandlingen skal behandles automatisk', () => {
             const behandling = lagBehandling({ skalBehandlesAutomatisk: true });
 
-            expect(finnSiderForBehandling(behandling).map(side => side.id)).not.toContain(SideId.SIMULERING);
+            expect(finnSiderForBehandling(behandling).map(side => side.id)).toContain(SideId.SIMULERING);
         });
 
         test('skal vise vedtak når årsaken ikke er satsendring', () => {
@@ -188,6 +188,7 @@ describe('Sider', () => {
                 const behandling = lagBehandling({
                     årsak: BehandlingÅrsak.SATSENDRING,
                     steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    skalBehandlesAutomatisk: true,
                 });
                 expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.SIMULERING);
             }

@@ -123,9 +123,6 @@ export const sider: Record<SideId, Side> = {
         href: 'simulering',
         navn: 'Simulering',
         steg: BehandlingSteg.VURDER_TILBAKEKREVING,
-        visSide: behandling => {
-            return !behandling.skalBehandlesAutomatisk;
-        },
     },
     VEDTAK: {
         id: SideId.VEDTAK,
@@ -167,10 +164,7 @@ export function finnSideForBehandlingssteg(behandling: IBehandling): Side | unde
         if (sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)) {
             return sider.VEDTAK;
         }
-        if (sider.SIMULERING.visSide && sider.SIMULERING.visSide(behandling)) {
-            return sider.SIMULERING;
-        }
-        return sider.BEHANDLINGRESULTAT;
+        return sider.SIMULERING;
     }
 
     const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
