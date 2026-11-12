@@ -1,6 +1,5 @@
 import { Fieldset } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
@@ -35,21 +34,19 @@ function Wrapper({ behandling = lagBehandling(), children }: WrapperProps) {
     return (
         <TestProviders>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <FormProvider {...form}>
-                            <form onSubmit={handleSubmit(() => {})}>
-                                <Fieldset error={errors.root?.message} legend={'Endre enhet'} hideLegend={true}>
-                                    {children}
-                                </Fieldset>
-                                <button type={'button'} onClick={() => setError('root', { message: 'Ukjent feil' })}>
-                                    Sett rotfeil
-                                </button>
-                                <button type={'submit'}>Send inn</button>
-                            </form>
-                        </FormProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <FormProvider {...form}>
+                        <form onSubmit={handleSubmit(() => {})}>
+                            <Fieldset error={errors.root?.message} legend={'Endre enhet'} hideLegend={true}>
+                                {children}
+                            </Fieldset>
+                            <button type={'button'} onClick={() => setError('root', { message: 'Ukjent feil' })}>
+                                Sett rotfeil
+                            </button>
+                            <button type={'submit'}>Send inn</button>
+                        </form>
+                    </FormProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
