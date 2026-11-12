@@ -2,7 +2,6 @@ import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/BegrunnelseFelt';
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/VedtaksdatoFelt';
@@ -24,7 +23,7 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
         error: angreKorrigertVedtakError,
     } = useAngreKorrigertVedtak({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             lukkModal();
         },
     });

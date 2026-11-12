@@ -1,7 +1,6 @@
 import { useSlettVilkår } from '@hooks/useSlettVilkår';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, Dialog, ErrorMessage } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { VilkårType } from '@typer/vilkår';
 import { useState } from 'react';
@@ -20,7 +19,7 @@ export function FjernUtvidetBarnetrygdVilkår({ personIdent }: Props) {
         error: slettVilkårError,
         reset: nullstillSlettVilkår,
     } = useSlettVilkår({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const onOpenChange = (åpen: boolean) => {

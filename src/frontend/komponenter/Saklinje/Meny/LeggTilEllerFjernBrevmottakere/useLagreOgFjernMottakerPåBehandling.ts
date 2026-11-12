@@ -44,7 +44,7 @@ export const useLagreEllerFjernMottakerPåBehandling = ({ behandlingId }: Props)
                             alertType: AlertType.SUCCESS,
                             tekst: 'Mottaker ble lagret',
                         });
-                        settÅpenBehandling(response);
+                        settÅpenBehandling(response.data);
                     }
                 }
             );
@@ -64,7 +64,7 @@ export const useLagreEllerFjernMottakerPåBehandling = ({ behandlingId }: Props)
                     alertType: AlertType.SUCCESS,
                     tekst: 'Mottaker fjernet',
                 });
-                settÅpenBehandling(response);
+                settÅpenBehandling(response.data);
             }
         });
     };

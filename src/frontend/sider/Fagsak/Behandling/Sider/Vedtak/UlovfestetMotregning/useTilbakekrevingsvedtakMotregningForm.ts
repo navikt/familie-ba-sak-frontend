@@ -1,5 +1,4 @@
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useForm } from 'react-hook-form';
 
@@ -48,7 +47,7 @@ export function useTilbakekrevingsvedtakMotregningForm({ lukkExpansionCard }: Pr
                 behandlingId: behandling.behandlingId,
                 tilbakekrevingsvedtakMotregning: { varselDato, årsakTilFeilutbetaling, vurderingAvSkyld },
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkExpansionCard();
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';

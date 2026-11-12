@@ -62,7 +62,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
         await user.click(screen.getByRole('button', { name: 'Fjern fullmektig' }));
 
         await waitFor(() => {
-            expect(settÅpenBehandling).toHaveBeenCalledWith(byggSuksessRessurs(oppdatertBehandling));
+            expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
             expect(settToast).toHaveBeenCalledWith(ToastTyper.BREVMOTTAKER_FJERNET, {
                 alertType: AlertType.SUCCESS,
                 tekst: 'Brevmottaker fjernet',
@@ -100,7 +100,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
         }
 
         await waitFor(() => expect(fjernKnapp).toBeEnabled());
-        expect(settÅpenBehandling).toHaveBeenCalledWith(byggSuksessRessurs(oppdatertBehandling));
+        expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
     });
 
     test('skal vise feil uten å oppdatere behandlingen eller vise en suksessmelding når sletting feiler', async () => {

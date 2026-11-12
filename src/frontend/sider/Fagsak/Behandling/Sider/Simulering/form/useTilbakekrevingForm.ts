@@ -2,7 +2,6 @@ import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useFagsakId } from '@hooks/useFagsakId';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterTilbakekreving } from '@hooks/useOppdaterTilbakekreving';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useSimuleringContext } from '@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext';
 import type { Tilbakekrevingsvalg } from '@typer/simulering';
@@ -69,7 +68,7 @@ export function useTilbakekrevingForm() {
                 tilbakekreving: utledTilbakekreving(values, behandling.vedtak, erFeilutbetaling),
             });
 
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
 
             navigate(`/fagsak/${fagsakId}/${behandling.behandlingId}/vedtak`);
         } catch (error: unknown) {

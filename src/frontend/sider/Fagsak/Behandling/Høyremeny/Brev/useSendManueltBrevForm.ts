@@ -2,7 +2,6 @@ import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { useSendManueltBrev } from '@hooks/useSendManueltBrev';
 import type { Regionkode } from '@komponenter/FlaggCombobox';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
@@ -192,7 +191,7 @@ export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
         try {
             const oppdatertBehandling = await sendBrev(hentSkjemaData(values));
             onSubmitSuccess();
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
         } catch (error) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
             setError('root', { message });

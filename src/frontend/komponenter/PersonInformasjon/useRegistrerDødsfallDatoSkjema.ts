@@ -1,4 +1,3 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
@@ -54,7 +53,7 @@ export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: Props) =>
 
         return registrerDødsfallDato(registrerDødsfallParameters)
             .then(behandling => {
-                settÅpenBehandling(byggSuksessRessurs(behandling));
+                settÅpenBehandling(behandling);
                 lukkModal();
             })
             .catch((e: unknown) =>
