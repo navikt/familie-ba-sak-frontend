@@ -2,7 +2,6 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstidspunkt';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { QueryClient } from '@tanstack/react-query';
 import { waitFor } from '@testing-library/react';
@@ -32,13 +31,11 @@ function Wrapper({ behandling = lagBehandling(), initialErÅpen = true, queryCli
     return (
         <TestProviders queryClient={queryClient}>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <EndringstidspunktDialogProvider initialErÅpen={initialErÅpen}>
-                            {children}
-                        </EndringstidspunktDialogProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <EndringstidspunktDialogProvider initialErÅpen={initialErÅpen}>
+                        {children}
+                    </EndringstidspunktDialogProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

@@ -1,5 +1,4 @@
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
@@ -43,9 +42,7 @@ function Wrapper({
                         <FagsakProvider fagsak={fagsak}>
                             <BrukerProvider bruker={bruker}>
                                 <BrevmottakereFagsakProvider>
-                                    <HentOgSettBehandlingProvider>
-                                        <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                                    </HentOgSettBehandlingProvider>
+                                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
                                 </BrevmottakereFagsakProvider>
                             </BrukerProvider>
                         </FagsakProvider>

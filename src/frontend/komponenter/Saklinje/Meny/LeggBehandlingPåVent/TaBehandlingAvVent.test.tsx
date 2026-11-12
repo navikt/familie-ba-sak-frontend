@@ -2,7 +2,6 @@ import { ActionMenu } from '@navikt/ds-react';
 import type { PropsWithChildren } from 'react';
 import { describe, expect } from 'vitest';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
@@ -20,13 +19,11 @@ function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children 
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <ActionMenu open={true}>
-                            <ActionMenu.Content>{children}</ActionMenu.Content>
-                        </ActionMenu>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <ActionMenu open={true}>
+                        <ActionMenu.Content>{children}</ActionMenu.Content>
+                    </ActionMenu>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
