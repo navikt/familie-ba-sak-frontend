@@ -2,7 +2,6 @@ import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettBrevmottaker } from '@hooks/useSlettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { BrevmottakerDetaljer } from '../Felles/BrevmottakerDetaljer';
@@ -23,7 +22,7 @@ export function BrevmottakerDetaljerBehandling({ brevmottaker }: Props) {
         error: slettBrevmottakerError,
     } = useSlettBrevmottaker({
         onSuccess: oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             settToast(ToastTyper.BREVMOTTAKER_FJERNET, { alertType: AlertType.SUCCESS, tekst: 'Brevmottaker fjernet' });
         },
     });

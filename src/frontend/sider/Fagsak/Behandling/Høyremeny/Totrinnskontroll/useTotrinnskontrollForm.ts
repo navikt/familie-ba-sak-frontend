@@ -3,7 +3,6 @@ import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperiode
 import { useIverksettVedtak } from '@hooks/useIverksettVedtak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { Tab, useTabContext } from '@sider/Fagsak/Behandling/Høyremeny/TabContextProvider';
 import { useTotrinnskontrollModalContext } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
@@ -79,7 +78,7 @@ export function useTotrinnskontrollForm() {
                 queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
             });
 
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
 
             åpneModal(beslutning);
 

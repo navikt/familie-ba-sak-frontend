@@ -6,7 +6,6 @@ import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetali
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage, ErrorSummary, HStack, Label, LocalAlert } from '@navikt/ds-react';
-import { byggDataRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingResultat, BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '@typer/eøsPerioder';
 import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
@@ -47,7 +46,7 @@ const Behandlingsresultat = () => {
         error: oppdaterBehandlingsresultatError,
     } = useOppdaterBehandlingsresultat({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
                 navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/simulering`);
             } else {
@@ -62,7 +61,7 @@ const Behandlingsresultat = () => {
         isError: isOpprettEndretUtbetalingAndelError,
         error: opprettEndretUtbetalingAndelError,
     } = useOpprettEndretUtbetalingAndel({
-        onSuccess: (behandling: IBehandling) => settÅpenBehandling(byggDataRessurs(behandling)),
+        onSuccess: (behandling: IBehandling) => settÅpenBehandling(behandling),
     });
 
     const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =

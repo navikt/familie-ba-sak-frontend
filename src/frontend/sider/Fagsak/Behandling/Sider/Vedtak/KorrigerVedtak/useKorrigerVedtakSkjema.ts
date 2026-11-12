@@ -1,5 +1,4 @@
 import { useKorrigerVedtak } from '@hooks/useKorrigerVedtak';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 
@@ -33,7 +32,7 @@ export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
 
     const { mutateAsync: korrigerVedtak } = useKorrigerVedtak({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             lukkModal();
         },
         onError: error => {

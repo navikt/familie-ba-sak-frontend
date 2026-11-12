@@ -1,6 +1,5 @@
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
@@ -25,9 +24,7 @@ function Wrapper({ fagsak, behandling, children }: WrapperProps) {
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

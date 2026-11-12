@@ -9,7 +9,6 @@ import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { IBehandling } from '@typer/behandling';
 import { Behandlingstype } from '@typer/behandling';
 import { ytelsetype } from '@typer/beregning';
@@ -119,7 +118,7 @@ const Oppsummeringsboks = ({
                 tekst: 'Småbarnstillegg er fjernet',
             });
             settRestFeil(undefined);
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
         },
         onError: () => settRestFeil('Teknisk feil ved fjerning av småbarnstillegg'),
     });
@@ -131,7 +130,7 @@ const Oppsummeringsboks = ({
                 tekst: 'Småbarnstillegg er lagt til',
             });
             settRestFeil(undefined);
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
         },
         onError: () => settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg'),
     });

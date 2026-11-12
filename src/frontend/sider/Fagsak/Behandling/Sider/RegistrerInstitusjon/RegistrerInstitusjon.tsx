@@ -5,7 +5,7 @@ import { useRegistrerInstitusjon } from '@hooks/useRegistrerInstitusjon';
 import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs, RessursStatus } from '@navikt/familie-typer';
+import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
@@ -41,7 +41,7 @@ const RegistrerInstitusjon = () => {
             { behandlingId: behandling.behandlingId },
             {
                 onSuccess: oppdatertBehandling => {
-                    settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+                    settÅpenBehandling(oppdatertBehandling);
                     gåTilNesteSide();
                 },
             }

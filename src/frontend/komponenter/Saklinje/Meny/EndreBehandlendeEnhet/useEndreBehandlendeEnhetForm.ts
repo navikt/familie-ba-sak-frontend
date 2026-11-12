@@ -1,6 +1,5 @@
 import { ApiFeil } from '@api/client/apiClient';
 import { useOppdaterBehandlendeEnhet } from '@hooks/useOppdaterBehandlendeEnhet';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { behandlendeEnheter, UKJENT_ENHET } from '@typer/enhet';
 import { useForm } from 'react-hook-form';
@@ -42,7 +41,7 @@ export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
         const { enhetId, begrunnelse } = formValues;
         try {
             const oppdatertBehandling = await oppdaterBehandlendeEnhet({ enhetId, begrunnelse });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkModal();
         } catch (error: unknown) {
             setError('root', { message: error instanceof ApiFeil ? error.message : 'Ukjent feil' });

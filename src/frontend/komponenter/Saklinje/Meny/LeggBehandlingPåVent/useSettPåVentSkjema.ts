@@ -1,5 +1,4 @@
 import { useSettPåVent } from '@hooks/useSettPåVent';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { SettPåVentÅrsak } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
@@ -56,7 +55,7 @@ export function useSettPåVentSkjema({ lukkModal }: Props) {
                 behandlingId: behandling.behandlingId,
                 erBehandlingAlleredePåVent,
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkModal();
         } catch (error) {
             const message = error instanceof Error ? error.message : '';

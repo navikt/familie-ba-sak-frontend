@@ -1,6 +1,5 @@
 import { useSettPåVent } from '@hooks/useSettPåVent';
 import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/konstanter';
 import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
@@ -25,7 +24,7 @@ export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
         error,
     } = useSettPåVent({
         onSuccess: oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkModal();
         },
     });

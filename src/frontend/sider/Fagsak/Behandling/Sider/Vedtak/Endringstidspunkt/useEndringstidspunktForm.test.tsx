@@ -3,10 +3,6 @@ import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperiode
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import {
-    HentOgSettBehandlingProvider,
-    useHentOgSettBehandlingContext,
-} from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { QueryClient } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';
@@ -26,31 +22,36 @@ interface Props extends PropsWithChildren {
     behandling?: IBehandling;
     initialErÅpen?: boolean;
     queryClient?: QueryClient;
+    settBehandling?: (behandling: IBehandling) => void;
 }
 
-function Wrapper({ behandling = lagBehandling(), initialErÅpen = true, queryClient, children }: Props) {
+function Wrapper({
+    behandling = lagBehandling(),
+    initialErÅpen = true,
+    queryClient,
+    settBehandling = () => {},
+    children,
+}: Props) {
     return (
         <TestProviders queryClient={queryClient}>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <EndringstidspunktDialogProvider initialErÅpen={initialErÅpen}>
-                            {children}
-                        </EndringstidspunktDialogProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling} settBehandling={settBehandling}>
+                    <EndringstidspunktDialogProvider initialErÅpen={initialErÅpen}>
+                        {children}
+                    </EndringstidspunktDialogProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
 }
 
 function renderUseEndringstidspunktForm(behandling?: IBehandling, queryClient?: QueryClient) {
-    return renderHook(
+    const settBehandling = vi.fn<(behandling: IBehandling) => void>();
+    const rendret = renderHook(
         () => {
             const { form, onSubmit } = useEndringstidspunktForm();
 
             const endringstidspunktDialogContext = useEndringstidspunktDialogContext();
-            const hentOgSettBehandlingContext = useHentOgSettBehandlingContext();
 
             // react-hook-form bruker en proxy for å avgjøre hvilke deler av formState den skal
             // abonnere på. Vi må lese errors under render for at endringer i setError skal føre
@@ -62,17 +63,17 @@ function renderUseEndringstidspunktForm(behandling?: IBehandling, queryClient?: 
                 onSubmit,
                 errors,
                 dialog: endringstidspunktDialogContext,
-                behandlingRessurs: hentOgSettBehandlingContext.behandlingRessurs,
             };
         },
         {
             wrapper: ({ children }) => (
-                <Wrapper behandling={behandling} queryClient={queryClient}>
+                <Wrapper behandling={behandling} queryClient={queryClient} settBehandling={settBehandling}>
                     {children}
                 </Wrapper>
             ),
         }
     );
+    return { ...rendret, settBehandling };
 }
 
 describe('useEndringstidspunktForm', () => {
@@ -92,14 +93,14 @@ describe('useEndringstidspunktForm', () => {
             )
         );
 
-        const { result } = renderUseEndringstidspunktForm(behandling);
+        const { result, settBehandling } = renderUseEndringstidspunktForm(behandling);
 
         act(() => result.current.form.setValue(Feltnavn.ENDRINGSTIDSPUNKT, '2024-01-01', { shouldDirty: true }));
 
         await act(() => result.current.form.handleSubmit(result.current.onSubmit)());
 
         await waitFor(() => expect(result.current.dialog.erDialogÅpen).toBe(false));
-        await waitFor(() => expect(result.current.behandlingRessurs).toEqual(byggSuksessRessurs(oppdatertBehandling)));
+        await waitFor(() => expect(settBehandling).toHaveBeenCalledWith(oppdatertBehandling));
         await waitFor(() => expect(result.current.form.getValues()).toEqual({ [Feltnavn.ENDRINGSTIDSPUNKT]: null }));
     });
 

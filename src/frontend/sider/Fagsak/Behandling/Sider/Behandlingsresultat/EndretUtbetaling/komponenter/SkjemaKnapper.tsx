@@ -1,6 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
-import { byggDataRessurs } from '@navikt/familie-typer';
 import { useFormContext } from 'react-hook-form';
 
 import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
@@ -32,7 +31,7 @@ export const SkjemaKnapper = ({ lukkSkjema, kunVisSlett = false }: SkjemaKnapper
         mutateAsync(endretUtbetalingAndel)
             .then(behandling => {
                 lukkSkjema();
-                settÅpenBehandling(byggDataRessurs(behandling));
+                settÅpenBehandling(behandling);
             })
             .catch(error => {
                 setError('root', {

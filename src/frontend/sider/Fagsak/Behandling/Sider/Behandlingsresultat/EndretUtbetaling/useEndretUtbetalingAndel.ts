@@ -1,4 +1,3 @@
-import { byggDataRessurs } from '@navikt/familie-typer';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
@@ -71,7 +70,7 @@ export const useEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbet
     const { mutateAsync: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
         onSuccess: (behandling: IBehandling) => {
             lukkSkjema();
-            settÅpenBehandling(byggDataRessurs(behandling));
+            settÅpenBehandling(behandling);
         },
         onError: (error: Error) => {
             setError('root', {

@@ -1,4 +1,3 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { ModalType } from '../../../../context/ModalContext';
@@ -59,7 +58,7 @@ export function useHenleggBehandlingForm() {
         }
         return mutateAsync({ behandling, årsak, begrunnelse })
             .then(behandling => {
-                settÅpenBehandling(byggSuksessRessurs(behandling));
+                settÅpenBehandling(behandling);
                 lukkModal();
                 åpneModal({ årsak });
             })

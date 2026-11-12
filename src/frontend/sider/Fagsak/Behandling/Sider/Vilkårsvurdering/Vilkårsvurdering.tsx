@@ -4,7 +4,6 @@ import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
@@ -44,7 +43,7 @@ export function Vilkårsvurdering() {
         error: oppdaterVilkårsvurderingError,
     } = useOppdaterVilkårsvurdering({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
         },
     });

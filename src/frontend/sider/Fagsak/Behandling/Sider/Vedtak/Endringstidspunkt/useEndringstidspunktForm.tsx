@@ -3,7 +3,6 @@ import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstids
 import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterEndringstidspunkt } from '@hooks/useOppdaterEndringstidspunkt';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
 import type { IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
@@ -59,7 +58,7 @@ export function useEndringstidspunktForm() {
             queryClient.invalidateQueries({
                 queryKey: HentEndringstidspunktQueryKeyFactory.endringstidspunkt(oppdatertBehandling.behandlingId),
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkDialog();
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
