@@ -1,7 +1,6 @@
 import { opprettBehandling } from '@api/opprettBehandling';
 import { OpprettBehandlingModal } from '@komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingModal';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { type RenderOptions, waitFor } from '@testing-library/react';
@@ -46,9 +45,7 @@ function Wrapper({
         <TestProviders saksbehandler={saksbehandler}>
             <FagsakProvider fagsak={fagsak}>
                 <BrukerProvider bruker={bruker}>
-                    <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                    </HentOgSettBehandlingProvider>
+                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
                 </BrukerProvider>
             </FagsakProvider>
         </TestProviders>

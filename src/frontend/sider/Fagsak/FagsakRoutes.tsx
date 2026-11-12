@@ -2,7 +2,6 @@ import { NotFound } from '@komponenter/Error/NotFound';
 import { RouteError } from '@komponenter/Error/RouteError';
 import { Behandling } from '@sider/Fagsak/Behandling/Behandling';
 import { behandlingRoutes } from '@sider/Fagsak/Behandling/BehandlingRoutes';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { Dokumenter } from '@sider/Fagsak/Dokumenter/Dokumenter';
 import { Dokumentutsending } from '@sider/Fagsak/Dokumentutsending/Dokumentutsending';
 import { Infotrygd } from '@sider/Fagsak/Infotrygd/Infotrygd';
@@ -33,11 +32,7 @@ export const fagsakRoutes: RouteObject[] = [
     },
     {
         path: ':behandlingId',
-        element: (
-            <HentOgSettBehandlingProvider>
-                <Behandling />
-            </HentOgSettBehandlingProvider>
-        ),
+        element: <Behandling />,
         errorElement: <RouteError />,
         children: behandlingRoutes,
     },

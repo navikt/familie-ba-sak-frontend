@@ -6,7 +6,6 @@ import { describe, expect } from 'vitest';
 import { ModalType } from '../../../../context/ModalContext';
 import { useModal } from '../../../../hooks/useModal';
 import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { server } from '../../../../testutils/mocks/node';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
@@ -42,14 +41,12 @@ function Wrapper({
     return (
         <TestProviders saksbehandler={saksbehandler}>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <ModalWrapper />
-                        <ActionMenu open={true}>
-                            <ActionMenu.Content>{children}</ActionMenu.Content>
-                        </ActionMenu>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <ModalWrapper />
+                    <ActionMenu open={true}>
+                        <ActionMenu.Content>{children}</ActionMenu.Content>
+                    </ActionMenu>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
