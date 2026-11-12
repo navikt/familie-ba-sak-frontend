@@ -1,7 +1,6 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { useEndreSøknadstidspunkt } from '@hooks/useEndreSøknadstidspunkt';
 import { HentRegistrerteSøknadstidspunkterQueryKeyFactory } from '@hooks/useHentRegistrerteSøknadstidspunkter';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { erRevurderingKlage, type IBehandling } from '@typer/behandling';
@@ -60,7 +59,7 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
 
     const { mutateAsync: endreSøknadstidspunkt } = useEndreSøknadstidspunkt({
         onSuccess: async oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             await queryClient.invalidateQueries({
                 queryKey: HentRegistrerteSøknadstidspunkterQueryKeyFactory.registrerteSøknadstidspunkter(
                     behandling.behandlingId

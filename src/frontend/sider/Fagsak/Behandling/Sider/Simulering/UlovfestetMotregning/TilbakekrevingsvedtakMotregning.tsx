@@ -3,7 +3,6 @@ import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTi
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { ArrowUndoIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ConfirmationPanel, ErrorMessage, Heading, InfoCard, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { AvregningAlert } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/AvregningAlert';
 import { BekreftSamtykkeTilMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/BekreftSamtykkeTilMotregning';
@@ -27,7 +26,7 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const {
@@ -35,7 +34,7 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const error = oppdaterError ?? slettError;

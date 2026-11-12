@@ -1,7 +1,6 @@
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterAnnenVurdering } from '@hooks/useOppdaterAnnenVurdering';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { IRestAnnenVurdering, Resultat } from '@typer/vilkår';
 import { useForm } from 'react-hook-form';
@@ -49,7 +48,7 @@ export function useAnnenVurderingSkjema({ annenVurdering, lukkSkjema }: Props) {
                 behandlingId: behandling.behandlingId,
                 annenVurdering: { ...annenVurdering, resultat: values.resultat, begrunnelse: values.begrunnelse },
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
             setError('root', { message: error instanceof Error ? error.message : 'En ukjent feil oppstod.' });

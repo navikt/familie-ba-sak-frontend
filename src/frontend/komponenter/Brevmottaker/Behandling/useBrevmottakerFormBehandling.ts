@@ -1,7 +1,6 @@
 import { useToastContext } from '@context/ToastContext';
 import { useOpprettBrevmottaker } from '@hooks/useOpprettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import type { Brevmottaker } from '@typer/brevmottaker';
 import { useBrevmottakerForm } from '../Felles/Form/useBrevmottakerForm';
@@ -21,7 +20,7 @@ export function useBrevmottakerFormBehandling({ onSubmitSuccess }: Props) {
             behandlingId: behandling.behandlingId,
             ...brevmottaker,
         });
-        settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+        settÅpenBehandling(oppdatertBehandling);
         settToast(ToastTyper.BREVMOTTAKER_LAGRET, { alertType: AlertType.SUCCESS, tekst: 'Brevmottaker ble lagret' });
     }
 

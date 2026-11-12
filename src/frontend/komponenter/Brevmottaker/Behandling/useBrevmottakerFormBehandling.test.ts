@@ -81,7 +81,7 @@ describe('useBrevmottakerFormBehandling', () => {
                 landkode: 'NO',
             },
         });
-        expect(settÅpenBehandling).toHaveBeenCalledWith(byggSuksessRessurs(oppdatertBehandling));
+        expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
         expect(settToast).toHaveBeenCalledWith(ToastTyper.BREVMOTTAKER_LAGRET, {
             alertType: AlertType.SUCCESS,
             tekst: 'Brevmottaker ble lagret',

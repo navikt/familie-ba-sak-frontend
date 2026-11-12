@@ -1,7 +1,6 @@
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterKompetanse } from '@hooks/useOppdaterKompetanse';
 import { useSlettKompetanse } from '@hooks/useSlettKompetanse';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { OptionType } from '@typer/common';
 import type { IRestKompetanse, KompetanseAktivitet, KompetanseResultat } from '@typer/eøsPerioder';
 import { type IIsoMånedPeriode, nyIsoMånedPeriode } from '@utils/dato';
@@ -79,7 +78,7 @@ export const useKompetansePeriodeSkjema = ({ kompetanse, barnIKompetanse, lukkSk
                 resultat: values.resultat,
                 erAnnenForelderOmfattetAvNorskLovgivning: kompetanse.erAnnenForelderOmfattetAvNorskLovgivning,
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
             setError('root', {
@@ -94,7 +93,7 @@ export const useKompetansePeriodeSkjema = ({ kompetanse, barnIKompetanse, lukkSk
                 behandlingId: behandling.behandlingId,
                 kompetanseId: kompetanse.id,
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
             setError('root', {

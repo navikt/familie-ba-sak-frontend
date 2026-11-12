@@ -3,7 +3,6 @@ import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useRegistrerSøknad } from '@hooks/useRegistrerSøknad';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
 import { useValgbareBarn } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useValgbareBarn';
@@ -98,7 +97,7 @@ export function useRegistrerSøknadForm() {
                 },
                 bekreftEndringerViaFrontend: modus === 'bekreftet',
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             navigate(`/fagsak/${fagsak.id}/${oppdatertBehandling.behandlingId}/vilkaarsvurdering`);
             if (modus === 'bekreftet') {
                 lukkBekreftEndringModal();

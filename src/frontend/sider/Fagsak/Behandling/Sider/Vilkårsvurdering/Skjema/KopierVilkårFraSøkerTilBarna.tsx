@@ -2,7 +2,6 @@ import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { FilesIcon } from '@navikt/aksel-icons';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
@@ -27,7 +26,7 @@ export function KopierVilkårFraSøkerTilBarna() {
         error: kopierVilkårFraSøkerTilBarnaError,
     } = useKopierVilkårFraSøkerTilBarna({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
 
             const barnasIdenter = behandling.personer
                 .filter(it => it.type === PersonType.BARN)
