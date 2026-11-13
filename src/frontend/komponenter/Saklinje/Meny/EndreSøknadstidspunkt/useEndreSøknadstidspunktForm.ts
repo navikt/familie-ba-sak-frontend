@@ -68,9 +68,6 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
             });
             lukkModal();
         },
-        onError: error => {
-            setError('root', { message: `Teknisk feil ved endring av søknadstidspunkt: ${error.message}` });
-        },
     });
 
     const form = useForm<EndreSøknadstidspunktFormValues>({
@@ -86,7 +83,7 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
         name: 'personer',
     });
 
-    function onSubmit(values: EndreSøknadstidspunktFormValues) {
+    async function onSubmit(values: EndreSøknadstidspunktFormValues) {
         const personerMedDato = values.personer.filter(person => person.søknadstidspunkt !== null);
 
         if (personerMedDato.length === 0) {
@@ -94,13 +91,18 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
             return;
         }
 
-        return endreSøknadstidspunkt({
-            behandlingId: behandling.behandlingId,
-            søknadstidspunktPerPerson: personerMedDato.map(person => ({
-                personIdent: person.personIdent,
-                søknadstidspunkt: dateTilIsoDatoString(person.søknadstidspunkt ?? undefined),
-            })),
-        });
+        try {
+            await endreSøknadstidspunkt({
+                behandlingId: behandling.behandlingId,
+                søknadstidspunktPerPerson: personerMedDato.map(person => ({
+                    personIdent: person.personIdent,
+                    søknadstidspunkt: dateTilIsoDatoString(person.søknadstidspunkt ?? undefined),
+                })),
+            });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message: `Teknisk feil ved endring av søknadstidspunkt: ${message}` });
+        }
     }
 
     return { form, fieldArray, onSubmit };

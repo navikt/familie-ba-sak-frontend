@@ -36,9 +36,6 @@ export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
             settÅpenBehandling(byggSuksessRessurs(behandling));
             lukkModal();
         },
-        onError: error => {
-            setError('root', { message: error.message ?? 'Teknisk feil ved lagring av korrigert vedtak.' });
-        },
     });
 
     const form = useForm<KorrigerVedtakFormValues, unknown, TransformedKorrigerVedtakFormValues>({
@@ -52,10 +49,15 @@ export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
 
     const { setError } = form;
 
-    function onSubmit(values: TransformedKorrigerVedtakFormValues) {
+    async function onSubmit(values: TransformedKorrigerVedtakFormValues) {
         const { vedtaksdato, begrunnelse } = values;
         const korrigerVedtakParameters = { vedtaksdato, begrunnelse, behandlingId: behandling.behandlingId };
-        return korrigerVedtak(korrigerVedtakParameters);
+        try {
+            await korrigerVedtak(korrigerVedtakParameters);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Teknisk feil ved lagring av korrigert vedtak.';
+            setError('root', { message });
+        }
     }
 
     return { form, onSubmit };

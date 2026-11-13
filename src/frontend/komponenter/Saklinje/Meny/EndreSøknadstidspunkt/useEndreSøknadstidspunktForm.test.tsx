@@ -56,19 +56,11 @@ vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext', () => ({
 }));
 
 vi.mock('@hooks/useEndreSøknadstidspunkt', () => ({
-    useEndreSøknadstidspunkt: (options?: {
-        onSuccess?: (behandling: unknown) => void | Promise<void>;
-        onError?: (error: Error) => void | Promise<void>;
-    }) => ({
+    useEndreSøknadstidspunkt: (options?: { onSuccess?: (behandling: unknown) => void | Promise<void> }) => ({
         mutateAsync: async (variabler: unknown) => {
-            try {
-                const behandling = await mockMutateAsync(variabler);
-                await options?.onSuccess?.(behandling);
-                return behandling;
-            } catch (error) {
-                await options?.onError?.(error as Error);
-                throw error;
-            }
+            const behandling = await mockMutateAsync(variabler);
+            await options?.onSuccess?.(behandling);
+            return behandling;
         },
     }),
 }));
@@ -221,18 +213,16 @@ describe('useEndreSøknadstidspunktForm', () => {
         const { result, lukkModal } = renderForm([]);
 
         await act(async () => {
-            await result.current
-                .onSubmit({
-                    personer: [
-                        {
-                            personIdent: barnMedPersistertVerdi.personIdent,
-                            navn: 'Barn 1',
-                            fødselsdato: '2023-12-31',
-                            søknadstidspunkt: new Date(2025, 3, 15),
-                        },
-                    ],
-                })
-                ?.catch(() => undefined);
+            await result.current.onSubmit({
+                personer: [
+                    {
+                        personIdent: barnMedPersistertVerdi.personIdent,
+                        navn: 'Barn 1',
+                        fødselsdato: '2023-12-31',
+                        søknadstidspunkt: new Date(2025, 3, 15),
+                    },
+                ],
+            });
         });
 
         expect(mockMutateAsync).toHaveBeenCalledTimes(1);

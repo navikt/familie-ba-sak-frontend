@@ -73,26 +73,29 @@ export const useEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbet
             lukkSkjema();
             settÅpenBehandling(byggDataRessurs(behandling));
         },
-        onError: (error: Error) => {
-            setError('root', {
-                message: error.message ?? 'Ukjent feil oppstod.',
-            });
-        },
     });
 
-    const onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues> = (values: EndretUtbetalingAndelFormValues) =>
-        oppdaterEndretUtbetalingAndel({
-            id: endretUtbetalingAndel.id,
-            personIdenter: values.personer.map(person => person.value),
-            prosent: utbetalingTilProsent(values.utbetaling) || undefined,
-            fom: values.fom ? dateTilIsoMånedStringEllerUndefined(values.fom) : undefined,
-            tom: values.tom ? dateTilIsoMånedStringEllerUndefined(values.tom) : undefined,
-            årsak: values.årsak || undefined,
-            begrunnelse: values.begrunnelse,
-            søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(values.søknadstidspunkt),
-            avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(values.avtaletidspunktDeltBosted),
-            erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
-        });
+    const onSubmit: SubmitHandler<EndretUtbetalingAndelFormValues> = async (
+        values: EndretUtbetalingAndelFormValues
+    ) => {
+        try {
+            await oppdaterEndretUtbetalingAndel({
+                id: endretUtbetalingAndel.id,
+                personIdenter: values.personer.map(person => person.value),
+                prosent: utbetalingTilProsent(values.utbetaling) || undefined,
+                fom: values.fom ? dateTilIsoMånedStringEllerUndefined(values.fom) : undefined,
+                tom: values.tom ? dateTilIsoMånedStringEllerUndefined(values.tom) : undefined,
+                årsak: values.årsak || undefined,
+                begrunnelse: values.begrunnelse,
+                søknadstidspunkt: dateTilIsoDatoStringEllerUndefined(values.søknadstidspunkt),
+                avtaletidspunktDeltBosted: dateTilIsoDatoStringEllerUndefined(values.avtaletidspunktDeltBosted),
+                erTilknyttetAndeler: endretUtbetalingAndel.erTilknyttetAndeler,
+            });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Ukjent feil oppstod.';
+            setError('root', { message });
+        }
+    };
 
     return {
         form,
