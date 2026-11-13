@@ -124,7 +124,10 @@ export const sider: Record<SideId, Side> = {
         navn: 'Simulering',
         steg: BehandlingSteg.VURDER_TILBAKEKREVING,
         visSide: behandling => {
-            return !behandling.skalBehandlesAutomatisk;
+            return (
+                !behandling.skalBehandlesAutomatisk ||
+                behandling.årsak === BehandlingÅrsak.AUTOMATISK_BEHANDLING_AV_SØKNAD
+            );
         },
     },
     VEDTAK: {

@@ -18,7 +18,6 @@ export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
         finnesStrengtFortroligPersonIFagsak: false,
         migreringsdato: '',
         behandlinger: [BehandlingTestdata.lagVisningBehandling()],
-        gjeldendeUtbetalingsperioder: [],
         ...(fagsak ?? {}),
     };
 }

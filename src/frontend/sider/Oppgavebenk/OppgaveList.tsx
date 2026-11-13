@@ -133,10 +133,7 @@ export function OppgaveList() {
                                     <BodyLong>{rad.tildeltEnhetsnr}</BodyLong>
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    <OppgavelisteSaksbehandler
-                                        oppgave={rad.tilordnetRessurs.oppg}
-                                        saksbehandler={rad.tilordnetRessurs.saksbehandler}
-                                    />
+                                    <OppgavelisteSaksbehandler oppgave={rad.tilordnetRessurs.oppg} />
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     <OppgaveDirektelenke oppgave={rad.handlinger} />

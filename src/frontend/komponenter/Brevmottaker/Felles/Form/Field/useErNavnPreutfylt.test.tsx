@@ -6,13 +6,15 @@ import { describe, expect, test } from 'vitest';
 import { BrevmottakerField, type BrevmottakerFormValues } from '../useBrevmottakerForm';
 import { useErNavnPreutfylt } from './useErNavnPreutfylt';
 
+function Wrapper({ brevmottakertype, children }: PropsWithChildren<{ brevmottakertype: Brevmottakertype | '' }>) {
+    const form = useForm<BrevmottakerFormValues>({
+        defaultValues: { [BrevmottakerField.BREVMOTTAKERTYPE]: brevmottakertype },
+    });
+    return <FormProvider {...form}>{children}</FormProvider>;
+}
+
 function lagWrapper(brevmottakertype: Brevmottakertype | '' = '') {
-    return function Wrapper({ children }: PropsWithChildren) {
-        const form = useForm<BrevmottakerFormValues>({
-            defaultValues: { [BrevmottakerField.BREVMOTTAKERTYPE]: brevmottakertype },
-        });
-        return <FormProvider {...form}>{children}</FormProvider>;
-    };
+    return ({ children }: PropsWithChildren) => <Wrapper brevmottakertype={brevmottakertype}>{children}</Wrapper>;
 }
 
 function renderUseErNavnPreutfylt(brevmottakertype: Brevmottakertype | '' = '') {

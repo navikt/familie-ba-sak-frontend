@@ -5,7 +5,7 @@ import { BehandlingTestdata, lagBehandling } from '@testutils/testdata/behandlin
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagGrunnlagPerson, lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
+import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
 import type { IPersonInfo } from '@typer/person';
 import { Adressebeskyttelsegradering, ForelderBarnRelasjonRolle } from '@typer/person';
 import { HttpResponse, http } from 'msw';
@@ -25,24 +25,32 @@ const behandling = lagBehandling({
     personer: [lagGrunnlagPerson()],
 });
 
-function lagWrapper(bruker: IPersonInfo = lagPerson(), behandlingForVisning = behandling) {
-    return function Wrapper({ children }: { children: ReactNode }) {
-        return (
-            <TestProviders>
-                <FagsakProvider fagsak={lagFagsak()}>
-                    <BrukerProvider bruker={bruker}>
-                        <HentOgSettBehandlingProvider>
-                            <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
-                        </HentOgSettBehandlingProvider>
-                    </BrukerProvider>
-                </FagsakProvider>
-            </TestProviders>
-        );
-    };
+interface WrapperProps {
+    children: ReactNode;
+    bruker?: IPersonInfo;
+    behandlingForVisning?: IBehandling;
 }
 
-function Wrapper({ children }: { children: ReactNode }) {
-    return lagWrapper()({ children });
+function Wrapper({ children, bruker = lagPerson(), behandlingForVisning = behandling }: WrapperProps) {
+    return (
+        <TestProviders>
+            <FagsakProvider fagsak={lagFagsak()}>
+                <BrukerProvider bruker={bruker}>
+                    <HentOgSettBehandlingProvider>
+                        <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
+                    </HentOgSettBehandlingProvider>
+                </BrukerProvider>
+            </FagsakProvider>
+        </TestProviders>
+    );
+}
+
+function lagWrapper(bruker: IPersonInfo, behandlingForVisning = behandling) {
+    return ({ children }: { children: ReactNode }) => (
+        <Wrapper bruker={bruker} behandlingForVisning={behandlingForVisning}>
+            {children}
+        </Wrapper>
+    );
 }
 
 describe('Brevskjema validering', () => {

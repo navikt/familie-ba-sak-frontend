@@ -12,23 +12,24 @@ interface Options {
     behandling: IBehandling;
 }
 
+function Wrapper({ behandling, children }: { behandling: IBehandling; children: ReactNode }) {
+    return (
+        <TestProviders>
+            <FagsakProvider fagsak={lagFagsak()}>
+                <HentOgSettBehandlingProvider>
+                    <BehandlingProvider behandling={behandling}>
+                        <EkspanderbareVilkårResultatRaderProvider>
+                            <Table>
+                                <Table.Body>{children}</Table.Body>
+                            </Table>
+                        </EkspanderbareVilkårResultatRaderProvider>
+                    </BehandlingProvider>
+                </HentOgSettBehandlingProvider>
+            </FagsakProvider>
+        </TestProviders>
+    );
+}
+
 export function renderIVilkårsvurdering(rad: ReactElement, { behandling }: Options) {
-    function Wrapper({ children }: { children: ReactNode }) {
-        return (
-            <TestProviders>
-                <FagsakProvider fagsak={lagFagsak()}>
-                    <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandling}>
-                            <EkspanderbareVilkårResultatRaderProvider>
-                                <Table>
-                                    <Table.Body>{children}</Table.Body>
-                                </Table>
-                            </EkspanderbareVilkårResultatRaderProvider>
-                        </BehandlingProvider>
-                    </HentOgSettBehandlingProvider>
-                </FagsakProvider>
-            </TestProviders>
-        );
-    }
-    return render(rad, { wrapper: Wrapper });
+    return render(rad, { wrapper: ({ children }) => <Wrapper behandling={behandling}>{children}</Wrapper> });
 }

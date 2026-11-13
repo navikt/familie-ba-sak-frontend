@@ -1,5 +1,4 @@
 import { byggFeiletRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
-import { FagsakTestdata } from '@testutils/testdata/fagsakTestdata';
 import { PersonTestdata } from '@testutils/testdata/personTestdata';
 import { VedtaksperiodeTestdata } from '@testutils/testdata/vedtaksperiodeTestdata';
 import { PersonType } from '@typer/person';
@@ -8,30 +7,27 @@ import { HttpResponse, http } from 'msw';
 import { expect, test } from '../fixtures';
 
 const FAGSAK_URL = '/familie-ba-sak/api/fagsaker/minimal/:fagsakId';
+const GJELDENDE_UTBETALINGSPERIODER_URL = '/familie-ba-sak/api/fagsaker/:fagsakId/gjeldende-utbetalingsperioder';
 
 test.describe('Saksoversikt', () => {
     test('skal vise løpende utbetaling og behandlinger for fagsaken', async ({ page, apiMock }) => {
         apiMock.use(
-            http.get(FAGSAK_URL, () =>
+            http.get(GJELDENDE_UTBETALINGSPERIODER_URL, () =>
                 HttpResponse.json(
-                    byggSuksessRessurs(
-                        FagsakTestdata.lagFagsak({
-                            gjeldendeUtbetalingsperioder: [
-                                VedtaksperiodeTestdata.lagUtbetalingsperiode({
-                                    utbetalingsperiodeDetaljer: [
-                                        VedtaksperiodeTestdata.lagUtbetalingsperiodeDetalj({
-                                            person: PersonTestdata.lagGrunnlagPerson({
-                                                navn: 'Barn Testersen',
-                                                personIdent: '10022012345',
-                                                type: PersonType.BARN,
-                                            }),
-                                            utbetaltPerMnd: 2012,
-                                        }),
-                                    ],
+                    byggSuksessRessurs([
+                        VedtaksperiodeTestdata.lagUtbetalingsperiode({
+                            utbetalingsperiodeDetaljer: [
+                                VedtaksperiodeTestdata.lagUtbetalingsperiodeDetalj({
+                                    person: PersonTestdata.lagGrunnlagPerson({
+                                        navn: 'Barn Testersen',
+                                        personIdent: '10022012345',
+                                        type: PersonType.BARN,
+                                    }),
+                                    utbetaltPerMnd: 2012,
                                 }),
                             ],
-                        })
-                    )
+                        }),
+                    ])
                 )
             )
         );
@@ -70,5 +66,20 @@ test.describe('Saksoversikt', () => {
         const feilmelding = page.getByRole('alert');
         await expect(feilmelding.getByRole('heading', { name: /Feil oppstod ved innlasting av fagsak/ })).toBeVisible();
         await expect(feilmelding).toContainText('Fant ikke fagsak med id 1.');
+    });
+
+    test('skal vise feilmelding når utbetalingene ikke kan hentes', async ({ page, apiMock }) => {
+        apiMock.use(
+            http.get(GJELDENDE_UTBETALINGSPERIODER_URL, () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente utbetalingene.'))
+            )
+        );
+
+        await page.goto('/fagsak/1/saksoversikt');
+
+        const feilmelding = page.getByRole('alert');
+        await expect(feilmelding.getByRole('heading', { name: 'Kunne ikke hente utbetalinger' })).toBeVisible();
+        await expect(feilmelding).toContainText('Klarte ikke å hente utbetalingene.');
+        await expect(page.getByRole('heading', { name: 'Saksoversikt' })).toBeVisible();
     });
 });

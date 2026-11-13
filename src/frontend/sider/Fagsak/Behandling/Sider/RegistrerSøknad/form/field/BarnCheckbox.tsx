@@ -6,7 +6,6 @@ import { useBarnaFieldArray } from '@sider/Fagsak/Behandling/Sider/RegistrerSøk
 import type { RegistrerSøknadFormValues } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useRegistrerSøknadForm';
 import { erFagsakAvTypeEnsligMindreårig, erFagsakAvTypeInstitusjon, erFagsakAvTypeSkjermetBarn } from '@typer/fagsak';
 import type { IBarnMedOpplysninger } from '@typer/søknad';
-import { hentBarnMedLøpendeUtbetaling } from '@utils/fagsak';
 import { formaterIdent, hentAlderSomString } from '@utils/formatter';
 import { useState } from 'react';
 import { useFormState } from 'react-hook-form';
@@ -20,7 +19,7 @@ export function BarnCheckbox({ index, barn }: Props) {
     const erLesevisning = useErLesevisning();
     const fagsak = useFagsak();
 
-    const { slettBarn } = useBarnaFieldArray();
+    const { slettBarn, barnMedLøpendeUtbetaling } = useBarnaFieldArray();
     const { isSubmitting } = useFormState<RegistrerSøknadFormValues>();
 
     const [visBekreftSlettBarnModal, settVisBekreftSlettBarnModal] = useState(false);
@@ -29,7 +28,6 @@ export function BarnCheckbox({ index, barn }: Props) {
     const gjelderEnsligMindreårig = erFagsakAvTypeEnsligMindreårig(fagsak);
     const gjelderSkjermetBarn = erFagsakAvTypeSkjermetBarn(fagsak);
 
-    const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
     const barnetHarLøpendeUtbetaling = barnMedLøpendeUtbetaling.has(barn.ident);
 
     const navn = barn.navn ?? 'Navn ukjent';

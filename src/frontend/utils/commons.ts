@@ -1,9 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
-export const randomUUID = (): string => {
-    return uuidv4();
-};
-
 export const fjernWhitespace = (streng: string) => streng.replace(/\s/g, '').replace(/[ \u0085]/g, '');
 
 // Skamløst knabba herfra https://gist.github.com/zachlysobey/71ac85046d0d533287ed85e1caa64660

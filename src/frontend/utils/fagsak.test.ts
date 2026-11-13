@@ -5,7 +5,7 @@ import { BehandlingResultat } from '@typer/behandling';
 import { YtelseType } from '@typer/beregning';
 import { PersonType } from '@typer/person';
 import { Målform } from '@typer/søknad';
-import { Vedtaksperiodetype } from '@typer/vedtaksperiode';
+import { type Utbetalingsperiode, Vedtaksperiodetype } from '@typer/vedtaksperiode';
 import { addYears } from 'date-fns';
 import { dagensDato, dateTilIsoDatoString } from './dato';
 import { hentBarnMedLøpendeUtbetaling, hentSisteIkkeHenlagteBehandling } from './fagsak';
@@ -46,47 +46,45 @@ describe('hentBarnMedLøpendeUtbetaling', () => {
             harFalskIdentitet: false,
         };
 
-        const fagsak = FagsakTestdata.lagFagsak({
-            gjeldendeUtbetalingsperioder: [
-                {
-                    periodeFom: '2020-01-01',
-                    periodeTom: '2020-12-31',
-                    vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
-                    utbetalingsperiodeDetaljer: [
-                        {
-                            person: {
-                                ...person,
-                                personIdent: '12345678911',
-                            },
-                            ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-                            utbetaltPerMnd: 1054,
-                            erPåvirketAvEndring: false,
+        const utbetalingsperioder: Utbetalingsperiode[] = [
+            {
+                periodeFom: '2020-01-01',
+                periodeTom: '2020-12-31',
+                vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
+                utbetalingsperiodeDetaljer: [
+                    {
+                        person: {
+                            ...person,
+                            personIdent: '12345678911',
                         },
-                    ],
-                    ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
-                    antallBarn: 1,
-                    utbetaltPerMnd: 1054,
-                },
-                {
-                    periodeFom: '2021-01-01',
-                    periodeTom: dateTilIsoDatoString(addYears(dagensDato, 1)),
-                    vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
-                    utbetalingsperiodeDetaljer: [
-                        {
-                            person,
-                            ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
-                            utbetaltPerMnd: 1054,
-                            erPåvirketAvEndring: false,
-                        },
-                    ],
-                    ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
-                    antallBarn: 1,
-                    utbetaltPerMnd: 1054,
-                },
-            ],
-        });
+                        ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+                        utbetaltPerMnd: 1054,
+                        erPåvirketAvEndring: false,
+                    },
+                ],
+                ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
+                antallBarn: 1,
+                utbetaltPerMnd: 1054,
+            },
+            {
+                periodeFom: '2021-01-01',
+                periodeTom: dateTilIsoDatoString(addYears(dagensDato, 1)),
+                vedtaksperiodetype: Vedtaksperiodetype.UTBETALING,
+                utbetalingsperiodeDetaljer: [
+                    {
+                        person,
+                        ytelseType: YtelseType.ORDINÆR_BARNETRYGD,
+                        utbetaltPerMnd: 1054,
+                        erPåvirketAvEndring: false,
+                    },
+                ],
+                ytelseTyper: [YtelseType.ORDINÆR_BARNETRYGD],
+                antallBarn: 1,
+                utbetaltPerMnd: 1054,
+            },
+        ];
 
-        const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(fagsak);
+        const barnMedLøpendeUtbetaling = hentBarnMedLøpendeUtbetaling(utbetalingsperioder);
 
         expect(barnMedLøpendeUtbetaling.size).toBe(1);
         expect(barnMedLøpendeUtbetaling.has(barnFnr)).toBe(true);

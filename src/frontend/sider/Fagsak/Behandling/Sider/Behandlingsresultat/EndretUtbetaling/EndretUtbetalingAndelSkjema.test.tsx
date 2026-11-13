@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { type DefaultValues, useForm } from 'react-hook-form';
+import { type DefaultValues, type SubmitHandler, useForm } from 'react-hook-form';
 import { describe, expect, test, vi } from 'vitest';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
@@ -64,9 +64,23 @@ function Wrapper({
     );
 }
 
-function FormWrapper() {
+interface FormWrapperProps {
+    startverdier?: DefaultValues<EndretUtbetalingAndelFormValues>;
+    onSubmit?: SubmitHandler<EndretUtbetalingAndelFormValues>;
+    lukkSkjema?: () => void;
+}
+
+function FormWrapper({ startverdier = defaultValues, onSubmit = vi.fn(), lukkSkjema = vi.fn() }: FormWrapperProps) {
+    const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues: startverdier });
+    return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmit} lukkSkjema={lukkSkjema} />;
+}
+
+function FormWrapperMedRootFeil() {
     const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-    return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
+    const onSubmitMock = vi.fn(() => {
+        form.setError('root', { message: 'Dette er en feilmelding' });
+    });
+    return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
 }
 
 describe('EndretUtbetalingAndelSkjema', () => {
@@ -91,15 +105,14 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal ikke vise SkjemaKnapper når erLesevisning er true', () => {
-        function CustomWrapper({ children }: { children: ReactNode }) {
-            const behandlingILesevisning: IBehandling = {
-                ...lagBehandling(),
-                status: BehandlingStatus.SATT_PÅ_VENT,
-            };
-            return <Wrapper behandling={behandlingILesevisning}>{children}</Wrapper>;
-        }
+        const behandlingILesevisning: IBehandling = {
+            ...lagBehandling(),
+            status: BehandlingStatus.SATT_PÅ_VENT,
+        };
 
-        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
+        const { screen } = render(<FormWrapper />, {
+            wrapper: ({ children }) => <Wrapper behandling={behandlingILesevisning}>{children}</Wrapper>,
+        });
 
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
@@ -107,21 +120,15 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal kun tillate sletting (ikke endring) for automatisk genererte andeler', () => {
-        function CustomWrapper({ children }: { children: ReactNode }) {
-            return (
-                <Wrapper
-                    endretUtbetalingAndel={{
-                        ...defaultEndretUtbetalingAndel,
-                        årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
-                        erAutomatiskGenerert: true,
-                    }}
-                >
-                    {children}
-                </Wrapper>
-            );
-        }
+        const endretUtbetalingAndel: IRestEndretUtbetalingAndel = {
+            ...defaultEndretUtbetalingAndel,
+            årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+            erAutomatiskGenerert: true,
+        };
 
-        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
+        const { screen } = render(<FormWrapper />, {
+            wrapper: ({ children }) => <Wrapper endretUtbetalingAndel={endretUtbetalingAndel}>{children}</Wrapper>,
+        });
 
         expect(screen.getByLabelText(/Årsak/)).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
@@ -130,36 +137,22 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal la manuelt opprettet etterbetaling-andel være redigerbar selv om årsak er etterbetaling', () => {
-        function CustomWrapper({ children }: { children: ReactNode }) {
-            return (
-                <Wrapper
-                    endretUtbetalingAndel={{
-                        ...defaultEndretUtbetalingAndel,
-                        årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
-                        erAutomatiskGenerert: false,
-                    }}
-                >
-                    {children}
-                </Wrapper>
-            );
-        }
+        const endretUtbetalingAndel: IRestEndretUtbetalingAndel = {
+            ...defaultEndretUtbetalingAndel,
+            årsak: IEndretUtbetalingAndelÅrsak.ETTERBETALING_3MND,
+            erAutomatiskGenerert: false,
+        };
 
-        const { screen } = render(<FormWrapper />, { wrapper: CustomWrapper });
+        const { screen } = render(<FormWrapper />, {
+            wrapper: ({ children }) => <Wrapper endretUtbetalingAndel={endretUtbetalingAndel}>{children}</Wrapper>,
+        });
 
         expect(screen.getByRole('button', { name: 'Bekreft' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Fjern periode' })).toBeInTheDocument();
     });
 
     test('skal vise feilmelding når det er root error', async () => {
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            const onSubmitMock = vi.fn(() => {
-                form.setError('root', { message: 'Dette er en feilmelding' });
-            });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+        const { screen, user } = render(<FormWrapperMedRootFeil />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(submitButton);
@@ -169,15 +162,7 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal kunne lukke feilmeldingen', async () => {
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            const onSubmitMock = vi.fn(() => {
-                form.setError('root', { message: 'Dette er en feilmelding' });
-            });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+        const { screen, user } = render(<FormWrapperMedRootFeil />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(submitButton);
@@ -192,17 +177,15 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal skjule AvtaletidspunktDeltBostedDatovelger når årsak endres fra DELT_BOSTED til annen årsak', async () => {
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({
-                defaultValues: {
+        const { screen, user } = render(
+            <FormWrapper
+                startverdier={{
                     ...defaultValues,
                     [EndretUtbetalingAndelFeltnavn.ÅRSAK]: IEndretUtbetalingAndelÅrsak.DELT_BOSTED,
-                },
-            });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+                }}
+            />,
+            { wrapper: Wrapper }
+        );
 
         expect(screen.getByLabelText(/Avtaletidspunkt delt bosted/)).toBeInTheDocument();
 
@@ -213,11 +196,6 @@ describe('EndretUtbetalingAndelSkjema', () => {
     });
 
     test('skal vise AvtaletidspunktDeltBostedDatovelger når årsak endres til DELT_BOSTED', async () => {
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={vi.fn()} />;
-        }
-
         const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
 
         expect(screen.queryByLabelText(/Avtaletidspunkt delt bosted/)).not.toBeInTheDocument();
@@ -231,12 +209,7 @@ describe('EndretUtbetalingAndelSkjema', () => {
     test('skal kalle onSubmit når skjemaet submittes', async () => {
         const onSubmitMock = vi.fn();
 
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+        const { screen, user } = render(<FormWrapper onSubmit={onSubmitMock} />, { wrapper: Wrapper });
 
         const submitButton = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(submitButton);
@@ -248,12 +221,7 @@ describe('EndretUtbetalingAndelSkjema', () => {
     test('skal kalle lukkSkjema når endringen avbrytes', async () => {
         const lukkSkjema = vi.fn();
 
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({ defaultValues });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={vi.fn()} lukkSkjema={lukkSkjema} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+        const { screen, user } = render(<FormWrapper lukkSkjema={lukkSkjema} />, { wrapper: Wrapper });
 
         const avbrytButton = screen.getByRole('button', { name: /Avbryt/ });
         await user.click(avbrytButton);
@@ -264,16 +232,10 @@ describe('EndretUtbetalingAndelSkjema', () => {
     test('skal vise valideringsfeil når påkrevde felter er tomme', async () => {
         const onSubmitMock = vi.fn();
 
-        function FormWrapper() {
-            const form = useForm<EndretUtbetalingAndelFormValues>({
-                defaultValues: {
-                    [EndretUtbetalingAndelFeltnavn.PERSONER]: [],
-                },
-            });
-            return <EndretUtbetalingAndelSkjema form={form} onSubmit={onSubmitMock} lukkSkjema={vi.fn()} />;
-        }
-
-        const { screen, user } = render(<FormWrapper />, { wrapper: Wrapper });
+        const { screen, user } = render(
+            <FormWrapper startverdier={{ [EndretUtbetalingAndelFeltnavn.PERSONER]: [] }} onSubmit={onSubmitMock} />,
+            { wrapper: Wrapper }
+        );
 
         const submitButton = screen.getByRole('button', { name: 'Bekreft' });
         await user.click(submitButton);

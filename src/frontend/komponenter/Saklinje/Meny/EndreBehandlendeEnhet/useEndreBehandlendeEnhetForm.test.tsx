@@ -17,22 +17,28 @@ import { describe, expect, test, vi } from 'vitest';
 import { EndreBehandlendeEnhetFormFields, useEndreBehandlendeEnhetForm } from './useEndreBehandlendeEnhetForm';
 
 interface WrapperProps extends PropsWithChildren {
-    fagsak?: IMinimalFagsak;
-    behandling?: IBehandling;
+    fagsak: IMinimalFagsak;
+    behandling: IBehandling;
+}
+
+function Wrapper({ fagsak, behandling, children }: WrapperProps) {
+    return (
+        <TestProviders>
+            <FagsakProvider fagsak={fagsak}>
+                <HentOgSettBehandlingProvider>
+                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
+                </HentOgSettBehandlingProvider>
+            </FagsakProvider>
+        </TestProviders>
+    );
 }
 
 function lagWrapper(fagsak = lagFagsak(), behandling = lagBehandling()) {
-    return function Wrapper({ children }: WrapperProps) {
-        return (
-            <TestProviders>
-                <FagsakProvider fagsak={fagsak}>
-                    <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                    </HentOgSettBehandlingProvider>
-                </FagsakProvider>
-            </TestProviders>
-        );
-    };
+    return ({ children }: PropsWithChildren) => (
+        <Wrapper fagsak={fagsak} behandling={behandling}>
+            {children}
+        </Wrapper>
+    );
 }
 
 function renderUseEndreBehandlendeEnhetForm({
