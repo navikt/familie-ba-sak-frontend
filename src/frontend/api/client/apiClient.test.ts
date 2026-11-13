@@ -1,9 +1,12 @@
+import { captureException } from '@nais/apm';
 import { server } from '@testutils/mocks/node';
 import { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { HttpResponse, http } from 'msw';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { ApiClient, ApiFeil, RessursStatus } from './apiClient';
+
+vi.mock('@nais/apm', () => ({ captureException: vi.fn() }));
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -411,6 +414,46 @@ describe('ApiClient', () => {
 
             await client.request<void, TestData>({ method: 'GET', url: '/api/test' });
             expect(onFulfilled).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('Rapportering til APM', () => {
+        beforeEach(() => {
+            vi.mocked(captureException).mockClear();
+        });
+
+        test('rapporterer FEILET-Ressurs på HTTP 200 med kontekst', async () => {
+            server.use(
+                http.post(`${BASE_URL}/api/test`, () =>
+                    HttpResponse.json(lagFeilRessurs(RessursStatus.FEILET, 'Noe gikk galt', 'abc-123'))
+                )
+            );
+
+            const apiFeil = await fangApiFeil(client.post({ url: '/api/test', data: { ident: '12345678910' } }));
+
+            expect(captureException).toHaveBeenCalledOnce();
+            expect(captureException).toHaveBeenCalledWith(apiFeil, {
+                context: {
+                    metode: 'POST',
+                    url: '/api/test',
+                    httpStatus: 200,
+                    ressursStatus: RessursStatus.FEILET,
+                    callId: 'abc-123',
+                },
+            });
+        });
+
+        test.each([
+            ['FUNKSJONELL_FEIL', () => HttpResponse.json(lagFeilRessurs(RessursStatus.FUNKSJONELL_FEIL, 'Feil'))],
+            ['IKKE_TILGANG', () => HttpResponse.json(lagFeilRessurs(RessursStatus.IKKE_TILGANG, 'Feil'))],
+            ['HTTP 401', () => new HttpResponse(null, { status: 401 })],
+            ['HTTP 403', () => new HttpResponse(null, { status: 403 })],
+        ])('rapporterer ikke forventet feil (%s)', async (_, respons) => {
+            server.use(http.get(`${BASE_URL}/api/test`, respons));
+
+            await fangApiFeil(client.get({ url: '/api/test' }));
+
+            expect(captureException).not.toHaveBeenCalled();
         });
     });
 });
