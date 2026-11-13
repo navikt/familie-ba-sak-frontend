@@ -9,7 +9,6 @@ import { render, TestProviders } from '../../../../../../../testutils/testrender
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../../FagsakContext';
 import { BehandlingProvider } from '../../../../context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../../context/HentOgSettBehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 
@@ -33,16 +32,14 @@ function Wrapper({
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={lagBehandling()}>
-                        <FormProvider {...form}>
-                            <form onSubmit={form.handleSubmit(() => onSubmit(onSubmitDelay))}>
-                                {children}
-                                <Button type="submit">Submit</Button>
-                            </form>
-                        </FormProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={lagBehandling()}>
+                    <FormProvider {...form}>
+                        <form onSubmit={form.handleSubmit(() => onSubmit(onSubmitDelay))}>
+                            {children}
+                            <Button type="submit">Submit</Button>
+                        </form>
+                    </FormProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

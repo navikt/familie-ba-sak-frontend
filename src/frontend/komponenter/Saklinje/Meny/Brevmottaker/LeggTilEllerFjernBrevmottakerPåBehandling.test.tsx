@@ -4,7 +4,6 @@ import {
 } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
@@ -30,16 +29,14 @@ function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children 
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <BrevmottakerDialogProvider>
-                            <DialogStatus />
-                            <ActionMenu open={true}>
-                                <ActionMenu.Content>{children}</ActionMenu.Content>
-                            </ActionMenu>
-                        </BrevmottakerDialogProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <BrevmottakerDialogProvider>
+                        <DialogStatus />
+                        <ActionMenu open={true}>
+                            <ActionMenu.Content>{children}</ActionMenu.Content>
+                        </ActionMenu>
+                    </BrevmottakerDialogProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
