@@ -14,4 +14,5 @@ export enum FeatureToggle {
     tillattOpprettingAvSkjermetBarnFagsak = 'familie-ba-sak.tillatt-oppretting-av-skjermet-barn-fagsak',
     preutfyllingLovligOpphold = 'familie-ba-sak.preutfylling-lovlig-opphold',
     kanGenerereBarnasVilkar = 'familie-ba-sak.kan-generere-barnas-vilkar',
+    brukReactQueryForBehandling = 'familie-ba-sak.bruk-react-query-for-behandling',
 }
