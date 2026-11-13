@@ -1,8 +1,23 @@
 import type { Regionkode } from '../RegionCombobox/region';
 
-export type Valutakode = 'DKK' | 'SEK' | 'ISK' | 'EUR' | 'PLN' | 'BGN' | 'CZK' | 'HUF' | 'HRK' | 'RON' | 'GBP' | 'CHF';
+export const VALUTAKODE_TIL_LABEL = {
+    SEK: 'SEK - Svensk krone',
+    DKK: 'DKK - Dansk krone',
+    GBP: 'GBP - Britisk pund',
+    BGN: 'BGN - Bulgarsk lev',
+    EUR: 'EUR - Euro',
+    ISK: 'ISK - Islandsk krone',
+    HRK: 'HRK - Kroatisk kuna',
+    PLN: 'PLN - Polsk zloty',
+    RON: 'RON - Rumensk leu',
+    CHF: 'CHF - Sveitsisk franc',
+    CZK: 'CZK - Tsjekkisk koruna',
+    HUF: 'HUF - Ungarsk forint',
+} satisfies Record<string, string>;
 
-export const EØS_VALUTAKODER: Valutakode[] = [
+export type Valutakode = keyof typeof VALUTAKODE_TIL_LABEL;
+
+export const EØS_VALUTAKODER: readonly Valutakode[] = [
     'DKK',
     'SEK',
     'BGN',
@@ -30,19 +45,4 @@ export const VALUTAKODE_TIL_REGIONKODE: Record<Valutakode, Regionkode> = {
     RON: 'RO',
     GBP: 'GB',
     CHF: 'CH',
-};
-
-export const VALUTAKODE_TIL_LABEL: Record<Valutakode, string> = {
-    SEK: 'SEK - Svensk krone',
-    DKK: 'DKK - Dansk krone',
-    GBP: 'GBP - Britisk pund',
-    BGN: 'BGN - Bulgarsk lev',
-    EUR: 'EUR - Euro',
-    ISK: 'ISK - Islandsk krone',
-    HRK: 'HRK - Kroatisk kuna',
-    PLN: 'PLN - Polsk zloty',
-    RON: 'RON - Rumensk leu',
-    CHF: 'CHF - Sveitsisk franc',
-    CZK: 'CZK - Tsjekkisk koruna',
-    HUF: 'HUF - Ungarsk forint',
 };

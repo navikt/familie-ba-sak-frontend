@@ -2,11 +2,21 @@
     width: 100%;
 }
 
+.containerDisabled {
+    opacity: var(--ax-opacity-disabled);
+    cursor: not-allowed;
+}
+
+.containerDisabled * {
+    cursor: not-allowed;
+}
+
 .inputWrapper {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 4px 12px;
-    min-height: 3rem;
+    padding: var(--ax-space-4) var(--ax-space-12);
+    min-height: var(--ax-space-48);
     cursor: text;
     background-color: var(--ax-bg-input);
     border: 1px solid var(--ax-border-neutral);
@@ -14,22 +24,14 @@
     box-shadow: 0 0 0 1px transparent;
 }
 
-.inputWrapperSingle {
-    align-items: center;
-}
-
-.inputWrapperMulti {
-    align-items: center;
-}
-
-.inputWrapper:not(:disabled, .inputWrapperReadOnly):focus-within {
+.inputWrapper:not(.inputWrapperReadOnly):focus-within {
     box-shadow: var(--ax-shadow-dialog);
     border-color: var(--ax-border-strong);
     outline: 3px solid var(--ax-border-focus);
     outline-offset: 3px;
 }
 
-.inputWrapperError:not(:hover, :focus-within, :disabled) {
+.inputWrapperError:not(:hover, :focus-within) {
     box-shadow: 0 0 0 1px var(--ax-border-danger);
     border-color: var(--ax-border-danger);
 }
@@ -41,9 +43,20 @@
     cursor: default;
 }
 
-.selectedFlag {
+.flag {
     display: flex;
     align-items: center;
+}
+
+/* Biblioteket legger på margin med CSS som injiseres ved kjøretid, og som vinner over CSS-moduler med lik spesifisitet.
+   Barneselektoren gir høyere spesifisitet, slik at vi slipper !important. */
+.flag > div {
+    display: flex;
+    margin: 0;
+}
+
+.selectedFlag {
+    margin: var(--ax-space-4);
 }
 
 .input {
@@ -55,7 +68,7 @@
     padding: 0;
     margin: 0;
     background: transparent;
-    font-family: var(--ax-font-family), serif;
+    font-family: var(--ax-font-family);
     font-size: var(--ax-font-size-large);
     font-weight: var(--ax-font-weight-regular);
     line-height: var(--ax-font-line-height-medium);
@@ -65,7 +78,7 @@
     background: none;
     border: none;
     padding: 0;
-    margin-left: 8px;
+    margin-left: var(--ax-space-8);
     color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
@@ -79,36 +92,39 @@
     right: 0;
     background: var(--ax-bg-default);
     border: 1px solid var(--ax-border-neutral);
-    border-radius: 6px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    max-height: 250px;
+    border-radius: var(--ax-radius-8);
+    box-shadow: var(--ax-shadow-dialog);
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 50;
-    padding: 4px 0;
+    padding: var(--ax-space-4) 0;
     margin: 0;
     list-style: none;
     box-sizing: border-box;
 }
 
 .dropdownBottom {
-    top: calc(100% + 8px);
+    top: calc(100% + var(--ax-space-8));
     bottom: auto;
 }
 
 .dropdownTop {
-    bottom: calc(100% + 8px);
+    bottom: calc(100% + var(--ax-space-8));
     top: auto;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.listbox {
+    position: relative;
+    width: 100%;
 }
 
 .option {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0.75rem;
+    gap: var(--ax-space-12);
+    /* Høyden settes av virtualiseringen, så bare sidepadding her */
+    padding-inline: var(--ax-space-12);
     margin-inline: var(--ax-space-8);
-    margin-block: var(--ax-space-2);
     border-radius: var(--ax-radius-8);
     cursor: pointer;
     position: absolute;
@@ -117,7 +133,6 @@
     right: 0;
 }
 
-.option:hover,
 .optionFocused {
     outline: 2px solid var(--ax-border-focus);
 }
@@ -130,51 +145,25 @@
     flex-grow: 1;
 }
 
-.optionFlagContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.optionFlag {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    margin: 0 !important;
-}
-
-.chipFlag {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    margin: 0 !important;
-}
-
 .selectedOption {
     background-color: var(--ax-bg-accent-moderate-pressedA);
 }
 
 .noResults {
-    padding: 8px 12px;
+    padding: var(--ax-space-8) var(--ax-space-12);
     color: var(--ax-text-neutral-subtle);
     font-size: var(--ax-font-size-medium);
     text-align: center;
 }
 
-.flagSvg {
-    width: 24px;
-    height: 16px;
-    border-radius: 2px;
-    object-fit: cover;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
-    margin-right: 12px;
-    flex-shrink: 0;
+.noResults:empty {
+    padding: 0;
 }
 
 .clearButton {
     background: none;
     border: none;
-    padding: 4px;
+    padding: var(--ax-space-4);
     color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
@@ -182,40 +171,41 @@
     justify-content: center;
 }
 
-.clearButton svg {
-    width: 14px;
-    height: 14px;
-}
-
 .arrowIconOpen {
     transform: rotate(180deg);
 }
 
-.checkmarkSvg {
+.checkmark {
     margin-left: auto;
     color: var(--ax-text-neutral);
     flex-shrink: 0;
 }
 
-.errorMessageIcon {
-    color: var(--ax-text-danger-subtle);
-    padding-bottom: 1px;
+.error {
+    margin-top: var(--ax-space-4);
+}
+
+.error:empty {
+    display: none;
 }
 
 .arrowButton:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+}
+
+.inputWrapperReadOnly .arrowButton:disabled {
+    opacity: var(--ax-opacity-disabled);
 }
 
 .chip {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: var(--ax-space-4);
     background-color: var(--ax-bg-neutral-moderateA);
     border: 1px solid var(--ax-border-neutral-subtle);
     color: var(--ax-text-neutral);
-    padding: 0 6px;
+    padding: 0 var(--ax-space-6);
     border-radius: var(--ax-radius-full);
     font-size: var(--ax-font-size-large);
     white-space: nowrap;
@@ -224,19 +214,18 @@
 .chipRemove {
     background: none;
     border: none;
-    padding: 4px;
-    margin-left: 6px;
+    padding: var(--ax-space-4);
+    margin-left: var(--ax-space-6);
     color: var(--ax-text-neutral);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: var(--ax-radius-full);
 }
 
 .chipRemove:hover {
     background-color: var(--ax-bg-neutral-moderate-hover);
-    color: var(--ax-text-neutral);
 }
 
 .valueContainer {
@@ -247,13 +236,13 @@
 
 .valueContainerSingle {
     flex-wrap: nowrap;
-    gap: 8px;
+    gap: var(--ax-space-8);
 }
 
 .valueContainerMulti {
     flex-wrap: wrap;
-    gap: 6px;
-    padding-block: 4px;
+    gap: var(--ax-space-6);
+    padding-block: var(--ax-space-4);
 }
 
 .actionsContainer {
@@ -261,7 +250,7 @@
     align-items: center;
     align-self: center;
     flex-shrink: 0;
-    margin-left: 8px;
+    margin-left: var(--ax-space-8);
 }
 
 .relativeAnchor {
