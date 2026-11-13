@@ -82,7 +82,6 @@ export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
                 );
                 onSubmitSuccessful();
             },
-            onError: error => setError('root', { message: error.message ?? 'En ukjent feil oppstod.' }),
         }
     );
 
@@ -113,13 +112,18 @@ export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
         return true;
     }
 
-    function onSubmit({ fritekstbegrunnelser }: FormValues) {
+    async function onSubmit({ fritekstbegrunnelser }: FormValues) {
         if (vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0) {
             setError('root.kombinerteBegrunnelserFeilmelding', { message: FRITEKST_FEILMELDING });
             return;
         }
         const fritekster = fritekstbegrunnelser.map(fritekstbegrunnelse => fritekstbegrunnelse.value);
-        return oppdaterVedtaksperiodeMedFritekster({ fritekster });
+        try {
+            await oppdaterVedtaksperiodeMedFritekster({ fritekster });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message });
+        }
     }
 
     return {
