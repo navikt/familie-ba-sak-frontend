@@ -8,7 +8,7 @@ Frontend app for barnetrygd sak.
 * Logg deg på naisdevice og kjør `nais login -y`, installer jq enten [via installeren](https://formulae.brew.sh/formula/jq) eller [via homebrew](https://formulae.brew.sh/formula/jq) og kjør [hent-og-lagre-miljøvariabler.sh](hent-og-lagre-milj%C3%B8variabler.sh) for å hente miljøvariabler. 
 * Installer [NVM] (https://github.com/nvm-sh/nvm).
 * Kjør `nvm use`
-* Aktiver riktig pnpm-versjon med `corepack enable` (henter versjonen fra `packageManager` i package.json)
+* Installer Corepack med `npm install -g corepack` (følger ikke lenger med Node) og aktiver riktig pnpm-versjon med `corepack enable` (henter versjonen fra `packageManager` i package.json)
 * Installere avhengigheter `pnpm install`
 * Starte dev-server `pnpm start:dev`
 * Åpne `http://localhost:8000` i nettleseren din
