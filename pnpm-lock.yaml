@@ -18,26 +18,26 @@ importers:
         specifier: 0.7.2
         version: 0.7.2(@grafana/faro-react@2.9.0(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0))(react-dom@19.3.0(react@19.3.0))(react-router-dom@7.18.2(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
       '@navikt/aksel-icons':
-        specifier: 8.17.2
-        version: 8.17.2
+        specifier: 8.22.1
+        version: 8.22.1
       '@navikt/ds-css':
-        specifier: 8.17.2
-        version: 8.17.2
+        specifier: 8.22.1
+        version: 8.22.1
       '@navikt/ds-react':
-        specifier: 8.17.2
-        version: 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 8.22.1
+        version: 8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@navikt/ds-tokens':
-        specifier: 8.17.2
-        version: 8.17.2
+        specifier: 8.22.1
+        version: 8.22.1
       '@navikt/familie-backend':
         specifier: 11.0.3
         version: 11.0.3(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@navikt/familie-form-elements':
         specifier: 22.0.4
-        version: 22.0.4(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)
+        version: 22.0.4(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)
       '@navikt/familie-header':
         specifier: 17.1.0
-        version: 17.1.0(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        version: 17.1.0(@navikt/aksel-icons@8.22.1)(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@navikt/familie-http':
         specifier: 8.0.28
         version: 8.0.28(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
@@ -52,13 +52,13 @@ importers:
         version: 8.2.54(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(react@19.3.0)
       '@navikt/familie-tidslinje':
         specifier: 11.0.7
-        version: 11.0.7(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(dayjs@1.11.23)(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        version: 11.0.7(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(dayjs@1.11.23)(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@navikt/familie-typer':
         specifier: 8.0.8
         version: 8.0.8
       '@navikt/flagg-ikoner':
         specifier: 15.1.14
-        version: 15.1.14(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@navikt/land-verktoy@15.1.14(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 15.1.14(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@navikt/land-verktoy@15.1.14(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@navikt/fnrvalidator':
         specifier: 2.2.1
         version: 2.2.1
@@ -592,21 +592,21 @@ packages:
       react-router: '>=6.0.0'
       react-router-dom: '>=6.0.0'
 
-  '@navikt/aksel-icons@8.17.2':
-    resolution: {integrity: sha512-P4N/SrXu1BFaanvp83AWb58hP2qutfmL5u+wBpoxtcSP5uSXDmNdT0qtsE8E7kvdY+cCPKfetHLlGX5O7xRD5g==, tarball: https://npm.pkg.github.com/download/@navikt/aksel-icons/8.17.2/e10ec442fa1f25b24704b55cc77c02a5d908a0f6}
+  '@navikt/aksel-icons@8.22.1':
+    resolution: {integrity: sha512-NmNg4vK6Hrabw8CleI6jJCwOb4aXnMjkE9Rw4OQjbfgHrg4UXWnUFgQJ3/Rk/unGdfXGNxV591RTwPNc2dZoTA==, tarball: https://npm.pkg.github.com/download/@navikt/aksel-icons/8.22.1/c93a3bad8be4134bd833ecc08db4583034be4d75}
 
-  '@navikt/ds-css@8.17.2':
-    resolution: {integrity: sha512-k+xkEVF5ZBSM5UoLjqDsRAn/mBrlLXL3S8JLQj3syW1i4HIu6N6FaIGMveZeobZef5rIBWwhLGsIJ8doWtgyOQ==, tarball: https://npm.pkg.github.com/download/@navikt/ds-css/8.17.2/b0294b41e7004be0e010c409ae4d42c6167c8538}
+  '@navikt/ds-css@8.22.1':
+    resolution: {integrity: sha512-whWza4g9GAssC9qWOEtrnPYcffaGGT6ko347A6KggccrC7/G7drxJj2aQVk+2bHFWT7GClg20dDxlmZKm9CcTA==, tarball: https://npm.pkg.github.com/download/@navikt/ds-css/8.22.1/623473ad66bd13b979cd026acb51b996b25a62a4}
 
-  '@navikt/ds-react@8.17.2':
-    resolution: {integrity: sha512-gVCKqF0rwlclmwpd3U3vAO1db49RhOpzVw+lCBz05RGCxH4ynmeTakuy2xI7MUsnIbiTB3LeBvnOsA23ynh1Dw==, tarball: https://npm.pkg.github.com/download/@navikt/ds-react/8.17.2/aff1f3f872620b72f91f14126b3169e34821408e}
+  '@navikt/ds-react@8.22.1':
+    resolution: {integrity: sha512-rS7wmk/pE3KIDTV3Oimbnx/vd9nxQs3AQt7QgxILNrIGvE+uih5ohbcz9UOk970beUDc+xeQ5jmRK209dzNfcw==, tarball: https://npm.pkg.github.com/download/@navikt/ds-react/8.22.1/864ade4ec3891f9bf5e94a71089665433ce351d7}
     peerDependencies:
       '@types/react': ^17.0.30 || ^18 || ^19
       react: ^17 || ^18 || ^19
       react-dom: ^17 || ^18 || ^19
 
-  '@navikt/ds-tokens@8.17.2':
-    resolution: {integrity: sha512-oDKFZxlgt/L2zNPCma03fo1sls5E9bUTybMh8/ELh7btS3Kurv7fvwlF7CMW8mWTa+/yh1oqLXY/ONp4+/mPTg==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.17.2/6d44d329afac5ae8d729cdf2f1c83d009dfd2c80}
+  '@navikt/ds-tokens@8.22.1':
+    resolution: {integrity: sha512-cDmfPn5Q0HmE8eTie5jkj76zKMrS/AeZcAKscxtZFTL6sFdIFKON8AwWcS0pdRuC3yxYNGRmO176xGjn2POLCQ==, tarball: https://npm.pkg.github.com/download/@navikt/ds-tokens/8.22.1/43f354b993b9a56b9b4329ab54a9e17c5decf92b}
 
   '@navikt/familie-backend@11.0.3':
     resolution: {integrity: sha512-212KzY0hnjlYx484Uzvy7JxCCSFeAiLP9S+ot4dnweLdU/vynxJremwSJKzXQSF42auSmhpOB6KFXtQTZKbOHw==, tarball: https://npm.pkg.github.com/download/@navikt/familie-backend/11.0.3/7cf7958e925f00a50cfcc7a3662ca393c27d6a90}
@@ -2640,8 +2640,8 @@ packages:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
 
-  react-day-picker@10.0.1:
-    resolution: {integrity: sha512-eNh6BlwcYInWaJtRv18mXQ06Ys/H6rdTZAnTaSdOYJuTpwP1JMCHNd1FDRadA+gbeinq+psdULN5Xnowy9mV8w==}
+  react-day-picker@10.0.2:
+    resolution: {integrity: sha512-QetiKtZWE9Uaw/pM/SYNv6WPYOTRnSJ2puL0GgwkmUFMIwiY0dtjH1W4B7DOVXVNQM0ZOClGpH/heOfBSzWeiA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/react': '>=16.8.0'
@@ -2989,8 +2989,8 @@ packages:
   svg-country-flags@1.2.10:
     resolution: {integrity: sha512-xrqwo0TYf/h2cfPvGpjdSuSguUbri4vNNizBnwzoZnX0xGo3O5nGJMlbYEp7NOYcnPGBm6LE2axqDWSB847bLw==}
 
-  tabbable@6.5.0:
-    resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
+  tabbable@6.5.1:
+    resolution: {integrity: sha512-dMCuwDUY6Noz3zVKLefBC4wq+aJV20yc7vWmM7uTNGwtQSFF5kX7OUIUsxuVajz/bdt5Xqdah3/0NLjth+cM5A==}
 
   tagged-tag@1.0.0:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
@@ -3588,7 +3588,7 @@ snapshots:
       '@floating-ui/utils': 0.2.12
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
-      tabbable: 6.5.0
+      tabbable: 6.5.1
 
   '@floating-ui/utils@0.2.12': {}
 
@@ -3769,23 +3769,23 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@navikt/aksel-icons@8.17.2': {}
+  '@navikt/aksel-icons@8.22.1': {}
 
-  '@navikt/ds-css@8.17.2': {}
+  '@navikt/ds-css@8.22.1': {}
 
-  '@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@floating-ui/react': 0.27.20(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@floating-ui/react-dom': 2.1.9(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@navikt/aksel-icons': 8.17.2
-      '@navikt/ds-tokens': 8.17.2
+      '@navikt/aksel-icons': 8.22.1
+      '@navikt/ds-tokens': 8.22.1
       '@types/react': 19.3.0
       date-fns: 4.4.0
       react: 19.3.0
-      react-day-picker: 10.0.1(@types/react@19.3.0)(react@19.3.0)
+      react-day-picker: 10.0.2(@types/react@19.3.0)(react@19.3.0)
       react-dom: 19.3.0(react@19.3.0)
 
-  '@navikt/ds-tokens@8.17.2': {}
+  '@navikt/ds-tokens@8.22.1': {}
 
   '@navikt/familie-backend@11.0.3(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
@@ -3809,10 +3809,10 @@ snapshots:
       - '@opentelemetry/api'
       - supports-color
 
-  '@navikt/familie-form-elements@22.0.4(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)':
+  '@navikt/familie-form-elements@22.0.4(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(supports-color@7.2.0)':
     dependencies:
-      '@navikt/ds-css': 8.17.2
-      '@navikt/ds-react': 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@navikt/ds-css': 8.22.1
+      '@navikt/ds-react': 8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-select: 5.10.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@7.2.0)
       styled-components: 6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -3821,11 +3821,11 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@navikt/familie-header@17.1.0(@navikt/aksel-icons@8.17.2)(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@navikt/familie-header@17.1.0(@navikt/aksel-icons@8.22.1)(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
-      '@navikt/aksel-icons': 8.17.2
-      '@navikt/ds-css': 8.17.2
-      '@navikt/ds-react': 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@navikt/aksel-icons': 8.22.1
+      '@navikt/ds-css': 8.22.1
+      '@navikt/ds-react': 8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@navikt/familie-ikoner': 9.1.8(react@19.3.0)
       '@navikt/familie-typer': 8.0.9
       '@navikt/fnrvalidator': 2.2.0
@@ -3867,10 +3867,10 @@ snapshots:
     transitivePeerDependencies:
       - axios
 
-  '@navikt/familie-tidslinje@11.0.7(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(dayjs@1.11.23)(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@navikt/familie-tidslinje@11.0.7(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@types/react@19.3.0)(dayjs@1.11.23)(react@19.3.0)(styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
-      '@navikt/ds-css': 8.17.2
-      '@navikt/ds-react': 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@navikt/ds-css': 8.22.1
+      '@navikt/ds-react': 8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@types/react': 19.3.0
       classnames: 2.5.1
       dayjs: 1.11.23
@@ -3882,10 +3882,10 @@ snapshots:
 
   '@navikt/familie-typer@8.0.9': {}
 
-  '@navikt/flagg-ikoner@15.1.14(@navikt/ds-css@8.17.2)(@navikt/ds-react@8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@navikt/land-verktoy@15.1.14(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@navikt/flagg-ikoner@15.1.14(@navikt/ds-css@8.22.1)(@navikt/ds-react@8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@navikt/land-verktoy@15.1.14(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@navikt/ds-css': 8.17.2
-      '@navikt/ds-react': 8.17.2(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@navikt/ds-css': 8.22.1
+      '@navikt/ds-react': 8.22.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@navikt/land-verktoy': 15.1.14(lodash@4.18.1)
       classnames: 2.5.1
       lodash: 4.18.1
@@ -5731,7 +5731,7 @@ snapshots:
       iconv-lite: 0.7.3
       unpipe: 1.0.0
 
-  react-day-picker@10.0.1(@types/react@19.3.0)(react@19.3.0):
+  react-day-picker@10.0.2(@types/react@19.3.0)(react@19.3.0):
     dependencies:
       '@date-fns/tz': 1.5.0
       date-fns: 4.4.0
@@ -6113,7 +6113,7 @@ snapshots:
 
   svg-country-flags@1.2.10: {}
 
-  tabbable@6.5.0: {}
+  tabbable@6.5.1: {}
 
   tagged-tag@1.0.0: {}
 
