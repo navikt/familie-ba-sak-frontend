@@ -1,6 +1,6 @@
 import { Heading, VStack } from '@navikt/ds-react';
 
-import { FilterSkjema } from './FilterSkjema';
+import { OppgavefilterForm } from './form/OppgavefilterForm';
 
 export function OppgaveHeader() {
     return (
@@ -8,7 +8,7 @@ export function OppgaveHeader() {
             <Heading size={'medium'} level={'2'}>
                 Oppgavebenken
             </Heading>
-            <FilterSkjema />
+            <OppgavefilterForm />
         </VStack>
     );
 }
