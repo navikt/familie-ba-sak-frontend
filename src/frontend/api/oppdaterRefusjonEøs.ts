@@ -1,7 +1,5 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
 export interface OppdaterRefusjonEøsPayload {
     fom: string;
@@ -12,15 +10,12 @@ export interface OppdaterRefusjonEøsPayload {
 }
 
 export async function oppdaterRefusjonEøs(
-    request: FamilieRequest,
     behandlingId: number,
     refusjonEøsId: number,
     payload: OppdaterRefusjonEøsPayload
 ) {
-    const ressurs = await request<OppdaterRefusjonEøsPayload, IBehandling>({
-        method: 'PUT',
+    return apiClient.put<OppdaterRefusjonEøsPayload, IBehandling>({
         url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}/perioder/${refusjonEøsId}`,
         data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
