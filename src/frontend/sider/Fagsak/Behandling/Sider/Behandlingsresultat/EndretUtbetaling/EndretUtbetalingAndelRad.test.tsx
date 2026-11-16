@@ -11,7 +11,6 @@ import { Målform } from '../../../../../../typer/søknad';
 import { IEndretUtbetalingAndelÅrsak, type IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../FagsakContext';
 import { BehandlingProvider } from '../../../context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../context/HentOgSettBehandlingContext';
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelRad } from './EndretUtbetalingAndelRad';
 
@@ -67,15 +66,13 @@ function Wrapper({
     return (
         <TestProviders>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
-                            <Table>
-                                <Table.Body>{children}</Table.Body>
-                            </Table>
-                        </EndretUtbetalingAndelProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
+                        <Table>
+                            <Table.Body>{children}</Table.Body>
+                        </Table>
+                    </EndretUtbetalingAndelProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
