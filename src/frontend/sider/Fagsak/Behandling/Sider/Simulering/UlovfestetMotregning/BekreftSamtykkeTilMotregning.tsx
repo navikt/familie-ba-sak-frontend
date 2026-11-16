@@ -2,7 +2,6 @@ import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTi
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, InfoCard, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 
 export function BekreftSamtykkeTilMotregning() {
@@ -13,7 +12,7 @@ export function BekreftSamtykkeTilMotregning() {
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const {
@@ -21,7 +20,7 @@ export function BekreftSamtykkeTilMotregning() {
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const error = oppdaterError ?? slettError;

@@ -3,7 +3,6 @@ import { useSlettFeilutbetaltValuta } from '@hooks/useSlettFeilutbetaltValuta';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '../../../context/BehandlingContext';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 
@@ -18,7 +17,7 @@ export function SlettFeilutbetaltValuta({ feilutbetaltValutaId }: Props) {
     const { mutate, isPending } = useSlettFeilutbetaltValuta({
         feilutbetaltValutaId: feilutbetaltValutaId,
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             if (!erLeggTilFeilutbetaltValutaFormÅpen && behandling.feilutbetaltValuta.length === 0) {
                 skjulFeilutbetaltValutaTabell();
             }
