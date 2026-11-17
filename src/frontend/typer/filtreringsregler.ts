@@ -44,6 +44,7 @@ export enum Filtreringsregel {
     SØKER_HAR_IKKE_KRYSSET_FOR_ASYLSØKER_I_SØKNADEN = 'SØKER_HAR_IKKE_KRYSSET_FOR_ASYLSØKER_I_SØKNADEN',
     SØKER_HAR_IKKE_KRYSSET_FOR_ADOPTERT_FRA_UTLANDET_I_SØKNADEN = 'SØKER_HAR_IKKE_KRYSSET_FOR_ADOPTERT_FRA_UTLANDET_I_SØKNADEN',
     SØKNADEN_INNEHOLDER_IKKE_VEDLEGG = 'SØKNADEN_INNEHOLDER_IKKE_VEDLEGG',
+    SØKNADEN_HAR_IKKE_DOKUMENTASJONSBEHOV_UTEN_VEDLEGG = 'SØKNADEN_HAR_IKKE_DOKUMENTASJONSBEHOV_UTEN_VEDLEGG',
 }
 
 export const filtreringsregler: Record<Filtreringsregel, string> = {
@@ -91,4 +92,5 @@ export const filtreringsregler: Record<Filtreringsregel, string> = {
     SØKER_HAR_IKKE_KRYSSET_FOR_ADOPTERT_FRA_UTLANDET_I_SØKNADEN:
         'Søker har ikke krysset for at noen av barna er adoptert fra utlandet i søknaden',
     SØKNADEN_INNEHOLDER_IKKE_VEDLEGG: 'Søknaden inneholder ikke vedlegg',
+    SØKNADEN_HAR_IKKE_DOKUMENTASJONSBEHOV_UTEN_VEDLEGG: 'Søknaden har ikke dokumentasjonsbehov uten opplastet vedlegg',
 };
