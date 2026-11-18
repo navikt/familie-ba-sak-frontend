@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentRegistrerteSøknadstidspunkter } from '@hooks/useHentRegistrerteSøknadstidspunkter';
 
-import { Alert, BodyShort, Button, Loader, Modal, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Dialog, Loader, VStack } from '@navikt/ds-react';
 import { erRevurderingKlage } from '@typer/behandling';
 
 import { EndreSøknadstidspunktSkjema } from './EndreSøknadstidspunktSkjema';
@@ -13,10 +13,7 @@ interface Props {
 const modalProps = (lukkModal: () => void) =>
     ({
         open: true,
-        onClose: lukkModal,
-        header: { heading: 'Endre søknadstidspunkt' },
-        width: '35rem',
-        portal: true,
+        onOpenChange: lukkModal,
     }) as const;
 
 const LukkKnapp = ({ lukkModal }: Props) => (
@@ -35,30 +32,42 @@ export const EndreSøknadstidspunktModal = ({ lukkModal }: Props) => {
 
     if (søknadstidspunkterIsPending) {
         return (
-            <Modal {...modalProps(lukkModal)}>
-                <Modal.Body aria-busy="true" aria-live="polite">
-                    <VStack gap="space-8" align="center">
-                        <Loader size="large" title="Laster søknadstidspunkt" />
-                        <BodyShort>Laster søknadstidspunkt</BodyShort>
-                    </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    <LukkKnapp lukkModal={lukkModal} />
-                </Modal.Footer>
-            </Modal>
+            <Dialog {...modalProps(lukkModal)}>
+                <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                    <Dialog.Header>
+                        <Dialog.Title>Endre søknadstidspunkt</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body aria-busy="true" aria-live="polite">
+                        <VStack gap="space-8" align="center">
+                            <Loader size="large" title="Laster søknadstidspunkt" />
+                            <BodyShort>Laster søknadstidspunkt</BodyShort>
+                        </VStack>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <LukkKnapp lukkModal={lukkModal} />
+                    </Dialog.Footer>
+                </Dialog.Popup>
+            </Dialog>
         );
     }
 
     if (søknadstidspunkterError) {
         return (
-            <Modal {...modalProps(lukkModal)}>
-                <Modal.Body>
-                    <Alert variant="error">Kunne ikke hente søknadstidspunkt: {søknadstidspunkterError.message}</Alert>
-                </Modal.Body>
-                <Modal.Footer>
-                    <LukkKnapp lukkModal={lukkModal} />
-                </Modal.Footer>
-            </Modal>
+            <Dialog {...modalProps(lukkModal)}>
+                <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                    <Dialog.Header>
+                        <Dialog.Title>Endre søknadstidspunkt</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <Alert variant="error">
+                            Kunne ikke hente søknadstidspunkt: {søknadstidspunkterError.message}
+                        </Alert>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <LukkKnapp lukkModal={lukkModal} />
+                    </Dialog.Footer>
+                </Dialog.Popup>
+            </Dialog>
         );
     }
 
@@ -66,22 +75,32 @@ export const EndreSøknadstidspunktModal = ({ lukkModal }: Props) => {
 
     if (skalViseIngenSøknadstidspunktMelding) {
         return (
-            <Modal {...modalProps(lukkModal)}>
-                <Modal.Body>
-                    <Alert variant="info">
-                        Det er ikke registrert søknadstidspunkt for noen barn på denne behandlingen.
-                    </Alert>
-                </Modal.Body>
-                <Modal.Footer>
-                    <LukkKnapp lukkModal={lukkModal} />
-                </Modal.Footer>
-            </Modal>
+            <Dialog {...modalProps(lukkModal)}>
+                <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                    <Dialog.Header>
+                        <Dialog.Title>Endre søknadstidspunkt</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <Alert variant="info">
+                            Det er ikke registrert søknadstidspunkt for noen barn på denne behandlingen.
+                        </Alert>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <LukkKnapp lukkModal={lukkModal} />
+                    </Dialog.Footer>
+                </Dialog.Popup>
+            </Dialog>
         );
     }
 
     return (
-        <Modal {...modalProps(lukkModal)}>
-            <EndreSøknadstidspunktSkjema lukkModal={lukkModal} søknadstidspunkter={søknadstidspunkter} />
-        </Modal>
+        <Dialog {...modalProps(lukkModal)}>
+            <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>Endre søknadstidspunkt</Dialog.Title>
+                </Dialog.Header>
+                <EndreSøknadstidspunktSkjema lukkModal={lukkModal} søknadstidspunkter={søknadstidspunkter} />
+            </Dialog.Popup>
+        </Dialog>
     );
 };
