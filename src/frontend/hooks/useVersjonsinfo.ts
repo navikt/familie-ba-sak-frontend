@@ -1,8 +1,7 @@
 import { hentBackendVersjonsinfo, hentFrontendVersjonsinfo } from '@api/hentVersjonsinfo';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useQueries } from '@tanstack/react-query';
 import { erPreprod } from '@utils/miljø';
-
-export const VERSJONSINFO_QUERY_KEY_PREFIX = 'versjonsinfo';
 
 export function useVersjonsinfo() {
     const skalHentes = erPreprod();
@@ -10,14 +9,14 @@ export function useVersjonsinfo() {
     return useQueries({
         queries: [
             {
-                queryKey: [VERSJONSINFO_QUERY_KEY_PREFIX, 'frontend'],
+                queryKey: queryKeys.versjonsinfoFrontend(),
                 queryFn: hentFrontendVersjonsinfo,
                 enabled: skalHentes,
                 staleTime: Infinity,
                 retry: false,
             },
             {
-                queryKey: [VERSJONSINFO_QUERY_KEY_PREFIX, 'backend'],
+                queryKey: queryKeys.versjonsinfoBackend(),
                 queryFn: hentBackendVersjonsinfo,
                 enabled: skalHentes,
                 staleTime: Infinity,

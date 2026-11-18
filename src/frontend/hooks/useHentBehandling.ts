@@ -1,5 +1,6 @@
 import { hentBehandling } from '@api/hentBehandling';
 import { oppdaterValutakursPåBehandling } from '@api/oppdaterValutakursPåBehandling';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
@@ -83,10 +84,6 @@ function obfuskerBehandling(behandling: IBehandling): IBehandling {
     };
 }
 
-export const HentBehandlingQueryKeyFactory = {
-    behandling: (behandlingId: number | undefined) => ['behandling', behandlingId],
-};
-
 export function useHentBehandling(behandlingId: number | undefined) {
     const saksbehandler = useSaksbehandler();
     const skalObfuskereData = useSkalObfuskereData();
@@ -97,7 +94,7 @@ export function useHentBehandling(behandlingId: number | undefined) {
     );
 
     return useQuery({
-        queryKey: HentBehandlingQueryKeyFactory.behandling(behandlingId),
+        queryKey: queryKeys.behandling(behandlingId),
         queryFn: async () => {
             if (behandlingId === undefined) {
                 throw new Error('Kan ikke hente behandling uten behandlingId.');

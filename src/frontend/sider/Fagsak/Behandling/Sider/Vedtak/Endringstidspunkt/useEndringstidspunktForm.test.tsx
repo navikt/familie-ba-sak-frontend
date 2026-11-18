@@ -1,5 +1,4 @@
-import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstidspunkt';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
@@ -133,7 +132,7 @@ describe('useEndringstidspunktForm', () => {
 
         await waitFor(() =>
             expect(invalidateQueriesSpy).toHaveBeenCalledWith({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(oppdatertBehandling.behandlingId),
+                queryKey: queryKeys.vedtaksperioder(oppdatertBehandling.behandlingId),
             })
         );
         expect(invalidateQueriesSpy).toHaveBeenCalledTimes(1);
@@ -157,9 +156,7 @@ describe('useEndringstidspunktForm', () => {
             )
         );
 
-        const endringstidspunktQueryKey = HentEndringstidspunktQueryKeyFactory.endringstidspunkt(
-            oppdatertBehandling.behandlingId
-        );
+        const endringstidspunktQueryKey = queryKeys.endringstidspunkt(oppdatertBehandling.behandlingId);
 
         const queryClient = new QueryClient();
         const invalidateQueriesSpy = vi

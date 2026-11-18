@@ -1,13 +1,10 @@
 import { hentEndringstidspunkt } from '@api/hentEndringstidspunkt';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useQuery } from '@tanstack/react-query';
-
-export const HentEndringstidspunktQueryKeyFactory = {
-    endringstidspunkt: (behandlingId: number) => ['endringstidspunkt', behandlingId],
-};
 
 export function useHentEndringstidspunkt(behandlingId: number) {
     return useQuery({
-        queryKey: HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandlingId),
+        queryKey: queryKeys.endringstidspunkt(behandlingId),
         queryFn: () => hentEndringstidspunkt(behandlingId),
     });
 }

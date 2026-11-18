@@ -113,7 +113,8 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   });
   ```
 - **Hooks** (`src/frontend/hooks/`): one hook per api file — `useHentX` wraps `useQuery`, `useOpprettX` /
-  `useOppdaterX` / `useSlettX` wrap `useMutation`. Query keys are exposed via `XQueryKeyFactory` objects.
+  `useOppdaterX` / `useSlettX` wrap `useMutation`. Query keys are defined in the single `queryKeys` factory
+  in `hooks/keys/queryKeys.ts` (e.g. `queryKeys.behandling(behandlingId)`).
   Mark queries/mutations that should trigger the global spinner with `meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true }`.
 - **Ressurs envelope**: backend responses are wrapped in a `Ressurs` envelope
   (`SUKSESS | FEILET | IKKE_TILGANG | FUNKSJONELL_FEIL`), locally typed in `api/client/apiClient.ts` — error

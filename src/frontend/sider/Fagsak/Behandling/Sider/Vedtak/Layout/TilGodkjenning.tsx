@@ -1,4 +1,4 @@
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { Button } from '@navikt/ds-react';
@@ -56,9 +56,7 @@ export function TilGodkjenning({ settFeilmelding }: Props) {
 
     const { mutate: sendVedtakTilBeslutter, isPending: sendVedtakTilBeslutterIsPending } = useSendVedtakTilBeslutter({
         onSuccess: async behandling => {
-            await queryClient.invalidateQueries({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-            });
+            await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
             settÅpenBehandling(behandling);
             åpneVisSendtTilTotrinnskontrollModal();
         },

@@ -1,5 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstidspunkt';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
@@ -127,10 +127,7 @@ describe('EndringstidspunktDialog', () => {
 
         const behandling = lagBehandling();
         const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-        queryClient.setQueryData(
-            HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandling.behandlingId),
-            '2024-01-01'
-        );
+        queryClient.setQueryData(queryKeys.endringstidspunkt(behandling.behandlingId), '2024-01-01');
 
         const { screen } = render(<EndringstidspunktDialog />, {
             wrapper: ({ children }) => (
@@ -167,13 +164,17 @@ describe('EndringstidspunktDialog', () => {
         );
 
         const behandling = lagBehandling();
-        const queryKey = HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandling.behandlingId);
+        const endringstidspunktQueryKey = queryKeys.endringstidspunkt(behandling.behandlingId);
         const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
         // React Query beholder bare feilen under ny henting dersom queryen tidligere har hatt data
-        queryClient.setQueryData(queryKey, '2024-01-01');
+        queryClient.setQueryData(endringstidspunktQueryKey, '2024-01-01');
         await queryClient
-            .fetchQuery({ queryKey, queryFn: () => Promise.reject(new Error('Tidligere feil')), staleTime: 0 })
+            .query({
+                queryKey: endringstidspunktQueryKey,
+                queryFn: () => Promise.reject(new Error('Tidligere feil')),
+                staleTime: 0,
+            })
             .catch(() => {});
 
         const { screen } = render(<EndringstidspunktDialog />, {
@@ -202,10 +203,7 @@ describe('EndringstidspunktDialog', () => {
 
         const behandling = lagBehandling();
         const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-        queryClient.setQueryData(
-            HentEndringstidspunktQueryKeyFactory.endringstidspunkt(behandling.behandlingId),
-            '2024-01-01'
-        );
+        queryClient.setQueryData(queryKeys.endringstidspunkt(behandling.behandlingId), '2024-01-01');
 
         const { screen } = render(<EndringstidspunktDialog />, {
             wrapper: ({ children }) => (

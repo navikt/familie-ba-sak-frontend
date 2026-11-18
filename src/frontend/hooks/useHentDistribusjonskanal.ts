@@ -1,17 +1,14 @@
 import { hentDistribusjonskanal } from '@api/hentDistribusjonskanal';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { Distribusjonskanal } from '@typer/dokument';
 
 type Options = Omit<UseQueryOptions<Distribusjonskanal>, 'queryKey' | 'queryFn' | 'enabled'>;
 
-export const HentDistribusjonskanalQueryKeyFactory = {
-    distribusjonskanal: (personIdent: string | undefined) => ['hentDistribusjonskanal', personIdent],
-};
-
 export function useHentDistribusjonskanal(personIdent: string | undefined, options?: Options) {
     return useQuery({
-        queryKey: HentDistribusjonskanalQueryKeyFactory.distribusjonskanal(personIdent),
+        queryKey: queryKeys.distribusjonskanal(personIdent),
         queryFn: () => {
             if (personIdent === undefined) {
                 throw new Error('Kan ikke hente distribusjonskanal uten personIdent.');

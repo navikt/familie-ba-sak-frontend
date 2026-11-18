@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { QueryClient } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
@@ -20,7 +21,7 @@ import { HttpResponse, http } from 'msw';
 import type { PropsWithChildren } from 'react';
 import { describe, expect, test } from 'vitest';
 
-import { HentBehandlingQueryKeyFactory, useHentBehandling } from './useHentBehandling';
+import { useHentBehandling } from './useHentBehandling';
 
 interface RenderOptions {
     behandlingId: number | undefined;
@@ -135,7 +136,7 @@ describe('useHentBehandling', () => {
     test('skal vente på ferskt behandlingssteg ved gjenåpning av en nylig besøkt behandling', async () => {
         const behandling = lagBehandling({ steg: BehandlingSteg.REGISTRERE_SØKNAD });
         const queryClient = lagQueryClient();
-        const queryKey = HentBehandlingQueryKeyFactory.behandling(behandling.behandlingId);
+        const queryKey = queryKeys.behandling(behandling.behandlingId);
 
         mockHentBehandling(behandling);
 
@@ -239,9 +240,7 @@ describe('useHentBehandling', () => {
             })
         );
 
-        expect(queryClient.getQueryData(HentBehandlingQueryKeyFactory.behandling(behandling.behandlingId))).toEqual(
-            behandling
-        );
+        expect(queryClient.getQueryData(queryKeys.behandling(behandling.behandlingId))).toEqual(behandling);
     });
 
     test('skal ikke obfuskere persondata når saksbehandler har skrivetilgang', async () => {

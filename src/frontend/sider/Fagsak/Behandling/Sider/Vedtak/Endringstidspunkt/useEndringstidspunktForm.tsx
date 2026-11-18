@@ -1,6 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentEndringstidspunktQueryKeyFactory } from '@hooks/useHentEndringstidspunkt';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterEndringstidspunkt } from '@hooks/useOppdaterEndringstidspunkt';
 import { useQueryClient } from '@tanstack/react-query';
@@ -53,11 +52,9 @@ export function useEndringstidspunktForm() {
         try {
             const oppdatertBehandling = await oppdaterEndringstidspunkt({ endringstidspunkt });
             await queryClient.invalidateQueries({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(oppdatertBehandling.behandlingId),
+                queryKey: queryKeys.vedtaksperioder(oppdatertBehandling.behandlingId),
             });
-            queryClient.invalidateQueries({
-                queryKey: HentEndringstidspunktQueryKeyFactory.endringstidspunkt(oppdatertBehandling.behandlingId),
-            });
+            queryClient.invalidateQueries({ queryKey: queryKeys.endringstidspunkt(oppdatertBehandling.behandlingId) });
             settÅpenBehandling(oppdatertBehandling);
             lukkDialog();
         } catch (error: unknown) {

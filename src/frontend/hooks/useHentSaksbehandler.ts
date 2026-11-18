@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import type { ISaksbehandler } from '@navikt/familie-typer';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 
@@ -11,7 +12,7 @@ type Options = Omit<
 
 export function useHentSaksbehandler(options?: Options) {
     return useQuery({
-        queryKey: ['saksbehandler'],
+        queryKey: queryKeys.saksbehandler(),
         queryFn: hentSaksbehandler,
         select: mapISaksbehandlerTilSaksbehandler,
         gcTime: 0,
