@@ -1,15 +1,12 @@
 import { oppdaterVedtaksperiodeMedFritekster } from '@api/oppdaterVedtaksperiodeMedFritekster';
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 
-export const OppdaterVedtaksperiodeMedFriteksterMutationKeyFactory = {
-    vedtaksperiodeMedFritekster: (vedtaksperiodeMedBegrunnelserId: number) => [
-        'vedtaksperioderMedFritekster',
-        vedtaksperiodeMedBegrunnelserId,
-    ],
-};
-
-type Options = Omit<UseMutationOptions<IVedtaksperiodeMedBegrunnelser[], DefaultError, Parameters>, 'mutationFn'>;
+type Options = Omit<
+    UseMutationOptions<IVedtaksperiodeMedBegrunnelser[], DefaultError, Parameters>,
+    'mutationKey' | 'mutationFn'
+>;
 
 interface Parameters {
     fritekster: string[];
@@ -22,9 +19,7 @@ export function useOppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunne
             const payload = { fritekster };
             return oppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelserId, payload);
         },
-        mutationKey: OppdaterVedtaksperiodeMedFriteksterMutationKeyFactory.vedtaksperiodeMedFritekster(
-            vedtaksperiodeMedBegrunnelserId
-        ),
+        mutationKey: mutationKeys.oppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelserId),
         ...options,
     });
 }

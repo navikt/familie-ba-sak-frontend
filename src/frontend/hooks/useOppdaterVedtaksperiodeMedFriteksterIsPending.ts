@@ -1,13 +1,10 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useMutationState } from '@tanstack/react-query';
-
-import { OppdaterVedtaksperiodeMedFriteksterMutationKeyFactory } from './useOppdaterVedtaksperiodeMedFritekster';
 
 export function useOppdaterVedtaksperiodeMedFriteksterIsPending(vedtaksperiodeMedBegrunnelserId: number): boolean {
     const states = useMutationState({
         filters: {
-            mutationKey: OppdaterVedtaksperiodeMedFriteksterMutationKeyFactory.vedtaksperiodeMedFritekster(
-                vedtaksperiodeMedBegrunnelserId
-            ),
+            mutationKey: mutationKeys.oppdaterVedtaksperiodeMedFritekster(vedtaksperiodeMedBegrunnelserId),
         },
         select: mutation => mutation.state,
     });

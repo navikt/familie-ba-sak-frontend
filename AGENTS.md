@@ -115,6 +115,8 @@ the "Legacy" column exists in older files and is being phased out — do not ext
 - **Hooks** (`src/frontend/hooks/`): one hook per api file — `useHentX` wraps `useQuery`, `useOpprettX` /
   `useOppdaterX` / `useSlettX` wrap `useMutation`. Query keys are defined in the single `queryKeys` factory
   in `hooks/keys/queryKeys.ts` (e.g. `queryKeys.behandling(behandlingId)`).
+  Mutation keys are defined in the single `mutationKeys` factory in `hooks/keys/mutationKeys.ts`;
+  use the same factory in mutation hooks and their pending/error consumers.
   Mark queries/mutations that should trigger the global spinner with `meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true }`.
 - **Ressurs envelope**: backend responses are wrapped in a `Ressurs` envelope
   (`SUKSESS | FEILET | IKKE_TILGANG | FUNKSJONELL_FEIL`), locally typed in `api/client/apiClient.ts` — error

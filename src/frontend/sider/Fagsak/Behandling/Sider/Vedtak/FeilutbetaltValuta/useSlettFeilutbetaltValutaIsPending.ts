@@ -1,6 +1,5 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useMutationState } from '@tanstack/react-query';
-
-import { lagMutationKey } from '../../../../../../hooks/useSlettFeilutbetaltValuta';
 
 interface Props {
     feilutbetaltValutaId: number;
@@ -8,7 +7,7 @@ interface Props {
 
 export function useSlettFeilutbetaltValutaIsPending({ feilutbetaltValutaId }: Props) {
     const states = useMutationState({
-        filters: { mutationKey: lagMutationKey(feilutbetaltValutaId) },
+        filters: { mutationKey: mutationKeys.slettFeilutbetaltValuta(feilutbetaltValutaId) },
     });
     const currentState = states[states.length - 1];
     return currentState && currentState.status === 'pending';

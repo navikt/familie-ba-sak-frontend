@@ -1,6 +1,5 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useMutationState } from '@tanstack/react-query';
-
-import { lagMutationKey } from '../../../../../../hooks/useSlettRefusjonEøs';
 
 interface Props {
     refusjonEøsId: number;
@@ -8,7 +7,7 @@ interface Props {
 
 export function useSlettRefusjonEøsIsPending({ refusjonEøsId }: Props) {
     const states = useMutationState({
-        filters: { mutationKey: lagMutationKey(refusjonEøsId) },
+        filters: { mutationKey: mutationKeys.slettRefusjonEøs(refusjonEøsId) },
     });
     const currentState = states[states.length - 1];
     return currentState && currentState.status === 'pending';
