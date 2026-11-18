@@ -19,12 +19,12 @@ export async function oppdaterUtenlandskPeriodeBeløp(
 ) {
     return apiClient.put<OppdaterUtenlandskPeriodeBeløpPayload, IBehandling>({
         data: payload,
-        url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}`,
+        url: `/familie-ba-sak/api/differanseberegning/utenlandskperiodebeløp/${behandlingId}`,
     });
 }
 
 export async function slettUtenlandskPeriodeBeløp(behandlingId: number, utenlandskPeriodeBeløpId: number) {
     return apiClient.delete<void, IBehandling>({
-        url: `/familie-ba-sak/api/differanseberegning/utenlandskperidebeløp/${behandlingId}/${utenlandskPeriodeBeløpId}`,
+        url: `/familie-ba-sak/api/differanseberegning/utenlandskperiodebeløp/${behandlingId}/${utenlandskPeriodeBeløpId}`,
     });
 }
