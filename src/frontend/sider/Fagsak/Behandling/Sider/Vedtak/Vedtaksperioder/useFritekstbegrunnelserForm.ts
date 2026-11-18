@@ -1,7 +1,6 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterVedtaksperiodeMedFritekster } from '@hooks/useOppdaterVedtaksperiodeMedFritekster';
 import { MAKS_LENGDE_FRITEKST } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/Fritekstbegrunnelser';
@@ -72,14 +71,9 @@ export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
         {
             onSuccess: async vedtaksperioderMedBegrunnelser => {
                 await queryClient.invalidateQueries({
-                    queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
-                        vedtaksperiodeMedBegrunnelser.id
-                    ),
+                    queryKey: queryKeys.genererteBrevbegrunnelser(behandlingId, vedtaksperiodeMedBegrunnelser.id),
                 });
-                queryClient.setQueryData(
-                    HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
-                    vedtaksperioderMedBegrunnelser
-                );
+                queryClient.setQueryData(queryKeys.vedtaksperioder(behandlingId), vedtaksperioderMedBegrunnelser);
                 onSubmitSuccessful();
             },
         }

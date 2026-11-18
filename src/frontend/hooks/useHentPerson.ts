@@ -1,4 +1,5 @@
 import { hentPerson } from '@api/hentPerson';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
@@ -30,10 +31,6 @@ function obfuskertPersonInfo(personInfo: IPersonInfo): IPersonInfo {
     };
 }
 
-export const HentPersonQueryKeyFactory = {
-    person: (ident: string | undefined) => ['person', ident],
-};
-
 type Parameters = Omit<
     UseQueryOptions<IPersonInfo, DefaultError, IPersonInfo>,
     'queryKey' | 'queryFn' | 'select' | 'enabled'
@@ -45,7 +42,7 @@ export function useHentPerson({ ident, ...rest }: Parameters) {
     const { request } = useHttp();
     const skalObfuskereData = useSkalObfuskereData();
     return useQuery({
-        queryKey: HentPersonQueryKeyFactory.person(ident),
+        queryKey: queryKeys.person(ident),
         queryFn: async () => {
             if (ident === undefined) {
                 return Promise.reject(new Error('Kan ikke hente person uten ident.'));

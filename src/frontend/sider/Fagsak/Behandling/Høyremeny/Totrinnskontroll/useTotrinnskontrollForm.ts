@@ -1,5 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useIverksettVedtak } from '@hooks/useIverksettVedtak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
@@ -74,9 +74,7 @@ export function useTotrinnskontrollForm() {
                 kontrollerteSider: kontrollsider.map(side => side.navn),
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-            });
+            await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
 
             settÅpenBehandling(oppdatertBehandling);
 

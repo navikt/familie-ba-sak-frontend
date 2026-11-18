@@ -1,4 +1,5 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { kjønnType } from '@navikt/familie-typer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
@@ -201,7 +202,7 @@ describe('useEndreSøknadstidspunktForm', () => {
         });
         expect(mockSettÅpenBehandling).toHaveBeenCalledTimes(1);
         expect(invalidateQueriesSpy).toHaveBeenCalledWith({
-            queryKey: ['registrerte-soknadstidspunkter', mockBehandling.behandlingId],
+            queryKey: queryKeys.registrerteSøknadstidspunkter(mockBehandling.behandlingId),
         });
         expect(lukkModal).toHaveBeenCalledTimes(1);
     });

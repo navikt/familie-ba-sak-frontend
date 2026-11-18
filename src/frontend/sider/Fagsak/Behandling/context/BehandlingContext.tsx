@@ -1,7 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useFagsak } from '@hooks/useFagsak';
-import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
-import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
-import { HentPersonerMedUgyldigEtterbetalingsperiodeQueryKeyFactory } from '@hooks/useHentPersonerMedUgyldigEtterbetalingsperiode';
 import { useNavigerAutomatiskTilSideForBehandlingssteg } from '@hooks/useNavigerAutomatiskTilSideForBehandlingssteg';
 import { useTrackTidsbrukPåSide } from '@hooks/useTrackTidsbrukPåSide';
 import { useQueryClient } from '@tanstack/react-query';
@@ -30,17 +28,10 @@ export function BehandlingProvider({ behandling, settBehandling = () => {}, chil
     useTrackTidsbrukPåSide(fagsak, behandling);
 
     const settÅpenBehandling = (behandling: IBehandling) => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsak.id) });
+        queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandling.behandlingId) });
         queryClient.invalidateQueries({
-            queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandling.behandlingId),
-        });
-        queryClient.invalidateQueries({
-            queryKey:
-                HentPersonerMedUgyldigEtterbetalingsperiodeQueryKeyFactory.personerMedUgyldigEtterbetalingsperiode(
-                    behandling.behandlingId
-                ),
-        });
-        queryClient.invalidateQueries({
-            queryKey: HentFagsakQueryKeyFactory.fagsak(fagsak.id),
+            queryKey: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandling.behandlingId),
         });
 
         settBehandling(behandling);

@@ -1,7 +1,6 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
-import { HentSammensattKontrollsakQueryKeyFactory } from '@hooks/useHentSammensattKontrollsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterSammensattKontrollsak } from '@hooks/useOppdaterSammensattKontrollsak';
 import { useSammensattKontrollsakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
@@ -25,13 +24,8 @@ export function useSammensattKontrollsakForm() {
 
     const { mutateAsync: oppdaterSammensattKontrollsak } = useOppdaterSammensattKontrollsak({
         onSuccess: sammensattKontrollsak => {
-            queryClient.setQueryData(
-                HentSammensattKontrollsakQueryKeyFactory.behandling(behandlingId),
-                sammensattKontrollsak
-            );
-            queryClient.invalidateQueries({
-                queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandlingId),
-            });
+            queryClient.setQueryData(queryKeys.sammensattKontrollsak(behandlingId), sammensattKontrollsak);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
 
