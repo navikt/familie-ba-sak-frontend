@@ -1,5 +1,5 @@
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
-import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
+import { BodyShort, Box, Button, LocalAlert, Dialog } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
@@ -23,54 +23,54 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
     });
 
     return (
-        <Modal
-            header={{ heading: 'Fortsett behandling', size: 'small' }}
-            open
-            onClose={lukkModal}
-            width={'35rem'}
-            portal
-        >
-            <Modal.Body>
-                <BodyShort>
-                    Behandlingen er satt på vent.
-                    {behandling?.aktivSettPåVent &&
-                        ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
-                </BodyShort>
-                <BodyShort>
-                    {`Frist: ${isoStringTilFormatertString({
-                        isoString: behandling?.aktivSettPåVent?.frist,
-                        tilFormat: Datoformat.DATO,
-                    })}. `}
-                    Gå via meny for å endre årsak og frist på ventende behandling.
-                </BodyShort>
-                <Box marginBlock={'space-16 space-0'}>
-                    <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
-                </Box>
+        <Dialog open onOpenChange={lukkModal}>
+            <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>Fortsett behandling</Dialog.Title>
+                </Dialog.Header>
 
-                {error && (
-                    <Box paddingBlock={'space-0 space-16'}>
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>{error.message}</LocalAlert.Title>
-                            </LocalAlert.Header>
-                        </LocalAlert>
+                <Dialog.Body>
+                    <BodyShort>
+                        Behandlingen er satt på vent.
+                        {behandling?.aktivSettPåVent &&
+                            ` Årsak: ${settPåVentÅrsaker[behandling?.aktivSettPåVent?.årsak]}. `}
+                    </BodyShort>
+                    <BodyShort>
+                        {`Frist: ${isoStringTilFormatertString({
+                            isoString: behandling?.aktivSettPåVent?.frist,
+                            tilFormat: Datoformat.DATO,
+                        })}. `}
+                        Gå via meny for å endre årsak og frist på ventende behandling.
+                    </BodyShort>
+                    <Box marginBlock={'space-16 space-0'}>
+                        <BodyShort>Ønsker du å fortsette behandlingen?</BodyShort>
                     </Box>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    type={'submit'}
-                    variant="primary"
-                    size="small"
-                    onClick={() => taBehandlingAvVent(behandling.behandlingId)}
-                    loading={isPending}
-                >
-                    Ja, fortsett
-                </Button>
-                <Button variant="tertiary" onClick={lukkModal}>
-                    Nei
-                </Button>
-            </Modal.Footer>
-        </Modal>
+
+                    {error && (
+                        <Box paddingBlock={'space-0 space-16'}>
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>{error.message}</LocalAlert.Title>
+                                </LocalAlert.Header>
+                            </LocalAlert>
+                        </Box>
+                    )}
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button
+                        type={'submit'}
+                        variant="primary"
+                        size="small"
+                        onClick={() => taBehandlingAvVent(behandling.behandlingId)}
+                        loading={isPending}
+                    >
+                        Ja, fortsett
+                    </Button>
+                    <Button variant="tertiary" onClick={lukkModal}>
+                        Nei
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 }

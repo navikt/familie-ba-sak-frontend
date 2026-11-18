@@ -1,7 +1,7 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, InfoCard, Modal, Textarea, VStack } from '@navikt/ds-react';
+import { Button, Dialog, Fieldset, InfoCard, Textarea, VStack } from '@navikt/ds-react';
 import { FormProvider, useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -14,15 +14,14 @@ import {
 export function LåsOppFagsakModal() {
     const { erModalÅpen, tittel, lukkModal, bredde } = useModal(ModalType.LAAS_OPP_FAGSAK);
     return (
-        <Modal
-            open={erModalÅpen}
-            width={bredde}
-            onClose={lukkModal}
-            header={{ heading: tittel, size: 'medium' }}
-            portal={true}
-        >
-            {erModalÅpen && <Innhold />}
-        </Modal>
+        <Dialog open={erModalÅpen} onOpenChange={lukkModal}>
+            <Dialog.Popup width={bredde} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>{tittel}</Dialog.Title>
+                </Dialog.Header>
+                <Innhold />
+            </Dialog.Popup>
+        </Dialog>
     );
 }
 
@@ -36,7 +35,7 @@ function Innhold() {
     } = form;
     return (
         <>
-            <Modal.Body>
+            <Dialog.Body>
                 <VStack gap={'space-16'}>
                     <InfoCard data-color="info">
                         <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -52,8 +51,8 @@ function Innhold() {
                         </form>
                     </FormProvider>
                 </VStack>
-            </Modal.Body>
-            <Modal.Footer>
+            </Dialog.Body>
+            <Dialog.Footer>
                 <Button
                     form={LAAS_OPP_FAGSAK_FORM_ID}
                     variant={'primary'}
@@ -66,7 +65,7 @@ function Innhold() {
                 <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()} disabled={isSubmitting}>
                     Avbryt
                 </Button>
-            </Modal.Footer>
+            </Dialog.Footer>
         </>
     );
 }

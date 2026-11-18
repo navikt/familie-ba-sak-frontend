@@ -5,10 +5,10 @@ import {
     BodyLong,
     Box,
     Button,
+    Dialog,
     Heading,
     HStack,
     LocalAlert,
-    Modal,
     Spacer,
     Switch,
     Table,
@@ -155,36 +155,40 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
             </Table>
 
             {erGjenopprettAutomatiskeValutakurserModalÅpen && (
-                <Modal
+                <Dialog
                     open={erGjenopprettAutomatiskeValutakurserModalÅpen}
-                    onClose={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
-                    header={{ heading: 'Gjenopprett automatiske valutakurser' }}
+                    onOpenChange={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
                 >
-                    <Modal.Body>
-                        <BodyLong>
-                            Er du sikker på at du vil gjenopprette de automatiske valutakursene? Alle manuelle endringer
-                            du har gjort i valutakursene denne behandlingen vil bli slettet.
-                        </BodyLong>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            type="button"
-                            onClick={() => {
-                                endreVurderingsstrategiForValutakurser();
-                                settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
-                            }}
-                        >
-                            Gjenopprett automatiske valutakurser
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
-                        >
-                            Avbryt
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                    <Dialog.Popup closeOnOutsideClick={false}>
+                        <Dialog.Header>
+                            <Dialog.Title>Gjenopprett automatiske valutakurser</Dialog.Title>
+                        </Dialog.Header>
+                        <Dialog.Body>
+                            <BodyLong>
+                                Er du sikker på at du vil gjenopprette de automatiske valutakursene? Alle manuelle
+                                endringer du har gjort i valutakursene denne behandlingen vil bli slettet.
+                            </BodyLong>
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    endreVurderingsstrategiForValutakurser();
+                                    settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
+                                }}
+                            >
+                                Gjenopprett automatiske valutakurser
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                            >
+                                Avbryt
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Popup>
+                </Dialog>
             )}
         </Box>
     );

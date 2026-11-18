@@ -1,6 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Heading, HelpText, HStack, InfoCard, Modal } from '@navikt/ds-react';
+import { Button, Dialog, Fieldset, HelpText, HStack, InfoCard } from '@navikt/ds-react';
 import { FormProvider } from 'react-hook-form';
 
 import { LeggTilBarnFelt } from './LeggTilBarnFelt';
@@ -21,52 +21,53 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
     } = form;
 
     return (
-        <Modal open onClose={lukkModal} aria-label={'Legg til barn'} width={'35rem'} portal>
-            <FormProvider {...form}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Modal.Header>
-                        <Heading level="2" size="small">
-                            <HStack margin={'space-8'} marginInline={'space-4'}>
-                                Legg til barn
-                                <HelpText style={{ marginLeft: '0.5rem' }}>
-                                    Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger
-                                    ligger på behandlingen fordi vi tidligere har avslått eller opphørt.
-                                </HelpText>
-                            </HStack>
-                        </Heading>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Fieldset
-                            error={errors.root?.message}
-                            errorPropagation={false}
-                            legend="Legg til barn på behandling"
-                            hideLegend
-                        >
-                            <InfoCard data-color="info">
-                                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                                    Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke reverseres
-                                    uten å henlegge.
-                                </InfoCard.Message>
-                            </InfoCard>
-                            <LeggTilBarnFelt erLesevisning={erLesevisning} />
-                        </Fieldset>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            type={'submit'}
-                            variant="primary"
-                            size="small"
-                            loading={isSubmitting}
-                            disabled={erLesevisning}
-                        >
-                            Legg til
-                        </Button>
-                        <Button variant="tertiary" size="small" onClick={lukkModal}>
-                            Avbryt
-                        </Button>
-                    </Modal.Footer>
-                </form>
-            </FormProvider>
-        </Modal>
+        <Dialog open onOpenChange={lukkModal}>
+            <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <HStack margin={'space-8'} marginInline={'space-4'}>
+                        <Dialog.Title>Legg til barn</Dialog.Title>
+                        <HelpText style={{ marginLeft: '0.5rem' }}>
+                            Her kan du, ved klage eller ettersendt dokumentasjon, legge til barn som ikke lenger ligger
+                            på behandlingen fordi vi tidligere har avslått eller opphørt.
+                        </HelpText>
+                    </HStack>
+                </Dialog.Header>
+                <Dialog.Body>
+                    <FormProvider {...form}>
+                        <form onSubmit={handleSubmit(onSubmit)} id={'legg-til-barn-paa-behandling-form'}>
+                            <Fieldset
+                                error={errors.root?.message}
+                                errorPropagation={false}
+                                legend="Legg til barn på behandling"
+                                hideLegend
+                            >
+                                <InfoCard data-color="info">
+                                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                                        Du er i ferd med å legge til et barn på behandlingen. Handlingen kan ikke
+                                        reverseres uten å henlegge.
+                                    </InfoCard.Message>
+                                </InfoCard>
+                                <LeggTilBarnFelt erLesevisning={erLesevisning} />
+                            </Fieldset>
+                        </form>
+                    </FormProvider>
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button
+                        type={'submit'}
+                        variant="primary"
+                        size="small"
+                        loading={isSubmitting}
+                        disabled={erLesevisning}
+                        form={'legg-til-barn-paa-behandling-form'}
+                    >
+                        Legg til
+                    </Button>
+                    <Button variant="tertiary" size="small" onClick={lukkModal}>
+                        Avbryt
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
