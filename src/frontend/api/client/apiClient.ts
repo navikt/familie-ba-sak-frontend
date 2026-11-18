@@ -1,3 +1,4 @@
+import { captureException } from '@nais/apm';
 import { logger, tilLoggFeil } from '@utils/logger';
 import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
@@ -201,10 +202,13 @@ export class ApiClient {
         const httpStatus = feil.status ?? 'ukjent';
         const ressursStatus = feil.ressursStatus ?? 'ukjent';
         // Logg aldri request-/response-body – de kan inneholde fødselsnummer og andre personopplysninger.
-        logger.warn(
+        logger.error(
             `API-kall feilet: ${metode} ${url} (HTTP ${httpStatus}, ressursstatus ${ressursStatus}) – ${feil.message}`,
             tilLoggFeil(feil)
         );
+        captureException(feil, {
+            context: { metode, url, httpStatus, ressursStatus, callId: feil.callId || 'ukjent' },
+        });
     }
 
     /**
