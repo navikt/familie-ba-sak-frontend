@@ -56,6 +56,38 @@ test.describe('Simulering', () => {
         await expect(page.getByRole('heading', { name: 'Vedtak', level: 1 })).toBeVisible();
     });
 
+    test('skal ikke sende lagret tilbakekrevingsvalg når simuleringen ikke har feilutbetaling', async ({
+        page,
+        apiMock,
+    }) => {
+        const behandlingsmock = lagBehandlingsmock(
+            lagBehandlingPåSteg(BehandlingSteg.VURDER_TILBAKEKREVING, {
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+                tilbakekreving: {
+                    vedtakId: 1,
+                    valg: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
+                    varsel: 'Varsel fra før feilutbetalingen falt bort',
+                    begrunnelse: 'Begrunnelse fra før feilutbetalingen falt bort',
+                },
+            })
+        );
+        apiMock.use(...behandlingsmock.handlers);
+
+        await page.goto('/fagsak/1/1/simulering');
+
+        await expect(page.getByRole('heading', { name: 'Simulering', level: 1 })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Tilbakekreving' })).toBeHidden();
+
+        const stegRequest = page.waitForRequest(
+            request => request.method() === 'POST' && request.url().endsWith(tilbakekrevingStegUrl(1))
+        );
+        await page.getByRole('button', { name: 'Neste steg' }).click();
+
+        expect((await stegRequest).postData()).toBeFalsy();
+        await expect(page).toHaveURL(/\/fagsak\/1\/1\/vedtak$/);
+    });
+
     test('skal kreve valg om tilbakekreving når simuleringen gir feilutbetaling', async ({ page, apiMock }) => {
         // Feilutbetaling oppstår når en revurdering endrer en utbetaling som allerede er gjort.
         const behandlingsmock = lagBehandlingsmock(

@@ -10,12 +10,11 @@ export function utledTilbakekreving(
 ): ITilbakekreving | undefined {
     const { tilbakekrevingsvalg, fritekstVarsel, begrunnelse } = values;
 
-    if (tilbakekrevingsvalg === '' || !erDefinert(vedtak)) {
+    if (tilbakekrevingsvalg === '' || !erDefinert(vedtak) || !erFeilutbetaling) {
         return undefined;
     }
 
-    const skalSendeVarsel =
-        erFeilutbetaling && tilbakekrevingsvalg === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL;
+    const skalSendeVarsel = tilbakekrevingsvalg === Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL;
 
     return {
         vedtakId: vedtak.id,
