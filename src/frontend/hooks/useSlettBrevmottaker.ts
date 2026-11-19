@@ -1,4 +1,5 @@
 import { slettBrevmottaker } from '@api/slettBrevmottaker';
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 
@@ -9,13 +10,9 @@ interface Parameters {
 
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationKey' | 'mutationFn'>;
 
-export const SlettBrevmottakerMutationKeyFactory = {
-    slettBrevmottaker: () => ['slettBrevmottaker'],
-};
-
 export function useSlettBrevmottaker(options?: Options) {
     return useMutation({
-        mutationKey: SlettBrevmottakerMutationKeyFactory.slettBrevmottaker(),
+        mutationKey: mutationKeys.slettBrevmottaker(),
         mutationFn: ({ behandlingId, brevmottakerId }: Parameters) =>
             slettBrevmottaker({ behandlingId, brevmottakerId }),
         ...options,

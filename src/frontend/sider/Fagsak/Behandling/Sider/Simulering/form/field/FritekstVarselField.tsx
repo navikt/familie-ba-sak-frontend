@@ -1,11 +1,9 @@
 import { ModalType } from '@context/ModalContext';
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useModal } from '@hooks/useModal';
-import {
-    mutationKey,
-    useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf,
-} from '@hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
+import { useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf } from '@hooks/useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf';
 import { ExternalLinkIcon, FileTextIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, HelpText, HStack, Link, Spacer, Tag, Textarea, VStack } from '@navikt/ds-react';
 import styles from '@sider/Fagsak/Behandling/Sider/Simulering/form/TilbakekrevingForm.module.css';
@@ -26,7 +24,10 @@ export function FritekstVarselField() {
 
     const { mutate: opprettTilbakekrevingVarselBrevPdf, isPending: isOpprettTilbakekrevingVarselBrevPdfPending } =
         useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf({
-            onMutate: () => åpneForhåndsvisOpprettingAvPdfModal({ mutationKey }),
+            onMutate: () =>
+                åpneForhåndsvisOpprettingAvPdfModal({
+                    mutationKey: mutationKeys.opprettForhåndsvisbarTilbakekrevingVarselbrevPdf(),
+                }),
         });
 
     const { control } = useFormContext<TilbakekrevingFormValues>();

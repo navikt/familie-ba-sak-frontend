@@ -1,9 +1,7 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { LocalAlert } from '@navikt/ds-react';
-
 import { useMutationState } from '@tanstack/react-query';
 import { useState } from 'react';
-
-import { lagMutationKey } from '../../../../../../hooks/useSlettFeilutbetaltValuta';
 import type { IRestFeilutbetaltValuta } from '../../../../../../typer/eøs-feilutbetalt-valuta';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 
@@ -13,7 +11,7 @@ interface Props {
 
 export function SlettFeilutbetaltValutaError({ feilutbetaltValuta }: Props) {
     const states = useMutationState({
-        filters: { mutationKey: lagMutationKey(feilutbetaltValuta.id) },
+        filters: { mutationKey: mutationKeys.slettFeilutbetaltValuta(feilutbetaltValuta.id) },
     });
 
     const state = states[states.length - 1];
