@@ -44,7 +44,7 @@ interface WrapperProps extends PropsWithChildren {
 
 function Wrapper({
     initialEntries = [{ pathname: '/fagsak/1/1/registrer-soknad' }],
-    behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER }),
+    behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER, steg: BehandlingSteg.VILKÅRSVURDERING }),
     fagsak = lagFagsak({ behandlinger: [lagVisningBehandling({ behandlingId: behandling?.behandlingId })] }),
     children,
 }: WrapperProps) {

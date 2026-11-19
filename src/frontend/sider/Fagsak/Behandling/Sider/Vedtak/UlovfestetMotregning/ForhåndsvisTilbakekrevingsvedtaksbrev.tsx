@@ -3,7 +3,7 @@ import { useHentEllerOpprettTilbakekrevingsvedtaksbrevPdf } from '@hooks/useHent
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, ErrorMessage, Heading, HStack, Loader } from '@navikt/ds-react';
-import { BehandlerRolle, BehandlingSteg, hentStegNummer } from '@typer/behandling';
+import { BehandlerRolle, BehandlingSteg, hentStegnummer } from '@typer/behandling';
 import { useState } from 'react';
 
 import Styles from './ForhåndsvisTilbakekrevingsvedtaksbrev.module.css';
@@ -27,8 +27,8 @@ export function ForhåndsvisTilbakekrevingsvedtaksbrev() {
         const erMinstSaksbehandler = saksbehandler.rolle >= BehandlerRolle.SAKSBEHANDLER;
         const erBeslutter = saksbehandler.rolle === BehandlerRolle.BESLUTTER;
 
-        const erFørBeslutteVedtak = hentStegNummer(steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-        const erPåBeslutteVedtak = hentStegNummer(steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const erFørBeslutteVedtak = hentStegnummer(steg) < hentStegnummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const erPåBeslutteVedtak = hentStegnummer(steg) === hentStegnummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const skalGenerereBrevUnderBehandling = erMinstSaksbehandler && erFørBeslutteVedtak;
         const skalGenerereBrevUnderBeslutning = erBeslutter && erPåBeslutteVedtak;

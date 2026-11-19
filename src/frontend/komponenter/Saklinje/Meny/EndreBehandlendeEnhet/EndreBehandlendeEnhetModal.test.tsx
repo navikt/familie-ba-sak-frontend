@@ -30,7 +30,10 @@ function Wrapper({
     children,
 }: WrapperProps) {
     return (
-        <TestProviders saksbehandler={saksbehandler}>
+        <TestProviders
+            saksbehandler={saksbehandler}
+            initialEntries={[{ pathname: `/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad` }]}
+        >
             <FagsakProvider fagsak={fagsak}>
                 <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
             </FagsakProvider>
