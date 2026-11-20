@@ -1,41 +1,28 @@
+import { useErViPåUgyldigSideForBehandling } from '@hooks/useErViPåUgyldigSideForBehandling';
 import { useFagsak } from '@hooks/useFagsak';
-import {
-    erViPåUdefinertFagsakSide,
-    erViPåUlovligSteg,
-    finnSideForBehandlingssteg,
-} from '@sider/Fagsak/Behandling/Sider/sider';
+import { finnSideForBehandlingssteg } from '@sider/Fagsak/Behandling/Sider/sider';
 import type { IBehandling } from '@typer/behandling';
-import { useCallback, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useEffect, useEffectEvent } from 'react';
+import { useNavigate } from 'react-router';
 
 interface Props {
     behandling: IBehandling;
 }
 
 export function useNavigerAutomatiskTilSideForBehandlingssteg({ behandling }: Props) {
-    const location = useLocation();
     const navigate = useNavigate();
     const fagsak = useFagsak();
+    const erViPåUgyldigSideForBehandling = useErViPåUgyldigSideForBehandling(behandling);
 
-    const forrigeBehandlingId = useRef<number | undefined>(undefined);
+    const side = finnSideForBehandlingssteg(behandling);
 
-    const pathname = location.pathname;
-    const behandlingId = behandling.behandlingId;
-
-    const navigerTilSideForBehandlingssteg = useCallback(() => {
-        const side = finnSideForBehandlingssteg(behandling);
-        if (!side) {
-            return;
+    const navigerTilSideForBehandlingssteg = useEffectEvent((behandlingId: number) => {
+        if (side && erViPåUgyldigSideForBehandling) {
+            navigate(`/fagsak/${fagsak.id}/${behandlingId}/${side.href}`, { replace: true });
         }
-        if (erViPåUdefinertFagsakSide(pathname) || erViPåUlovligSteg(pathname, side)) {
-            navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/${side.href}`, { replace: true });
-        }
-    }, [fagsak, behandling, pathname, navigate]);
+    });
 
     useEffect(() => {
-        if (behandlingId !== forrigeBehandlingId.current) {
-            forrigeBehandlingId.current = behandlingId;
-            navigerTilSideForBehandlingssteg();
-        }
-    }, [behandlingId, navigerTilSideForBehandlingssteg]);
+        navigerTilSideForBehandlingssteg(behandling.behandlingId);
+    }, [behandling.behandlingId]);
 }

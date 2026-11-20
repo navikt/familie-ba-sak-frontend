@@ -1,10 +1,4 @@
-import {
-    BehandlingSteg,
-    BehandlingStegStatus,
-    BehandlingÅrsak,
-    hentStegNummer,
-    type IBehandling,
-} from '@typer/behandling';
+import { BehandlingSteg, BehandlingÅrsak, hentStegnummer, type IBehandling } from '@typer/behandling';
 import { Resultat } from '@typer/vilkår';
 
 import { mapFraRestPersonResultatTilPersonResultat } from './Vilkårsvurdering/utils';
@@ -141,8 +135,29 @@ export const sider: Record<SideId, Side> = {
     },
 };
 
+/**
+ * Sjekker om stegA kommer etter stegB ut fra rekkefølgen i backend. Flere steg har samme rekkefølge i backend
+ * (f.eks. REGISTRERE_INSTITUSJON og REGISTRERE_SØKNAD), så da brukes rekkefølgen på sidene som avgjørende.
+ */
+export function erStegEtter(stegA: BehandlingSteg, stegB: BehandlingSteg): boolean {
+    const stegnummerA = hentStegnummer(stegA);
+    const stegnummerB = hentStegnummer(stegB);
+    if (stegnummerA !== stegnummerB) {
+        return stegnummerA > stegnummerB;
+    }
+
+    const stegForSider = Object.values(sider).map(side => side.steg);
+    const indeksA = stegForSider.indexOf(stegA);
+    const indeksB = stegForSider.indexOf(stegB);
+    if (indeksA === -1 || indeksB === -1) {
+        return false;
+    }
+
+    return indeksA > indeksB;
+}
+
 export function erSidenAktiv(side: Side, behandling: IBehandling): boolean {
-    const steg = finnSteg(behandling);
+    const steg = finnGjeldendeSteg(behandling);
 
     if (!side.steg && side.steg !== 0) {
         return true;
@@ -152,7 +167,7 @@ export function erSidenAktiv(side: Side, behandling: IBehandling): boolean {
         return false;
     }
 
-    return hentStegNummer(side.steg) <= hentStegNummer(steg);
+    return !erStegEtter(side.steg, steg);
 }
 
 export function finnSiderForBehandling(behandling: IBehandling) {
@@ -164,65 +179,34 @@ export function hentSideFraUrl(url: string) {
 }
 
 export function finnSideForBehandlingssteg(behandling: IBehandling): Side | undefined {
-    const steg = finnSteg(behandling);
+    const steg = finnGjeldendeSteg(behandling);
 
-    if (hentStegNummer(steg) >= hentStegNummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
-        if (sider.VEDTAK.visSide && sider.VEDTAK.visSide(behandling)) {
+    if (!steg) {
+        return undefined;
+    }
+
+    if (hentStegnummer(steg) >= hentStegnummer(BehandlingSteg.SEND_TIL_BESLUTTER)) {
+        if (sider.VEDTAK.visSide?.(behandling)) {
             return sider.VEDTAK;
         }
-        if (sider.SIMULERING.visSide && sider.SIMULERING.visSide(behandling)) {
+        if (sider.SIMULERING.visSide?.(behandling)) {
             return sider.SIMULERING;
         }
         return sider.BEHANDLINGRESULTAT;
     }
 
-    const sideForSteg = Object.entries(sider).find(([_, side]) => side.steg === steg);
+    const siderForBehandling = finnSiderForBehandling(behandling);
 
-    return sideForSteg ? sideForSteg[1] : undefined;
+    return siderForBehandling.find(side => side.steg === steg);
 }
 
-export function erViPåUdefinertFagsakSide(pathname: string) {
-    return (
-        Object.values(sider).filter((side: Side) => pathname.includes(side.href)).length === 0 &&
-        !pathname.includes('saksoversikt') &&
-        !pathname.includes('ny-behandling')
-    );
+function finnGjeldendeSteg(behandling: IBehandling): BehandlingSteg | undefined {
+    const erHenlagt = behandling.stegTilstand.some(it => it.behandlingSteg === BehandlingSteg.HENLEGG_BEHANDLING);
+    return erHenlagt ? finnStegBehandlingenBleHenlagtPå(behandling) : behandling.steg;
 }
 
-export function erViPåUlovligSteg(pathname: string, behandlingSide?: Side) {
-    if (!behandlingSide) return false;
-
-    const ønsketSteg = Object.values(sider).find((side: Side) => pathname.includes(side.href));
-
-    if (ønsketSteg) {
-        if (hentStegNummer(ønsketSteg?.steg) > hentStegNummer(behandlingSide.steg)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function finnSteg(behandling: IBehandling): BehandlingSteg {
-    const erHenlagt = inneholderSteg(behandling, BehandlingSteg.HENLEGG_BEHANDLING);
-    if (erHenlagt) {
-        if (inneholderSteg(behandling, BehandlingSteg.SEND_TIL_BESLUTTER)) {
-            return BehandlingSteg.SEND_TIL_BESLUTTER;
-        }
-        if (inneholderSteg(behandling, BehandlingSteg.VILKÅRSVURDERING)) {
-            return BehandlingSteg.VILKÅRSVURDERING;
-        }
-        if (inneholderSteg(behandling, BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING)) {
-            return BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING;
-        }
-        return BehandlingSteg.REGISTRERE_SØKNAD;
-    } else {
-        return behandling.steg;
-    }
-}
-
-function inneholderSteg(behandling: IBehandling, behandlingSteg: BehandlingSteg): boolean {
-    return behandling.stegTilstand
-        .filter(stegTilstand => stegTilstand.behandlingStegStatus !== BehandlingStegStatus.IKKE_UTFØRT)
-        .some(stegTilstand => stegTilstand.behandlingSteg === behandlingSteg);
+// Backend sorterer stegtilstanden kronologisk og legger til henleggelsessteget etter steget behandlingen ble henlagt på.
+function finnStegBehandlingenBleHenlagtPå(behandling: IBehandling): BehandlingSteg | undefined {
+    const stegene = behandling.stegTilstand.map(it => it.behandlingSteg);
+    return stegene[stegene.indexOf(BehandlingSteg.HENLEGG_BEHANDLING) - 1];
 }

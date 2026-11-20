@@ -3,7 +3,7 @@ import { useHentEllerOpprettVedtaksbrevPdf } from '@hooks/useHentEllerOpprettVed
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, ErrorMessage, Heading, HStack, Loader } from '@navikt/ds-react';
-import { BehandlerRolle, BehandlingSteg, hentStegNummer } from '@typer/behandling';
+import { BehandlerRolle, BehandlingSteg, hentStegnummer } from '@typer/behandling';
 import { useState } from 'react';
 
 import Styles from './ForhåndsvisVedtaksbrev.module.css';
@@ -28,8 +28,8 @@ export function ForhåndsvisVedtaksbrev() {
             throw Error(`Fant ikke forventet vedtak for behandling ${behandling.behandlingId}`);
         }
 
-        const erFørBeslutteVedtak = hentStegNummer(behandling.steg) < hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
-        const erPåBeslutteVedtak = hentStegNummer(behandling.steg) === hentStegNummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const erFørBeslutteVedtak = hentStegnummer(behandling.steg) < hentStegnummer(BehandlingSteg.BESLUTTE_VEDTAK);
+        const erPåBeslutteVedtak = hentStegnummer(behandling.steg) === hentStegnummer(BehandlingSteg.BESLUTTE_VEDTAK);
 
         const erMinstSaksbehandler = saksbehandler.rolle >= BehandlerRolle.SAKSBEHANDLER;
         const erBeslutter = saksbehandler.rolle === BehandlerRolle.BESLUTTER;

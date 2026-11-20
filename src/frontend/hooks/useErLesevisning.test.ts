@@ -3,24 +3,27 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { lagBehandling } from '../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '../testutils/testdata/saksbehandlerTestdata';
-import { BehandlingStatus, BehandlingSteg } from '../typer/behandling';
+import { BehandlingStatus, BehandlingSteg, BehandlingÅrsak } from '../typer/behandling';
 import { harTilgangTilEnhet } from '../typer/enhet';
 import { FagsakStatus } from '../typer/fagsak';
 import { MIDLERTIDIG_BEHANDLENDE_ENHET_ID } from '../utils/behandling';
 import { useBehandling } from './useBehandling';
 import { useErLesevisning } from './useErLesevisning';
+import { useErViPåUgyldigSideForBehandling } from './useErViPåUgyldigSideForBehandling';
 import { useFagsak } from './useFagsak';
 import { useSaksbehandler } from './useSaksbehandler';
 
 vi.mock('./useBehandling');
 vi.mock('./useSaksbehandler');
 vi.mock('./useFagsak');
+vi.mock('./useErViPåUgyldigSideForBehandling');
 vi.mock('../typer/enhet');
 
 const mockUseBehandling = vi.mocked(useBehandling);
 const mockUseSaksbehandler = vi.mocked(useSaksbehandler);
 const mockHarTilgangTilEnhet = vi.mocked(harTilgangTilEnhet);
 const mockUseFagsak = vi.mocked(useFagsak);
+const mockUseErViPåUgyldigSideForBehandling = vi.mocked(useErViPåUgyldigSideForBehandling);
 
 beforeEach(() => {
     vi.resetAllMocks();
@@ -28,6 +31,7 @@ beforeEach(() => {
     mockUseSaksbehandler.mockReturnValue(lagSaksbehandler());
     mockHarTilgangTilEnhet.mockReturnValue(true);
     mockUseFagsak.mockReturnValue(lagFagsak());
+    mockUseErViPåUgyldigSideForBehandling.mockReturnValue(false);
 });
 
 describe('useErLesevisning', () => {
@@ -148,5 +152,33 @@ describe('useErLesevisning', () => {
         const { result } = renderHook(() => useErLesevisning());
 
         expect(result.current).toBe(true);
+    });
+
+    it('returnerer true når saksbehandler er på en ugyldig side for behandlingen', () => {
+        mockUseErViPåUgyldigSideForBehandling.mockReturnValue(true);
+
+        const { result } = renderHook(() => useErLesevisning());
+
+        expect(result.current).toBe(true);
+    });
+
+    it('returnerer true når saksbehandler er på en ugyldig side selv om superbruker og enhetssjekk ignoreres', () => {
+        mockUseErViPåUgyldigSideForBehandling.mockReturnValue(true);
+        mockUseSaksbehandler.mockReturnValue(lagSaksbehandler({ harSuperbrukertilgang: true }));
+
+        const { result } = renderHook(() =>
+            useErLesevisning({ sjekkTilgangTilEnhet: false, skalIgnorereOmEnhetErMidlertidig: true })
+        );
+
+        expect(result.current).toBe(true);
+    });
+
+    it('returnerer false når saksbehandler mangler enhetstilgang men behandlingen er åpen for alle', () => {
+        mockHarTilgangTilEnhet.mockReturnValue(false);
+        mockUseBehandling.mockReturnValue(lagBehandling({ årsak: BehandlingÅrsak.TEKNISK_ENDRING }));
+
+        const { result } = renderHook(() => useErLesevisning());
+
+        expect(result.current).toBe(false);
     });
 });
