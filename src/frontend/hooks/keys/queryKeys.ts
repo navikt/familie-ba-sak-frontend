@@ -73,6 +73,9 @@ export const queryKeys = {
     endringstidspunkt: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'endringstidspunkt'] as const;
     },
+    feilutbetaltValuta: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'feilutbetalt-valuta'] as const;
+    },
     filtreringsresultater: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'filtreringsresultater'] as const;
     },

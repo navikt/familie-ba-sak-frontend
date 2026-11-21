@@ -3,10 +3,10 @@ import { ActionMenu } from '@navikt/ds-react';
 import { useFeilutbetaltValutaTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 
 export function FeilutbetaltValuta() {
-    const { visFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
+    const { visLeggTilFeilutbetaltValutaForm } = useFeilutbetaltValutaTabellContext();
 
     return (
-        <ActionMenu.Item onSelect={visFeilutbetaltValutaTabell}>
+        <ActionMenu.Item onSelect={visLeggTilFeilutbetaltValutaForm}>
             <CalculatorIcon fontSize={'1.4rem'} />
             Legg til feilutbetalt valuta og sats
         </ActionMenu.Item>
