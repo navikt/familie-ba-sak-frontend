@@ -19,26 +19,22 @@ export function BrevSendtDialog({ settErBrevSendtDialog√Öpen, erBrevSendtDialog√
                 </Dialog.Header>
                 <Dialog.Footer>
                     <HStack gap={'space-8'} justify="center" width={'100%'}>
-                        <Dialog.CloseTrigger>
-                            <Button
-                                variant={'secondary'}
-                                key={'saksoversikt'}
-                                size={'medium'}
-                                onClick={() => navigate(`/fagsak/${fagsak.id}/saksoversikt`)}
-                            >
-                                Se saksoversikt
-                            </Button>
-                        </Dialog.CloseTrigger>
-                        <Dialog.CloseTrigger>
-                            <Button
-                                variant={'secondary'}
-                                key={'oppgavebenken'}
-                                size={'medium'}
-                                onClick={() => navigate('/oppgaver')}
-                            >
-                                Se oppgavebenk
-                            </Button>
-                        </Dialog.CloseTrigger>
+                        <Button
+                            variant={'secondary'}
+                            key={'saksoversikt'}
+                            size={'medium'}
+                            onClick={() => navigate(`/fagsak/${fagsak.id}/saksoversikt`)}
+                        >
+                            Se saksoversikt
+                        </Button>
+                        <Button
+                            variant={'secondary'}
+                            key={'oppgavebenken'}
+                            size={'medium'}
+                            onClick={() => navigate('/oppgaver')}
+                        >
+                            Se oppgavebenk
+                        </Button>
                     </HStack>
                 </Dialog.Footer>
             </Dialog.Popup>

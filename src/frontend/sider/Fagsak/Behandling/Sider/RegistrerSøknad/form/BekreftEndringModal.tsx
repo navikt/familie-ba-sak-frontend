@@ -1,4 +1,4 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
 import type {
     RegistrerSøknadFormValues,
@@ -39,23 +39,23 @@ export function BekreftEndringModal({ onSubmit }: Props) {
     }
 
     return (
-        <Modal
-            open={erBekreftEndringModalÅpen}
-            onClose={avbryt}
-            header={{ heading: 'Er du sikker på at du vil gå videre?' }}
-            width={'35rem'}
-        >
-            <Modal.Body>
-                <BodyShort className={Styles.innhold}>{bekreftEndringFeilmelding}</BodyShort>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button type={'button'} variant={'primary'} onClick={bekreft} loading={isSubmitting}>
-                    Ja
-                </Button>
-                <Button type={'button'} variant={'secondary'} onClick={avbryt} disabled={isSubmitting}>
-                    Nei
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        <Dialog open={erBekreftEndringModalÅpen} onOpenChange={avbryt}>
+            <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>Er du sikker på at du vil gå videre?</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
+                    <BodyShort className={Styles.innhold}>{bekreftEndringFeilmelding}</BodyShort>
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button type={'button'} variant={'primary'} onClick={bekreft} loading={isSubmitting}>
+                        Ja
+                    </Button>
+                    <Button type={'button'} variant={'secondary'} onClick={avbryt} disabled={isSubmitting}>
+                        Nei
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 }

@@ -1,4 +1,4 @@
-import { Modal } from '@navikt/ds-react';
+import { Dialog } from '@navikt/ds-react';
 import type { Utsendingsinfo } from '@navikt/familie-typer';
 
 interface IProps {
@@ -10,15 +10,13 @@ export const UtsendingsinfoModal = ({ onClose, data: { digitalpostSendt, fysiskp
     const tittel = digitalpostSendt ? 'Digital post sendt' : 'Sendt per post';
     const adresse = digitalpostSendt?.adresse || fysiskpostSendt?.adressetekstKonvolutt;
     return (
-        <Modal
-            open
-            closeOnBackdropClick
-            onClose={onClose}
-            width="small"
-            header={{ heading: tittel, size: 'small' }}
-            portal
-        >
-            <Modal.Body>{adresse}</Modal.Body>
-        </Modal>
+        <Dialog open onOpenChange={onClose} size={'small'}>
+            <Dialog.Popup closeOnOutsideClick width={'small'}>
+                <Dialog.Header>
+                    <Dialog.Title>{tittel}</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>{adresse}</Dialog.Body>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

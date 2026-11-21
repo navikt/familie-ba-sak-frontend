@@ -1,5 +1,5 @@
 import { useFagsak } from '@hooks/useFagsak';
-import { BodyShort, Box, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import { useNavigate } from 'react-router';
 
@@ -29,20 +29,23 @@ export function TotrinnskontrollModal() {
     }
 
     return (
-        <Modal open={true} onClose={lukkModal} header={{ heading: 'Totrinnskontroll' }} portal={true}>
-            <Modal.Body>
-                <Box marginBlock={'space-16'}>
+        <Dialog open={true} onOpenChange={lukkModal}>
+            <Dialog.Popup width={'small'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>Totrinnskontroll</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
                     <BodyShort>{beslutningstekst[beslutning]}</BodyShort>
-                </Box>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant={'secondary'} size={'medium'} onClick={navigerTilSaksoversikt}>
-                    Gå til saksoversikten
-                </Button>
-                <Button variant={'primary'} size={'medium'} onClick={navigerTilOppgavebenk}>
-                    Gå til oppgavebenken
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button variant={'secondary'} size={'medium'} onClick={navigerTilSaksoversikt}>
+                        Gå til saksoversikten
+                    </Button>
+                    <Button variant={'primary'} size={'medium'} onClick={navigerTilOppgavebenk}>
+                        Gå til oppgavebenken
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 }

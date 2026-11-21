@@ -6,10 +6,10 @@ import { useModal } from '@hooks/useModal';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import {
     Button,
+    Dialog,
     Fieldset,
     HStack,
     InlineMessage,
-    Modal,
     Select,
     Spacer,
     Textarea,
@@ -41,58 +41,63 @@ export function KorrigerEtterbetalingModal() {
     }
 
     return (
-        <Modal open={erModalÅpen} onClose={handleLukkModal} header={{ heading: tittel }} width={bredde} portal>
-            <form onSubmit={form.handleSubmit(korrigerEtterbetaling)}>
-                <Modal.Body>
-                    <Fieldset error={false} legend="Korriger etterbetaling" hideLegend>
-                        <VStack gap={'space-16'}>
-                            <Select
-                                {...form.register('årsak', {
-                                    required: 'Velg en årsak',
-                                    validate: value => erÅrsakForKorrigeringGyldig(value),
-                                })}
-                                label={'Årsak'}
-                                readOnly={erLesevisning}
-                                error={form.formState.errors.årsak?.message}
-                            >
-                                {årsaker.map(årsak => (
-                                    <option value={årsak.value} key={årsak.value}>
-                                        {årsak.label}
-                                    </option>
-                                ))}
-                            </Select>
-                            <TextField
-                                {...form.register('beløp', {
-                                    required: 'Beløp er påkrevd',
-                                    validate: value => erEtterbetalingsbeløpGyldig(value),
-                                })}
-                                label={'Nytt beløp'}
-                                error={form.formState.errors.beløp?.message}
-                                readOnly={erLesevisning}
-                                className={erLesevisning ? 'lesevisning' : ''}
-                            />
-                            <Textarea
-                                {...form.register('begrunnelse')}
-                                label={'Begrunnelse (valgfri)'}
-                                maxLength={erLesevisning ? 0 : 1000}
-                                readOnly={erLesevisning}
-                            />
-                            {!erLesevisning && (
-                                <>
-                                    <InlineMessage status="info">
-                                        Husk å sende korrigeringsmelding til NØS
-                                    </InlineMessage>
-                                    {form.formState.errors.root?.message && (
-                                        <InlineMessage status="error">
-                                            {form.formState.errors.root.message}
+        <Dialog open={erModalÅpen} onOpenChange={handleLukkModal}>
+            <Dialog.Popup width={bredde} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>{tittel}</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
+                    <form onSubmit={form.handleSubmit(korrigerEtterbetaling)} id={'korriger-etterbetaling-form'}>
+                        <Fieldset error={false} legend="Korriger etterbetaling" hideLegend>
+                            <VStack gap={'space-16'}>
+                                <Select
+                                    {...form.register('årsak', {
+                                        required: 'Velg en årsak',
+                                        validate: value => erÅrsakForKorrigeringGyldig(value),
+                                    })}
+                                    label={'Årsak'}
+                                    readOnly={erLesevisning}
+                                    error={form.formState.errors.årsak?.message}
+                                >
+                                    {årsaker.map(årsak => (
+                                        <option value={årsak.value} key={årsak.value}>
+                                            {årsak.label}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <TextField
+                                    {...form.register('beløp', {
+                                        required: 'Beløp er påkrevd',
+                                        validate: value => erEtterbetalingsbeløpGyldig(value),
+                                    })}
+                                    label={'Nytt beløp'}
+                                    error={form.formState.errors.beløp?.message}
+                                    readOnly={erLesevisning}
+                                    className={erLesevisning ? 'lesevisning' : ''}
+                                />
+                                <Textarea
+                                    {...form.register('begrunnelse')}
+                                    label={'Begrunnelse (valgfri)'}
+                                    maxLength={erLesevisning ? 0 : 1000}
+                                    readOnly={erLesevisning}
+                                />
+                                {!erLesevisning && (
+                                    <>
+                                        <InlineMessage status="info">
+                                            Husk å sende korrigeringsmelding til NØS
                                         </InlineMessage>
-                                    )}
-                                </>
-                            )}
-                        </VStack>
-                    </Fieldset>
-                </Modal.Body>
-                <Modal.Footer>
+                                        {form.formState.errors.root?.message && (
+                                            <InlineMessage status="error">
+                                                {form.formState.errors.root.message}
+                                            </InlineMessage>
+                                        )}
+                                    </>
+                                )}
+                            </VStack>
+                        </Fieldset>
+                    </form>
+                </Dialog.Body>
+                <Dialog.Footer>
                     {!erLesevisning && (
                         <HStack gap={'space-0 space-64'}>
                             <HStack>
@@ -114,15 +119,20 @@ export function KorrigerEtterbetalingModal() {
                                 <Button onClick={handleLukkModal} variant={'tertiary'}>
                                     Avbryt
                                 </Button>
-                                <Button type={'submit'} variant={'primary'} loading={korrigerEtterbetalingPending}>
+                                <Button
+                                    type={'submit'}
+                                    variant={'primary'}
+                                    loading={korrigerEtterbetalingPending}
+                                    form={'korriger-etterbetaling-form'}
+                                >
                                     {korrigertEtterbetaling ? 'Oppdater' : 'Korriger beløp'}
                                 </Button>
                             </HStack>
                         </HStack>
                     )}
                     {erLesevisning && <Button onClick={lukkModal}>Lukk</Button>}
-                </Modal.Footer>
-            </form>
-        </Modal>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 }
