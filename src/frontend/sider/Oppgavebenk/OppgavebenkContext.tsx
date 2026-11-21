@@ -5,12 +5,10 @@ import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import type { SortState } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
-import { Valideringsstatus } from '@navikt/familie-skjema';
 import type { Ressurs } from '@navikt/familie-typer';
 import { byggFeiletRessurs, byggHenterRessurs, byggTomRessurs, RessursStatus } from '@navikt/familie-typer';
 import type { IFinnOppgaveRequest, IHentOppgaveDto, IOppgave } from '@typer/oppgave';
-import { EnhetFilter, SaksbehandlerFilter } from '@typer/oppgave';
-import { erIsoStringGyldig } from '@utils/dato';
+import { SaksbehandlerFilter } from '@typer/oppgave';
 import { hentNesteSorteringsrekkefølge, hentSortState, Sorteringsrekkefølge } from '@utils/tabell';
 import type { AxiosError } from 'axios';
 import type { PropsWithChildren } from 'react';
@@ -18,8 +16,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { finnFagsakÅNavigereTil } from './finnFagsakÅNavigereTil';
-import type { IOppgaveFelt, IOppgaveFelter } from './oppgavefelter';
-import { initialOppgaveFelter } from './oppgavefelter';
+import type { OppgavefilterFormValues } from './form/useOppgavefilterForm';
 import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
 
 const OPPGAVEBENK_SORTERINGSNØKKEL = 'OPPGAVEBENK_SORTERINGSNØKKEL';
@@ -29,13 +26,9 @@ export const oppgaveSideLimit = 15;
 const maksAntallOppgaver = 150;
 
 interface OppgavebenkContextValue {
-    hentOppgaver: () => void;
-    oppgaveFelter: IOppgaveFelter;
+    hentOppgaver: (verdier: OppgavefilterFormValues) => Promise<void>;
     oppgaver: Ressurs<IHentOppgaveDto>;
-    settVerdiPåOppgaveFelt: (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => void;
     oppdaterOppgave: (oppgave: IOppgave) => void;
-    tilbakestillOppgaveFelter: () => void;
-    validerSkjema: () => boolean;
     gåTilFagsakEllerVisFeilmelding: (personident: string) => Promise<void>;
     sortering: SortState | undefined;
     settOgLagreSortering: (sorteringsnøkkel: Sorteringsnøkkel) => void;
@@ -53,11 +46,7 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
 
     const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson();
 
-    const [hentOppgaverVedSidelast, settHentOppgaverVedSidelast] = useState(true);
-
     const [oppgaver, settOppgaver] = useState<Ressurs<IHentOppgaveDto>>(byggTomRessurs<IHentOppgaveDto>());
-
-    const [oppgaveFelter, settOppgaveFelter] = useState<IOppgaveFelter>(initialOppgaveFelter(saksbehandler));
 
     const oppgaverader: IOppgaveRad[] = useMemo(() => {
         return oppgaver.status === RessursStatus.SUKSESS && oppgaver.data.oppgaver.length > 0
@@ -96,38 +85,6 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         settSortering(nySortering);
     };
 
-    useEffect(() => {
-        settOppgaveFelter(initialOppgaveFelter(saksbehandler));
-    }, [saksbehandler]);
-
-    useEffect(() => {
-        if (hentOppgaverVedSidelast) {
-            if (
-                Object.values(oppgaveFelter).filter(
-                    (oppgaveFelt: IOppgaveFelt) =>
-                        oppgaveFelt.filter?.initialValue !== oppgaveFelt.filter?.selectedValue
-                ).length > 0
-            ) {
-                hentOppgaver();
-            }
-            settHentOppgaverVedSidelast(false);
-        }
-    }, [oppgaveFelter]);
-
-    const hentOppgaveFelt = (nøkkel: string) => {
-        return oppgaveFelter[nøkkel];
-    };
-
-    const oppdaterOppgaveFeltILocalStorage = (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => {
-        const oppgaveFelterLocalStorage = JSON.parse(localStorage.getItem('oppgaveFeltVerdier') || '{}');
-        oppgaveFelterLocalStorage[oppgaveFelt.nøkkel] = nyVerdi;
-        localStorage.setItem('oppgaveFeltVerdier', JSON.stringify(oppgaveFelterLocalStorage));
-    };
-
-    const tilbakestillOppgaveFeltILocalStorage = () => {
-        localStorage.removeItem('oppgaveFeltVerdier');
-    };
-
     const oppdaterOppgave = (oppdatertOppgave: IOppgave) => {
         if (oppgaver.status === RessursStatus.SUKSESS) {
             const nyOppgaveliste = oppgaver.data.oppgaver.map(oppgave => {
@@ -145,41 +102,6 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                 },
             });
         }
-    };
-
-    const settVerdiPåOppgaveFelt = (oppgaveFelt: IOppgaveFelt, nyVerdi: string) => {
-        if (oppgaveFelt.filter) {
-            const oppdaterteOppgaveFelter = {
-                ...oppgaveFelter,
-                [oppgaveFelt.nøkkel]: {
-                    ...oppgaveFelt,
-                    filter: {
-                        ...oppgaveFelt.filter,
-                        selectedValue: nyVerdi,
-                    },
-                },
-            };
-            oppdaterOppgaveFeltILocalStorage(oppgaveFelt, nyVerdi);
-
-            settOppgaveFelter(oppdaterteOppgaveFelter);
-
-            navigate({
-                search: Object.values(oppdaterteOppgaveFelter)
-                    .filter(
-                        (mapOppgaveFelt: IOppgaveFelt) =>
-                            mapOppgaveFelt.filter?.selectedValue !== mapOppgaveFelt.filter?.initialValue
-                    )
-                    .map((mapOppgaveFelt: IOppgaveFelt) => {
-                        return `${mapOppgaveFelt.nøkkel}=${mapOppgaveFelt?.filter?.selectedValue}`;
-                    })
-                    .join('&'),
-            });
-        }
-    };
-
-    const tilbakestillOppgaveFelter = () => {
-        tilbakestillOppgaveFeltILocalStorage();
-        settOppgaveFelter(initialOppgaveFelter(saksbehandler));
     };
 
     const visFantIkkeFagsakToast = () => {
@@ -208,48 +130,12 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         }
     };
 
-    const validerSkjema = () => {
-        const opprettetTidspunktGyldig =
-            oppgaveFelter.opprettetTidspunkt.filter?.selectedValue === '' ||
-            erIsoStringGyldig(oppgaveFelter.opprettetTidspunkt.filter?.selectedValue);
-
-        const fristGyldig =
-            oppgaveFelter.fristFerdigstillelse.filter?.selectedValue === '' ||
-            erIsoStringGyldig(oppgaveFelter.fristFerdigstillelse.filter?.selectedValue);
-
-        const enhetGyldig = oppgaveFelter.tildeltEnhetsnr.filter?.selectedValue !== EnhetFilter.VELG;
-
-        const oppdaterteOppgaveFelter = {
-            ...oppgaveFelter,
-            opprettetTidspunkt: {
-                ...oppgaveFelter.opprettetTidspunkt,
-                valideringsstatus: opprettetTidspunktGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
-                feilmelding: opprettetTidspunktGyldig ? '' : 'Dato må skrives på format ddmmåå',
-            },
-            fristFerdigstillelse: {
-                ...oppgaveFelter.fristFerdigstillelse,
-                valideringsstatus: fristGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
-                feilmelding: fristGyldig ? '' : 'Dato må skrives på format ddmmåå',
-            },
-            tildeltEnhetsnr: {
-                ...oppgaveFelter.tildeltEnhetsnr,
-                valideringsstatus: enhetGyldig ? Valideringsstatus.OK : Valideringsstatus.FEIL,
-                feilmelding: enhetGyldig ? '' : 'Du må velge enhet',
-            },
-        };
-
-        const erGyldig = opprettetTidspunktGyldig && fristGyldig && enhetGyldig;
-        settOppgaveFelter(oppdaterteOppgaveFelter);
-
-        return erGyldig;
-    };
-
-    const hentOppgaver = () => {
+    const hentOppgaver = (verdier: OppgavefilterFormValues) => {
         settOppgaver(byggHenterRessurs());
 
-        const saksbehandlerFilter = hentOppgaveFelt('tilordnetRessurs').filter?.selectedValue;
+        const erstattAlleMedUndefined = (filter: string) => (filter === 'ALLE' ? undefined : filter);
         let tildeltRessurs: boolean | undefined;
-        switch (saksbehandlerFilter) {
+        switch (verdier.saksbehandler) {
             case SaksbehandlerFilter.FORDELTE:
                 tildeltRessurs = true;
                 break;
@@ -260,45 +146,18 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                 tildeltRessurs = undefined;
         }
 
-        hentOppgaverFraBackend(
-            hentOppgaveFelt('behandlingstema').filter?.selectedValue,
-            hentOppgaveFelt('behandlingstype').filter?.selectedValue,
-            hentOppgaveFelt('oppgavetype').filter?.selectedValue,
-            hentOppgaveFelt('tildeltEnhetsnr').filter?.selectedValue,
-            hentOppgaveFelt('fristFerdigstillelse').filter?.selectedValue,
-            hentOppgaveFelt('opprettetTidspunkt').filter?.selectedValue,
-            saksbehandlerFilter === SaksbehandlerFilter.INNLOGGET ? saksbehandler.navIdent : undefined,
-            tildeltRessurs
-        ).then((oppgaverRessurs: Ressurs<IHentOppgaveDto>) => {
-            settOppgaver(oppgaverRessurs);
-        });
-    };
-
-    const hentOppgaverFraBackend = (
-        behandlingstema?: string,
-        behandlingstype?: string,
-        oppgavetype?: string,
-        enhet?: string,
-        frist?: string,
-        registrertDato?: string,
-        tilordnetRessurs?: string,
-        tildeltRessurs?: boolean
-    ): Promise<Ressurs<IHentOppgaveDto>> => {
-        const erstattAlleMedUndefined = (filter: string | undefined) => (filter === 'ALLE' ? undefined : filter);
-
         const finnOppgaveRequest: IFinnOppgaveRequest = {
-            behandlingstema: erstattAlleMedUndefined(behandlingstema),
-            behandlingstype: erstattAlleMedUndefined(behandlingstype),
-            oppgavetype: erstattAlleMedUndefined(oppgavetype),
-            enhet: erstattAlleMedUndefined(enhet)?.replace('E', ''),
-            tilordnetRessurs,
+            behandlingstema: erstattAlleMedUndefined(verdier.behandlingstema),
+            behandlingstype: erstattAlleMedUndefined(verdier.behandlingstype),
+            oppgavetype: erstattAlleMedUndefined(verdier.oppgavetype),
+            enhet: erstattAlleMedUndefined(verdier.enhet)?.replace('E', ''),
+            tilordnetRessurs:
+                verdier.saksbehandler === SaksbehandlerFilter.INNLOGGET ? saksbehandler.navIdent : undefined,
             tildeltRessurs,
-            opprettetFomTidspunkt:
-                registrertDato && registrertDato !== '' ? `${registrertDato}T00:00:00.000` : undefined,
-            opprettetTomTidspunkt:
-                registrertDato && registrertDato !== '' ? `${registrertDato}T23:59:59.999` : undefined,
-            fristFomDato: frist && frist !== '' ? frist : undefined,
-            fristTomDato: frist && frist !== '' ? frist : undefined,
+            opprettetFomTidspunkt: verdier.registrertDato ? `${verdier.registrertDato}T00:00:00.000` : undefined,
+            opprettetTomTidspunkt: verdier.registrertDato ? `${verdier.registrertDato}T23:59:59.999` : undefined,
+            fristFomDato: verdier.frist || undefined,
+            fristTomDato: verdier.frist || undefined,
             limit: maksAntallOppgaver,
             offset: 0,
         };
@@ -309,10 +168,10 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
             url: `/familie-ba-sak/api/oppgave/hent-oppgaver`,
         })
             .then((oppgaverRes: Ressurs<IHentOppgaveDto>) => {
-                return oppgaverRes;
+                settOppgaver(oppgaverRes);
             })
             .catch((_error: AxiosError) => {
-                return byggFeiletRessurs('Ukjent ved innhenting av oppgaver');
+                settOppgaver(byggFeiletRessurs('Ukjent ved innhenting av oppgaver'));
             });
     };
 
@@ -320,12 +179,8 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         <OppgavebenkContext.Provider
             value={{
                 hentOppgaver,
-                oppgaveFelter,
                 oppgaver,
-                settVerdiPåOppgaveFelt,
                 oppdaterOppgave,
-                tilbakestillOppgaveFelter,
-                validerSkjema,
                 gåTilFagsakEllerVisFeilmelding,
                 sortering,
                 settOgLagreSortering,
