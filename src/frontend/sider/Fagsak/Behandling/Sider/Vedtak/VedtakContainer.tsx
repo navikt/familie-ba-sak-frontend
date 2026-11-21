@@ -37,15 +37,15 @@ export function VedtakContainer({ children }: PropsWithChildren) {
 
     const {
         data: feilutbetaltValutaPerioder,
-        isPending: feilutbetaltValutaIsPending,
-        error: feilutbetaltValutaError,
+        isPending: feilutbetaltValutaPerioderIsPending,
+        error: feilutbetaltValutaPerioderError,
     } = useHentFeilutbetaltValuta(behandling.behandlingId);
 
     if (
         vedtaksperioderIsPending ||
         alleBegrunnelserIsPending ||
         sammensattKontrollsakIsPending ||
-        feilutbetaltValutaIsPending
+        feilutbetaltValutaPerioderIsPending
     ) {
         return (
             <Box margin={'space-48'}>
@@ -57,12 +57,17 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         );
     }
 
-    if (vedtaksperioderError || alleBegrunnelserError || sammensattKontrollsakError || feilutbetaltValutaError) {
+    if (
+        vedtaksperioderError ||
+        alleBegrunnelserError ||
+        sammensattKontrollsakError ||
+        feilutbetaltValutaPerioderError
+    ) {
         const errors = [
             vedtaksperioderError,
             alleBegrunnelserError,
             sammensattKontrollsakError,
-            feilutbetaltValutaError,
+            feilutbetaltValutaPerioderError,
         ].filter(error => erDefinert(error));
         return (
             <Box margin={'space-48'}>

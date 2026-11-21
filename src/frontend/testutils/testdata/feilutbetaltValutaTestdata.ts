@@ -1,4 +1,4 @@
-import type { IRestFeilutbetaltValuta } from '../../typer/eøs-feilutbetalt-valuta';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 
 export function lagFeilutbetaltValuta(feilutbetaltValuta?: Partial<IRestFeilutbetaltValuta>): IRestFeilutbetaltValuta {
     return {

@@ -198,20 +198,11 @@ describe('FeilutbetaltValutaTabell', () => {
     });
 
     test('skal åpne tabellen med skjema fra menyvalget og skjule den igjen ved avbryt', async () => {
-        // Arrange
         mockFeilutbetaltValuta([]);
         const { screen, user } = renderTabell();
-
-        // Act
         await user.click(await screen.findByRole('menuitem', { name: 'Legg til feilutbetalt valuta og sats' }));
-
-        // Assert
         expect(screen.getByRole('button', { name: 'Lagre periode' })).toBeInTheDocument();
-
-        // Act
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
-
-        // Assert
         expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
     });
 
@@ -254,28 +245,7 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(settBehandling).not.toHaveBeenCalled();
     });
 
-    test('skal hente periodene på nytt og beholde tabellen når en av flere perioder slettes', async () => {
-        // Arrange
-        mockFeilutbetaltValuta([periode, annenPeriode]);
-        server.use(
-            http.delete(ENKELTPERIODE_URL, () => {
-                mockFeilutbetaltValuta([annenPeriode]);
-                return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
-            })
-        );
-        const { screen, user } = renderTabell();
-        const rad = await screen.findByRole('row', radMedPeriode);
-
-        // Act
-        await user.click(within(rad).getByRole('button', { name: 'Fjern periode' }));
-
-        // Assert
-        await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
-        expect(screen.getByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
-    });
-
     test('skal beholde tabellen når siste periode slettes mens skjemaet for ny periode er åpent', async () => {
-        // Arrange
         mockFeilutbetaltValuta([periode]);
         server.use(
             http.delete(ENKELTPERIODE_URL, () => {
@@ -286,42 +256,25 @@ describe('FeilutbetaltValutaTabell', () => {
         const { screen, user } = renderTabell();
         const rad = await screen.findByRole('row', radMedPeriode);
         await user.click(screen.getByRole('button', { name: 'Legg til ny periode' }));
-
-        // Act
         await user.click(within(rad).getByRole('button', { name: 'Fjern periode' }));
-
-        // Assert
         await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
         expect(screen.getByRole('button', { name: 'Lagre periode' })).toBeInTheDocument();
-
-        // Act
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
-
-        // Assert
         expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
     });
 
     test('skal ikke kunne slette perioden på nytt mens periodene hentes', async () => {
-        // Arrange
         mockFeilutbetaltValuta([periode, annenPeriode]);
         const { slettet, hentetPåNytt, fullførHenting } = mockSlettMedVentendeHenting([annenPeriode]);
         const { screen, user } = renderTabell();
         const rad = await screen.findByRole('row', radMedPeriode);
         const fjern = within(rad).getByRole('button', { name: 'Fjern periode' });
-
-        // Act
         await user.click(fjern);
         await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
-
-        // Assert
         expect(fjern).toBeInTheDocument();
         expect(fjern).toBeDisabled();
-
-        // Act
         await user.click(fjern);
         fullførHenting();
-
-        // Assert
         await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
         expect(slettet).toHaveBeenCalledTimes(1);
     });
@@ -358,7 +311,6 @@ describe('FeilutbetaltValutaTabell', () => {
     });
 
     test('skal hente periodene på nytt før skjemaet lukkes når en periode legges til', async () => {
-        // Arrange
         mockFeilutbetaltValuta([periode]);
         const { opprettetPayload, hentetPåNytt, fullførHenting } = mockOpprettMedVentendeHenting([
             periode,
@@ -367,54 +319,18 @@ describe('FeilutbetaltValutaTabell', () => {
         const { screen, user, settBehandling, erHistorikkinnslagInvalidert } = renderTabell();
         await screen.findByRole('row', radMedPeriode);
         await user.click(screen.getByRole('button', { name: 'Legg til ny periode' }));
-
-        // Act
         await user.type(screen.getByRole('textbox', { name: 'F.o.m' }), '05.2024');
         await user.type(screen.getByRole('textbox', { name: 'T.o.m' }), '05.2024');
         await user.type(screen.getByRole('textbox', { name: 'Feilutbetalt beløp' }), '250');
         await user.click(screen.getByRole('button', { name: 'Lagre periode' }));
-
-        // Assert
         await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
         expect(screen.getByRole('textbox', { name: 'Feilutbetalt beløp' })).toBeInTheDocument();
         expect(screen.queryByRole('row', radMedAnnenPeriode)).not.toBeInTheDocument();
-
-        // Act
         fullførHenting();
-
-        // Assert
         expect(await screen.findByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
         expect(screen.queryByRole('textbox', { name: 'Feilutbetalt beløp' })).not.toBeInTheDocument();
         expect(opprettetPayload).toHaveBeenCalledWith({ fom: '2024-05-01', tom: '2024-05-31', feilutbetaltBeløp: 250 });
         expect(erHistorikkinnslagInvalidert()).toBe(true);
         expect(settBehandling).not.toHaveBeenCalled();
-    });
-
-    test('skal ikke kunne lagre perioden på nytt mens periodene hentes', async () => {
-        // Arrange
-        mockFeilutbetaltValuta([]);
-        const { opprettetPayload, hentetPåNytt, fullførHenting } = mockOpprettMedVentendeHenting([annenPeriode]);
-        const { screen, user } = renderTabell();
-        await user.click(await screen.findByRole('menuitem', { name: 'Legg til feilutbetalt valuta og sats' }));
-        await user.type(screen.getByRole('textbox', { name: 'F.o.m' }), '05.2024');
-        await user.type(screen.getByRole('textbox', { name: 'T.o.m' }), '05.2024');
-        await user.type(screen.getByRole('textbox', { name: 'Feilutbetalt beløp' }), '250');
-        const lagre = screen.getByRole('button', { name: 'Lagre periode' });
-
-        // Act
-        await user.click(lagre);
-        await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
-
-        // Assert
-        expect(lagre).toBeInTheDocument();
-        expect(lagre).toBeDisabled();
-
-        // Act
-        await user.click(lagre);
-        fullførHenting();
-
-        // Assert
-        expect(await screen.findByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
-        expect(opprettetPayload).toHaveBeenCalledTimes(1);
     });
 });

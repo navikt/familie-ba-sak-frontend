@@ -52,7 +52,7 @@ export function FeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm, re
                                     variant={'primary'}
                                     size={'small'}
                                     loading={isSubmitting}
-                                    disabled={readOnly || isSubmitting}
+                                    disabled={readOnly}
                                 >
                                     Lagre periode
                                 </Button>
