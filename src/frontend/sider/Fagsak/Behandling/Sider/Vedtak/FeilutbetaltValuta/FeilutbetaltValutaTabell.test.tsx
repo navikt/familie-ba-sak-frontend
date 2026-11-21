@@ -14,49 +14,72 @@ import { render, TestProviders } from '@testutils/testrender';
 import type { IBehandling } from '@typer/behandling';
 import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 import { HttpResponse, http } from 'msw';
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 
 import { FeilutbetaltValuta } from './FeilutbetaltValuta';
 import { FeilutbetaltValutaTabell } from './FeilutbetaltValutaTabell';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
+import {
+    FeilutbetaltValutaTabellProvider,
+    useFeilutbetaltValutaTabellContext,
+} from './FeilutbetaltValutaTabellContext';
 
 const PERIODER_URL = '/familie-ba-sak/api/feilutbetalt-valuta/behandling/:behandlingId';
-const PERIODE_URL = '/familie-ba-sak/api/feilutbetalt-valuta/behandling/:behandlingId/periode/:id';
+const ENKELTPERIODE_URL = '/familie-ba-sak/api/feilutbetalt-valuta/behandling/:behandlingId/periode/:id';
 
 const behandlingId = 1;
 
 const periode = lagFeilutbetaltValuta({ id: 5, fom: '2024-01-01', tom: '2024-03-31', feilutbetaltBeløp: 500 });
 const annenPeriode = lagFeilutbetaltValuta({ id: 6, fom: '2024-05-01', tom: '2024-05-31', feilutbetaltBeløp: 250 });
 
-const periodeRad = { name: /01\.01\.2024 - 31\.03\.2024/ };
-const annenPeriodeRad = { name: /01\.05\.2024 - 31\.05\.2024/ };
+const radMedPeriode = { name: /01\.01\.2024 - 31\.03\.2024/ };
+const radMedAnnenPeriode = { name: /01\.05\.2024 - 31\.05\.2024/ };
 
 function mockFeilutbetaltValuta(perioder: IRestFeilutbetaltValuta[]) {
     server.use(http.get(PERIODER_URL, () => HttpResponse.json(byggSuksessRessurs(perioder))));
 }
 
-function mockOpprettMedVentendeHenting(perioderEtterOpprettelse: IRestFeilutbetaltValuta[]) {
-    const opprettetPayload = vi.fn();
+function lagVentendeHenting(perioder: IRestFeilutbetaltValuta[]) {
     const hentetPåNytt = vi.fn();
     let fullførHenting: () => void = () => {};
     const hentingFullført = new Promise<void>(resolve => {
         fullførHenting = resolve;
     });
+    const ventPåNesteHenting = () =>
+        server.use(
+            http.get(PERIODER_URL, async () => {
+                hentetPåNytt();
+                await hentingFullført;
+                return HttpResponse.json(byggSuksessRessurs(perioder));
+            })
+        );
+    return { hentetPåNytt, ventPåNesteHenting, fullførHenting: () => fullførHenting() };
+}
+
+function mockOpprettMedVentendeHenting(perioderEtterOpprettelse: IRestFeilutbetaltValuta[]) {
+    const opprettetPayload = vi.fn();
+    const { hentetPåNytt, ventPåNesteHenting, fullførHenting } = lagVentendeHenting(perioderEtterOpprettelse);
     server.use(
         http.post(PERIODER_URL, async ({ request }) => {
             opprettetPayload(await request.json());
-            server.use(
-                http.get(PERIODER_URL, async () => {
-                    hentetPåNytt();
-                    await hentingFullført;
-                    return HttpResponse.json(byggSuksessRessurs(perioderEtterOpprettelse));
-                })
-            );
+            ventPåNesteHenting();
             return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
         })
     );
-    return { opprettetPayload, hentetPåNytt, fullførHenting: () => fullførHenting() };
+    return { opprettetPayload, hentetPåNytt, fullførHenting };
+}
+
+function mockSlettMedVentendeHenting(perioderEtterSletting: IRestFeilutbetaltValuta[]) {
+    const slettet = vi.fn();
+    const { hentetPåNytt, ventPåNesteHenting, fullførHenting } = lagVentendeHenting(perioderEtterSletting);
+    server.use(
+        http.delete(ENKELTPERIODE_URL, () => {
+            slettet();
+            ventPåNesteHenting();
+            return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
+        })
+    );
+    return { slettet, hentetPåNytt, fullførHenting };
 }
 
 interface Props extends PropsWithChildren {
@@ -69,7 +92,7 @@ function Wrapper({ queryClient, settBehandling, children }: Props) {
         <TestProviders queryClient={queryClient}>
             <FagsakProvider fagsak={lagFagsak()}>
                 <BehandlingProvider behandling={lagBehandling({ behandlingId })} settBehandling={settBehandling}>
-                    <VedtakContainer>{children}</VedtakContainer>
+                    {children}
                 </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
@@ -93,10 +116,13 @@ function Tabell() {
     return <FeilutbetaltValutaTabell />;
 }
 
-function renderTabell(queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })) {
+function renderMedProvidere(
+    ui: ReactNode,
+    queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+) {
     queryClient.setQueryData(queryKeys.historikkinnslag(behandlingId), []);
     const settBehandling = vi.fn();
-    const result = render(<Tabell />, {
+    const result = render(ui, {
         wrapper: ({ children }) => (
             <Wrapper queryClient={queryClient} settBehandling={settBehandling}>
                 {children}
@@ -108,6 +134,14 @@ function renderTabell(queryClient = new QueryClient({ defaultOptions: { queries:
     return { ...result, settBehandling, erHistorikkinnslagInvalidert };
 }
 
+function renderTabell() {
+    return renderMedProvidere(
+        <VedtakContainer>
+            <Tabell />
+        </VedtakContainer>
+    );
+}
+
 describe('FeilutbetaltValutaTabell', () => {
     test('skal vise perioder som er hentet fra endepunktet for feilutbetalt valuta', async () => {
         // Arrange
@@ -117,7 +151,7 @@ describe('FeilutbetaltValutaTabell', () => {
         const { screen } = renderTabell();
 
         // Assert
-        const rad = await screen.findByRole('row', periodeRad);
+        const rad = await screen.findByRole('row', radMedPeriode);
         expect(within(rad).getByRole('cell', { name: '500 kr' })).toBeInTheDocument();
     });
 
@@ -143,21 +177,24 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(await screen.findByText('Klarte ikke å hente inn vedtak.')).toBeInTheDocument();
     });
 
-    test('skal vise tabellen når en utdatert liste uten perioder blir oppdatert med perioder', async () => {
+    test('skal vise tabellen når listen går fra ingen perioder til perioder', () => {
         // Arrange
-        mockFeilutbetaltValuta([periode]);
-        const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-        queryClient.setQueryData(queryKeys.vedtaksperioder(behandlingId), []);
-        queryClient.setQueryData(queryKeys.alleBegrunnelser(), {});
-        queryClient.setQueryData(queryKeys.sammensattKontrollsak(behandlingId), null);
-        queryClient.setQueryData(queryKeys.feilutbetaltValuta(behandlingId), []);
+        const { screen, rerender } = renderMedProvidere(
+            <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={[]}>
+                <Tabell />
+            </FeilutbetaltValutaTabellProvider>
+        );
+        expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
 
         // Act
-        const { screen } = renderTabell(queryClient);
+        rerender(
+            <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={[periode]}>
+                <Tabell />
+            </FeilutbetaltValutaTabellProvider>
+        );
 
         // Assert
-        expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
-        expect(await screen.findByRole('row', periodeRad)).toBeInTheDocument();
+        expect(screen.getByRole('row', radMedPeriode)).toBeInTheDocument();
     });
 
     test('skal åpne tabellen med skjema fra menyvalget og skjule den igjen ved avbryt', async () => {
@@ -198,14 +235,14 @@ describe('FeilutbetaltValutaTabell', () => {
         mockFeilutbetaltValuta([periode]);
         const slettetUrl = vi.fn();
         server.use(
-            http.delete(PERIODE_URL, ({ request }) => {
+            http.delete(ENKELTPERIODE_URL, ({ request }) => {
                 slettetUrl(new URL(request.url).pathname);
                 mockFeilutbetaltValuta([]);
                 return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
             })
         );
         const { screen, user, settBehandling, erHistorikkinnslagInvalidert } = renderTabell();
-        const rad = await screen.findByRole('row', periodeRad);
+        const rad = await screen.findByRole('row', radMedPeriode);
 
         // Act
         await user.click(within(rad).getByRole('button', { name: 'Fjern periode' }));
@@ -221,40 +258,40 @@ describe('FeilutbetaltValutaTabell', () => {
         // Arrange
         mockFeilutbetaltValuta([periode, annenPeriode]);
         server.use(
-            http.delete(PERIODE_URL, () => {
+            http.delete(ENKELTPERIODE_URL, () => {
                 mockFeilutbetaltValuta([annenPeriode]);
                 return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
             })
         );
         const { screen, user } = renderTabell();
-        const rad = await screen.findByRole('row', periodeRad);
+        const rad = await screen.findByRole('row', radMedPeriode);
 
         // Act
         await user.click(within(rad).getByRole('button', { name: 'Fjern periode' }));
 
         // Assert
-        await waitFor(() => expect(screen.queryByRole('row', periodeRad)).not.toBeInTheDocument());
-        expect(screen.getByRole('row', annenPeriodeRad)).toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
+        expect(screen.getByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
     });
 
     test('skal beholde tabellen når siste periode slettes mens skjemaet for ny periode er åpent', async () => {
         // Arrange
         mockFeilutbetaltValuta([periode]);
         server.use(
-            http.delete(PERIODE_URL, () => {
+            http.delete(ENKELTPERIODE_URL, () => {
                 mockFeilutbetaltValuta([]);
                 return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
             })
         );
         const { screen, user } = renderTabell();
-        const rad = await screen.findByRole('row', periodeRad);
+        const rad = await screen.findByRole('row', radMedPeriode);
         await user.click(screen.getByRole('button', { name: 'Legg til ny periode' }));
 
         // Act
         await user.click(within(rad).getByRole('button', { name: 'Fjern periode' }));
 
         // Assert
-        await waitFor(() => expect(screen.queryByRole('row', periodeRad)).not.toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
         expect(screen.getByRole('button', { name: 'Lagre periode' })).toBeInTheDocument();
 
         // Act
@@ -264,19 +301,44 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
     });
 
+    test('skal ikke kunne slette perioden på nytt mens periodene hentes', async () => {
+        // Arrange
+        mockFeilutbetaltValuta([periode, annenPeriode]);
+        const { slettet, hentetPåNytt, fullførHenting } = mockSlettMedVentendeHenting([annenPeriode]);
+        const { screen, user } = renderTabell();
+        const rad = await screen.findByRole('row', radMedPeriode);
+        const fjern = within(rad).getByRole('button', { name: 'Fjern periode' });
+
+        // Act
+        await user.click(fjern);
+        await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
+
+        // Assert
+        expect(fjern).toBeInTheDocument();
+        expect(fjern).toBeDisabled();
+
+        // Act
+        await user.click(fjern);
+        fullførHenting();
+
+        // Assert
+        await waitFor(() => expect(screen.queryByRole('row', radMedPeriode)).not.toBeInTheDocument());
+        expect(slettet).toHaveBeenCalledTimes(1);
+    });
+
     test('skal hente periodene på nytt når en periode oppdateres', async () => {
         // Arrange
         mockFeilutbetaltValuta([periode]);
         const oppdatertPayload = vi.fn();
         server.use(
-            http.put(PERIODE_URL, async ({ request }) => {
+            http.put(ENKELTPERIODE_URL, async ({ request }) => {
                 oppdatertPayload(await request.json());
                 mockFeilutbetaltValuta([{ ...periode, feilutbetaltBeløp: 750 }]);
                 return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId })));
             })
         );
         const { screen, user, settBehandling, erHistorikkinnslagInvalidert } = renderTabell();
-        const rad = await screen.findByRole('row', periodeRad);
+        const rad = await screen.findByRole('row', radMedPeriode);
         await user.click(within(rad).getByRole('button', { name: 'Vis mer' }));
 
         // Act
@@ -287,6 +349,9 @@ describe('FeilutbetaltValutaTabell', () => {
 
         // Assert
         expect(await screen.findByRole('cell', { name: '750 kr' })).toBeInTheDocument();
+        expect(
+            await within(screen.getByRole('row', radMedPeriode)).findByRole('button', { name: 'Vis mer' })
+        ).toBeInTheDocument();
         expect(oppdatertPayload).toHaveBeenCalledWith({ fom: '2024-01-01', tom: '2024-03-31', feilutbetaltBeløp: 750 });
         expect(erHistorikkinnslagInvalidert()).toBe(true);
         expect(settBehandling).not.toHaveBeenCalled();
@@ -300,7 +365,7 @@ describe('FeilutbetaltValutaTabell', () => {
             annenPeriode,
         ]);
         const { screen, user, settBehandling, erHistorikkinnslagInvalidert } = renderTabell();
-        await screen.findByRole('row', periodeRad);
+        await screen.findByRole('row', radMedPeriode);
         await user.click(screen.getByRole('button', { name: 'Legg til ny periode' }));
 
         // Act
@@ -312,13 +377,13 @@ describe('FeilutbetaltValutaTabell', () => {
         // Assert
         await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
         expect(screen.getByRole('textbox', { name: 'Feilutbetalt beløp' })).toBeInTheDocument();
-        expect(screen.queryByRole('row', annenPeriodeRad)).not.toBeInTheDocument();
+        expect(screen.queryByRole('row', radMedAnnenPeriode)).not.toBeInTheDocument();
 
         // Act
         fullførHenting();
 
         // Assert
-        expect(await screen.findByRole('row', annenPeriodeRad)).toBeInTheDocument();
+        expect(await screen.findByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
         expect(screen.queryByRole('textbox', { name: 'Feilutbetalt beløp' })).not.toBeInTheDocument();
         expect(opprettetPayload).toHaveBeenCalledWith({ fom: '2024-05-01', tom: '2024-05-31', feilutbetaltBeløp: 250 });
         expect(erHistorikkinnslagInvalidert()).toBe(true);
@@ -341,6 +406,7 @@ describe('FeilutbetaltValutaTabell', () => {
         await waitFor(() => expect(hentetPåNytt).toHaveBeenCalled());
 
         // Assert
+        expect(lagre).toBeInTheDocument();
         expect(lagre).toBeDisabled();
 
         // Act
@@ -348,7 +414,7 @@ describe('FeilutbetaltValutaTabell', () => {
         fullførHenting();
 
         // Assert
-        expect(await screen.findByRole('row', annenPeriodeRad)).toBeInTheDocument();
+        expect(await screen.findByRole('row', radMedAnnenPeriode)).toBeInTheDocument();
         expect(opprettetPayload).toHaveBeenCalledTimes(1);
     });
 });
