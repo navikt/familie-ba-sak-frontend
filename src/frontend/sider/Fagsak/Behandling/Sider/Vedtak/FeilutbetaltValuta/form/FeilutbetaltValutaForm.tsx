@@ -1,9 +1,7 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ErrorMessage, Fieldset, Stack } from '@navikt/ds-react';
 import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 import { FormProvider } from 'react-hook-form';
-import { useFeilutbetaltValutaTabellContext } from '../FeilutbetaltValutaTabellContext';
 import { BeløpField } from './BeløpField';
 import Styles from './FeilutbetaltValutaForm.module.css';
 import { FomDatoField } from './FomDatoField';
@@ -19,10 +17,6 @@ interface Props {
 }
 
 export function FeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm, readOnly }: Props) {
-    const behandling = useBehandling();
-
-    const { skjulFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
-
     const { form, onSubmit } = useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm });
 
     const {
@@ -32,9 +26,6 @@ export function FeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm, re
     } = form;
 
     function onAvbryt() {
-        if (behandling.feilutbetaltValuta.length === 0) {
-            skjulFeilutbetaltValutaTabell();
-        }
         skjulForm();
         reset();
     }

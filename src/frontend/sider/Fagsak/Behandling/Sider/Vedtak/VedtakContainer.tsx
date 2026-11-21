@@ -1,5 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
+import { useHentFeilutbetaltValuta } from '@hooks/useHentFeilutbetaltValuta';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
@@ -34,7 +35,18 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         error: sammensattKontrollsakError,
     } = useHentSammensattKontrollsak(behandling.behandlingId);
 
-    if (vedtaksperioderIsPending || alleBegrunnelserIsPending || sammensattKontrollsakIsPending) {
+    const {
+        data: feilutbetaltValutaPerioder,
+        isPending: feilutbetaltValutaPerioderIsPending,
+        error: feilutbetaltValutaPerioderError,
+    } = useHentFeilutbetaltValuta(behandling.behandlingId);
+
+    if (
+        vedtaksperioderIsPending ||
+        alleBegrunnelserIsPending ||
+        sammensattKontrollsakIsPending ||
+        feilutbetaltValutaPerioderIsPending
+    ) {
         return (
             <Box margin={'space-48'}>
                 <Stack direction={'row'} justify={'center'} align={'center'} gap={'space-8'}>
@@ -45,10 +57,18 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         );
     }
 
-    if (vedtaksperioderError || alleBegrunnelserError || sammensattKontrollsakError) {
-        const errors = [vedtaksperioderError, alleBegrunnelserError, sammensattKontrollsakError].filter(error =>
-            erDefinert(error)
-        );
+    if (
+        vedtaksperioderError ||
+        alleBegrunnelserError ||
+        sammensattKontrollsakError ||
+        feilutbetaltValutaPerioderError
+    ) {
+        const errors = [
+            vedtaksperioderError,
+            alleBegrunnelserError,
+            sammensattKontrollsakError,
+            feilutbetaltValutaPerioderError,
+        ].filter(error => erDefinert(error));
         return (
             <Box margin={'space-48'}>
                 <LocalAlert status={'error'}>
@@ -73,7 +93,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
             <AlleBegrunnelserProvider alleBegrunnelser={alleBegrunnelser}>
                 <VedtaksperioderProvider vedtaksperioder={vedtaksperioder}>
                     <SendtTilTotrinnskontrollModalProvider>
-                        <FeilutbetaltValutaTabellProvider>
+                        <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={feilutbetaltValutaPerioder}>
                             <RefusjonEøsTabellProvider>
                                 <EndringstidspunktDialogProvider>{children}</EndringstidspunktDialogProvider>
                             </RefusjonEøsTabellProvider>
