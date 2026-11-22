@@ -1,10 +1,9 @@
-import { useBehandling } from '@hooks/useBehandling';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFagsak } from '@hooks/useFagsak';
+import { useFagsakId } from '@hooks/useFagsakId';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
-import type { IBehandling } from '@typer/behandling';
-import type { IMinimalFagsak } from '@typer/fagsak';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 import { summerBeløpForPerioder } from '../utils';
 import { FeilutbetaltValutaRad } from './FeilutbetaltValutaRad';
@@ -13,18 +12,18 @@ import { FeilutbetaltValutaForm } from './form/FeilutbetaltValutaForm';
 import { Type } from './form/useFeilutbetaltValutaForm';
 import { SlettFeilutbetaltValutaError } from './SlettFeilutbetaltValutaError';
 
-function lagTekstTilNøs(fagsak: IMinimalFagsak, behandling: IBehandling) {
-    const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsak.id}/${behandling.behandlingId}/vedtak`;
+function lagTekstTilNøs(fagsakId: number, behandlingId: number, feilutbetaltValutaPerioder: IRestFeilutbetaltValuta[]) {
+    const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak`;
 
     const totaltFeilutbetaltValutaBeløp = summerBeløpForPerioder(
-        behandling.feilutbetaltValuta.map(it => ({
+        feilutbetaltValutaPerioder.map(it => ({
             fom: it.fom,
             tom: it.tom,
             beløp: it.feilutbetaltBeløp,
         }))
     );
 
-    const formatertFeilutbetaltValuta = behandling.feilutbetaltValuta
+    const formatertFeilutbetaltValuta = feilutbetaltValutaPerioder
         .map(
             feilutbetaltValuta =>
                 `${isoDatoPeriodeTilFormatertString({
@@ -42,13 +41,14 @@ function lagTekstTilNøs(fagsak: IMinimalFagsak, behandling: IBehandling) {
 
 export function FeilutbetaltValutaTabell() {
     const {
+        feilutbetaltValutaPerioder,
         erLeggTilFeilutbetaltValutaFormÅpen,
         visLeggTilFeilutbetaltValutaForm,
         skjulLeggTilFeilutbetaltValutaForm,
     } = useFeilutbetaltValutaTabellContext();
 
-    const fagsak = useFagsak();
-    const behandling = useBehandling();
+    const fagsakId = useFagsakId();
+    const behandlingId = useBehandlingId();
     const erLesevisning = useErLesevisning();
 
     return (
@@ -56,7 +56,7 @@ export function FeilutbetaltValutaTabell() {
             <Heading level={'2'} size={'small'} spacing={false}>
                 Feilutbetalt valuta og sats
             </Heading>
-            {behandling.feilutbetaltValuta.map(fv => (
+            {feilutbetaltValutaPerioder.map(fv => (
                 <SlettFeilutbetaltValutaError key={fv.id} feilutbetaltValuta={fv} />
             ))}
             <Table size={'small'}>
@@ -71,7 +71,7 @@ export function FeilutbetaltValutaTabell() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {behandling.feilutbetaltValuta.map(fv => (
+                    {feilutbetaltValutaPerioder.map(fv => (
                         <FeilutbetaltValutaRad key={fv.id} feilutbetaltValuta={fv} />
                     ))}
                     {erLeggTilFeilutbetaltValutaFormÅpen && (
@@ -100,7 +100,7 @@ export function FeilutbetaltValutaTabell() {
                     </Button>
                 )}
                 <CopyButton
-                    copyText={lagTekstTilNøs(fagsak, behandling)}
+                    copyText={lagTekstTilNøs(fagsakId, behandlingId, feilutbetaltValutaPerioder)}
                     text={'Kopier tekst til NØS'}
                     activeText={'Kopiert!'}
                     variant={'action'}

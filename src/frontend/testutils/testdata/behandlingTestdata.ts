@@ -61,7 +61,6 @@ export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
         valutakurser: [],
         korrigertEtterbetaling: undefined,
         korrigertVedtak: undefined,
-        feilutbetaltValuta: [],
         refusjonEøs: [],
         brevmottakere: [],
         vurderingsstrategiForValutakurser: null,

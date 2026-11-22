@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 
 export interface OppdaterFeilutbetaltValutaPayload {
     fom: string;
@@ -12,7 +12,7 @@ export async function oppdaterFeilutbetaltValuta(
     feilutbetaltValutaId: number,
     payload: OppdaterFeilutbetaltValutaPayload
 ) {
-    return apiClient.put<OppdaterFeilutbetaltValutaPayload, IBehandling>({
+    return apiClient.put<OppdaterFeilutbetaltValutaPayload, IRestFeilutbetaltValuta[]>({
         url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${feilutbetaltValutaId}`,
         data: payload,
     });
