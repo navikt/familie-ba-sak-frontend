@@ -1,29 +1,37 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/BegrunnelseFelt';
+import { useKorrigertVedtakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakContext';
+import {
+    KORRIGER_VEDTAK_FORM_ID,
+    useKorrigerVedtakSkjema,
+} from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/useKorrigerVedtakSkjema';
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/VedtaksdatoFelt';
+import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider } from 'react-hook-form';
-
-import { KORRIGER_VEDTAK_FORM_ID, useKorrigerVedtakSkjema } from './useKorrigerVedtakSkjema';
 
 interface Props {
     lukkModal: () => void;
 }
 
 export function KorrigerVedtakModal({ lukkModal }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
     const erLesevisning = useErLesevisning();
+    const { korrigertVedtak } = useKorrigertVedtakContext();
 
     const {
         mutate: angreKorrigertVedtak,
         isPending: angreKorrigertVedtakIsPending,
         error: angreKorrigertVedtakError,
     } = useAngreKorrigertVedtak({
-        onSuccess: behandling => {
-            settÅpenBehandling(behandling);
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.korrigertVedtak(behandlingId) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
             lukkModal();
         },
     });
@@ -35,7 +43,6 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
         formState: { isSubmitting, errors },
     } = form;
 
-    const korrigertVedtak = behandling.korrigertVedtak;
     const visAngreKnapp = korrigertVedtak != null;
 
     return (
@@ -73,7 +80,7 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
                             type={'submit'}
                             variant={'primary'}
                             loading={isSubmitting}
-                            disabled={angreKorrigertVedtakIsPending}
+                            disabled={isSubmitting || angreKorrigertVedtakIsPending}
                         >
                             {korrigertVedtak ? 'Oppdater' : 'Legg til'}
                         </Button>
@@ -83,9 +90,10 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
                         {visAngreKnapp && (
                             <Button
                                 size={'small'}
-                                onClick={() => angreKorrigertVedtak(behandling.behandlingId)}
+                                onClick={() => angreKorrigertVedtak(behandlingId)}
                                 variant={'tertiary'}
                                 loading={angreKorrigertVedtakIsPending}
+                                disabled={isSubmitting || angreKorrigertVedtakIsPending}
                                 icon={<ArrowUndoIcon />}
                             >
                                 Fjern korrigering

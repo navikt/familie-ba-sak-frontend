@@ -1,16 +1,16 @@
 import { type KorrigerVedtakPayload, korrigerVedtak } from '@api/korrigerVedtak';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestKorrigertVedtak } from '@typer/vedtak';
 
 interface KorrigerVedtakParameters extends KorrigerVedtakPayload {
     behandlingId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, KorrigerVedtakParameters>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IRestKorrigertVedtak, DefaultError, KorrigerVedtakParameters>, 'mutationFn'>;
 
 export function useKorrigerVedtak(options?: Options) {
-    return useMutation<IBehandling, Error, KorrigerVedtakParameters>({
-        mutationFn: (parameters: KorrigerVedtakParameters): Promise<IBehandling> => {
+    return useMutation<IRestKorrigertVedtak, Error, KorrigerVedtakParameters>({
+        mutationFn: (parameters: KorrigerVedtakParameters): Promise<IRestKorrigertVedtak> => {
             const { behandlingId, ...payload } = parameters;
             return korrigerVedtak(payload, behandlingId);
         },

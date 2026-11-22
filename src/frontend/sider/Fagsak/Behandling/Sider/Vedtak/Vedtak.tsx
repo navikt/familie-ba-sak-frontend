@@ -8,6 +8,7 @@ import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/V
 import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingAdvarsel';
 import { useKorrigertEtterbetalingContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingContext';
 import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakAdvarsel';
+import { useKorrigertVedtakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakContext';
 import { Layout } from '@sider/Fagsak/Behandling/Sider/Vedtak/Layout/Layout';
 import { useErBehandlingMedVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/useErBehandlingMedVedtaksbrev';
 import { Vedtaksmeny } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksmeny/Vedtaksmeny';
@@ -32,6 +33,7 @@ export function Vedtak() {
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
     const { korrigertEtterbetaling } = useKorrigertEtterbetalingContext();
+    const { korrigertVedtak } = useKorrigertVedtakContext();
 
     const slettSammensattKontrollsakError = useSlettSammensattKontrollsakError(behandling.behandlingId);
     const opprettSammensattKontrollsakError = useOpprettSammensattKontrollsakError(behandling.behandlingId);
@@ -69,7 +71,7 @@ export function Vedtak() {
                         </LocalAlert>
                     )}
                     {korrigertEtterbetaling && <KorrigertEtterbetalingAdvarsel />}
-                    {behandling.korrigertVedtak && <KorrigertVedtakAdvarsel />}
+                    {korrigertVedtak && <KorrigertVedtakAdvarsel />}
                     <RegistrerteBrevmottakereBehandling kilde={'vedtak'} />
                     {!harBrevmottakerMedUtenlandskAdresse && <UkjentAdresseAlert />}
                     {!erBehandlingMedVedtaksbrevbygger && <IngenVedtaksbrevbyggerAdvarsel />}

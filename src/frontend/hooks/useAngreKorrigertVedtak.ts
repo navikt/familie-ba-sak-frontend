@@ -1,12 +1,12 @@
 import { angreKorrigertVedtak } from '@api/angreKorrigertVedtak';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestKorrigertVedtak } from '@typer/vedtak';
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, number>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IRestKorrigertVedtak | null, DefaultError, number>, 'mutationFn'>;
 
 export function useAngreKorrigertVedtak(options?: Options) {
-    return useMutation<IBehandling, Error, number>({
-        mutationFn: (behandlingId: number): Promise<IBehandling> => angreKorrigertVedtak(behandlingId),
+    return useMutation<IRestKorrigertVedtak | null, Error, number>({
+        mutationFn: (behandlingId: number): Promise<IRestKorrigertVedtak | null> => angreKorrigertVedtak(behandlingId),
         ...options,
     });
 }

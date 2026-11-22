@@ -19,7 +19,7 @@ import type {
 import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
 import type { ITotrinnskontroll } from './totrinnskontroll';
 import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
-import type { IRestKorrigertVedtak, IVedtakForBehandling } from './vedtak';
+import type { IVedtakForBehandling } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
@@ -331,7 +331,6 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    korrigertVedtak?: IRestKorrigertVedtak;
     refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;

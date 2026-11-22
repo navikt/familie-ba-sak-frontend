@@ -21,6 +21,9 @@ export const vedtakHandlers = [
     http.get<{ behandlingId: string }>('/familie-ba-sak/api/korrigertetterbetaling/behandling/:behandlingId', () => {
         return HttpResponse.json(byggSuksessRessurs(null));
     }),
+    http.get<{ behandlingId: string }>('/familie-ba-sak/api/korrigertvedtak/behandling/:behandlingId', () => {
+        return HttpResponse.json(byggSuksessRessurs(null));
+    }),
     http.get('/familie-ba-sak/api/vilkaarsvurdering/vilkaarsbegrunnelser', () => {
         return HttpResponse.json(byggSuksessRessurs(VedtaksperiodeTestdata.lagAlleBegrunnelser()));
     }),

@@ -1,8 +1,10 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useKorrigerVedtak } from '@hooks/useKorrigerVedtak';
+import { useKorrigertVedtakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { useBehandlingContext } from '../../../BehandlingContext';
 
 export const KORRIGER_VEDTAK_FORM_ID = 'korriger_vedtak_form_id';
 
@@ -26,13 +28,14 @@ interface Props {
 }
 
 export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
-
-    const korrigertVedtak = behandling.korrigertVedtak;
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
+    const { korrigertVedtak } = useKorrigertVedtakContext();
 
     const { mutateAsync: korrigerVedtak } = useKorrigerVedtak({
-        onSuccess: behandling => {
-            settÅpenBehandling(behandling);
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.korrigertVedtak(behandlingId) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
             lukkModal();
         },
     });
@@ -50,7 +53,7 @@ export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
 
     async function onSubmit(values: TransformedKorrigerVedtakFormValues) {
         const { vedtaksdato, begrunnelse } = values;
-        const korrigerVedtakParameters = { vedtaksdato, begrunnelse, behandlingId: behandling.behandlingId };
+        const korrigerVedtakParameters = { vedtaksdato, begrunnelse, behandlingId };
         try {
             await korrigerVedtak(korrigerVedtakParameters);
         } catch (error: unknown) {
