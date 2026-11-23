@@ -80,7 +80,7 @@
         "react-dom": "19.3.1",
         "react-hook-form": "7.92.0",
         "react-router": "8.5.1",
-        "styled-components": "6.5.3",
+        "styled-components": "6.6.0",
         "tslib": "2.9.1"
     },
     "devDependencies": {
