@@ -1,7 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHarSaksbehandlerTilgang } from '@hooks/useHarSaksbehandlerTilgang';
 import { useLeggTilBarnPåBehandling } from '@hooks/useLeggTilBarnPåBehandling';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { adressebeskyttelsestyper } from '@typer/person';
 import { useForm } from 'react-hook-form';
 

@@ -5,7 +5,7 @@ import { useOppdaterFeilutbetaltValuta } from '../../../../../../../hooks/useOpp
 import { useOpprettFeilutbetaltValuta } from '../../../../../../../hooks/useOpprettFeilutbetaltValuta';
 import type { IRestFeilutbetaltValuta } from '../../../../../../../typer/eøs-feilutbetalt-valuta';
 import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     FOM_DATO = 'FOM_DATO',

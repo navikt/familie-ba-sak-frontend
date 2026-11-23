@@ -13,7 +13,7 @@ import { periodeOverlapperMedValgtDato } from '@utils/dato';
 import { formaterIdent, slåSammenListeTilStreng } from '@utils/formatter';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import Skjemasteg from '../Skjemasteg';
 import EndretUtbetalingAndelTabell from './EndretUtbetaling/EndretUtbetalingAndelTabell';
 import KompetanseSkjema from './Eøs/Kompetanse/KompetanseSkjema';

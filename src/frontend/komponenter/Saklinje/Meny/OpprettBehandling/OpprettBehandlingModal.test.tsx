@@ -1,6 +1,6 @@
 import { opprettBehandling } from '@api/opprettBehandling';
 import { OpprettBehandlingModal } from '@komponenter/Saklinje/Meny/OpprettBehandling/OpprettBehandlingModal';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { type RenderOptions, waitFor } from '@testing-library/react';

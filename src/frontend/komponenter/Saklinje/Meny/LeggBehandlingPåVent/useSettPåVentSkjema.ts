@@ -1,5 +1,5 @@
 import { useSettPåVent } from '@hooks/useSettPåVent';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import type { SettPåVentÅrsak } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { addDays } from 'date-fns';

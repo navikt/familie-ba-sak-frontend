@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { EkspanderbareVilkårResultatRaderProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';

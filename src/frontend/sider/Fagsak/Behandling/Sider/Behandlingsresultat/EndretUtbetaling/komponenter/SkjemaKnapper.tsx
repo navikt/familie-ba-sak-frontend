@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
 import { useSlettEndretUtbetalingAndel } from '../../../../../../../hooks/useSlettEndretUtbetalingAndel';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 import { useEndretUtbetalingAndelContext } from '../EndretUtbetalingAndelContext';
 import type { EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 

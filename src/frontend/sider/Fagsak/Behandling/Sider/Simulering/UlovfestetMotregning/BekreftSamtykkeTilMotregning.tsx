@@ -2,7 +2,7 @@ import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTi
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, InfoCard, VStack } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 
 export function BekreftSamtykkeTilMotregning() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();

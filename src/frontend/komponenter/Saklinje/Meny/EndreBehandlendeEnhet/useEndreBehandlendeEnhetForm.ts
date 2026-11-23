@@ -1,6 +1,6 @@
 import { ApiFeil } from '@api/client/apiClient';
 import { useOppdaterBehandlendeEnhet } from '@hooks/useOppdaterBehandlendeEnhet';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { behandlendeEnheter, UKJENT_ENHET } from '@typer/enhet';
 import { useForm } from 'react-hook-form';
 

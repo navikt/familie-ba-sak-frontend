@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { useEndringstidspunktDialogContext } from './EndringstidspunktDialogContext';
 
 export interface FormValues {

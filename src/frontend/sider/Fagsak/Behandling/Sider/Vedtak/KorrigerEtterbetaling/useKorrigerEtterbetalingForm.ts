@@ -8,7 +8,7 @@ import type { OptionType } from '@typer/common';
 import { KorrigertEtterbetalingÅrsak } from '@typer/vedtak';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 
 interface KorrigerEtterbetalingFormValues {
     årsak: string;

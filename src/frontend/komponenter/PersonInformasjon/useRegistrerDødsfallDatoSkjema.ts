@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
 import { useRegistrerDødsfallDato } from '../../hooks/useRegistrerDødsfallDato';
-import { useBehandlingContext } from '../../sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '../../sider/Fagsak/Behandling/BehandlingContext';
 import type { IGrunnlagPerson } from '../../typer/person';
 import { dateTilIsoDatoString } from '../../utils/dato';
 

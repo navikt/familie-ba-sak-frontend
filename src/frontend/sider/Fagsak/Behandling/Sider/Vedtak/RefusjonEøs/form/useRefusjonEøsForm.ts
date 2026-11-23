@@ -5,7 +5,7 @@ import { useOppdaterRefusjonEøs } from '../../../../../../../hooks/useOppdaterR
 import { useOpprettRefusjonEøs } from '../../../../../../../hooks/useOpprettRefusjonEøs';
 import type { IRestRefusjonEøs } from '../../../../../../../typer/refusjon-eøs';
 import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     LANDKODE = 'LANDKODE',

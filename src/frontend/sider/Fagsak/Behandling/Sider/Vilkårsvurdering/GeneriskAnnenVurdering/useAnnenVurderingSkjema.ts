@@ -1,7 +1,7 @@
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterAnnenVurdering } from '@hooks/useOppdaterAnnenVurdering';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import type { IRestAnnenVurdering, Resultat } from '@typer/vilkår';
 import { useForm } from 'react-hook-form';
 

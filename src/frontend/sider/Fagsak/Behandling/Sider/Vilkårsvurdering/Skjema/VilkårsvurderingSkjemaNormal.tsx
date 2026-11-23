@@ -14,7 +14,7 @@ import {
 import { PersonType } from '@typer/person';
 import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår';
 import { Activity } from 'react';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';

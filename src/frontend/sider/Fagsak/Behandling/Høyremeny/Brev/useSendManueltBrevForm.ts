@@ -2,7 +2,7 @@ import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { useSendManueltBrev } from '@hooks/useSendManueltBrev';
 import type { Regionkode } from '@komponenter/FlaggCombobox';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';

@@ -6,7 +6,7 @@ import { SamhandlerTabell } from '@komponenter/Samhandler/SamhandlerTabell';
 import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { useNavigate } from 'react-router';

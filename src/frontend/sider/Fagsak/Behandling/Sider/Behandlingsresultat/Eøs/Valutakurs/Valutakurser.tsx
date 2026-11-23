@@ -17,7 +17,7 @@ import {
 import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { useState } from 'react';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 import Styles from './Valutakurser.module.css';
 import ValutakursTabellRad from './ValutakursTabellRad';
 
