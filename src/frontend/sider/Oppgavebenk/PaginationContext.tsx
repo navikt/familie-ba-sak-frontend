@@ -4,7 +4,7 @@ import { type NavigateOptions, useSearchParams } from 'react-router';
 
 interface PaginationContextValue {
     page: number;
-    setPage: (page: number) => void;
+    setPage: (page: number, options?: NavigateOptions) => void;
 }
 
 const PAGE_SEARCH_PARAM = 'side';
