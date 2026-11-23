@@ -13,7 +13,7 @@ interface Options {
 
 function Wrapper({ behandling, children }: { behandling: IBehandling; children: ReactNode }) {
     return (
-        <TestProviders>
+        <TestProviders initialEntries={[{ pathname: `/fagsak/1/${behandling.behandlingId}/vilkaarsvurdering` }]}>
             <FagsakProvider fagsak={lagFagsak()}>
                 <BehandlingProvider behandling={behandling}>
                     <EkspanderbareVilkårResultatRaderProvider>

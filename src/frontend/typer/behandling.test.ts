@@ -7,10 +7,12 @@ import { describe, expect } from 'vitest';
 
 import {
     BehandlingResultat,
+    BehandlingSteg,
     Behandlingstype,
     BehandlingÅrsak,
     erBehandlingHenlagt,
     erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
+    hentStegnummer,
     kanLeggeTilUtvidetVilkår,
     MIDLERTIDIG_BEHANDLENDE_ENHET_ID,
     sjekkErBehandleneEnhetMidlertidig,
@@ -26,6 +28,34 @@ describe('erBehandlingHenlagt', () => {
                 expect(erBehandlingHenlagt(resultat)).toBe(false);
             }
         });
+    });
+});
+
+describe('hentStegnummer', () => {
+    test.each([
+        [BehandlingSteg.HENLEGG_BEHANDLING, 0],
+        [BehandlingSteg.REGISTRERE_INSTITUSJON, 1],
+        [BehandlingSteg.REGISTRERE_PERSONGRUNNLAG, 1],
+        [BehandlingSteg.REGISTRERE_SØKNAD, 1],
+        [BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING, 2],
+        [BehandlingSteg.VILKÅRSVURDERING, 3],
+        [BehandlingSteg.BEHANDLINGSRESULTAT, 4],
+        [BehandlingSteg.VURDER_TILBAKEKREVING, 5],
+        [BehandlingSteg.SEND_TIL_BESLUTTER, 6],
+        [BehandlingSteg.BESLUTTE_VEDTAK, 7],
+        [BehandlingSteg.IVERKSETT_MOT_OPPDRAG, 8],
+        [BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI, 9],
+        [BehandlingSteg.IVERKSETT_MOT_FAMILIE_TILBAKE, 10],
+        [BehandlingSteg.JOURNALFØR_VEDTAKSBREV, 11],
+        [BehandlingSteg.DISTRIBUER_VEDTAKSBREV, 12],
+        [BehandlingSteg.FERDIGSTILLE_BEHANDLING, 13],
+        [BehandlingSteg.BEHANDLING_AVSLUTTET, 14],
+    ])('skal returnere riktig stegnummer for %s', (steg, forventetStegnummer) => {
+        expect(hentStegnummer(steg)).toBe(forventetStegnummer);
+    });
+
+    test('skal returnere 0 for ukjent steg', () => {
+        expect(hentStegnummer('UKJENT_STEG' as BehandlingSteg)).toBe(0);
     });
 });
 

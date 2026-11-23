@@ -1,6 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { Checkbox, CheckboxGroup, InlineMessage } from '@navikt/ds-react';
-import { BehandlingSteg, hentStegNummer } from '@typer/behandling';
+import { BehandlingSteg, hentStegnummer } from '@typer/behandling';
 import { lagBarnLabel, sorterBarnEtterFødselsdato } from '@utils/formatter';
 import { useController, useFormContext } from 'react-hook-form';
 
@@ -29,7 +29,7 @@ export function BarnBrevetGjelderField() {
     const sorterteBarn = sorterBarnEtterFødselsdato(barnBrevetGjelder);
 
     const skalViseVarselOmManglendeBarn =
-        hentStegNummer(behandling.steg) <= hentStegNummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
+        hentStegnummer(behandling.steg) <= hentStegnummer(BehandlingSteg.REGISTRERE_SØKNAD) &&
         barnBrevetGjelder.length === 0;
 
     const oppdaterBarnMedNyMerketStatus = (barnaSomErMerket: string[]) => {

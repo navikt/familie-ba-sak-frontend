@@ -156,6 +156,7 @@ export enum BehandlingSteg {
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
     IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
     VENTE_PÅ_STATUS_FRA_ØKONOMI = 'VENTE_PÅ_STATUS_FRA_ØKONOMI',
+    IVERKSETT_MOT_FAMILIE_TILBAKE = 'IVERKSETT_MOT_FAMILIE_TILBAKE',
     JOURNALFØR_VEDTAKSBREV = 'JOURNALFØR_VEDTAKSBREV',
     DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
     FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
@@ -178,11 +179,15 @@ export enum BehandlingStegStatus {
     IKKE_UTFØRT = 'IKKE_UTFØRT',
 }
 
-export const hentStegNummer = (steg: BehandlingSteg): number => {
+export function hentStegnummer(steg: BehandlingSteg): number {
     switch (steg) {
-        case BehandlingSteg.REGISTRERE_SØKNAD:
+        case BehandlingSteg.HENLEGG_BEHANDLING:
+            return 0;
+        case BehandlingSteg.REGISTRERE_INSTITUSJON:
             return 1;
         case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
+            return 1;
+        case BehandlingSteg.REGISTRERE_SØKNAD:
             return 1;
         case BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING:
             return 2;
@@ -200,18 +205,20 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 8;
         case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 9;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.IVERKSETT_MOT_FAMILIE_TILBAKE:
             return 10;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 11;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 12;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 13;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 14;
         default:
             return 0;
     }
-};
+}
 
 export enum BehandlingStatus {
     UTREDES = 'UTREDES',

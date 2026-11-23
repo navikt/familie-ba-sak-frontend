@@ -6,7 +6,13 @@ import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
+import {
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingÅrsak,
+    type IBehandling,
+} from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { LeggTilBarnPBehandling } from './LeggTilBarnPåBehandling';
 
@@ -21,11 +27,12 @@ function Wrapper({
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         status: BehandlingStatus.UTREDES,
         årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+        steg: BehandlingSteg.VILKÅRSVURDERING,
     }),
     children,
 }: WrapperProps) {
     return (
-        <TestProviders>
+        <TestProviders initialEntries={[{ pathname: '/fagsak/1/1/vilkaarsvurdering' }]}>
             <FagsakProvider fagsak={fagsak}>
                 <BehandlingProvider behandling={behandling}>
                     <ActionMenu open={true}>
