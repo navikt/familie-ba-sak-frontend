@@ -1,7 +1,7 @@
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { VedtakContainer } from '@sider/Fagsak/Behandling/Sider/Vedtak/VedtakContainer';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { QueryClient } from '@tanstack/react-query';
