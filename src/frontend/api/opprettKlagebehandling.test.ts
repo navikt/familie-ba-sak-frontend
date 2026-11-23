@@ -1,5 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { opprettKlagebehandling } from '@api/opprettKlagebehandling';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -18,7 +19,7 @@ describe('opprettKlagebehandling', () => {
             klageMottattDato: '2026-08-05',
         };
 
-        const fagsakId = 123;
+        const fagsakId = FagsakId.fra(123);
 
         vi.mocked(apiClient.post).mockResolvedValueOnce(fagsakId);
 
@@ -38,7 +39,7 @@ describe('opprettKlagebehandling', () => {
         const payload = {
             klageMottattDato: '2026-08-05',
         };
-        const fagsakId = 123;
+        const fagsakId = FagsakId.fra(123);
 
         await expect(opprettKlagebehandling(payload, fagsakId)).rejects.toThrow('Noe gikk galt');
     });

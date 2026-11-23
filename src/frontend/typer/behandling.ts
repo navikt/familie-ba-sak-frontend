@@ -1,11 +1,11 @@
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import type { IsoDatoString } from '@utils/dato';
-
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
 import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
+import type { FagsakId } from './fagsak';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import { type IGrunnlagPerson, PersonType } from './person';
@@ -37,7 +37,7 @@ export interface NyBehandling {
     barnasIdenter?: string[];
     nyMigreringsdato?: IsoDatoString;
     søknadMottattDato?: IsoDatoString;
-    fagsakId: number;
+    fagsakId: FagsakId;
 }
 
 export enum HenleggÅrsak {

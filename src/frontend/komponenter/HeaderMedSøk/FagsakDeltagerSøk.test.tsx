@@ -5,6 +5,7 @@ import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 import { render } from '@testutils/testrender';
 import generator from '@testutils/testverktøy/fnr/fnr-generator';
+import { FagsakId } from '@typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
 import { Avvisningskode } from '@typer/tilgang';
 import { Route, Routes } from 'react-router';
@@ -28,7 +29,7 @@ function lagFagsakDeltager(fagsakDeltager: Partial<IFagsakDeltager> = {}): IFags
         rolle: FagsakDeltagerRolle.Forelder,
         harTilgang: true,
         erEgenAnsatt: false,
-        fagsakId: 1,
+        fagsakId: FagsakId.fra(1),
         ...fagsakDeltager,
     };
 }
@@ -132,7 +133,7 @@ describe('FagsakDeltagerSøk', () => {
 
     test('skal navigere til saksoversikten når et treff med fagsak velges', async () => {
         // Arrange
-        vi.mocked(søkFagsakDeltagere).mockResolvedValue([lagFagsakDeltager({ fagsakId: 42 })]);
+        vi.mocked(søkFagsakDeltagere).mockResolvedValue([lagFagsakDeltager({ fagsakId: FagsakId.fra(42) })]);
         const { screen, user } = render(<FagsakDeltagerSøkMedRuter />);
         await user.type(screen.getByRole('searchbox'), gyldigFnr);
 

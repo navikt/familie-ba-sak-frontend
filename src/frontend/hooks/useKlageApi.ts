@@ -1,12 +1,13 @@
 import { useHttp } from '@navikt/familie-http';
 import { byggTomRessurs, type Ressurs } from '@navikt/familie-typer';
+import type { FagsakId } from '@typer/fagsak';
 
 import type { IKlagebehandling } from '@typer/klage';
 
 export const useKlageApi = () => {
     const { request } = useHttp();
 
-    const hentKlagebehandlingerPåFagsak = (fagsakId: number | undefined): Promise<Ressurs<IKlagebehandling[]>> => {
+    const hentKlagebehandlingerPåFagsak = (fagsakId: FagsakId | undefined): Promise<Ressurs<IKlagebehandling[]>> => {
         if (!fagsakId) {
             return Promise.resolve(byggTomRessurs());
         }

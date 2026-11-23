@@ -2,6 +2,7 @@ import { forhåndsvisBrevPåFagsak } from '@api/forhåndsvisBrevPåFagsak';
 import { Informasjonsbrev } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { Målform } from '@typer/søknad';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -31,7 +32,7 @@ describe('useForhåndsvisBrevPåFagsak', () => {
     test('returnerer object URL ved vellykket forhåndsvisning', async () => {
         vi.mocked(forhåndsvisBrevPåFagsak).mockResolvedValue('base64-pdf-innhold');
 
-        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(1), {
+        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(FagsakId.fra(1)), {
             wrapper: TestProviders,
         });
 
@@ -46,7 +47,7 @@ describe('useForhåndsvisBrevPåFagsak', () => {
         vi.mocked(forhåndsvisBrevPåFagsak).mockResolvedValue('base64-pdf-innhold');
         const onSuccess = vi.fn();
 
-        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(1, { onSuccess }), {
+        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(FagsakId.fra(1), { onSuccess }), {
             wrapper: TestProviders,
         });
 
@@ -60,7 +61,7 @@ describe('useForhåndsvisBrevPåFagsak', () => {
     test('setter isError ved feil fra api-funksjon', async () => {
         vi.mocked(forhåndsvisBrevPåFagsak).mockRejectedValue(new Error('Noe gikk galt'));
 
-        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(1), {
+        const { result } = renderHook(() => useForhåndsvisBrevPåFagsak(FagsakId.fra(1)), {
             wrapper: TestProviders,
         });
 

@@ -2,6 +2,7 @@ import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
+import { FagsakId } from '@typer/fagsak';
 import type { PropsWithChildren } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -25,7 +26,7 @@ function lagWrapper(href: string) {
 
 beforeEach(() => {
     vi.clearAllMocks();
-    useFagsakMock.mockReturnValue(lagFagsak({ id: 10 }));
+    useFagsakMock.mockReturnValue(lagFagsak({ id: FagsakId.fra(10) }));
 });
 
 describe('UgyldigSideAdvarsel', () => {
