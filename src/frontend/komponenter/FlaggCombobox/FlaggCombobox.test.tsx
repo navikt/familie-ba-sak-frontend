@@ -66,6 +66,8 @@ describe('FlaggCombobox', () => {
     const originalResizeObserver = globalThis.ResizeObserver;
     const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
     const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
+    const originalClientHeight = Object.getOwnPropertyDescriptor(Element.prototype, 'clientHeight');
+    const originalClientWidth = Object.getOwnPropertyDescriptor(Element.prototype, 'clientWidth');
     const originalGetBoundingClientRect = Element.prototype.getBoundingClientRect;
 
     beforeAll(() => {
@@ -81,6 +83,16 @@ describe('FlaggCombobox', () => {
         });
 
         Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+            configurable: true,
+            value: 300,
+        });
+
+        Object.defineProperty(Element.prototype, 'clientHeight', {
+            configurable: true,
+            value: 500,
+        });
+
+        Object.defineProperty(Element.prototype, 'clientWidth', {
             configurable: true,
             value: 300,
         });
@@ -107,6 +119,12 @@ describe('FlaggCombobox', () => {
         }
         if (originalOffsetWidth) {
             Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth);
+        }
+        if (originalClientHeight) {
+            Object.defineProperty(Element.prototype, 'clientHeight', originalClientHeight);
+        }
+        if (originalClientWidth) {
+            Object.defineProperty(Element.prototype, 'clientWidth', originalClientWidth);
         }
 
         Element.prototype.getBoundingClientRect = originalGetBoundingClientRect;
