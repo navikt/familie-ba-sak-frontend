@@ -33,8 +33,8 @@ export function useKorrigerVedtakSkjema({ lukkModal }: Props) {
     const { korrigertVedtak } = useKorrigertVedtakContext();
 
     const { mutateAsync: korrigerVedtak } = useKorrigerVedtak({
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.korrigertVedtak(behandlingId) });
+        onSuccess: lagretKorrigertVedtak => {
+            queryClient.setQueryData(queryKeys.korrigertVedtak(behandlingId), lagretKorrigertVedtak);
             queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
             lukkModal();
         },

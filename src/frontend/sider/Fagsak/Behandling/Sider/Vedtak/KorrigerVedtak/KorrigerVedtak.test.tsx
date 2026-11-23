@@ -93,14 +93,9 @@ describe('KorrigerVedtak', () => {
         expect(screen.getByRole('button', { name: 'Oppdater' })).toBeInTheDocument();
     });
 
-    test('skal hente korrigert vedtak på nytt når en korrigering lagres', async () => {
+    test('skal vise korrigeringen fra svaret når en korrigering lagres', async () => {
         mockKorrigertVedtak(null);
-        server.use(
-            http.post(KORRIGERT_VEDTAK_URL, () => {
-                mockKorrigertVedtak(korrigertVedtak);
-                return HttpResponse.json(byggSuksessRessurs(korrigertVedtak));
-            })
-        );
+        server.use(http.post(KORRIGERT_VEDTAK_URL, () => HttpResponse.json(byggSuksessRessurs(korrigertVedtak))));
         const { screen, user, erHistorikkinnslagInvalidert } = renderVedtaksside();
 
         await user.click(await screen.findByRole('button', { name: 'Vedtaksmeny' }));
@@ -114,14 +109,9 @@ describe('KorrigerVedtak', () => {
         expect(erHistorikkinnslagInvalidert()).toBe(true);
     });
 
-    test('skal hente korrigert vedtak på nytt når korrigeringen fjernes', async () => {
+    test('skal skjule korrigeringen når den fjernes', async () => {
         mockKorrigertVedtak(korrigertVedtak);
-        server.use(
-            http.patch(KORRIGERT_VEDTAK_URL, () => {
-                mockKorrigertVedtak(null);
-                return HttpResponse.json(byggSuksessRessurs(null));
-            })
-        );
+        server.use(http.patch(KORRIGERT_VEDTAK_URL, () => HttpResponse.json(byggSuksessRessurs(korrigertVedtak))));
         const { screen, user, erHistorikkinnslagInvalidert } = renderVedtaksside();
 
         await user.click(await screen.findByRole('button', { name: 'Vedtaksmeny' }));

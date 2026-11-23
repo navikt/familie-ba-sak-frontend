@@ -29,8 +29,8 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
         isPending: angreKorrigertVedtakIsPending,
         error: angreKorrigertVedtakError,
     } = useAngreKorrigertVedtak({
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.korrigertVedtak(behandlingId) });
+        onSuccess: () => {
+            queryClient.setQueryData(queryKeys.korrigertVedtak(behandlingId), null);
             queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
             lukkModal();
         },
