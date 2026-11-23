@@ -17,4 +17,7 @@ export const behandlingHandlers = [
             return HttpResponse.json(byggSuksessRessurs<string[]>([]));
         }
     ),
+    http.get<{ behandlingId: string }>('/familie-ba-sak/api/behandlinger/:behandlingId/migreringsdato', () => {
+        return HttpResponse.json(byggSuksessRessurs(null));
+    }),
 ];

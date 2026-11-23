@@ -326,7 +326,6 @@ export interface IBehandling {
     skalBehandlesAutomatisk: boolean;
     tilbakekreving?: ITilbakekreving;
     aktivSettPåVent?: ISettPåVent;
-    migreringsdato?: string;
     søknadMottattDato?: string;
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];

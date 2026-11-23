@@ -1,12 +1,14 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useHentMigreringsdato } from '@hooks/useHentMigreringsdato';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
+import { erDefinert } from '@utils/commons';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
 import { useState } from 'react';
@@ -36,6 +38,8 @@ export function Vilkårsvurdering() {
     const toggles = useFeatureToggles();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
+
+    const { data: migreringsdato } = useHentMigreringsdato(behandling.behandlingId);
 
     const {
         mutate: oppdaterVilkårsvurdering,
@@ -83,10 +87,10 @@ export function Vilkårsvurdering() {
             senderInn={oppdaterVilkårsvurderingIsPending}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
-            {behandling?.migreringsdato !== null && (
+            {erDefinert(migreringsdato) && (
                 <Detail className={styles.hentetLabel}>
                     {`Saken ble migrert fra Infotrygd: ${isoStringTilFormatertString({
-                        isoString: behandling?.migreringsdato,
+                        isoString: migreringsdato,
                         tilFormat: Datoformat.DATO,
                     })}`}
                 </Detail>
