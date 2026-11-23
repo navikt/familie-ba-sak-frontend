@@ -27,6 +27,7 @@ export function lagVisningBehandling(visningBehandling?: Partial<VisningBehandli
 
 export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
     return {
+        fagsakId: 1,
         arbeidsfordelingPåBehandling: {
             behandlendeEnhetId: '4833',
             behandlendeEnhetNavn: 'Oslo',

@@ -14,17 +14,20 @@ import type { Saksbehandler } from '@typer/saksbehandler';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { MemoryRouter } from 'react-router';
 
+import { registrerQueryClientLyttere } from '../queryClient';
 import { skruPåAlleToggles } from './mocks/handlers/featureToggleHandlers';
 import { lagSaksbehandler } from './testdata/saksbehandlerTestdata';
 
 function lagQueryClient() {
-    return new QueryClient({
+    const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
                 retry: 0,
             },
         },
     });
+    registrerQueryClientLyttere(queryClient);
+    return queryClient;
 }
 
 interface Props extends PropsWithChildren {

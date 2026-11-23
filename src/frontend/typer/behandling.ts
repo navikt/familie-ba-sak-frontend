@@ -304,6 +304,7 @@ export enum BehandlerRolle {
 }
 
 export interface IBehandling {
+    fagsakId: number;
     arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
     behandlingId: number;
     endretAv: string;

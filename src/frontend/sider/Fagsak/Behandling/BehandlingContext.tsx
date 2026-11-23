@@ -7,9 +7,17 @@ import type { IBehandling } from '@typer/behandling';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
+export enum Behandlingskilde {
+    /** Behandlingen ligger i query-cachen, og avhengige queries invalideres av registrerQueryClientLyttere. */
+    REACT_QUERY = 'REACT_QUERY',
+    /** Behandlingen ligger utenfor query-cachen, så avhengige queries må invalideres her. */
+    USE_HTTP = 'USE_HTTP',
+}
+
 interface Props extends PropsWithChildren {
     behandling: IBehandling;
     settBehandling?: (behandling: IBehandling) => void;
+    behandlingskilde?: Behandlingskilde;
 }
 
 interface BehandlingContextValue {
@@ -19,7 +27,12 @@ interface BehandlingContextValue {
 
 const BehandlingContext = createContext<BehandlingContextValue | undefined>(undefined);
 
-export function BehandlingProvider({ behandling, settBehandling = () => {}, children }: Props) {
+export function BehandlingProvider({
+    behandling,
+    settBehandling = () => {},
+    behandlingskilde = Behandlingskilde.REACT_QUERY,
+    children,
+}: Props) {
     const fagsak = useFagsak();
     const queryClient = useQueryClient();
 
@@ -27,15 +40,16 @@ export function BehandlingProvider({ behandling, settBehandling = () => {}, chil
 
     useTrackTidsbrukPåSide(fagsak, behandling);
 
-    const settÅpenBehandling = (behandling: IBehandling) => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsak.id) });
-        queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandling.behandlingId) });
-        queryClient.invalidateQueries({
-            queryKey: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandling.behandlingId),
-        });
-
+    function settÅpenBehandling(behandling: IBehandling) {
+        if (behandlingskilde === Behandlingskilde.USE_HTTP) {
+            queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsak.id) });
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandling.behandlingId) });
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandling.behandlingId),
+            });
+        }
         settBehandling(behandling);
-    };
+    }
 
     return (
         <BehandlingContext.Provider value={{ behandling, settÅpenBehandling }}>{children}</BehandlingContext.Provider>
