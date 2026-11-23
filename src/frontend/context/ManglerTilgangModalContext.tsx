@@ -1,5 +1,5 @@
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 
 import type { Adressebeskyttelsegradering } from '@typer/person';
 import { adressebeskyttelsestyper } from '@typer/person';
@@ -33,26 +33,34 @@ export function ManglerTilgangModalProvider({ children }: PropsWithChildren) {
         <ManglerTilgangModalContext.Provider value={{ visManglerTilgangModal }}>
             {children}
             {manglerTilgang && (
-                <Modal open={true} portal={true} header={{ heading: 'Mangler tilgang' }} onClose={lukk} width={'35rem'}>
-                    <Modal.Body>
-                        <VStack gap={'space-24'} marginBlock={'space-8 space-0'}>
-                            <BodyShort>{manglerTilgang.begrunnelse}</BodyShort>
-                            {manglerTilgang.adressebeskyttelsegradering && (
-                                <HStack gap={'space-4'} align={'center'}>
-                                    <XMarkOctagonFillIcon color={'var(--ax-text-danger-subtle)'} fontSize={'1.2rem'} />
-                                    <ErrorMessage>
-                                        {`Ident har diskresjonskode ${adressebeskyttelsestyper[manglerTilgang.adressebeskyttelsegradering] ?? manglerTilgang.adressebeskyttelsegradering}.`}
-                                    </ErrorMessage>
-                                </HStack>
-                            )}
-                        </VStack>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant={'primary'} size={'small'} onClick={lukk}>
-                            Lukk
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                <Dialog open={true} onOpenChange={lukk}>
+                    <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                        <Dialog.Header>
+                            <Dialog.Title>Mangler tilgang</Dialog.Title>
+                        </Dialog.Header>
+                        <Dialog.Body>
+                            <VStack gap={'space-24'} marginBlock={'space-8 space-0'}>
+                                <BodyShort>{manglerTilgang.begrunnelse}</BodyShort>
+                                {manglerTilgang.adressebeskyttelsegradering && (
+                                    <HStack gap={'space-4'} align={'center'}>
+                                        <XMarkOctagonFillIcon
+                                            color={'var(--ax-text-danger-subtle)'}
+                                            fontSize={'1.2rem'}
+                                        />
+                                        <ErrorMessage>
+                                            {`Ident har diskresjonskode ${adressebeskyttelsestyper[manglerTilgang.adressebeskyttelsegradering] ?? manglerTilgang.adressebeskyttelsegradering}.`}
+                                        </ErrorMessage>
+                                    </HStack>
+                                )}
+                            </VStack>
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                            <Button variant={'primary'} size={'small'} onClick={lukk}>
+                                Lukk
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Popup>
+                </Dialog>
             )}
         </ManglerTilgangModalContext.Provider>
     );

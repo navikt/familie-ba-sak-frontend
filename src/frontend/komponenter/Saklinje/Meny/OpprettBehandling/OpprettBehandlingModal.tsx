@@ -7,7 +7,7 @@ import { KlageMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandli
 import { MigreringsdatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/MigreringsdatoFelt';
 import { SøknadMottattDatoFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/SøknadMottattDatoFelt';
 import { ValgteBarnFelt } from '@komponenter/Saklinje/Meny/OpprettBehandling/felter/ValgteBarnFelt';
-import { Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
+import { Button, Dialog, Fieldset, VStack } from '@navikt/ds-react';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { FagsakType } from '@typer/fagsak';
 import { Klagebehandlingstype } from '@typer/klage';
@@ -63,42 +63,38 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
         behandlingsårsak === BehandlingÅrsak.HELMANUELL_MIGRERING;
 
     return (
-        <Modal
-            open
-            onClose={lukkModal}
-            width={'35rem'}
-            portal={true}
-            header={{
-                heading: 'Opprett ny behandling',
-                size: 'medium',
-            }}
-        >
-            <FormProvider {...form}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Modal.Body>
-                        <Fieldset error={errors.root?.message} legend={'Opprett ny behandling'} hideLegend>
-                            <VStack gap={'space-16'}>
-                                <BehandlingstypeFelt />
-                                {skalViseBehandlingsårsakFelt && <BehandlingsårsakFelt />}
-                                {skalViseValgteBarnFelt && <ValgteBarnFelt />}
-                                {skalViseBehandlingstemaFelt && <BehandlingstemaFelt />}
-                                {skalViseMigreringsdatoFelt && <MigreringsdatoFelt />}
-                                {skalViseBegrunnelseFelt && <BegrunnelseFelt />}
-                                {skalViseSøknadMottattDatoFelt && <SøknadMottattDatoFelt />}
-                                {skalViseKlageMottattDatoFelt && <KlageMottattDatoFelt />}
-                            </VStack>
-                        </Fieldset>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant={'primary'} type={'submit'} loading={isSubmitting}>
-                            Bekreft
-                        </Button>
-                        <Button type={'button'} variant={'tertiary'} disabled={isSubmitting} onClick={lukkModal}>
-                            Avbryt
-                        </Button>
-                    </Modal.Footer>
-                </form>
-            </FormProvider>
-        </Modal>
+        <Dialog open onOpenChange={lukkModal}>
+            <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>Opprett ny behandling</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Body>
+                    <FormProvider {...form}>
+                        <form id={'opprett-behandling-form'} onSubmit={handleSubmit(onSubmit)}>
+                            <Fieldset error={errors.root?.message} legend={'Opprett ny behandling'} hideLegend>
+                                <VStack gap={'space-16'}>
+                                    <BehandlingstypeFelt />
+                                    {skalViseBehandlingsårsakFelt && <BehandlingsårsakFelt />}
+                                    {skalViseValgteBarnFelt && <ValgteBarnFelt />}
+                                    {skalViseBehandlingstemaFelt && <BehandlingstemaFelt />}
+                                    {skalViseMigreringsdatoFelt && <MigreringsdatoFelt />}
+                                    {skalViseBegrunnelseFelt && <BegrunnelseFelt />}
+                                    {skalViseSøknadMottattDatoFelt && <SøknadMottattDatoFelt />}
+                                    {skalViseKlageMottattDatoFelt && <KlageMottattDatoFelt />}
+                                </VStack>
+                            </Fieldset>
+                        </form>
+                    </FormProvider>
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button type={'button'} variant={'tertiary'} disabled={isSubmitting} onClick={lukkModal}>
+                        Avbryt
+                    </Button>
+                    <Button variant={'primary'} type={'submit'} loading={isSubmitting} form={'opprett-behandling-form'}>
+                        Bekreft
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 }

@@ -1,9 +1,9 @@
+import { ModalType } from '@context/ModalContext';
+import { useModal } from '@hooks/useModal';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, InfoCard, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, Dialog, Fieldset, InfoCard, VStack } from '@navikt/ds-react';
+import { HenleggÅrsak } from '@typer/behandling';
 import { FormProvider } from 'react-hook-form';
-import { ModalType } from '../../../../context/ModalContext';
-import { useModal } from '../../../../hooks/useModal';
-import { HenleggÅrsak } from '../../../../typer/behandling';
 import { BegrunnelseFelt } from './BegrunnelseFelt';
 import { ForhåndsvisBrevLenke } from './ForhåndsvisBrevLenke';
 import {
@@ -17,15 +17,14 @@ import { ÅrsakFelt } from './ÅrsakFelt';
 export function HenleggBehandlingModal() {
     const { erModalÅpen, tittel, lukkModal, bredde } = useModal(ModalType.HENLEGG_BEHANDLING);
     return (
-        <Modal
-            open={erModalÅpen}
-            width={bredde}
-            onClose={lukkModal}
-            header={{ heading: tittel, size: 'medium' }}
-            portal={true}
-        >
-            {erModalÅpen && <Innhold />}
-        </Modal>
+        <Dialog open={erModalÅpen} onOpenChange={lukkModal}>
+            <Dialog.Popup width={bredde} closeOnOutsideClick={false}>
+                <Dialog.Header>
+                    <Dialog.Title>{tittel}</Dialog.Title>
+                </Dialog.Header>
+                <Innhold />
+            </Dialog.Popup>
+        </Dialog>
     );
 }
 
@@ -45,7 +44,7 @@ function Innhold() {
 
     return (
         <>
-            <Modal.Body>
+            <Dialog.Body>
                 <VStack gap={'space-16'}>
                     <InfoCard data-color="info">
                         <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
@@ -65,8 +64,14 @@ function Innhold() {
                         </form>
                     </FormProvider>
                 </VStack>
-            </Modal.Body>
-            <Modal.Footer>
+            </Dialog.Body>
+            <Dialog.Footer>
+                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && <ForhåndsvisBrevLenke />}
+                <Box asChild marginInline={'auto space-0'}>
+                    <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
+                        Avbryt
+                    </Button>
+                </Box>
                 <Button
                     form={HENLEGG_BEHANDLING_FORM_ID}
                     variant={'primary'}
@@ -76,11 +81,7 @@ function Innhold() {
                 >
                     {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET ? 'Bekreft og send brev' : 'Bekreft'}
                 </Button>
-                <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
-                    Avbryt
-                </Button>
-                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && <ForhåndsvisBrevLenke />}
-            </Modal.Footer>
+            </Dialog.Footer>
         </>
     );
 }

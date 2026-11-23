@@ -1,5 +1,5 @@
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, ErrorMessage, HStack, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { logger, tilLoggFeil } from '@utils/logger';
 import { createContext, type PropsWithChildren, useCallback, useContext, useState } from 'react';
 
@@ -48,36 +48,41 @@ export function TekniskFeilModalProvider({ initielleTekniskeFeil = [], children 
         <TekniskFeilModalContext.Provider value={{ visTekniskFeilModal }}>
             {children}
             {tekniskeFeil.length > 0 && (
-                <Modal open={true} portal={true} header={{ heading: 'Teknisk feil' }} onClose={lukk} width={'35rem'}>
-                    <Modal.Body>
-                        <VStack gap={'space-32'}>
-                            <BodyLong>
-                                {tekniskeFeil.length === 1
-                                    ? 'Det har oppstått en teknisk feil i vedtaksløsningen. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.'
-                                    : 'Det har oppstått tekniske feil i vedtaksløsningen. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.'}
-                            </BodyLong>
-                            <VStack gap={'space-8'}>
-                                {tekniskeFeil.map((tf, index) => (
-                                    <HStack key={tf.id} gap={'space-4'} align={'start'} wrap={false}>
-                                        <XMarkOctagonFillIcon
-                                            color={'var(--ax-text-danger-subtle)'}
-                                            fontSize={'1.4rem'}
-                                        />
-                                        <ErrorMessage>
-                                            {tekniskeFeil.length > 1 && `${index + 1}. `}
-                                            {tf.tekst}
-                                        </ErrorMessage>
-                                    </HStack>
-                                ))}
+                <Dialog open={true} onOpenChange={lukk}>
+                    <Dialog.Popup width={'35rem'} closeOnOutsideClick={false}>
+                        <Dialog.Header>
+                            <Dialog.Title>Teknisk feil</Dialog.Title>
+                        </Dialog.Header>
+                        <Dialog.Body>
+                            <VStack gap={'space-32'}>
+                                <BodyLong>
+                                    {tekniskeFeil.length === 1
+                                        ? 'Det har oppstått en teknisk feil i vedtaksløsningen. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.'
+                                        : 'Det har oppstått tekniske feil i vedtaksløsningen. Prøv igjen senere eller kontakt brukerstøtte hvis problemet vedvarer.'}
+                                </BodyLong>
+                                <VStack gap={'space-8'}>
+                                    {tekniskeFeil.map((tf, index) => (
+                                        <HStack key={tf.id} gap={'space-4'} align={'start'} wrap={false}>
+                                            <XMarkOctagonFillIcon
+                                                color={'var(--ax-text-danger-subtle)'}
+                                                fontSize={'1.4rem'}
+                                            />
+                                            <ErrorMessage>
+                                                {tekniskeFeil.length > 1 && `${index + 1}. `}
+                                                {tf.tekst}
+                                            </ErrorMessage>
+                                        </HStack>
+                                    ))}
+                                </VStack>
                             </VStack>
-                        </VStack>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant={'primary'} size={'small'} onClick={lukk}>
-                            Lukk
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                            <Button variant={'primary'} size={'small'} onClick={lukk}>
+                                Lukk
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Popup>
+                </Dialog>
             )}
         </TekniskFeilModalContext.Provider>
     );

@@ -330,7 +330,7 @@ describe('Behandlingsmeny', () => {
                 />
             ),
         });
-
+        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
         const meny = screen.getByRole('button', { name: 'Meny' });
         await user.click(meny);
 

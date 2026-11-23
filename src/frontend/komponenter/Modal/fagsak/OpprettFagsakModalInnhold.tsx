@@ -2,7 +2,7 @@ import { ModalType } from '@context/ModalContext';
 import { useHentFagsaker } from '@hooks/useHentFagsaker';
 import { useHentPersonEnkel } from '@hooks/useHentPersonEnkel';
 import { useModal } from '@hooks/useModal';
-import { Button, LocalAlert, Modal, Skeleton, VStack } from '@navikt/ds-react';
+import { Button, Dialog, LocalAlert, Skeleton, VStack } from '@navikt/ds-react';
 import { FagsakType } from '@typer/fagsak';
 
 import { FagsakerProvider } from './context/FagsakerContext';
@@ -49,21 +49,21 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     if (personIsPending || fagaskerIsPending) {
         return (
             <>
-                <Modal.Body>
+                <Dialog.Body>
                     <VStack gap={'space-16'}>
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
                         <Skeleton variant={'rectangle'} width={'100%'} height={'1.65rem'} />
                     </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
-                        Opprett fagsak
-                    </Button>
+                </Dialog.Body>
+                <Dialog.Footer>
                     <Button key={'avbryt'} variant={'tertiary'} onClick={lukkModal}>
                         Avbryt
                     </Button>
-                </Modal.Footer>
+                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
+                        Opprett fagsak
+                    </Button>
+                </Dialog.Footer>
             </>
         );
     }
@@ -71,7 +71,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
     if (personError || fagsakerError) {
         return (
             <>
-                <Modal.Body>
+                <Dialog.Body>
                     <VStack gap={'space-16'}>
                         {personError && (
                             <LocalAlert status="error">
@@ -88,22 +88,22 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                             </LocalAlert>
                         )}
                     </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
-                        Opprett fagsak
-                    </Button>
+                </Dialog.Body>
+                <Dialog.Footer>
                     <Button key={'avbryt'} variant={'tertiary'} onClick={lukkModal}>
                         Avbryt
                     </Button>
-                </Modal.Footer>
+                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
+                        Opprett fagsak
+                    </Button>
+                </Dialog.Footer>
             </>
         );
     }
 
     return (
         <FagsakerProvider fagsaker={fagsaker}>
-            <Modal.Body>
+            <Dialog.Body>
                 <VStack gap={'space-16'}>
                     <Undertittel fagsaker={fagsaker} />
                     <PersonDetaljer person={person} />
@@ -135,8 +135,11 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                         </LocalAlert>
                     )}
                 </VStack>
-            </Modal.Body>
-            <Modal.Footer>
+            </Dialog.Body>
+            <Dialog.Footer>
+                <Button type={'button'} variant={'tertiary'} onClick={lukkModal}>
+                    Avbryt
+                </Button>
                 <Button
                     type={'submit'}
                     variant={'primary'}
@@ -146,10 +149,7 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                 >
                     Opprett fagsak
                 </Button>
-                <Button type={'button'} variant={'tertiary'} onClick={lukkModal}>
-                    Avbryt
-                </Button>
-            </Modal.Footer>
+            </Dialog.Footer>
         </FagsakerProvider>
     );
 }
