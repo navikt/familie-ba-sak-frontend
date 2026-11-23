@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { type KorrigerEtterbetalingPayload, korrigerEtterbetaling } from '@api/korrigerEtterbetaling';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagKorrigertEtterbetaling } from '@testutils/testdata/korrigertEtterbetalingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -13,8 +13,8 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling();
-const behandlingId = behandling.behandlingId;
+const behandlingId = 1;
+const korrigertEtterbetaling = lagKorrigertEtterbetaling();
 
 const payload: KorrigerEtterbetalingPayload = {
     årsak: 'FEIL_TIDLIGERE_UTBETALT_BELØP',
@@ -24,7 +24,7 @@ const payload: KorrigerEtterbetalingPayload = {
 
 describe('korrigerEtterbetaling', () => {
     test('skal sende forespørsel om å korrigere etterbetaling', async () => {
-        vi.mocked(apiClient.post).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.post).mockResolvedValueOnce(korrigertEtterbetaling);
 
         const svar = await korrigerEtterbetaling(payload, behandlingId);
 
@@ -33,7 +33,7 @@ describe('korrigerEtterbetaling', () => {
             data: payload,
             url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(korrigertEtterbetaling);
     });
 
     test('skal håndtere feil', async () => {
