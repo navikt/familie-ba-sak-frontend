@@ -14,6 +14,7 @@ import { OpprettSammensattKontrollsak } from '@sider/Fagsak/Behandling/Sider/Ved
 import { useSkalViseSammensattKontrollsakMenyvalg } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/useSkalViseSammensattKontrollsakMenyvalg';
 import { useState } from 'react';
 import { KorrigerEtterbetaling } from '../KorrigerEtterbetaling/KorrigerEtterbetaling';
+import { KorrigerEtterbetalingModal } from '../KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 import { useSammensattKontrollsakContext } from '../SammensattKontrollsak/SammensattKontrollsakContext';
 import Styles from './Vedtaksmeny.module.css';
 
@@ -29,6 +30,7 @@ export function Vedtaksmeny() {
 
     return (
         <Stack width={'100%'} justify={'end'} align={'center'}>
+            <KorrigerEtterbetalingModal />
             {visKorrigerVedtakModal && <KorrigerVedtakModal lukkModal={() => settVisKorrigerVedtakModal(false)} />}
             {erEndringstidspunktDialogÅpen && <EndringstidspunktDialog />}
             <ActionMenu>

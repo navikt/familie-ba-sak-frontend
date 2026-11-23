@@ -1,11 +1,13 @@
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
 import { useHentFeilutbetaltValuta } from '@hooks/useHentFeilutbetaltValuta';
+import { useHentKorrigertEtterbetaling } from '@hooks/useHentKorrigertEtterbetaling';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
 import { EndringstidspunktDialogProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/EndringstidspunktDialogContext';
 import { FeilutbetaltValutaTabellProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
+import { KorrigertEtterbetalingProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingContext';
 import { RefusjonEøsTabellProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 import { SammensattKontrollsakProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import { SendtTilTotrinnskontrollModalProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Totrinnskontroll/SendtTilTotrinnskontrollModalContext';
@@ -16,6 +18,12 @@ import type { PropsWithChildren } from 'react';
 
 export function VedtakContainer({ children }: PropsWithChildren) {
     const behandlingId = useBehandlingId();
+
+    const {
+        data: korrigertEtterbetaling,
+        isPending: korrigertEtterbetalingIsPending,
+        error: korrigertEtterbetalingError,
+    } = useHentKorrigertEtterbetaling(behandlingId);
 
     const {
         data: vedtaksperioder,
@@ -45,7 +53,8 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         vedtaksperioderIsPending ||
         alleBegrunnelserIsPending ||
         sammensattKontrollsakIsPending ||
-        feilutbetaltValutaPerioderIsPending
+        feilutbetaltValutaPerioderIsPending ||
+        korrigertEtterbetalingIsPending
     ) {
         return (
             <Box margin={'space-48'}>
@@ -61,13 +70,15 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         vedtaksperioderError ||
         alleBegrunnelserError ||
         sammensattKontrollsakError ||
-        feilutbetaltValutaPerioderError
+        feilutbetaltValutaPerioderError ||
+        korrigertEtterbetalingError
     ) {
         const errors = [
             vedtaksperioderError,
             alleBegrunnelserError,
             sammensattKontrollsakError,
             feilutbetaltValutaPerioderError,
+            korrigertEtterbetalingError,
         ].filter(error => erDefinert(error));
         return (
             <Box margin={'space-48'}>
@@ -95,7 +106,13 @@ export function VedtakContainer({ children }: PropsWithChildren) {
                     <SendtTilTotrinnskontrollModalProvider>
                         <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={feilutbetaltValutaPerioder}>
                             <RefusjonEøsTabellProvider>
-                                <EndringstidspunktDialogProvider>{children}</EndringstidspunktDialogProvider>
+                                <EndringstidspunktDialogProvider>
+                                    <KorrigertEtterbetalingProvider
+                                        korrigertEtterbetaling={korrigertEtterbetaling ?? undefined}
+                                    >
+                                        {children}
+                                    </KorrigertEtterbetalingProvider>
+                                </EndringstidspunktDialogProvider>
                             </RefusjonEøsTabellProvider>
                         </FeilutbetaltValutaTabellProvider>
                     </SendtTilTotrinnskontrollModalProvider>

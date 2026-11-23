@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestKorrigertEtterbetaling } from '@typer/vedtak';
 
 export interface KorrigerEtterbetalingPayload {
     årsak: string;
@@ -8,7 +8,7 @@ export interface KorrigerEtterbetalingPayload {
 }
 
 export async function korrigerEtterbetaling(payload: KorrigerEtterbetalingPayload, behandlingId: number) {
-    return apiClient.post<KorrigerEtterbetalingPayload, IBehandling>({
+    return apiClient.post<KorrigerEtterbetalingPayload, IRestKorrigertEtterbetaling>({
         data: payload,
         url: `/familie-ba-sak/api/korrigertetterbetaling/behandling/${behandlingId}`,
     });

@@ -82,6 +82,9 @@ export const queryKeys = {
     historikkinnslag: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'historikkinnslag'] as const;
     },
+    korrigertEtterbetaling: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'korrigert-etterbetaling'] as const;
+    },
     personerMedUgyldigEtterbetalingsperiode: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'personer-med-ugyldig-etterbetalingsperiode'] as const;
     },

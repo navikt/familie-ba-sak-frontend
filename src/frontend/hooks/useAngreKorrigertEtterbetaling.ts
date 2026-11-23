@@ -1,12 +1,13 @@
 import { angreKorrigertEtterbetaling } from '@api/angreKorrigertEtterbetaling';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestKorrigertEtterbetaling } from '@typer/vedtak';
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, number>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IRestKorrigertEtterbetaling | null, DefaultError, number>, 'mutationFn'>;
 
 export function useAngreKorrigertEtterbetaling(options?: Options) {
-    return useMutation<IBehandling, Error, number>({
-        mutationFn: (behandlingId: number): Promise<IBehandling> => angreKorrigertEtterbetaling(behandlingId),
+    return useMutation<IRestKorrigertEtterbetaling | null, Error, number>({
+        mutationFn: (behandlingId: number): Promise<IRestKorrigertEtterbetaling | null> =>
+            angreKorrigertEtterbetaling(behandlingId),
         ...options,
     });
 }
