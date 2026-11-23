@@ -99,12 +99,12 @@
         "@vercel/nft": "1.11.2",
         "@vitejs/plugin-react": "6.3.0",
         "husky": "9.1.7",
-        "jsdom": "30.1.1",
+        "jsdom": "31.0.1",
         "lint-staged": "17.6.1",
         "msw": "2.15.0",
         "pino-pretty": "13.2.0",
         "typescript": "7.0.2",
         "vite": "8.3.8",
-        "vitest": "5.0.2"
+        "vitest": "5.1.0"
     }
 }
