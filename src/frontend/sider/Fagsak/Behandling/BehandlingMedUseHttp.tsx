@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
-import { BehandlingProvider } from './context/BehandlingContext';
+import { BehandlingProvider } from './BehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
 import { TabContextProvider } from './Høyremeny/TabContextProvider';
 import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';

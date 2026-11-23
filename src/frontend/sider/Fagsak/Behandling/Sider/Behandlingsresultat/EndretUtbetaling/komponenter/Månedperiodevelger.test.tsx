@@ -8,7 +8,7 @@ import { lagPersonMedAndelerTilkjentYtelse } from '../../../../../../../testutil
 import { render, TestProviders } from '../../../../../../../testutils/testrender';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../../FagsakContext';
-import { BehandlingProvider } from '../../../../context/BehandlingContext';
+import { BehandlingProvider } from '../../../../BehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 import { Månedperiodevelger, utledTidligsteOgSenesteDato } from './Månedperiodevelger';
 

@@ -3,7 +3,7 @@ import { useSlettFeilutbetaltValuta } from '@hooks/useSlettFeilutbetaltValuta';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
 
 interface Props {

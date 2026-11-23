@@ -9,7 +9,7 @@ import { render } from '../../../../../../../testutils/testrender';
 import type { IBehandling } from '../../../../../../../typer/behandling';
 import { PersonType } from '../../../../../../../typer/person';
 import { Målform } from '../../../../../../../typer/søknad';
-import { BehandlingProvider } from '../../../../context/BehandlingContext';
+import { BehandlingProvider } from '../../../../BehandlingContext';
 import { EndretUtbetalingAndelFeltnavn, type EndretUtbetalingAndelFormValues } from '../useEndretUtbetalingAndel';
 import { Personvelger } from './Personvelger';
 
@@ -63,7 +63,7 @@ const defaultBehandling: IBehandling = lagBehandling({
 
 const TestBehandlingContext = createContext<IBehandling>(defaultBehandling);
 
-vi.mock('../../../../context/BehandlingContext', () => ({
+vi.mock('../../../../BehandlingContext', () => ({
     useBehandlingContext: () => ({
         behandling: useContext(TestBehandlingContext),
     }),

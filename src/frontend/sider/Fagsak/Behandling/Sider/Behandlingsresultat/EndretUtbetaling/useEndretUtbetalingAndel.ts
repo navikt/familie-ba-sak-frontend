@@ -11,7 +11,7 @@ import {
     isoStringTilDateEllerUndefined,
 } from '../../../../../../utils/dato';
 import { lagPersonLabel } from '../../../../../../utils/formatter';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { prosentTilUtbetaling, type Utbetaling, utbetalingTilProsent } from '../Utbetaling';
 
 export interface StandardFeltProps {

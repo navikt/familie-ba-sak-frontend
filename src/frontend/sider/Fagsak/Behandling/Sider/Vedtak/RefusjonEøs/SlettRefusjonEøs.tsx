@@ -3,7 +3,7 @@ import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 
 interface Props {

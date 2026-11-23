@@ -1,4 +1,4 @@
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';

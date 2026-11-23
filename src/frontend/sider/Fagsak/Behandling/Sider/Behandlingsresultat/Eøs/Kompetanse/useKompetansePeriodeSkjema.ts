@@ -6,7 +6,7 @@ import type { IRestKompetanse, KompetanseAktivitet, KompetanseResultat } from '@
 import { type IIsoMånedPeriode, nyIsoMånedPeriode } from '@utils/dato';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum KompetanseFelt {
     BARN = 'barnIdenter',

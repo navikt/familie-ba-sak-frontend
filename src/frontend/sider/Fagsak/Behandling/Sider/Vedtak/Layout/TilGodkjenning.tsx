@@ -2,7 +2,7 @@ import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { Button } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useSimuleringsvurdering } from '@sider/Fagsak/Behandling/Sider/Simulering/useSimuleringsvurdering';
 import { useFeilutbetaltValutaTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useRefusjonEøsTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';

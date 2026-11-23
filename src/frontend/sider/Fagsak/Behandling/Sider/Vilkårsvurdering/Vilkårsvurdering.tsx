@@ -11,7 +11,7 @@ import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';

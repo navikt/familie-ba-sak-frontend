@@ -3,7 +3,7 @@ import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useIverksettVedtak } from '@hooks/useIverksettVedtak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { Tab, useTabContext } from '@sider/Fagsak/Behandling/Høyremeny/TabContextProvider';
 import { useTotrinnskontrollModalContext } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
 import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';

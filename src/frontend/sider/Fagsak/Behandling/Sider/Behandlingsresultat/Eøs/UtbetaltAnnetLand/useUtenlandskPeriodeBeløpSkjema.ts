@@ -7,7 +7,7 @@ import { type IIsoMånedPeriode, nyIsoMånedPeriode } from '@utils/dato';
 import { konverterDesimalverdiTilSkjemaVisning, konverterSkjemaverdiTilDesimal } from '@utils/eøs';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum UtenlandskPeriodeBeløpFelt {
     BARN = 'barnIdenter',

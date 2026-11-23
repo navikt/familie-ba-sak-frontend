@@ -1,7 +1,7 @@
 import { useSlettVilkår } from '@hooks/useSlettVilkår';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, Dialog, ErrorMessage } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { VilkårType } from '@typer/vilkår';
 import { useState } from 'react';
 

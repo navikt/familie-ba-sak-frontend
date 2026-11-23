@@ -2,7 +2,7 @@ import { useToastContext } from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettBrevmottaker } from '@hooks/useSlettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { BrevmottakerDetaljer } from '../Felles/BrevmottakerDetaljer';
 

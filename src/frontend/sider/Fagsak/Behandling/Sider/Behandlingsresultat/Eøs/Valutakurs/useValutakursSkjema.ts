@@ -13,7 +13,7 @@ import { konverterDesimalverdiTilSkjemaVisning, konverterSkjemaverdiTilDesimal }
 import { isBefore } from 'date-fns';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum ValutakursFelt {
     BARN = 'barnIdenter',

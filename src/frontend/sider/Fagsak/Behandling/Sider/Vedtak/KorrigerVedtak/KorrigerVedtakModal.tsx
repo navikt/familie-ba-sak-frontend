@@ -2,7 +2,7 @@ import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, Fieldset, Modal, VStack } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/BegrunnelseFelt';
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/VedtaksdatoFelt';
 import { FormProvider } from 'react-hook-form';

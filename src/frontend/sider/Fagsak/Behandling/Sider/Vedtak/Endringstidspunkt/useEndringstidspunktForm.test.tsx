@@ -1,7 +1,7 @@
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { QueryClient } from '@tanstack/react-query';
 import { act, renderHook, waitFor } from '@testing-library/react';

@@ -1,7 +1,7 @@
 import * as ToastContext from '@context/ToastContext';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { act, renderHook } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -13,7 +13,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { BrevmottakerField, type BrevmottakerTransformedFormValues } from '../Felles/Form/useBrevmottakerForm';
 import { useBrevmottakerFormBehandling } from './useBrevmottakerFormBehandling';
 
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext');
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const OPPRETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId';
 const behandling = lagBehandling({ behandlingId: 42 });

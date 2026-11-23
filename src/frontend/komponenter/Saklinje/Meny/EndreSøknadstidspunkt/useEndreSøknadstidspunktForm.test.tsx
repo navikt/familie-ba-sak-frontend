@@ -49,7 +49,7 @@ const { mockMutateAsync, mockSettÅpenBehandling } = vi.hoisted(() => ({
     mockSettÅpenBehandling: vi.fn(),
 }));
 
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext', () => ({
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext', () => ({
     useBehandlingContext: () => ({
         behandling: mockBehandling,
         settÅpenBehandling: mockSettÅpenBehandling,

@@ -3,7 +3,7 @@ import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropply
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 
 const FALLBACK_MESSAGE =

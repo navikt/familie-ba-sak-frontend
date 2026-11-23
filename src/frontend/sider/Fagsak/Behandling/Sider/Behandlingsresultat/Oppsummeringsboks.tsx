@@ -24,7 +24,7 @@ import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
 import { Datoformat, dateTilFormatertString } from '@utils/dato';
 import { formaterBeløp, formaterIdent, hentAlderSomString, sorterUtbetaling } from '@utils/formatter';
 import { type PropsWithChildren, useState } from 'react';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import Styles from './Oppsummeringsboks.module.css';
 import { kanFjerneSmåbarnstilleggFraPeriode, kanLeggeSmåbarnstilleggTilPeriode } from './OppsummeringsboksUtils';
 

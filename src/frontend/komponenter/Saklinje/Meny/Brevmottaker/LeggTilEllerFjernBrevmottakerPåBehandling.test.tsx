@@ -3,7 +3,7 @@ import {
     useBrevmottakerDialogContext,
 } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';

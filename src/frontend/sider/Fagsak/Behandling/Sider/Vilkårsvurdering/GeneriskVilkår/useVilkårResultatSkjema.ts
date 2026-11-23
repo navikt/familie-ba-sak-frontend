@@ -1,7 +1,7 @@
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterVilkårResultat } from '@hooks/useOppdaterVilkårResultat';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { VedtakBegrunnelse } from '@typer/vedtak';

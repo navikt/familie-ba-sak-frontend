@@ -9,7 +9,7 @@ import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../FagsakContext';
-import { BehandlingProvider } from '../../../context/BehandlingContext';
+import { BehandlingProvider } from '../../../BehandlingContext';
 import { Utbetaling } from '../Utbetaling';
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';

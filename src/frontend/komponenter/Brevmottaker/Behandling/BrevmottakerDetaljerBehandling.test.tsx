@@ -2,7 +2,7 @@ import * as ToastContext from '@context/ToastContext';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -13,7 +13,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { BrevmottakerDetaljerBehandling } from './BrevmottakerDetaljerBehandling';
 
 vi.mock('@hooks/useErLesevisning');
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext');
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const SLETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId/:brevmottakerId';
 const brevmottaker = lagBrevmottakerBehandling({ id: 7 });

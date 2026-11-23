@@ -1,7 +1,7 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { useEndreSøknadstidspunkt } from '@hooks/useEndreSøknadstidspunkt';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { erRevurderingKlage, type IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
