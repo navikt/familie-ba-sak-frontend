@@ -54,8 +54,8 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
         formState: { isDirty },
     } = form;
 
-    async function onSuccess() {
-        await queryClient.invalidateQueries({ queryKey: queryKeys.feilutbetaltValuta(behandlingId) });
+    function onSuccess(feilutbetaltValutaPerioder: IRestFeilutbetaltValuta[]) {
+        queryClient.setQueryData(queryKeys.feilutbetaltValuta(behandlingId), feilutbetaltValutaPerioder);
         queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
     }
 

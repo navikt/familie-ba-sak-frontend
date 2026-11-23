@@ -134,13 +134,12 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(screen.getByText('Tabellen er skjult')).toBeInTheDocument();
     });
 
-    test('skal hente periodene på nytt og skjule tabellen når siste periode slettes', async () => {
+    test('skal vise periodene fra svaret og skjule tabellen når siste periode slettes', async () => {
         mockFeilutbetaltValuta([periode]);
         const slettForespørsel = vi.fn();
         server.use(
             http.delete(ENKELTPERIODE_URL, ({ params }) => {
                 slettForespørsel(params);
-                mockFeilutbetaltValuta([]);
                 return HttpResponse.json(byggSuksessRessurs([]));
             })
         );
@@ -154,14 +153,13 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(erHistorikkinnslagInvalidert()).toBe(true);
     });
 
-    test('skal hente periodene på nytt når en periode oppdateres', async () => {
+    test('skal vise periodene fra svaret når en periode oppdateres', async () => {
         mockFeilutbetaltValuta([periode]);
         const oppdaterForespørsel = vi.fn();
         server.use(
             http.put(ENKELTPERIODE_URL, async ({ params, request }) => {
                 oppdaterForespørsel({ params, body: await request.json() });
-                mockFeilutbetaltValuta([{ ...periode, feilutbetaltBeløp: 750 }]);
-                return HttpResponse.json(byggSuksessRessurs([]));
+                return HttpResponse.json(byggSuksessRessurs([{ ...periode, feilutbetaltBeløp: 750 }]));
             })
         );
         const { screen, user, erHistorikkinnslagInvalidert } = renderTabell();
@@ -184,14 +182,13 @@ describe('FeilutbetaltValutaTabell', () => {
         expect(erHistorikkinnslagInvalidert()).toBe(true);
     });
 
-    test('skal hente periodene på nytt når en periode legges til', async () => {
+    test('skal vise periodene fra svaret når en periode legges til', async () => {
         mockFeilutbetaltValuta([periode]);
         const opprettForespørsel = vi.fn();
         server.use(
             http.post(PERIODER_URL, async ({ params, request }) => {
                 opprettForespørsel({ params, body: await request.json() });
-                mockFeilutbetaltValuta([periode, annenPeriode]);
-                return HttpResponse.json(byggSuksessRessurs([]));
+                return HttpResponse.json(byggSuksessRessurs([periode, annenPeriode]));
             })
         );
         const { screen, user, erHistorikkinnslagInvalidert } = renderTabell();

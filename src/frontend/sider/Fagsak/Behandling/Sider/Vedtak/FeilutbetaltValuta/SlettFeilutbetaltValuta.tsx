@@ -17,8 +17,8 @@ export function SlettFeilutbetaltValuta({ feilutbetaltValutaId }: Props) {
 
     const { mutate, isPending } = useSlettFeilutbetaltValuta({
         feilutbetaltValutaId: feilutbetaltValutaId,
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.feilutbetaltValuta(behandlingId) });
+        onSuccess: feilutbetaltValutaPerioder => {
+            queryClient.setQueryData(queryKeys.feilutbetaltValuta(behandlingId), feilutbetaltValutaPerioder);
             queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
