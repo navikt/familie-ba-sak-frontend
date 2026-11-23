@@ -1,11 +1,12 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
+import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
+import { useOppdaterFeilutbetaltValuta } from '@hooks/useOppdaterFeilutbetaltValuta';
+import { useOpprettFeilutbetaltValuta } from '@hooks/useOpprettFeilutbetaltValuta';
+import { useQueryClient } from '@tanstack/react-query';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
+import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { useConfirmBrowserRefresh } from '../../../../../../../hooks/useConfirmBrowserRefresh';
-import { useOppdaterFeilutbetaltValuta } from '../../../../../../../hooks/useOppdaterFeilutbetaltValuta';
-import { useOpprettFeilutbetaltValuta } from '../../../../../../../hooks/useOpprettFeilutbetaltValuta';
-import type { IRestFeilutbetaltValuta } from '../../../../../../../typer/eøs-feilutbetalt-valuta';
-import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     FOM_DATO = 'FOM_DATO',
@@ -37,7 +38,8 @@ interface Props {
 }
 
 export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
 
     const form = useForm<FormValues, never, TransformedFormValues>({
         values: {
@@ -52,25 +54,27 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
         formState: { isDirty },
     } = form;
 
-    const { mutateAsync: opprettFeilutbetaltValuta } = useOpprettFeilutbetaltValuta();
-    const { mutateAsync: oppdaterFeilutbetaltValuta } = useOppdaterFeilutbetaltValuta();
+    function onSuccess(feilutbetaltValutaPerioder: IRestFeilutbetaltValuta[]) {
+        queryClient.setQueryData(queryKeys.feilutbetaltValuta(behandlingId), feilutbetaltValutaPerioder);
+        queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
+    }
+
+    const { mutateAsync: opprettFeilutbetaltValuta } = useOpprettFeilutbetaltValuta({ onSuccess });
+    const { mutateAsync: oppdaterFeilutbetaltValuta } = useOppdaterFeilutbetaltValuta({ onSuccess });
 
     useConfirmBrowserRefresh({ enabled: isDirty });
 
     async function onSubmit(values: TransformedFormValues) {
         if (type === Type.OPPRETT) {
             return opprettFeilutbetaltValuta({
-                behandlingId: behandling.behandlingId,
+                behandlingId,
                 payload: {
                     fom: values[Fields.FOM_DATO],
                     tom: values[Fields.TOM_DATO],
                     feilutbetaltBeløp: Number(values[Fields.BELOEP]),
                 },
             })
-                .then(behandling => {
-                    settÅpenBehandling(behandling);
-                    skjulForm();
-                })
+                .then(() => skjulForm())
                 .catch(e => {
                     const message = e instanceof Error ? e.message : 'En ukjent feil oppstod.';
                     setError('root', { message });
@@ -81,7 +85,7 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
                 return;
             }
             return oppdaterFeilutbetaltValuta({
-                behandlingId: behandling.behandlingId,
+                behandlingId,
                 feilutbetaltValutaId: feilutbetaltValuta.id,
                 payload: {
                     fom: values[Fields.FOM_DATO],
@@ -89,10 +93,7 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
                     feilutbetaltBeløp: Number(values[Fields.BELOEP]),
                 },
             })
-                .then(behandling => {
-                    settÅpenBehandling(behandling);
-                    skjulForm();
-                })
+                .then(() => skjulForm())
                 .catch(e => {
                     const message = e instanceof Error ? e.message : 'En ukjent feil oppstod.';
                     setError('root', { message });

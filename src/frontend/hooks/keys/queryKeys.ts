@@ -73,11 +73,20 @@ export const queryKeys = {
     endringstidspunkt: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'endringstidspunkt'] as const;
     },
+    feilutbetaltValuta: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'feilutbetalt-valuta'] as const;
+    },
     filtreringsresultater: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'filtreringsresultater'] as const;
     },
     historikkinnslag: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'historikkinnslag'] as const;
+    },
+    korrigertEtterbetaling: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'korrigert-etterbetaling'] as const;
+    },
+    korrigertVedtak: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'korrigert-vedtak'] as const;
     },
     personerMedUgyldigEtterbetalingsperiode: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'personer-med-ugyldig-etterbetalingsperiode'] as const;

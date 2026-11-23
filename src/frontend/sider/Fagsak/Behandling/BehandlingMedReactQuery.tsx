@@ -10,7 +10,6 @@ import type { IBehandling } from '@typer/behandling';
 
 import { BehandlingProvider } from './BehandlingContext';
 import { BehandlingOppsett, PersonlinjeUtenBehandling } from './BehandlingOppsett';
-import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 
 interface Props {
     behandlingId: number;
@@ -77,7 +76,6 @@ export function BehandlingMedReactQuery({ behandlingId }: Props) {
             <KontrollsiderProvider>
                 <HenleggBehandlingModal />
                 <HenleggBehandlingVeivalgModal />
-                <KorrigerEtterbetalingModal />
                 <BehandlingOppsett />
             </KontrollsiderProvider>
         </BehandlingProvider>

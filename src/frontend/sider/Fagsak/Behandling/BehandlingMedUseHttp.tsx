@@ -19,7 +19,6 @@ import { useEffect, useState } from 'react';
 
 import { BehandlingProvider } from './BehandlingContext';
 import { BehandlingOppsett, PersonlinjeUtenBehandling } from './BehandlingOppsett';
-import { KorrigerEtterbetalingModal } from './Sider/Vedtak/KorrigerEtterbetaling/KorrigerEtterbetalingModal';
 
 interface Props {
     behandlingId: number;
@@ -81,7 +80,6 @@ export function BehandlingMedUseHttp({ behandlingId }: Props) {
                     <KontrollsiderProvider>
                         <HenleggBehandlingModal />
                         <HenleggBehandlingVeivalgModal />
-                        <KorrigerEtterbetalingModal />
                         <BehandlingOppsett />
                     </KontrollsiderProvider>
                 </BehandlingProvider>

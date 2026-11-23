@@ -27,9 +27,12 @@ const fagsaknøkler = {
 
 const behandlingsnøkler = {
     endringstidspunkt: queryKeys.endringstidspunkt(behandlingId),
+    feilutbetaltValuta: queryKeys.feilutbetaltValuta(behandlingId),
     filtreringsresultater: queryKeys.filtreringsresultater(behandlingId),
     genererteBrevbegrunnelser: queryKeys.genererteBrevbegrunnelser(behandlingId, vedtaksperiodeId),
     historikkinnslag: queryKeys.historikkinnslag(behandlingId),
+    korrigertEtterbetaling: queryKeys.korrigertEtterbetaling(behandlingId),
+    korrigertVedtak: queryKeys.korrigertVedtak(behandlingId),
     personerMedUgyldigEtterbetalingsperiode: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandlingId),
     registrerteSøknadstidspunkter: queryKeys.registrerteSøknadstidspunkter(behandlingId),
     sammensattKontrollsak: queryKeys.sammensattKontrollsak(behandlingId),

@@ -1,6 +1,6 @@
 import { type OppdaterFeilutbetaltValutaPayload, oppdaterFeilutbetaltValuta } from '@api/oppdaterFeilutbetaltValuta';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 
 interface Parameters {
     behandlingId: number;
@@ -8,7 +8,7 @@ interface Parameters {
     payload: OppdaterFeilutbetaltValutaPayload;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IRestFeilutbetaltValuta[], DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOppdaterFeilutbetaltValuta(options: Options = {}) {
     return useMutation({

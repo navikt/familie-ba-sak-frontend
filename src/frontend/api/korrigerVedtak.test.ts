@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { type KorrigerVedtakPayload, korrigerVedtak } from '@api/korrigerVedtak';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagKorrigertVedtak } from '@testutils/testdata/korrigertVedtakTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -18,12 +18,12 @@ const payload: KorrigerVedtakPayload = {
     begrunnelse: 'Begrunnelse for korrigering',
 };
 
-const behandling = lagBehandling();
-const behandlingId = behandling.behandlingId;
+const behandlingId = 1;
+const korrigertVedtak = lagKorrigertVedtak();
 
 describe('korrigerVedtak', () => {
     test('skal sende forespørsel om å korrigere vedtak', async () => {
-        vi.mocked(apiClient.post).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.post).mockResolvedValueOnce(korrigertVedtak);
 
         const svar = await korrigerVedtak(payload, behandlingId);
 
@@ -32,7 +32,7 @@ describe('korrigerVedtak', () => {
             data: payload,
             url: `/familie-ba-sak/api/korrigertvedtak/behandling/${behandlingId}`,
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(korrigertVedtak);
     });
 
     test('skal håndtere feil', async () => {

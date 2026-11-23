@@ -1,7 +1,7 @@
 import { type OpprettFeilutbetaltValutaPayload, opprettFeilutbetaltValuta } from '@api/opprettFeilutbetaltValuta';
 import { useOpprettFeilutbetaltValuta } from '@hooks/useOpprettFeilutbetaltValuta';
 import { renderHook, waitFor } from '@testing-library/react';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagFeilutbetaltValuta } from '@testutils/testdata/feilutbetaltValutaTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -11,7 +11,7 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const feilutbetaltValutaPerioder = [lagFeilutbetaltValuta()];
 
 const payload: OpprettFeilutbetaltValutaPayload = {
     fom: '2024-01-01',
@@ -24,7 +24,7 @@ const parameters = { behandlingId: 123, payload };
 describe('useOpprettFeilutbetaltValuta', () => {
     test('skal kalle opprettFeilutbetaltValuta med riktige parametere', async () => {
         // Arrange
-        vi.mocked(opprettFeilutbetaltValuta).mockResolvedValue(behandling);
+        vi.mocked(opprettFeilutbetaltValuta).mockResolvedValue(feilutbetaltValutaPerioder);
 
         const { result } = renderHook(() => useOpprettFeilutbetaltValuta(), { wrapper: TestProviders });
 
@@ -34,13 +34,13 @@ describe('useOpprettFeilutbetaltValuta', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(opprettFeilutbetaltValuta).toHaveBeenCalledWith(123, payload);
-        expect(result.current.data).toEqual(behandling);
+        expect(result.current.data).toEqual(feilutbetaltValutaPerioder);
     });
 
     test('skal kalle onSuccess-callback ved vellykket mutasjon', async () => {
         // Arrange
         const onSuccess = vi.fn();
-        vi.mocked(opprettFeilutbetaltValuta).mockResolvedValue(behandling);
+        vi.mocked(opprettFeilutbetaltValuta).mockResolvedValue(feilutbetaltValutaPerioder);
 
         const { result } = renderHook(() => useOpprettFeilutbetaltValuta({ onSuccess }), { wrapper: TestProviders });
 
@@ -49,7 +49,7 @@ describe('useOpprettFeilutbetaltValuta', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(onSuccess).toHaveBeenCalledWith(behandling, parameters, undefined, expect.any(Object));
+        expect(onSuccess).toHaveBeenCalledWith(feilutbetaltValutaPerioder, parameters, undefined, expect.any(Object));
     });
 
     test('skal sette isError dersom opprettFeilutbetaltValuta feiler', async () => {
