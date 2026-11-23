@@ -1,4 +1,4 @@
-import { LocalStorageKeyFactory, useLocalStorage } from '@hooks/useLocalStorage';
+import { LocalStorage, LocalStorageKeyFactory } from '@utils/localStorage';
 import { useCallback } from 'react';
 
 import { DATOFELTER, OppgavefilterField, type OppgavefilterFormValues } from './useOppgavefilterForm';
@@ -9,21 +9,16 @@ import { erGyldigDato } from './validering';
  * slik at localStorage holder seg i takt med URL-en (se useOppdaterURL).
  */
 export function useOppdaterLocalStorage() {
-    const localStorage = useLocalStorage();
-
-    return useCallback(
-        (values: Partial<OppgavefilterFormValues>) => {
-            for (const field of Object.values(OppgavefilterField)) {
-                const value = values[field];
-                if (value === undefined) {
-                    continue;
-                }
-                if (DATOFELTER.includes(field) && value !== '' && !erGyldigDato(value)) {
-                    continue;
-                }
-                localStorage.set(LocalStorageKeyFactory.oppgavefilter(field), value);
+    return useCallback((values: Partial<OppgavefilterFormValues>) => {
+        for (const field of Object.values(OppgavefilterField)) {
+            const value = values[field];
+            if (value === undefined) {
+                continue;
             }
-        },
-        [localStorage]
-    );
+            if (DATOFELTER.includes(field) && value !== '' && !erGyldigDato(value)) {
+                continue;
+            }
+            LocalStorage.set(LocalStorageKeyFactory.oppgavefilter(field), value);
+        }
+    }, []);
 }

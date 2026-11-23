@@ -1,9 +1,9 @@
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { Select } from '@navikt/ds-react';
 import { harTilgangTilEnhet } from '@typer/enhet';
-import { EnhetFilter, enhetFilter } from '@typer/oppgave';
+import { enhetFilter } from '@typer/oppgave';
 import type { ChangeEvent } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import { useOppdaterLocalStorage } from '../useOppdaterLocalStorage';
 import { useOppdaterURL } from '../useOppdaterURL';
 import { OppgavefilterField, type OppgavefilterFormValues } from '../useOppgavefilterForm';
@@ -11,8 +11,6 @@ import { validerEnhet } from '../validering';
 
 export function EnhetField() {
     const saksbehandler = useSaksbehandler();
-
-    const { clearErrors } = useFormContext<OppgavefilterFormValues>();
 
     const { field, fieldState } = useController<OppgavefilterFormValues>({
         name: OppgavefilterField.ENHET,
@@ -26,9 +24,6 @@ export function EnhetField() {
         field.onChange(event);
         oppdaterLocalStorage({ [OppgavefilterField.ENHET]: event.target.value });
         oppdaterURL({ [OppgavefilterField.ENHET]: event.target.value });
-        if (event.target.value !== EnhetFilter.VELG) {
-            clearErrors(field.name);
-        }
     }
 
     return (

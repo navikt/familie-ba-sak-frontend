@@ -1,4 +1,4 @@
-import { LocalStorageKeyFactory } from '@hooks/useLocalStorage';
+import { LocalStorageKeyFactory } from '@utils/localStorage';
 
 import { OppgavefilterField } from './useOppgavefilterForm';
 

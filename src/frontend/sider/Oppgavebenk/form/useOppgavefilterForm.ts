@@ -82,9 +82,7 @@ export function useOppgavefilterForm() {
     useOnMount(() => {
         oppdaterLocalStorage(defaultValues);
         oppdaterURL(defaultValues, { replace: true });
-        if (defaultValues[OppgavefilterField.ENHET] === EnhetFilter.VELG) {
-            setError(OppgavefilterField.ENHET, { type: 'validate', message: 'Du må velge enhet.' });
-        } else {
+        if (defaultValues[OppgavefilterField.ENHET] !== EnhetFilter.VELG) {
             void onSubmit(defaultValues, Mode.KEEP_PAGE_PARAM);
         }
     });

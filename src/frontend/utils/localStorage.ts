@@ -12,12 +12,8 @@ export interface LocalStorage {
     remove: (key: LocalStorageKey) => void;
 }
 
-const localStorageFunctions: LocalStorage = {
+export const LocalStorage: LocalStorage = {
     get: key => localStorage.getItem(key),
     set: (key, value) => localStorage.setItem(key, value),
     remove: key => localStorage.removeItem(key),
 };
-
-export function useLocalStorage(): LocalStorage {
-    return localStorageFunctions;
-}

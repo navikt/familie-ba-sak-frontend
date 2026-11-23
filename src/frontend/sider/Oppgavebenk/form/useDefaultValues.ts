@@ -1,5 +1,5 @@
-import { LocalStorageKeyFactory, useLocalStorage } from '@hooks/useLocalStorage';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
+import { LocalStorage, LocalStorageKeyFactory } from '@utils/localStorage';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { migrerGamleFilterverdier, migrerGamleSøkeparametere } from './migrering';
@@ -11,8 +11,6 @@ export function useDefaultValues(): OppgavefilterFormValues {
 
     const saksbehandler = useSaksbehandler();
 
-    const localStorage = useLocalStorage();
-
     const [defaultValues] = useState(() => {
         migrerGamleFilterverdier();
         const migrerteSøkeparametere = migrerGamleSøkeparametere(searchParams);
@@ -23,7 +21,7 @@ export function useDefaultValues(): OppgavefilterFormValues {
         function lagDefaultValue(field: OppgavefilterField): string {
             const verdi = harQueryParams
                 ? migrerteSøkeparametere.get(field)
-                : localStorage.get(LocalStorageKeyFactory.oppgavefilter(field));
+                : LocalStorage.get(LocalStorageKeyFactory.oppgavefilter(field));
             return verdi !== null && valideringer[field](verdi) ? verdi : STANDARDVERDIER[field];
         }
 
