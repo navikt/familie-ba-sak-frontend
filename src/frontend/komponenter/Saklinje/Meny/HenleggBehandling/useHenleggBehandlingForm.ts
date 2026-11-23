@@ -1,10 +1,9 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { ModalType } from '../../../../context/ModalContext';
 import { useHenleggBehandling } from '../../../../hooks/useHenleggBehandling';
 import { useModal } from '../../../../hooks/useModal';
-import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '../../../../sider/Fagsak/Behandling/BehandlingContext';
 import type { HenleggÅrsak } from '../../../../typer/behandling';
 
 export const HenleggBehandlingServerErrors: Record<
@@ -59,7 +58,7 @@ export function useHenleggBehandlingForm() {
         }
         return mutateAsync({ behandling, årsak, begrunnelse })
             .then(behandling => {
-                settÅpenBehandling(byggSuksessRessurs(behandling));
+                settÅpenBehandling(behandling);
                 lukkModal();
                 åpneModal({ årsak });
             })

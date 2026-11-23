@@ -1,7 +1,5 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
 export interface OpprettFeilutbetaltValutaPayload {
     fom: string;
@@ -9,15 +7,9 @@ export interface OpprettFeilutbetaltValutaPayload {
     feilutbetaltBeløp: number;
 }
 
-export async function opprettFeilutbetaltValuta(
-    request: FamilieRequest,
-    behandlingId: number,
-    payload: OpprettFeilutbetaltValutaPayload
-) {
-    const ressurs = await request<OpprettFeilutbetaltValutaPayload, IBehandling>({
-        method: 'POST',
+export async function opprettFeilutbetaltValuta(behandlingId: number, payload: OpprettFeilutbetaltValutaPayload) {
+    return apiClient.post<OpprettFeilutbetaltValutaPayload, IBehandling>({
         url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}`,
         data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

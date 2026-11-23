@@ -1,10 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useIverksettVedtak } from '@hooks/useIverksettVedtak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { Tab, useTabContext } from '@sider/Fagsak/Behandling/Høyremeny/TabContextProvider';
 import { useTotrinnskontrollModalContext } from '@sider/Fagsak/Behandling/Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
 import { useKontrollsiderContext } from '@sider/Fagsak/Behandling/KontrollsiderContext';
@@ -75,11 +74,9 @@ export function useTotrinnskontrollForm() {
                 kontrollerteSider: kontrollsider.map(side => side.navn),
             });
 
-            await queryClient.invalidateQueries({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-            });
+            await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
 
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
 
             åpneModal(beslutning);
 

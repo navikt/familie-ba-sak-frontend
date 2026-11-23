@@ -1,9 +1,8 @@
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useSendVedtakTilBeslutter } from '@hooks/useSendVedtakTilBeslutter';
 import { Button } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useSimuleringsvurdering } from '@sider/Fagsak/Behandling/Sider/Simulering/useSimuleringsvurdering';
 import { useFeilutbetaltValutaTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/FeilutbetaltValuta/FeilutbetaltValutaTabellContext';
 import { useRefusjonEøsTabellContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
@@ -57,10 +56,8 @@ export function TilGodkjenning({ settFeilmelding }: Props) {
 
     const { mutate: sendVedtakTilBeslutter, isPending: sendVedtakTilBeslutterIsPending } = useSendVedtakTilBeslutter({
         onSuccess: async behandling => {
-            await queryClient.invalidateQueries({
-                queryKey: HentVedtaksperioderQueryKeyFactory.behandling(behandling.behandlingId),
-            });
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
+            settÅpenBehandling(behandling);
             åpneVisSendtTilTotrinnskontrollModal();
         },
         onError: error => settFeilmelding(error.message),

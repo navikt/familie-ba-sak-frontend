@@ -1,9 +1,7 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { LocalAlert } from '@navikt/ds-react';
-
 import { useMutationState } from '@tanstack/react-query';
 import { useState } from 'react';
-
-import { lagMutationKey } from '../../../../../../hooks/useSlettRefusjonEøs';
 import type { IRestRefusjonEøs } from '../../../../../../typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '../../../../../../utils/dato';
 
@@ -13,7 +11,7 @@ interface Props {
 
 export function SlettRefusjonEøsError({ refusjonEøs }: Props) {
     const states = useMutationState({
-        filters: { mutationKey: lagMutationKey(refusjonEøs.id) },
+        filters: { mutationKey: mutationKeys.slettRefusjonEøs(refusjonEøs.id) },
     });
 
     const state = states[states.length - 1];

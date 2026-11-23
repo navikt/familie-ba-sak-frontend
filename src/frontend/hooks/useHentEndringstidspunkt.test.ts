@@ -1,9 +1,10 @@
 import { hentEndringstidspunkt } from '@api/hentEndringstidspunkt';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { HentEndringstidspunktQueryKeyFactory, useHentEndringstidspunkt } from './useHentEndringstidspunkt';
+import { useHentEndringstidspunkt } from './useHentEndringstidspunkt';
 
 vi.mock('@api/hentEndringstidspunkt');
 
@@ -37,6 +38,6 @@ describe('useHentEndringstidspunkt', () => {
     });
 
     test('lager query key med behandlingId', () => {
-        expect(HentEndringstidspunktQueryKeyFactory.endringstidspunkt(123)).toEqual(['endringstidspunkt', 123]);
+        expect(queryKeys.endringstidspunkt(123)).toEqual(['behandling', 123, 'endringstidspunkt']);
     });
 });

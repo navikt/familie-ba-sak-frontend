@@ -1,6 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { EkspanderbareVilkårResultatRaderProvider } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
@@ -14,17 +13,15 @@ interface Options {
 
 function Wrapper({ behandling, children }: { behandling: IBehandling; children: ReactNode }) {
     return (
-        <TestProviders>
+        <TestProviders initialEntries={[{ pathname: `/fagsak/1/${behandling.behandlingId}/vilkaarsvurdering` }]}>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <EkspanderbareVilkårResultatRaderProvider>
-                            <Table>
-                                <Table.Body>{children}</Table.Body>
-                            </Table>
-                        </EkspanderbareVilkårResultatRaderProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <EkspanderbareVilkårResultatRaderProvider>
+                        <Table>
+                            <Table.Body>{children}</Table.Body>
+                        </Table>
+                    </EkspanderbareVilkårResultatRaderProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

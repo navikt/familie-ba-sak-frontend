@@ -1,10 +1,10 @@
-import { SlettSammensattKontrollsakMutationKeyFactory } from '@hooks/useSlettSammensattKontrollsak';
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useMutationState } from '@tanstack/react-query';
 
 export function useSlettSammensattKontrollsakError(behandlingId: number) {
     const states = useMutationState({
         filters: {
-            mutationKey: SlettSammensattKontrollsakMutationKeyFactory.slettSammensattKontrollsak(behandlingId),
+            mutationKey: mutationKeys.slettSammensattKontrollsak(behandlingId),
         },
         select: mutation => mutation.state,
     });

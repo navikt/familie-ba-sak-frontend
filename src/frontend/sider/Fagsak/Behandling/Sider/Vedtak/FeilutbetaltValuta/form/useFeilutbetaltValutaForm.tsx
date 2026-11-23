@@ -1,4 +1,3 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useForm } from 'react-hook-form';
 
 import { useConfirmBrowserRefresh } from '../../../../../../../hooks/useConfirmBrowserRefresh';
@@ -6,7 +5,7 @@ import { useOppdaterFeilutbetaltValuta } from '../../../../../../../hooks/useOpp
 import { useOpprettFeilutbetaltValuta } from '../../../../../../../hooks/useOpprettFeilutbetaltValuta';
 import type { IRestFeilutbetaltValuta } from '../../../../../../../typer/eøs-feilutbetalt-valuta';
 import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     FOM_DATO = 'FOM_DATO',
@@ -69,7 +68,7 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
                 },
             })
                 .then(behandling => {
-                    settÅpenBehandling(byggSuksessRessurs(behandling));
+                    settÅpenBehandling(behandling);
                     skjulForm();
                 })
                 .catch(e => {
@@ -91,7 +90,7 @@ export function useFeilutbetaltValutaForm({ type, feilutbetaltValuta, skjulForm 
                 },
             })
                 .then(behandling => {
-                    settÅpenBehandling(byggSuksessRessurs(behandling));
+                    settÅpenBehandling(behandling);
                     skjulForm();
                 })
                 .catch(e => {

@@ -2,9 +2,8 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 
 const FALLBACK_MESSAGE =
@@ -28,7 +27,7 @@ export function OppdaterRegisteropplysninger() {
     const erLesevisning = useErLesevisning();
 
     const { mutate, isPending, error } = useOppdaterRegisteropplysninger({
-        onSuccess: behandling => settÅpenBehandling(byggSuksessRessurs(behandling)),
+        onSuccess: behandling => settÅpenBehandling(behandling),
     });
 
     const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;

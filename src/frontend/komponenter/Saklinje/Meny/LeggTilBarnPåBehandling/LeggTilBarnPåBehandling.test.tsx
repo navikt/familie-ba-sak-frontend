@@ -1,13 +1,18 @@
 import { ActionMenu } from '@navikt/ds-react';
 import type { PropsWithChildren } from 'react';
 import { describe, expect } from 'vitest';
-import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../../sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '../../../../sider/Fagsak/Behandling/BehandlingContext';
 import { FagsakProvider } from '../../../../sider/Fagsak/FagsakContext';
 import { lagBehandling } from '../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../testutils/testrender';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, type IBehandling } from '../../../../typer/behandling';
+import {
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingÅrsak,
+    type IBehandling,
+} from '../../../../typer/behandling';
 import type { IMinimalFagsak } from '../../../../typer/fagsak';
 import { LeggTilBarnPBehandling } from './LeggTilBarnPåBehandling';
 
@@ -22,19 +27,18 @@ function Wrapper({
         type: Behandlingstype.FØRSTEGANGSBEHANDLING,
         status: BehandlingStatus.UTREDES,
         årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+        steg: BehandlingSteg.VILKÅRSVURDERING,
     }),
     children,
 }: WrapperProps) {
     return (
-        <TestProviders>
+        <TestProviders initialEntries={[{ pathname: '/fagsak/1/1/vilkaarsvurdering' }]}>
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <ActionMenu open={true}>
-                            <ActionMenu.Content>{children}</ActionMenu.Content>
-                        </ActionMenu>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <ActionMenu open={true}>
+                        <ActionMenu.Content>{children}</ActionMenu.Content>
+                    </ActionMenu>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

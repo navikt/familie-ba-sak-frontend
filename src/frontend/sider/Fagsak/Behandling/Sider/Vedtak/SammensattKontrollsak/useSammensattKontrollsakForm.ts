@@ -1,7 +1,6 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
-import { HentSammensattKontrollsakQueryKeyFactory } from '@hooks/useHentSammensattKontrollsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterSammensattKontrollsak } from '@hooks/useOppdaterSammensattKontrollsak';
 import { useSammensattKontrollsakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
@@ -25,17 +24,8 @@ export function useSammensattKontrollsakForm() {
 
     const { mutateAsync: oppdaterSammensattKontrollsak } = useOppdaterSammensattKontrollsak({
         onSuccess: sammensattKontrollsak => {
-            queryClient.setQueryData(
-                HentSammensattKontrollsakQueryKeyFactory.behandling(behandlingId),
-                sammensattKontrollsak
-            );
-            queryClient.invalidateQueries({
-                queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandlingId),
-            });
-        },
-        onError: error => {
-            const message = error.message ?? 'Teknisk feil ved lagring av sammensatt kontrollsak.';
-            setError('root', { message });
+            queryClient.setQueryData(queryKeys.sammensattKontrollsak(behandlingId), sammensattKontrollsak);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
 
@@ -56,12 +46,18 @@ export function useSammensattKontrollsakForm() {
 
     useOnFormSubmitSuccessful(control, () => reset());
 
-    function onSubmit(values: SammensattKontrollsakFormValues) {
+    async function onSubmit(values: SammensattKontrollsakFormValues) {
         if (!erDefinert(sammensattKontrollsak)) {
             throw Error('Sammensatt kontrollsak er ikke satt.');
         }
         const { fritekst } = values;
-        return oppdaterSammensattKontrollsak({ ...sammensattKontrollsak, fritekst });
+        try {
+            await oppdaterSammensattKontrollsak({ ...sammensattKontrollsak, fritekst });
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error ? error.message : 'Teknisk feil ved lagring av sammensatt kontrollsak.';
+            setError('root', { message });
+        }
     }
 
     return { form, onSubmit };

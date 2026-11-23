@@ -35,7 +35,7 @@ vi.mock('@hooks/useHentRegistrerteSøknadstidspunkter', () => ({
 vi.mock('@hooks/useEndreSøknadstidspunkt', () => ({
     useEndreSøknadstidspunkt: () => ({ mutateAsync: mockMutateAsync }),
 }));
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext', () => ({
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext', () => ({
     useBehandlingContext: () => ({ behandling: mockBehandling, settÅpenBehandling: vi.fn() }),
 }));
 vi.mock('@hooks/useErLesevisning', () => ({ useErLesevisning: () => false }));

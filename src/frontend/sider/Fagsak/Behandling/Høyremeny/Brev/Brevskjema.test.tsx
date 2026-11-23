@@ -5,7 +5,13 @@ import { BehandlingTestdata, lagBehandling } from '@testutils/testdata/behandlin
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagGrunnlagPerson, lagPerson } from '@testutils/testdata/personTestdata';
 import { render, TestProviders } from '@testutils/testrender';
-import { BehandlingStatus, Behandlingstype, BehandlingÅrsak, type IBehandling } from '@typer/behandling';
+import {
+    BehandlingStatus,
+    BehandlingSteg,
+    Behandlingstype,
+    BehandlingÅrsak,
+    type IBehandling,
+} from '@typer/behandling';
 import type { IPersonInfo } from '@typer/person';
 import { Adressebeskyttelsegradering, ForelderBarnRelasjonRolle } from '@typer/person';
 import { HttpResponse, http } from 'msw';
@@ -13,8 +19,7 @@ import type { ReactNode } from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { BrukerProvider } from '../../../BrukerContext';
 import { FagsakProvider } from '../../../FagsakContext';
-import { BehandlingProvider } from '../../context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '../../BehandlingContext';
 import Brevskjema from './Brevskjema';
 
 const OBLIGATORISK_FEILMELDING = 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
@@ -22,6 +27,7 @@ const OBLIGATORISK_FEILMELDING = 'Dette kulepunktet er obligatorisk. Du må skri
 const behandling = lagBehandling({
     type: Behandlingstype.REVURDERING,
     årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+    steg: BehandlingSteg.VILKÅRSVURDERING,
     personer: [lagGrunnlagPerson()],
 });
 
@@ -33,12 +39,12 @@ interface WrapperProps {
 
 function Wrapper({ children, bruker = lagPerson(), behandlingForVisning = behandling }: WrapperProps) {
     return (
-        <TestProviders>
+        <TestProviders
+            initialEntries={[{ pathname: `/fagsak/1/${behandlingForVisning.behandlingId}/vilkaarsvurdering` }]}
+        >
             <FagsakProvider fagsak={lagFagsak()}>
                 <BrukerProvider bruker={bruker}>
-                    <HentOgSettBehandlingProvider>
-                        <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
-                    </HentOgSettBehandlingProvider>
+                    <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
                 </BrukerProvider>
             </FagsakProvider>
         </TestProviders>

@@ -1,4 +1,5 @@
 import { type HistorikkinnslagDto, hentHistorikkinnslag } from '@api/hentHistorikkinnslag';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { BehandlerRolle } from '@typer/behandling';
@@ -14,10 +15,6 @@ export interface Historikkinnslag {
     beskrivelse?: string;
 }
 
-export const HentHistorikkinnslagQueryKeyFactory = {
-    historikkinnslag: (behandlingId: number) => ['historikkinnslag', behandlingId],
-};
-
 type Options = Omit<
     UseQueryOptions<HistorikkinnslagDto[], DefaultError, Historikkinnslag[]>,
     'queryKey' | 'queryFn' | 'select'
@@ -26,7 +23,7 @@ type Options = Omit<
 export function useHentHistorikkinnslag(behandlingId: number, options?: Options) {
     const skalObfuskereData = useSkalObfuskereData();
     return useQuery({
-        queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandlingId),
+        queryKey: queryKeys.historikkinnslag(behandlingId),
         queryFn: () => hentHistorikkinnslag(behandlingId),
         select: historikkinnslag => {
             let historikkinnslagKopi = [...historikkinnslag];

@@ -4,7 +4,6 @@ import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
@@ -12,7 +11,7 @@ import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { erProd } from '@utils/miljø';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useBehandlingContext } from '../../context/BehandlingContext';
+import { useBehandlingContext } from '../../BehandlingContext';
 import Skjemasteg, { MAX_SKJEMASTEG_BREDDE } from '../Skjemasteg';
 import { FyllUtVilkårsvurderingITestmiljøKnapp } from './FyllUtVilkårsvurderingITestmiljøKnapp';
 import { annenVurderingFeilmeldingId } from './GeneriskAnnenVurdering/AnnenVurderingTabell';
@@ -44,7 +43,7 @@ export function Vilkårsvurdering() {
         error: oppdaterVilkårsvurderingError,
     } = useOppdaterVilkårsvurdering({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
         },
     });

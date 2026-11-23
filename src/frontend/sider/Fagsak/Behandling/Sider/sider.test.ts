@@ -1,14 +1,7 @@
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { BehandlingSteg, BehandlingStegStatus, BehandlingÅrsak } from '@typer/behandling';
 
-import {
-    erViPåUdefinertFagsakSide,
-    erViPåUlovligSteg,
-    finnSideForBehandlingssteg,
-    finnSiderForBehandling,
-    SideId,
-    sider,
-} from './sider';
+import { erSidenAktiv, erStegEtter, finnSideForBehandlingssteg, finnSiderForBehandling, SideId, sider } from './sider';
 
 describe('Sider', () => {
     describe('FinnSiderForBehandling', () => {
@@ -141,25 +134,31 @@ describe('Sider', () => {
         });
     });
 
-    describe('erViPåUdefinertFagsakSide', () => {
-        test('Skal returnere false dersom den får inn en kjent side og true ved ukjent', () => {
-            const testUrl = 'test-url/';
-            Object.values(sider)
-                .map(side => side.href)
-                .forEach(sideUrl => expect(erViPåUdefinertFagsakSide(testUrl + sideUrl)).toBeFalsy());
-            expect(erViPåUdefinertFagsakSide(testUrl + 'saksoversikt')).toBeFalsy();
-            expect(erViPåUdefinertFagsakSide(testUrl + 'ny-behandling')).toBeFalsy();
+    describe('erStegEtter', () => {
+        test('skal bruke rekkefølgen fra backend når stegene har ulik rekkefølge', () => {
+            expect(erStegEtter(BehandlingSteg.VILKÅRSVURDERING, BehandlingSteg.REGISTRERE_SØKNAD)).toBe(true);
+            expect(erStegEtter(BehandlingSteg.REGISTRERE_SØKNAD, BehandlingSteg.VILKÅRSVURDERING)).toBe(false);
+        });
 
-            expect(erViPåUdefinertFagsakSide('dette-skal-ikke-være/en-definert-side')).toBeTruthy();
+        test('skal bruke rekkefølgen på sidene når stegene har lik rekkefølge i backend', () => {
+            expect(erStegEtter(BehandlingSteg.REGISTRERE_SØKNAD, BehandlingSteg.REGISTRERE_INSTITUSJON)).toBe(true);
+            expect(erStegEtter(BehandlingSteg.REGISTRERE_INSTITUSJON, BehandlingSteg.REGISTRERE_SØKNAD)).toBe(false);
+        });
+
+        test('skal returnere false når et av stegene med lik rekkefølge ikke har en egen side', () => {
+            expect(erStegEtter(BehandlingSteg.REGISTRERE_SØKNAD, BehandlingSteg.REGISTRERE_PERSONGRUNNLAG)).toBe(false);
         });
     });
 
-    describe('erViPåUlovligSteg', () => {
-        test('Skal returnere true dersom vi er på ulovlig steg', () => {
-            expect(erViPåUlovligSteg('vedtak', sider.REGISTRERE_SØKNAD)).toBeTruthy();
-        });
-        test('Skal returnere false dersom vi ikke er på ulovlig steg', () => {
-            expect(erViPåUlovligSteg('registrer-soknad', sider.FILTRERINGSREGLER)).toBeFalsy();
+    describe('erSidenAktiv', () => {
+        test('skal ikke vise registrer søknad som aktiv når institusjonssaken er på registrering av institusjon', () => {
+            const behandling = lagBehandling({
+                årsak: BehandlingÅrsak.SØKNAD,
+                steg: BehandlingSteg.REGISTRERE_INSTITUSJON,
+            });
+
+            expect(erSidenAktiv(sider.REGISTRER_INSTITUSJON, behandling)).toBe(true);
+            expect(erSidenAktiv(sider.REGISTRERE_SØKNAD, behandling)).toBe(false);
         });
     });
 
@@ -213,5 +212,130 @@ describe('Sider', () => {
                 expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.VEDTAK);
             }
         );
+
+        test.each([
+            [BehandlingSteg.REGISTRERE_SØKNAD, sider.REGISTRERE_SØKNAD],
+            [BehandlingSteg.VILKÅRSVURDERING, sider.VILKÅRSVURDERING],
+            [BehandlingSteg.BEHANDLINGSRESULTAT, sider.BEHANDLINGRESULTAT],
+            [BehandlingSteg.VURDER_TILBAKEKREVING, sider.SIMULERING],
+            [BehandlingSteg.SEND_TIL_BESLUTTER, sider.VEDTAK],
+        ])('skal returnere siden som tilhører steget %s', (steg, forventetSide) => {
+            const behandling = lagBehandling({ årsak: BehandlingÅrsak.SØKNAD, steg });
+            expect(finnSideForBehandlingssteg(behandling)).toEqual(forventetSide);
+        });
+
+        test('skal returnere undefined dersom steget ikke har en egen side', () => {
+            const behandling = lagBehandling({ steg: BehandlingSteg.REGISTRERE_PERSONGRUNNLAG });
+            expect(finnSideForBehandlingssteg(behandling)).toBeUndefined();
+        });
+
+        test('skal returnere undefined dersom siden for steget er skjult for behandlingen', () => {
+            const behandling = lagBehandling({
+                årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+                steg: BehandlingSteg.REGISTRERE_SØKNAD,
+            });
+            expect(finnSideForBehandlingssteg(behandling)).toBeUndefined();
+        });
+
+        test('skal returnere Behandlingsresultat-siden dersom behandlingssteget er etter "send til beslutter" og verken vedtak eller simulering vises', () => {
+            const behandling = lagBehandling({
+                årsak: BehandlingÅrsak.SATSENDRING,
+                skalBehandlesAutomatisk: true,
+                steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+            });
+            expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.BEHANDLINGRESULTAT);
+        });
+
+        describe('henlagt behandling', () => {
+            function lagHenlagtStegTilstand(stegene: BehandlingSteg[]) {
+                const henlagtPåSteg = stegene[stegene.length - 1];
+                return [
+                    BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                    ...stegene,
+                    BehandlingSteg.HENLEGG_BEHANDLING,
+                    BehandlingSteg.FERDIGSTILLE_BEHANDLING,
+                    BehandlingSteg.BEHANDLING_AVSLUTTET,
+                ].map(behandlingSteg => ({
+                    behandlingSteg,
+                    behandlingStegStatus:
+                        behandlingSteg === henlagtPåSteg
+                            ? BehandlingStegStatus.IKKE_UTFØRT
+                            : BehandlingStegStatus.UTFØRT,
+                }));
+            }
+
+            test('skal returnere Vilkårsvurdering-siden for revurdering henlagt på vilkårsvurdering', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: lagHenlagtStegTilstand([BehandlingSteg.VILKÅRSVURDERING]),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.VILKÅRSVURDERING);
+            });
+
+            test('skal returnere Registrer søknad-siden for søknad henlagt på registrering av søknad', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: lagHenlagtStegTilstand([BehandlingSteg.REGISTRERE_SØKNAD]),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.REGISTRERE_SØKNAD);
+            });
+
+            test('skal returnere Behandlingsresultat-siden for behandling henlagt på behandlingsresultat', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: lagHenlagtStegTilstand([
+                        BehandlingSteg.REGISTRERE_SØKNAD,
+                        BehandlingSteg.VILKÅRSVURDERING,
+                        BehandlingSteg.BEHANDLINGSRESULTAT,
+                    ]),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.BEHANDLINGRESULTAT);
+            });
+
+            test('skal returnere Vedtak-siden for behandling henlagt på send til beslutter', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: lagHenlagtStegTilstand([
+                        BehandlingSteg.REGISTRERE_SØKNAD,
+                        BehandlingSteg.VILKÅRSVURDERING,
+                        BehandlingSteg.BEHANDLINGSRESULTAT,
+                        BehandlingSteg.VURDER_TILBAKEKREVING,
+                        BehandlingSteg.SEND_TIL_BESLUTTER,
+                    ]),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.VEDTAK);
+            });
+
+            test('skal returnere Registrer institusjon-siden for institusjonssak henlagt på registrering av institusjon', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.SØKNAD,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: lagHenlagtStegTilstand([BehandlingSteg.REGISTRERE_INSTITUSJON]),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.REGISTRER_INSTITUSJON);
+            });
+
+            test('skal returnere Behandlingsresultat-siden for fødselshendelse henlagt automatisk etter behandlingsresultat', () => {
+                const behandling = lagBehandling({
+                    årsak: BehandlingÅrsak.FØDSELSHENDELSE,
+                    skalBehandlesAutomatisk: true,
+                    steg: BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    stegTilstand: [
+                        BehandlingSteg.REGISTRERE_PERSONGRUNNLAG,
+                        BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING,
+                        BehandlingSteg.VILKÅRSVURDERING,
+                        BehandlingSteg.BEHANDLINGSRESULTAT,
+                        BehandlingSteg.HENLEGG_BEHANDLING,
+                        BehandlingSteg.FERDIGSTILLE_BEHANDLING,
+                        BehandlingSteg.BEHANDLING_AVSLUTTET,
+                    ].map(behandlingSteg => ({ behandlingSteg, behandlingStegStatus: BehandlingStegStatus.UTFØRT })),
+                });
+                expect(finnSideForBehandlingssteg(behandling)).toEqual(sider.BEHANDLINGRESULTAT);
+            });
+        });
     });
 });

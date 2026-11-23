@@ -1,4 +1,3 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useForm } from 'react-hook-form';
 
 import { useConfirmBrowserRefresh } from '../../../../../../../hooks/useConfirmBrowserRefresh';
@@ -6,7 +5,7 @@ import { useOppdaterRefusjonEøs } from '../../../../../../../hooks/useOppdaterR
 import { useOpprettRefusjonEøs } from '../../../../../../../hooks/useOpprettRefusjonEøs';
 import type { IRestRefusjonEøs } from '../../../../../../../typer/refusjon-eøs';
 import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     LANDKODE = 'LANDKODE',
@@ -79,7 +78,7 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
                 },
             })
                 .then(behandling => {
-                    settÅpenBehandling(byggSuksessRessurs(behandling));
+                    settÅpenBehandling(behandling);
                     skjulForm();
                 })
                 .catch(e => {
@@ -103,7 +102,7 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
                 },
             })
                 .then(behandling => {
-                    settÅpenBehandling(byggSuksessRessurs(behandling));
+                    settÅpenBehandling(behandling);
                     skjulForm();
                 })
                 .catch(e => {

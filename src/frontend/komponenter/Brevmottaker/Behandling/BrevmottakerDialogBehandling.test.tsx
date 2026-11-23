@@ -1,6 +1,6 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
@@ -16,7 +16,7 @@ import { BrevmottakerDialogProvider } from '../Felles/BrevmottakerDialogContext'
 import { BrevmottakerDialogBehandling } from './BrevmottakerDialogBehandling';
 
 vi.mock('@hooks/useErLesevisning');
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext');
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const OPPRETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId';
 const UTENLANDSK_ADRESSE_INFO = 'Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.';

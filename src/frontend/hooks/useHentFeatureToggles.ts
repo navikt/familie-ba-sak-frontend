@@ -1,4 +1,5 @@
 import { hentFeatureToggles } from '@api/hentFeatureToggles';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
@@ -12,10 +13,6 @@ function skruAvAlleToggles(): FeatureToggles {
     }, {});
 }
 
-export const HentFeatureTogglesQueryKeyFactory = {
-    toggles: () => ['toggles'],
-};
-
 type Options = Omit<
     UseQueryOptions<FeatureToggles, DefaultError, FeatureToggles>,
     'queryKey' | 'queryFn' | 'gcTime' | 'staleTime'
@@ -23,7 +20,7 @@ type Options = Omit<
 
 export function useHentFeatureToggles(options?: Options) {
     return useQuery({
-        queryKey: HentFeatureTogglesQueryKeyFactory.toggles(),
+        queryKey: queryKeys.featureToggles(),
         queryFn: async () => {
             try {
                 return await hentFeatureToggles();

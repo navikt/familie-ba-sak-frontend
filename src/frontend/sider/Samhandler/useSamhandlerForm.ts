@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useHttp } from '@navikt/familie-http';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -37,7 +38,7 @@ export function useSamhandlerForm({ settSamhandler }: Props) {
     async function onSubmit(values: SamhandlerFormValues) {
         return await queryClient
             .fetchQuery({
-                queryKey: ['samhandler-orgnr', values.orgnr],
+                queryKey: queryKeys.samhandler(values.orgnr),
                 queryFn: () => hentSamhandler(request, values.orgnr, påvirkerSystemLaster),
             })
             .then(settSamhandler)

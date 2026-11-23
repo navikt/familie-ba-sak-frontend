@@ -1,16 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function slettFeilutbetaltValuta(
-    request: FamilieRequest,
-    behandlingId: number,
-    feilutbetaltValutaId: number
-) {
-    const ressurs = await request<null, IBehandling>({
-        method: 'DELETE',
+export async function slettFeilutbetaltValuta(behandlingId: number, feilutbetaltValutaId: number) {
+    return apiClient.delete<void, IBehandling>({
         url: `/familie-ba-sak/api/feilutbetalt-valuta/behandling/${behandlingId}/periode/${feilutbetaltValutaId}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

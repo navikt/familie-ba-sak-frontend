@@ -1,8 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useFagsak } from '@hooks/useFagsak';
-import { HentBarnetrygdbehandlingerQueryKeyFactory } from '@hooks/useHentBarnetrygdbehandlinger';
-import { HentFagsakQueryKeyFactory } from '@hooks/useHentFagsak';
-import { HentKlagebehandlingerQueryKeyFactory } from '@hooks/useHentKlagebehandlinger';
-import { HentTilbakekrevingsbehandlingerQueryKeyFactory } from '@hooks/useHentTilbakekrevingsbehandlinger';
 import { useOpprettBehandling } from '@hooks/useOpprettBehandling';
 import { useOpprettKlagebehandling } from '@hooks/useOpprettKlagebehandling';
 import { useOpprettTilbakekreving } from '@hooks/useOpprettTilbakekreving';
@@ -101,9 +98,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
         if (behandlingstype === Klagebehandlingstype.KLAGE) {
             try {
                 await opprettKlagebehandling({ klageMottattDato, fagsakId });
-                await queryClient.invalidateQueries({
-                    queryKey: HentKlagebehandlingerQueryKeyFactory.fagsak(fagsakId),
-                });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsakId) });
                 lukkModal();
             } catch (error) {
                 setError('root', {
@@ -116,9 +111,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
         ) {
             try {
                 await opprettTilbakekreving({ fagsakId });
-                await queryClient.invalidateQueries({
-                    queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
-                });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsakId) });
                 onTilbakekrevingsbehandlingOpprettet();
                 lukkModal();
             } catch (error) {
@@ -145,10 +138,7 @@ export function useOpprettBehandlingSkjema({ lukkModal, onTilbakekrevingsbehandl
                     begrunnelse: begrunnelse || undefined,
                 };
                 const behandling = await opprettBehandling(opprettBehandlingParameters);
-                await queryClient.invalidateQueries({
-                    queryKey: HentBarnetrygdbehandlingerQueryKeyFactory.fagsak(fagsakId),
-                });
-                await queryClient.invalidateQueries({ queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId) });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.fagsak(fagsakId) });
                 lukkModal();
 
                 if (behandling.årsak === BehandlingÅrsak.SØKNAD) {

@@ -4,12 +4,11 @@ import { useAngreKorrigertEtterbetaling } from '@hooks/useAngreKorrigertEtterbet
 import { useKorrigerEtterbetaling } from '@hooks/useKorrigerEtterbetaling';
 import { useModal } from '@hooks/useModal';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { RessursStatus } from '@navikt/familie-typer';
 import type { OptionType } from '@typer/common';
 import { KorrigertEtterbetalingÅrsak } from '@typer/vedtak';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 
 interface KorrigerEtterbetalingFormValues {
     årsak: string;
@@ -89,7 +88,7 @@ export function useKorrigerEtterbetalingForm() {
                     alertType: AlertType.SUCCESS,
                     tekst: 'Etterbetalingsbeløp i brevet er korrigert',
                 });
-                settÅpenBehandling({ status: RessursStatus.SUKSESS, data: behandling });
+                settÅpenBehandling(behandling);
                 lukkModal();
             })
             .catch(_ => {
@@ -109,7 +108,7 @@ export function useKorrigerEtterbetalingForm() {
                     alertType: AlertType.SUCCESS,
                     tekst: 'Korrigering av etterbetalingsbeløp fjernet',
                 });
-                settÅpenBehandling({ status: RessursStatus.SUKSESS, data: behandling });
+                settÅpenBehandling(behandling);
                 lukkModal();
             })
             .catch(_ => {

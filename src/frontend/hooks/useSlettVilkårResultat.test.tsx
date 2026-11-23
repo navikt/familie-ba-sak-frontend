@@ -5,11 +5,7 @@ import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import type { PropsWithChildren } from 'react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import {
-    type Parameters,
-    SlettVilkårResultatMutationKeyFactory,
-    useSlettVilkårResultat,
-} from './useSlettVilkårResultat';
+import { type Parameters, useSlettVilkårResultat } from './useSlettVilkårResultat';
 
 vi.mock('@api/slettVilkårResultat', () => ({
     slettVilkårResultat: vi.fn(),
@@ -96,9 +92,5 @@ describe('useSlettVilkårResultat', () => {
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
         expect(onSuccess).toHaveBeenCalledTimes(1);
-    });
-
-    test('skal eksponere riktig mutationKey fra factory', () => {
-        expect(SlettVilkårResultatMutationKeyFactory.slettVilkårResultat()).toEqual(['slettVilkårResultat']);
     });
 });

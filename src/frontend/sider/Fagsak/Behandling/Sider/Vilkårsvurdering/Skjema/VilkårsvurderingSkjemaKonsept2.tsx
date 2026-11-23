@@ -2,7 +2,6 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail, ErrorMessage, Heading, HStack, List, LocalAlert, VStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
     BehandlingSteg,
@@ -12,7 +11,7 @@ import {
 import { PersonType } from '@typer/person';
 import { annenVurderingConfig, VilkårType } from '@typer/vilkår';
 import { useLocation } from 'react-router';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import { utledVilkårSomMåKontrolleresPerPerson } from '../utils';
@@ -35,7 +34,7 @@ export function VilkårsvurderingSkjemaKonsept2() {
         isPending: opprettVilkårResultatIsPending,
         error: opprettVilkårResultatError,
     } = useOpprettVilkårResultat({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const leggTilVilkårUtvidet = (personIdent: string) =>

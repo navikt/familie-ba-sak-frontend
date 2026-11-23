@@ -1,10 +1,10 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import type { OpprettFagsakPayload } from '../../../../api/opprettFagsak';
 import { ModalType } from '../../../../context/ModalContext';
-import { HentFagsakerQueryKeyFactory } from '../../../../hooks/useHentFagsaker';
 import { useModal } from '../../../../hooks/useModal';
 import { useOnFormSubmitSuccessful } from '../../../../hooks/useOnFormSubmitSuccessful';
 import { useOpprettFagsak } from '../../../../hooks/useOpprettFagsak';
@@ -75,9 +75,7 @@ export function useOpprettFagsakForm({ personIdent, fagsaker }: Props) {
         };
         return mutateAsync(payload)
             .then(fagsak => {
-                queryClient.invalidateQueries({
-                    queryKey: HentFagsakerQueryKeyFactory.fagsaker(personIdent),
-                });
+                queryClient.invalidateQueries({ queryKey: queryKeys.fagsaker(personIdent) });
                 lukkModal();
                 const aktivBehandling = hentAktivBehandlingPåMinimalFagsak(fagsak);
                 if (aktivBehandling) {

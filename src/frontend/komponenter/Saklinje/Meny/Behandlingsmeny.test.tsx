@@ -3,8 +3,7 @@ import { useModal } from '@hooks/useModal';
 import { RegistrerteBrevmottakereBehandling } from '@komponenter/Brevmottaker/Behandling/RegistrerteBrevmottakereBehandling';
 import { BrevmottakerDialogProvider } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { Heading } from '@navikt/ds-react';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BrevmottakereFagsakProvider } from '@sider/Fagsak/BrevmottakereFagsakContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
@@ -45,7 +44,7 @@ interface WrapperProps extends PropsWithChildren {
 
 function Wrapper({
     initialEntries = [{ pathname: '/fagsak/1/1/registrer-soknad' }],
-    behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER }),
+    behandling = lagBehandling({ årsak: BehandlingÅrsak.NYE_OPPLYSNINGER, steg: BehandlingSteg.VILKÅRSVURDERING }),
     fagsak = lagFagsak({ behandlinger: [lagVisningBehandling({ behandlingId: behandling?.behandlingId })] }),
     children,
 }: WrapperProps) {
@@ -69,12 +68,10 @@ function Wrapper({
                             <Route
                                 path={`/fagsak/:fagsakId/:behandlingId/:side`}
                                 element={
-                                    <HentOgSettBehandlingProvider>
-                                        <BehandlingProvider behandling={behandling}>
-                                            <HenleggBehandlingModal />
-                                            <BrevmottakerDialogProvider>{children}</BrevmottakerDialogProvider>
-                                        </BehandlingProvider>
-                                    </HentOgSettBehandlingProvider>
+                                    <BehandlingProvider behandling={behandling}>
+                                        <HenleggBehandlingModal />
+                                        <BrevmottakerDialogProvider>{children}</BrevmottakerDialogProvider>
+                                    </BehandlingProvider>
                                 }
                             />
                         </Routes>

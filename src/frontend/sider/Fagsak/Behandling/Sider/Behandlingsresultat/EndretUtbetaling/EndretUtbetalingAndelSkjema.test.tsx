@@ -5,12 +5,11 @@ import { describe, expect, test, vi } from 'vitest';
 import { lagBehandling } from '../../../../../../testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '../../../../../../testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '../../../../../../testutils/testrender';
-import { BehandlingStatus, type IBehandling } from '../../../../../../typer/behandling';
+import { BehandlingStatus, BehandlingSteg, type IBehandling } from '../../../../../../typer/behandling';
 import type { IRestEndretUtbetalingAndel } from '../../../../../../typer/utbetalingAndel';
 import { IEndretUtbetalingAndelÅrsak } from '../../../../../../typer/utbetalingAndel';
 import { FagsakProvider } from '../../../../FagsakContext';
-import { BehandlingProvider } from '../../../context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '../../../context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '../../../BehandlingContext';
 import { Utbetaling } from '../Utbetaling';
 import { EndretUtbetalingAndelProvider } from './EndretUtbetalingAndelContext';
 import { EndretUtbetalingAndelSkjema } from './EndretUtbetalingAndelSkjema';
@@ -42,7 +41,7 @@ const defaultValues: DefaultValues<EndretUtbetalingAndelFormValues> = {
 
 function Wrapper({
     children,
-    behandling = lagBehandling(),
+    behandling = lagBehandling({ steg: BehandlingSteg.BEHANDLINGSRESULTAT }),
     endretUtbetalingAndel = defaultEndretUtbetalingAndel,
 }: {
     children: ReactNode;
@@ -50,15 +49,13 @@ function Wrapper({
     endretUtbetalingAndel?: IRestEndretUtbetalingAndel;
 }) {
     return (
-        <TestProviders>
+        <TestProviders initialEntries={[{ pathname: `/fagsak/1/${behandling.behandlingId}/tilkjent-ytelse` }]}>
             <FagsakProvider fagsak={lagFagsak()}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>
-                        <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
-                            {children}
-                        </EndretUtbetalingAndelProvider>
-                    </BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>
+                    <EndretUtbetalingAndelProvider endretUtbetalingAndel={endretUtbetalingAndel}>
+                        {children}
+                    </EndretUtbetalingAndelProvider>
+                </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );
@@ -106,7 +103,7 @@ describe('EndretUtbetalingAndelSkjema', () => {
 
     test('skal ikke vise SkjemaKnapper når erLesevisning er true', () => {
         const behandlingILesevisning: IBehandling = {
-            ...lagBehandling(),
+            ...lagBehandling({ steg: BehandlingSteg.BEHANDLINGSRESULTAT }),
             status: BehandlingStatus.SATT_PÅ_VENT,
         };
 
