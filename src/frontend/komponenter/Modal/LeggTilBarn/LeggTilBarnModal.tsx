@@ -79,6 +79,14 @@ export function LeggTilBarnModal() {
                 </Dialog.Body>
                 <Dialog.Footer>
                     <Button
+                        variant={'tertiary'}
+                        size={'medium'}
+                        onClick={() => onClose()}
+                        loading={form.formState.isSubmitting}
+                    >
+                        Avbryt
+                    </Button>
+                    <Button
                         variant={'primary'}
                         type={'submit'}
                         size={'medium'}
@@ -86,14 +94,6 @@ export function LeggTilBarnModal() {
                         form={'legg-til-barn-form'}
                     >
                         Legg til
-                    </Button>
-                    <Button
-                        variant={'tertiary'}
-                        size={'medium'}
-                        onClick={() => onClose()}
-                        loading={form.formState.isSubmitting}
-                    >
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

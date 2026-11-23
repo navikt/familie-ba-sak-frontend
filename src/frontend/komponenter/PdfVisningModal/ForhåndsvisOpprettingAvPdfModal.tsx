@@ -16,7 +16,7 @@ export function ForhåndsvisOpprettingAvPdfModal() {
                     <Dialog.Title>{tittel}</Dialog.Title>
                 </Dialog.Header>
                 <Dialog.Body className={styles.body}>
-                    <Innhold mutationKey={mutationKey} />
+                    {erModalÅpen && <Innhold mutationKey={mutationKey} />}
                 </Dialog.Body>
             </Dialog.Popup>
         </Dialog>

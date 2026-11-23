@@ -35,6 +35,9 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                     </FormProvider>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button variant="secondary" size="small" onClick={lukkModal}>
+                        Avbryt
+                    </Button>
                     <Button
                         type={'submit'}
                         variant="primary"
@@ -44,9 +47,6 @@ export const EndreBehandlingstemaModal = ({ lukkModal }: Props) => {
                         form={'endre-behandlingstema-form'}
                     >
                         Bekreft
-                    </Button>
-                    <Button variant="secondary" size="small" onClick={lukkModal}>
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

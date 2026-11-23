@@ -87,11 +87,11 @@ export function OpprettBehandlingModal({ lukkModal, onTilbakekrevingsbehandlingO
                     </FormProvider>
                 </Dialog.Body>
                 <Dialog.Footer>
-                    <Button variant={'primary'} type={'submit'} loading={isSubmitting} form={'opprett-behandling-form'}>
-                        Bekreft
-                    </Button>
                     <Button type={'button'} variant={'tertiary'} disabled={isSubmitting} onClick={lukkModal}>
                         Avbryt
+                    </Button>
+                    <Button variant={'primary'} type={'submit'} loading={isSubmitting} form={'opprett-behandling-form'}>
+                        Bekreft
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

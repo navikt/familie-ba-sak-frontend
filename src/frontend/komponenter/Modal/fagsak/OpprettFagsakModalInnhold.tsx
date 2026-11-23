@@ -57,11 +57,11 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     </VStack>
                 </Dialog.Body>
                 <Dialog.Footer>
-                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
-                        Opprett fagsak
-                    </Button>
                     <Button key={'avbryt'} variant={'tertiary'} onClick={lukkModal}>
                         Avbryt
+                    </Button>
+                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
+                        Opprett fagsak
                     </Button>
                 </Dialog.Footer>
             </>
@@ -90,11 +90,11 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     </VStack>
                 </Dialog.Body>
                 <Dialog.Footer>
-                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
-                        Opprett fagsak
-                    </Button>
                     <Button key={'avbryt'} variant={'tertiary'} onClick={lukkModal}>
                         Avbryt
+                    </Button>
+                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
+                        Opprett fagsak
                     </Button>
                 </Dialog.Footer>
             </>
@@ -137,6 +137,9 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                 </VStack>
             </Dialog.Body>
             <Dialog.Footer>
+                <Button type={'button'} variant={'tertiary'} onClick={lukkModal}>
+                    Avbryt
+                </Button>
                 <Button
                     type={'submit'}
                     variant={'primary'}
@@ -145,9 +148,6 @@ export function OpprettFagsakModalInnhold({ personIdent }: Props) {
                     loading={opprettFagsakForm.formState.isSubmitting}
                 >
                     Opprett fagsak
-                </Button>
-                <Button type={'button'} variant={'tertiary'} onClick={lukkModal}>
-                    Avbryt
                 </Button>
             </Dialog.Footer>
         </FagsakerProvider>

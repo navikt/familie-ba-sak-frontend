@@ -48,6 +48,9 @@ export function SettBehandlingPåVentModal({ lukkModal }: Props) {
                     </Fieldset>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button variant={'tertiary'} size={'medium'} onClick={lukkModal}>
+                        Avbryt
+                    </Button>
                     <Button
                         form={SETT_PÅ_VENT_FORM_ID}
                         type={'submit'}
@@ -56,9 +59,6 @@ export function SettBehandlingPåVentModal({ lukkModal }: Props) {
                         loading={isSubmitting}
                     >
                         {erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                    </Button>
-                    <Button variant={'tertiary'} size={'medium'} onClick={lukkModal}>
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

@@ -49,6 +49,9 @@ export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
                     </FormProvider>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button onClick={onClose} variant={'tertiary'}>
+                        Avbryt
+                    </Button>
                     <Button
                         type={'submit'}
                         variant={'primary'}
@@ -56,9 +59,6 @@ export const RegistrerDødsfallDatoModal = ({ lukkModal, person }: Props) => {
                         form={'registrer-dodsfall-dato-form'}
                     >
                         Bekreft
-                    </Button>
-                    <Button onClick={onClose} variant={'tertiary'}>
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

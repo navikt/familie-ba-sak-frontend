@@ -53,6 +53,9 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                     </FormProvider>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button variant="tertiary" size="small" onClick={lukkModal}>
+                        Avbryt
+                    </Button>
                     <Button
                         type={'submit'}
                         variant="primary"
@@ -62,9 +65,6 @@ export const LeggTilBarnPåBehandlingModal = ({ lukkModal }: Props) => {
                         form={'legg-til-barn-paa-behandling-form'}
                     >
                         Legg til
-                    </Button>
-                    <Button variant="tertiary" size="small" onClick={lukkModal}>
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

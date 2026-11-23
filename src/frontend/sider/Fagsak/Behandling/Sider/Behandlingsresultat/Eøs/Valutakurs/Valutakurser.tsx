@@ -172,19 +172,19 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
                         <Dialog.Footer>
                             <Button
                                 type="button"
+                                variant="secondary"
+                                onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
+                            >
+                                Avbryt
+                            </Button>
+                            <Button
+                                type="button"
                                 onClick={() => {
                                     endreVurderingsstrategiForValutakurser();
                                     settErGjenopprettAutomatiskeValutakurserModalÅpen(false);
                                 }}
                             >
                                 Gjenopprett automatiske valutakurser
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() => settErGjenopprettAutomatiskeValutakurserModalÅpen(false)}
-                            >
-                                Avbryt
                             </Button>
                         </Dialog.Footer>
                     </Dialog.Popup>

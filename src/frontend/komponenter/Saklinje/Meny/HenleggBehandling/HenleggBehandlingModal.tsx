@@ -1,7 +1,7 @@
 import { ModalType } from '@context/ModalContext';
 import { useModal } from '@hooks/useModal';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { Button, Dialog, Fieldset, InfoCard, VStack } from '@navikt/ds-react';
+import { Box, Button, Dialog, Fieldset, InfoCard, VStack } from '@navikt/ds-react';
 import { HenleggÅrsak } from '@typer/behandling';
 import { FormProvider } from 'react-hook-form';
 import { BegrunnelseFelt } from './BegrunnelseFelt';
@@ -66,6 +66,12 @@ function Innhold() {
                 </VStack>
             </Dialog.Body>
             <Dialog.Footer>
+                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && <ForhåndsvisBrevLenke />}
+                <Box asChild marginInline={'auto space-0'}>
+                    <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
+                        Avbryt
+                    </Button>
+                </Box>
                 <Button
                     form={HENLEGG_BEHANDLING_FORM_ID}
                     variant={'primary'}
@@ -75,10 +81,6 @@ function Innhold() {
                 >
                     {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET ? 'Bekreft og send brev' : 'Bekreft'}
                 </Button>
-                <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()}>
-                    Avbryt
-                </Button>
-                {valgtÅrsak === HenleggÅrsak.SØKNAD_TRUKKET && <ForhåndsvisBrevLenke />}
             </Dialog.Footer>
         </>
     );

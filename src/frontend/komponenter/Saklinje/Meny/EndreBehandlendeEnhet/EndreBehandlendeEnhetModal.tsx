@@ -49,6 +49,15 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
                     </FormProvider>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button
+                        type={'button'}
+                        variant={'secondary'}
+                        size={'small'}
+                        onClick={lukkModal}
+                        disabled={isSubmitting}
+                    >
+                        Avbryt
+                    </Button>
                     {!erRedigeringDeaktivert && (
                         <Button
                             type={'submit'}
@@ -60,15 +69,6 @@ export function EndreBehandlendeEnhetModal({ lukkModal }: Props) {
                             Bekreft
                         </Button>
                     )}
-                    <Button
-                        type={'button'}
-                        variant={'secondary'}
-                        size={'small'}
-                        onClick={lukkModal}
-                        disabled={isSubmitting}
-                    >
-                        Avbryt
-                    </Button>
                 </Dialog.Footer>
             </Dialog.Popup>
         </Dialog>

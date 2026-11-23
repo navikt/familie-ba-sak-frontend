@@ -48,11 +48,11 @@ export function BekreftEndringModal({ onSubmit }: Props) {
                     <BodyShort className={Styles.innhold}>{bekreftEndringFeilmelding}</BodyShort>
                 </Dialog.Body>
                 <Dialog.Footer>
-                    <Button type={'button'} variant={'primary'} onClick={bekreft} loading={isSubmitting}>
-                        Ja
-                    </Button>
                     <Button type={'button'} variant={'secondary'} onClick={avbryt} disabled={isSubmitting}>
                         Nei
+                    </Button>
+                    <Button type={'button'} variant={'primary'} onClick={bekreft} loading={isSubmitting}>
+                        Ja
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

@@ -26,11 +26,11 @@ export function OpprettFagsakModal() {
                                     </LocalAlert>
                                 </Dialog.Body>
                                 <Dialog.Footer>
-                                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
-                                        Opprett fagsak
-                                    </Button>
                                     <Button key={'avbryt'} variant={'tertiary'} onClick={lukkModal}>
                                         Avbryt
+                                    </Button>
+                                    <Button key={'Bekreft'} variant={'primary'} disabled={true}>
+                                        Opprett fagsak
                                     </Button>
                                 </Dialog.Footer>
                             </>

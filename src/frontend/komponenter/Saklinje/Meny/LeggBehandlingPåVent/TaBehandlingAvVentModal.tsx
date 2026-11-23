@@ -1,5 +1,5 @@
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
-import { BodyShort, Box, Button, LocalAlert, Dialog } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Dialog, LocalAlert } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
@@ -57,6 +57,9 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                     )}
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button variant="tertiary" onClick={lukkModal}>
+                        Nei
+                    </Button>
                     <Button
                         type={'submit'}
                         variant="primary"
@@ -65,9 +68,6 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
                         loading={isPending}
                     >
                         Ja, fortsett
-                    </Button>
-                    <Button variant="tertiary" onClick={lukkModal}>
-                        Nei
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

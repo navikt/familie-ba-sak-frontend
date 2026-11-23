@@ -53,6 +53,9 @@ function Innhold() {
                 </VStack>
             </Dialog.Body>
             <Dialog.Footer>
+                <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()} disabled={isSubmitting}>
+                    Avbryt
+                </Button>
                 <Button
                     form={LAAS_OPP_FAGSAK_FORM_ID}
                     variant={'primary'}
@@ -61,9 +64,6 @@ function Innhold() {
                     loading={isSubmitting}
                 >
                     Bekreft
-                </Button>
-                <Button variant={'tertiary'} size={'small'} onClick={() => lukkModal()} disabled={isSubmitting}>
-                    Avbryt
                 </Button>
             </Dialog.Footer>
         </>

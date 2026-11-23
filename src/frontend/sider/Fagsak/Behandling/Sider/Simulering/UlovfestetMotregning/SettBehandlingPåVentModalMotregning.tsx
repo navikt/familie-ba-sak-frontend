@@ -1,5 +1,5 @@
 import { useSettPåVent } from '@hooks/useSettPåVent';
-import { BodyShort, Button, DatePicker, Fieldset, Dialog, Select, useDatepicker, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, DatePicker, Dialog, Fieldset, Select, useDatepicker, VStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/konstanter';
 import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
@@ -66,6 +66,9 @@ export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
                     </Fieldset>
                 </Dialog.Body>
                 <Dialog.Footer>
+                    <Button variant={'tertiary'} size="medium" onClick={lukkModal}>
+                        Avbryt
+                    </Button>
                     <Button
                         variant={'primary'}
                         size={'medium'}
@@ -81,9 +84,6 @@ export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
                         disabled={setterPåVent}
                     >
                         {erBehandlingAlleredePåVent ? 'Oppdater' : 'Bekreft'}
-                    </Button>
-                    <Button variant={'tertiary'} size="medium" onClick={lukkModal}>
-                        Avbryt
                     </Button>
                 </Dialog.Footer>
             </Dialog.Popup>

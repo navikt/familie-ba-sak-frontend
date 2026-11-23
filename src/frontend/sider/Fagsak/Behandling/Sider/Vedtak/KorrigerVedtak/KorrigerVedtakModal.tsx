@@ -1,7 +1,7 @@
 import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Fieldset, Dialog, VStack } from '@navikt/ds-react';
+import { BodyLong, Box, Button, Dialog, Fieldset, VStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BegrunnelseFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/BegrunnelseFelt';
 import { VedtaksdatoFelt } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/VedtaksdatoFelt';
@@ -74,18 +74,6 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
                 <Dialog.Footer>
                     {!erLesevisning && (
                         <>
-                            <Button
-                                form={KORRIGER_VEDTAK_FORM_ID}
-                                type={'submit'}
-                                variant={'primary'}
-                                loading={isSubmitting}
-                                disabled={angreKorrigertVedtakIsPending}
-                            >
-                                {korrigertVedtak ? 'Oppdater' : 'Legg til'}
-                            </Button>
-                            <Button onClick={lukkModal} variant={'tertiary'}>
-                                Avbryt
-                            </Button>
                             {visAngreKnapp && (
                                 <Button
                                     size={'small'}
@@ -97,6 +85,20 @@ export function KorrigerVedtakModal({ lukkModal }: Props) {
                                     Fjern korrigering
                                 </Button>
                             )}
+                            <Box marginInline={'auto space-0'} asChild>
+                                <Button onClick={lukkModal} variant={'tertiary'}>
+                                    Avbryt
+                                </Button>
+                            </Box>
+                            <Button
+                                form={KORRIGER_VEDTAK_FORM_ID}
+                                type={'submit'}
+                                variant={'primary'}
+                                loading={isSubmitting}
+                                disabled={angreKorrigertVedtakIsPending}
+                            >
+                                {korrigertVedtak ? 'Oppdater' : 'Legg til'}
+                            </Button>
                         </>
                     )}
                     {erLesevisning && (

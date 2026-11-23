@@ -51,6 +51,9 @@ export const EndreSøknadstidspunktSkjema = ({ lukkModal, søknadstidspunkter }:
                 </FormProvider>
             </Dialog.Body>
             <Dialog.Footer>
+                <Button type="button" variant="secondary" size="small" disabled={isSubmitting} onClick={lukkModal}>
+                    Avbryt
+                </Button>
                 <Button
                     type="submit"
                     variant="primary"
@@ -60,9 +63,6 @@ export const EndreSøknadstidspunktSkjema = ({ lukkModal, søknadstidspunkter }:
                     form={'endre-soknadstidspunkt-form'}
                 >
                     Bekreft
-                </Button>
-                <Button type="button" variant="secondary" size="small" disabled={isSubmitting} onClick={lukkModal}>
-                    Avbryt
                 </Button>
             </Dialog.Footer>
         </>
