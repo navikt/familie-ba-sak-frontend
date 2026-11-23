@@ -44,7 +44,7 @@
         ]
     },
     "dependencies": {
-        "@dotenvx/dotenvx": "2.32.2",
+        "@dotenvx/dotenvx": "2.38.2",
         "@nais/apm": "0.7.3",
         "@navikt/aksel-icons": "8.23.0",
         "@navikt/ds-css": "8.23.0",
