@@ -85,6 +85,9 @@ export const queryKeys = {
     korrigertEtterbetaling: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'korrigert-etterbetaling'] as const;
     },
+    korrigertVedtak: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'korrigert-vedtak'] as const;
+    },
     personerMedUgyldigEtterbetalingsperiode: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'personer-med-ugyldig-etterbetalingsperiode'] as const;
     },

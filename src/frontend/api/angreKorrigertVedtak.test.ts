@@ -1,6 +1,6 @@
 import { angreKorrigertVedtak } from '@api/angreKorrigertVedtak';
 import { apiClient } from '@api/client/apiClient';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagKorrigertVedtak } from '@testutils/testdata/korrigertVedtakTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -13,12 +13,12 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling();
-const behandlingId = behandling.behandlingId;
+const behandlingId = 1;
+const korrigertVedtak = lagKorrigertVedtak();
 
 describe('angreKorrigertVedtak', () => {
     test('skal sende forespørsel om å angre korrigert vedtak', async () => {
-        vi.mocked(apiClient.patch).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.patch).mockResolvedValueOnce(korrigertVedtak);
 
         const svar = await angreKorrigertVedtak(behandlingId);
 
@@ -26,7 +26,7 @@ describe('angreKorrigertVedtak', () => {
         expect(apiClient.patch).toHaveBeenCalledWith({
             url: `/familie-ba-sak/api/korrigertvedtak/behandling/${behandlingId}`,
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(korrigertVedtak);
     });
 
     test('skal håndtere feil', async () => {
