@@ -1,5 +1,6 @@
-import { useBehandling } from '@hooks/useBehandling';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
+import { useHentFeilutbetaltValuta } from '@hooks/useHentFeilutbetaltValuta';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
@@ -14,13 +15,13 @@ import { erDefinert } from '@utils/commons';
 import type { PropsWithChildren } from 'react';
 
 export function VedtakContainer({ children }: PropsWithChildren) {
-    const behandling = useBehandling();
+    const behandlingId = useBehandlingId();
 
     const {
         data: vedtaksperioder,
         isPending: vedtaksperioderIsPending,
         error: vedtaksperioderError,
-    } = useHentVedtaksperioder(behandling.behandlingId);
+    } = useHentVedtaksperioder(behandlingId);
 
     const {
         data: alleBegrunnelser,
@@ -32,9 +33,20 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         data: sammensattKontrollsak,
         isPending: sammensattKontrollsakIsPending,
         error: sammensattKontrollsakError,
-    } = useHentSammensattKontrollsak(behandling.behandlingId);
+    } = useHentSammensattKontrollsak(behandlingId);
 
-    if (vedtaksperioderIsPending || alleBegrunnelserIsPending || sammensattKontrollsakIsPending) {
+    const {
+        data: feilutbetaltValutaPerioder,
+        isPending: feilutbetaltValutaPerioderIsPending,
+        error: feilutbetaltValutaPerioderError,
+    } = useHentFeilutbetaltValuta(behandlingId);
+
+    if (
+        vedtaksperioderIsPending ||
+        alleBegrunnelserIsPending ||
+        sammensattKontrollsakIsPending ||
+        feilutbetaltValutaPerioderIsPending
+    ) {
         return (
             <Box margin={'space-48'}>
                 <Stack direction={'row'} justify={'center'} align={'center'} gap={'space-8'}>
@@ -45,10 +57,18 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         );
     }
 
-    if (vedtaksperioderError || alleBegrunnelserError || sammensattKontrollsakError) {
-        const errors = [vedtaksperioderError, alleBegrunnelserError, sammensattKontrollsakError].filter(error =>
-            erDefinert(error)
-        );
+    if (
+        vedtaksperioderError ||
+        alleBegrunnelserError ||
+        sammensattKontrollsakError ||
+        feilutbetaltValutaPerioderError
+    ) {
+        const errors = [
+            vedtaksperioderError,
+            alleBegrunnelserError,
+            sammensattKontrollsakError,
+            feilutbetaltValutaPerioderError,
+        ].filter(error => erDefinert(error));
         return (
             <Box margin={'space-48'}>
                 <LocalAlert status={'error'}>
@@ -73,7 +93,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
             <AlleBegrunnelserProvider alleBegrunnelser={alleBegrunnelser}>
                 <VedtaksperioderProvider vedtaksperioder={vedtaksperioder}>
                     <SendtTilTotrinnskontrollModalProvider>
-                        <FeilutbetaltValutaTabellProvider>
+                        <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={feilutbetaltValutaPerioder}>
                             <RefusjonEøsTabellProvider>
                                 <EndringstidspunktDialogProvider>{children}</EndringstidspunktDialogProvider>
                             </RefusjonEøsTabellProvider>

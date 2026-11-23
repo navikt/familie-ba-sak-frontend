@@ -4,7 +4,6 @@ import type { IsoDatoString } from '@utils/dato';
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
-import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
@@ -334,7 +333,6 @@ export interface IBehandling {
     valutakurser: IRestValutakurs[];
     korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
     korrigertVedtak?: IRestKorrigertVedtak;
-    feilutbetaltValuta: IRestFeilutbetaltValuta[];
     refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;

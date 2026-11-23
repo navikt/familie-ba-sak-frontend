@@ -1,14 +1,17 @@
 import { slettFeilutbetaltValuta } from '@api/slettFeilutbetaltValuta';
 import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
 
 interface Parameters {
     behandlingId: number;
     feilutbetaltValutaId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationKey' | 'mutationFn'> & {
+type Options = Omit<
+    UseMutationOptions<IRestFeilutbetaltValuta[], DefaultError, Parameters>,
+    'mutationKey' | 'mutationFn'
+> & {
     feilutbetaltValutaId: number;
 };
 

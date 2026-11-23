@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { type OppdaterFeilutbetaltValutaPayload, oppdaterFeilutbetaltValuta } from '@api/oppdaterFeilutbetaltValuta';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagFeilutbetaltValuta } from '@testutils/testdata/feilutbetaltValutaTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -19,11 +19,11 @@ const payload: OppdaterFeilutbetaltValutaPayload = {
     feilutbetaltBeløp: 1000,
 };
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const feilutbetaltValutaPerioder = [lagFeilutbetaltValuta()];
 
 describe('oppdaterFeilutbetaltValuta', () => {
     test('skal sende forespørsel om å oppdatere feilutbetalt valuta', async () => {
-        vi.mocked(apiClient.put).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.put).mockResolvedValueOnce(feilutbetaltValutaPerioder);
 
         const svar = await oppdaterFeilutbetaltValuta(123, 5, payload);
 
@@ -32,7 +32,7 @@ describe('oppdaterFeilutbetaltValuta', () => {
             data: payload,
             url: '/familie-ba-sak/api/feilutbetalt-valuta/behandling/123/periode/5',
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(feilutbetaltValutaPerioder);
     });
 
     test('skal håndtere feil', async () => {
