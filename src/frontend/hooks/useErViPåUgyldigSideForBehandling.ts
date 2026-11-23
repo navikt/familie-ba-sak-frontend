@@ -8,7 +8,7 @@ export function useErViPåUgyldigSideForBehandling(behandling: IBehandling): boo
     const location = useLocation();
 
     const siderForBehandling = finnSiderForBehandling(behandling);
-    const siderForBehandlingssteg = finnSideForBehandlingssteg(behandling);
+    const sideForBehandlingssteg = finnSideForBehandlingssteg(behandling);
 
     const nåværendeSide = siderForBehandling.find(side => {
         const path = `${BASE_PATH}${side.href}`;
@@ -21,10 +21,10 @@ export function useErViPåUgyldigSideForBehandling(behandling: IBehandling): boo
         return true;
     }
 
-    if (siderForBehandlingssteg === undefined) {
+    if (sideForBehandlingssteg === undefined) {
         // Steget har ingen synlig side (f.eks. REGISTRERE_PERSONGRUNNLAG), så ingen sider er gyldige.
         return true;
     }
 
-    return erStegEtter(nåværendeSide.steg, siderForBehandlingssteg.steg);
+    return erStegEtter(nåværendeSide.steg, sideForBehandlingssteg.steg);
 }
