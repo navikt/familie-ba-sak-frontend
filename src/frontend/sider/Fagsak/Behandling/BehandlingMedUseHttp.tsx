@@ -17,7 +17,7 @@ import { obfuskerBehandling } from '@utils/obfuskerData';
 import type { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
-import { BehandlingProvider } from './BehandlingContext';
+import { BehandlingProvider, Behandlingskilde } from './BehandlingContext';
 import { BehandlingOppsett, PersonlinjeUtenBehandling } from './BehandlingOppsett';
 
 interface Props {
@@ -70,6 +70,7 @@ export function BehandlingMedUseHttp({ behandlingId }: Props) {
                 <BehandlingProvider
                     key={behandling.behandlingId}
                     behandling={behandling}
+                    behandlingskilde={Behandlingskilde.USE_HTTP}
                     settBehandling={behandling => {
                         if (skalObfuskereData) {
                             obfuskerBehandling(behandling);
