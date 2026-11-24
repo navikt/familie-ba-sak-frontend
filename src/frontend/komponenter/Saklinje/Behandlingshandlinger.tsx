@@ -5,6 +5,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import { useFagsakContext } from '@sider/Fagsak/FagsakContext';
 import { FagsakStatus } from '@typer/fagsak';
 import { Link as ReactRouterLink } from 'react-router';
+import Styles from './Behandlingshandlinger.module.css';
 import { Behandlingsmeny } from './Meny/Behandlingsmeny';
 
 /** Konsept 2: behandlingens handlinger, som vises til høyre i personlinjen. */
@@ -13,13 +14,14 @@ export function Behandlingshandlinger() {
     const saksbehandler = useSaksbehandler();
 
     return (
-        <HStack gap={'space-8'} align={'center'} wrap={false}>
+        <HStack gap={'space-20'} align={'center'} wrap={false}>
             <Button
                 as={ReactRouterLink}
                 size={'small'}
                 variant={'tertiary'}
                 icon={<HouseIcon aria-hidden />}
                 to={`/fagsak/${fagsak.id}/saksoversikt`}
+                className={Styles.saksoversikt}
             >
                 Saksoversikt
             </Button>

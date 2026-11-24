@@ -1,6 +1,8 @@
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { Box, Table } from '@navikt/ds-react';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { IRestVilkårResultat, IVilkårConfig } from '@typer/vilkår';
+import classNames from 'classnames';
 
 import Styles from './VilkårTabell.module.css';
 import { VilkårTabellRad } from './VilkårTabellRad';
@@ -16,9 +18,11 @@ interface Props {
 }
 
 export function VilkårTabell({ person, vilkårFraConfig, vilkårResultater, settFokusPåKnapp }: Props) {
+    const erNyttOppsett = useErNyttOppsett();
+
     return (
         <Box className={Styles.wrapper}>
-            <Table className={Styles.table}>
+            <Table className={classNames(Styles.table, { [Styles.likeKolonner]: erNyttOppsett })}>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell className={Styles.col1} scope={'col'}>

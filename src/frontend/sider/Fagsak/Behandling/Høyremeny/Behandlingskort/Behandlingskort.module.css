@@ -1,0 +1,12 @@
+/* Konsept 2 og 3. Figma har 20px luft fra ytterkanten; kantlinjene (1px, 4px til venstre) ligger innenfor. */
+.kort {
+    padding: 1.1875rem 1.1875rem 1.1875rem var(--ax-space-16);
+}
+
+.hode {
+    padding-bottom: 1.1875rem;
+}
+
+.rader {
+    gap: 0.625rem;
+}

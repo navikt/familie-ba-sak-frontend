@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, Label, Table } from '@navikt/ds-react';
+import { BodyLong, Button, HStack, Label, Table } from '@navikt/ds-react';
 
 import { differenceInMilliseconds } from 'date-fns';
 import type { ReactNode } from 'react';
@@ -99,23 +99,15 @@ const RegisteropplysningerTabell = ({
         return (
             <div className={styles.kompakt}>
                 <div className={styles.kompaktGrid}>
-                    <Label size="small" as="p">
-                        {registeropplysning[opplysningstype]}
-                    </Label>
-                    <Label size="small" as="p">
-                        {hentDatoHeader(opplysningstype)}
-                    </Label>
+                    <Label as="p">{registeropplysning[opplysningstype]}</Label>
+                    <Label as="p">{hentDatoHeader(opplysningstype)}</Label>
                     {rader.map((periode, index) => (
                         <Fragment key={`${periode.fom}_${periode.tom}_${periode.verdi}`}>
                             <HStack gap="space-8" align="start" wrap={false}>
                                 <span className={styles.kompaktIkon}>{index === 0 && ikon}</span>
-                                <BodyShort size="small" className={styles.dataCell}>
-                                    {periode.verdi}
-                                </BodyShort>
+                                <BodyLong className={styles.dataCell}>{periode.verdi}</BodyLong>
                             </HStack>
-                            <BodyShort size="small">
-                                {manglerOpplysninger ? '-' : hentDatoVerdi(opplysningstype, periode)}
-                            </BodyShort>
+                            <BodyLong>{manglerOpplysninger ? '-' : hentDatoVerdi(opplysningstype, periode)}</BodyLong>
                         </Fragment>
                     ))}
                 </div>

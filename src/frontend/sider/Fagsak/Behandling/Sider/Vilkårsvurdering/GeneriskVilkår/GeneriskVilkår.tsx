@@ -136,7 +136,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
 
     return (
         <section id={generiskVilkårKey} className={classNames(styles.kort, statusklasse[vilkårstatus])}>
-            <Heading size="small" level="3" className={styles.kortTittel}>
+            <Heading size="medium" level="3" className={styles.kortTittel}>
                 <button
                     type="button"
                     className={styles.kortHeader}
@@ -145,23 +145,23 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
                 >
                     <HStack as="span" gap="space-8" align="center" wrap={false}>
                         {skalViseLyspære && (
-                            <LightBulbFillIcon aria-hidden fontSize="1.25rem" color="var(--ax-warning-500)" />
+                            <LightBulbFillIcon aria-hidden fontSize="1.5rem" color="var(--ax-warning-500)" />
                         )}
                         {vilkårFraConfig.tittel}
                     </HStack>
                     {erÅpen ? (
-                        <ChevronDownIcon aria-hidden fontSize="1.5rem" />
+                        <ChevronDownIcon aria-hidden fontSize="2rem" />
                     ) : (
-                        <ChevronUpIcon aria-hidden fontSize="1.5rem" />
+                        <ChevronUpIcon aria-hidden fontSize="2rem" />
                     )}
                 </button>
             </Heading>
             <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box padding="space-16" paddingBlock="space-8 space-16">
+                <div className={styles.kortInnhold}>
                     <Fieldset error={opprettVilkårResultatError?.message} legend={vilkårFraConfig.tittel} hideLegend>
                         {tabellOgKnapper}
                     </Fieldset>
-                </Box>
+                </div>
             </Activity>
         </section>
     );

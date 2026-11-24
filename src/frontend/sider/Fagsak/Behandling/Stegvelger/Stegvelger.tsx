@@ -1,68 +1,54 @@
 import { useBehandling } from '@hooks/useBehandling';
-import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
-import { CheckmarkIcon, ExclamationmarkTriangleFillIcon, PadlockLockedFillIcon } from '@navikt/aksel-icons';
+import {
+    CheckmarkIcon,
+    ExclamationmarkTriangleFillIcon,
+    PadlockLockedFillIcon,
+    XMarkOctagonFillIcon,
+} from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
-import { BehandlingStatus, type IBehandling } from '@typer/behandling';
 import classNames from 'classnames';
 import { NavLink } from 'react-router';
-import { erSidenAktiv, finnSideForBehandlingssteg, finnSiderForBehandling, type Side } from '../Sider/sider';
+import { erSidenAktiv, finnSideForBehandlingssteg, finnSiderForBehandling } from '../Sider/sider';
 import Styles from './Stegvelger.module.css';
-
-enum Stegstatus {
-    UTFØRT = 'UTFØRT',
-    LÅST = 'LÅST',
-    PÅGÅR = 'PÅGÅR',
-    ADVARSEL = 'ADVARSEL',
-    IKKE_STARTET = 'IKKE_STARTET',
-}
+import { Stegstatus, utledStegstatus } from './stegstatus';
 
 const stegstatusVisningsnavn: Record<Stegstatus, string> = {
-    UTFØRT: 'Utført',
-    LÅST: 'Utført og låst',
-    PÅGÅR: 'Pågår',
-    ADVARSEL: 'Krever handling',
-    IKKE_STARTET: 'Ikke startet',
+    INNVILGET: 'Utført',
+    AKSJONSPUNKT: 'Krever handling',
+    AVSLAG: 'Avslag',
+    IKKE_FULLFØRT: 'Ikke fullført',
+    DELVIS_INNVILGET: 'Delvis innvilget',
+    LÅST_INNVILGET: 'Utført og låst',
+    LÅST_AVSLAG: 'Avslag og låst',
 };
 
 const stegstatusKlasse: Record<Stegstatus, string> = {
-    UTFØRT: Styles.ferdig,
-    LÅST: Styles.ferdig,
-    PÅGÅR: Styles.paagaar,
-    ADVARSEL: Styles.advarsel,
-    IKKE_STARTET: Styles.ikkeStartet,
+    INNVILGET: Styles.innvilget,
+    AKSJONSPUNKT: Styles.aksjonspunkt,
+    AVSLAG: Styles.avslag,
+    IKKE_FULLFØRT: Styles.ikkeFullført,
+    DELVIS_INNVILGET: Styles.delvisInnvilget,
+    LÅST_INNVILGET: Styles.innvilget,
+    LÅST_AVSLAG: Styles.avslag,
 };
 
-function utledStegstatus(
-    side: Side,
-    behandling: IBehandling,
-    gjeldendeSide: Side | undefined,
-    erLesevisning: boolean
-): Stegstatus {
-    if (!erSidenAktiv(side, behandling)) {
-        return Stegstatus.IKKE_STARTET;
-    }
-    const harAksjonspunkter = (side.undersider?.(behandling) ?? []).some(
-        underside => underside.antallAksjonspunkter() > 0
-    );
-    if (harAksjonspunkter) {
-        return Stegstatus.ADVARSEL;
-    }
-    if (erLesevisning) {
-        return Stegstatus.LÅST;
-    }
-    if (side.id === gjeldendeSide?.id && behandling.status !== BehandlingStatus.AVSLUTTET) {
-        return Stegstatus.PÅGÅR;
-    }
-    return Stegstatus.UTFØRT;
-}
-
-function HalvfyltSirkelIkon({ title }: { title: string }) {
+/** Ikonet for delvis innvilget i Figma: en sirkel der halvparten er fylt. */
+function DelvisInnvilgetIkon({ title }: { title: string }) {
     return (
-        <svg width="1.25rem" height="1.25rem" viewBox="0 0 24 24" role="img" className={Styles.ikonFerdig}>
+        <svg
+            width="1.5rem"
+            height="1.5rem"
+            viewBox="0 0 24 24"
+            role="img"
+            className={Styles.ikonInnvilget}
+            style={{ transform: 'rotate(90deg)' }}
+        >
             <title>{title}</title>
-            <circle cx="12" cy="12" r="8.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M17.83 6.17A8.25 8.25 0 0 1 6.17 17.83Z" fill="currentColor" />
+            <path
+                fill="currentColor"
+                d="M12 2.25C17.3848 2.25 21.75 6.61522 21.75 12C21.75 17.3848 17.3848 21.75 12 21.75C6.61522 21.75 2.25 17.3848 2.25 12C2.25 9.31161 3.33787 6.87706 5.09766 5.11328L5.11328 5.09766C6.87706 3.33787 9.31161 2.25 12 2.25ZM5.66016 6.7207C4.46758 8.15132 3.75 9.99188 3.75 12C3.75 16.5563 7.44365 20.25 12 20.25C14.0081 20.25 15.8487 19.5324 17.2793 18.3398L5.66016 6.7207Z"
+            />
         </svg>
     );
 }
@@ -70,17 +56,20 @@ function HalvfyltSirkelIkon({ title }: { title: string }) {
 function Stegikon({ status }: { status: Stegstatus }) {
     const tittel = stegstatusVisningsnavn[status];
     switch (status) {
-        case Stegstatus.UTFØRT:
-            return <CheckmarkIcon title={tittel} className={Styles.ikonFerdig} fontSize="1.25rem" />;
-        case Stegstatus.LÅST:
-            return <PadlockLockedFillIcon title={tittel} fontSize="1.25rem" />;
-        case Stegstatus.PÅGÅR:
-            return <HalvfyltSirkelIkon title={tittel} />;
-        case Stegstatus.ADVARSEL:
+        case Stegstatus.INNVILGET:
+            return <CheckmarkIcon title={tittel} className={Styles.ikonInnvilget} fontSize="1.5rem" />;
+        case Stegstatus.AKSJONSPUNKT:
             return (
-                <ExclamationmarkTriangleFillIcon title={tittel} className={Styles.ikonAdvarsel} fontSize="1.25rem" />
+                <ExclamationmarkTriangleFillIcon title={tittel} className={Styles.ikonAksjonspunkt} fontSize="1.5rem" />
             );
-        case Stegstatus.IKKE_STARTET:
+        case Stegstatus.AVSLAG:
+            return <XMarkOctagonFillIcon title={tittel} className={Styles.ikonAvslag} fontSize="1.5rem" />;
+        case Stegstatus.DELVIS_INNVILGET:
+            return <DelvisInnvilgetIkon title={tittel} />;
+        case Stegstatus.LÅST_INNVILGET:
+        case Stegstatus.LÅST_AVSLAG:
+            return <PadlockLockedFillIcon title={tittel} fontSize="1.5rem" />;
+        case Stegstatus.IKKE_FULLFØRT:
             return null;
     }
 }
@@ -88,22 +77,24 @@ function Stegikon({ status }: { status: Stegstatus }) {
 export function Stegvelger() {
     const fagsakId = useFagsakId();
     const behandling = useBehandling();
-    const erLesevisning = useErLesevisning();
 
     const sider = finnSiderForBehandling(behandling);
     const gjeldendeSide = finnSideForBehandlingssteg(behandling);
 
     return (
-        <HStack as="nav" aria-label="Behandlingssteg" wrap={false} gap="space-12" className={Styles.stegvelger}>
+        <HStack as="nav" aria-label="Behandlingssteg" wrap={false} gap="space-16" className={Styles.stegvelger}>
             {sider.map(side => {
-                const status = utledStegstatus(side, behandling, gjeldendeSide, erLesevisning);
-                const erTilgjengelig = status !== Stegstatus.IKKE_STARTET;
+                const status = utledStegstatus(side, behandling, gjeldendeSide);
+                const erTilgjengelig = erSidenAktiv(side, behandling);
                 return (
                     <NavLink
                         key={side.id}
                         to={`/fagsak/${fagsakId}/${behandling.behandlingId}/${side.href}`}
                         className={({ isActive }) =>
-                            classNames(Styles.steg, stegstatusKlasse[status], { [Styles.valgt]: isActive })
+                            classNames(Styles.steg, stegstatusKlasse[status], {
+                                [Styles.valgt]: isActive,
+                                [Styles.utilgjengelig]: !erTilgjengelig,
+                            })
                         }
                         aria-disabled={!erTilgjengelig}
                         tabIndex={erTilgjengelig ? undefined : -1}
@@ -114,7 +105,7 @@ export function Stegvelger() {
                         }}
                         draggable={false}
                     >
-                        <HStack gap="space-6" align="center" justify="center" wrap={false}>
+                        <HStack gap="space-4" align="center" justify="center" wrap={false} minHeight="1.5rem">
                             <Stegikon status={status} />
                             <BodyShort size="small" as="span" className={Styles.navn}>
                                 {side.navn}

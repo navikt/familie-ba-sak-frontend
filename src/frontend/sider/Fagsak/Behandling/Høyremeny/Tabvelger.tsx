@@ -1,6 +1,7 @@
 import { useErNyttOppsett } from '@hooks/useKonsept';
 import { ClockDashedIcon, FileTextIcon, NotePencilIcon, PersonCheckmarkIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
+import classNames from 'classnames';
 import { useBehandling } from '../../../../hooks/useBehandling';
 import { useErLesevisning } from '../../../../hooks/useErLesevisning';
 import { Behandlingstype } from '../../../../typer/behandling';
@@ -20,7 +21,7 @@ export function Tabvelger() {
     const erMigreringFraInfotrygd = behandling.type === Behandlingstype.MIGRERING_FRA_INFOTRYGD;
 
     return (
-        <Tabs.List className={styles.tabsListe}>
+        <Tabs.List className={classNames(styles.tabsListe, { [styles.nyttOppsett]: erNyttOppsett })}>
             {skalViseTotrinnskontroll && (
                 <Tabs.Tab
                     value={Tab.Totrinnskontroll}

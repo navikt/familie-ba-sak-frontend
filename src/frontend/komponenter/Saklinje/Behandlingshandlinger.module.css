@@ -1,0 +1,5 @@
+/* Lenken er like høy som en liten knapp (32px), men teksten er 18px */
+.saksoversikt :global(.aksel-label) {
+    font-size: var(--ax-font-size-large);
+    line-height: var(--ax-space-24);
+}

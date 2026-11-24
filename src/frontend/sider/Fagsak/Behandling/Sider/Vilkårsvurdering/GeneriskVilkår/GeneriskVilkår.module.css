@@ -7,13 +7,20 @@
     margin-bottom: var(--ax-space-20);
 }
 
-/* Konsept 2 */
+/*
+ * Konsept 2 og 3. Som i Figma tegner hodet og innholdet hver sin kantlinje, slik at linjen rundt hodet ligger oppå
+ * bakgrunnsfargen og blir litt mørkere enn linjen rundt innholdet.
+ */
 .kort {
-    margin-top: var(--ax-space-28);
-    border: 1px solid var(--ax-border-neutral-subtle);
-    border-radius: var(--ax-radius-8);
-    background-color: var(--ax-bg-default);
+    --kantfarge: var(--ax-border-neutral-subtleA);
+
+    margin-top: 2.0625rem;
     scroll-margin-top: var(--ax-space-16);
+}
+
+/* Avstanden til overskriften over kortene settes av skjemaet */
+.kort:first-child {
+    margin-top: 0;
 }
 
 .kort:last-child {
@@ -30,24 +37,23 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    gap: var(--ax-space-8);
-    padding: var(--ax-space-12) var(--ax-space-16);
-    border: none;
-    border-bottom: 1px solid var(--ax-border-neutral-subtle);
-    border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
-    background-color: var(--ax-bg-neutral-moderate);
+    gap: var(--ax-space-12);
+    /* 16/20 i Figma, der kantlinjen (1px) ligger innenfor målene */
+    padding: 0.9375rem 1.1875rem;
+    border: 1px solid var(--kantfarge);
+    border-radius: var(--ax-radius-12) var(--ax-radius-12) 0 0;
+    background-color: var(--ax-bg-neutral-moderateA);
     color: var(--ax-text-neutral);
     text-align: left;
     cursor: pointer;
 }
 
 .kortHeader[aria-expanded="false"] {
-    border-bottom: none;
-    border-radius: var(--ax-radius-8);
+    border-radius: var(--ax-radius-12);
 }
 
 .kortHeader:hover {
-    background-color: var(--ax-bg-neutral-moderate-hover);
+    background-color: var(--ax-bg-neutral-moderate-hoverA);
 }
 
 .kortHeader:focus-visible {
@@ -55,29 +61,45 @@
     outline-offset: -3px;
 }
 
+.kortInnhold {
+    padding: var(--ax-space-16) 1.1875rem 0.4375rem;
+    border: 1px solid var(--kantfarge);
+    border-top: none;
+    border-radius: 0 0 var(--ax-radius-12) var(--ax-radius-12);
+}
+
 .oppfylt {
-    border-color: var(--ax-border-success-subtle);
+    --kantfarge: var(--ax-border-success-subtleA);
 }
 
 .oppfylt .kortHeader {
-    background-color: var(--ax-bg-success-soft);
-    border-bottom-color: var(--ax-border-success-subtle);
+    background-color: var(--ax-bg-success-moderateA);
+}
+
+.oppfylt .kortHeader:hover {
+    background-color: var(--ax-bg-success-moderate-hoverA);
 }
 
 .delvisOppfylt {
-    border-color: var(--ax-border-warning-subtle);
+    --kantfarge: var(--ax-border-warning-subtleA);
 }
 
 .delvisOppfylt .kortHeader {
-    background-color: var(--ax-bg-warning-soft);
-    border-bottom-color: var(--ax-border-warning-subtle);
+    background-color: var(--ax-bg-warning-moderateA);
+}
+
+.delvisOppfylt .kortHeader:hover {
+    background-color: var(--ax-bg-warning-moderate-hoverA);
 }
 
 .ikkeOppfylt {
-    border-color: var(--ax-border-danger-subtle);
+    --kantfarge: var(--ax-border-danger-subtleA);
 }
 
 .ikkeOppfylt .kortHeader {
-    background-color: var(--ax-bg-danger-soft);
-    border-bottom-color: var(--ax-border-danger-subtle);
+    background-color: var(--ax-bg-danger-moderateA);
+}
+
+.ikkeOppfylt .kortHeader:hover {
+    background-color: var(--ax-bg-danger-moderate-hoverA);
 }

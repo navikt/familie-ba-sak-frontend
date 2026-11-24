@@ -10,6 +10,14 @@
     max-width: 20rem;
 }
 
+/* Konsept 2 og 3: begrunnelsen går over inntil to linjer, som i Figma */
+.beskrivelseToLinjer {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
 .tooltip {
     padding-top: 8px;
     padding-bottom: 8px;

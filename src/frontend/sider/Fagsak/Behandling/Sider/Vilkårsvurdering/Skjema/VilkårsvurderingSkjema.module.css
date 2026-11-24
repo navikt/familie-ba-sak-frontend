@@ -6,27 +6,43 @@
     padding-bottom: 1rem;
 }
 
+/* Som vilkårskortene: hodet og innholdet tegner hver sin kantlinje */
 .personkort {
-    border: 1px solid var(--ax-border-neutral-subtle);
-    border-radius: var(--ax-radius-8);
     scroll-margin-top: var(--ax-space-16);
 }
 
 .personkortHeader {
-    padding: var(--ax-space-8) var(--ax-space-16);
-    border-bottom: 1px solid var(--ax-border-neutral-subtle);
-    border-radius: var(--ax-radius-8) var(--ax-radius-8) 0 0;
-    background-color: var(--ax-bg-neutral-moderate);
+    /* 16/20 i Figma, der kantlinjen (1px) ligger innenfor målene */
+    padding: 0.9375rem 1.1875rem;
+    border: 1px solid var(--ax-border-neutral-subtleA);
+    border-radius: var(--ax-radius-12) var(--ax-radius-12) 0 0;
+    background-color: var(--ax-bg-neutral-moderateA);
 }
 
 .personkortHeader[data-lukket="true"] {
-    border-bottom: none;
-    border-radius: var(--ax-radius-8);
+    border-radius: var(--ax-radius-12);
+}
+
+.personkortInnhold {
+    padding: var(--ax-space-16) 1.1875rem 0.9375rem;
+    border: 1px solid var(--ax-border-neutral-subtleA);
+    border-top: none;
+    border-radius: 0 0 var(--ax-radius-12) var(--ax-radius-12);
+}
+
+.personkortChevron {
+    padding: 0;
+}
+
+/* 59px over overskriften og 33px under (skjemaet har 32px mellom delene) */
+.seksjonshode {
+    margin-block: 1.6875rem 0.0625rem;
 }
 
 .seksjonsoverskrift {
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.075em;
+    line-height: var(--ax-space-20);
     color: var(--ax-text-neutral-subtle);
 }
 

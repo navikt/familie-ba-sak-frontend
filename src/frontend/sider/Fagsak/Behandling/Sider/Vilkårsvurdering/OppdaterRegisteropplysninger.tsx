@@ -1,7 +1,8 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useBehandlingContext } from '../../BehandlingContext';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
@@ -25,6 +26,7 @@ export function OppdaterRegisteropplysninger() {
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const erLesevisning = useErLesevisning();
+    const erNyttOppsett = useErNyttOppsett();
 
     const { mutate, isPending, error } = useOppdaterRegisteropplysninger({
         onSuccess: behandling => settÅpenBehandling(behandling),
@@ -35,14 +37,18 @@ export function OppdaterRegisteropplysninger() {
     return (
         <VStack gap={'space-8'}>
             <HStack align={'center'} gap={'space-8'} wrap={false}>
-                <Detail textColor={'subtle'}>{formaterTidspunkt(registeropplysningerHentetTidpsunkt)}</Detail>
+                {erNyttOppsett ? (
+                    <BodyLong>{formaterTidspunkt(registeropplysningerHentetTidpsunkt)}</BodyLong>
+                ) : (
+                    <Detail textColor={'subtle'}>{formaterTidspunkt(registeropplysningerHentetTidpsunkt)}</Detail>
+                )}
                 {!erLesevisning && (
                     <Button
                         aria-label={'Oppdater registeropplysninger'}
                         onClick={() => mutate({ behandlingId: behandling.behandlingId })}
                         loading={isPending}
                         variant={'tertiary'}
-                        size={'small'}
+                        size={erNyttOppsett ? 'xsmall' : 'small'}
                         icon={<ArrowsSquarepathIcon fontSize={'1.5rem'} focusable={'false'} />}
                     />
                 )}

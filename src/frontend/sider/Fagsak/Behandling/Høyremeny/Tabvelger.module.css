@@ -8,3 +8,12 @@
         flex: 1;
     }
 }
+
+/* Konsept 2 og 3: ingen luft på sidene, og lite luft i fanene så de får plass med 18px tekst på smalere skjermer */
+.nyttOppsett {
+    padding-inline: 0;
+
+    > button {
+        padding-inline: var(--ax-space-4);
+    }
+}

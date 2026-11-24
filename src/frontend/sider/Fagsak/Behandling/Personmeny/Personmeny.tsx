@@ -3,17 +3,17 @@ import { useFagsakId } from '@hooks/useFagsakId';
 import {
     CaretDownFillIcon,
     CaretRightFillIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
+    CogRotationIcon,
+    PersonIcon,
     ShieldLockFillIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, CopyButton, Detail, HStack, Stack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, CopyButton, Detail, HStack, VStack } from '@navikt/ds-react';
 import { personTypeMap } from '@typer/person';
 import type { IPersonResultat } from '@typer/vilkår';
 import { formaterIdent, hentAlder } from '@utils/formatter';
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
-import { Activity, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { erSidenAktiv, sider } from '../Sider/sider';
 import { mapFraRestPersonResultatTilPersonResultat } from '../Sider/Vilkårsvurdering/utils';
@@ -27,7 +27,6 @@ import {
     utledVilkårstatus,
     Vilkårstatus,
 } from '../Sider/Vilkårsvurdering/vilkårstatus';
-import { useVenstremeny } from '../Venstremeny/useVenstremeny';
 import Styles from './Personmeny.module.css';
 import { Statusikon } from './Statusikon';
 
@@ -36,7 +35,6 @@ export function Personmeny() {
     const behandling = useBehandling();
     const { pathname, hash } = useLocation();
 
-    const [erÅpen, settErÅpen] = useVenstremeny();
     const [ekspanderingOverstyrt, settEkspanderingOverstyrt] = useState<Record<string, boolean>>({});
 
     const vilkårsvurdering = useMemo(
@@ -70,7 +68,7 @@ export function Personmeny() {
         if (person.skjermesForBruker) {
             return (
                 <Box key={person.personIdent} className={classNames(Styles.person, { [Styles.valgt]: erValgt })}>
-                    <HStack gap="space-8" align="center" wrap={false} className={Styles.personrad}>
+                    <HStack gap="space-8" align="center" wrap={false}>
                         <ShieldLockFillIcon aria-hidden fontSize="1rem" color="var(--ax-warning-500)" />
                         {lenke(personHash, Styles.personlenke, <BodyShort>{person.navn}</BodyShort>)}
                     </HStack>
@@ -87,7 +85,7 @@ export function Personmeny() {
 
         return (
             <Box key={person.personIdent} className={classNames(Styles.person, { [Styles.valgt]: erValgt })}>
-                <HStack gap="space-4" align="center" wrap={false} className={Styles.personrad}>
+                <HStack gap="space-4" align="center" wrap={false}>
                     <button
                         type="button"
                         className={Styles.caret}
@@ -102,38 +100,61 @@ export function Personmeny() {
                     {lenke(
                         personHash,
                         Styles.personlenke,
-                        <HStack gap="space-8" align="center" wrap={false}>
+                        <HStack gap="space-4" align="center" wrap={false}>
                             <Statusikon status={personstatus} variant="person" />
-                            <BodyShort>{etikett}</BodyShort>
+                            <BodyShort weight="semibold" truncate>
+                                {etikett}
+                            </BodyShort>
                         </HStack>
                     )}
-                    <BodyShort className={Styles.teller}>{`${antallVurdert}/${vilkår.length}`}</BodyShort>
+                    <Detail className={Styles.teller}>{`${antallVurdert}/${vilkår.length}`}</Detail>
                 </HStack>
-                <HStack align="center" wrap={false} className={Styles.ident}>
+                {/* Ident og vilkår står rett under personens statusikon: caret (20px) + mellomrom (4px) */}
+                <HStack
+                    gap="space-4"
+                    align="center"
+                    wrap={false}
+                    paddingBlock="space-6 space-2"
+                    paddingInline="space-24 space-0"
+                >
                     <BodyShort>{formaterIdent(person.personIdent)}</BodyShort>
-                    <CopyButton copyText={person.personIdent} size="small" />
+                    <CopyButton copyText={person.personIdent} size="xsmall" />
                 </HStack>
                 {erEkspandert && (
-                    <VStack as="ul" className={Styles.liste}>
-                        {vilkår.map(({ vilkårFraConfig, vilkårResultater, status }) => (
-                            <li key={vilkårFraConfig.key}>
-                                {lenke(
-                                    lagVilkårHash(personHash, vilkårFraConfig),
-                                    Styles.underlenke,
-                                    <HStack gap="space-8" align="center" justify="space-between" wrap={false}>
-                                        <HStack gap="space-8" align="center" wrap={false}>
+                    <VStack as="ul" gap="space-4" className={Styles.liste}>
+                        {vilkår.map(({ vilkårFraConfig, vilkårResultater, status }) => {
+                            const erAutomatisk = erAutomatiskVurdert(vilkårResultater);
+                            const VurdertAvIkon = erAutomatisk ? CogRotationIcon : PersonIcon;
+                            // Ikonet vises også før vilkåret er vurdert, men får først tittel når det er vurdert
+                            const vurdertAv =
+                                status === Vilkårstatus.IKKE_VURDERT
+                                    ? undefined
+                                    : `Vurdert ${erAutomatisk ? 'automatisk' : 'manuelt'}`;
+                            return (
+                                <li key={vilkårFraConfig.key}>
+                                    {lenke(
+                                        lagVilkårHash(personHash, vilkårFraConfig),
+                                        Styles.underlenke,
+                                        <HStack gap="space-4" align="center" wrap={false}>
                                             <Statusikon status={status} variant="vilkår" />
-                                            <BodyShort>{vilkårFraConfig.tittel}</BodyShort>
-                                        </HStack>
-                                        {status !== Vilkårstatus.IKKE_VURDERT && (
-                                            <BodyShort className={Styles.vurdertAv}>
-                                                {erAutomatiskVurdert(vilkårResultater) ? 'auto' : 'manuell'}
+                                            <BodyShort
+                                                truncate
+                                                title={vilkårFraConfig.tittel}
+                                                className={Styles.vilkårnavn}
+                                            >
+                                                {vilkårFraConfig.tittel}
                                             </BodyShort>
-                                        )}
-                                    </HStack>
-                                )}
-                            </li>
-                        ))}
+                                            <VurdertAvIkon
+                                                title={vurdertAv}
+                                                aria-hidden={!vurdertAv}
+                                                fontSize="1.25rem"
+                                                className={Styles.vurdertAv}
+                                            />
+                                        </HStack>
+                                    )}
+                                </li>
+                            );
+                        })}
                     </VStack>
                 )}
             </Box>
@@ -141,23 +162,14 @@ export function Personmeny() {
     }
 
     return (
-        <Stack direction="row-reverse">
-            <Button
-                title={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
-                aria-label={erÅpen ? 'Skjul venstremeny' : 'Vis venstremeny'}
-                className={Styles.knapp}
-                variant="secondary"
-                size="small"
-                icon={erÅpen ? <ChevronLeftIcon aria-hidden /> : <ChevronRightIcon aria-hidden />}
-                onMouseDown={e => e.preventDefault()}
-                onClick={() => settErÅpen(prev => !prev)}
-            />
-            <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                <Box as="nav" aria-label="Personer i behandlingen" width="clamp(17rem, 18vw, 24rem)">
-                    <Detail className={Styles.overskrift}>Saksbehandling</Detail>
-                    <VStack gap="space-8">{vilkårsvurdering.map(lagPersonnode)}</VStack>
-                </Box>
-            </Activity>
-        </Stack>
+        <Box
+            as="nav"
+            aria-label="Personer i behandlingen"
+            width="clamp(15rem, 14.6vw, 17.5rem)"
+            className={Styles.meny}
+        >
+            <Detail className={Styles.overskrift}>Saksbehandling</Detail>
+            {vilkårsvurdering.map(lagPersonnode)}
+        </Box>
     );
 }

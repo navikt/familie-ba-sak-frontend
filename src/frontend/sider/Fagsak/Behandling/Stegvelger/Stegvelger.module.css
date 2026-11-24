@@ -1,19 +1,22 @@
 .stegvelger {
-    padding: var(--ax-space-8) var(--ax-space-16) var(--ax-space-8);
+    padding: var(--ax-space-8) 1.5625rem var(--ax-space-16);
     border-bottom: 1px solid var(--ax-border-neutral-subtle);
     overflow-x: auto;
+    /* overflow gjør at flex ellers krymper stegvelgeren når innholdet under er høyere enn vinduet */
+    flex-shrink: 0;
 }
 
-/* Statusstripen under hvert steg tegnes med ::after slik at den kan være stiplet for steg som pågår */
+/* Statusstripen under hvert steg tegnes med ::after slik at den kan være stripet for delvis innvilget */
 .steg {
-    --stripefarge: var(--ax-bg-neutral-moderate);
-    --stripefarge-valgt: var(--ax-border-neutral-subtle);
+    --stripefarge: var(--ax-bg-sunken);
+    --stripefarge-valgt: var(--ax-bg-neutral-moderate-pressed);
 
     position: relative;
     flex: 1 1 0;
     min-width: 8rem;
-    padding: var(--ax-space-6) var(--ax-space-4) var(--ax-space-12);
-    border-radius: var(--ax-radius-4) var(--ax-radius-4) 0 0;
+    /* Etikettrad (24px) + mellomrom (4px) + stripe (6px) */
+    padding: var(--ax-space-4) var(--ax-space-4) 0.625rem;
+    border-radius: var(--ax-radius-4);
     color: var(--ax-text-neutral);
     text-decoration: none;
     white-space: nowrap;
@@ -24,7 +27,7 @@
     content: "";
     position: absolute;
     inset: auto 0 0;
-    height: 5px;
+    height: 6px;
     border-radius: var(--ax-radius-full);
     background: var(--stripefarge);
 }
@@ -33,7 +36,7 @@
     background: var(--stripefarge-valgt);
 }
 
-.steg:hover:not(.ikkeStartet) {
+.steg:hover:not(.utilgjengelig) {
     background-color: var(--ax-bg-neutral-soft);
 }
 
@@ -46,35 +49,54 @@
     font-weight: var(--ax-font-weight-bold);
 }
 
-.ferdig {
-    --stripefarge: var(--ax-border-success-subtle);
-    --stripefarge-valgt: var(--ax-border-success);
-}
-
-.advarsel {
-    --stripefarge: var(--ax-border-warning-subtle);
-    --stripefarge-valgt: var(--ax-border-warning);
-}
-
-.paagaar.steg::after {
-    background: repeating-linear-gradient(-45deg, var(--ax-border-success-subtle) 0 8px, transparent 8px 13px);
-}
-
-.paagaar.steg.valgt::after {
-    background: repeating-linear-gradient(-45deg, var(--ax-border-success) 0 8px, transparent 8px 13px);
-}
-
-.ikkeStartet {
-    color: var(--ax-text-neutral-subtle);
+.utilgjengelig {
     cursor: default;
 }
 
-.ikonFerdig {
+.ikkeFullført:hover:not(.utilgjengelig) {
+    --stripefarge: var(--ax-bg-neutral-moderate-hover);
+}
+
+.innvilget {
+    --stripefarge: var(--ax-bg-success-moderate-pressed);
+    --stripefarge-valgt: var(--ax-bg-success-strong);
+}
+
+.aksjonspunkt {
+    --stripefarge: var(--ax-bg-warning-moderate-pressed);
+    --stripefarge-valgt: var(--ax-bg-warning-strong);
+}
+
+.avslag {
+    --stripefarge: var(--ax-bg-danger-moderate-pressed);
+    --stripefarge-valgt: var(--ax-bg-danger-strong);
+}
+
+/* Delvis innvilget: skrå striper som i Figma (8px brede og 16,3px fra start til start, målt vannrett) */
+.delvisInnvilget {
+    --stripefarge: repeating-linear-gradient(
+        130deg,
+        var(--ax-bg-success-moderate-pressed) 0 6.1px,
+        transparent 6.1px 12.4px
+    );
+    --stripefarge-valgt: repeating-linear-gradient(
+        130deg,
+        var(--ax-bg-success-strong) 0 6.1px,
+        transparent 6.1px 12.4px
+    );
+}
+
+.ikonInnvilget {
     flex-shrink: 0;
     color: var(--ax-text-success-decoration);
 }
 
-.ikonAdvarsel {
+.ikonAksjonspunkt {
     flex-shrink: 0;
     color: var(--ax-text-warning-decoration);
+}
+
+.ikonAvslag {
+    flex-shrink: 0;
+    color: var(--ax-text-danger-decoration);
 }

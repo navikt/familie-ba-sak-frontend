@@ -1,6 +1,7 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
@@ -24,6 +25,9 @@ import { ManglendeSvalbardmerkingVarsel } from './Varsel/ManglendeSvalbardmerkin
 import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 
+/** Konsept 2 og 3: kortene er 1034px brede */
+const MAX_BREDDE_NYTT_OPPSETT = '64.625rem';
+
 export function Vilkårsvurdering() {
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
@@ -34,6 +38,7 @@ export function Vilkårsvurdering() {
     const erLesevisning = useErLesevisning();
     const navigate = useNavigate();
     const toggles = useFeatureToggles();
+    const erNyttOppsett = useErNyttOppsett();
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
 
@@ -79,7 +84,7 @@ export function Vilkårsvurdering() {
                     settVisFeilmeldinger(true);
                 }
             }}
-            maxWidthStyle={MAX_SKJEMASTEG_BREDDE}
+            maxWidthStyle={erNyttOppsett ? MAX_BREDDE_NYTT_OPPSETT : MAX_SKJEMASTEG_BREDDE}
             senderInn={oppdaterVilkårsvurderingIsPending}
             steg={BehandlingSteg.VILKÅRSVURDERING}
         >
@@ -93,12 +98,12 @@ export function Vilkårsvurdering() {
             )}
             <OppdaterRegisteropplysninger />
             {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (
-                <HStack gap="space-16" marginBlock={'space-32 space-32'}>
+                <HStack gap={erNyttOppsett ? 'space-24' : 'space-16'} marginBlock={'space-32 space-32'}>
                     <FyllUtVilkårsvurderingITestmiljøKnapp behandlingId={behandling.behandlingId} />
                     <TømPersonopplysningerCacheITestmiljøKnapp />
                 </HStack>
             )}
-            <VStack gap="space-40">
+            <VStack gap="space-40" marginBlock={erNyttOppsett ? 'space-32 space-0' : undefined}>
                 <VilkårsvurderingSkjema />
                 {uregistrerteBarn.length > 0 && (
                     <InfoCard data-color="info">

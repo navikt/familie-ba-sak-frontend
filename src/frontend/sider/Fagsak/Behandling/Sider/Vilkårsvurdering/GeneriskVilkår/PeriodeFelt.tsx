@@ -1,4 +1,5 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { type DateValidationT, Fieldset, HelpText, HStack, Label } from '@navikt/ds-react';
 import type { IGrunnlagPerson } from '@typer/person';
 import { VilkårType } from '@typer/vilkår';
@@ -22,6 +23,7 @@ interface Props {
 
 export function PeriodeFelt({ person, vilkårType, lagretPeriode }: Props) {
     const erLesevisning = useErLesevisning();
+    const erNyttOppsett = useErNyttOppsett();
 
     const { control } = useFormContext<VilkårResultatFormValues>();
 
@@ -73,7 +75,7 @@ export function PeriodeFelt({ person, vilkårType, lagretPeriode }: Props) {
                     </HelpText>
                 </HStack>
             )}
-            <HStack gap={'space-16'}>
+            <HStack gap={erNyttOppsett ? 'space-32' : 'space-16'}>
                 <FomDatoFelt
                     lagretFom={lagretPeriode.fom}
                     readOnly={readOnly}

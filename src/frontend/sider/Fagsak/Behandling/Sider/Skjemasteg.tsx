@@ -1,5 +1,6 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { BehandlingPåVentAlert } from '@komponenter/Alert/BehandlingPåVentAlert';
 import { MidlertidigEnhetAlert } from '@komponenter/Alert/MidlertidigEnhetAlert';
 import { Box, Button, ErrorMessage, Heading, Stack, VStack } from '@navikt/ds-react';
@@ -46,6 +47,7 @@ const Skjemasteg = ({
 }: IProps) => {
     const behandling = useBehandling();
     const erLesevisning = useErLesevisning();
+    const erNyttOppsett = useErNyttOppsett();
 
     useEffect(() => {
         const skjema = document.getElementById('skjemasteg');
@@ -70,13 +72,20 @@ const Skjemasteg = ({
 
     return (
         <Box marginBlock={'space-0 space-128'}>
-            <VStack id={'skjemasteg'} paddingInline={'space-32'} paddingBlock={'space-24'} gap={'space-16'}>
+            <VStack
+                id={'skjemasteg'}
+                paddingInline={erNyttOppsett ? 'space-20' : 'space-32'}
+                paddingBlock={erNyttOppsett ? 'space-12' : 'space-24'}
+                gap={'space-16'}
+            >
                 <BehandlingPåVentAlert />
                 <MidlertidigEnhetAlert />
                 <Box position={'relative'} marginBlock={'space-8'} className={className} maxWidth={maxWidthStyle}>
-                    <Heading size={'large'} level={'1'} spacing={true}>
-                        {tittel}
-                    </Heading>
+                    <Box marginBlock={erNyttOppsett ? 'space-0 space-12' : undefined}>
+                        <Heading size={'large'} level={'1'} spacing={!erNyttOppsett}>
+                            {tittel}
+                        </Heading>
+                    </Box>
                     {children}
                     {feilmelding !== '' && (
                         <Box marginBlock={'space-16 space-0'}>

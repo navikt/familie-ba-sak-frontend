@@ -1,6 +1,7 @@
 import { useBehandling } from '@hooks/useBehandling';
 import { useHentHistorikkinnslag } from '@hooks/useHentHistorikkinnslag';
-import { useErNyttOppsett } from '@hooks/useKonsept';
+import { Konsept, useErNyttOppsett, useKonsept } from '@hooks/useKonsept';
+import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
 import { Box, Button, Tabs, VStack } from '@navikt/ds-react';
 import { Activity } from 'react';
 
@@ -23,6 +24,10 @@ export function Høyremeny() {
     const { erModalÅpen } = useTotrinnskontrollModalContext();
     const { tab, settTab } = useTabContext();
     const erNyttOppsett = useErNyttOppsett();
+    // Konsept 2 har ingen knapp for å skjule menyen
+    const kanSkjules = useKonsept() !== Konsept.KONSEPT_2;
+    // Fanene har 18px tekst i Figma (1920px). På smalere skjermer får ikke tre faner plass med den størrelsen.
+    const brukSmåFaner = useSkjermstørrelse() < Skjermstørrelse['3XL'];
     // Dokumenter-fanen finnes bare i konsept 2 og 3
     const aktivTab = !erNyttOppsett && tab === Tab.Dokumenter ? Tab.Historikk : tab;
 
@@ -41,24 +46,30 @@ export function Høyremeny() {
         <>
             {erModalÅpen && <TotrinnskontrollModal />}
             <Box>
-                <Button
-                    title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
-                    aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
-                    className={Styles.knapp}
-                    variant={'secondary'}
-                    size={'small'}
-                    icon={<HøyremenyKnappikon erHøyremenyÅpen={erÅpen} />}
-                    onMouseDown={e => e.preventDefault()}
-                    onClick={() => settErÅpen(prev => !prev)}
-                />
-                <Activity mode={erÅpen ? 'visible' : 'hidden'}>
-                    <VStack width={'clamp(20rem, 20vw, 25rem)'}>
+                {kanSkjules && (
+                    <Button
+                        title={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                        aria-label={erÅpen ? 'Skjul høyremeny' : 'Vis høyremeny'}
+                        className={Styles.knapp}
+                        variant={'secondary'}
+                        size={'small'}
+                        icon={<HøyremenyKnappikon erHøyremenyÅpen={erÅpen} />}
+                        onMouseDown={e => e.preventDefault()}
+                        onClick={() => settErÅpen(prev => !prev)}
+                    />
+                )}
+                <Activity mode={!kanSkjules || erÅpen ? 'visible' : 'hidden'}>
+                    <VStack
+                        width={erNyttOppsett ? 'clamp(20rem, 25.42vw, 30.5rem)' : 'clamp(20rem, 20vw, 25rem)'}
+                        padding={erNyttOppsett ? 'space-20' : undefined}
+                        className={erNyttOppsett ? Styles.nyttOppsett : undefined}
+                    >
                         <Behandlingskort />
                         <Tabs
                             value={aktivTab}
                             onChange={tab => settTab(tab as Tab)}
                             iconPosition={'top'}
-                            size={erNyttOppsett ? 'small' : undefined}
+                            size={erNyttOppsett && brukSmåFaner ? 'small' : undefined}
                         >
                             <Tabvelger />
                             <Tabs.Panel value={Tab.Totrinnskontroll}>

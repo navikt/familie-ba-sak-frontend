@@ -1,7 +1,7 @@
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Detail, ErrorMessage, Heading, HStack, List, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, ErrorMessage, Heading, HStack, List, LocalAlert, VStack } from '@navikt/ds-react';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
     BehandlingSteg,
@@ -114,10 +114,12 @@ export function VilkårsvurderingSkjemaKonsept2() {
                                 </Heading>
                             </HStack>
                         ) : (
-                            <VStack gap="space-16">
+                            <VStack gap="space-32">
                                 <Personkort key={ident} person={personResultat.person} />
-                                <HStack justify="space-between" align="center" marginBlock="space-16 space-0">
-                                    <Detail className={styles.seksjonsoverskrift}>Vilkår</Detail>
+                                <HStack justify="space-between" align="center" className={styles.seksjonshode}>
+                                    <BodyShort size="large" as="h2" className={styles.seksjonsoverskrift}>
+                                        Vilkår
+                                    </BodyShort>
                                     {skalKunneLeggeTilUtvidetBarnetrygdVilkår && (
                                         <Button
                                             variant={'tertiary'}

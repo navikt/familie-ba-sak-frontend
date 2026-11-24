@@ -68,18 +68,21 @@ export function utledVilkårstatus(vilkårResultater: IRestVilkårResultat[]): V
     return harIkkeOppfylt ? Vilkårstatus.IKKE_OPPFYLT : Vilkårstatus.OPPFYLT;
 }
 
-/** Den mest alvorlige statusen blant vilkårene vinner; personen er bare oppfylt når alle vilkårene er det. */
+/**
+ * Personen står som ikke vurdert til alle vilkårene er vurdert. Deretter vinner den mest alvorlige statusen; personen
+ * er bare oppfylt når alle vilkårene er det.
+ */
 export function utledPersonstatus(vilkårstatuser: Vilkårstatus[]): Vilkårstatus {
+    if (vilkårstatuser.length === 0 || vilkårstatuser.some(status => status === Vilkårstatus.IKKE_VURDERT)) {
+        return Vilkårstatus.IKKE_VURDERT;
+    }
     if (vilkårstatuser.some(status => status === Vilkårstatus.IKKE_OPPFYLT)) {
         return Vilkårstatus.IKKE_OPPFYLT;
     }
     if (vilkårstatuser.some(status => status === Vilkårstatus.DELVIS_OPPFYLT)) {
         return Vilkårstatus.DELVIS_OPPFYLT;
     }
-    if (vilkårstatuser.length > 0 && vilkårstatuser.every(status => status === Vilkårstatus.OPPFYLT)) {
-        return Vilkårstatus.OPPFYLT;
-    }
-    return Vilkårstatus.IKKE_VURDERT;
+    return Vilkårstatus.OPPFYLT;
 }
 
 export function erAutomatiskVurdert(vilkårResultater: IRestVilkårResultat[]) {

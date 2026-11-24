@@ -36,3 +36,92 @@
 .col6 {
     width: 5%;
 }
+
+/*
+ * Konsept 2 og 3: radene er rykket inn 8px på hver side og har fem like brede kolonner (195,6px av 994px).
+ * Knappen som åpner raden har ingen egen kolonne i Figma, så den ligger oppå høyre ende av den siste.
+ */
+.likeKolonner .col1 {
+    width: 20.48%;
+    padding-left: var(--ax-space-16);
+}
+
+.likeKolonner .col2,
+.likeKolonner .col3,
+.likeKolonner .col4 {
+    width: 19.68%;
+}
+
+.likeKolonner .col5 {
+    width: 20.48%;
+}
+
+.likeKolonner .col6 {
+    width: 0;
+    padding: 0;
+}
+
+/* Lange ord får brytes, så teksten ikke renner over i neste kolonne eller under knappen på smale skjermer */
+.likeKolonner :global(.aksel-table__header-cell),
+.likeKolonner :global(.aksel-table__data-cell) {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+}
+
+.likeKolonner :global(.aksel-table__data-cell):nth-child(5) {
+    padding-right: var(--ax-space-40);
+}
+
+.likeKolonner :global(.aksel-table__toggle-expand-button) {
+    margin-left: calc(var(--ax-space-40) * -1);
+}
+
+.likeKolonner :global(.aksel-table__data-cell):first-child {
+    padding-left: var(--ax-space-16);
+}
+
+/* Radene er 48px (hode) og 72px høye i Figma medregnet linjen under */
+.likeKolonner :global(.aksel-table__header-cell),
+.likeKolonner :global(.aksel-table__data-cell):not(:global(.aksel-table__toggle-expand-cell)) {
+    padding-bottom: 0.6875rem;
+}
+
+/* Linjen under raden beholdes når raden er åpen, og skjemaet starter 32px under den, helt til venstre i kortet */
+.likeKolonner :global(.aksel-table__expandable-row--open) :global(.aksel-table__data-cell) {
+    border-bottom-color: var(--ax-border-neutral-subtleA);
+}
+
+.likeKolonner :global(.aksel-table__expanded-row-content) {
+    padding-block-start: var(--ax-space-32);
+    padding-inline-start: 0;
+}
+
+.likeKolonner :global(.aksel-table__expanded-row):last-child :global(.aksel-table__expanded-row-collapse) {
+    border-bottom: none;
+}
+
+/*
+ * Figma viser bare 1920px. På smalere skjermer får «Vurdert av» mer av bredden, på bekostning av begrunnelsen
+ * (som uansett kuttes etter to linjer), så «behandlingen» slipper å deles over flere linjer.
+ */
+@media (max-width: 1599px) {
+    .likeKolonner .col1 {
+        width: 17.5%;
+    }
+
+    .likeKolonner .col2 {
+        width: 19.5%;
+    }
+
+    .likeKolonner .col3 {
+        width: 18.5%;
+    }
+
+    .likeKolonner .col4 {
+        width: 17.5%;
+    }
+
+    .likeKolonner .col5 {
+        width: 27%;
+    }
+}

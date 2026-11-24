@@ -1,7 +1,7 @@
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { Konsept, useKonsept } from '@hooks/useKonsept';
 import VilkårResultatIkon from '@ikoner/VilkårResultatIkon';
-import { CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
+import { ClockDashedIcon, CogIcon, CogRotationIcon, PersonIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Table, Tooltip } from '@navikt/ds-react';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import type { IGrunnlagPerson } from '@typer/person';
@@ -39,6 +39,7 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
     const vurderesEtter = useWatch({ control, name: VilkårResultatFelt.VURDERES_ETTER });
 
     const periodeErTom = !vilkårResultat.periodeFom && !vilkårResultat.periodeTom;
+    const ikonavstand = konsept === Konsept.DAGENS ? 'space-6' : 'space-8';
 
     const toggleForm = (visAlert: boolean) => {
         const harUlagredeEndringer = erRadEkspandert && visAlert && isDirty;
@@ -71,7 +72,7 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
             }
         >
             <Table.DataCell className={Styles.celle}>
-                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
+                <HStack justify={'start'} align={'center'} gap={ikonavstand} wrap={false}>
                     {(konsept === Konsept.DAGENS || vilkårResultat.resultat !== Resultat.IKKE_VURDERT) && (
                         <VilkårResultatIkon
                             resultat={vilkårResultat.resultat}
@@ -97,12 +98,16 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
             <Table.DataCell className={Styles.celle}>
                 {vilkårResultat.begrunnelse && (
                     <Tooltip content={vilkårResultat.begrunnelse} className={Styles.tooltip}>
-                        <BodyShort className={Styles.beskrivelse}>{vilkårResultat.begrunnelse}</BodyShort>
+                        <BodyShort
+                            className={konsept === Konsept.DAGENS ? Styles.beskrivelse : Styles.beskrivelseToLinjer}
+                        >
+                            {vilkårResultat.begrunnelse}
+                        </BodyShort>
                     </Tooltip>
                 )}
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
-                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
+                <HStack justify={'start'} align={'center'} gap={ikonavstand} wrap={false}>
                     {vurderesEtter ? (
                         <>
                             {alleRegelverk[vurderesEtter].symbol}
@@ -117,8 +122,18 @@ export function VilkårTabellRad({ person, vilkårFraConfig, vilkårResultat, se
                 </HStack>
             </Table.DataCell>
             <Table.DataCell className={Styles.celle}>
-                <HStack justify={'start'} align={'center'} gap={'space-6'} wrap={false}>
-                    {vilkårResultat.erAutomatiskVurdert ? (
+                <HStack justify={'start'} align={'center'} gap={ikonavstand} wrap={false}>
+                    {konsept === Konsept.KONSEPT_2 ? (
+                        // Konsept 2: klokkeikon som i Figma, bare når perioden er vurdert
+                        vilkårResultat.erVurdert && (
+                            <ClockDashedIcon
+                                title={
+                                    vilkårResultat.erAutomatiskVurdert ? 'Automatisk vurdering' : 'Manuell vurdering'
+                                }
+                                className={Styles.ikon}
+                            />
+                        )
+                    ) : vilkårResultat.erAutomatiskVurdert ? (
                         <CogRotationIcon title={'Automatisk Vurdering'} className={Styles.ikon} />
                     ) : (
                         <PersonIcon title={'Manuell vurdering'} className={Styles.ikon} />

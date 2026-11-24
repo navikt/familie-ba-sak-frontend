@@ -41,3 +41,17 @@
         height: calc(100% - 0.75rem);
     }
 }
+
+/* Konsept 2 og 3: Aksel trekker første punkt 8px opp; tittelen skal starte i toppen av fanen */
+.prosess {
+    padding-top: var(--ax-space-8);
+}
+
+.prosess :global(.aksel-process__timestamp) {
+    margin-bottom: 0.3125rem;
+}
+
+/* 134px fra innslag til innslag, som i Figma */
+.prosess :global(.aksel-process__event:not(:last-child)) :global(.aksel-process__item) {
+    margin-bottom: 3.28125rem;
+}

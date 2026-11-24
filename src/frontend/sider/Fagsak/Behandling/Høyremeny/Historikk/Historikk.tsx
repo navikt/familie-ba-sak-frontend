@@ -1,5 +1,6 @@
+import { useErNyttOppsett } from '@hooks/useKonsept';
 import { InformationSquareFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, ErrorMessage, HStack, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, ErrorMessage, HStack, Loader, Process, VStack } from '@navikt/ds-react';
 import type { Historikkinnslag } from '../../../../../hooks/useHentHistorikkinnslag';
 import { BehandlerRolle, behandlerRoller } from '../../../../../typer/behandling';
 import Styles from './Historikk.module.css';
@@ -10,7 +11,15 @@ interface Props {
     feil?: Error | null;
 }
 
+function lagRolle(rolle: Historikkinnslag['rolle']) {
+    return rolle.toString() !== BehandlerRolle[BehandlerRolle.SYSTEM] && behandlerRoller[rolle]
+        ? `(${behandlerRoller[rolle].navn})`
+        : '';
+}
+
 export function Historikk({ historikkinnslag, laster, feil }: Props) {
+    const erNyttOppsett = useErNyttOppsett();
+
     if (laster) {
         return (
             <HStack justify={'center'} align={'center'} paddingBlock={'space-32'} gap={'space-8'}>
@@ -38,13 +47,23 @@ export function Historikk({ historikkinnslag, laster, feil }: Props) {
         );
     }
 
+    if (erNyttOppsett) {
+        return (
+            <Process className={Styles.prosess}>
+                {historikkinnslag.map(innslag => (
+                    <Process.Event key={innslag.id} title={innslag.tittel} timestamp={innslag.dato}>
+                        {innslag.beskrivelse && <div>{innslag.beskrivelse}</div>}
+                        <div>{`${innslag.utførtAv} ${lagRolle(innslag.rolle)}`}</div>
+                    </Process.Event>
+                ))}
+            </Process>
+        );
+    }
+
     return (
         <ul className={Styles.liste}>
             {historikkinnslag.map(innslag => {
-                const rolle =
-                    innslag.rolle.toString() !== BehandlerRolle[BehandlerRolle.SYSTEM] && behandlerRoller[innslag.rolle]
-                        ? `(${behandlerRoller[innslag.rolle].navn})`
-                        : '';
+                const rolle = lagRolle(innslag.rolle);
                 return (
                     <li key={innslag.id} className={Styles.listElement}>
                         <BodyShort weight={'semibold'}>{innslag.tittel}</BodyShort>

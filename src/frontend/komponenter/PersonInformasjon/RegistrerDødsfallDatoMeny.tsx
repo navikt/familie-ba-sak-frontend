@@ -7,9 +7,11 @@ import { RegistrerDødsfallDatoModal } from './RegistrerDødsfallDatoModal';
 
 interface IRegistrerDødsfallDato {
     person: IGrunnlagPerson;
+    /** Overstyrer størrelsen som ellers følger skjermbredden */
+    størrelse?: 'medium' | 'small';
 }
 
-const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
+const RegistrerDødsfallDatoMeny = ({ person, størrelse }: IRegistrerDødsfallDato) => {
     const skjermsstørrelse = useSkjermstørrelse();
 
     const [visModal, settVisModal] = useState<boolean>(false);
@@ -22,7 +24,7 @@ const RegistrerDødsfallDatoMeny = ({ person }: IRegistrerDødsfallDato) => {
                         aria-label="Åpne valgmeny"
                         icon={<MenuElipsisHorizontalCircleIcon aria-hidden />}
                         variant="tertiary"
-                        size={skjermsstørrelse > Skjermstørrelse['2XL'] ? 'medium' : 'small'}
+                        size={størrelse ?? (skjermsstørrelse > Skjermstørrelse['2XL'] ? 'medium' : 'small')}
                     />
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>

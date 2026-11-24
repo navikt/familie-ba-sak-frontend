@@ -12,6 +12,45 @@
     border-left-color: var(--ax-border-neutral);
 }
 
+/* Konsept 2 og 3: feltene er 460px brede, med 12px mellom etikett og felt */
 .flat {
-    max-width: 30rem;
+    max-width: 28.75rem;
+}
+
+.flat :global(.aksel-form-field) {
+    gap: var(--ax-space-12);
+}
+
+/* Spørsmål med ja/nei: 32px mellom spørsmålet og valgene i Figma */
+.flat :global(.aksel-radio-group) > :global(.aksel-radio-buttons) {
+    margin-top: var(--ax-space-32);
+}
+
+/* Aksel lar den indre rammen i en skrivebeskyttet nedtrekksliste beholde mørk kant; Figma har lys som de andre feltene */
+.flat :global(.aksel-combobox--readonly) :global(.aksel-combobox__wrapper-inner) {
+    border-color: var(--ax-border-neutral-subtle);
+}
+
+/* Skrivebeskyttede felt har 24px hengelås og 8px til etiketten i Figma; datofeltene har Aksels egen størrelse */
+.flat :global(.aksel-form-field__readonly-icon) {
+    margin: 0 var(--ax-space-8) 0 0;
+    font-size: 1.5rem;
+}
+
+.flat :global(.aksel-date__field) {
+    gap: var(--ax-space-8);
+}
+
+.flat :global(.aksel-date__field) :global(.aksel-form-field__readonly-icon) {
+    margin-top: 0.1875rem;
+    font-size: 1.125rem;
+}
+
+.flat :global(.aksel-date__field-wrapper) {
+    width: 13.375rem;
+}
+
+.flat :global(.aksel-date__field-input) {
+    flex: 1;
+    min-width: 0;
 }

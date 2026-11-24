@@ -15,6 +15,7 @@ import {
 } from '../../../../../typer/behandling';
 import { behandlingKategori, behandlingUnderkategori } from '../../../../../typer/behandlingstema';
 import { Datoformat, isoStringTilFormatertString } from '../../../../../utils/dato';
+import Styles from './Behandlingskort.module.css';
 import { Informasjonsbolk } from './Informasjonsbolk';
 
 function hentResultatfarge(behandlingResultat: BehandlingResultat): AkselColoredBorderToken {
@@ -87,21 +88,22 @@ export function Behandlingskort() {
 
     return (
         <Box
-            padding="space-8"
+            padding={erNyttOppsett ? undefined : 'space-8'}
             borderColor={hentResultatfarge(behandling.resultat)}
-            borderWidth="1 1 1 5"
-            borderRadius="4"
-            margin="space-8"
+            borderWidth={erNyttOppsett ? '1 1 1 4' : '1 1 1 5'}
+            borderRadius={erNyttOppsett ? '8' : '4'}
+            margin={erNyttOppsett ? undefined : 'space-8'}
+            className={erNyttOppsett ? Styles.kort : undefined}
         >
             <Box borderWidth="0 0 1 0" borderColor="neutral-subtle">
                 {erNyttOppsett ? (
-                    <VStack gap="space-4" marginBlock="space-0 space-8">
-                        <Heading size={'xsmall'} level={'2'}>
+                    <VStack gap="space-8" className={Styles.hode}>
+                        <Heading size={'small'} level={'2'}>
                             {`${behandlingstyper[behandling.type].navn} (${behandlingIndex}/${antallBehandlinger})`}
                         </Heading>
-                        <HStack gap={'space-4'}>
+                        <HStack gap={'space-8'}>
                             {utledTagger(behandling).map(tagg => (
-                                <Tag key={tagg} variant={'moderate'} data-color={'neutral'} size={'xsmall'}>
+                                <Tag key={tagg} variant={'moderate'} data-color={'neutral'} size={'small'}>
                                     {tagg}
                                 </Tag>
                             ))}
@@ -119,14 +121,18 @@ export function Behandlingskort() {
                     </VStack>
                 )}
             </Box>
-            <VStack gap="space-16" marginBlock="space-12 space-0">
+            <VStack
+                gap={erNyttOppsett ? undefined : 'space-16'}
+                marginBlock={erNyttOppsett ? 'space-20 space-0' : 'space-12 space-0'}
+                className={erNyttOppsett ? Styles.rader : undefined}
+            >
                 <Informasjonsbolk label="Behandlingsstatus" tekst={behandlingsstatuser[behandling.status]} />
                 <Informasjonsbolk
                     label="Resultat"
                     tekst={behandlingsresultater[behandling.resultat]}
                     tekstFarge={hentResultatfargeTekst(behandling.resultat)}
                 />
-                <Box>
+                <VStack gap={erNyttOppsett ? 'space-4' : undefined}>
                     {behandling.søknadMottattDato && (
                         <Informasjonsbolk
                             label="Søknad mottatt"
@@ -151,7 +157,7 @@ export function Behandlingskort() {
                             defaultString: 'Ikke satt',
                         })}
                     />
-                </Box>
+                </VStack>
                 <Informasjonsbolk
                     label="Enhet"
                     tekst={behandling.arbeidsfordelingPåBehandling.behandlendeEnhetId}

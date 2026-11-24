@@ -17,7 +17,7 @@ export function SkjemaRamme({ lesevisning, resultat, children }: Props) {
     if (erNyttOppsett) {
         // Konsept 2 og 3: skjemaet ligger flatt i vilkårskortet, uten innrykk og farget kantlinje
         return (
-            <VStack gap={'space-16'} className={styles.flat}>
+            <VStack gap={'space-32'} className={styles.flat}>
                 {children}
             </VStack>
         );

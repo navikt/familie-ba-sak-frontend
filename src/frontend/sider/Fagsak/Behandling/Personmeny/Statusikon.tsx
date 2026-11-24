@@ -1,4 +1,10 @@
-import { CheckmarkCircleIcon, CircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import {
+    CheckmarkCircleFillIcon,
+    CheckmarkCircleIcon,
+    CircleIcon,
+    CircleSlashFillIcon,
+    CircleSlashIcon,
+} from '@navikt/aksel-icons';
 
 import { Vilkårstatus, vilkårstatusVisningsnavn } from '../Sider/Vilkårsvurdering/vilkårstatus';
 import Styles from './Personmeny.module.css';
@@ -11,39 +17,22 @@ interface Props {
 const fargeklasse: Record<Vilkårstatus, string> = {
     IKKE_VURDERT: Styles.ikonIkkeVurdert,
     OPPFYLT: Styles.ikonVurdert,
-    DELVIS_OPPFYLT: Styles.ikonDelvisOppfylt,
-    IKKE_OPPFYLT: Styles.ikonIkkeOppfylt,
+    DELVIS_OPPFYLT: Styles.ikonIkkeEllerDelvisOppfylt,
+    IKKE_OPPFYLT: Styles.ikonIkkeEllerDelvisOppfylt,
 };
 
-/** Personens status vises som en tykk ring, eller fylt sirkel når alle vilkårene er oppfylt. */
-function Personsirkel({ status, tittel }: { status: Vilkårstatus; tittel: string }) {
-    const erFylt = status === Vilkårstatus.OPPFYLT;
-    return (
-        <svg width="1rem" height="1rem" viewBox="0 0 16 16" role="img" className={fargeklasse[status]}>
-            <title>{tittel}</title>
-            {erFylt ? (
-                <circle cx="8" cy="8" r="7" fill="currentColor" />
-            ) : (
-                <circle cx="8" cy="8" r="5.75" fill="none" stroke="currentColor" strokeWidth="2.5" />
-            )}
-        </svg>
-    );
-}
-
+/** Oppfylt og ikke oppfylt vises med omriss for vilkår og fylt ikon for personens samlede status. */
 export function Statusikon({ status, variant }: Props) {
-    const tittel = vilkårstatusVisningsnavn[status];
-
-    if (variant === 'person') {
-        return <Personsirkel status={status} tittel={tittel} />;
-    }
+    const erPerson = variant === 'person';
+    const ikonProps = { title: vilkårstatusVisningsnavn[status], className: fargeklasse[status], fontSize: '1rem' };
 
     switch (status) {
         case Vilkårstatus.OPPFYLT:
-            return <CheckmarkCircleIcon title={tittel} className={fargeklasse[status]} fontSize="1.25rem" />;
+            return erPerson ? <CheckmarkCircleFillIcon {...ikonProps} /> : <CheckmarkCircleIcon {...ikonProps} />;
         case Vilkårstatus.IKKE_OPPFYLT:
-            return <XMarkOctagonIcon title={tittel} className={fargeklasse[status]} fontSize="1.25rem" />;
+            return erPerson ? <CircleSlashFillIcon {...ikonProps} /> : <CircleSlashIcon {...ikonProps} />;
         case Vilkårstatus.DELVIS_OPPFYLT:
         case Vilkårstatus.IKKE_VURDERT:
-            return <CircleIcon title={tittel} className={fargeklasse[status]} fontSize="1.25rem" />;
+            return <CircleIcon {...ikonProps} />;
     }
 }

@@ -10,3 +10,12 @@
     background-color: var(--ax-bg-default);
     z-index: 10;
 }
+
+/* Konsept 2 og 3: 30px mellom behandlingskortet, fanene og innholdet i fanen */
+.nyttOppsett {
+    gap: 1.875rem;
+}
+
+.nyttOppsett :global(.aksel-tabs__tablist-wrapper) {
+    margin-bottom: 1.875rem;
+}
