@@ -1,12 +1,13 @@
 import { QueryClient, type QueryKey } from '@tanstack/react-query';
+import { FagsakId } from '@typer/fagsak';
 import { beforeEach, describe, expect, test } from 'vitest';
 
 import { queryKeys } from './queryKeys';
 
 const ident = '12345678910';
 const annenIdent = '10987654321';
-const fagsakId = 1;
-const annenFagsakId = 2;
+const fagsakId = FagsakId.fra(1);
+const annenFagsakId = FagsakId.fra(2);
 const behandlingId = 10;
 const annenBehandlingId = 20;
 const vedtaksperiodeId = 100;

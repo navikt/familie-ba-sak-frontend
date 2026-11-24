@@ -1,8 +1,10 @@
+import type { FagsakId } from '@typer/fagsak';
+
 function personQueryKey(ident: string | undefined) {
     return ['person', ident] as const;
 }
 
-function fagsakQueryKey(fagsakId: number | undefined) {
+function fagsakQueryKey(fagsakId: FagsakId | undefined) {
     return ['fagsak', fagsakId] as const;
 }
 
@@ -52,19 +54,19 @@ export const queryKeys = {
 
     // Fagsak
     fagsak: fagsakQueryKey,
-    barnetrygdbehandlinger: (fagsakId: number) => {
+    barnetrygdbehandlinger: (fagsakId: FagsakId) => {
         return [...fagsakQueryKey(fagsakId), 'barnetrygdbehandlinger'] as const;
     },
-    gjeldendeUtbetalingsperioder: (fagsakId: number) => {
+    gjeldendeUtbetalingsperioder: (fagsakId: FagsakId) => {
         return [...fagsakQueryKey(fagsakId), 'gjeldende-utbetalingsperioder'] as const;
     },
-    harÅpenTilbakekreving: (fagsakId: number) => {
+    harÅpenTilbakekreving: (fagsakId: FagsakId) => {
         return [...fagsakQueryKey(fagsakId), 'har-apen-tilbakekreving'] as const;
     },
-    klagebehandlinger: (fagsakId: number) => {
+    klagebehandlinger: (fagsakId: FagsakId) => {
         return [...fagsakQueryKey(fagsakId), 'klagebehandlinger'] as const;
     },
-    tilbakekrevingsbehandlinger: (fagsakId: number) => {
+    tilbakekrevingsbehandlinger: (fagsakId: FagsakId) => {
         return [...fagsakQueryKey(fagsakId), 'tilbakekrevingsbehandlinger'] as const;
     },
 

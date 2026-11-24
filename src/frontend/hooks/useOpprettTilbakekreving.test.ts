@@ -2,6 +2,7 @@ import { opprettTilbakekreving } from '@api/opprettTilbakekreving';
 import { useOpprettTilbakekreving } from '@hooks/useOpprettTilbakekreving';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/opprettTilbakekreving');
@@ -10,7 +11,7 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const fagsakId = 123;
+const fagsakId = FagsakId.fra(123);
 const tilbakemelding = 'Tilbakekreving opprettet';
 
 describe('useOpprettTilbakekreving', () => {

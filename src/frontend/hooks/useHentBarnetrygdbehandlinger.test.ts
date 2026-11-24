@@ -2,6 +2,7 @@ import { hentBarnetrygdbehandlinger } from '@api/hentBarnetrygdbehandlinger';
 import { renderHook, waitFor } from '@testing-library/react';
 import { lagVisningBehandling } from '@testutils/testdata/behandlingTestdata';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { useHentBarnetrygdbehandlinger } from './useHentBarnetrygdbehandlinger';
 
@@ -16,7 +17,7 @@ describe('useHentBarnetrygdbehandlinger', () => {
         const behandlinger = [lagVisningBehandling()];
         vi.mocked(hentBarnetrygdbehandlinger).mockResolvedValue(behandlinger);
 
-        const { result } = renderHook(() => useHentBarnetrygdbehandlinger(123), {
+        const { result } = renderHook(() => useHentBarnetrygdbehandlinger(FagsakId.fra(123)), {
             wrapper: TestProviders,
         });
 
@@ -28,7 +29,7 @@ describe('useHentBarnetrygdbehandlinger', () => {
     test('setter isError ved feil fra api-funksjon', async () => {
         vi.mocked(hentBarnetrygdbehandlinger).mockRejectedValue(new Error('Noe gikk galt'));
 
-        const { result } = renderHook(() => useHentBarnetrygdbehandlinger(123), {
+        const { result } = renderHook(() => useHentBarnetrygdbehandlinger(FagsakId.fra(123)), {
             wrapper: TestProviders,
         });
 

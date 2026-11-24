@@ -2,6 +2,7 @@ import { forhåndsvisBrevPåFagsak } from '@api/forhåndsvisBrevPåFagsak';
 import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IManueltBrevRequestPåFagsak } from '@typer/dokument';
+import type { FagsakId } from '@typer/fagsak';
 import { opprettPdfBlob } from '@utils/blob';
 
 type Options = Omit<
@@ -9,7 +10,7 @@ type Options = Omit<
     'mutationKey' | 'mutationFn'
 >;
 
-export function useForhåndsvisBrevPåFagsak(fagsakId: number, options?: Options) {
+export function useForhåndsvisBrevPåFagsak(fagsakId: FagsakId, options?: Options) {
     return useMutation({
         mutationKey: mutationKeys.forhåndsvisBrevPåFagsak(fagsakId),
         mutationFn: async (payload: IManueltBrevRequestPåFagsak) => {

@@ -3,6 +3,7 @@ import { opprettBehandling } from '@api/opprettBehandling';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '@typer/behandlingstema';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -26,7 +27,7 @@ describe('opprettBehandling', () => {
             nyMigreringsdato: undefined,
             søknadMottattDato: '2026-08-04',
             barnasIdenter: undefined,
-            fagsakId: 123,
+            fagsakId: FagsakId.fra(123),
             begrunnelse: undefined,
         };
 
@@ -59,7 +60,7 @@ describe('opprettBehandling', () => {
             underkategori: null,
             behandlingType: Behandlingstype.FØRSTEGANGSBEHANDLING,
             navIdent: 'Z123456',
-            fagsakId: 123,
+            fagsakId: FagsakId.fra(123),
         };
 
         await expect(opprettBehandling(payload)).rejects.toThrow('Noe gikk galt');

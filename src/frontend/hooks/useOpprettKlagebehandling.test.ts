@@ -1,6 +1,7 @@
 import { opprettKlagebehandling } from '@api/opprettKlagebehandling';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { useOpprettKlagebehandling } from './useOpprettKlagebehandling';
@@ -13,7 +14,7 @@ afterEach(() => {
 
 const parameters = {
     klageMottattDato: '2026-08-07',
-    fagsakId: 123,
+    fagsakId: FagsakId.fra(123),
 };
 
 describe('useOpprettKlagebehandling', () => {

@@ -1,5 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { lagTilbakekrevingbehandling } from '@testutils/testdata/tilbakekrevingTestdata';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { hentTilbakekrevingsbehandlinger } from './hentTilbakekrevingsbehandlinger';
 
@@ -18,7 +19,7 @@ describe('hentTilbakekrevingsbehandlinger', () => {
         const tilbakekrevingsbehandlinger = [lagTilbakekrevingbehandling()];
         vi.mocked(apiClient.get).mockResolvedValue(tilbakekrevingsbehandlinger);
 
-        const result = await hentTilbakekrevingsbehandlinger(123);
+        const result = await hentTilbakekrevingsbehandlinger(FagsakId.fra(123));
 
         expect(apiClient.get).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/tilbakekreving/fagsak/123',
@@ -30,6 +31,6 @@ describe('hentTilbakekrevingsbehandlinger', () => {
     test('kaster feil ved avvist promise', async () => {
         vi.mocked(apiClient.get).mockRejectedValue(new Error('Noe gikk galt'));
 
-        await expect(hentTilbakekrevingsbehandlinger(123)).rejects.toThrow('Noe gikk galt');
+        await expect(hentTilbakekrevingsbehandlinger(FagsakId.fra(123))).rejects.toThrow('Noe gikk galt');
     });
 });

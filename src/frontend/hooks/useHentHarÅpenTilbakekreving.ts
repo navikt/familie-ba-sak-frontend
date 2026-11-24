@@ -2,10 +2,11 @@ import { hentHarÅpenTilbakekreving } from '@api/hentHarÅpenTilbakekreving';
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { FagsakId } from '@typer/fagsak';
 
 type Options = Omit<UseQueryOptions<boolean>, 'queryKey' | 'queryFn'>;
 
-export function useHentHarÅpenTilbakekreving(fagsakId: number, options?: Options) {
+export function useHentHarÅpenTilbakekreving(fagsakId: FagsakId, options?: Options) {
     return useQuery({
         queryKey: queryKeys.harÅpenTilbakekreving(fagsakId),
         queryFn: () => hentHarÅpenTilbakekreving(fagsakId),
