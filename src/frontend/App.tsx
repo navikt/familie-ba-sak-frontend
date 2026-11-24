@@ -12,20 +12,13 @@ import { ToastProvider } from '@context/ToastContext';
 import { useStartUmami } from '@hooks/useStartUmami';
 import { ErrorBoundary } from '@komponenter/Error/ErrorBoundary';
 import { captureRouteException } from '@komponenter/Error/RouteError';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { erProd } from '@utils/miljø';
 import { RouterProvider } from 'react-router';
 
 import { appRoutes } from './AppRoutes';
-
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: false, // Fungerer ikke så bra med global "Systemet laster" spinner, på sikt kan vi kanskje enable retries
-        },
-    },
-});
+import { queryClient } from './queryClient';
 
 export function App() {
     useStartUmami();

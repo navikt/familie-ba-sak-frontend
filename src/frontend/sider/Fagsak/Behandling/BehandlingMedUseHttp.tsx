@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
-import { BehandlingProvider } from './BehandlingContext';
+import { BehandlingProvider, Behandlingskilde } from './BehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
 import { TabContextProvider } from './Høyremeny/TabContextProvider';
 import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
@@ -77,6 +77,7 @@ export function BehandlingMedUseHttp({ behandlingId }: Props) {
                 <BehandlingProvider
                     key={behandling.behandlingId}
                     behandling={behandling}
+                    behandlingskilde={Behandlingskilde.USE_HTTP}
                     settBehandling={behandling => {
                         if (skalObfuskereData) {
                             obfuskerBehandling(behandling);
