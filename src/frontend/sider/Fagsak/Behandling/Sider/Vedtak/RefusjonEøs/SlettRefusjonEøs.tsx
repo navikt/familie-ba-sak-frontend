@@ -1,26 +1,25 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { useBehandlingContext } from '../../../BehandlingContext';
-import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
     refusjonEøsId: number;
 }
 
 export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { erLeggTilRefusjonEøsFormÅpen, skjulRefusjonEøsTabell } = useRefusjonEøsTabellContext();
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
 
     const { mutate, isPending } = useSlettRefusjonEøs({
         refusjonEøsId: refusjonEøsId,
-        onSuccess: behandling => {
-            settÅpenBehandling(behandling);
-            if (!erLeggTilRefusjonEøsFormÅpen && behandling.refusjonEøs.length === 0) {
-                skjulRefusjonEøsTabell();
-            }
+        onSuccess: refusjonEøsPerioder => {
+            queryClient.setQueryData(queryKeys.refusjonEøs(behandlingId), refusjonEøsPerioder);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
 
@@ -35,7 +34,7 @@ export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
             <Button
                 variant={'tertiary'}
                 size={'small'}
-                onClick={() => mutate({ behandlingId: behandling.behandlingId, refusjonEøsId })}
+                onClick={() => mutate({ behandlingId, refusjonEøsId })}
                 icon={<TrashIcon />}
                 loading={isPending}
             />

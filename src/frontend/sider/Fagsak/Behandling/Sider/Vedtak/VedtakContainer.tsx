@@ -3,6 +3,7 @@ import { useHentAlleBegrunnelser } from '@hooks/useHentAlleBegrunnelser';
 import { useHentFeilutbetaltValuta } from '@hooks/useHentFeilutbetaltValuta';
 import { useHentKorrigertEtterbetaling } from '@hooks/useHentKorrigertEtterbetaling';
 import { useHentKorrigertVedtak } from '@hooks/useHentKorrigertVedtak';
+import { useHentRefusjonEøs } from '@hooks/useHentRefusjonEøs';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
@@ -57,11 +58,18 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         error: feilutbetaltValutaPerioderError,
     } = useHentFeilutbetaltValuta(behandlingId);
 
+    const {
+        data: refusjonEøsPerioder,
+        isPending: refusjonEøsPerioderIsPending,
+        error: refusjonEøsPerioderError,
+    } = useHentRefusjonEøs(behandlingId);
+
     if (
         vedtaksperioderIsPending ||
         alleBegrunnelserIsPending ||
         sammensattKontrollsakIsPending ||
         feilutbetaltValutaPerioderIsPending ||
+        refusjonEøsPerioderIsPending ||
         korrigertEtterbetalingIsPending ||
         korrigertVedtakIsPending
     ) {
@@ -80,6 +88,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         alleBegrunnelserError ||
         sammensattKontrollsakError ||
         feilutbetaltValutaPerioderError ||
+        refusjonEøsPerioderError ||
         korrigertEtterbetalingError ||
         korrigertVedtakError
     ) {
@@ -88,6 +97,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
             alleBegrunnelserError,
             sammensattKontrollsakError,
             feilutbetaltValutaPerioderError,
+            refusjonEøsPerioderError,
             korrigertEtterbetalingError,
             korrigertVedtakError,
         ].filter(error => erDefinert(error));
@@ -116,7 +126,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
                 <VedtaksperioderProvider vedtaksperioder={vedtaksperioder}>
                     <SendtTilTotrinnskontrollModalProvider>
                         <FeilutbetaltValutaTabellProvider feilutbetaltValutaPerioder={feilutbetaltValutaPerioder}>
-                            <RefusjonEøsTabellProvider>
+                            <RefusjonEøsTabellProvider refusjonEøsPerioder={refusjonEøsPerioder}>
                                 <EndringstidspunktDialogProvider>
                                     <KorrigertEtterbetalingProvider
                                         korrigertEtterbetaling={korrigertEtterbetaling ?? undefined}

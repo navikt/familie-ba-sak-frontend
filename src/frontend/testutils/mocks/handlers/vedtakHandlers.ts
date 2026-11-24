@@ -1,5 +1,6 @@
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { IRestFeilutbetaltValuta } from '@typer/eøs-feilutbetalt-valuta';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import type { IVedtaksperiodeMedBegrunnelser } from '@typer/vedtaksperiode';
 import { HttpResponse, http } from 'msw';
 
@@ -32,5 +33,8 @@ export const vedtakHandlers = [
     }),
     http.get<{ behandlingId: string }>('/familie-ba-sak/api/feilutbetalt-valuta/behandling/:behandlingId', () => {
         return HttpResponse.json(byggSuksessRessurs<IRestFeilutbetaltValuta[]>([]));
+    }),
+    http.get<{ behandlingId: string }>(encodeURI('/familie-ba-sak/api/refusjon-eøs/behandlinger/:behandlingId'), () => {
+        return HttpResponse.json(byggSuksessRessurs<IRestRefusjonEøs[]>([]));
     }),
 ];

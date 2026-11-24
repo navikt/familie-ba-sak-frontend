@@ -1,6 +1,6 @@
 import { type OppdaterRefusjonEøsPayload, oppdaterRefusjonEøs } from '@api/oppdaterRefusjonEøs';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 
 interface Parameters {
     behandlingId: number;
@@ -8,7 +8,7 @@ interface Parameters {
     payload: OppdaterRefusjonEøsPayload;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<IRestRefusjonEøs[], DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOppdaterRefusjonEøs(options: Options = {}) {
     return useMutation({

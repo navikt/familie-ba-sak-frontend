@@ -1,5 +1,5 @@
 import { apiClient } from '@api/client/apiClient';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 
 export interface OpprettRefusjonEøsPayload {
     fom: string;
@@ -10,7 +10,7 @@ export interface OpprettRefusjonEøsPayload {
 }
 
 export async function opprettRefusjonEøs(behandlingId: number, payload: OpprettRefusjonEøsPayload) {
-    return apiClient.post<OpprettRefusjonEøsPayload, IBehandling>({
+    return apiClient.post<OpprettRefusjonEøsPayload, IRestRefusjonEøs[]>({
         url: `/familie-ba-sak/api/refusjon-eøs/behandlinger/${behandlingId}`,
         data: payload,
     });

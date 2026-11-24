@@ -1,11 +1,12 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
+import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
+import { useOppdaterRefusjonEøs } from '@hooks/useOppdaterRefusjonEøs';
+import { useOpprettRefusjonEøs } from '@hooks/useOpprettRefusjonEøs';
+import { useQueryClient } from '@tanstack/react-query';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
+import { dateTilIsoDatoString, type IsoDatoString } from '@utils/dato';
 import { useForm } from 'react-hook-form';
-
-import { useConfirmBrowserRefresh } from '../../../../../../../hooks/useConfirmBrowserRefresh';
-import { useOppdaterRefusjonEøs } from '../../../../../../../hooks/useOppdaterRefusjonEøs';
-import { useOpprettRefusjonEøs } from '../../../../../../../hooks/useOpprettRefusjonEøs';
-import type { IRestRefusjonEøs } from '../../../../../../../typer/refusjon-eøs';
-import { dateTilIsoDatoString, type IsoDatoString } from '../../../../../../../utils/dato';
-import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum Fields {
     LANDKODE = 'LANDKODE',
@@ -43,7 +44,8 @@ interface Props {
 }
 
 export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
 
     const form = useForm<FormValues, never, TransformedFormValues>({
         values: {
@@ -60,15 +62,20 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
         formState: { isDirty },
     } = form;
 
-    const { mutateAsync: opprettRefusjonEøs } = useOpprettRefusjonEøs();
-    const { mutateAsync: oppdaterRefusjonEøs } = useOppdaterRefusjonEøs();
+    function onSuccess(refusjonEøsPerioder: IRestRefusjonEøs[]) {
+        queryClient.setQueryData(queryKeys.refusjonEøs(behandlingId), refusjonEøsPerioder);
+        queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
+    }
+
+    const { mutateAsync: opprettRefusjonEøs } = useOpprettRefusjonEøs({ onSuccess });
+    const { mutateAsync: oppdaterRefusjonEøs } = useOppdaterRefusjonEøs({ onSuccess });
 
     useConfirmBrowserRefresh({ enabled: isDirty });
 
     async function onSubmit(values: TransformedFormValues) {
         if (type === Type.OPPRETT) {
             return opprettRefusjonEøs({
-                behandlingId: behandling.behandlingId,
+                behandlingId,
                 payload: {
                     fom: values[Fields.FOM_DATO],
                     tom: values[Fields.TOM_DATO],
@@ -77,10 +84,7 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
                     refusjonAvklart: values[Fields.REFUSJON_AVKLART],
                 },
             })
-                .then(behandling => {
-                    settÅpenBehandling(behandling);
-                    skjulForm();
-                })
+                .then(() => skjulForm())
                 .catch(e => {
                     const message = e instanceof Error ? e.message : 'En ukjent feil oppstod.';
                     setError('root', { message });
@@ -91,7 +95,7 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
                 return;
             }
             return oppdaterRefusjonEøs({
-                behandlingId: behandling.behandlingId,
+                behandlingId,
                 refusjonEøsId: refusjonEøs.id,
                 payload: {
                     fom: values[Fields.FOM_DATO],
@@ -101,10 +105,7 @@ export function useRefusjonEøsForm({ type, refusjonEøs, skjulForm }: Props) {
                     refusjonAvklart: values[Fields.REFUSJON_AVKLART],
                 },
             })
-                .then(behandling => {
-                    settÅpenBehandling(behandling);
-                    skjulForm();
-                })
+                .then(() => skjulForm())
                 .catch(e => {
                     const message = e instanceof Error ? e.message : 'En ukjent feil oppstod.';
                     setError('root', { message });

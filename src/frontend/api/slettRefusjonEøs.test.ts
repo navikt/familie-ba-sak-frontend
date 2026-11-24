@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { slettRefusjonEøs } from '@api/slettRefusjonEøs';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagRefusjonEøs } from '@testutils/testdata/refusjonEøsTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -13,11 +13,11 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const refusjonEøsPerioder = [lagRefusjonEøs()];
 
 describe('slettRefusjonEøs', () => {
     test('skal sende forespørsel om å slette refusjon EØS', async () => {
-        vi.mocked(apiClient.delete).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.delete).mockResolvedValueOnce(refusjonEøsPerioder);
 
         const svar = await slettRefusjonEøs(123, 5);
 
@@ -25,7 +25,7 @@ describe('slettRefusjonEøs', () => {
         expect(apiClient.delete).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/refusjon-eøs/behandlinger/123/perioder/5',
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(refusjonEøsPerioder);
     });
 
     test('skal håndtere feil', async () => {

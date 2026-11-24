@@ -8,7 +8,6 @@ import type { FagsakId } from './fagsak';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import { type IGrunnlagPerson, PersonType } from './person';
-import type { IRestRefusjonEøs } from './refusjon-eøs';
 import type { ITilbakekreving } from './simulering';
 import { type ISøknadDTO, Målform } from './søknad';
 import type {
@@ -332,7 +331,6 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
