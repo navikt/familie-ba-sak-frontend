@@ -1,10 +1,14 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function BekreftSamtykkeTilMotregning() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const {
@@ -12,7 +16,10 @@ export function BekreftSamtykkeTilMotregning() {
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const {
@@ -20,7 +27,10 @@ export function BekreftSamtykkeTilMotregning() {
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const error = oppdaterError ?? slettError;

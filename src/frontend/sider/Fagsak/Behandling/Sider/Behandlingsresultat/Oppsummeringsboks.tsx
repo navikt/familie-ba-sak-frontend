@@ -1,4 +1,5 @@
 import { useToastContext } from '@context/ToastContext';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFjernSmåbarnstillegg } from '@hooks/useFjernSmåbarnstillegg';
 import { useLeggTilSmåbarnstillegg } from '@hooks/useLeggTilSmåbarnstillegg';
@@ -9,6 +10,7 @@ import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { PlusCircleIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Heading, HGrid, HStack, InlineMessage, LocalAlert, VStack } from '@navikt/ds-react';
 import type { Etikett } from '@navikt/familie-tidslinje';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 import { Behandlingstype } from '@typer/behandling';
 import { ytelsetype } from '@typer/beregning';
@@ -91,6 +93,8 @@ const Oppsummeringsboks = ({
     utbetaltAnnetLandBeløp,
     valutakurser,
 }: IProps) => {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useToastContext();
     const { settAktivEtikett } = useTidslinjeContext();
@@ -118,6 +122,7 @@ const Oppsummeringsboks = ({
                 tekst: 'Småbarnstillegg er fjernet',
             });
             settRestFeil(undefined);
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
         },
         onError: () => settRestFeil('Teknisk feil ved fjerning av småbarnstillegg'),
@@ -130,6 +135,7 @@ const Oppsummeringsboks = ({
                 tekst: 'Småbarnstillegg er lagt til',
             });
             settRestFeil(undefined);
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
         },
         onError: () => settRestFeil('Teknisk feil ved innleggelse av småbarnstillegg'),

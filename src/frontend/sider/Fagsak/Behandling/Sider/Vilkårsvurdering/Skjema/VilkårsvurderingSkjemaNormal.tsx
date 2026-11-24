@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrelse';
@@ -6,6 +7,7 @@ import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } fr
 import { BodyShort, Box, Button, ErrorMessage, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
+import { useQueryClient } from '@tanstack/react-query';
 import {
     BehandlingSteg,
     erRiktigBehandlingForKopieringAvVilkårFraSøkerTilBarna,
@@ -23,6 +25,8 @@ import { useVilkårsvurderingContext } from '../VilkårsvurderingContext';
 import styles from './VilkårsvurderingSkjema.module.css';
 
 export function VilkårsvurderingSkjemaNormal() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
     const { erPanelEkspandert, togglePanel } = useEkspanderbareVilkårsvurderingPaneler();
@@ -37,7 +41,10 @@ export function VilkårsvurderingSkjemaNormal() {
         isPending: opprettVilkårResultatIsPending,
         error: opprettVilkårResultatError,
     } = useOpprettVilkårResultat({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const leggTilVilkårUtvidet = (personIdent: string) =>

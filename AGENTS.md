@@ -123,6 +123,9 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   When the behandling in the cache is updated (any `setQueryData`, or a refetch — not the first fetch),
   `registrerQueryClientLyttere` (`src/frontend/queryClient.ts`) automatically invalidates queries that depend on it
   (the fagsak, `historikkinnslag`, `personerMedUgyldigEtterbetalingsperiode`). Add new dependencies there.
+  When a request returns an updated behandling, call
+  `queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling)` together with
+  `settÅpenBehandling(oppdatertBehandling)` (`queryKeys.behandling` accepts a behandling or a behandlingId).
 - **Ressurs envelope**: backend responses are wrapped in a `Ressurs` envelope
   (`SUKSESS | FEILET | IKKE_TILGANG | FUNKSJONELL_FEIL`), locally typed in `api/client/apiClient.ts` — error
   statuses can arrive with HTTP 200. `apiClient` unwraps this via `pakkUtRessursResponse()` and throws

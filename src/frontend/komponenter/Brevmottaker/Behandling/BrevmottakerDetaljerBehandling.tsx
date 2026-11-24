@@ -1,8 +1,10 @@
 import { useToastContext } from '@context/ToastContext';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettBrevmottaker } from '@hooks/useSlettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { BrevmottakerDetaljer } from '../Felles/BrevmottakerDetaljer';
 
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export function BrevmottakerDetaljerBehandling({ brevmottaker }: Props) {
+    const queryClient = useQueryClient();
+
     const erLesevisning = useErLesevisning();
 
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -22,6 +26,7 @@ export function BrevmottakerDetaljerBehandling({ brevmottaker }: Props) {
         error: slettBrevmottakerError,
     } = useSlettBrevmottaker({
         onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             settToast(ToastTyper.BREVMOTTAKER_FJERNET, { alertType: AlertType.SUCCESS, tekst: 'Brevmottaker fjernet' });
         },

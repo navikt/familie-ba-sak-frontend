@@ -1,6 +1,8 @@
 import { ApiFeil } from '@api/client/apiClient';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOppdaterBehandlendeEnhet } from '@hooks/useOppdaterBehandlendeEnhet';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { behandlendeEnheter, UKJENT_ENHET } from '@typer/enhet';
 import { useForm } from 'react-hook-form';
 
@@ -19,6 +21,8 @@ interface Props {
 }
 
 export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: oppdaterBehandlendeEnhet } = useOppdaterBehandlendeEnhet(behandling.behandlingId);
 
@@ -41,6 +45,7 @@ export function useEndreBehandlendeEnhetForm({ lukkModal }: Props) {
         const { enhetId, begrunnelse } = formValues;
         try {
             const oppdatertBehandling = await oppdaterBehandlendeEnhet({ enhetId, begrunnelse });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkModal();
         } catch (error: unknown) {

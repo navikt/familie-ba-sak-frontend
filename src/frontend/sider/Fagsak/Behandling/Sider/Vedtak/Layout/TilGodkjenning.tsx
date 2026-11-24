@@ -57,6 +57,7 @@ export function TilGodkjenning({ settFeilmelding }: Props) {
     const { mutate: sendVedtakTilBeslutter, isPending: sendVedtakTilBeslutterIsPending } = useSendVedtakTilBeslutter({
         onSuccess: async behandling => {
             await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
             åpneVisSendtTilTotrinnskontrollModal();
         },

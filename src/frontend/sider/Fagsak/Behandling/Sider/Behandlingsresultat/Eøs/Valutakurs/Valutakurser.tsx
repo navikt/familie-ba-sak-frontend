@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useEndreVurderingsstrategiForValutakurser } from '@hooks/useEndreVurderingsstrategiForValutakurser';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
@@ -14,6 +15,7 @@ import {
     Table,
     VStack,
 } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { useState } from 'react';
@@ -29,6 +31,8 @@ interface IProps {
 }
 
 const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, visFeilmeldinger }: IProps) => {
+    const queryClient = useQueryClient();
+
     const { settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: endreVurderingsstrategi } = useEndreVurderingsstrategiForValutakurser();
     const [erGjenopprettAutomatiskeValutakurserModalÅpen, settErGjenopprettAutomatiskeValutakurserModalÅpen] =
@@ -60,6 +64,7 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
             behandlingId: åpenBehandling.behandlingId,
             vurderingsstrategi: nesteVurderingsstrategi,
         }).then(oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
         });
     };

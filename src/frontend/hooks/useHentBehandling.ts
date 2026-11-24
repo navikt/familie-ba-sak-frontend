@@ -111,7 +111,7 @@ export function useHentBehandling(behandlingId: number | undefined) {
         // cached behandling, som er et problem hvis de ikke bruker "values" (eller noe tilsvarende) fra RHF.
         // Dette må sees mer på før vi eventuelt fjerner gcTime herfra.
         gcTime: 0,
-        // Behandlingen oppdateres eksplisitt via settÅpenBehandling. Automatisk refetch kan nullstille skjemaer
+        // Behandlingen oppdateres eksplisitt via setQueryData. Automatisk refetch kan nullstille skjemaer
         // som er under redigering. Det kan også oppdatere steget på behandlingen hvis behandlingen har blitt oppdatert
         // i en annen fane, av en annen saksbehandler, eller at serveren har oppdatert den selv, som kan føre til at
         // saksbehandler befinner seg på et tidligere steg enn det behandlingen er på, eller et senere (ulovlig) steg.

@@ -1,3 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useQueryClient } from '@tanstack/react-query';
 import { type FieldErrors, useForm } from 'react-hook-form';
 
 import { ModalType } from '../../../../context/ModalContext';
@@ -32,6 +34,8 @@ export interface HenleggBehandlingFormValues {
 export const HENLEGG_BEHANDLING_FORM_ID = 'henlegg_behandling_modal_form';
 
 export function useHenleggBehandlingForm() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { lukkModal } = useModal(ModalType.HENLEGG_BEHANDLING);
@@ -58,6 +62,7 @@ export function useHenleggBehandlingForm() {
         }
         return mutateAsync({ behandling, årsak, begrunnelse })
             .then(behandling => {
+                queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
                 settÅpenBehandling(behandling);
                 lukkModal();
                 åpneModal({ årsak });

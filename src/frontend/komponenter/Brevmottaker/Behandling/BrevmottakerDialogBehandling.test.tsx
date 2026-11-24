@@ -1,7 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { BrukerProvider } from '@sider/Fagsak/BrukerContext';
+import { QueryClient } from '@tanstack/react-query';
 import { waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -21,10 +23,11 @@ vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 const OPPRETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId';
 const UTENLANDSK_ADRESSE_INFO = 'Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.';
 const settÅpenBehandling = vi.fn();
+let queryClient: QueryClient;
 
 function Wrapper({ children }: PropsWithChildren) {
     return (
-        <TestProviders>
+        <TestProviders queryClient={queryClient}>
             <BrukerProvider bruker={lagPerson({ navn: 'Bruker Brukersen' })}>
                 <BrevmottakerDialogProvider initialErÅpen={true}>
                     {({ erDialogÅpen }) => erDialogÅpen && children}
@@ -49,6 +52,7 @@ async function renderDialog(brevmottakere: BrevmottakerBehandling[] = []) {
 describe('BrevmottakerDialogBehandling', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        queryClient = new QueryClient();
         vi.mocked(useErLesevisning).mockReturnValue(false);
     });
 
@@ -164,6 +168,7 @@ describe('BrevmottakerDialogBehandling', () => {
         expect(screen.getByText('Navn er påkrevd.')).toBeInTheDocument();
         expect(screen.getByText('Land er påkrevd.')).toBeInTheDocument();
         expect(screen.getByText('Adresselinje 1 er påkrevd.')).toBeInTheDocument();
+        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
         expect(settÅpenBehandling).not.toHaveBeenCalled();
     });
 
@@ -198,6 +203,7 @@ describe('BrevmottakerDialogBehandling', () => {
                 landkode: 'NO',
             },
         });
+        expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(lagBehandling({ behandlingId: 42 }));
         expect(settÅpenBehandling).toHaveBeenCalledOnce();
         expect(hentLukkKnappIFooter(screen)).toBeEnabled();
     });
@@ -223,6 +229,7 @@ describe('BrevmottakerDialogBehandling', () => {
 
         expect(await screen.findByText('Brevmottakeren kunne ikke lagres.')).toBeInTheDocument();
         expect(screen.getByRole('textbox', { name: 'Navn' })).toHaveValue('Vera Verge');
+        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
         expect(settÅpenBehandling).not.toHaveBeenCalled();
     });
 

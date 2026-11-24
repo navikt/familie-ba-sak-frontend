@@ -1,7 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterAnnenVurdering } from '@hooks/useOppdaterAnnenVurdering';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IRestAnnenVurdering, Resultat } from '@typer/vilkår';
 import { useForm } from 'react-hook-form';
 
@@ -21,6 +23,8 @@ interface Props {
 }
 
 export function useAnnenVurderingSkjema({ annenVurdering, lukkSkjema }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { mutateAsync: oppdaterAnnenVurdering } = useOppdaterAnnenVurdering();
 
@@ -48,6 +52,7 @@ export function useAnnenVurderingSkjema({ annenVurdering, lukkSkjema }: Props) {
                 behandlingId: behandling.behandlingId,
                 annenVurdering: { ...annenVurdering, resultat: values.resultat, begrunnelse: values.begrunnelse },
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {

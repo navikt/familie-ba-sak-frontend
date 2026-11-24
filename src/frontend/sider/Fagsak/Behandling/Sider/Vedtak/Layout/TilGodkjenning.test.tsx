@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -20,6 +21,7 @@ const {
     useSendVedtakTilBeslutterMock,
     sendVedtakTilBeslutterMock,
     invalidateQueriesMock,
+    setQueryDataMock,
 } = vi.hoisted(() => ({
     useBehandlingContextMock: vi.fn(),
     useSendtTilTotrinnskontrollModalContextMock: vi.fn(),
@@ -32,6 +34,7 @@ const {
     useSendVedtakTilBeslutterMock: vi.fn(),
     sendVedtakTilBeslutterMock: vi.fn(),
     invalidateQueriesMock: vi.fn(),
+    setQueryDataMock: vi.fn(),
 }));
 
 vi.mock('@sider/Fagsak/Behandling/BehandlingContext', () => ({
@@ -58,7 +61,7 @@ vi.mock('@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperioderCo
 vi.mock('@hooks/useSaksbehandler', () => ({ useSaksbehandler: useSaksbehandlerMock }));
 vi.mock('@hooks/useSendVedtakTilBeslutter', () => ({ useSendVedtakTilBeslutter: useSendVedtakTilBeslutterMock }));
 vi.mock('@tanstack/react-query', () => ({
-    useQueryClient: () => ({ invalidateQueries: invalidateQueriesMock }),
+    useQueryClient: () => ({ invalidateQueries: invalidateQueriesMock, setQueryData: setQueryDataMock }),
 }));
 
 const settFeilmeldingMock = vi.fn();
@@ -273,6 +276,7 @@ describe('TilGodkjenning', () => {
 
         // Assert
         expect(invalidateQueriesMock).toHaveBeenCalled();
+        expect(setQueryDataMock).toHaveBeenCalledWith(queryKeys.behandling(2), oppdatertBehandling);
         expect(settÅpenBehandlingMock).toHaveBeenCalled();
         expect(åpneModalMock).toHaveBeenCalled();
     });

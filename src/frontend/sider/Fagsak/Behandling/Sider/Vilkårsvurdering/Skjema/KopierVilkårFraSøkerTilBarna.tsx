@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useKopierVilkårFraSøkerTilBarna } from '@hooks/useKopierVilkårFraSøkerTilBarna';
 import { FilesIcon } from '@navikt/aksel-icons';
@@ -5,6 +6,7 @@ import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { FeatureToggle } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import { Resultat, VilkårType } from '@typer/vilkår';
@@ -13,6 +15,8 @@ import { useState } from 'react';
 const VILKÅRTYPER_SOM_SKAL_ÅPNES = [VilkårType.BOR_MED_SØKER, VilkårType.BOSATT_I_RIKET];
 
 export function KopierVilkårFraSøkerTilBarna() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { ekspanderPanel, kollapsPanel } = useEkspanderbareVilkårsvurderingPaneler();
     const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
@@ -26,6 +30,7 @@ export function KopierVilkårFraSøkerTilBarna() {
         error: kopierVilkårFraSøkerTilBarnaError,
     } = useKopierVilkårFraSøkerTilBarna({
         onSuccess: behandling => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
 
             const barnasIdenter = behandling.personer

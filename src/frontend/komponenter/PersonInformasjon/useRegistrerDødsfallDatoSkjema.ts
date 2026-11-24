@@ -1,3 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
@@ -27,6 +29,8 @@ type TransformedRegistrerDødsfallDatoFormValues = {
 };
 
 export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: Props) => {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { mutateAsync: registrerDødsfallDato } = useRegistrerDødsfallDato();
@@ -53,6 +57,7 @@ export const useRegistrerDødsfallDatoSkjema = ({ person, lukkModal }: Props) =>
 
         return registrerDødsfallDato(registrerDødsfallParameters)
             .then(behandling => {
+                queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
                 settÅpenBehandling(behandling);
                 lukkModal();
             })

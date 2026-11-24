@@ -1,6 +1,8 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
 import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export function TaBehandlingAvVentModal({ lukkModal }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const {
@@ -17,6 +21,7 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
         error,
     } = useTaBehandlingAvVent({
         onSuccess: behandling => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
             lukkModal();
         },

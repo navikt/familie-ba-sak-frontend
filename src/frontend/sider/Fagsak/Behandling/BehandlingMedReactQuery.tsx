@@ -1,13 +1,10 @@
 import { ApiFeil, RessursStatus } from '@api/client/apiClient';
-import { queryKeys } from '@hooks/keys/queryKeys';
 import { useHentBehandling } from '@hooks/useHentBehandling';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
 import { Box, GlobalAlert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { KontrollsiderProvider } from '@sider/Fagsak/Behandling/KontrollsiderContext';
-import { useQueryClient } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
 import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
@@ -23,17 +20,11 @@ interface Props {
 }
 
 export function BehandlingMedReactQuery({ behandlingId }: Props) {
-    const queryClient = useQueryClient();
-
     const {
         data: behandling,
         isPending: behandlingIsPending,
         error: behandlingError,
     } = useHentBehandling(behandlingId);
-
-    function settBehandling(oppdatertBehandling: IBehandling) {
-        queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling.behandlingId), oppdatertBehandling);
-    }
 
     if (behandlingIsPending) {
         return (
@@ -70,7 +61,7 @@ export function BehandlingMedReactQuery({ behandlingId }: Props) {
     }
 
     return (
-        <BehandlingProvider key={behandling.behandlingId} behandling={behandling} settBehandling={settBehandling}>
+        <BehandlingProvider key={behandling.behandlingId} behandling={behandling}>
             <KontrollsiderProvider>
                 <HenleggBehandlingModal />
                 <HenleggBehandlingVeivalgModal />

@@ -1,8 +1,10 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBruker } from '@hooks/useBruker';
 import { useFagsak } from '@hooks/useFagsak';
 import { useSendManueltBrev } from '@hooks/useSendManueltBrev';
 import type { Regionkode } from '@komponenter/FlaggCombobox';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IBehandling } from '@typer/behandling';
 import { BehandlingKategori } from '@typer/behandlingstema';
 import type { IManueltBrevRequestPåBehandling } from '@typer/dokument';
@@ -123,6 +125,8 @@ interface Props {
 }
 
 export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
+    const queryClient = useQueryClient();
+
     const fagsak = useFagsak();
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const bruker = useBruker();
@@ -191,6 +195,7 @@ export const useSendManueltBrevForm = ({ onSubmitSuccess }: Props) => {
         try {
             const oppdatertBehandling = await sendBrev(hentSkjemaData(values));
             onSubmitSuccess();
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
         } catch (error) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';

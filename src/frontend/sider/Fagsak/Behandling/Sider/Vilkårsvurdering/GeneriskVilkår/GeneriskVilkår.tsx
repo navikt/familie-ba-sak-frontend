@@ -1,9 +1,11 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
 import { PersonType } from '@typer/person';
@@ -21,6 +23,8 @@ interface Props {
 }
 
 export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, generiskVilkårKey }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { ekspanderRad } = useEkspanderbareVilkårResultatRader();
     const erLesevisning = useErLesevisning();
@@ -52,6 +56,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
         error: opprettVilkårResultatError,
     } = useOpprettVilkårResultat({
         onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             åpneNyeIkkeVurdertVilkårResultat(oppdatertBehandling);
         },

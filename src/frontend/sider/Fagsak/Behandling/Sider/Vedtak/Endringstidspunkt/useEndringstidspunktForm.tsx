@@ -55,6 +55,7 @@ export function useEndringstidspunktForm() {
                 queryKey: queryKeys.vedtaksperioder(oppdatertBehandling.behandlingId),
             });
             queryClient.invalidateQueries({ queryKey: queryKeys.endringstidspunkt(oppdatertBehandling.behandlingId) });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkDialog();
         } catch (error: unknown) {

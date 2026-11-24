@@ -1,7 +1,9 @@
 import { useToastContext } from '@context/ToastContext';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOpprettBrevmottaker } from '@hooks/useOpprettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import type { Brevmottaker } from '@typer/brevmottaker';
 import { useBrevmottakerForm } from '../Felles/Form/useBrevmottakerForm';
 
@@ -10,6 +12,8 @@ interface Props {
 }
 
 export function useBrevmottakerFormBehandling({ onSubmitSuccess }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useToastContext();
 
@@ -20,6 +24,7 @@ export function useBrevmottakerFormBehandling({ onSubmitSuccess }: Props) {
             behandlingId: behandling.behandlingId,
             ...brevmottaker,
         });
+        queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
         settÅpenBehandling(oppdatertBehandling);
         settToast(ToastTyper.BREVMOTTAKER_LAGRET, { alertType: AlertType.SUCCESS, tekst: 'Brevmottaker ble lagret' });
     }
