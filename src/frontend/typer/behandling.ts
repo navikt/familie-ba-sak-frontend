@@ -2,6 +2,7 @@ import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import type { IsoDatoString } from '@utils/dato';
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
+import { type Brand, lagBrandedIdFactory } from './brand';
 import type { INøkkelPar } from './common';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
 import type { FagsakId } from './fagsak';
@@ -24,6 +25,9 @@ import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
 export const MIDLERTIDIG_BEHANDLENDE_ENHET_ID = '4863';
+
+export type BehandlingId = Brand<number, 'BehandlingId'>;
+export const BehandlingId = lagBrandedIdFactory('BehandlingId');
 
 export interface NyBehandling {
     kategori: BehandlingKategori | null;
@@ -305,7 +309,7 @@ export enum BehandlerRolle {
 export interface IBehandling {
     fagsakId: FagsakId;
     arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
-    behandlingId: number;
+    behandlingId: BehandlingId;
     endretAv: string;
     kategori: BehandlingKategori;
     underkategori: BehandlingUnderkategori;
