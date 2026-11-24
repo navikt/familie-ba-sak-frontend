@@ -19,9 +19,21 @@ export enum FagsakType {
     SKJERMET_BARN = 'SKJERMET_BARN',
 }
 
+export type FagsakId = number & { readonly __brand: 'FagsakId' };
+
+export const FagsakId = {
+    erGyldig: (id: number): id is FagsakId => Number.isSafeInteger(id) && id > 0,
+    fra: (id: number): FagsakId => {
+        if (!FagsakId.erGyldig(id)) {
+            throw new Error(`Ugyldig fagsakId: ${id}`);
+        }
+        return id;
+    },
+};
+
 // Interface
 export interface IBaseFagsak {
-    id: number;
+    id: FagsakId;
     fagsakeier: string;
     opprettetTidspunkt: string;
     saksnummer: string;

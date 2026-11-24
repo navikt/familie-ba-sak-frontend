@@ -2,6 +2,7 @@ import { hentTilbakekrevingsbehandlinger } from '@api/hentTilbakekrevingsbehandl
 import { renderHook, waitFor } from '@testing-library/react';
 import { lagTilbakekrevingbehandling } from '@testutils/testdata/tilbakekrevingTestdata';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { useHentTilbakekrevingsbehandlinger } from './useHentTilbakekrevingsbehandlinger';
 
@@ -16,7 +17,7 @@ describe('useHentTilbakekrevingsbehandlinger', () => {
         const tilbakekrevingsbehandlinger = [lagTilbakekrevingbehandling()];
         vi.mocked(hentTilbakekrevingsbehandlinger).mockResolvedValue(tilbakekrevingsbehandlinger);
 
-        const { result } = renderHook(() => useHentTilbakekrevingsbehandlinger(123), {
+        const { result } = renderHook(() => useHentTilbakekrevingsbehandlinger(FagsakId.fra(123)), {
             wrapper: TestProviders,
         });
 
@@ -28,7 +29,7 @@ describe('useHentTilbakekrevingsbehandlinger', () => {
     test('setter isError ved feil fra api-funksjon', async () => {
         vi.mocked(hentTilbakekrevingsbehandlinger).mockRejectedValue(new Error('Noe gikk galt'));
 
-        const { result } = renderHook(() => useHentTilbakekrevingsbehandlinger(123), {
+        const { result } = renderHook(() => useHentTilbakekrevingsbehandlinger(FagsakId.fra(123)), {
             wrapper: TestProviders,
         });
 

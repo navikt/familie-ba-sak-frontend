@@ -2,14 +2,15 @@ import { queryKeys } from '@hooks/keys/queryKeys';
 import { QueryClient, type QueryKey } from '@tanstack/react-query';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
+import { FagsakId } from '@typer/fagsak';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { queryClient as appQueryClient, registrerQueryClientLyttere } from './queryClient';
 
 const behandlingId = 1;
 const annenBehandlingId = 2;
-const fagsakId = 10;
-const annenFagsakId = 20;
+const fagsakId = FagsakId.fra(10);
+const annenFagsakId = FagsakId.fra(20);
 
 describe('queryClient', () => {
     describe('registrerQueryClientLyttere', () => {

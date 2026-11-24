@@ -1,7 +1,8 @@
 import { useHentHarÅpenTilbakekreving } from '@hooks/useHentHarÅpenTilbakekreving';
+import type { FagsakId } from '@typer/fagsak';
 
 // Leser feilen fra spørringen SimuleringContainer allerede har startet, uten å starte en ny henting.
-export function useHentHarÅpenTilbakekrevingError(fagsakId: number) {
+export function useHentHarÅpenTilbakekrevingError(fagsakId: FagsakId) {
     const { error } = useHentHarÅpenTilbakekreving(fagsakId, { enabled: false });
     return error;
 }

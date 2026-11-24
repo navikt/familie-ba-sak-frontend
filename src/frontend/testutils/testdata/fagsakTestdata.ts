@@ -1,10 +1,10 @@
 import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
-import { FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
+import { FagsakId, FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
 import { BehandlingTestdata } from './behandlingTestdata';
 
 export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
     return {
-        id: 1,
+        id: FagsakId.fra(1),
         fagsakeier: '12345678910',
         opprettetTidspunkt: '2020-09-19T09:08:56.8',
         saksnummer: '1234',

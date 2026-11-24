@@ -1,5 +1,5 @@
 import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-import type { IMinimalFagsak } from '@typer/fagsak';
+import type { FagsakId, IMinimalFagsak } from '@typer/fagsak';
 
 import { RessursResolver } from '../utils/ressursResolver';
 
@@ -7,7 +7,7 @@ export interface LåsOppFagsakPayload {
     begrunnelse: string;
 }
 
-export async function låsOppFagsak(request: FamilieRequest, fagsakId: number, payload: LåsOppFagsakPayload) {
+export async function låsOppFagsak(request: FamilieRequest, fagsakId: FagsakId, payload: LåsOppFagsakPayload) {
     const ressurs = await request<LåsOppFagsakPayload, IMinimalFagsak>({
         data: payload,
         method: 'PATCH',

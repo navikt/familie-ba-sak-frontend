@@ -1,5 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { Informasjonsbrev } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
+import { FagsakId } from '@typer/fagsak';
 import { Målform } from '@typer/søknad';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -27,7 +28,7 @@ describe('forhåndsvisBrevPåFagsak', () => {
     test('kaller apiClient.post med riktig URL og data', async () => {
         vi.mocked(apiClient.post).mockResolvedValue('base64-pdf-innhold');
 
-        const result = await forhåndsvisBrevPåFagsak(1, payload);
+        const result = await forhåndsvisBrevPåFagsak(FagsakId.fra(1), payload);
 
         expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/dokument/fagsak/1/forhaandsvis-brev',
@@ -39,6 +40,6 @@ describe('forhåndsvisBrevPåFagsak', () => {
     test('kaster feil ved avvist promise', async () => {
         vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
-        await expect(forhåndsvisBrevPåFagsak(1, payload)).rejects.toThrow('Noe gikk galt');
+        await expect(forhåndsvisBrevPåFagsak(FagsakId.fra(1), payload)).rejects.toThrow('Noe gikk galt');
     });
 });

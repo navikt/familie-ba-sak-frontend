@@ -1,5 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { Informasjonsbrev } from '@sider/Fagsak/Behandling/Høyremeny/Brev/typer';
+import { FagsakId } from '@typer/fagsak';
 import { Målform } from '@typer/søknad';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -27,7 +28,7 @@ describe('sendInformasjonsbrev', () => {
     test('kaller apiClient.post med riktig URL og data', async () => {
         vi.mocked(apiClient.post).mockResolvedValue(undefined);
 
-        await sendInformasjonsbrev(1, payload);
+        await sendInformasjonsbrev(FagsakId.fra(1), payload);
 
         expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/dokument/fagsak/1/send-brev',
@@ -38,6 +39,6 @@ describe('sendInformasjonsbrev', () => {
     test('kaster feil ved avvist promise', async () => {
         vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
-        await expect(sendInformasjonsbrev(1, payload)).rejects.toThrow('Noe gikk galt');
+        await expect(sendInformasjonsbrev(FagsakId.fra(1), payload)).rejects.toThrow('Noe gikk galt');
     });
 });

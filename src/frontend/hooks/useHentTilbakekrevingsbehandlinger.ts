@@ -2,8 +2,9 @@ import { hentTilbakekrevingsbehandlinger } from '@api/hentTilbakekrevingsbehandl
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
+import type { FagsakId } from '@typer/fagsak';
 
-export function useHentTilbakekrevingsbehandlinger(fagsakId: number) {
+export function useHentTilbakekrevingsbehandlinger(fagsakId: FagsakId) {
     return useQuery({
         queryKey: queryKeys.tilbakekrevingsbehandlinger(fagsakId),
         queryFn: () => hentTilbakekrevingsbehandlinger(fagsakId),
