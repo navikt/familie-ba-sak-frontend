@@ -10,7 +10,6 @@ import type { IPersonInfo } from '@typer/person';
 import { ForelderBarnRelasjonRolle } from '@typer/person';
 import { type IBarnMedOpplysninger, Målform } from '@typer/søknad';
 import type { IsoDatoString } from '@utils/dato';
-import deepEqual from 'deep-equal';
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { transformerSkjemaData } from './transformerSkjemaData';
@@ -121,7 +120,8 @@ export function useDokumentutsendingSkjema({ åpneBrevSendtDialog, settForhånds
 
     const skjemaverdier = getValues();
     const visForhåndsvisningBeskjed =
-        !!skjemaverdier.årsak && !deepEqual(byggBrevRequest(skjemaverdier), sistForhåndsvisteBrevRequest);
+        !!skjemaverdier.årsak &&
+        JSON.stringify(byggBrevRequest(skjemaverdier)) !== JSON.stringify(sistForhåndsvisteBrevRequest);
 
     return {
         form,

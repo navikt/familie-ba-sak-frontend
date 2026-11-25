@@ -40,7 +40,6 @@ updates:
           - "@navikt/familie-header"
           - "@navikt/familie-http"
           - "@navikt/familie-ikoner"
-          - "@navikt/familie-logging"
           - "@navikt/familie-skjema"
           - "@navikt/familie-tidslinje"
           - "@navikt/familie-typer"
@@ -52,7 +51,6 @@ updates:
       nais-apm:
         patterns:
           - "@nais/apm"
-          - "@grafana/faro-web-sdk"
       testing-library:
         patterns:
           - "@testing-library/dom"
@@ -80,10 +78,6 @@ updates:
         patterns:
           - "express"
           - "@types/express"
-      deep_equal:
-        patterns:
-          - "deep-equal"
-          - "@types/deep-equal"
       types:
         patterns:
           - "@types/*"
