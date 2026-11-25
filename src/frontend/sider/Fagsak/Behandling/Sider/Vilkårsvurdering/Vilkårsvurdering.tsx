@@ -4,7 +4,17 @@ import { useFeatureToggles } from '@hooks/useFeatureToggles';
 import { useHentMigreringsdato } from '@hooks/useHentMigreringsdato';
 import { useOppdaterVilkårsvurdering } from '@hooks/useOppdaterVilkårsvurdering';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { BodyShort, Detail, ErrorMessage, ErrorSummary, HStack, InfoCard, List, VStack } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Detail,
+    ErrorMessage,
+    ErrorSummary,
+    HStack,
+    InfoCard,
+    List,
+    LocalAlert,
+    VStack,
+} from '@navikt/ds-react';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
@@ -39,7 +49,7 @@ export function Vilkårsvurdering() {
 
     const [visFeilmeldinger, settVisFeilmeldinger] = useState(false);
 
-    const { data: migreringsdato } = useHentMigreringsdato(behandling.behandlingId);
+    const { data: migreringsdato, error: migreringsdatoError } = useHentMigreringsdato(behandling.behandlingId);
 
     const {
         mutate: oppdaterVilkårsvurdering,
@@ -94,6 +104,14 @@ export function Vilkårsvurdering() {
                         tilFormat: Datoformat.DATO,
                     })}`}
                 </Detail>
+            )}
+            {migreringsdatoError && (
+                <LocalAlert status="warning">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Klarte ikke å sjekke om saken er migrert fra Infotrygd</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{migreringsdatoError.message}</LocalAlert.Content>
+                </LocalAlert>
             )}
             <OppdaterRegisteropplysninger />
             {!erProd() && !toggles[FeatureToggle.skalSkjuleTestmiljøknapper] && (

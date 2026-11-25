@@ -1,4 +1,4 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg } from '@typer/behandling';
 import { Regelverk, Resultat, VilkårType } from '@typer/vilkår';
 import { HttpResponse, http } from 'msw';
@@ -54,6 +54,25 @@ test.describe('Vilkårsvurdering', () => {
         await page.goto('/fagsak/1/1/vilkaarsvurdering');
 
         await expect(page.getByText('Saken ble migrert fra Infotrygd: 01.02.2020')).toBeVisible();
+    });
+
+    test('skal varsle når migreringsdatoen ikke kan hentes', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(lagBehandlingPåSteg(BehandlingSteg.VILKÅRSVURDERING));
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/migreringsdato', () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente migreringsdatoen.'))
+            )
+        );
+
+        await page.goto('/fagsak/1/1/vilkaarsvurdering');
+
+        const varsel = page.getByRole('alert').filter({
+            has: page.getByRole('heading', { name: 'Klarte ikke å sjekke om saken er migrert fra Infotrygd' }),
+        });
+        await expect(varsel).toBeVisible();
+        await expect(varsel).toContainText('Klarte ikke å hente migreringsdatoen.');
+        await expect(page.getByRole('heading', { name: new RegExp(`^${SØKER_NAVN}`) })).toBeVisible();
     });
 
     test('skal ikke gå videre før alle vilkår er vurdert', async ({ page, apiMock }) => {
