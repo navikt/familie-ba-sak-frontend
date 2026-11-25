@@ -57,14 +57,14 @@ importers:
         specifier: 8.0.9
         version: 8.0.9
       '@navikt/flagg-ikoner':
-        specifier: 16.0.6
-        version: 16.0.6(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.6(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: 16.0.7
+        version: 16.0.7(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.7(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@navikt/fnrvalidator':
         specifier: 2.2.1
         version: 2.2.1
       '@navikt/land-verktoy':
-        specifier: 16.0.6
-        version: 16.0.6(lodash@4.18.1)
+        specifier: 16.0.7
+        version: 16.0.7(lodash@4.18.1)
       '@navikt/pino-logger':
         specifier: 5.0.2
         version: 5.0.2(pino@10.4.0)
@@ -640,12 +640,12 @@ packages:
   '@navikt/familie-typer@8.0.9':
     resolution: {integrity: sha512-bP3YfOg56PijcaB4Z9PVjZcxXMdGYzv0ynmpZ7E2tsBj1QRFc0RyWWm3qn1fwkmT7lu98P15xfyZ/wvaoEW0CQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.9/1719367c9efad063d892c02e63db74eb5c6e17e5}
 
-  '@navikt/flagg-ikoner@16.0.6':
-    resolution: {integrity: sha512-UitTnTDxWEx+raREPyqDtO/cU9F/m9Ww62OKIbJc6opA3mjqHu0jLHU8xnb3B0ooWmnA9q1pBytS+gl3HusNaA==, tarball: https://npm.pkg.github.com/download/@navikt/flagg-ikoner/16.0.6/2cc69516ec98a46fe9dc337737749ebcb92c28bb}
+  '@navikt/flagg-ikoner@16.0.7':
+    resolution: {integrity: sha512-NXBzVZliUxSVe5fgbjvcXDfLSM06b7Q/QnlJIMHINDk4VEfe/phllEl57DlPmknu4kX2bSztOSWO8ZEh8cQfgg==, tarball: https://npm.pkg.github.com/download/@navikt/flagg-ikoner/16.0.7/0197af28fbaef10da34074d6ced354d10af62c47}
     peerDependencies:
       '@navikt/ds-css': '>=7'
       '@navikt/ds-react': '>=7'
-      '@navikt/land-verktoy': 16.0.6||^14.0.0
+      '@navikt/land-verktoy': 16.0.7||^14.0.0
       classnames: '2'
       lodash: '4'
       react: '>=18'
@@ -657,8 +657,8 @@ packages:
   '@navikt/fnrvalidator@2.2.1':
     resolution: {integrity: sha512-R6x3MBFC0E/B7oTs+P2jAP+ym7+d6cwSpDsLeMja9IwPpJq3HV/OClFBVWm9fJZPmXfumKRMGy6gqsQPj90ftg==, tarball: https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.1/37ed0feb23a7525139ad5512684ff6b0977112c6}
 
-  '@navikt/land-verktoy@16.0.6':
-    resolution: {integrity: sha512-MEE43nVjrkRbF6cY1Zv92l5XcU4eZc91AYsM1f6f/k2dsn+RM/HQcCtuPIZchMWWVOaY7wv0dpY6BjZlOsD6bQ==, tarball: https://npm.pkg.github.com/download/@navikt/land-verktoy/16.0.6/82d33bea20be9d10947fb808be745301753637ca}
+  '@navikt/land-verktoy@16.0.7':
+    resolution: {integrity: sha512-MeG7CQeaTXZx87XGp9buYxpzMK3BZm/ZJs5wQEK9YR30u9YjmRgHc7ilzlY/pGE4/DdKecdJU8oXlXtg/XVndg==, tarball: https://npm.pkg.github.com/download/@navikt/land-verktoy/16.0.7/eb8e1451a270844efb6446dd023c258cf74be995}
     peerDependencies:
       lodash: '4'
 
@@ -3903,11 +3903,11 @@ snapshots:
 
   '@navikt/familie-typer@8.0.9': {}
 
-  '@navikt/flagg-ikoner@16.0.6(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.6(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@navikt/flagg-ikoner@16.0.7(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.7(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@navikt/ds-css': 8.23.0
       '@navikt/ds-react': 8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@navikt/land-verktoy': 16.0.6(lodash@4.18.1)
+      '@navikt/land-verktoy': 16.0.7(lodash@4.18.1)
       classnames: 2.5.1
       lodash: 4.18.1
       react: 19.3.1
@@ -3919,7 +3919,7 @@ snapshots:
 
   '@navikt/fnrvalidator@2.2.1': {}
 
-  '@navikt/land-verktoy@16.0.6(lodash@4.18.1)':
+  '@navikt/land-verktoy@16.0.7(lodash@4.18.1)':
     dependencies:
       '@piotrgorecki/i18n-currency-name': 1.3.0
       country-data-list: 1.6.3
