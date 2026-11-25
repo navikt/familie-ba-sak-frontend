@@ -36,6 +36,7 @@ const behandlingsnøkler = {
     korrigertVedtak: queryKeys.korrigertVedtak(behandlingId),
     migreringsdato: queryKeys.migreringsdato(behandlingId),
     personerMedUgyldigEtterbetalingsperiode: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandlingId),
+    refusjonEøs: queryKeys.refusjonEøs(behandlingId),
     registrerteSøknadstidspunkter: queryKeys.registrerteSøknadstidspunkter(behandlingId),
     sammensattKontrollsak: queryKeys.sammensattKontrollsak(behandlingId),
     simulering: queryKeys.simulering(behandlingId),

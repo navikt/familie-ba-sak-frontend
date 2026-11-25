@@ -1,11 +1,10 @@
-import { useBehandling } from '@hooks/useBehandling';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext, useState } from 'react';
 
 interface RefusjonEøsTabellContext {
+    refusjonEøsPerioder: IRestRefusjonEøs[];
     erRefusjonEøsTabellSynlig: boolean;
-    visRefusjonEøsTabell: () => void;
-    skjulRefusjonEøsTabell: () => void;
     erLeggTilRefusjonEøsFormÅpen: boolean;
     visLeggTilRefusjonEøsForm: () => void;
     skjulLeggTilRefusjonEøsForm: () => void;
@@ -13,13 +12,14 @@ interface RefusjonEøsTabellContext {
 
 const RefusjonEøsTabellContext = createContext<RefusjonEøsTabellContext | undefined>(undefined);
 
-export function RefusjonEøsTabellProvider({ children }: PropsWithChildren) {
-    const behandling = useBehandling();
+interface Props extends PropsWithChildren {
+    refusjonEøsPerioder: IRestRefusjonEøs[];
+}
 
-    const harRefusjonEøs = behandling.refusjonEøs.length !== 0;
-
-    const [erRefusjonEøsTabellSynlig, settErRefusjonEøsTabellSynlig] = useState(harRefusjonEøs);
+export function RefusjonEøsTabellProvider({ refusjonEøsPerioder, children }: Props) {
     const [erLeggTilRefusjonEøsFormÅpen, settErLeggTilRefusjonEøsFormÅpen] = useState(false);
+
+    const erRefusjonEøsTabellSynlig = refusjonEøsPerioder.length > 0 || erLeggTilRefusjonEøsFormÅpen;
 
     const visLeggTilRefusjonEøsForm = useCallback(() => {
         settErLeggTilRefusjonEøsFormÅpen(true);
@@ -29,24 +29,11 @@ export function RefusjonEøsTabellProvider({ children }: PropsWithChildren) {
         settErLeggTilRefusjonEøsFormÅpen(false);
     }, []);
 
-    const visRefusjonEøsTabell = useCallback(() => {
-        if (!harRefusjonEøs) {
-            visLeggTilRefusjonEøsForm();
-        }
-        settErRefusjonEøsTabellSynlig(true);
-    }, [harRefusjonEøs, visLeggTilRefusjonEøsForm]);
-
-    const skjulRefusjonEøsTabell = useCallback(() => {
-        skjulLeggTilRefusjonEøsForm();
-        settErRefusjonEøsTabellSynlig(false);
-    }, [skjulLeggTilRefusjonEøsForm]);
-
     return (
         <RefusjonEøsTabellContext.Provider
             value={{
+                refusjonEøsPerioder,
                 erRefusjonEøsTabellSynlig,
-                visRefusjonEøsTabell,
-                skjulRefusjonEøsTabell,
                 erLeggTilRefusjonEøsFormÅpen,
                 visLeggTilRefusjonEøsForm,
                 skjulLeggTilRefusjonEøsForm,

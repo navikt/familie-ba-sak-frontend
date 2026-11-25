@@ -1,10 +1,10 @@
-import { useBehandling } from '@hooks/useBehandling';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
-import { useFagsak } from '@hooks/useFagsak';
+import { useFagsakId } from '@hooks/useFagsakId';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
-import type { IBehandling } from '@typer/behandling';
-import type { IMinimalFagsak } from '@typer/fagsak';
+import type { FagsakId } from '@typer/fagsak';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 import { summerTotalBeløpForPerioder } from '../utils';
 import { RefusjonEøsForm } from './form/RefusjonEøsForm';
@@ -13,14 +13,14 @@ import { RefusjonEøsRad } from './RefusjonEøsRad';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 import { SlettRefusjonEøsError } from './SlettRefusjonEøsError';
 
-function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandling) {
-    const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsak.id}/${behandling.behandlingId}/vedtak`;
+function lagKopieringstekstTilNØS(fagsakId: FagsakId, behandlingId: number, refusjonEøsPerioder: IRestRefusjonEøs[]) {
+    const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak`;
 
     const totaltRefusjonsbeløp = summerTotalBeløpForPerioder(
-        behandling.refusjonEøs.map(it => ({ fom: it.fom, tom: it.tom, beløp: it.refusjonsbeløp }))
+        refusjonEøsPerioder.map(it => ({ fom: it.fom, tom: it.tom, beløp: it.refusjonsbeløp }))
     );
 
-    const formatertRefusjon = behandling.refusjonEøs
+    const formatertRefusjon = refusjonEøsPerioder
         .map(
             refusjonEøs =>
                 `${isoDatoPeriodeTilFormatertString({
@@ -37,11 +37,15 @@ function lagKopieringstekstTilNØS(fagsak: IMinimalFagsak, behandling: IBehandli
 }
 
 export function RefusjonEøsTabell() {
-    const { erLeggTilRefusjonEøsFormÅpen, visLeggTilRefusjonEøsForm, skjulLeggTilRefusjonEøsForm } =
-        useRefusjonEøsTabellContext();
+    const {
+        refusjonEøsPerioder,
+        erLeggTilRefusjonEøsFormÅpen,
+        visLeggTilRefusjonEøsForm,
+        skjulLeggTilRefusjonEøsForm,
+    } = useRefusjonEøsTabellContext();
 
-    const fagsak = useFagsak();
-    const behandling = useBehandling();
+    const fagsakId = useFagsakId();
+    const behandlingId = useBehandlingId();
     const erLesevisning = useErLesevisning();
 
     return (
@@ -49,7 +53,7 @@ export function RefusjonEøsTabell() {
             <Heading level={'2'} size={'small'} spacing={false}>
                 Refusjon EØS
             </Heading>
-            {behandling.refusjonEøs.map(refusjonEøs => (
+            {refusjonEøsPerioder.map(refusjonEøs => (
                 <SlettRefusjonEøsError key={refusjonEøs.id} refusjonEøs={refusjonEøs} />
             ))}
             <Table size={'small'}>
@@ -64,7 +68,7 @@ export function RefusjonEøsTabell() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {behandling.refusjonEøs.map(refusjonEøs => (
+                    {refusjonEøsPerioder.map(refusjonEøs => (
                         <RefusjonEøsRad key={refusjonEøs.id} refusjonEøs={refusjonEøs} />
                     ))}
                     {erLeggTilRefusjonEøsFormÅpen && (
@@ -94,7 +98,7 @@ export function RefusjonEøsTabell() {
                 )}
                 <CopyButton
                     text={'Kopier tekst til NØS'}
-                    copyText={lagKopieringstekstTilNØS(fagsak, behandling)}
+                    copyText={lagKopieringstekstTilNØS(fagsakId, behandlingId, refusjonEøsPerioder)}
                     activeText={'Kopiert!'}
                     variant={'action'}
                     size={'small'}

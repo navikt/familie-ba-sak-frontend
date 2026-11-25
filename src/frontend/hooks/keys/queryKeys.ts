@@ -96,6 +96,9 @@ export const queryKeys = {
     personerMedUgyldigEtterbetalingsperiode: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'personer-med-ugyldig-etterbetalingsperiode'] as const;
     },
+    refusjonEøs: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'refusjon-eos'] as const;
+    },
     registrerteSøknadstidspunkter: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'registrerte-soknadstidspunkter'] as const;
     },

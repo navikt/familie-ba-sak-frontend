@@ -1,7 +1,7 @@
 import { type OppdaterRefusjonEøsPayload, oppdaterRefusjonEøs } from '@api/oppdaterRefusjonEøs';
 import { useOppdaterRefusjonEøs } from '@hooks/useOppdaterRefusjonEøs';
 import { renderHook, waitFor } from '@testing-library/react';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagRefusjonEøs } from '@testutils/testdata/refusjonEøsTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -11,7 +11,7 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const refusjonEøsPerioder = [lagRefusjonEøs()];
 
 const payload: OppdaterRefusjonEøsPayload = {
     fom: '2024-01-01',
@@ -26,7 +26,7 @@ const parameters = { behandlingId: 123, refusjonEøsId: 5, payload };
 describe('useOppdaterRefusjonEøs', () => {
     test('skal kalle oppdaterRefusjonEøs med riktige parametere', async () => {
         // Arrange
-        vi.mocked(oppdaterRefusjonEøs).mockResolvedValue(behandling);
+        vi.mocked(oppdaterRefusjonEøs).mockResolvedValue(refusjonEøsPerioder);
 
         const { result } = renderHook(() => useOppdaterRefusjonEøs(), { wrapper: TestProviders });
 
@@ -36,13 +36,13 @@ describe('useOppdaterRefusjonEøs', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(oppdaterRefusjonEøs).toHaveBeenCalledWith(123, 5, payload);
-        expect(result.current.data).toEqual(behandling);
+        expect(result.current.data).toEqual(refusjonEøsPerioder);
     });
 
     test('skal kalle onSuccess-callback ved vellykket mutasjon', async () => {
         // Arrange
         const onSuccess = vi.fn();
-        vi.mocked(oppdaterRefusjonEøs).mockResolvedValue(behandling);
+        vi.mocked(oppdaterRefusjonEøs).mockResolvedValue(refusjonEøsPerioder);
 
         const { result } = renderHook(() => useOppdaterRefusjonEøs({ onSuccess }), { wrapper: TestProviders });
 
@@ -51,7 +51,7 @@ describe('useOppdaterRefusjonEøs', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(onSuccess).toHaveBeenCalledWith(behandling, parameters, undefined, expect.any(Object));
+        expect(onSuccess).toHaveBeenCalledWith(refusjonEøsPerioder, parameters, undefined, expect.any(Object));
     });
 
     test('skal sette isError dersom oppdaterRefusjonEøs feiler', async () => {
