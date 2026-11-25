@@ -54,14 +54,14 @@ importers:
         specifier: 8.0.9
         version: 8.0.9
       '@navikt/flagg-ikoner':
-        specifier: 16.0.6
-        version: 16.0.6(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.6(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: 16.0.7
+        version: 16.0.7(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.7(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@navikt/fnrvalidator':
         specifier: 2.2.1
         version: 2.2.1
       '@navikt/land-verktoy':
-        specifier: 16.0.6
-        version: 16.0.6(lodash@4.18.1)
+        specifier: 16.0.7
+        version: 16.0.7(lodash@4.18.1)
       '@navikt/pino-logger':
         specifier: 5.0.2
         version: 5.0.2(pino@10.4.0)
@@ -128,7 +128,7 @@ importers:
         version: 10.4.2
       '@testing-library/jest-dom':
         specifier: 7.0.1
-        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)))
+        version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1(@opentelemetry/api@1.10.0)(@types/node@26.6.6)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)))
       '@testing-library/react':
         specifier: 16.3.3
         version: 16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -139,8 +139,8 @@ importers:
         specifier: 5.0.6
         version: 5.0.6
       '@types/node':
-        specifier: 26.6.5
-        version: 26.6.5
+        specifier: 26.6.6
+        version: 26.6.6
       '@types/react':
         specifier: 19.3.0
         version: 19.3.0
@@ -148,11 +148,11 @@ importers:
         specifier: 19.3.0
         version: 19.3.0(@types/react@19.3.0)
       '@vercel/nft':
-        specifier: 1.11.2
-        version: 1.11.2(supports-color@7.2.0)
+        specifier: 1.11.7
+        version: 1.11.7(supports-color@7.2.0)
       '@vitejs/plugin-react':
         specifier: 6.3.0
-        version: 6.3.0(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
+        version: 6.3.0(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -164,7 +164,7 @@ importers:
         version: 17.6.1
       msw:
         specifier: 2.15.0
-        version: 2.15.0(@types/node@26.6.5)(typescript@7.0.2)
+        version: 2.15.0(@types/node@26.6.6)(typescript@7.0.2)
       pino-pretty:
         specifier: 13.2.0
         version: 13.2.0
@@ -173,10 +173,10 @@ importers:
         version: 7.0.2
       vite:
         specifier: 8.3.8
-        version: 8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
+        version: 8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
       vitest:
-        specifier: 5.1.0
-        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
+        specifier: 5.1.1
+        version: 5.1.1(@opentelemetry/api@1.10.0)(@types/node@26.6.6)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
 
 packages:
 
@@ -628,12 +628,12 @@ packages:
   '@navikt/familie-typer@8.0.9':
     resolution: {integrity: sha512-bP3YfOg56PijcaB4Z9PVjZcxXMdGYzv0ynmpZ7E2tsBj1QRFc0RyWWm3qn1fwkmT7lu98P15xfyZ/wvaoEW0CQ==, tarball: https://npm.pkg.github.com/download/@navikt/familie-typer/8.0.9/1719367c9efad063d892c02e63db74eb5c6e17e5}
 
-  '@navikt/flagg-ikoner@16.0.6':
-    resolution: {integrity: sha512-UitTnTDxWEx+raREPyqDtO/cU9F/m9Ww62OKIbJc6opA3mjqHu0jLHU8xnb3B0ooWmnA9q1pBytS+gl3HusNaA==, tarball: https://npm.pkg.github.com/download/@navikt/flagg-ikoner/16.0.6/2cc69516ec98a46fe9dc337737749ebcb92c28bb}
+  '@navikt/flagg-ikoner@16.0.7':
+    resolution: {integrity: sha512-NXBzVZliUxSVe5fgbjvcXDfLSM06b7Q/QnlJIMHINDk4VEfe/phllEl57DlPmknu4kX2bSztOSWO8ZEh8cQfgg==, tarball: https://npm.pkg.github.com/download/@navikt/flagg-ikoner/16.0.7/0197af28fbaef10da34074d6ced354d10af62c47}
     peerDependencies:
       '@navikt/ds-css': '>=7'
       '@navikt/ds-react': '>=7'
-      '@navikt/land-verktoy': 16.0.6||^14.0.0
+      '@navikt/land-verktoy': 16.0.7||^14.0.0
       classnames: '2'
       lodash: '4'
       react: '>=18'
@@ -645,8 +645,8 @@ packages:
   '@navikt/fnrvalidator@2.2.1':
     resolution: {integrity: sha512-R6x3MBFC0E/B7oTs+P2jAP+ym7+d6cwSpDsLeMja9IwPpJq3HV/OClFBVWm9fJZPmXfumKRMGy6gqsQPj90ftg==, tarball: https://npm.pkg.github.com/download/@navikt/fnrvalidator/2.2.1/37ed0feb23a7525139ad5512684ff6b0977112c6}
 
-  '@navikt/land-verktoy@16.0.6':
-    resolution: {integrity: sha512-MEE43nVjrkRbF6cY1Zv92l5XcU4eZc91AYsM1f6f/k2dsn+RM/HQcCtuPIZchMWWVOaY7wv0dpY6BjZlOsD6bQ==, tarball: https://npm.pkg.github.com/download/@navikt/land-verktoy/16.0.6/82d33bea20be9d10947fb808be745301753637ca}
+  '@navikt/land-verktoy@16.0.7':
+    resolution: {integrity: sha512-MeG7CQeaTXZx87XGp9buYxpzMK3BZm/ZJs5wQEK9YR30u9YjmRgHc7ilzlY/pGE4/DdKecdJU8oXlXtg/XVndg==, tarball: https://npm.pkg.github.com/download/@navikt/land-verktoy/16.0.7/eb8e1451a270844efb6446dd023c258cf74be995}
     peerDependencies:
       lodash: '4'
 
@@ -1195,8 +1195,8 @@ packages:
   '@types/http-errors@2.0.5':
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
 
-  '@types/node@26.6.5':
-    resolution: {integrity: sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==}
+  '@types/node@26.6.6':
+    resolution: {integrity: sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -1358,8 +1358,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@vercel/nft@1.11.2':
-    resolution: {integrity: sha512-joJ/I0qH6GN+aB+GH1Eq5ID2BEbp0PbBNjXmOz1EpaE3uYN7PwQ2Gou6hfw5zwRTYj6EcHzLlk78gkJY15lp2w==}
+  '@vercel/nft@1.11.7':
+    resolution: {integrity: sha512-dxQ4fppya6cmFsuMAmPo9bwR6DgOty2Bh7VPqT3T2IQi/7DCqSLFPzHrTgb+h7f+ls0RYwgLXljfyDijVOZm0w==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -1379,8 +1379,8 @@ packages:
       oxc-transform-react:
         optional: true
 
-  '@vitest/mocker@5.1.0':
-    resolution: {integrity: sha512-5umB9/jlWcqVS6fsrFmv5Gdnpu6wAUio/lEOwAmvB7v+lFo/IW2B9FhAD0p19GCULTgMzLCdUmuCDCnAzWgppQ==}
+  '@vitest/mocker@5.1.1':
+    resolution: {integrity: sha512-b2OgTB4+3ImWIVafXKazJXwLKwQxUNnix6b3xUvUTMh7RyXlrtzoxfZr8aEz9zkHOMAS4K5lu3TvFWoiVeVTQg==}
     peerDependencies:
       msw: ^2.4.9 || ^3.0.0
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -1390,8 +1390,8 @@ packages:
       vite:
         optional: true
 
-  '@vitest/spy@5.1.0':
-    resolution: {integrity: sha512-2DPO5OMHWKrBngC+fCmTQqemNF0gidRhp3lxbBmRhW+M1XJrfgPpqNqWVevXtn2f2ufD5ZaR1B6B641aAlcX5A==}
+  '@vitest/spy@5.1.1':
+    resolution: {integrity: sha512-6K8C6alQG1/Yc8/ZI22iJS7JEsxPdVzqtqDq+/xM4Z0mGVykemMVjLhqMy/q6/IHYG3kKD8hKSwRen/ZdyI9vQ==}
 
   '@xstate/fsm@1.6.5':
     resolution: {integrity: sha512-b5o1I6aLNeYlU/3CPlj/Z91ybk1gUsKT+5NAJI+2W4UjvS5KLG28K9v5UvNoFVjHV8PajVZ00RH3vnjyQO7ZAw==}
@@ -2378,8 +2378,8 @@ packages:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
 
-  minimatch@11.0.8:
-    resolution: {integrity: sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==}
+  minimatch@11.0.9:
+    resolution: {integrity: sha512-KCFkfyjqerNlSstjlhIGNXIKZGA/6O4V4RlhZ+Dsr621SPPw0mzlypE9D9ZOoPiVefHID+j7/XuMMlqfD/F60Q==}
     engines: {node: 20 || >=22}
 
   minimist@1.2.8:
@@ -3197,20 +3197,20 @@ packages:
       yaml:
         optional: true
 
-  vitest@5.1.0:
-    resolution: {integrity: sha512-MzmNFnrwa8v8lF1bLxw3UJ4EREwVOVb75VqJZmUDRjJ6EluK/x9th7qTbaeDk41WxE1GxWqmTXcdsfobfH5sOA==}
+  vitest@5.1.1:
+    resolution: {integrity: sha512-trVmzUFOSraCZcI3uZIMD5FqBh4atFkC/XuJP/IU7qtyQay0FCs3Ia+0QiQ2JJwGyWG/xrcBoJNel2+O7kEZ0g==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
       '@types/node': ^22.0.0 || >=24.0.0
-      '@vitest/browser-playwright': 5.1.0
-      '@vitest/browser-preview': 5.1.0
+      '@vitest/browser-playwright': 5.1.1
+      '@vitest/browser-preview': 5.1.1
       '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
-      '@vitest/coverage-istanbul': 5.1.0
-      '@vitest/coverage-v8': 5.1.0
-      '@vitest/ui': 5.1.0
+      '@vitest/coverage-istanbul': 5.1.1
+      '@vitest/coverage-v8': 5.1.1
+      '@vitest/ui': 5.1.1
       happy-dom: '*'
       jsdom: '*'
       vite: ^6.4.0 || ^7.0.0 || ^8.0.0
@@ -3674,30 +3674,30 @@ snapshots:
 
   '@inquirer/ansi@2.0.7': {}
 
-  '@inquirer/confirm@6.1.1(@types/node@26.6.5)':
+  '@inquirer/confirm@6.1.1(@types/node@26.6.6)':
     dependencies:
-      '@inquirer/core': 11.2.1(@types/node@26.6.5)
-      '@inquirer/type': 4.0.7(@types/node@26.6.5)
+      '@inquirer/core': 11.2.1(@types/node@26.6.6)
+      '@inquirer/type': 4.0.7(@types/node@26.6.6)
     optionalDependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
-  '@inquirer/core@11.2.1(@types/node@26.6.5)':
+  '@inquirer/core@11.2.1(@types/node@26.6.6)':
     dependencies:
       '@inquirer/ansi': 2.0.7
       '@inquirer/figures': 2.0.7
-      '@inquirer/type': 4.0.7(@types/node@26.6.5)
+      '@inquirer/type': 4.0.7(@types/node@26.6.6)
       cli-width: 4.1.0
       fast-wrap-ansi: 0.2.2
       mute-stream: 3.0.0
       signal-exit: 4.1.0
     optionalDependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@inquirer/figures@2.0.7': {}
 
-  '@inquirer/type@4.0.7(@types/node@26.6.5)':
+  '@inquirer/type@4.0.7(@types/node@26.6.6)':
     optionalDependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@internationalized/number@3.6.9':
     dependencies:
@@ -3891,11 +3891,11 @@ snapshots:
 
   '@navikt/familie-typer@8.0.9': {}
 
-  '@navikt/flagg-ikoner@16.0.6(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.6(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@navikt/flagg-ikoner@16.0.7(@navikt/ds-css@8.23.0)(@navikt/ds-react@8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@navikt/land-verktoy@16.0.7(lodash@4.18.1))(classnames@2.5.1)(lodash@4.18.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@navikt/ds-css': 8.23.0
       '@navikt/ds-react': 8.23.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@navikt/land-verktoy': 16.0.6(lodash@4.18.1)
+      '@navikt/land-verktoy': 16.0.7(lodash@4.18.1)
       classnames: 2.5.1
       lodash: 4.18.1
       react: 19.3.1
@@ -3907,7 +3907,7 @@ snapshots:
 
   '@navikt/fnrvalidator@2.2.1': {}
 
-  '@navikt/land-verktoy@16.0.6(lodash@4.18.1)':
+  '@navikt/land-verktoy@16.0.7(lodash@4.18.1)':
     dependencies:
       '@piotrgorecki/i18n-currency-name': 1.3.0
       country-data-list: 1.6.3
@@ -4352,7 +4352,7 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)))':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.1.1(@opentelemetry/api@1.10.0)(@types/node@26.6.6)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)))':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.2
@@ -4362,7 +4362,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
+      vitest: 5.1.1(@opentelemetry/api@1.10.0)(@types/node@26.6.6)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.2)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
@@ -4388,7 +4388,7 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@types/chai@5.2.3':
     dependencies:
@@ -4397,7 +4397,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@types/cookie-parser@1.4.8(@types/express@5.0.6)':
     dependencies:
@@ -4413,7 +4413,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.1.2':
     dependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
       '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -4430,7 +4430,7 @@ snapshots:
 
   '@types/http-errors@2.0.5': {}
 
-  '@types/node@26.6.5':
+  '@types/node@26.6.6':
     dependencies:
       undici-types: 8.9.0
 
@@ -4458,16 +4458,16 @@ snapshots:
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
 
   '@types/statuses@2.0.6': {}
 
@@ -4533,7 +4533,7 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vercel/nft@1.11.2(supports-color@7.2.0)':
+  '@vercel/nft@1.11.7(supports-color@7.2.0)':
     dependencies:
       '@mapbox/node-pre-gyp': 2.0.3(supports-color@7.2.0)
       '@rollup/pluginutils': 5.5.1
@@ -4552,22 +4552,22 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vitejs/plugin-react@6.3.0(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))':
+  '@vitejs/plugin-react@6.3.0(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.1.1
-      vite: 8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
+      vite: 8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
 
-  '@vitest/mocker@5.1.0(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))':
+  '@vitest/mocker@5.1.1(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.1.0
+      '@vitest/spy': 5.1.1
       estree-walker: 3.0.3
       magic-string: 1.4.5
     optionalDependencies:
-      msw: 2.15.0(@types/node@26.6.5)(typescript@7.0.2)
-      vite: 8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
+      msw: 2.15.0(@types/node@26.6.6)(typescript@7.0.2)
+      vite: 8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
 
-  '@vitest/spy@5.1.0': {}
+  '@vitest/spy@5.1.1': {}
 
   '@xstate/fsm@1.6.5': {}
 
@@ -5122,7 +5122,7 @@ snapshots:
 
   glob@14.0.6:
     dependencies:
-      minimatch: 11.0.8
+      minimatch: 11.0.9
       minipass: 7.1.3
       path-scurry: 3.0.0
 
@@ -5525,7 +5525,7 @@ snapshots:
 
   min-indent@1.0.1: {}
 
-  minimatch@11.0.8:
+  minimatch@11.0.9:
     dependencies:
       '@isaacs/nonrecursive-glob-match': 1.1.0
       brace-expansion: 5.0.13
@@ -5546,9 +5546,9 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2):
+  msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2):
     dependencies:
-      '@inquirer/confirm': 6.1.1(@types/node@26.6.5)
+      '@inquirer/confirm': 6.1.1(@types/node@26.6.6)
       '@mswjs/interceptors': 0.41.9
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
@@ -6340,7 +6340,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1):
+  vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -6348,15 +6348,15 @@ snapshots:
       rolldown: 1.2.19
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
       fsevents: 2.3.3
       less: 4.9.1(supports-color@7.2.0)
       yaml: 2.9.1
 
-  vitest@5.1.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)):
+  vitest@5.1.1(@opentelemetry/api@1.10.0)(@types/node@26.6.6)(jsdom@31.0.1(@noble/hashes@1.8.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.1.0(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
+      '@vitest/mocker': 5.1.1(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(vite@8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -6367,11 +6367,11 @@ snapshots:
       tinybench: 6.2.3
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 8.3.8(@types/node@26.6.5)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
+      vite: 8.3.8(@types/node@26.6.6)(less@4.9.1(supports-color@7.2.0))(yaml@2.9.1)
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@opentelemetry/api': 1.10.0
-      '@types/node': 26.6.5
+      '@types/node': 26.6.6
       jsdom: 31.0.1(@noble/hashes@1.8.0)
     transitivePeerDependencies:
       - msw
