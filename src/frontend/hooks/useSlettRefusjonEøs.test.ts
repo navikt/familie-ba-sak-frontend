@@ -1,7 +1,7 @@
 import { slettRefusjonEøs } from '@api/slettRefusjonEøs';
 import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 import { renderHook, waitFor } from '@testing-library/react';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagRefusjonEøs } from '@testutils/testdata/refusjonEøsTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -11,14 +11,14 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const refusjonEøsPerioder = [lagRefusjonEøs()];
 
 const parameters = { behandlingId: 123, refusjonEøsId: 5 };
 
 describe('useSlettRefusjonEøs', () => {
     test('skal kalle slettRefusjonEøs med riktige parametere', async () => {
         // Arrange
-        vi.mocked(slettRefusjonEøs).mockResolvedValue(behandling);
+        vi.mocked(slettRefusjonEøs).mockResolvedValue(refusjonEøsPerioder);
 
         const { result } = renderHook(() => useSlettRefusjonEøs({ refusjonEøsId: 5 }), { wrapper: TestProviders });
 
@@ -28,13 +28,13 @@ describe('useSlettRefusjonEøs', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(slettRefusjonEøs).toHaveBeenCalledWith(123, 5);
-        expect(result.current.data).toEqual(behandling);
+        expect(result.current.data).toEqual(refusjonEøsPerioder);
     });
 
     test('skal kalle onSuccess-callback ved vellykket mutasjon', async () => {
         // Arrange
         const onSuccess = vi.fn();
-        vi.mocked(slettRefusjonEøs).mockResolvedValue(behandling);
+        vi.mocked(slettRefusjonEøs).mockResolvedValue(refusjonEøsPerioder);
 
         const { result } = renderHook(() => useSlettRefusjonEøs({ refusjonEøsId: 5, onSuccess }), {
             wrapper: TestProviders,
@@ -45,7 +45,7 @@ describe('useSlettRefusjonEøs', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(onSuccess).toHaveBeenCalledWith(behandling, parameters, undefined, expect.any(Object));
+        expect(onSuccess).toHaveBeenCalledWith(refusjonEøsPerioder, parameters, undefined, expect.any(Object));
     });
 
     test('skal sette isError dersom slettRefusjonEøs feiler', async () => {

@@ -1,9 +1,7 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ErrorMessage, Fieldset, Stack } from '@navikt/ds-react';
 import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import { FormProvider } from 'react-hook-form';
-import { useRefusjonEøsTabellContext } from '../RefusjonEøsTabellContext';
 import { BeløpField } from './BeløpField';
 import { FomDatoField } from './FomDatoField';
 import { LandkodeField } from './LandkodeField';
@@ -21,10 +19,6 @@ interface Props {
 }
 
 export function RefusjonEøsForm({ type, refusjonEøs, skjulForm, readOnly }: Props) {
-    const behandling = useBehandling();
-
-    const { skjulRefusjonEøsTabell } = useRefusjonEøsTabellContext();
-
     const { form, onSubmit } = useRefusjonEøsForm({ type, refusjonEøs, skjulForm });
 
     const {
@@ -34,9 +28,6 @@ export function RefusjonEøsForm({ type, refusjonEøs, skjulForm, readOnly }: Pr
     } = form;
 
     function onAvbyrt() {
-        if (behandling.refusjonEøs.length === 0) {
-            skjulRefusjonEøsTabell();
-        }
         skjulForm();
         reset();
     }

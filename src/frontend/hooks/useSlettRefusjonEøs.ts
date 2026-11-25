@@ -1,14 +1,14 @@
 import { slettRefusjonEøs } from '@api/slettRefusjonEøs';
 import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 
 interface Parameters {
     behandlingId: number;
     refusjonEøsId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationKey' | 'mutationFn'> & {
+type Options = Omit<UseMutationOptions<IRestRefusjonEøs[], DefaultError, Parameters>, 'mutationKey' | 'mutationFn'> & {
     refusjonEøsId: number;
 };
 

@@ -1,6 +1,6 @@
 import { opprettSammensattKontrollsak } from '@api/opprettSammensattKontrollsak';
 import { mutationKeys } from '@hooks/keys/mutationKeys';
-import { useHttp } from '@navikt/familie-http';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { IRestOpprettSammensattKontrollsak, IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
 
@@ -12,10 +12,10 @@ type Options = Omit<
 >;
 
 export function useOpprettSammensattKontrollsak(behandlingId: number, options?: Options) {
-    const { request } = useHttp();
     return useMutation({
         mutationKey: mutationKeys.opprettSammensattKontrollsak(behandlingId),
-        mutationFn: (parameters: Parameters) => opprettSammensattKontrollsak(request, parameters),
+        mutationFn: (parameters: Parameters) => opprettSammensattKontrollsak(parameters),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
         ...options,
     });
 }

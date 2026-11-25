@@ -1,6 +1,6 @@
 import { apiClient } from '@api/client/apiClient';
 import { type OppdaterRefusjonEøsPayload, oppdaterRefusjonEøs } from '@api/oppdaterRefusjonEøs';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagRefusjonEøs } from '@testutils/testdata/refusjonEøsTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -21,11 +21,11 @@ const payload: OppdaterRefusjonEøsPayload = {
     refusjonAvklart: false,
 };
 
-const behandling = lagBehandling({ behandlingId: 123 });
+const refusjonEøsPerioder = [lagRefusjonEøs()];
 
 describe('oppdaterRefusjonEøs', () => {
     test('skal sende forespørsel om å oppdatere refusjon EØS', async () => {
-        vi.mocked(apiClient.put).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.put).mockResolvedValueOnce(refusjonEøsPerioder);
 
         const svar = await oppdaterRefusjonEøs(123, 5, payload);
 
@@ -34,7 +34,7 @@ describe('oppdaterRefusjonEøs', () => {
             data: payload,
             url: '/familie-ba-sak/api/refusjon-eøs/behandlinger/123/perioder/5',
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(refusjonEøsPerioder);
     });
 
     test('skal håndtere feil', async () => {

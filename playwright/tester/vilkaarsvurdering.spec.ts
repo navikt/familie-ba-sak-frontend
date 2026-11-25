@@ -1,5 +1,7 @@
+import { byggFeiletRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { BehandlingSteg } from '@typer/behandling';
 import { Regelverk, Resultat, VilkårType } from '@typer/vilkår';
+import { HttpResponse, http } from 'msw';
 
 import {
     BARN_NAVN,
@@ -41,6 +43,40 @@ test.describe('Vilkårsvurdering', () => {
         await expect(page.getByRole('heading', { name: 'Under 18 år' })).toBeVisible();
         await expect(page.getByRole('heading', { name: 'Bor fast hos søker' })).toBeVisible();
         await expect(page.getByRole('cell', { name: 'Oppfylt' })).toHaveCount(5);
+        await expect(page.getByText(/Saken ble migrert fra Infotrygd/)).toBeHidden();
+    });
+
+    test('skal vise når saken ble migrert fra Infotrygd', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(lagBehandlingPåSteg(BehandlingSteg.VILKÅRSVURDERING));
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/migreringsdato', () =>
+                HttpResponse.json(byggSuksessRessurs('2020-02-01'))
+            )
+        );
+
+        await page.goto('/fagsak/1/1/vilkaarsvurdering');
+
+        await expect(page.getByText('Saken ble migrert fra Infotrygd: 01.02.2020')).toBeVisible();
+    });
+
+    test('skal varsle når migreringsdatoen ikke kan hentes', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(lagBehandlingPåSteg(BehandlingSteg.VILKÅRSVURDERING));
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/migreringsdato', () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente migreringsdatoen.'))
+            )
+        );
+
+        await page.goto('/fagsak/1/1/vilkaarsvurdering');
+
+        const varsel = page.getByRole('alert').filter({
+            has: page.getByRole('heading', { name: 'Klarte ikke å sjekke om saken er migrert fra Infotrygd' }),
+        });
+        await expect(varsel).toBeVisible();
+        await expect(varsel).toContainText('Klarte ikke å hente migreringsdatoen.');
+        await expect(page.getByRole('region', { name: SØKER_NAVN })).toBeVisible();
     });
 
     test('skal ikke gå videre før alle vilkår er vurdert', async ({ page, apiMock }) => {
