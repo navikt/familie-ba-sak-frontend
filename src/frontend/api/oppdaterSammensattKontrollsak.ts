@@ -1,13 +1,11 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
-import { RessursResolver } from '@utils/ressursResolver';
 
-export async function oppdaterSammensattKontrollsak(request: FamilieRequest, payload: IRestSammensattKontrollsak) {
-    const ressurs = await request<IRestSammensattKontrollsak, IRestSammensattKontrollsak>({
+export async function oppdaterSammensattKontrollsak(
+    payload: IRestSammensattKontrollsak
+): Promise<IRestSammensattKontrollsak> {
+    return apiClient.put<IRestSammensattKontrollsak, IRestSammensattKontrollsak>({
         data: payload,
-        method: 'PUT',
         url: '/familie-ba-sak/api/sammensatt-kontrollsak',
-        påvirkerSystemLaster: false,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

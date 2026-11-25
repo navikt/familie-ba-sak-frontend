@@ -1,12 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
-import { RessursResolver } from '@utils/ressursResolver';
 
-export async function hentSammensattKontrollsak(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<void, IRestSammensattKontrollsak | null>({
-        method: 'GET',
+export async function hentSammensattKontrollsak(behandlingId: number): Promise<IRestSammensattKontrollsak | null> {
+    return apiClient.get<void, IRestSammensattKontrollsak | null>({
         url: `/familie-ba-sak/api/sammensatt-kontrollsak/${behandlingId}`,
     });
-
-    return RessursResolver.resolveToPromise(ressurs);
 }

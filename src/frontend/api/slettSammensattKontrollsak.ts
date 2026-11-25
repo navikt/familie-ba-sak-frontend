@@ -1,14 +1,9 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { IRestSammensattKontrollsak } from '@typer/sammensatt-kontrollsak';
-import { RessursResolver } from '@utils/ressursResolver';
 
-export async function slettSammensattKontrollsak(request: FamilieRequest, payload: IRestSammensattKontrollsak) {
-    const ressurs = await request<IRestSammensattKontrollsak, number>({
+export async function slettSammensattKontrollsak(payload: IRestSammensattKontrollsak): Promise<number> {
+    return apiClient.delete<IRestSammensattKontrollsak, number>({
         data: payload,
-        method: 'DELETE',
         url: '/familie-ba-sak/api/sammensatt-kontrollsak',
-        påvirkerSystemLaster: true,
     });
-
-    return RessursResolver.resolveToPromise(ressurs);
 }
