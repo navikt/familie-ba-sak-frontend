@@ -1,18 +1,12 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { IBehandling } from '../typer/behandling';
-import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
+import type { IRestEndretUtbetalingAndel } from '@typer/utbetalingAndel';
 
 export async function slettEndretUtbetalingAndel(
-    request: FamilieRequest,
     behandlingId: number,
     endretUtbetalingAndel: IRestEndretUtbetalingAndel
 ) {
-    const ressurs = await request<null, IBehandling>({
-        method: 'DELETE',
+    return apiClient.delete<void, IBehandling>({
         url: `/familie-ba-sak/api/endretutbetalingandel/${behandlingId}/${endretUtbetalingAndel.id}`,
-        påvirkerSystemLaster: true,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
