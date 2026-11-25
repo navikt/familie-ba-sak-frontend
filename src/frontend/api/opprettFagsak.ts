@@ -1,8 +1,6 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-
-import type { FagsakType, IMinimalFagsak } from '../typer/fagsak';
-import type { IInstitusjon } from '../typer/institusjon';
-import { RessursResolver } from '../utils/ressursResolver';
+import { apiClient } from '@api/client/apiClient';
+import type { FagsakType, IMinimalFagsak } from '@typer/fagsak';
+import type { IInstitusjon } from '@typer/institusjon';
 
 interface SkjermetBarnSøker {
     søkersIdent: string;
@@ -15,12 +13,9 @@ export interface OpprettFagsakPayload {
     skjermetBarnSøker: SkjermetBarnSøker | null;
 }
 
-export async function opprettFagsak(request: FamilieRequest, payload: OpprettFagsakPayload) {
-    const ressurs = await request<OpprettFagsakPayload, IMinimalFagsak>({
-        data: payload,
-        method: 'POST',
+export async function opprettFagsak(payload: OpprettFagsakPayload): Promise<IMinimalFagsak> {
+    return apiClient.post<OpprettFagsakPayload, IMinimalFagsak>({
         url: `/familie-ba-sak/api/fagsaker`,
-        påvirkerSystemLaster: true,
+        data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

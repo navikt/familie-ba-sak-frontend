@@ -1,18 +1,13 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { FagsakId, IMinimalFagsak } from '@typer/fagsak';
-
-import { RessursResolver } from '../utils/ressursResolver';
 
 export interface LåsOppFagsakPayload {
     begrunnelse: string;
 }
 
-export async function låsOppFagsak(request: FamilieRequest, fagsakId: FagsakId, payload: LåsOppFagsakPayload) {
-    const ressurs = await request<LåsOppFagsakPayload, IMinimalFagsak>({
-        data: payload,
-        method: 'PATCH',
+export async function låsOppFagsak(fagsakId: FagsakId, payload: LåsOppFagsakPayload): Promise<IMinimalFagsak> {
+    return apiClient.patch<LåsOppFagsakPayload, IMinimalFagsak>({
         url: `/familie-ba-sak/api/fagsaker/${fagsakId}/laas-opp`,
-        påvirkerSystemLaster: false,
+        data: payload,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
