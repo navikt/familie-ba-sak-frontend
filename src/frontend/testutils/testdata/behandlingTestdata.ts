@@ -56,7 +56,6 @@ export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
         skalBehandlesAutomatisk: false,
         tilbakekreving: undefined,
         aktivSettPåVent: undefined,
-        migreringsdato: undefined,
         søknadMottattDato: undefined,
         kompetanser: [],
         utenlandskePeriodebeløp: [],

@@ -90,6 +90,9 @@ export const queryKeys = {
     korrigertVedtak: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'korrigert-vedtak'] as const;
     },
+    migreringsdato: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'migreringsdato'] as const;
+    },
     personerMedUgyldigEtterbetalingsperiode: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'personer-med-ugyldig-etterbetalingsperiode'] as const;
     },

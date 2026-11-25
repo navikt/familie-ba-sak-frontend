@@ -34,6 +34,7 @@ const behandlingsnøkler = {
     historikkinnslag: queryKeys.historikkinnslag(behandlingId),
     korrigertEtterbetaling: queryKeys.korrigertEtterbetaling(behandlingId),
     korrigertVedtak: queryKeys.korrigertVedtak(behandlingId),
+    migreringsdato: queryKeys.migreringsdato(behandlingId),
     personerMedUgyldigEtterbetalingsperiode: queryKeys.personerMedUgyldigEtterbetalingsperiode(behandlingId),
     registrerteSøknadstidspunkter: queryKeys.registrerteSøknadstidspunkter(behandlingId),
     sammensattKontrollsak: queryKeys.sammensattKontrollsak(behandlingId),
