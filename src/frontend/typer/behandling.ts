@@ -1,11 +1,10 @@
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import type { IsoDatoString } from '@utils/dato';
-
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
 import type { INøkkelPar } from './common';
-import type { IRestFeilutbetaltValuta } from './eøs-feilutbetalt-valuta';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from './eøsPerioder';
+import type { FagsakId } from './fagsak';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import { type IGrunnlagPerson, PersonType } from './person';
@@ -20,7 +19,7 @@ import type {
 import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
 import type { ITotrinnskontroll } from './totrinnskontroll';
 import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
-import type { IRestKorrigertEtterbetaling, IRestKorrigertVedtak, IVedtakForBehandling } from './vedtak';
+import type { IVedtakForBehandling } from './vedtak';
 import type { Utbetalingsperiode } from './vedtaksperiode';
 import type { IRestPersonResultat, IRestStegTilstand } from './vilkår';
 
@@ -37,7 +36,7 @@ export interface NyBehandling {
     barnasIdenter?: string[];
     nyMigreringsdato?: IsoDatoString;
     søknadMottattDato?: IsoDatoString;
-    fagsakId: number;
+    fagsakId: FagsakId;
 }
 
 export enum HenleggÅrsak {
@@ -156,6 +155,7 @@ export enum BehandlingSteg {
     BESLUTTE_VEDTAK = 'BESLUTTE_VEDTAK',
     IVERKSETT_MOT_OPPDRAG = 'IVERKSETT_MOT_OPPDRAG',
     VENTE_PÅ_STATUS_FRA_ØKONOMI = 'VENTE_PÅ_STATUS_FRA_ØKONOMI',
+    IVERKSETT_MOT_FAMILIE_TILBAKE = 'IVERKSETT_MOT_FAMILIE_TILBAKE',
     JOURNALFØR_VEDTAKSBREV = 'JOURNALFØR_VEDTAKSBREV',
     DISTRIBUER_VEDTAKSBREV = 'DISTRIBUER_VEDTAKSBREV',
     FERDIGSTILLE_BEHANDLING = 'FERDIGSTILLE_BEHANDLING',
@@ -178,11 +178,15 @@ export enum BehandlingStegStatus {
     IKKE_UTFØRT = 'IKKE_UTFØRT',
 }
 
-export const hentStegNummer = (steg: BehandlingSteg): number => {
+export function hentStegnummer(steg: BehandlingSteg): number {
     switch (steg) {
-        case BehandlingSteg.REGISTRERE_SØKNAD:
+        case BehandlingSteg.HENLEGG_BEHANDLING:
+            return 0;
+        case BehandlingSteg.REGISTRERE_INSTITUSJON:
             return 1;
         case BehandlingSteg.REGISTRERE_PERSONGRUNNLAG:
+            return 1;
+        case BehandlingSteg.REGISTRERE_SØKNAD:
             return 1;
         case BehandlingSteg.FILTRERING_AUTOMATISK_BEHANDLING:
             return 2;
@@ -200,18 +204,20 @@ export const hentStegNummer = (steg: BehandlingSteg): number => {
             return 8;
         case BehandlingSteg.VENTE_PÅ_STATUS_FRA_ØKONOMI:
             return 9;
-        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
+        case BehandlingSteg.IVERKSETT_MOT_FAMILIE_TILBAKE:
             return 10;
-        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
+        case BehandlingSteg.JOURNALFØR_VEDTAKSBREV:
             return 11;
-        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
+        case BehandlingSteg.DISTRIBUER_VEDTAKSBREV:
             return 12;
-        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+        case BehandlingSteg.FERDIGSTILLE_BEHANDLING:
             return 13;
+        case BehandlingSteg.BEHANDLING_AVSLUTTET:
+            return 14;
         default:
             return 0;
     }
-};
+}
 
 export enum BehandlingStatus {
     UTREDES = 'UTREDES',
@@ -297,6 +303,7 @@ export enum BehandlerRolle {
 }
 
 export interface IBehandling {
+    fagsakId: FagsakId;
     arbeidsfordelingPåBehandling: IArbeidsfordelingPåBehandling;
     behandlingId: number;
     endretAv: string;
@@ -325,9 +332,6 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    korrigertEtterbetaling?: IRestKorrigertEtterbetaling;
-    korrigertVedtak?: IRestKorrigertVedtak;
-    feilutbetaltValuta: IRestFeilutbetaltValuta[];
     refusjonEøs: IRestRefusjonEøs[];
     brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;

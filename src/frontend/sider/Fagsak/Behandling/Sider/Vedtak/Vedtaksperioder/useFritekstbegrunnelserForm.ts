@@ -1,7 +1,6 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
-import { HentGenererteBrevbegrunnelserQueryKeyFactory } from '@hooks/useHentGenererteBrevbegrunnelser';
-import { HentVedtaksperioderQueryKeyFactory } from '@hooks/useHentVedtaksperioder';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterVedtaksperiodeMedFritekster } from '@hooks/useOppdaterVedtaksperiodeMedFritekster';
 import { MAKS_LENGDE_FRITEKST } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/Fritekstbegrunnelser';
@@ -72,17 +71,11 @@ export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
         {
             onSuccess: async vedtaksperioderMedBegrunnelser => {
                 await queryClient.invalidateQueries({
-                    queryKey: HentGenererteBrevbegrunnelserQueryKeyFactory.vedtaksperiode(
-                        vedtaksperiodeMedBegrunnelser.id
-                    ),
+                    queryKey: queryKeys.genererteBrevbegrunnelser(behandlingId, vedtaksperiodeMedBegrunnelser.id),
                 });
-                queryClient.setQueryData(
-                    HentVedtaksperioderQueryKeyFactory.behandling(behandlingId),
-                    vedtaksperioderMedBegrunnelser
-                );
+                queryClient.setQueryData(queryKeys.vedtaksperioder(behandlingId), vedtaksperioderMedBegrunnelser);
                 onSubmitSuccessful();
             },
-            onError: error => setError('root', { message: error.message ?? 'En ukjent feil oppstod.' }),
         }
     );
 
@@ -113,13 +106,18 @@ export function useFritekstbegrunnelserForm({ onSubmitSuccessful }: Props) {
         return true;
     }
 
-    function onSubmit({ fritekstbegrunnelser }: FormValues) {
+    async function onSubmit({ fritekstbegrunnelser }: FormValues) {
         if (vedtaksperiodeMedBegrunnelser.begrunnelser.length === 0) {
             setError('root.kombinerteBegrunnelserFeilmelding', { message: FRITEKST_FEILMELDING });
             return;
         }
         const fritekster = fritekstbegrunnelser.map(fritekstbegrunnelse => fritekstbegrunnelse.value);
-        return oppdaterVedtaksperiodeMedFritekster({ fritekster });
+        try {
+            await oppdaterVedtaksperiodeMedFritekster({ fritekster });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message });
+        }
     }
 
     return {

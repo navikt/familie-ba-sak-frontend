@@ -1,6 +1,5 @@
 import { byggFunksjonellFeilRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
-import { BehandlingProvider } from '@sider/Fagsak/Behandling/context/BehandlingContext';
-import { HentOgSettBehandlingProvider } from '@sider/Fagsak/Behandling/context/HentOgSettBehandlingContext';
+import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { waitFor } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
@@ -31,11 +30,12 @@ function Wrapper({
     children,
 }: WrapperProps) {
     return (
-        <TestProviders saksbehandler={saksbehandler}>
+        <TestProviders
+            saksbehandler={saksbehandler}
+            initialEntries={[{ pathname: `/fagsak/${fagsak.id}/${behandling.behandlingId}/registrer-soknad` }]}
+        >
             <FagsakProvider fagsak={fagsak}>
-                <HentOgSettBehandlingProvider>
-                    <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
-                </HentOgSettBehandlingProvider>
+                <BehandlingProvider behandling={behandling}>{children}</BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
     );

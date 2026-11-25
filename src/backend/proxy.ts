@@ -42,10 +42,18 @@ export const doRedirectProxy = () => {
 };
 
 export const attachToken = (authConfig: Configuration) => {
-    return async (req: Request, _res: Response, next: NextFunction) => {
-        getOnBehalfOfAccessToken(authConfig, req, oboConfig).then((accessToken: string) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const accessToken = await getOnBehalfOfAccessToken(authConfig, req, oboConfig);
             req.headers.Authorization = `Bearer ${accessToken}`;
-            return next();
-        });
+            next();
+        } catch (feil) {
+            // ensureAuthenticated kan allerede ha svart 401 (feilet token-refresh) og likevel kalt next().
+            if (res.headersSent) {
+                return;
+            }
+            logger.warn(`Fikk ikke OBO-token for ${req.path}: ${feil instanceof Error ? feil.message : feil}`);
+            res.status(401).send('Unauthorized');
+        }
     };
 };

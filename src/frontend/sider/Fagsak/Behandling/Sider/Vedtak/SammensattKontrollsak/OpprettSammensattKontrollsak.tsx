@@ -1,6 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandlingId } from '@hooks/useBehandlingId';
-import { HentHistorikkinnslagQueryKeyFactory } from '@hooks/useHentHistorikkinnslag';
-import { HentSammensattKontrollsakQueryKeyFactory } from '@hooks/useHentSammensattKontrollsak';
 import { useOpprettSammensattKontrollsak } from '@hooks/useOpprettSammensattKontrollsak';
 import { TasklistStartIcon } from '@navikt/aksel-icons';
 import { ActionMenu, HStack, Loader } from '@navikt/ds-react';
@@ -13,13 +12,8 @@ export function OpprettSammensattKontrollsak() {
     const { mutate: opprettSammensattKontrollsak, isPending: opprettSammensattKontrollsakIsPending } =
         useOpprettSammensattKontrollsak(behandlingId, {
             onSuccess: sammensattKontrollsak => {
-                queryClient.setQueryData(
-                    HentSammensattKontrollsakQueryKeyFactory.behandling(behandlingId),
-                    sammensattKontrollsak
-                );
-                queryClient.invalidateQueries({
-                    queryKey: HentHistorikkinnslagQueryKeyFactory.historikkinnslag(behandlingId),
-                });
+                queryClient.setQueryData(queryKeys.sammensattKontrollsak(behandlingId), sammensattKontrollsak);
+                queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
             },
         });
 

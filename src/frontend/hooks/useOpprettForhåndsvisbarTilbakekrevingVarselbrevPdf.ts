@@ -1,3 +1,4 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
 
@@ -14,12 +15,10 @@ interface MutationParameters {
 
 type Options = Omit<UseMutationOptions<Blob, DefaultError, MutationParameters>, 'mutationKey' | 'mutationFn'>;
 
-export const mutationKey = ['opprett_forhaandsvisbar_tilbakekreving_varsel_brev_pdf'];
-
 export function useOpprettForhåndsvisbarTilbakekrevingVarselbrevPdf(options?: Options) {
     const { request } = useHttp();
     return useMutation({
-        mutationKey,
+        mutationKey: mutationKeys.opprettForhåndsvisbarTilbakekrevingVarselbrevPdf(),
         mutationFn: async ({ behandlingId, payload }: MutationParameters) => {
             try {
                 const bytes = await opprettForhåndsvisbarTilbakekrevingVarselbrev(request, behandlingId, payload);

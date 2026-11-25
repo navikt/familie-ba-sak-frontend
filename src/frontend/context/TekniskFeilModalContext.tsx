@@ -58,10 +58,10 @@ export function TekniskFeilModalProvider({ initielleTekniskeFeil = [], children 
                             </BodyLong>
                             <VStack gap={'space-8'}>
                                 {tekniskeFeil.map((tf, index) => (
-                                    <HStack key={tf.id} gap={'space-4'} align={'center'}>
+                                    <HStack key={tf.id} gap={'space-4'} align={'start'} wrap={false}>
                                         <XMarkOctagonFillIcon
                                             color={'var(--ax-text-danger-subtle)'}
-                                            fontSize={'1.2rem'}
+                                            fontSize={'1.4rem'}
                                         />
                                         <ErrorMessage>
                                             {tekniskeFeil.length > 1 && `${index + 1}. `}

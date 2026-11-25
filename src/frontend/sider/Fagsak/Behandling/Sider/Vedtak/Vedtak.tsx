@@ -6,7 +6,9 @@ import { Box, LocalAlert, VStack } from '@navikt/ds-react';
 import { ForhåndsvisVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/ForhåndsvisVedtaksbrev';
 import { IngenVedtaksbrevbyggerAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/IngenVedtaksbrevbyggerAdvarsel';
 import { KorrigertEtterbetalingAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingAdvarsel';
+import { useKorrigertEtterbetalingContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerEtterbetaling/KorrigertEtterbetalingContext';
 import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakAdvarsel';
+import { useKorrigertVedtakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakContext';
 import { Layout } from '@sider/Fagsak/Behandling/Sider/Vedtak/Layout/Layout';
 import { useErBehandlingMedVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/useErBehandlingMedVedtaksbrev';
 import { Vedtaksmeny } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksmeny/Vedtaksmeny';
@@ -30,6 +32,8 @@ export function Vedtak() {
     const { erFeilutbetaltValutaTabellSynlig } = useFeilutbetaltValutaTabellContext();
     const { erRefusjonEøsTabellSynlig } = useRefusjonEøsTabellContext();
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
+    const { korrigertEtterbetaling } = useKorrigertEtterbetalingContext();
+    const { korrigertVedtak } = useKorrigertVedtakContext();
 
     const slettSammensattKontrollsakError = useSlettSammensattKontrollsakError(behandling.behandlingId);
     const opprettSammensattKontrollsakError = useOpprettSammensattKontrollsakError(behandling.behandlingId);
@@ -66,8 +70,8 @@ export function Vedtak() {
                             </LocalAlert.Header>
                         </LocalAlert>
                     )}
-                    {behandling.korrigertEtterbetaling && <KorrigertEtterbetalingAdvarsel />}
-                    {behandling.korrigertVedtak && <KorrigertVedtakAdvarsel />}
+                    {korrigertEtterbetaling && <KorrigertEtterbetalingAdvarsel />}
+                    {korrigertVedtak && <KorrigertVedtakAdvarsel />}
                     <RegistrerteBrevmottakereBehandling kilde={'vedtak'} />
                     {!harBrevmottakerMedUtenlandskAdresse && <UkjentAdresseAlert />}
                     {!erBehandlingMedVedtaksbrevbygger && <IngenVedtaksbrevbyggerAdvarsel />}

@@ -1,7 +1,7 @@
 import { angreKorrigertEtterbetaling } from '@api/angreKorrigertEtterbetaling';
 import { useAngreKorrigertEtterbetaling } from '@hooks/useAngreKorrigertEtterbetaling';
 import { renderHook, waitFor } from '@testing-library/react';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagKorrigertEtterbetaling } from '@testutils/testdata/korrigertEtterbetalingTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -11,13 +11,13 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling();
-const behandlingId = behandling.behandlingId;
+const behandlingId = 1;
+const korrigertEtterbetaling = lagKorrigertEtterbetaling();
 
 describe('useAngreKorrigertEtterbetaling', () => {
     test('kaller angreKorrigertEtterbetaling med riktig payload', async () => {
         // Arrange
-        vi.mocked(angreKorrigertEtterbetaling).mockResolvedValue(behandling);
+        vi.mocked(angreKorrigertEtterbetaling).mockResolvedValue(korrigertEtterbetaling);
 
         const { result } = renderHook(() => useAngreKorrigertEtterbetaling(), {
             wrapper: TestProviders,
@@ -29,13 +29,13 @@ describe('useAngreKorrigertEtterbetaling', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(angreKorrigertEtterbetaling).toHaveBeenCalledWith(behandlingId);
-        expect(result.current.data).toEqual(behandling);
+        expect(result.current.data).toEqual(korrigertEtterbetaling);
     });
 
     test('skal kalle onSuccess-callback ved vellykket mutasjon', async () => {
         // Arrange
         const onSuccess = vi.fn();
-        vi.mocked(angreKorrigertEtterbetaling).mockResolvedValue(behandling);
+        vi.mocked(angreKorrigertEtterbetaling).mockResolvedValue(korrigertEtterbetaling);
 
         const { result } = renderHook(() => useAngreKorrigertEtterbetaling({ onSuccess }), {
             wrapper: TestProviders,
@@ -46,7 +46,7 @@ describe('useAngreKorrigertEtterbetaling', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(onSuccess).toHaveBeenCalledWith(behandling, behandlingId, undefined, expect.any(Object));
+        expect(onSuccess).toHaveBeenCalledWith(korrigertEtterbetaling, behandlingId, undefined, expect.any(Object));
     });
 
     test('skal sette isError dersom angreKorrigertEtterbetaling feiler', async () => {

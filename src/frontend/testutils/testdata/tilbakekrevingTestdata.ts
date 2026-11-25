@@ -5,13 +5,12 @@ import {
     Tilbakekrevingsbehandlingstype,
     TilbakekrevingsbehandlingÅrsak,
 } from '../../typer/tilbakekrevingsbehandling';
-import { randomUUID } from '../../utils/commons';
 
 export function lagTilbakekrevingbehandling(
     tilbakekrevingsbehandling?: Partial<ITilbakekrevingsbehandling>
 ): ITilbakekrevingsbehandling {
     return {
-        behandlingId: randomUUID(),
+        behandlingId: crypto.randomUUID(),
         opprettetTidspunkt: '2025-09-29T15:00:00.00',
         aktiv: true,
         årsak: TilbakekrevingsbehandlingÅrsak.REVURDERING_KLAGE_KA,

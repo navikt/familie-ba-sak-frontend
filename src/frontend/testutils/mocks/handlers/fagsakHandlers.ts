@@ -1,4 +1,5 @@
 import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { FagsakId } from '@typer/fagsak';
 import { HttpResponse, http } from 'msw';
 
 import { lagVisningBehandling } from '../../testdata/behandlingTestdata';
@@ -7,7 +8,12 @@ import { FagsakTestdata } from '../../testdata/fagsakTestdata';
 
 export const fagsakHandlers = [
     http.get<{ fagsakId: string }>('/familie-ba-sak/api/fagsaker/minimal/:fagsakId', ({ params }) => {
-        return HttpResponse.json(byggSuksessRessurs(FagsakTestdata.lagFagsak({ id: Number(params.fagsakId) })));
+        return HttpResponse.json(
+            byggSuksessRessurs(FagsakTestdata.lagFagsak({ id: FagsakId.fra(Number(params.fagsakId)) }))
+        );
+    }),
+    http.get('/familie-ba-sak/api/fagsaker/:fagsakId/gjeldende-utbetalingsperioder', () => {
+        return HttpResponse.json(byggSuksessRessurs([]));
     }),
     http.post<never, { personIdent: string }>(
         '/familie-ba-sak/api/fagsaker/hent-fagsaker-paa-person',

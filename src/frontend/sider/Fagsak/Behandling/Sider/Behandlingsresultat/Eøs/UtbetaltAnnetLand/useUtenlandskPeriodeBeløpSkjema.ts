@@ -1,14 +1,13 @@
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterUtenlandskPeriodeBeløp } from '@hooks/useOppdaterUtenlandskPeriodeBeløp';
 import { useSlettUtenlandskPeriodeBeløp } from '@hooks/useSlettUtenlandskPeriodeBeløp';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import type { OptionType } from '@typer/common';
 import type { IRestUtenlandskPeriodeBeløp, UtenlandskPeriodeBeløpIntervall } from '@typer/eøsPerioder';
 import { type IIsoMånedPeriode, nyIsoMånedPeriode } from '@utils/dato';
 import { konverterDesimalverdiTilSkjemaVisning, konverterSkjemaverdiTilDesimal } from '@utils/eøs';
 import { useForm } from 'react-hook-form';
 
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 
 export enum UtenlandskPeriodeBeløpFelt {
     BARN = 'barnIdenter',
@@ -79,7 +78,7 @@ export const useUtenlandskPeriodeBeløpSkjema = ({
                 intervall: values.intervall,
                 utbetalingsland: values.utbetalingsland,
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
             setError('root', {
@@ -95,7 +94,7 @@ export const useUtenlandskPeriodeBeløpSkjema = ({
                 behandlingId: behandling.behandlingId,
                 utenlandskPeriodeBeløpId: utenlandskPeriodeBeløp.id,
             });
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
             setError('root', {

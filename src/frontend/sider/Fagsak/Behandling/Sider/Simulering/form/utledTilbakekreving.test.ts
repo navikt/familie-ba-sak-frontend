@@ -36,6 +36,12 @@ describe('utledTilbakekreving', () => {
         expect(tilbakekreving).toBeUndefined();
     });
 
+    test('skal returnere undefined når simuleringen ikke har en feilutbetaling', () => {
+        const tilbakekreving = utledTilbakekreving(lagFormValues(), vedtak, false);
+
+        expect(tilbakekreving).toBeUndefined();
+    });
+
     test('skal sette vedtakId, valg og begrunnelse', () => {
         const values = lagFormValues({
             [TilbakekrevingFormField.TILBAKEKREVINGSVALG]: Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING,
@@ -70,17 +76,6 @@ describe('utledTilbakekreving', () => {
         });
 
         const tilbakekreving = utledTilbakekreving(values, vedtak, true);
-
-        expect(tilbakekreving?.varsel).toBeUndefined();
-    });
-
-    test('skal ikke ta med fritekst i varselet når simuleringen ikke har en feilutbetaling', () => {
-        const values = lagFormValues({
-            [TilbakekrevingFormField.TILBAKEKREVINGSVALG]: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
-            [TilbakekrevingFormField.FRITEKST_VARSEL]: 'Fritekst som ikke skal sendes',
-        });
-
-        const tilbakekreving = utledTilbakekreving(values, vedtak, false);
 
         expect(tilbakekreving?.varsel).toBeUndefined();
     });

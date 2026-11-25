@@ -8,6 +8,7 @@ import {
     type IBehandling,
 } from '../../typer/behandling';
 import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
+import { FagsakId } from '../../typer/fagsak';
 
 export function lagVisningBehandling(visningBehandling?: Partial<VisningBehandling>): VisningBehandling {
     return {
@@ -27,6 +28,7 @@ export function lagVisningBehandling(visningBehandling?: Partial<VisningBehandli
 
 export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
     return {
+        fagsakId: FagsakId.fra(1),
         arbeidsfordelingPåBehandling: {
             behandlendeEnhetId: '4833',
             behandlendeEnhetNavn: 'Oslo',
@@ -59,9 +61,6 @@ export function lagBehandling(behandling?: Partial<IBehandling>): IBehandling {
         kompetanser: [],
         utenlandskePeriodebeløp: [],
         valutakurser: [],
-        korrigertEtterbetaling: undefined,
-        korrigertVedtak: undefined,
-        feilutbetaltValuta: [],
         refusjonEøs: [],
         brevmottakere: [],
         vurderingsstrategiForValutakurser: null,

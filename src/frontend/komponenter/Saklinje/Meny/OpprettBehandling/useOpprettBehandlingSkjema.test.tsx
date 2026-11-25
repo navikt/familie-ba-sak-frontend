@@ -18,22 +18,24 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
+function Wrapper({ fagsakType, children }: PropsWithChildren<{ fagsakType: FagsakType }>) {
+    return (
+        <TestProviders>
+            <FagsakProvider
+                fagsak={lagFagsak({
+                    fagsakType,
+                    status: FagsakStatus.OPPRETTET,
+                    behandlinger: [],
+                })}
+            >
+                {children}
+            </FagsakProvider>
+        </TestProviders>
+    );
+}
+
 function lagWrapper(fagsakType: FagsakType) {
-    return function Wrapper({ children }: PropsWithChildren) {
-        return (
-            <TestProviders>
-                <FagsakProvider
-                    fagsak={lagFagsak({
-                        fagsakType,
-                        status: FagsakStatus.OPPRETTET,
-                        behandlinger: [],
-                    })}
-                >
-                    {children}
-                </FagsakProvider>
-            </TestProviders>
-        );
-    };
+    return ({ children }: PropsWithChildren) => <Wrapper fagsakType={fagsakType}>{children}</Wrapper>;
 }
 
 describe('useOpprettBehandlingSkjema', () => {

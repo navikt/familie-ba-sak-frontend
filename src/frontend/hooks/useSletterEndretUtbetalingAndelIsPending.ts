@@ -1,6 +1,6 @@
+import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { useMutationState } from '@tanstack/react-query';
 import type { IRestEndretUtbetalingAndel } from '../typer/utbetalingAndel';
-import { SlettEndretUtbetalingAndelMutationKeyFactory } from './useSlettEndretUtbetalingAndel';
 
 interface Props {
     endretUtbetalingAndel: IRestEndretUtbetalingAndel;
@@ -9,7 +9,7 @@ interface Props {
 export function useSletterEndretUtbetalingAndelIsPending({ endretUtbetalingAndel }: Props) {
     const states = useMutationState({
         filters: {
-            mutationKey: SlettEndretUtbetalingAndelMutationKeyFactory.endretUtbetalingAndel(endretUtbetalingAndel),
+            mutationKey: mutationKeys.slettEndretUtbetalingAndel(endretUtbetalingAndel.id),
         },
     });
     const currentState = states[states.length - 1];

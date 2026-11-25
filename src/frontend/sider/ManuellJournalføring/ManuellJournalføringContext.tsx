@@ -1,4 +1,4 @@
-import { useKlageApi } from '@api/useKlageApi';
+import { useKlageApi } from '@hooks/useKlageApi';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
 import { useHttp } from '@navikt/familie-http';
 import type { Avhengigheter, FeiloppsummeringFeil, Felt, FeltState, ISkjema } from '@navikt/familie-skjema';

@@ -16,7 +16,7 @@ describe('useHentGenererteBrevbegrunnelser', () => {
         const begrunnelser = ['Begrunnelse 1', 'Begrunnelse 2'];
         vi.mocked(hentGenererteBrevbegrunnelser).mockResolvedValue(begrunnelser);
 
-        const { result } = renderHook(() => useHentGenererteBrevbegrunnelser(123), {
+        const { result } = renderHook(() => useHentGenererteBrevbegrunnelser(1, 123), {
             wrapper: TestProviders,
         });
 
@@ -28,7 +28,7 @@ describe('useHentGenererteBrevbegrunnelser', () => {
     test('setter isError ved feil fra api-funksjon', async () => {
         vi.mocked(hentGenererteBrevbegrunnelser).mockRejectedValue(new Error('Noe gikk galt'));
 
-        const { result } = renderHook(() => useHentGenererteBrevbegrunnelser(123), {
+        const { result } = renderHook(() => useHentGenererteBrevbegrunnelser(1, 123), {
             wrapper: TestProviders,
         });
 

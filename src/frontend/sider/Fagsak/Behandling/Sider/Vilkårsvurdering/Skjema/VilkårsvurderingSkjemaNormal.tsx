@@ -4,7 +4,6 @@ import { Skjermstørrelse, useSkjermstørrelse } from '@hooks/useSkjermstørrels
 import { PersonInformasjon } from '@komponenter/PersonInformasjon/PersonInformasjon';
 import { ChevronDownIcon, ChevronUpIcon, PlusCircleIcon, ShieldLockFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, ErrorMessage, Heading, HStack, List, LocalAlert, Stack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useEkspanderbareVilkårsvurderingPaneler } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårsvurderingPanelerContext';
 import { KopierVilkårFraSøkerTilBarna } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/Skjema/KopierVilkårFraSøkerTilBarna';
 import {
@@ -15,7 +14,7 @@ import {
 import { PersonType } from '@typer/person';
 import { annenVurderingConfig, VilkårType, vilkårConfig } from '@typer/vilkår';
 import { Activity } from 'react';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { GeneriskAnnenVurdering } from '../GeneriskAnnenVurdering/GeneriskAnnenVurdering';
 import { GeneriskVilkår } from '../GeneriskVilkår/GeneriskVilkår';
 import Registeropplysninger from '../Registeropplysninger/Registeropplysninger';
@@ -38,7 +37,7 @@ export function VilkårsvurderingSkjemaNormal() {
         isPending: opprettVilkårResultatIsPending,
         error: opprettVilkårResultatError,
     } = useOpprettVilkårResultat({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling)),
+        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
     });
 
     const leggTilVilkårUtvidet = (personIdent: string) =>

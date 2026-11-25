@@ -1,14 +1,12 @@
 import { hentTilbakekrevingsbehandlinger } from '@api/hentTilbakekrevingsbehandlinger';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
+import type { FagsakId } from '@typer/fagsak';
 
-export const HentTilbakekrevingsbehandlingerQueryKeyFactory = {
-    fagsak: (fagsakId: number) => ['tilbakekrevingsbehandlinger', fagsakId],
-};
-
-export function useHentTilbakekrevingsbehandlinger(fagsakId: number) {
+export function useHentTilbakekrevingsbehandlinger(fagsakId: FagsakId) {
     return useQuery({
-        queryKey: HentTilbakekrevingsbehandlingerQueryKeyFactory.fagsak(fagsakId),
+        queryKey: queryKeys.tilbakekrevingsbehandlinger(fagsakId),
         queryFn: () => hentTilbakekrevingsbehandlinger(fagsakId),
         meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });

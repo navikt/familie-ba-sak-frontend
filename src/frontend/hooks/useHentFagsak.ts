@@ -1,45 +1,17 @@
 import { hentFagsak } from '@api/hentFagsak';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { MetaKey } from '@hooks/meta/metaKey';
-import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { useQuery } from '@tanstack/react-query';
-import type { IMinimalFagsak } from '@typer/fagsak';
-import { PersonType } from '@typer/person';
+import type { FagsakId } from '@typer/fagsak';
 
-// TODO : Refactor so it does not mutate fagsak object, but return a new object instead
-function obfuskerFagsak(fagsak: IMinimalFagsak) {
-    fagsak.gjeldendeUtbetalingsperioder.forEach(gup => {
-        let indeks = 1;
-        gup.utbetalingsperiodeDetaljer
-            .sort((a, b) => b.person.fødselsdato.localeCompare(a.person.fødselsdato))
-            .forEach(upd => {
-                if (upd.person.type === PersonType.SØKER) {
-                    upd.person.navn = 'Søker Søkersen';
-                } else {
-                    upd.person.navn = '[' + indeks++ + '] Barn Barnesen';
-                }
-            });
-    });
-}
-
-export const HentFagsakQueryKeyFactory = {
-    fagsak: (fagsakId: number | undefined) => ['fagsak', fagsakId],
-};
-
-export function useHentFagsak(fagsakId: number | undefined) {
-    const skalObfuskereData = useSkalObfuskereData();
+export function useHentFagsak(fagsakId: FagsakId | undefined) {
     return useQuery({
-        queryKey: HentFagsakQueryKeyFactory.fagsak(fagsakId),
+        queryKey: queryKeys.fagsak(fagsakId),
         queryFn: () => {
             if (fagsakId === undefined) {
                 throw new Error('Kan ikke hente fagsak uten fagsakId.');
             }
             return hentFagsak(fagsakId);
-        },
-        select: fagsak => {
-            if (skalObfuskereData) {
-                obfuskerFagsak(fagsak);
-            }
-            return fagsak;
         },
         enabled: fagsakId !== undefined,
         meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },

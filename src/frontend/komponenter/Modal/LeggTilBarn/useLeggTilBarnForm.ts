@@ -1,5 +1,5 @@
 import { hentPersonEnkel } from '@api/hentPersonEnkel';
-import { HentPersonEnkelQueryKeyFactory } from '@hooks/useHentPersonEnkel';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 import { useQueryClient } from '@tanstack/react-query';
@@ -79,7 +79,7 @@ export function useLeggTilBarnForm() {
         if (erFolkeregistrert) {
             try {
                 const person = await queryClient.fetchQuery({
-                    queryKey: HentPersonEnkelQueryKeyFactory.personEnkel(fødselsnummer),
+                    queryKey: queryKeys.personEnkel(fødselsnummer),
                     queryFn: () => hentPersonEnkel({ ident: fødselsnummer }),
                 });
                 if (

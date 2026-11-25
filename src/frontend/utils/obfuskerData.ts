@@ -5,6 +5,7 @@ import type { IBehandling } from '../typer/behandling';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '../typer/fagsakdeltager';
 import { type IGrunnlagPerson, PersonType } from '../typer/person';
 import type { ISamhandlerInfo } from '../typer/samhandler';
+import type { Utbetalingsperiode } from '../typer/vedtaksperiode';
 
 export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
     if (ressurs.status === RessursStatus.SUKSESS) {
@@ -23,50 +24,47 @@ export const obfuskerSamhandler = (ressurs: Ressurs<ISamhandlerInfo>) => {
     }
 };
 
-export const obfuskerBehandling = (behandlingRessurs: Ressurs<IBehandling>) => {
-    if (behandlingRessurs.status === RessursStatus.SUKSESS) {
-        let indeks = 1;
-        behandlingRessurs.data.søknadsgrunnlag?.barnaMedOpplysninger?.sort(sammenlignFødselsdato).forEach(barn => {
-            barn.navn = '[' + indeks++ + '] Barn Barnesen';
+export const obfuskerBehandling = (behandling: IBehandling) => {
+    let indeks = 1;
+    behandling.søknadsgrunnlag?.barnaMedOpplysninger?.sort(sammenlignFødselsdato).forEach(barn => {
+        barn.navn = '[' + indeks++ + '] Barn Barnesen';
+    });
+    indeks = 1;
+    behandling.personer?.sort(sammenlignFødselsdato).forEach(person => {
+        if (person.type === PersonType.BARN) {
+            person.navn = '[' + indeks++ + '] Barn Barnesen';
+        } else {
+            person.navn = 'Søker Søkersen';
+        }
+        person.registerhistorikk?.bostedsadresse.forEach((adresse, index: number) => {
+            adresse.verdi = `Bostedsadresse ${index + 1}`;
         });
+        person.registerhistorikk?.oppholdsadresse.forEach((adresse, index: number) => {
+            adresse.verdi = `Oppholdsadresse ${index + 1}`;
+        });
+        person.registerhistorikk?.deltBosted.forEach((adresse, index: number) => {
+            adresse.verdi = `Deltbostedsadresse ${index + 1}`;
+        });
+        person.registerhistorikk?.dødsboadresse.forEach((adresse, index: number) => {
+            adresse.verdi = `Dødsbosadresse ${index + 1}`;
+        });
+    });
+    behandling.utbetalingsperioder.forEach(ubp => {
         indeks = 1;
-        behandlingRessurs.data.personer?.sort(sammenlignFødselsdato).forEach(person => {
-            if (person.type === PersonType.BARN) {
-                person.navn = '[' + indeks++ + '] Barn Barnesen';
+        ubp.utbetalingsperiodeDetaljer?.sort(sammenlignFødselsdato).forEach(ubpd => {
+            if (ubpd.person.type === PersonType.BARN) {
+                ubpd.person.navn = '[' + indeks++ + '] Barn Barnesen';
             } else {
-                person.navn = 'Søker Søkersen';
+                ubpd.person.navn = 'Søker Søkersen';
             }
-            person.registerhistorikk?.bostedsadresse.forEach((adresse, index: number) => {
-                adresse.verdi = `Bostedsadresse ${index + 1}`;
-            });
-            person.registerhistorikk?.oppholdsadresse.forEach((adresse, index: number) => {
-                adresse.verdi = `Oppholdsadresse ${index + 1}`;
-            });
-            person.registerhistorikk?.deltBosted.forEach((adresse, index: number) => {
-                adresse.verdi = `Deltbostedsadresse ${index + 1}`;
-            });
-            person.registerhistorikk?.dødsboadresse.forEach((adresse, index: number) => {
-                adresse.verdi = `Dødsbosadresse ${index + 1}`;
-            });
         });
-        behandlingRessurs.data.utbetalingsperioder.forEach(ubp => {
-            indeks = 1;
-            ubp.utbetalingsperiodeDetaljer?.sort(sammenlignFødselsdato).forEach(ubpd => {
-                if (ubpd.person.type === PersonType.BARN) {
-                    ubpd.person.navn = '[' + indeks++ + '] Barn Barnesen';
-                } else {
-                    ubpd.person.navn = 'Søker Søkersen';
-                }
-            });
-        });
-        behandlingRessurs.data.brevmottakere?.forEach(brevmottaker => {
-            brevmottaker.navn =
-                brevmottaker.type.charAt(0).toUpperCase() +
-                brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' ');
-            brevmottaker.adresselinje1 = 'Mottakerveien 1';
-            brevmottaker.adresselinje2 = undefined;
-        });
-    }
+    });
+    behandling.brevmottakere?.forEach(brevmottaker => {
+        brevmottaker.navn =
+            brevmottaker.type.charAt(0).toUpperCase() + brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' ');
+        brevmottaker.adresselinje1 = 'Mottakerveien 1';
+        brevmottaker.adresselinje2 = undefined;
+    });
 };
 
 function obfuskertNavnForRolle(rolle: FagsakDeltagerRolle): string {
@@ -89,3 +87,21 @@ const sammenlignFødselsdato = <T extends { fødselsdato?: string; person?: IGru
     if (a.fødselsdato && b.fødselsdato) return b.fødselsdato.localeCompare(a.fødselsdato);
     return 0;
 };
+
+export const obfuskerUtbetalingsperioder = (utbetalingsperioder: Utbetalingsperiode[]): Utbetalingsperiode[] =>
+    utbetalingsperioder.map(utbetalingsperiode => {
+        let indeks = 1;
+        return {
+            ...utbetalingsperiode,
+            utbetalingsperiodeDetaljer: utbetalingsperiode.utbetalingsperiodeDetaljer
+                .toSorted(sammenlignFødselsdato)
+                .map(detalj => ({
+                    ...detalj,
+                    person: {
+                        ...detalj.person,
+                        navn:
+                            detalj.person.type === PersonType.SØKER ? 'Søker Søkersen' : `[${indeks++}] Barn Barnesen`,
+                    },
+                })),
+        };
+    });

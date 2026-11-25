@@ -8,14 +8,14 @@ import { BrevmottakerListe } from './BrevmottakerListe';
 interface Props {
     brevmottakere: Brevmottaker[];
     beskrivelse: string;
-    dialog: (lukkDialog: () => void) => ReactNode;
+    dialog: ReactNode;
     className?: string;
 }
 
 export function RegistrerteBrevmottakere({ brevmottakere, beskrivelse, dialog, className }: Props) {
     return (
         <BrevmottakerDialogProvider>
-            {({ erDialogÅpen, åpneDialog, lukkDialog }) => (
+            {({ erDialogÅpen, åpneDialog }) => (
                 <>
                     {brevmottakere.length !== 0 && (
                         <InfoCard data-color={'info'} className={className}>
@@ -37,7 +37,7 @@ export function RegistrerteBrevmottakere({ brevmottakere, beskrivelse, dialog, c
                             </InfoCard.Content>
                         </InfoCard>
                     )}
-                    {erDialogÅpen && dialog(lukkDialog)}
+                    {erDialogÅpen && dialog}
                 </>
             )}
         </BrevmottakerDialogProvider>

@@ -43,6 +43,16 @@ describe('useFagsakIdParam', () => {
         expect(result.current).toEqual(undefined);
     });
 
+    it.each(['0', '-1', '1.5', '%20', '1e3', '0x10', '12abc', '007'])(
+        'skal returnere undefined for ugyldig fagsakId "%s"',
+        fagsakId => {
+            const { result } = renderHook(() => useFagsakIdParam(), {
+                wrapper: Router(`/fagsak/${fagsakId}`),
+            });
+            expect(result.current).toEqual(undefined);
+        }
+    );
+
     it('skal returnere undefined for URL sti uten fagsakid', () => {
         const behandlingId = '1234';
         const { result } = renderHook(() => useFagsakIdParam(), {

@@ -2,8 +2,7 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOpprettVilkårResultat } from '@hooks/useOpprettVilkårResultat';
 import { LightBulbFillIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading, HStack } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
 import { BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IGrunnlagPerson } from '@typer/person';
@@ -53,7 +52,7 @@ export function GeneriskVilkår({ person, vilkårFraConfig, vilkårResultater, g
         error: opprettVilkårResultatError,
     } = useOpprettVilkårResultat({
         onSuccess: oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             åpneNyeIkkeVurdertVilkårResultat(oppdatertBehandling);
         },
     });

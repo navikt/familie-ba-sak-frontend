@@ -1,27 +1,25 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettFeilutbetaltValuta } from '@hooks/useSlettFeilutbetaltValuta';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
-import { useFeilutbetaltValutaTabellContext } from './FeilutbetaltValutaTabellContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
     feilutbetaltValutaId: number;
 }
 
 export function SlettFeilutbetaltValuta({ feilutbetaltValutaId }: Props) {
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
-    const { erLeggTilFeilutbetaltValutaFormÅpen, skjulFeilutbetaltValutaTabell } = useFeilutbetaltValutaTabellContext();
+    const queryClient = useQueryClient();
+    const behandlingId = useBehandlingId();
 
     const { mutate, isPending } = useSlettFeilutbetaltValuta({
         feilutbetaltValutaId: feilutbetaltValutaId,
-        onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
-            if (!erLeggTilFeilutbetaltValutaFormÅpen && behandling.feilutbetaltValuta.length === 0) {
-                skjulFeilutbetaltValutaTabell();
-            }
+        onSuccess: feilutbetaltValutaPerioder => {
+            queryClient.setQueryData(queryKeys.feilutbetaltValuta(behandlingId), feilutbetaltValutaPerioder);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
 
@@ -36,7 +34,7 @@ export function SlettFeilutbetaltValuta({ feilutbetaltValutaId }: Props) {
             <Button
                 variant={'tertiary'}
                 size={'small'}
-                onClick={() => mutate({ behandlingId: behandling.behandlingId, feilutbetaltValutaId })}
+                onClick={() => mutate({ behandlingId, feilutbetaltValutaId })}
                 icon={<TrashIcon />}
                 loading={isPending}
             />

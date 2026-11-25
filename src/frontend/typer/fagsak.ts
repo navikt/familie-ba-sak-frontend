@@ -3,7 +3,6 @@ import type { VisningBehandling } from '@sider/Fagsak/Saksoversikt/visningBehand
 import type { BehandlingKategori, BehandlingUnderkategori } from './behandlingstema';
 import type { INøkkelPar } from './common';
 import type { IInstitusjon } from './institusjon';
-import type { Utbetalingsperiode } from './vedtaksperiode';
 
 // Enum
 export enum FagsakStatus {
@@ -20,9 +19,21 @@ export enum FagsakType {
     SKJERMET_BARN = 'SKJERMET_BARN',
 }
 
+export type FagsakId = number & { readonly __brand: 'FagsakId' };
+
+export const FagsakId = {
+    erGyldig: (id: number): id is FagsakId => Number.isSafeInteger(id) && id > 0,
+    fra: (id: number): FagsakId => {
+        if (!FagsakId.erGyldig(id)) {
+            throw new Error(`Ugyldig fagsakId: ${id}`);
+        }
+        return id;
+    },
+};
+
 // Interface
 export interface IBaseFagsak {
-    id: number;
+    id: FagsakId;
     fagsakeier: string;
     opprettetTidspunkt: string;
     saksnummer: string;
@@ -48,7 +59,6 @@ export function sjekkHarBarnEnsligMindreårigFagsak(fagsaker: IBaseFagsak[] | un
 export interface IMinimalFagsak extends IBaseFagsak {
     migreringsdato?: string;
     behandlinger: VisningBehandling[];
-    gjeldendeUtbetalingsperioder: Utbetalingsperiode[];
 }
 
 export function erFagsakAvTypeInstitusjon(fagsak: IMinimalFagsak) {

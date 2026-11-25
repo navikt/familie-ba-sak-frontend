@@ -1,8 +1,6 @@
-import { useHttp } from '@navikt/familie-http';
+import { type OppdaterRefusjonEøsPayload, oppdaterRefusjonEøs } from '@api/oppdaterRefusjonEøs';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-
-import { type OppdaterRefusjonEøsPayload, oppdaterRefusjonEøs } from '../api/oppdaterRefusjonEøs';
-import type { IBehandling } from '../typer/behandling';
+import type { IBehandling } from '@typer/behandling';
 
 interface Parameters {
     behandlingId: number;
@@ -13,11 +11,10 @@ interface Parameters {
 type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOppdaterRefusjonEøs(options: Options = {}) {
-    const { request } = useHttp();
     return useMutation({
         mutationFn: (parameters: Parameters) => {
             const { behandlingId, refusjonEøsId, payload } = parameters;
-            return oppdaterRefusjonEøs(request, behandlingId, refusjonEøsId, payload);
+            return oppdaterRefusjonEøs(behandlingId, refusjonEøsId, payload);
         },
         ...options,
     });

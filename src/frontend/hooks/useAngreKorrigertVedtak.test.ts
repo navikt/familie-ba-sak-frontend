@@ -1,7 +1,7 @@
 import { angreKorrigertVedtak } from '@api/angreKorrigertVedtak';
 import { useAngreKorrigertVedtak } from '@hooks/useAngreKorrigertVedtak';
 import { renderHook, waitFor } from '@testing-library/react';
-import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagKorrigertVedtak } from '@testutils/testdata/korrigertVedtakTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -11,13 +11,13 @@ afterEach(() => {
     vi.clearAllMocks();
 });
 
-const behandling = lagBehandling();
-const behandlingId = behandling.behandlingId;
+const behandlingId = 1;
+const korrigertVedtak = lagKorrigertVedtak();
 
 describe('useAngreKorrigertVedtak', () => {
     test('kaller angreKorrigertVedtak med riktig payload', async () => {
         // Arrange
-        vi.mocked(angreKorrigertVedtak).mockResolvedValue(behandling);
+        vi.mocked(angreKorrigertVedtak).mockResolvedValue(korrigertVedtak);
 
         const { result } = renderHook(() => useAngreKorrigertVedtak(), {
             wrapper: TestProviders,
@@ -29,13 +29,13 @@ describe('useAngreKorrigertVedtak', () => {
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(angreKorrigertVedtak).toHaveBeenCalledWith(behandlingId);
-        expect(result.current.data).toEqual(behandling);
+        expect(result.current.data).toEqual(korrigertVedtak);
     });
 
     test('skal kalle onSuccess-callback ved vellykket mutasjon', async () => {
         // Arrange
         const onSuccess = vi.fn();
-        vi.mocked(angreKorrigertVedtak).mockResolvedValue(behandling);
+        vi.mocked(angreKorrigertVedtak).mockResolvedValue(korrigertVedtak);
 
         const { result } = renderHook(() => useAngreKorrigertVedtak({ onSuccess }), {
             wrapper: TestProviders,
@@ -46,7 +46,7 @@ describe('useAngreKorrigertVedtak', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(onSuccess).toHaveBeenCalledWith(behandling, behandlingId, undefined, expect.any(Object));
+        expect(onSuccess).toHaveBeenCalledWith(korrigertVedtak, behandlingId, undefined, expect.any(Object));
     });
 
     test('skal sette isError dersom angreKorrigertVedtak feiler', async () => {

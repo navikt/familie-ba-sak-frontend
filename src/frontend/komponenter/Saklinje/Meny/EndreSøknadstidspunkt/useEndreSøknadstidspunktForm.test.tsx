@@ -1,4 +1,5 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { kjønnType } from '@navikt/familie-typer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
@@ -48,7 +49,7 @@ const { mockMutateAsync, mockSettÅpenBehandling } = vi.hoisted(() => ({
     mockSettÅpenBehandling: vi.fn(),
 }));
 
-vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext', () => ({
+vi.mock('@sider/Fagsak/Behandling/BehandlingContext', () => ({
     useBehandlingContext: () => ({
         behandling: mockBehandling,
         settÅpenBehandling: mockSettÅpenBehandling,
@@ -56,19 +57,11 @@ vi.mock('@sider/Fagsak/Behandling/context/BehandlingContext', () => ({
 }));
 
 vi.mock('@hooks/useEndreSøknadstidspunkt', () => ({
-    useEndreSøknadstidspunkt: (options?: {
-        onSuccess?: (behandling: unknown) => void | Promise<void>;
-        onError?: (error: Error) => void | Promise<void>;
-    }) => ({
+    useEndreSøknadstidspunkt: (options?: { onSuccess?: (behandling: unknown) => void | Promise<void> }) => ({
         mutateAsync: async (variabler: unknown) => {
-            try {
-                const behandling = await mockMutateAsync(variabler);
-                await options?.onSuccess?.(behandling);
-                return behandling;
-            } catch (error) {
-                await options?.onError?.(error as Error);
-                throw error;
-            }
+            const behandling = await mockMutateAsync(variabler);
+            await options?.onSuccess?.(behandling);
+            return behandling;
         },
     }),
 }));
@@ -209,7 +202,7 @@ describe('useEndreSøknadstidspunktForm', () => {
         });
         expect(mockSettÅpenBehandling).toHaveBeenCalledTimes(1);
         expect(invalidateQueriesSpy).toHaveBeenCalledWith({
-            queryKey: ['registrerte-soknadstidspunkter', mockBehandling.behandlingId],
+            queryKey: queryKeys.registrerteSøknadstidspunkter(mockBehandling.behandlingId),
         });
         expect(lukkModal).toHaveBeenCalledTimes(1);
     });
@@ -221,18 +214,16 @@ describe('useEndreSøknadstidspunktForm', () => {
         const { result, lukkModal } = renderForm([]);
 
         await act(async () => {
-            await result.current
-                .onSubmit({
-                    personer: [
-                        {
-                            personIdent: barnMedPersistertVerdi.personIdent,
-                            navn: 'Barn 1',
-                            fødselsdato: '2023-12-31',
-                            søknadstidspunkt: new Date(2025, 3, 15),
-                        },
-                    ],
-                })
-                ?.catch(() => undefined);
+            await result.current.onSubmit({
+                personer: [
+                    {
+                        personIdent: barnMedPersistertVerdi.personIdent,
+                        navn: 'Barn 1',
+                        fødselsdato: '2023-12-31',
+                        søknadstidspunkt: new Date(2025, 3, 15),
+                    },
+                ],
+            });
         });
 
         expect(mockMutateAsync).toHaveBeenCalledTimes(1);

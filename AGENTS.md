@@ -60,6 +60,7 @@ src/frontend/
   ikoner/                          # SVG icon components
   public/                          # Static assets (favicon)
   App.tsx                          # QueryClient + context providers + RouterProvider
+  queryClient.ts                   # App QueryClient instance + registrerQueryClientLyttere (cache listeners)
 
 playwright/                        # Playwright UI tests, run against `vite preview` with mocked API (config in playwright.config.ts)
   fixtures.ts                      # `test`/`expect` with the auto `apiMock` fixture — import from here, not @playwright/test
@@ -114,8 +115,14 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   });
   ```
 - **Hooks** (`src/frontend/hooks/`): one hook per api file — `useHentX` wraps `useQuery`, `useOpprettX` /
-  `useOppdaterX` / `useSlettX` wrap `useMutation`. Query keys are exposed via `XQueryKeyFactory` objects.
+  `useOppdaterX` / `useSlettX` wrap `useMutation`. Query keys are defined in the single `queryKeys` factory
+  in `hooks/keys/queryKeys.ts` (e.g. `queryKeys.behandling(behandlingId)`).
+  Mutation keys are defined in the single `mutationKeys` factory in `hooks/keys/mutationKeys.ts`;
+  use the same factory in mutation hooks and their pending/error consumers.
   Mark queries/mutations that should trigger the global spinner with `meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true }`.
+  When the behandling in the cache is updated (any `setQueryData`, or a refetch — not the first fetch),
+  `registrerQueryClientLyttere` (`src/frontend/queryClient.ts`) automatically invalidates queries that depend on it
+  (the fagsak, `historikkinnslag`, `personerMedUgyldigEtterbetalingsperiode`). Add new dependencies there.
 - **Ressurs envelope**: backend responses are wrapped in a `Ressurs` envelope
   (`SUKSESS | FEILET | IKKE_TILGANG | FUNKSJONELL_FEIL`), locally typed in `api/client/apiClient.ts` — error
   statuses can arrive with HTTP 200. `apiClient` unwraps this via `pakkUtRessursResponse()` and throws
@@ -126,7 +133,7 @@ the "Legacy" column exists in older files and is being phased out — do not ext
   this fully (some use `useXForm` naming, or inline defaults) — treat it as the target shape for new or
   touched forms rather than an established universal rule.
 - **Obfuscated data**: some data toggled via feature flag can be masked for demo/opplæring purposes — see
-  `useSkalObfuskereData` and the `select` option in hooks like `useHentFagsak` / `useHentPerson`.
+  `useSkalObfuskereData` and the `select` option in hooks like `useHentGjeldendeUtbetalingsperioder` / `useHentPerson`.
 
 ## Testing
 

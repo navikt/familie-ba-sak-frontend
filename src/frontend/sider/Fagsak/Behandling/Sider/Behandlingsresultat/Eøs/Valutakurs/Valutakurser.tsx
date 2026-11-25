@@ -14,11 +14,10 @@ import {
     Table,
     VStack,
 } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { Behandlingstype, type IBehandling, VurderingsstrategiForValutakurser } from '@typer/behandling';
 import { EøsPeriodeStatus, type IRestValutakurs, Vurderingsform } from '@typer/eøsPerioder';
 import { useState } from 'react';
-import { useBehandlingContext } from '../../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../../BehandlingContext';
 import Styles from './Valutakurser.module.css';
 import ValutakursTabellRad from './ValutakursTabellRad';
 
@@ -61,7 +60,7 @@ const Valutakurser = ({ valutakurser, erValutakurserGyldige, åpenBehandling, vi
             behandlingId: åpenBehandling.behandlingId,
             vurderingsstrategi: nesteVurderingsstrategi,
         }).then(oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
         });
     };
 

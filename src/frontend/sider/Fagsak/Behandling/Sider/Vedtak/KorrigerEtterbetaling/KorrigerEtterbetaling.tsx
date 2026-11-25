@@ -1,16 +1,17 @@
 import { ModalType } from '@context/ModalContext';
-import { useBehandling } from '@hooks/useBehandling';
 import { useModal } from '@hooks/useModal';
 
 import { DocPencilIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
+import { useKorrigertEtterbetalingContext } from './KorrigertEtterbetalingContext';
+
 export function KorrigerEtterbetaling() {
-    const behandling = useBehandling();
+    const { korrigertEtterbetaling } = useKorrigertEtterbetalingContext();
 
     const { åpneModal } = useModal(ModalType.KORRIGER_ETTERBETALING);
 
-    const label = behandling.korrigertEtterbetaling ? 'Vis korrigert etterbetaling' : 'Korriger etterbetaling';
+    const label = korrigertEtterbetaling ? 'Vis korrigert etterbetaling' : 'Korriger etterbetaling';
 
     return (
         <ActionMenu.Item onSelect={() => åpneModal()}>

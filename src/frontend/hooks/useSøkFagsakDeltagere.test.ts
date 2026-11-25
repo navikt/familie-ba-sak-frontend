@@ -3,6 +3,7 @@ import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { useSøkFagsakDeltagere } from '@hooks/useSøkFagsakDeltagere';
 import { renderHook, waitFor } from '@testing-library/react';
 import { TestProviders } from '@testutils/testrender';
+import { FagsakId } from '@typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
@@ -21,7 +22,7 @@ const søker: IFagsakDeltager = {
     rolle: FagsakDeltagerRolle.Forelder,
     harTilgang: true,
     erEgenAnsatt: false,
-    fagsakId: 1,
+    fagsakId: FagsakId.fra(1),
 };
 
 const barn: IFagsakDeltager = {
@@ -30,7 +31,7 @@ const barn: IFagsakDeltager = {
     rolle: FagsakDeltagerRolle.Barn,
     harTilgang: true,
     erEgenAnsatt: false,
-    fagsakId: 1,
+    fagsakId: FagsakId.fra(1),
 };
 
 describe('useSøkFagsakDeltagere', () => {

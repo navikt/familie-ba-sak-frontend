@@ -3,8 +3,7 @@ import { useSlettRefusjonEøs } from '@hooks/useSlettRefusjonEøs';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, Tooltip } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '../../../context/BehandlingContext';
+import { useBehandlingContext } from '../../../BehandlingContext';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 
 interface Props {
@@ -18,7 +17,7 @@ export function SlettRefusjonEøs({ refusjonEøsId }: Props) {
     const { mutate, isPending } = useSlettRefusjonEøs({
         refusjonEøsId: refusjonEøsId,
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             if (!erLeggTilRefusjonEøsFormÅpen && behandling.refusjonEøs.length === 0) {
                 skjulRefusjonEøsTabell();
             }

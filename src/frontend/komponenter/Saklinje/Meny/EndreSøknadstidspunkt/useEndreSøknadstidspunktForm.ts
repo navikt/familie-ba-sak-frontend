@@ -1,8 +1,7 @@
 import type { RegistrertSøknadstidspunkt } from '@api/hentRegistrerteSøknadstidspunkter';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useEndreSøknadstidspunkt } from '@hooks/useEndreSøknadstidspunkt';
-import { HentRegistrerteSøknadstidspunkterQueryKeyFactory } from '@hooks/useHentRegistrerteSøknadstidspunkter';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { erRevurderingKlage, type IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
@@ -60,16 +59,11 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
 
     const { mutateAsync: endreSøknadstidspunkt } = useEndreSøknadstidspunkt({
         onSuccess: async oppdatertBehandling => {
-            settÅpenBehandling(byggSuksessRessurs(oppdatertBehandling));
+            settÅpenBehandling(oppdatertBehandling);
             await queryClient.invalidateQueries({
-                queryKey: HentRegistrerteSøknadstidspunkterQueryKeyFactory.registrerteSøknadstidspunkter(
-                    behandling.behandlingId
-                ),
+                queryKey: queryKeys.registrerteSøknadstidspunkter(behandling.behandlingId),
             });
             lukkModal();
-        },
-        onError: error => {
-            setError('root', { message: `Teknisk feil ved endring av søknadstidspunkt: ${error.message}` });
         },
     });
 
@@ -86,7 +80,7 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
         name: 'personer',
     });
 
-    function onSubmit(values: EndreSøknadstidspunktFormValues) {
+    async function onSubmit(values: EndreSøknadstidspunktFormValues) {
         const personerMedDato = values.personer.filter(person => person.søknadstidspunkt !== null);
 
         if (personerMedDato.length === 0) {
@@ -94,13 +88,18 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
             return;
         }
 
-        return endreSøknadstidspunkt({
-            behandlingId: behandling.behandlingId,
-            søknadstidspunktPerPerson: personerMedDato.map(person => ({
-                personIdent: person.personIdent,
-                søknadstidspunkt: dateTilIsoDatoString(person.søknadstidspunkt ?? undefined),
-            })),
-        });
+        try {
+            await endreSøknadstidspunkt({
+                behandlingId: behandling.behandlingId,
+                søknadstidspunktPerPerson: personerMedDato.map(person => ({
+                    personIdent: person.personIdent,
+                    søknadstidspunkt: dateTilIsoDatoString(person.søknadstidspunkt ?? undefined),
+                })),
+            });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';
+            setError('root', { message: `Teknisk feil ved endring av søknadstidspunkt: ${message}` });
+        }
     }
 
     return { form, fieldArray, onSubmit };

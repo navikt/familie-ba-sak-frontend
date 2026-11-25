@@ -1,7 +1,6 @@
 import { useTaBehandlingAvVent } from '@hooks/useTaBehandlingAvVent';
 import { BodyShort, Box, Button, LocalAlert, Modal } from '@navikt/ds-react';
-import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/context/BehandlingContext';
+import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { settPåVentÅrsaker } from '@typer/behandling';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 
@@ -18,7 +17,7 @@ export function TaBehandlingAvVentModal({ lukkModal }: Props) {
         error,
     } = useTaBehandlingAvVent({
         onSuccess: behandling => {
-            settÅpenBehandling(byggSuksessRessurs(behandling));
+            settÅpenBehandling(behandling);
             lukkModal();
         },
     });
