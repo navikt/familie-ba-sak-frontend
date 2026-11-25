@@ -3,6 +3,7 @@ import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsakId } from '@hooks/useFagsakId';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, CopyButton, Heading, Stack, Table } from '@navikt/ds-react';
+import type { FagsakId } from '@typer/fagsak';
 import type { IRestRefusjonEøs } from '@typer/refusjon-eøs';
 import { isoDatoPeriodeTilFormatertString } from '@utils/dato';
 import { summerTotalBeløpForPerioder } from '../utils';
@@ -12,7 +13,7 @@ import { RefusjonEøsRad } from './RefusjonEøsRad';
 import { useRefusjonEøsTabellContext } from './RefusjonEøsTabellContext';
 import { SlettRefusjonEøsError } from './SlettRefusjonEøsError';
 
-function lagKopieringstekstTilNØS(fagsakId: number, behandlingId: number, refusjonEøsPerioder: IRestRefusjonEøs[]) {
+function lagKopieringstekstTilNØS(fagsakId: FagsakId, behandlingId: number, refusjonEøsPerioder: IRestRefusjonEøs[]) {
     const url = `https://barnetrygd.intern.nav.no/fagsak/${fagsakId}/${behandlingId}/vedtak`;
 
     const totaltRefusjonsbeløp = summerTotalBeløpForPerioder(
