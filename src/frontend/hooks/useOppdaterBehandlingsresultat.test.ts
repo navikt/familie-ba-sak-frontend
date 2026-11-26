@@ -27,7 +27,7 @@ describe('useOppdaterBehandlingsresultat', () => {
 
         // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
-        expect(oppdaterBehandlingsresultat).toHaveBeenCalledWith(expect.any(Function), behandling.behandlingId);
+        expect(oppdaterBehandlingsresultat).toHaveBeenCalledWith(behandling.behandlingId);
         expect(result.current.data).toEqual(behandling);
     });
 

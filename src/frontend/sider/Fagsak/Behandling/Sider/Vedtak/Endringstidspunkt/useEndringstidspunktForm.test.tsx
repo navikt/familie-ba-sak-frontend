@@ -205,7 +205,11 @@ describe('useEndringstidspunktForm', () => {
 
         await act(() => result.current.form.handleSubmit(result.current.onSubmit)());
 
-        await waitFor(() => expect(result.current.errors.root?.message).toBe('En feil har oppstått!'));
+        await waitFor(() =>
+            expect(result.current.errors.root?.message).toBe(
+                'Får ikke kontakt med serveren. Sjekk internettforbindelsen din og prøv igjen.'
+            )
+        );
         expect(result.current.dialog.erDialogÅpen).toBe(true);
     });
 
