@@ -7,6 +7,7 @@ import { VedtaksperiodeTestdata } from '@testutils/testdata/vedtaksperiodeTestda
 import { VilkårResultatTestdata } from '@testutils/testdata/vilkårResultatTestdata';
 import { BehandlerRolle, type BehandlingSteg, type IBehandling } from '@typer/behandling';
 import { YtelseType } from '@typer/beregning';
+import type { NoBrand } from '@typer/brand';
 import { PersonType } from '@typer/person';
 import { type IRestVedtakBegrunnelseTilknyttetVilkår, VedtakBegrunnelseType } from '@typer/vedtak';
 import { type IVedtaksperiodeMedBegrunnelser, Vedtaksperiodetype } from '@typer/vedtaksperiode';
@@ -134,7 +135,7 @@ export function lagTilkjentYtelse(): Pick<IBehandling, 'utbetalingsperioder' | '
  * Førstegangsbehandling på søknad for én søker og ett barn, der alle vilkår er oppfylt og barnet har fått tilkjent
  * ordinær barnetrygd.
  */
-export function lagBehandlingPåSteg(steg: BehandlingSteg, endringer: Partial<IBehandling> = {}): IBehandling {
+export function lagBehandlingPåSteg(steg: BehandlingSteg, endringer: Partial<NoBrand<IBehandling>> = {}): IBehandling {
     return BehandlingTestdata.lagBehandling({
         steg,
         personer: lagPersoner(),

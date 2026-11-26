@@ -1,10 +1,11 @@
-import { BehandlingKategori, BehandlingUnderkategori } from '../../typer/behandlingstema';
-import { FagsakId, FagsakStatus, FagsakType, type IMinimalFagsak } from '../../typer/fagsak';
+import { BehandlingKategori, BehandlingUnderkategori } from '@typer/behandlingstema';
+import type { NoBrand } from '@typer/brand';
+import { FagsakId, FagsakStatus, FagsakType, type IMinimalFagsak } from '@typer/fagsak';
 import { BehandlingTestdata } from './behandlingTestdata';
 
-export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
+export function lagFagsak(fagsak: Partial<NoBrand<IMinimalFagsak>> = {}): IMinimalFagsak {
+    const { id = 1, ...resten } = fagsak;
     return {
-        id: FagsakId.fra(1),
         fagsakeier: '12345678910',
         opprettetTidspunkt: '2020-09-19T09:08:56.8',
         saksnummer: '1234',
@@ -18,7 +19,8 @@ export function lagFagsak(fagsak?: Partial<IMinimalFagsak>): IMinimalFagsak {
         finnesStrengtFortroligPersonIFagsak: false,
         migreringsdato: '',
         behandlinger: [BehandlingTestdata.lagVisningBehandling()],
-        ...(fagsak ?? {}),
+        ...resten,
+        id: FagsakId.fra(id),
     };
 }
 
