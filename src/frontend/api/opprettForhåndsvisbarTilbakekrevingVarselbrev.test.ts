@@ -11,7 +11,7 @@ afterEach(() => {
 });
 
 describe('opprettForhåndsvisbarTilbakekrevingVarselbrev', () => {
-    test('skal sende POST med fritekst og returnere bytene', async () => {
+    test('skal sende POST med fritekst og returnere base64-streng', async () => {
         // Arrange
         const bytes = 'JVBERi0xLjQK';
         vi.mocked(apiClient.post).mockResolvedValue(bytes);
