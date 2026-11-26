@@ -2,7 +2,6 @@ import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { FagsakDeltagerTestdata } from '@testutils/testdata/fagsakDeltagerTestdata';
 import { FagsakTestdata } from '@testutils/testdata/fagsakTestdata';
 import generator from '@testutils/testverktøy/fnr/fnr-generator';
-import { FagsakId } from '@typer/fagsak';
 import { HttpResponse, http } from 'msw';
 
 import { expect, test } from '../fixtures';
@@ -38,7 +37,7 @@ test.describe('Personsøk', () => {
                         FagsakDeltagerTestdata.lagFagsakDeltager({
                             ident: gyldigFnr,
                             navn: 'Søker Søkersen',
-                            fagsakId: FagsakId.fra(42),
+                            fagsakId: 42,
                         }),
                     ])
                 )
@@ -75,7 +74,7 @@ test.describe('Personsøk', () => {
                 HttpResponse.json(
                     byggSuksessRessurs(
                         FagsakTestdata.lagFagsak({
-                            id: FagsakId.fra(2),
+                            id: 2,
                             søkerFødselsnummer: gyldigFnr,
                             behandlinger: [],
                         })
