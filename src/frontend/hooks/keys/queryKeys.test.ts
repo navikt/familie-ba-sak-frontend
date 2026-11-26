@@ -40,6 +40,7 @@ const behandlingsnøkler = {
     registrerteSøknadstidspunkter: queryKeys.registrerteSøknadstidspunkter(behandlingId),
     sammensattKontrollsak: queryKeys.sammensattKontrollsak(behandlingId),
     simulering: queryKeys.simulering(behandlingId),
+    tilbakekreving: queryKeys.tilbakekreving(behandlingId),
     validerBehandlingsresultat: queryKeys.validerBehandlingsresultat(behandlingId),
     vedtaksperioder: queryKeys.vedtaksperioder(behandlingId),
 };

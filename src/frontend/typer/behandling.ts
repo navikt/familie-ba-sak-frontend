@@ -9,7 +9,6 @@ import type { FagsakId } from './fagsak';
 import type { KlageResultat, KlageStatus, KlageÅrsak } from './klage';
 import type { ManglendeFinnmarkSvalbardMerking } from './ManglendeFinnmarkSvalbardMerking';
 import { type IGrunnlagPerson, PersonType } from './person';
-import type { ITilbakekreving } from './simulering';
 import { type ISøknadDTO, Målform } from './søknad';
 import type {
     Behandlingsstatus,
@@ -328,7 +327,6 @@ export interface IBehandling {
     personerMedAndelerTilkjentYtelse: IPersonMedAndelerTilkjentYtelse[];
     årsak: BehandlingÅrsak;
     skalBehandlesAutomatisk: boolean;
-    tilbakekreving?: ITilbakekreving;
     aktivSettPåVent?: ISettPåVent;
     søknadMottattDato?: string;
     kompetanser: IRestKompetanse[];

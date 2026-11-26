@@ -55,7 +55,6 @@ export function lagBehandling(behandling: Partial<NoBrand<IBehandling>> = {}): I
         personerMedAndelerTilkjentYtelse: [],
         årsak: BehandlingÅrsak.SØKNAD,
         skalBehandlesAutomatisk: false,
-        tilbakekreving: undefined,
         aktivSettPåVent: undefined,
         søknadMottattDato: undefined,
         kompetanser: [],

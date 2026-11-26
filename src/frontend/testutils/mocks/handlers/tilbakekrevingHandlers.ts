@@ -12,4 +12,7 @@ export const tilbakekrevingHandlers = [
     http.get<{ fagsakId: string }>('/familie-ba-sak/api/fagsaker/:fagsakId/har-apen-tilbakekreving', () => {
         return HttpResponse.json(byggSuksessRessurs(false));
     }),
+    http.get<{ behandlingId: string }>('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () => {
+        return HttpResponse.json(byggSuksessRessurs(null));
+    }),
 ];
