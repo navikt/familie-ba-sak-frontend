@@ -1,42 +1,37 @@
-import { RessursStatus } from '@navikt/familie-typer/dist/ressurs';
+import { apiClient } from '@api/client/apiClient';
+import { oppdaterBehandlingsresultat } from '@api/oppdaterBehandlingsresultat';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { oppdaterBehandlingsresultat } from './oppdaterBehandlingsresultat';
+vi.mock('@api/client/apiClient', () => ({
+    apiClient: { post: vi.fn() },
+}));
 
 afterEach(() => {
     vi.clearAllMocks();
 });
 
 describe('oppdaterBehandlingsresultat', () => {
-    test('kaller request med riktig metode og URL, og får forventet resultat', async () => {
+    test('skal sende POST til behandlingsresultat-steget og returnere behandlingen', async () => {
         // Arrange
         const behandling = lagBehandling({ behandlingId: 123 });
-
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.SUKSESS,
-            data: behandling,
-        });
+        vi.mocked(apiClient.post).mockResolvedValue(behandling);
 
         // Act
-        const result = await oppdaterBehandlingsresultat(mockRequest, behandling.behandlingId);
+        const svar = await oppdaterBehandlingsresultat(123);
 
         // Assert
-        expect(mockRequest).toHaveBeenCalledWith({
-            method: 'POST',
-            url: `/familie-ba-sak/api/behandlinger/${behandling.behandlingId}/steg/behandlingsresultat`,
+        expect(apiClient.post).toHaveBeenCalledWith({
+            url: '/familie-ba-sak/api/behandlinger/123/steg/behandlingsresultat',
         });
-        expect(result).toEqual(behandling);
+        expect(svar).toEqual(behandling);
     });
 
-    test('Skal håndtere feil', async () => {
+    test('skal håndtere feil', async () => {
         // Arrange
-        const mockRequest = vi.fn().mockResolvedValue({
-            status: RessursStatus.FEILET,
-            frontendFeilmelding: 'Noe gikk galt',
-        });
+        vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
         // Act & assert
-        await expect(oppdaterBehandlingsresultat(mockRequest, 123)).rejects.toThrow();
+        await expect(oppdaterBehandlingsresultat(123)).rejects.toThrow('Noe gikk galt');
     });
 });
