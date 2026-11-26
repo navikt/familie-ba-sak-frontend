@@ -1,6 +1,9 @@
 import { useVisManglerTilgangModal } from '@context/ManglerTilgangModalContext';
 import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
+import { useToastContext } from '@context/ToastContext';
+import { useHentFagsakerPåPerson } from '@hooks/useHentFagsakerPåPerson';
 import { useSjekkSaksbehandlertilgangTilIdent } from '@hooks/useSjekkSaksbehandlertilgangTilIdent';
+import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { Button } from '@navikt/ds-react';
 import type { IOppgave } from '@typer/oppgave';
 import { OppgavetypeFilter, oppgaveTypeFilter } from '@typer/oppgave';
@@ -8,14 +11,14 @@ import { hentFnrFraOppgaveIdenter } from '@utils/oppgave';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { useOppgavebenkContext } from './OppgavebenkContext';
+import { finnFagsakÅNavigereTil } from './finnFagsakÅNavigereTil';
 
 interface Props {
     oppgave: IOppgave;
 }
 
 export function OppgaveDirektelenke({ oppgave }: Props) {
-    const { gåTilFagsakEllerVisFeilmelding } = useOppgavebenkContext();
+    const { settToast } = useToastContext();
 
     const visTekniskFeilModal = useVisTekniskFeilModal();
     const visManglerTilgangModal = useVisManglerTilgangModal();
@@ -25,45 +28,66 @@ export function OppgaveDirektelenke({ oppgave }: Props) {
     const [laster, settLaster] = useState(false);
 
     const { mutateAsync: sjekkSaksbehandlertilgangTilIdent } = useSjekkSaksbehandlertilgangTilIdent();
+    const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson();
 
     async function navigerTilJournalføring() {
         settLaster(true);
-        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (brukerIdent) {
-            try {
-                const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
-                if (tilgangsreusltat.saksbehandlerHarTilgang) {
-                    navigate(`/oppgaver/journalfor/${oppgave.id}`);
-                } else {
-                    visManglerTilgangModal(tilgangsreusltat);
+        let navigerer = false;
+        try {
+            const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+            if (brukerIdent) {
+                const tilgangsresultat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
+                if (!tilgangsresultat.saksbehandlerHarTilgang) {
+                    visManglerTilgangModal(tilgangsresultat);
+                    return;
                 }
-            } catch (error) {
-                visTekniskFeilModal(error);
             }
-        } else {
             navigate(`/oppgaver/journalfor/${oppgave.id}`);
+            navigerer = true;
+        } catch (error) {
+            visTekniskFeilModal(error);
+        } finally {
+            if (!navigerer) {
+                settLaster(false);
+            }
         }
-        settLaster(false);
     }
 
     async function navigerTilFagsak() {
         settLaster(true);
-        const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
-        if (brukerIdent) {
-            try {
-                const tilgangsreusltat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
-                if (tilgangsreusltat.saksbehandlerHarTilgang) {
-                    await gåTilFagsakEllerVisFeilmelding(brukerIdent);
-                } else {
-                    visManglerTilgangModal(tilgangsreusltat);
-                }
-            } catch (error) {
-                visTekniskFeilModal(error);
+        let navigerer = false;
+        try {
+            const brukerIdent = hentFnrFraOppgaveIdenter(oppgave.identer);
+            if (!brukerIdent) {
+                visManglerTilgangModal();
+                return;
             }
-        } else {
-            visManglerTilgangModal();
+            const tilgangsresultat = await sjekkSaksbehandlertilgangTilIdent({ brukerIdent });
+            if (!tilgangsresultat.saksbehandlerHarTilgang) {
+                visManglerTilgangModal(tilgangsresultat);
+                return;
+            }
+            const fagsaker = await hentFagsakerPåPerson({ personIdent: brukerIdent });
+            const fagsaknavigering = finnFagsakÅNavigereTil(fagsaker);
+            if (fagsaknavigering.status === 'FUNNET') {
+                navigate(`/fagsak/${fagsaknavigering.fagsak.id}/saksoversikt`);
+                navigerer = true;
+                return;
+            }
+            settToast(ToastTyper.FANT_IKKE_FAGSAK, {
+                alertType: AlertType.WARNING,
+                tekst:
+                    fagsaknavigering.status === 'INGEN_FAGSAKER'
+                        ? 'Fant ikke fagsak'
+                        : 'Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.',
+            });
+        } catch (error) {
+            visTekniskFeilModal(error);
+        } finally {
+            if (!navigerer) {
+                settLaster(false);
+            }
         }
-        settLaster(false);
     }
 
     const oppgavetype = oppgaveTypeFilter[oppgave.oppgavetype as OppgavetypeFilter]?.id;
@@ -76,15 +100,11 @@ export function OppgaveDirektelenke({ oppgave }: Props) {
                 </Button>
             );
         case OppgavetypeFilter.BEH_SED:
-            if (oppgavetype === OppgavetypeFilter.BEH_SED) {
-                return (
-                    <Button variant={'tertiary'} size={'small'} onClick={navigerTilJournalføring} loading={laster}>
-                        Gå til oppgave
-                    </Button>
-                );
-            } else {
-                return null;
-            }
+            return (
+                <Button variant={'tertiary'} size={'small'} onClick={navigerTilJournalføring} loading={laster}>
+                    Gå til oppgave
+                </Button>
+            );
         case OppgavetypeFilter.BEH_SAK:
         case OppgavetypeFilter.GOD_VED:
         case OppgavetypeFilter.BEH_UND_VED:

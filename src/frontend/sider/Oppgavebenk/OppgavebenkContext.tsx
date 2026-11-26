@@ -1,8 +1,4 @@
-import { useVisTekniskFeilModal } from '@context/TekniskFeilModalContext';
-import { useToastContext } from '@context/ToastContext';
-import { useHentFagsakerPåPerson } from '@hooks/useHentFagsakerPåPerson';
 import { useSaksbehandler } from '@hooks/useSaksbehandler';
-import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import type { SortState } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import type { Ressurs } from '@navikt/familie-typer';
@@ -13,9 +9,7 @@ import { hentNesteSorteringsrekkefølge, hentSortState, Sorteringsrekkefølge } 
 import type { AxiosError } from 'axios';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
-import { finnFagsakÅNavigereTil } from './finnFagsakÅNavigereTil';
 import type { OppgavefilterFormValues } from './form/useOppgavefilterForm';
 import { type IOppgaveRad, mapIOppgaverTilOppgaveRad, Sorteringsnøkkel, sorterEtterNøkkel } from './utils';
 
@@ -29,7 +23,6 @@ interface OppgavebenkContextValue {
     hentOppgaver: (verdier: OppgavefilterFormValues) => Promise<void>;
     oppgaver: Ressurs<IHentOppgaveDto>;
     oppdaterOppgave: (oppgave: IOppgave) => void;
-    gåTilFagsakEllerVisFeilmelding: (personident: string) => Promise<void>;
     sortering: SortState | undefined;
     settOgLagreSortering: (sorteringsnøkkel: Sorteringsnøkkel) => void;
     sorterteOppgaverader: IOppgaveRad[];
@@ -38,13 +31,8 @@ interface OppgavebenkContextValue {
 const OppgavebenkContext = createContext<OppgavebenkContextValue | undefined>(undefined);
 
 export const OppgavebenkProvider = (props: PropsWithChildren) => {
-    const { settToast } = useToastContext();
     const saksbehandler = useSaksbehandler();
-    const navigate = useNavigate();
     const { request } = useHttp();
-    const visTekniskFeilModal = useVisTekniskFeilModal();
-
-    const { mutateAsync: hentFagsakerPåPerson } = useHentFagsakerPåPerson();
 
     const [oppgaver, settOppgaver] = useState<Ressurs<IHentOppgaveDto>>(byggTomRessurs<IHentOppgaveDto>());
 
@@ -104,32 +92,6 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
         }
     };
 
-    const visFantIkkeFagsakToast = () => {
-        settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-            alertType: AlertType.WARNING,
-            tekst: 'Fant ikke fagsak',
-        });
-    };
-
-    const gåTilFagsakEllerVisFeilmelding = async (personident: string): Promise<void> => {
-        try {
-            const fagsaker = await hentFagsakerPåPerson({ personIdent: personident });
-            const fagsaknavigering = finnFagsakÅNavigereTil(fagsaker);
-            if (fagsaknavigering.status === 'INGEN_FAGSAKER') {
-                visFantIkkeFagsakToast();
-            } else if (fagsaknavigering.status === 'FUNNET') {
-                navigate(`/fagsak/${fagsaknavigering.fagsak.id}/saksoversikt`);
-            } else {
-                settToast(ToastTyper.FANT_IKKE_FAGSAK, {
-                    alertType: AlertType.WARNING,
-                    tekst: 'Det finnes flere relevante fagsaker på brukeren, du må søke opp fagsaken manuelt.',
-                });
-            }
-        } catch (error) {
-            visTekniskFeilModal(error);
-        }
-    };
-
     const hentOppgaver = (verdier: OppgavefilterFormValues) => {
         settOppgaver(byggHenterRessurs());
 
@@ -181,7 +143,6 @@ export const OppgavebenkProvider = (props: PropsWithChildren) => {
                 hentOppgaver,
                 oppgaver,
                 oppdaterOppgave,
-                gåTilFagsakEllerVisFeilmelding,
                 sortering,
                 settOgLagreSortering,
                 sorterteOppgaverader,
