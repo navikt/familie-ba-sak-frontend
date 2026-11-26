@@ -51,5 +51,8 @@ backend(sessionConfig, prometheusTellere, appConfig).then(async ({ app, azureAut
 
     app.listen(port, '0.0.0.0', () => {
         logger.info(`Server startet på port ${port}. Build version: ${envVar('APP_VERSION')}.`);
+        if (erLokal()) {
+            logger.info(`\n\n ➜ Åpne appen: http://localhost:${port} \n`);
+        }
     });
 });
