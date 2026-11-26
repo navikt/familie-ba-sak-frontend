@@ -2,8 +2,8 @@ import {
     CheckmarkCircleFillIcon,
     CheckmarkCircleIcon,
     CircleIcon,
-    CircleSlashFillIcon,
-    CircleSlashIcon,
+    XMarkOctagonFillIcon,
+    XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 
 import { Vilkårstatus, vilkårstatusVisningsnavn } from '../Sider/Vilkårsvurdering/vilkårstatus';
@@ -30,7 +30,7 @@ export function Statusikon({ status, variant }: Props) {
         case Vilkårstatus.OPPFYLT:
             return erPerson ? <CheckmarkCircleFillIcon {...ikonProps} /> : <CheckmarkCircleIcon {...ikonProps} />;
         case Vilkårstatus.IKKE_OPPFYLT:
-            return erPerson ? <CircleSlashFillIcon {...ikonProps} /> : <CircleSlashIcon {...ikonProps} />;
+            return erPerson ? <XMarkOctagonFillIcon {...ikonProps} /> : <XMarkOctagonIcon {...ikonProps} />;
         case Vilkårstatus.DELVIS_OPPFYLT:
         case Vilkårstatus.IKKE_VURDERT:
             return <CircleIcon {...ikonProps} />;
