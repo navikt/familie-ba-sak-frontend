@@ -1,7 +1,7 @@
 import { hentPerson } from '@api/hentPerson';
 import { queryKeys } from '@hooks/keys/queryKeys';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
-import { useHttp } from '@navikt/familie-http';
 import { type DefaultError, type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { ForelderBarnRelasjonRolle, type IPersonInfo } from '@typer/person';
 
@@ -39,16 +39,14 @@ type Parameters = Omit<
 };
 
 export function useHentPerson({ ident, ...rest }: Parameters) {
-    const { request } = useHttp();
     const skalObfuskereData = useSkalObfuskereData();
     return useQuery({
         queryKey: queryKeys.person(ident),
-        queryFn: async () => {
+        queryFn: () => {
             if (ident === undefined) {
-                return Promise.reject(new Error('Kan ikke hente person uten ident.'));
+                throw new Error('Kan ikke hente person uten ident.');
             }
-            const person = await hentPerson(request, ident);
-            return Promise.resolve(person);
+            return hentPerson({ ident });
         },
         select: person => {
             const nyPerson = skalObfuskereData ? obfuskertPersonInfo(person) : person;
@@ -62,6 +60,7 @@ export function useHentPerson({ ident, ...rest }: Parameters) {
             };
         },
         enabled: ident !== undefined,
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
         ...rest,
     });
 }

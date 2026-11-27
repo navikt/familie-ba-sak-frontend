@@ -1,9 +1,6 @@
-import { useHttp } from '@navikt/familie-http';
+import { type LåsOppFagsakPayload, låsOppFagsak } from '@api/låsOppFagsak';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { FagsakId } from '@typer/fagsak';
-
-import { type LåsOppFagsakPayload, låsOppFagsak } from '../api/låsOppFagsak';
-import type { IMinimalFagsak } from '../typer/fagsak';
+import type { FagsakId, IMinimalFagsak } from '@typer/fagsak';
 
 interface Parameters extends LåsOppFagsakPayload {
     fagsakId: FagsakId;
@@ -12,12 +9,8 @@ interface Parameters extends LåsOppFagsakPayload {
 type Options = Omit<UseMutationOptions<IMinimalFagsak, DefaultError, Parameters>, 'mutationFn'>;
 
 export function useLåsOppFagsak(options?: Options) {
-    const { request } = useHttp();
     return useMutation({
-        mutationFn: (parameters: Parameters) => {
-            const { fagsakId, begrunnelse } = parameters;
-            return låsOppFagsak(request, fagsakId, { begrunnelse });
-        },
+        mutationFn: ({ fagsakId, begrunnelse }: Parameters) => låsOppFagsak(fagsakId, { begrunnelse }),
         ...options,
     });
 }

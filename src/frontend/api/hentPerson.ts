@@ -1,27 +1,20 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
-import { RessursStatus } from '@navikt/familie-typer';
+import { apiClient } from '@api/client/apiClient';
+import type { IPersonInfo } from '@typer/person';
+import { lagManglerTilgangBegrunnelse } from '@typer/tilgang';
 
-import type { IPersonInfo } from '../typer/person';
-import { lagManglerTilgangBegrunnelse } from '../typer/tilgang';
-import { RessursResolver } from '../utils/ressursResolver';
-
-interface RequestParams {
+interface Payload {
     ident: string;
 }
 
-export async function hentPerson(request: FamilieRequest, ident: string, påvirkerSystemLaster: boolean = true) {
-    const ressurs = await request<RequestParams, IPersonInfo>({
-        method: 'POST',
+export async function hentPerson(payload: Payload): Promise<IPersonInfo> {
+    const person = await apiClient.post<Payload, IPersonInfo>({
         url: '/familie-ba-sak/api/person',
-        data: { ident },
-        påvirkerSystemLaster,
+        data: payload,
     });
-    if (ressurs.status === RessursStatus.SUKSESS && ressurs.data.harTilgang === false) {
-        return Promise.reject(
-            new Error(
-                `Du har ikke tilgang til denne personen. ${lagManglerTilgangBegrunnelse(ressurs.data.avvisningskode, ressurs.data.adressebeskyttelseGradering)}.`
-            )
+    if (person.harTilgang === false) {
+        throw new Error(
+            `Du har ikke tilgang til denne personen. ${lagManglerTilgangBegrunnelse(person.avvisningskode, person.adressebeskyttelseGradering)}.`
         );
     }
-    return RessursResolver.resolveToPromise(ressurs);
+    return person;
 }
