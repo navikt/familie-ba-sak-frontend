@@ -23,11 +23,14 @@ const payload: OpprettFagsakPayload = {
 
 describe('opprettFagsak', () => {
     test('skal sende forespørsel om opprettelse av fagsak', async () => {
+        // Arrange
         const fagsak = lagFagsak();
         vi.mocked(apiClient.post).mockResolvedValueOnce(fagsak);
 
+        // Act
         const svar = await opprettFagsak(payload);
 
+        // Assert
         expect(apiClient.post).toHaveBeenCalledTimes(1);
         expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/fagsaker',
@@ -37,8 +40,10 @@ describe('opprettFagsak', () => {
     });
 
     test('skal håndtere feil', async () => {
+        // Arrange
         vi.mocked(apiClient.post).mockRejectedValue(new Error('Noe gikk galt'));
 
+        // Act & assert
         await expect(opprettFagsak(payload)).rejects.toThrow('Noe gikk galt');
     });
 });

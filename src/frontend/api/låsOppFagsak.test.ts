@@ -16,12 +16,15 @@ afterEach(() => {
 
 describe('låsOppFagsak', () => {
     test('skal sende forespørsel om å låse opp fagsak', async () => {
+        // Arrange
         const payload = { begrunnelse: 'En begrunnelse' };
         const fagsak = lagFagsak();
         vi.mocked(apiClient.patch).mockResolvedValueOnce(fagsak);
 
+        // Act
         const svar = await låsOppFagsak(FagsakId.fra(123), payload);
 
+        // Assert
         expect(apiClient.patch).toHaveBeenCalledTimes(1);
         expect(apiClient.patch).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/fagsaker/123/laas-opp',
@@ -31,8 +34,10 @@ describe('låsOppFagsak', () => {
     });
 
     test('skal håndtere feil', async () => {
+        // Arrange
         vi.mocked(apiClient.patch).mockRejectedValue(new Error('Noe gikk galt'));
 
+        // Act & assert
         await expect(låsOppFagsak(FagsakId.fra(123), { begrunnelse: 'En begrunnelse' })).rejects.toThrow(
             'Noe gikk galt'
         );
