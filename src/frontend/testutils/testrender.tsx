@@ -18,7 +18,7 @@ import { registrerQueryClientLyttere } from '../queryClient';
 import { skruPåAlleToggles } from './mocks/handlers/featureToggleHandlers';
 import { lagSaksbehandler } from './testdata/saksbehandlerTestdata';
 
-function lagQueryClient() {
+export function lagTestQueryClient() {
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
@@ -39,7 +39,7 @@ interface Props extends PropsWithChildren {
 }
 
 export function TestProviders({
-    queryClient = lagQueryClient(), // Ny instans for hver test
+    queryClient = lagTestQueryClient(), // Ny instans for hver test
     initialEntries = [{ pathname: '/' }],
     saksbehandler = lagSaksbehandler(),
     fjernRessursSomLasterTimeout = 0,

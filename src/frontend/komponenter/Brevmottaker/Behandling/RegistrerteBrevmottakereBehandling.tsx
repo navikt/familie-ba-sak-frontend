@@ -1,4 +1,4 @@
-import { useBehandling } from '@hooks/useBehandling';
+import { useBrevmottakereBehandling } from '@sider/Fagsak/Behandling/BrevmottakereBehandlingContext';
 import { RegistrerteBrevmottakere } from '../Felles/RegistrerteBrevmottakere';
 import { BrevmottakerDialogBehandling } from './BrevmottakerDialogBehandling';
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export function RegistrerteBrevmottakereBehandling({ kilde, className }: Props) {
-    const { brevmottakere } = useBehandling();
+    const brevmottakere = useBrevmottakereBehandling();
 
     return (
         <RegistrerteBrevmottakere

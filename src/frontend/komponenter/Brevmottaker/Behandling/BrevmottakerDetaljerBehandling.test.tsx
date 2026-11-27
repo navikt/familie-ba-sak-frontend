@@ -43,16 +43,20 @@ describe('BrevmottakerDetaljerBehandling', () => {
     });
 
     test('skal vise brevmottakeren uten fjern-knapp i lesevisning', () => {
+        // Arrange
         vi.mocked(useErLesevisning).mockReturnValue(true);
 
+        // Act
         const { screen } = render(<BrevmottakerDetaljerBehandling brevmottaker={brevmottaker} />);
 
+        // Assert
         expect(screen.getByRole('heading', { name: 'Fullmektig' })).toBeInTheDocument();
         expect(screen.getByText(brevmottaker.navn)).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Fjern fullmektig' })).not.toBeInTheDocument();
     });
 
     test('skal slette riktig brevmottaker, oppdatere behandlingen og vise en suksessmelding', async () => {
+        // Arrange
         const slettForespørsel = vi.fn();
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, ({ params }) => {
@@ -65,8 +69,10 @@ describe('BrevmottakerDetaljerBehandling', () => {
             wrapper: ({ children }) => <TestProviders queryClient={queryClient}>{children}</TestProviders>,
         });
 
+        // Act
         await user.click(screen.getByRole('button', { name: 'Fjern fullmektig' }));
 
+        // Assert
         await waitFor(() => {
             expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(oppdatertBehandling);
             expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
@@ -82,10 +88,13 @@ describe('BrevmottakerDetaljerBehandling', () => {
     });
 
     test('skal deaktivere fjern-knappen mens brevmottakeren slettes', async () => {
+        // Arrange
         let fullførForespørsel: () => void = () => {};
+
         const forespørselFullført = new Promise<void>(resolve => {
             fullførForespørsel = resolve;
         });
+
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, async () => {
                 await forespørselFullført;
@@ -96,11 +105,12 @@ describe('BrevmottakerDetaljerBehandling', () => {
         const { screen, user } = render(<BrevmottakerDetaljerBehandling brevmottaker={brevmottaker} />, {
             wrapper: ({ children }) => <TestProviders queryClient={queryClient}>{children}</TestProviders>,
         });
+
         const fjernKnapp = screen.getByRole('button', { name: 'Fjern fullmektig' });
 
+        // Act & assert
         try {
             await user.click(fjernKnapp);
-
             await waitFor(() => expect(fjernKnapp).toBeDisabled());
             expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
             expect(settÅpenBehandling).not.toHaveBeenCalled();
@@ -115,6 +125,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
     });
 
     test('skal vise feil uten å oppdatere behandlingen eller vise en suksessmelding når sletting feiler', async () => {
+        // Arrange
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, () =>
                 HttpResponse.json({
@@ -129,8 +140,10 @@ describe('BrevmottakerDetaljerBehandling', () => {
             wrapper: ({ children }) => <TestProviders queryClient={queryClient}>{children}</TestProviders>,
         });
 
+        // Act
         await user.click(screen.getByRole('button', { name: 'Fjern fullmektig' }));
 
+        // Assert
         expect(await screen.findByText('Brevmottakeren kunne ikke fjernes.')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Fjern fullmektig' })).toBeEnabled();
         expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();

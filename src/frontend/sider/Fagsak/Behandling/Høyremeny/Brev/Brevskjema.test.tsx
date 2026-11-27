@@ -20,6 +20,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { BrukerProvider } from '../../../BrukerContext';
 import { FagsakProvider } from '../../../FagsakContext';
 import { BehandlingProvider } from '../../BehandlingContext';
+import { BrevmottakereBehandlingProvider } from '../../BrevmottakereBehandlingContext';
 import Brevskjema from './Brevskjema';
 
 const OBLIGATORISK_FEILMELDING = 'Dette kulepunktet er obligatorisk. Du må skrive tekst i feltet.';
@@ -44,7 +45,9 @@ function Wrapper({ children, bruker = lagPerson(), behandlingForVisning = behand
         >
             <FagsakProvider fagsak={lagFagsak()}>
                 <BrukerProvider bruker={bruker}>
-                    <BehandlingProvider behandling={behandlingForVisning}>{children}</BehandlingProvider>
+                    <BehandlingProvider behandling={behandlingForVisning}>
+                        <BrevmottakereBehandlingProvider brevmottakere={[]}>{children}</BrevmottakereBehandlingProvider>
+                    </BehandlingProvider>
                 </BrukerProvider>
             </FagsakProvider>
         </TestProviders>

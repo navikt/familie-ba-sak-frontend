@@ -21,6 +21,7 @@ import { Outlet } from 'react-router';
 
 import Styles from './Behandling.module.css';
 import { BehandlingProvider } from './BehandlingContext';
+import { BrevmottakereBehandlingProvider } from './BrevmottakereBehandlingContext';
 import { Høyremeny } from './Høyremeny/Høyremeny';
 import { TabContextProvider } from './Høyremeny/TabContextProvider';
 import { TotrinnskontrollModalContextProvider } from './Høyremeny/Totrinnskontroll/TotrinnskontrollModalContextProvider';
@@ -84,29 +85,31 @@ export function BehandlingMedUseHttp({ behandlingId }: Props) {
                         settBehandlingRessurs(byggSuksessRessurs(behandling));
                     }}
                 >
-                    <KontrollsiderProvider>
-                        <HenleggBehandlingModal />
-                        <HenleggBehandlingVeivalgModal />
-                        <VStack className={Styles.skrollbarStack}>
-                            <Behandlingslinje />
-                            <UgyldigSideAdvarsel />
-                            <HStack className={Styles.skrollbarStack}>
-                                <Box className={Styles.venstreKolonne}>
-                                    <Venstremeny />
-                                </Box>
-                                <Box className={Styles.midtreKolonne}>
-                                    <Outlet />
-                                </Box>
-                                <Box className={Styles.høyreKolonne}>
-                                    <TotrinnskontrollModalContextProvider>
-                                        <TabContextProvider>
-                                            <Høyremeny />
-                                        </TabContextProvider>
-                                    </TotrinnskontrollModalContextProvider>
-                                </Box>
-                            </HStack>
-                        </VStack>
-                    </KontrollsiderProvider>
+                    <BrevmottakereBehandlingProvider brevmottakere={behandling.brevmottakere}>
+                        <KontrollsiderProvider>
+                            <HenleggBehandlingModal />
+                            <HenleggBehandlingVeivalgModal />
+                            <VStack className={Styles.skrollbarStack}>
+                                <Behandlingslinje />
+                                <UgyldigSideAdvarsel />
+                                <HStack className={Styles.skrollbarStack}>
+                                    <Box className={Styles.venstreKolonne}>
+                                        <Venstremeny />
+                                    </Box>
+                                    <Box className={Styles.midtreKolonne}>
+                                        <Outlet />
+                                    </Box>
+                                    <Box className={Styles.høyreKolonne}>
+                                        <TotrinnskontrollModalContextProvider>
+                                            <TabContextProvider>
+                                                <Høyremeny />
+                                            </TabContextProvider>
+                                        </TotrinnskontrollModalContextProvider>
+                                    </Box>
+                                </HStack>
+                            </VStack>
+                        </KontrollsiderProvider>
+                    </BrevmottakereBehandlingProvider>
                 </BehandlingProvider>
             );
         }

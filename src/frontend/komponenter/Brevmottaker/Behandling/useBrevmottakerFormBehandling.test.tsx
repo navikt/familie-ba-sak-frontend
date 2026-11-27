@@ -3,15 +3,15 @@ import { queryKeys } from '@hooks/keys/queryKeys';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
-import { TestProviders } from '@testutils/testrender';
+import { lagTestQueryClient, TestProviders } from '@testutils/testrender';
 import { Brevmottakertype } from '@typer/brevmottaker';
 import { HttpResponse, http } from 'msw';
-import { createElement } from 'react';
+import type { PropsWithChildren } from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { BrevmottakerField, type BrevmottakerTransformedFormValues } from '../Felles/Form/useBrevmottakerForm';
 import { useBrevmottakerFormBehandling } from './useBrevmottakerFormBehandling';
@@ -25,6 +25,10 @@ const settÅpenBehandling = vi.fn();
 const settToast = vi.fn();
 let queryClient: QueryClient;
 
+function Wrapper({ children }: PropsWithChildren) {
+    return <TestProviders queryClient={queryClient}>{children}</TestProviders>;
+}
+
 const values: BrevmottakerTransformedFormValues = {
     [BrevmottakerField.BREVMOTTAKERTYPE]: Brevmottakertype.VERGE,
     [BrevmottakerField.NAVN]: 'Vera Verge',
@@ -35,21 +39,10 @@ const values: BrevmottakerTransformedFormValues = {
     [BrevmottakerField.POSTSTED]: 'Oslo',
 };
 
-function renderUseBrevmottakerFormBehandling(onSubmitSuccess = vi.fn()) {
-    const { result } = renderHook(
-        () => {
-            const { form, onSubmit } = useBrevmottakerFormBehandling({ onSubmitSuccess });
-            return { onSubmit, rootFeilmelding: form.formState.errors.root?.message };
-        },
-        { wrapper: ({ children }) => createElement(TestProviders, { queryClient }, children) }
-    );
-    return { result, onSubmitSuccess };
-}
-
 describe('useBrevmottakerFormBehandling', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        queryClient = new QueryClient();
+        queryClient = lagTestQueryClient();
         vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling });
         vi.spyOn(ToastContext, 'useToastContext').mockReturnValue({
             settToast,
@@ -63,7 +56,10 @@ describe('useBrevmottakerFormBehandling', () => {
     });
 
     test('skal lagre brevmottakeren på behandlingen, oppdatere behandlingen og vise en suksessmelding', async () => {
+        // Arrange
+        const onSubmitSuccess = vi.fn();
         const forespørsel = vi.fn();
+
         server.use(
             http.post(OPPRETT_BREVMOTTAKER_URL, async ({ params, request }) => {
                 forespørsel({ params, body: await request.json() });
@@ -71,10 +67,18 @@ describe('useBrevmottakerFormBehandling', () => {
             })
         );
 
-        const { result, onSubmitSuccess } = renderUseBrevmottakerFormBehandling();
+        const { result } = renderHook(
+            () => {
+                const { form, onSubmit } = useBrevmottakerFormBehandling({ onSubmitSuccess });
+                return { onSubmit, rootFeilmelding: form.formState.errors.root?.message };
+            },
+            { wrapper: Wrapper }
+        );
 
+        // Act
         await act(() => result.current.onSubmit(values));
 
+        // Assert
         expect(forespørsel).toHaveBeenCalledExactlyOnceWith({
             params: { behandlingId: '42' },
             body: {
@@ -97,6 +101,9 @@ describe('useBrevmottakerFormBehandling', () => {
     });
 
     test('skal vise feilmelding uten å oppdatere behandlingen når lagring feiler', async () => {
+        // Arrange
+        const onSubmitSuccess = vi.fn();
+
         server.use(
             http.post(OPPRETT_BREVMOTTAKER_URL, () =>
                 HttpResponse.json({
@@ -107,10 +114,18 @@ describe('useBrevmottakerFormBehandling', () => {
             )
         );
 
-        const { result, onSubmitSuccess } = renderUseBrevmottakerFormBehandling();
+        const { result } = renderHook(
+            () => {
+                const { form, onSubmit } = useBrevmottakerFormBehandling({ onSubmitSuccess });
+                return { onSubmit, rootFeilmelding: form.formState.errors.root?.message };
+            },
+            { wrapper: Wrapper }
+        );
 
+        // Act
         await act(() => result.current.onSubmit(values));
 
+        // Assert
         expect(result.current.rootFeilmelding).toBe('Brevmottakeren kunne ikke lagres.');
         expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
         expect(settÅpenBehandling).not.toHaveBeenCalled();

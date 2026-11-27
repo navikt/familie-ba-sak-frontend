@@ -9,6 +9,7 @@ import { useSamhandlerRequest } from '@komponenter/Samhandler/useSamhandler';
 import { FileTextIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, ErrorMessage, Fieldset, Heading, HStack, Label, Loader, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
+import { useBrevmottakereBehandling } from '@sider/Fagsak/Behandling/BrevmottakereBehandlingContext';
 import { useEffect, useState } from 'react';
 import { FormProvider, useController } from 'react-hook-form';
 import { AntallUkerSvarfristField } from './AntallUkerSvarfristField';
@@ -46,7 +47,7 @@ const Brevskjema = ({ onSubmitSuccess }: IProps) => {
 
     const { form, onSubmit, hentSkjemaData } = useSendManueltBrevForm({ onSubmitSuccess });
 
-    const brevmottakere = behandling.brevmottakere;
+    const brevmottakere = useBrevmottakereBehandling();
 
     const {
         control,
