@@ -1,3 +1,4 @@
+import { hentBehandling } from '@api/hentBehandling';
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
@@ -19,9 +20,8 @@ interface Props {
 }
 
 export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregning, avregningsperioder }: Props) {
-    const queryClient = useQueryClient();
-
     const erLesevisning = useErLesevisning();
+    const queryClient = useQueryClient();
 
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
@@ -30,7 +30,13 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => {
+        onSuccess: async lagretTilbakekrevingsvedtakMotregning => {
+            queryClient.setQueryData(
+                queryKeys.tilbakekrevingsvedtakMotregning(behandling.behandlingId),
+                lagretTilbakekrevingsvedtakMotregning
+            );
+            // Backend setter behandlingen tilbake til simulering når valget endres.
+            const oppdatertBehandling = await hentBehandling({ behandlingId: behandling.behandlingId });
             queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
         },
@@ -41,9 +47,9 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => {
-            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
-            settÅpenBehandling(oppdatertBehandling);
+        onSuccess: () => {
+            queryClient.setQueryData(queryKeys.tilbakekrevingsvedtakMotregning(behandling.behandlingId), null);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandling.behandlingId) });
         },
     });
 

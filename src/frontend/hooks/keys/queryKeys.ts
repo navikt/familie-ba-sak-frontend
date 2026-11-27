@@ -113,6 +113,9 @@ export const queryKeys = {
     tilbakekreving: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'tilbakekreving'] as const;
     },
+    tilbakekrevingsvedtakMotregning: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'tilbakekrevingsvedtak-motregning'] as const;
+    },
     validerBehandlingsresultat: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'valider-behandlingsresultat'] as const;
     },

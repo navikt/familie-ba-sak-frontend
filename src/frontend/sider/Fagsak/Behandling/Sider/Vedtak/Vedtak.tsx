@@ -10,6 +10,7 @@ import { useKorrigertEtterbetalingContext } from '@sider/Fagsak/Behandling/Sider
 import { KorrigertVedtakAdvarsel } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakAdvarsel';
 import { useKorrigertVedtakContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/KorrigerVedtak/KorrigertVedtakContext';
 import { Layout } from '@sider/Fagsak/Behandling/Sider/Vedtak/Layout/Layout';
+import { useTilbakekrevingsvedtakMotregningContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/UlovfestetMotregning/TilbakekrevingsvedtakMotregningContext';
 import { useErBehandlingMedVedtaksbrev } from '@sider/Fagsak/Behandling/Sider/Vedtak/useErBehandlingMedVedtaksbrev';
 import { Vedtaksmeny } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksmeny/Vedtaksmeny';
 import { BehandlingUtenVedtaksbrevAdvarsel } from './BehandlingUtenVedtaksbrevAdvarsel';
@@ -34,6 +35,7 @@ export function Vedtak() {
     const { sammensattKontrollsak } = useSammensattKontrollsakContext();
     const { korrigertEtterbetaling } = useKorrigertEtterbetalingContext();
     const { korrigertVedtak } = useKorrigertVedtakContext();
+    const { tilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregningContext();
 
     const slettSammensattKontrollsakError = useSlettSammensattKontrollsakError(behandling.behandlingId);
     const opprettSammensattKontrollsakError = useOpprettSammensattKontrollsakError(behandling.behandlingId);
@@ -88,7 +90,7 @@ export function Vedtak() {
                         </Box>
                     )}
                     {!erAutomatiskBehandlingFortsattInnvilget && <ForhåndsvisVedtaksbrev />}
-                    {behandling.tilbakekrevingsvedtakMotregning && <TilbakekrevingsvedtakMotregning />}
+                    {tilbakekrevingsvedtakMotregning && <TilbakekrevingsvedtakMotregning />}
                 </VStack>
             </VStack>
         </Layout>

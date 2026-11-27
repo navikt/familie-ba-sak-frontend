@@ -62,7 +62,6 @@ export function lagBehandling(behandling: Partial<NoBrand<IBehandling>> = {}): I
         valutakurser: [],
         brevmottakere: [],
         vurderingsstrategiForValutakurser: null,
-        tilbakekrevingsvedtakMotregning: null,
         manglendeSvalbardmerking: [],
         manglendeFinnmarkmerking: undefined,
         ...resten,

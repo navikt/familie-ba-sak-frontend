@@ -1,6 +1,7 @@
 import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useTilbakekrevingsvedtakMotregningContext } from '@sider/Fagsak/Behandling/Sider/Vedtak/UlovfestetMotregning/TilbakekrevingsvedtakMotregningContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
@@ -20,13 +21,19 @@ interface Props {
 }
 
 export function useTilbakekrevingsvedtakMotregningForm({ lukkExpansionCard }: Props) {
+    const behandlingId = useBehandlingId();
     const queryClient = useQueryClient();
 
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
+    const { mutateAsync: oppdaterTilbakekrevingsvedtakMotregning } = useOppdaterTilbakekrevingsvedtakMotregning({
+        onSuccess: lagretTilbakekrevingsvedtakMotregning => {
+            queryClient.setQueryData(
+                queryKeys.tilbakekrevingsvedtakMotregning(behandlingId),
+                lagretTilbakekrevingsvedtakMotregning
+            );
+        },
+    });
 
-    const { mutateAsync: oppdaterTilbakekrevingsvedtakMotregning } = useOppdaterTilbakekrevingsvedtakMotregning();
-
-    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
+    const { tilbakekrevingsvedtakMotregning } = useTilbakekrevingsvedtakMotregningContext();
 
     const form = useForm<TilbakekrevingsvedtakMotregningSkjemaverdier>({
         defaultValues: {
@@ -47,12 +54,10 @@ export function useTilbakekrevingsvedtakMotregningForm({ lukkExpansionCard }: Pr
         vurderingAvSkyld,
     }: TilbakekrevingsvedtakMotregningSkjemaverdier): Promise<void> {
         try {
-            const oppdatertBehandling = await oppdaterTilbakekrevingsvedtakMotregning({
-                behandlingId: behandling.behandlingId,
+            await oppdaterTilbakekrevingsvedtakMotregning({
+                behandlingId,
                 tilbakekrevingsvedtakMotregning: { varselDato, årsakTilFeilutbetaling, vurderingAvSkyld },
             });
-            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
-            settÅpenBehandling(oppdatertBehandling);
             lukkExpansionCard();
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'En ukjent feil oppstod.';

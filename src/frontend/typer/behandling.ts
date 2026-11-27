@@ -15,7 +15,6 @@ import type {
     TilbakekrevingsbehandlingResultat,
     TilbakekrevingsbehandlingÅrsak,
 } from './tilbakekrevingsbehandling';
-import type { TilbakekrevingsvedtakMotregningDTO } from './tilbakekrevingsvedtakMotregning';
 import type { ITotrinnskontroll } from './totrinnskontroll';
 import type { IRestEndretUtbetalingAndel } from './utbetalingAndel';
 import type { IVedtakForBehandling } from './vedtak';
@@ -334,7 +333,6 @@ export interface IBehandling {
     valutakurser: IRestValutakurs[];
     brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
-    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     manglendeSvalbardmerking: ManglendeFinnmarkSvalbardMerking[];
     manglendeFinnmarkmerking?: ManglendeFinnmarkSvalbardMerking;
 }

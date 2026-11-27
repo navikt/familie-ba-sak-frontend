@@ -3,6 +3,7 @@ import { useFagsakId } from '@hooks/useFagsakId';
 import { useHentHarÅpenTilbakekreving } from '@hooks/useHentHarÅpenTilbakekreving';
 import { useHentSimulering } from '@hooks/useHentSimulering';
 import { useHentTilbakekreving } from '@hooks/useHentTilbakekreving';
+import { useHentTilbakekrevingsvedtakMotregning } from '@hooks/useHentTilbakekrevingsvedtakMotregning';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
 import { SimuleringProvider } from '@sider/Fagsak/Behandling/Sider/Simulering/SimuleringContext';
 import { erDefinert } from '@utils/commons';
@@ -28,6 +29,17 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
         error: tilbakekrevingError,
     } = useHentTilbakekreving(behandling.behandlingId, { enabled: skalHenteHarÅpenTilbakekreving });
 
+    // Tilbakekrevingsvedtak motregning er kun relevant når simuleringen har en avregning.
+    const skalHenteTilbakekrevingsvedtakMotregning = erDefinert(simulering) && simulering.avregningsperioder.length > 0;
+
+    const {
+        data: tilbakekrevingsvedtakMotregning,
+        isPending: tilbakekrevingsvedtakMotregningIsPending,
+        error: tilbakekrevingsvedtakMotregningError,
+    } = useHentTilbakekrevingsvedtakMotregning(behandling.behandlingId, {
+        enabled: skalHenteTilbakekrevingsvedtakMotregning,
+    });
+
     const { data: harÅpenTilbakekreving, isPending: harÅpenTilbakekrevingIsPending } = useHentHarÅpenTilbakekreving(
         fagsakId,
         { enabled: skalHenteHarÅpenTilbakekreving }
@@ -35,7 +47,8 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
 
     if (
         simuleringIsPending ||
-        (skalHenteHarÅpenTilbakekreving && (tilbakekrevingIsPending || harÅpenTilbakekrevingIsPending))
+        (skalHenteHarÅpenTilbakekreving && (tilbakekrevingIsPending || harÅpenTilbakekrevingIsPending)) ||
+        (skalHenteTilbakekrevingsvedtakMotregning && tilbakekrevingsvedtakMotregningIsPending)
     ) {
         return (
             <Box margin={'space-48'}>
@@ -48,8 +61,10 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
     }
 
     // En feil på åpen tilbakekreving skal ikke skjule simuleringen. TilbakekrevingForm leser den selv fra spørringen.
-    if (simuleringError || tilbakekrevingError) {
-        const errors = [simuleringError, tilbakekrevingError].filter(error => erDefinert(error));
+    if (simuleringError || tilbakekrevingError || tilbakekrevingsvedtakMotregningError) {
+        const errors = [simuleringError, tilbakekrevingError, tilbakekrevingsvedtakMotregningError].filter(error =>
+            erDefinert(error)
+        );
         return (
             <Box margin={'space-48'}>
                 <LocalAlert status={'error'}>
@@ -73,6 +88,7 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
         <SimuleringProvider
             simulering={simulering}
             tilbakekreving={tilbakekreving ?? undefined}
+            tilbakekrevingsvedtakMotregning={tilbakekrevingsvedtakMotregning ?? null}
             harÅpenTilbakekreving={harÅpenTilbakekreving ?? false}
         >
             {children}

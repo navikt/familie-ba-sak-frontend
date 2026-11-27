@@ -30,6 +30,10 @@ export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
         onSuccess: oppdatertBehandling => {
             queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
+            // Backend oppretter motregningen når behandlingen settes på vent med denne årsaken.
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.tilbakekrevingsvedtakMotregning(behandling.behandlingId),
+            });
             lukkModal();
         },
     });
