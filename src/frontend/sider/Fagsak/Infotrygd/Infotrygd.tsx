@@ -1,9 +1,10 @@
 import { useFagsak } from '@hooks/useFagsak';
+import { useHentInfotrygdSaker } from '@hooks/useHentInfotrygdSaker';
 import { Fagsaklinje } from '@komponenter/Saklinje/Fagsaklinje';
 import { BodyShort, Box, Heading, HStack, Loader, LocalAlert } from '@navikt/ds-react';
 import type { ReactNode } from 'react';
+
 import { Infotrygdtabeller } from '../../Infotrygd/Infotrygdtabeller';
-import { useHentInfotrygdSaker } from './useHentInfotrygdSaker';
 
 const InnholdContainer = ({ children }: { children: ReactNode }) => (
     <Box maxWidth="70rem" marginBlock="space-40" marginInline="space-64">
