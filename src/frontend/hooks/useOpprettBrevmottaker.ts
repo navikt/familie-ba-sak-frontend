@@ -1,12 +1,12 @@
 import { type OpprettBrevmottakerPayload, opprettBrevmottaker } from '@api/opprettBrevmottaker';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 
 interface Parameters extends OpprettBrevmottakerPayload {
     behandlingId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationFn'>;
+type Options = Omit<UseMutationOptions<BrevmottakerBehandling[], DefaultError, Parameters>, 'mutationFn'>;
 
 export function useOpprettBrevmottaker(options?: Options) {
     return useMutation({

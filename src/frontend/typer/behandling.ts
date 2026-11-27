@@ -1,4 +1,3 @@
-import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import type { IsoDatoString } from '@utils/dato';
 import { BehandlingKategori, type BehandlingUnderkategori } from './behandlingstema';
 import type { IPersonMedAndelerTilkjentYtelse } from './beregning';
@@ -334,7 +333,6 @@ export interface IBehandling {
     kompetanser: IRestKompetanse[];
     utenlandskePeriodebeløp: IRestUtenlandskPeriodeBeløp[];
     valutakurser: IRestValutakurs[];
-    brevmottakere: BrevmottakerBehandling[];
     vurderingsstrategiForValutakurser: VurderingsstrategiForValutakurser | null;
     tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     manglendeSvalbardmerking: ManglendeFinnmarkSvalbardMerking[];

@@ -2,6 +2,7 @@ import { slettBrevmottaker } from '@api/slettBrevmottaker';
 import { useSlettBrevmottaker } from '@hooks/useSlettBrevmottaker';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
+import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { TestProviders } from '@testutils/testrender';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { useSlettBrevmottakerIsPending } from './useSlettBrevmottakerIsPending';
@@ -44,7 +45,7 @@ describe('useSlettBrevmottakerIsPending', () => {
         await waitFor(() => expect(result.current.isPending).toBe(true));
 
         await act(async () => {
-            deferred.resolve(behandling);
+            deferred.resolve([lagBrevmottakerBehandling()]);
         });
 
         await waitFor(() => expect(result.current.isPending).toBe(false));

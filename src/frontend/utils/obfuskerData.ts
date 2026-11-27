@@ -59,12 +59,6 @@ export const obfuskerBehandling = (behandling: IBehandling) => {
             }
         });
     });
-    behandling.brevmottakere?.forEach(brevmottaker => {
-        brevmottaker.navn =
-            brevmottaker.type.charAt(0).toUpperCase() + brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' ');
-        brevmottaker.adresselinje1 = 'Mottakerveien 1';
-        brevmottaker.adresselinje2 = undefined;
-    });
 };
 
 function obfuskertNavnForRolle(rolle: FagsakDeltagerRolle): string {

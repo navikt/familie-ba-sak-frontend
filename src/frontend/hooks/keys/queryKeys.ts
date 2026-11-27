@@ -74,6 +74,9 @@ export const queryKeys = {
 
     // Behandling
     behandling: behandlingQueryKey,
+    brevmottakere: (behandlingEllerId: IBehandling | number) => {
+        return [...behandlingQueryKey(behandlingEllerId), 'brevmottakere'] as const;
+    },
     endringstidspunkt: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'endringstidspunkt'] as const;
     },
