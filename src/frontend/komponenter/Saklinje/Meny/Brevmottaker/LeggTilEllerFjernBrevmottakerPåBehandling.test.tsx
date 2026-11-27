@@ -4,12 +4,14 @@ import {
 } from '@komponenter/Brevmottaker/Felles/BrevmottakerDialogContext';
 import { ActionMenu } from '@navikt/ds-react';
 import { BehandlingProvider } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { BrevmottakereBehandlingProvider } from '@sider/Fagsak/Behandling/BrevmottakereBehandlingContext';
 import { FagsakProvider } from '@sider/Fagsak/FagsakContext';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { render, TestProviders } from '@testutils/testrender';
 import { BehandlingStatus, Behandlingstype, type IBehandling } from '@typer/behandling';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { FagsakType, type IMinimalFagsak } from '@typer/fagsak';
 import type { PropsWithChildren } from 'react';
 import { describe, expect, test } from 'vitest';
@@ -18,6 +20,7 @@ import { LeggTilEllerFjernBrevmottakerPåBehandling } from './LeggTilEllerFjernB
 interface WrapperProps extends PropsWithChildren {
     fagsak?: IMinimalFagsak;
     behandling?: IBehandling;
+    brevmottakere?: BrevmottakerBehandling[];
 }
 
 function DialogStatus() {
@@ -25,17 +28,19 @@ function DialogStatus() {
     return <output aria-label={'Dialogstatus'}>{erDialogÅpen ? 'Åpen' : 'Lukket'}</output>;
 }
 
-function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), children }: WrapperProps) {
+function Wrapper({ fagsak = lagFagsak(), behandling = lagBehandling(), brevmottakere = [], children }: WrapperProps) {
     return (
         <TestProviders>
             <FagsakProvider fagsak={fagsak}>
                 <BehandlingProvider behandling={behandling}>
-                    <BrevmottakerDialogProvider>
-                        <DialogStatus />
-                        <ActionMenu open={true}>
-                            <ActionMenu.Content>{children}</ActionMenu.Content>
-                        </ActionMenu>
-                    </BrevmottakerDialogProvider>
+                    <BrevmottakereBehandlingProvider brevmottakere={brevmottakere}>
+                        <BrevmottakerDialogProvider>
+                            <DialogStatus />
+                            <ActionMenu open={true}>
+                                <ActionMenu.Content>{children}</ActionMenu.Content>
+                            </ActionMenu>
+                        </BrevmottakerDialogProvider>
+                    </BrevmottakereBehandlingProvider>
                 </BehandlingProvider>
             </FagsakProvider>
         </TestProviders>
@@ -50,9 +55,7 @@ describe('LeggTilEllerFjernBrevmottakerPåBehandling', () => {
 
     test('skal rendre komponent med en brevmottaker allerede lagt til', () => {
         const { screen } = render(<LeggTilEllerFjernBrevmottakerPåBehandling />, {
-            wrapper: props => (
-                <Wrapper {...props} behandling={lagBehandling({ brevmottakere: [lagBrevmottakerBehandling()] })} />
-            ),
+            wrapper: props => <Wrapper {...props} brevmottakere={[lagBrevmottakerBehandling()]} />,
         });
         expect(screen.getByRole('menuitem', { name: 'Legg til eller fjern brevmottaker' })).toBeInTheDocument();
     });
@@ -62,9 +65,7 @@ describe('LeggTilEllerFjernBrevmottakerPåBehandling', () => {
             wrapper: props => (
                 <Wrapper
                     {...props}
-                    behandling={lagBehandling({
-                        brevmottakere: [lagBrevmottakerBehandling({ id: 1 }), lagBrevmottakerBehandling({ id: 2 })],
-                    })}
+                    brevmottakere={[lagBrevmottakerBehandling({ id: 1 }), lagBrevmottakerBehandling({ id: 2 })]}
                 />
             ),
         });
@@ -101,10 +102,8 @@ describe('LeggTilEllerFjernBrevmottakerPåBehandling', () => {
             wrapper: props => (
                 <Wrapper
                     {...props}
-                    behandling={lagBehandling({
-                        status: BehandlingStatus.SATT_PÅ_VENT,
-                        brevmottakere: [lagBrevmottakerBehandling()],
-                    })}
+                    behandling={lagBehandling({ status: BehandlingStatus.SATT_PÅ_VENT })}
+                    brevmottakere={[lagBrevmottakerBehandling()]}
                 />
             ),
         });

@@ -1,6 +1,6 @@
 import { queryKeys } from '@hooks/keys/queryKeys';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
 import { server } from '@testutils/mocks/node';
@@ -10,7 +10,7 @@ import { lagGrunnlagPerson } from '@testutils/testdata/personTestdata';
 import { lagRegisterhistorikk } from '@testutils/testdata/registerhistorikkTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { lagUtbetalingsperiode, lagUtbetalingsperiodeDetalj } from '@testutils/testdata/vedtaksperiodeTestdata';
-import { TestProviders } from '@testutils/testrender';
+import { lagTestQueryClient, TestProviders } from '@testutils/testrender';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
 import { Brevmottakertype } from '@typer/brevmottaker';
@@ -33,13 +33,9 @@ interface RenderOptions {
 const VEILEDER_GRUPPE = '93a26831-9866-4410-927b-74ff51a9107c';
 const BESLUTTER_GRUPPE = '9449c153-5a1e-44a7-84c6-7cc7a8867233';
 
-function lagQueryClient() {
-    return new QueryClient({ defaultOptions: { queries: { retry: false } } });
-}
-
 function renderUseHentBehandling({
     behandlingId,
-    queryClient = lagQueryClient(),
+    queryClient = lagTestQueryClient(),
     saksbehandler = lagSaksbehandler(),
     featureToggles = skruPåAlleToggles(),
 }: RenderOptions) {
@@ -135,7 +131,7 @@ function lagBehandlingMedPersondata(): IBehandling {
 describe('useHentBehandling', () => {
     test('skal vente på ferskt behandlingssteg ved gjenåpning av en nylig besøkt behandling', async () => {
         const behandling = lagBehandling({ steg: BehandlingSteg.REGISTRERE_SØKNAD });
-        const queryClient = lagQueryClient();
+        const queryClient = lagTestQueryClient();
         const queryKey = queryKeys.behandling(behandling.behandlingId);
 
         mockHentBehandling(behandling);
@@ -198,7 +194,7 @@ describe('useHentBehandling', () => {
 
     test('skal obfuskere persondata uten å endre behandlingen i cachen', async () => {
         const behandling = lagBehandlingMedPersondata();
-        const queryClient = lagQueryClient();
+        const queryClient = lagTestQueryClient();
         mockHentBehandling(behandling);
 
         const { result } = renderUseHentBehandling({

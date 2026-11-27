@@ -1,8 +1,8 @@
-import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettBrevmottakerIsPending } from '@hooks/useSlettBrevmottakerIsPending';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Dialog, Fieldset, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { useBrevmottakereBehandling } from '@sider/Fagsak/Behandling/BrevmottakereBehandlingContext';
 import { kanLeggeTilBrevmottaker, Modus, utledValgbareBrevmottakertyper } from '@typer/brevmottaker';
 import { useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
@@ -22,8 +22,8 @@ import { useBrevmottakerFormBehandling } from './useBrevmottakerFormBehandling';
 
 export function BrevmottakerDialogBehandling() {
     const erLesevisning = useErLesevisning();
+    const brevmottakere = useBrevmottakereBehandling();
 
-    const { brevmottakere } = useBehandling();
     const { lukkDialog } = useBrevmottakerDialogContext();
 
     const [visForm, settVisForm] = useState(brevmottakere.length === 0 && !erLesevisning);
