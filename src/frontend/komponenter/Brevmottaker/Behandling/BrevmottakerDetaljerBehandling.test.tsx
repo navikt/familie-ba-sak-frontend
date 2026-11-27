@@ -10,6 +10,7 @@ import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { render, TestProviders } from '@testutils/testrender';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { HttpResponse, http } from 'msw';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { BrevmottakerDetaljerBehandling } from './BrevmottakerDetaljerBehandling';
@@ -19,9 +20,8 @@ vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const SLETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId/:brevmottakerId';
 const brevmottaker = lagBrevmottakerBehandling({ id: 7 });
-const behandling = lagBehandling({ behandlingId: 42, brevmottakere: [brevmottaker] });
-const oppdatertBehandling = lagBehandling({ ...behandling, brevmottakere: [] });
-const settÅpenBehandling = vi.fn();
+const behandling = lagBehandling({ behandlingId: 42 });
+const oppdaterteBrevmottakere: BrevmottakerBehandling[] = [];
 const settToast = vi.fn();
 let queryClient: QueryClient;
 
@@ -30,7 +30,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
         vi.clearAllMocks();
         queryClient = new QueryClient();
         vi.mocked(useErLesevisning).mockReturnValue(false);
-        vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling });
+        vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling: vi.fn() });
         vi.spyOn(ToastContext, 'useToastContext').mockReturnValue({
             settToast,
             settToasts: vi.fn(),
@@ -55,13 +55,13 @@ describe('BrevmottakerDetaljerBehandling', () => {
         expect(screen.queryByRole('button', { name: 'Fjern fullmektig' })).not.toBeInTheDocument();
     });
 
-    test('skal slette riktig brevmottaker, oppdatere behandlingen og vise en suksessmelding', async () => {
+    test('skal slette riktig brevmottaker, oppdatere brevmottakerne og vise en suksessmelding', async () => {
         // Arrange
         const slettForespørsel = vi.fn();
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, ({ params }) => {
                 slettForespørsel(params);
-                return HttpResponse.json(byggSuksessRessurs(oppdatertBehandling));
+                return HttpResponse.json(byggSuksessRessurs(oppdaterteBrevmottakere));
             })
         );
 
@@ -74,8 +74,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
 
         // Assert
         await waitFor(() => {
-            expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(oppdatertBehandling);
-            expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
+            expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toEqual(oppdaterteBrevmottakere);
             expect(settToast).toHaveBeenCalledWith(ToastTyper.BREVMOTTAKER_FJERNET, {
                 alertType: AlertType.SUCCESS,
                 tekst: 'Brevmottaker fjernet',
@@ -98,7 +97,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, async () => {
                 await forespørselFullført;
-                return HttpResponse.json(byggSuksessRessurs(oppdatertBehandling));
+                return HttpResponse.json(byggSuksessRessurs(oppdaterteBrevmottakere));
             })
         );
 
@@ -112,19 +111,17 @@ describe('BrevmottakerDetaljerBehandling', () => {
         try {
             await user.click(fjernKnapp);
             await waitFor(() => expect(fjernKnapp).toBeDisabled());
-            expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
-            expect(settÅpenBehandling).not.toHaveBeenCalled();
+            expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toBeUndefined();
             expect(settToast).not.toHaveBeenCalled();
         } finally {
             fullførForespørsel();
         }
 
         await waitFor(() => expect(fjernKnapp).toBeEnabled());
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(oppdatertBehandling);
-        expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toEqual(oppdaterteBrevmottakere);
     });
 
-    test('skal vise feil uten å oppdatere behandlingen eller vise en suksessmelding når sletting feiler', async () => {
+    test('skal vise feil uten å oppdatere brevmottakerne eller vise en suksessmelding når sletting feiler', async () => {
         // Arrange
         server.use(
             http.delete(SLETT_BREVMOTTAKER_URL, () =>
@@ -146,8 +143,7 @@ describe('BrevmottakerDetaljerBehandling', () => {
         // Assert
         expect(await screen.findByText('Brevmottakeren kunne ikke fjernes.')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Fjern fullmektig' })).toBeEnabled();
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
-        expect(settÅpenBehandling).not.toHaveBeenCalled();
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toBeUndefined();
         expect(settToast).not.toHaveBeenCalled();
     });
 });

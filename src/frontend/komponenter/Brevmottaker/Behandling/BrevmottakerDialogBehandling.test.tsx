@@ -23,7 +23,6 @@ vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const OPPRETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId';
 const UTENLANDSK_ADRESSE_INFO = 'Ved utenlandsk adresse skal postnummer og poststed legges i adresselinjene.';
-const settÅpenBehandling = vi.fn();
 let queryClient: QueryClient;
 
 interface WrapperProps extends PropsWithChildren {
@@ -51,7 +50,7 @@ describe('BrevmottakerDialogBehandling', () => {
         vi.mocked(useErLesevisning).mockReturnValue(false);
         vi.mocked(useBehandlingContext).mockReturnValue({
             behandling: lagBehandling({ behandlingId: 42 }),
-            settÅpenBehandling,
+            settÅpenBehandling: vi.fn(),
         });
     });
 
@@ -268,8 +267,7 @@ describe('BrevmottakerDialogBehandling', () => {
         expect(screen.getByText('Navn er påkrevd.')).toBeInTheDocument();
         expect(screen.getByText('Land er påkrevd.')).toBeInTheDocument();
         expect(screen.getByText('Adresselinje 1 er påkrevd.')).toBeInTheDocument();
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
-        expect(settÅpenBehandling).not.toHaveBeenCalled();
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toBeUndefined();
     });
 
     test('skal lagre brevmottakeren og skjule skjemaet når lagring er vellykket', async () => {
@@ -279,7 +277,9 @@ describe('BrevmottakerDialogBehandling', () => {
         server.use(
             http.post(OPPRETT_BREVMOTTAKER_URL, async ({ params, request }) => {
                 forespørsel({ params, body: await request.json() });
-                return HttpResponse.json(byggSuksessRessurs(lagBehandling({ behandlingId: 42 })));
+                return HttpResponse.json(
+                    byggSuksessRessurs([lagBrevmottakerBehandling({ type: Brevmottakertype.VERGE })])
+                );
             })
         );
 
@@ -314,8 +314,9 @@ describe('BrevmottakerDialogBehandling', () => {
                 landkode: 'NO',
             },
         });
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(lagBehandling({ behandlingId: 42 }));
-        expect(settÅpenBehandling).toHaveBeenCalledOnce();
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toEqual([
+            lagBrevmottakerBehandling({ type: Brevmottakertype.VERGE }),
+        ]);
         expect(hentLukkKnappIFooter(screen)).toBeEnabled();
     });
 
@@ -349,8 +350,7 @@ describe('BrevmottakerDialogBehandling', () => {
         // Assert
         expect(await screen.findByText('Brevmottakeren kunne ikke lagres.')).toBeInTheDocument();
         expect(screen.getByRole('textbox', { name: 'Navn' })).toHaveValue('Vera Verge');
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
-        expect(settÅpenBehandling).not.toHaveBeenCalled();
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toBeUndefined();
     });
 
     test('skal lukke dialogen når man klikker på Lukk', async () => {

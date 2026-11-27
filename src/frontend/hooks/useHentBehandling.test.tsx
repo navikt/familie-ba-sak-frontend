@@ -5,7 +5,6 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { skruPåAlleToggles } from '@testutils/mocks/handlers/featureToggleHandlers';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { lagGrunnlagPerson } from '@testutils/testdata/personTestdata';
 import { lagRegisterhistorikk } from '@testutils/testdata/registerhistorikkTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
@@ -13,7 +12,6 @@ import { lagUtbetalingsperiode, lagUtbetalingsperiodeDetalj } from '@testutils/t
 import { lagTestQueryClient, TestProviders } from '@testutils/testrender';
 import { BehandlingSteg, type IBehandling } from '@typer/behandling';
 import { BehandlingUnderkategori } from '@typer/behandlingstema';
-import { Brevmottakertype } from '@typer/brevmottaker';
 import { FeatureToggle, type FeatureToggles } from '@typer/featureToggles';
 import { PersonType } from '@typer/person';
 import type { Saksbehandler } from '@typer/saksbehandler';
@@ -115,14 +113,6 @@ function lagBehandlingMedPersondata(): IBehandling {
                     lagUtbetalingsperiodeDetalj({ person: eldsteBarn }),
                     lagUtbetalingsperiodeDetalj({ person: yngsteBarn }),
                 ],
-            }),
-        ],
-        brevmottakere: [
-            lagBrevmottakerBehandling({
-                type: Brevmottakertype.BRUKER_MED_UTENLANDSK_ADRESSE,
-                navn: 'Ekte Mottaker',
-                adresselinje1: 'Ekte mottakergate 1',
-                adresselinje2: 'Ekte mottakergate 2',
             }),
         ],
     });
@@ -228,13 +218,6 @@ describe('useHentBehandling', () => {
             '[2] Barn Barnesen',
             'Søker Søkersen',
         ]);
-        expect(obfuskert?.brevmottakere[0]).toEqual(
-            expect.objectContaining({
-                navn: 'Bruker med utenlandsk adresse',
-                adresselinje1: 'Mottakerveien 1',
-                adresselinje2: undefined,
-            })
-        );
 
         expect(queryClient.getQueryData(queryKeys.behandling(behandling.behandlingId))).toEqual(behandling);
     });

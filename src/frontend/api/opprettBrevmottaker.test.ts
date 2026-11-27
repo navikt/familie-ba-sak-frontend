@@ -1,7 +1,7 @@
 import { apiClient } from '@api/client/apiClient';
 import { type OpprettBrevmottakerPayload, opprettBrevmottaker } from '@api/opprettBrevmottaker';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
-import { lagBrevmottaker } from '@testutils/testdata/brevmottakerTestdata';
+import { lagBrevmottaker, lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestdata';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('@api/client/apiClient', () => ({
@@ -17,11 +17,12 @@ afterEach(() => {
 const payload: OpprettBrevmottakerPayload = lagBrevmottaker();
 
 const behandling = lagBehandling();
+const brevmottakere = [lagBrevmottakerBehandling()];
 const behandlingId = behandling.behandlingId;
 
 describe('opprettBrevmottaker', () => {
     test('skal sende forespørsel om å opprette brevmottaker', async () => {
-        vi.mocked(apiClient.post).mockResolvedValueOnce(behandling);
+        vi.mocked(apiClient.post).mockResolvedValueOnce(brevmottakere);
 
         const svar = await opprettBrevmottaker({ behandlingId }, payload);
 
@@ -30,7 +31,7 @@ describe('opprettBrevmottaker', () => {
             data: payload,
             url: `/familie-ba-sak/api/brevmottaker/${behandlingId}`,
         });
-        expect(svar).toEqual(behandling);
+        expect(svar).toEqual(brevmottakere);
     });
 
     test('skal håndtere feil', async () => {

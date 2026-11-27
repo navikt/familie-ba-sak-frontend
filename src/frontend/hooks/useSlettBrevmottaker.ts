@@ -1,14 +1,17 @@
 import { slettBrevmottaker } from '@api/slettBrevmottaker';
 import { mutationKeys } from '@hooks/keys/mutationKeys';
 import { type DefaultError, type UseMutationOptions, useMutation } from '@tanstack/react-query';
-import type { IBehandling } from '@typer/behandling';
+import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 
 interface Parameters {
     behandlingId: number;
     brevmottakerId: number;
 }
 
-type Options = Omit<UseMutationOptions<IBehandling, DefaultError, Parameters>, 'mutationKey' | 'mutationFn'>;
+type Options = Omit<
+    UseMutationOptions<BrevmottakerBehandling[], DefaultError, Parameters>,
+    'mutationKey' | 'mutationFn'
+>;
 
 export function useSlettBrevmottaker(options?: Options) {
     return useMutation({

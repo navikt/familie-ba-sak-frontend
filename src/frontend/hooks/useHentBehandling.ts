@@ -73,14 +73,6 @@ function obfuskerBehandling(behandling: IBehandling): IBehandling {
                     })),
             };
         }),
-        brevmottakere: behandling.brevmottakere?.map(brevmottaker => ({
-            ...brevmottaker,
-            navn:
-                brevmottaker.type.charAt(0).toUpperCase() +
-                brevmottaker.type.slice(1).toLowerCase().replaceAll('_', ' '),
-            adresselinje1: 'Mottakerveien 1',
-            adresselinje2: undefined,
-        })),
     };
 }
 

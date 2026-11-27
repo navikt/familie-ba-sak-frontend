@@ -1,12 +1,12 @@
 import { ApiFeil, RessursStatus } from '@api/client/apiClient';
 import { useHentBehandling } from '@hooks/useHentBehandling';
+import { useHentBrevmottakere } from '@hooks/useHentBrevmottakere';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
 import { Box, GlobalAlert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { KontrollsiderProvider } from '@sider/Fagsak/Behandling/KontrollsiderContext';
 import { Outlet } from 'react-router';
-
 import Styles from './Behandling.module.css';
 import { BehandlingProvider } from './BehandlingContext';
 import { BrevmottakereBehandlingProvider } from './BrevmottakereBehandlingContext';
@@ -27,7 +27,13 @@ export function BehandlingMedReactQuery({ behandlingId }: Props) {
         error: behandlingError,
     } = useHentBehandling(behandlingId);
 
-    if (behandlingIsPending) {
+    const {
+        data: brevmottakere,
+        isPending: brevmottakereIsPending,
+        error: brevmottakereError,
+    } = useHentBrevmottakere(behandlingId);
+
+    if (behandlingIsPending || brevmottakereIsPending) {
         return (
             <HStack gap={'space-16'} margin={'space-16'}>
                 <Loader size={'small'} />
@@ -36,26 +42,28 @@ export function BehandlingMedReactQuery({ behandlingId }: Props) {
         );
     }
 
-    if (behandlingError instanceof ApiFeil && behandlingError.ressursStatus === RessursStatus.IKKE_TILGANG) {
-        return (
-            <Box margin={'space-8'}>
-                <GlobalAlert status={'warning'}>
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
-            </Box>
-        );
-    }
+    if (behandlingError || brevmottakereError) {
+        const error = behandlingError ?? brevmottakereError;
 
-    if (behandlingError) {
+        if (error instanceof ApiFeil && error.ressursStatus === RessursStatus.IKKE_TILGANG) {
+            return (
+                <Box margin={'space-8'}>
+                    <GlobalAlert status={'warning'}>
+                        <GlobalAlert.Header>
+                            <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
+                        </GlobalAlert.Header>
+                    </GlobalAlert>
+                </Box>
+            );
+        }
+
         return (
             <Box margin={'space-8'}>
                 <GlobalAlert status={'error'}>
                     <GlobalAlert.Header>
                         <GlobalAlert.Title>Feil oppstod ved innlasting av behandling</GlobalAlert.Title>
                     </GlobalAlert.Header>
-                    <GlobalAlert.Content>{behandlingError.message}</GlobalAlert.Content>
+                    <GlobalAlert.Content>{error?.message}</GlobalAlert.Content>
                 </GlobalAlert>
             </Box>
         );
@@ -63,7 +71,7 @@ export function BehandlingMedReactQuery({ behandlingId }: Props) {
 
     return (
         <BehandlingProvider key={behandling.behandlingId} behandling={behandling}>
-            <BrevmottakereBehandlingProvider brevmottakere={behandling.brevmottakere}>
+            <BrevmottakereBehandlingProvider brevmottakere={brevmottakere}>
                 <KontrollsiderProvider>
                     <HenleggBehandlingModal />
                     <HenleggBehandlingVeivalgModal />

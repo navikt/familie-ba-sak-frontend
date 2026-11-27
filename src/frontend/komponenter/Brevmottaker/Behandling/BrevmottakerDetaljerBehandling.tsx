@@ -1,9 +1,9 @@
 import { useToastContext } from '@context/ToastContext';
 import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useSlettBrevmottaker } from '@hooks/useSlettBrevmottaker';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 import type { BrevmottakerBehandling } from '@typer/brevmottaker';
 import { BrevmottakerDetaljer } from '../Felles/BrevmottakerDetaljer';
@@ -16,8 +16,8 @@ export function BrevmottakerDetaljerBehandling({ brevmottaker }: Props) {
     const queryClient = useQueryClient();
 
     const erLesevisning = useErLesevisning();
+    const behandling = useBehandling();
 
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { settToast } = useToastContext();
 
     const {
@@ -25,9 +25,9 @@ export function BrevmottakerDetaljerBehandling({ brevmottaker }: Props) {
         isPending: slettBrevmottakerIsPending,
         error: slettBrevmottakerError,
     } = useSlettBrevmottaker({
-        onSuccess: oppdatertBehandling => {
-            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
-            settÅpenBehandling(oppdatertBehandling);
+        onSuccess: brevmottakere => {
+            queryClient.setQueryData(queryKeys.brevmottakere(behandling), brevmottakere);
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandling.behandlingId) });
             settToast(ToastTyper.BREVMOTTAKER_FJERNET, { alertType: AlertType.SUCCESS, tekst: 'Brevmottaker fjernet' });
         },
     });

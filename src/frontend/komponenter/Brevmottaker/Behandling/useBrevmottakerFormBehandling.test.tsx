@@ -20,8 +20,7 @@ vi.mock('@sider/Fagsak/Behandling/BehandlingContext');
 
 const OPPRETT_BREVMOTTAKER_URL = '/familie-ba-sak/api/brevmottaker/:behandlingId';
 const behandling = lagBehandling({ behandlingId: 42 });
-const oppdatertBehandling = lagBehandling({ behandlingId: 42, brevmottakere: [lagBrevmottakerBehandling()] });
-const settÅpenBehandling = vi.fn();
+const oppdaterteBrevmottakere = [lagBrevmottakerBehandling()];
 const settToast = vi.fn();
 let queryClient: QueryClient;
 
@@ -43,7 +42,7 @@ describe('useBrevmottakerFormBehandling', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         queryClient = lagTestQueryClient();
-        vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling });
+        vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling: vi.fn() });
         vi.spyOn(ToastContext, 'useToastContext').mockReturnValue({
             settToast,
             settToasts: vi.fn(),
@@ -55,7 +54,7 @@ describe('useBrevmottakerFormBehandling', () => {
         vi.restoreAllMocks();
     });
 
-    test('skal lagre brevmottakeren på behandlingen, oppdatere behandlingen og vise en suksessmelding', async () => {
+    test('skal lagre brevmottakeren på behandlingen, oppdatere brevmottakerne og vise en suksessmelding', async () => {
         // Arrange
         const onSubmitSuccess = vi.fn();
         const forespørsel = vi.fn();
@@ -63,7 +62,7 @@ describe('useBrevmottakerFormBehandling', () => {
         server.use(
             http.post(OPPRETT_BREVMOTTAKER_URL, async ({ params, request }) => {
                 forespørsel({ params, body: await request.json() });
-                return HttpResponse.json(byggSuksessRessurs(oppdatertBehandling));
+                return HttpResponse.json(byggSuksessRessurs(oppdaterteBrevmottakere));
             })
         );
 
@@ -90,8 +89,7 @@ describe('useBrevmottakerFormBehandling', () => {
                 landkode: 'NO',
             },
         });
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(oppdatertBehandling);
-        expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toEqual(oppdaterteBrevmottakere);
         expect(settToast).toHaveBeenCalledWith(ToastTyper.BREVMOTTAKER_LAGRET, {
             alertType: AlertType.SUCCESS,
             tekst: 'Brevmottaker ble lagret',
@@ -100,7 +98,7 @@ describe('useBrevmottakerFormBehandling', () => {
         expect(result.current.rootFeilmelding).toBeUndefined();
     });
 
-    test('skal vise feilmelding uten å oppdatere behandlingen når lagring feiler', async () => {
+    test('skal vise feilmelding uten å oppdatere brevmottakerne når lagring feiler', async () => {
         // Arrange
         const onSubmitSuccess = vi.fn();
 
@@ -127,8 +125,7 @@ describe('useBrevmottakerFormBehandling', () => {
 
         // Assert
         expect(result.current.rootFeilmelding).toBe('Brevmottakeren kunne ikke lagres.');
-        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
-        expect(settÅpenBehandling).not.toHaveBeenCalled();
+        expect(queryClient.getQueryData(queryKeys.brevmottakere(42))).toBeUndefined();
         expect(settToast).not.toHaveBeenCalled();
         expect(onSubmitSuccess).not.toHaveBeenCalled();
     });
