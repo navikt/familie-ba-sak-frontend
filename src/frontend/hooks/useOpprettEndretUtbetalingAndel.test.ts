@@ -21,6 +21,7 @@ afterEach(() => {
 
 describe('useOpprettEndretUtbetalingAndel', () => {
     test('skal kalle opprettEndretUtbetalingAndel med behandlingId og returnere behandlingen', async () => {
+        // Arrange
         vi.mocked(opprettEndretUtbetalingAndel).mockResolvedValueOnce(behandling);
         const onSuccess = vi.fn();
 
@@ -28,8 +29,10 @@ describe('useOpprettEndretUtbetalingAndel', () => {
             wrapper: TestProviders,
         });
 
+        // Act
         result.current.mutate();
 
+        // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(opprettEndretUtbetalingAndel).toHaveBeenCalledWith(behandling.behandlingId);
         expect(result.current.data).toEqual(behandling);
@@ -37,14 +40,17 @@ describe('useOpprettEndretUtbetalingAndel', () => {
     });
 
     test('skal sette isError dersom opprettEndretUtbetalingAndel feiler', async () => {
+        // Arrange
         vi.mocked(opprettEndretUtbetalingAndel).mockRejectedValueOnce(new Error('Noe gikk galt'));
 
         const { result } = renderHook(() => useOpprettEndretUtbetalingAndel(), {
             wrapper: TestProviders,
         });
 
+        // Act
         result.current.mutate();
 
+        // Assert
         await waitFor(() => expect(result.current.isError).toBe(true));
         expect(result.current.error?.message).toBe('Noe gikk galt');
     });

@@ -27,6 +27,7 @@ const endretUtbetalingAndel: IRestEndretUtbetalingAndel = {
 
 describe('useOppdaterEndretUtbetalingAndel', () => {
     test('skal kalle oppdaterEndretUtbetalingAndel med behandlingId og endret utbetalingsandel', async () => {
+        // Arrange
         vi.mocked(oppdaterEndretUtbetalingAndel).mockResolvedValueOnce(behandling);
         const onSuccess = vi.fn();
 
@@ -34,8 +35,10 @@ describe('useOppdaterEndretUtbetalingAndel', () => {
             wrapper: TestProviders,
         });
 
+        // Act
         result.current.mutate(endretUtbetalingAndel);
 
+        // Assert
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(oppdaterEndretUtbetalingAndel).toHaveBeenCalledWith(behandling.behandlingId, endretUtbetalingAndel);
         expect(result.current.data).toEqual(behandling);
@@ -43,14 +46,17 @@ describe('useOppdaterEndretUtbetalingAndel', () => {
     });
 
     test('skal sette isError dersom oppdaterEndretUtbetalingAndel feiler', async () => {
+        // Arrange
         vi.mocked(oppdaterEndretUtbetalingAndel).mockRejectedValueOnce(new Error('Noe gikk galt'));
 
         const { result } = renderHook(() => useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel), {
             wrapper: TestProviders,
         });
 
+        // Act
         result.current.mutate(endretUtbetalingAndel);
 
+        // Assert
         await waitFor(() => expect(result.current.isError).toBe(true));
         expect(result.current.error?.message).toBe('Noe gikk galt');
     });

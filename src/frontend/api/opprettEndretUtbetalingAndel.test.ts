@@ -15,10 +15,13 @@ const behandling = lagBehandling({ behandlingId: 123 });
 
 describe('opprettEndretUtbetalingAndel', () => {
     test('skal sende POST til riktig URL og returnere behandlingen', async () => {
+        // Arrange
         vi.mocked(apiClient.post).mockResolvedValueOnce(behandling);
 
+        // Act
         const svar = await opprettEndretUtbetalingAndel(behandling.behandlingId);
 
+        // Assert
         expect(apiClient.post).toHaveBeenCalledTimes(1);
         expect(apiClient.post).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/endretutbetalingandel/123',
@@ -27,8 +30,10 @@ describe('opprettEndretUtbetalingAndel', () => {
     });
 
     test('skal håndtere feil', async () => {
+        // Arrange
         vi.mocked(apiClient.post).mockRejectedValueOnce(new Error('Noe gikk galt'));
 
+        // Act & assert
         await expect(opprettEndretUtbetalingAndel(behandling.behandlingId)).rejects.toThrow('Noe gikk galt');
     });
 });

@@ -26,10 +26,13 @@ const endretUtbetalingAndel: IRestEndretUtbetalingAndel = {
 
 describe('oppdaterEndretUtbetalingAndel', () => {
     test('skal sende PUT med endret utbetalingsandel til riktig URL og returnere behandlingen', async () => {
+        // Arrange
         vi.mocked(apiClient.put).mockResolvedValueOnce(behandling);
 
+        // Act
         const svar = await oppdaterEndretUtbetalingAndel(behandling.behandlingId, endretUtbetalingAndel);
 
+        // Assert
         expect(apiClient.put).toHaveBeenCalledTimes(1);
         expect(apiClient.put).toHaveBeenCalledWith({
             url: '/familie-ba-sak/api/endretutbetalingandel/123/456',
@@ -39,8 +42,10 @@ describe('oppdaterEndretUtbetalingAndel', () => {
     });
 
     test('skal håndtere feil', async () => {
+        // Arrange
         vi.mocked(apiClient.put).mockRejectedValueOnce(new Error('Noe gikk galt'));
 
+        // Act & assert
         await expect(oppdaterEndretUtbetalingAndel(behandling.behandlingId, endretUtbetalingAndel)).rejects.toThrow(
             'Noe gikk galt'
         );
