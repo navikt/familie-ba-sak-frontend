@@ -1,13 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+import type { IBehandling } from '@typer/behandling';
 
-import type { IBehandling } from '../typer/behandling';
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function opprettEndretUtbetalingAndel(request: FamilieRequest, behandlingId: number) {
-    const ressurs = await request<null, IBehandling>({
-        method: 'POST',
+export async function opprettEndretUtbetalingAndel(behandlingId: number) {
+    return apiClient.post<void, IBehandling>({
         url: `/familie-ba-sak/api/endretutbetalingandel/${behandlingId}`,
-        påvirkerSystemLaster: false,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }
