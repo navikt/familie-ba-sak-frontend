@@ -1,3 +1,5 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
+import { useQueryClient } from '@tanstack/react-query';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 
 import { useOnFormSubmitSuccessful } from '../../../../../../hooks/useOnFormSubmitSuccessful';
@@ -41,6 +43,8 @@ export interface EndretUtbetalingAndelFormValues {
 }
 
 export const useEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbetalingAndel, lukkSkjema: () => void) => {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const personer = endretUtbetalingAndel.personIdenter.map(ident => ({
@@ -70,6 +74,7 @@ export const useEndretUtbetalingAndel = (endretUtbetalingAndel: IRestEndretUtbet
     const { mutateAsync: oppdaterEndretUtbetalingAndel } = useOppdaterEndretUtbetalingAndel(endretUtbetalingAndel, {
         onSuccess: (behandling: IBehandling) => {
             lukkSkjema();
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
         },
     });

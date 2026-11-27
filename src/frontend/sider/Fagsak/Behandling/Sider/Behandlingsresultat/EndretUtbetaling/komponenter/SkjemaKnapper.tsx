@@ -1,5 +1,7 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useFormContext } from 'react-hook-form';
 
 import { useOppdatererEndretUtbetalingAndelIsPending } from '../../../../../../../hooks/useOppdatererEndretUtbetalingAndelIsPending';
@@ -15,6 +17,8 @@ interface SkjemaKnapperProps {
 }
 
 export const SkjemaKnapper = ({ lukkSkjema, kunVisSlett = false }: SkjemaKnapperProps) => {
+    const queryClient = useQueryClient();
+
     const { settÅpenBehandling } = useBehandlingContext();
     const { endretUtbetalingAndel } = useEndretUtbetalingAndelContext();
     const { reset, setError } = useFormContext<EndretUtbetalingAndelFormValues>();
@@ -31,6 +35,7 @@ export const SkjemaKnapper = ({ lukkSkjema, kunVisSlett = false }: SkjemaKnapper
         mutateAsync(endretUtbetalingAndel)
             .then(behandling => {
                 lukkSkjema();
+                queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
                 settÅpenBehandling(behandling);
             })
             .catch(error => {

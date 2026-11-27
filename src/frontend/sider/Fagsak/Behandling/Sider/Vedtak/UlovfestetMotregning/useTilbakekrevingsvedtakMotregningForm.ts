@@ -1,5 +1,7 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 const PREUTFYLT_DEFAULT_TEKST_ÅRSAK_TIL_FEILUTBETALING =
@@ -18,6 +20,8 @@ interface Props {
 }
 
 export function useTilbakekrevingsvedtakMotregningForm({ lukkExpansionCard }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { mutateAsync: oppdaterTilbakekrevingsvedtakMotregning } = useOppdaterTilbakekrevingsvedtakMotregning();
@@ -47,6 +51,7 @@ export function useTilbakekrevingsvedtakMotregningForm({ lukkExpansionCard }: Pr
                 behandlingId: behandling.behandlingId,
                 tilbakekrevingsvedtakMotregning: { varselDato, årsakTilFeilutbetaling, vurderingAvSkyld },
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkExpansionCard();
         } catch (error: unknown) {

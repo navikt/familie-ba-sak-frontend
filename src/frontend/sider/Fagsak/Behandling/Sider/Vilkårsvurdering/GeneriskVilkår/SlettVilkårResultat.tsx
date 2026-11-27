@@ -1,8 +1,10 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSlettVilkårResultat } from '@hooks/useSlettVilkårResultat';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbareVilkårResultatRader } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
     personIdent: string;
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export function SlettVilkårResultat({ personIdent, vilkårResultatId, onNullstilt }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { ekspanderRad, kollapsRad } = useEkspanderbareVilkårResultatRader();
@@ -38,6 +42,7 @@ export function SlettVilkårResultat({ personIdent, vilkårResultatId, onNullsti
                 ekspanderRad(id);
             }
 
+            queryClient.setQueryData(queryKeys.behandling(nyBehandling), nyBehandling);
             settÅpenBehandling(nyBehandling);
         },
     });

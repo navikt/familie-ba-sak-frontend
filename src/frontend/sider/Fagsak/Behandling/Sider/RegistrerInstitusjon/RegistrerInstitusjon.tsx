@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useBehandling } from '@hooks/useBehandling';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
@@ -8,10 +9,13 @@ import { Button, LocalAlert, VStack } from '@navikt/ds-react';
 import { RessursStatus } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { Steg } from '@sider/Fagsak/Behandling/Sider/Steg';
+import { useQueryClient } from '@tanstack/react-query';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { useNavigate } from 'react-router';
 
 const RegistrerInstitusjon = () => {
+    const queryClient = useQueryClient();
+
     const behandling = useBehandling();
     const fagsak = useFagsak();
     const navigate = useNavigate();
@@ -41,6 +45,7 @@ const RegistrerInstitusjon = () => {
             { behandlingId: behandling.behandlingId },
             {
                 onSuccess: oppdatertBehandling => {
+                    queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
                     settÅpenBehandling(oppdatertBehandling);
                     gåTilNesteSide();
                 },

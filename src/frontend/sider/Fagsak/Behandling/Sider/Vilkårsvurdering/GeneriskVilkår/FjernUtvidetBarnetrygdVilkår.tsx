@@ -1,7 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSlettVilkår } from '@hooks/useSlettVilkår';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyLong, Box, Button, Dialog, ErrorMessage } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { VilkårType } from '@typer/vilkår';
 import { useState } from 'react';
 
@@ -10,6 +12,8 @@ interface Props {
 }
 
 export function FjernUtvidetBarnetrygdVilkår({ personIdent }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const [visDialog, settVisDialog] = useState(false);
 
@@ -19,7 +23,10 @@ export function FjernUtvidetBarnetrygdVilkår({ personIdent }: Props) {
         error: slettVilkårError,
         reset: nullstillSlettVilkår,
     } = useSlettVilkår({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const onOpenChange = (åpen: boolean) => {

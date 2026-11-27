@@ -1,4 +1,5 @@
 import { ApiFeil, RessursStatus } from '@api/client/apiClient';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useFagsak } from '@hooks/useFagsak';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
@@ -6,6 +7,7 @@ import { useRegistrerSøknad } from '@hooks/useRegistrerSøknad';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useBekreftEndringModalContext } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/BekreftEndringModalContext';
 import { useValgbareBarn } from '@sider/Fagsak/Behandling/Sider/RegistrerSøknad/form/useValgbareBarn';
+import { useQueryClient } from '@tanstack/react-query';
 import type { BehandlingUnderkategori } from '@typer/behandlingstema';
 import type { IBarnMedOpplysninger, Målform } from '@typer/søknad';
 import { useId } from 'react';
@@ -34,6 +36,8 @@ export interface TransformedRegistrerSøknadFormValues {
 }
 
 export function useRegistrerSøknadForm() {
+    const queryClient = useQueryClient();
+
     const id = useId();
     const fagsak = useFagsak();
     const navigate = useNavigate();
@@ -97,6 +101,7 @@ export function useRegistrerSøknadForm() {
                 },
                 bekreftEndringerViaFrontend: modus === 'bekreftet',
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             navigate(`/fagsak/${fagsak.id}/${oppdatertBehandling.behandlingId}/vilkaarsvurdering`);
             if (modus === 'bekreftet') {

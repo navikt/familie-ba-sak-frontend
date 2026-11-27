@@ -76,6 +76,7 @@ export function useTotrinnskontrollForm() {
 
             await queryClient.invalidateQueries({ queryKey: queryKeys.vedtaksperioder(behandling.behandlingId) });
 
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
 
             åpneModal(beslutning);

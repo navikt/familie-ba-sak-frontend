@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useFeatureToggles } from '@hooks/useFeatureToggles';
@@ -15,6 +16,7 @@ import {
     LocalAlert,
     VStack,
 } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { BehandlingSteg, BehandlingÅrsak } from '@typer/behandling';
 import { FeatureToggle } from '@typer/featureToggles';
 import { annenVurderingConfig, vilkårConfig } from '@typer/vilkår';
@@ -37,6 +39,8 @@ import styles from './Vilkårsvurdering.module.css';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
 
 export function Vilkårsvurdering() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { erVilkårsvurderingenGyldig, vilkårMedFeil, andreVurderingerMedFeil, vilkårsvurdering } =
@@ -57,6 +61,7 @@ export function Vilkårsvurdering() {
         error: oppdaterVilkårsvurderingError,
     } = useOppdaterVilkårsvurdering({
         onSuccess: behandling => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
             navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/tilkjent-ytelse`);
         },

@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useFagsak } from '@hooks/useFagsak';
 import { useHentPersonerMedUgyldigEtterbetalingsperiode } from '@hooks/useHentPersonerMedUgyldigEtterbetalingsperiode';
@@ -6,6 +7,7 @@ import { useOpprettEndretUtbetalingAndel } from '@hooks/useOpprettEndretUtbetali
 import { useTidslinjeContext } from '@komponenter/Tidslinje/TidslinjeContext';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage, ErrorSummary, HStack, Label, LocalAlert } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { BehandlingResultat, BehandlingSteg, Behandlingstype, type IBehandling } from '@typer/behandling';
 import type { IRestKompetanse, IRestUtenlandskPeriodeBeløp, IRestValutakurs } from '@typer/eøsPerioder';
 import type { Utbetalingsperiode } from '@typer/vedtaksperiode';
@@ -28,6 +30,8 @@ import { Oppsummeringsboks } from './Oppsummeringsboks';
 import TilkjentYtelseTidslinje from './TilkjentYtelseTidslinje';
 
 const Behandlingsresultat = () => {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const fagsak = useFagsak();
@@ -46,6 +50,7 @@ const Behandlingsresultat = () => {
         error: oppdaterBehandlingsresultatError,
     } = useOppdaterBehandlingsresultat({
         onSuccess: behandling => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
             settÅpenBehandling(behandling);
             if (behandling.resultat !== BehandlingResultat.AVSLÅTT) {
                 navigate(`/fagsak/${fagsak.id}/${behandling.behandlingId}/simulering`);
@@ -61,7 +66,10 @@ const Behandlingsresultat = () => {
         isError: isOpprettEndretUtbetalingAndelError,
         error: opprettEndretUtbetalingAndelError,
     } = useOpprettEndretUtbetalingAndel({
-        onSuccess: (behandling: IBehandling) => settÅpenBehandling(behandling),
+        onSuccess: (behandling: IBehandling) => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
+            settÅpenBehandling(behandling);
+        },
     });
 
     const { aktivEtikett, filterOgSorterAndelPersonerIGrunnlag, filterOgSorterGrunnlagPersonerMedAndeler } =

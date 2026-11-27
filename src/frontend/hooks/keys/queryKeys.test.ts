@@ -1,4 +1,5 @@
 import { QueryClient, type QueryKey } from '@tanstack/react-query';
+import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
 import { FagsakId } from '@typer/fagsak';
 import { beforeEach, describe, expect, test } from 'vitest';
 
@@ -175,6 +176,10 @@ describe('queryKeys', () => {
         for (const nøkkel of Object.values(frittståendeNøkler)) {
             expect(erInvalidert(nøkkel)).toBe(false);
         }
+    });
+
+    test('skal gi samme behandlingsnøkkel for behandling som for behandlingId', () => {
+        expect(queryKeys.behandling(lagBehandling({ behandlingId }))).toEqual(queryKeys.behandling(behandlingId));
     });
 
     test('skal ha unike nøkler', () => {

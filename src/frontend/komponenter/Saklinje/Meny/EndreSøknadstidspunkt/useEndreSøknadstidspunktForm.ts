@@ -59,6 +59,7 @@ export function useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }
 
     const { mutateAsync: endreSøknadstidspunkt } = useEndreSøknadstidspunkt({
         onSuccess: async oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             await queryClient.invalidateQueries({
                 queryKey: queryKeys.registrerteSøknadstidspunkter(behandling.behandlingId),

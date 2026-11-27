@@ -1,7 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useSettPåVent } from '@hooks/useSettPåVent';
 import { BodyShort, Button, DatePicker, Fieldset, Modal, Select, useDatepicker, VStack } from '@navikt/ds-react';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/konstanter';
+import { useQueryClient } from '@tanstack/react-query';
 import { SettPåVentÅrsak, settPåVentÅrsaker } from '@typer/behandling';
 import { dagensDato, dateTilIsoDatoString } from '@utils/dato';
 import { addDays } from 'date-fns';
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const årsak = SettPåVentÅrsak.AVVENTER_SAMTYKKE_ULOVFESTET_MOTREGNING;
@@ -24,6 +28,7 @@ export function SettBehandlingPåVentModalMotregning({ lukkModal }: Props) {
         error,
     } = useSettPåVent({
         onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkModal();
         },

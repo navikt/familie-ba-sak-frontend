@@ -1,3 +1,4 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
@@ -7,6 +8,7 @@ import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext
 import { AvregningAlert } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/AvregningAlert';
 import { BekreftSamtykkeTilMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/BekreftSamtykkeTilMotregning';
 import { dagerFristForAvventerSamtykkeUlovfestetMotregning } from '@sider/Fagsak/Behandling/Sider/Simulering/UlovfestetMotregning/konstanter';
+import { useQueryClient } from '@tanstack/react-query';
 import { SettPåVentÅrsak } from '@typer/behandling';
 import type { IAvregningsperiode } from '@typer/simulering';
 import type { TilbakekrevingsvedtakMotregningDTO } from '@typer/tilbakekrevingsvedtakMotregning';
@@ -17,6 +19,8 @@ interface Props {
 }
 
 export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregning, avregningsperioder }: Props) {
+    const queryClient = useQueryClient();
+
     const erLesevisning = useErLesevisning();
 
     const { behandling, settÅpenBehandling } = useBehandlingContext();
@@ -26,7 +30,10 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const {
@@ -34,7 +41,10 @@ export function TilbakekrevingsvedtakMotregning({ tilbakekrevingsvedtakMotregnin
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => settÅpenBehandling(oppdatertBehandling),
+        onSuccess: oppdatertBehandling => {
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
+            settÅpenBehandling(oppdatertBehandling);
+        },
     });
 
     const error = oppdaterError ?? slettError;

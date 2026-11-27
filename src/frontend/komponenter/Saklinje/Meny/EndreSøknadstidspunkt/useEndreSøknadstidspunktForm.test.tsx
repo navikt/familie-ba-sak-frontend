@@ -78,7 +78,7 @@ const renderForm = (søknadstidspunkter: RegistrertSøknadstidspunkt[]) => {
         <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
     const { result } = renderHook(() => useEndreSøknadstidspunktForm({ lukkModal, søknadstidspunkter }), { wrapper });
-    return { result, lukkModal, invalidateQueriesSpy };
+    return { result, lukkModal, invalidateQueriesSpy, queryClient };
 };
 
 describe('useEndreSøknadstidspunktForm', () => {
@@ -171,9 +171,10 @@ describe('useEndreSøknadstidspunktForm', () => {
 
     test('onSubmit sender kun barn med dato (ISO-format), oppdaterer behandling og lukker modal', async () => {
         mockBehandling = lagBehandling({ personer: [søker, barnMedPersistertVerdi, barnUtenPersistertVerdi] });
-        mockMutateAsync.mockResolvedValue(lagBehandling());
+        const oppdatertBehandling = lagBehandling({ behandlingId: mockBehandling.behandlingId });
+        mockMutateAsync.mockResolvedValue(oppdatertBehandling);
 
-        const { result, lukkModal, invalidateQueriesSpy } = renderForm([]);
+        const { result, lukkModal, invalidateQueriesSpy, queryClient } = renderForm([]);
 
         await act(async () => {
             await result.current.onSubmit({
@@ -200,6 +201,7 @@ describe('useEndreSøknadstidspunktForm', () => {
                 { personIdent: barnMedPersistertVerdi.personIdent, søknadstidspunkt: '2025-04-15' },
             ],
         });
+        expect(queryClient.getQueryData(queryKeys.behandling(mockBehandling))).toEqual(oppdatertBehandling);
         expect(mockSettÅpenBehandling).toHaveBeenCalledTimes(1);
         expect(invalidateQueriesSpy).toHaveBeenCalledWith({
             queryKey: queryKeys.registrerteSøknadstidspunkter(mockBehandling.behandlingId),
@@ -211,7 +213,7 @@ describe('useEndreSøknadstidspunktForm', () => {
         mockBehandling = lagBehandling({ personer: [søker, barnMedPersistertVerdi] });
         mockMutateAsync.mockRejectedValue(new Error('Teknisk feil fra backend'));
 
-        const { result, lukkModal } = renderForm([]);
+        const { result, lukkModal, queryClient } = renderForm([]);
 
         await act(async () => {
             await result.current.onSubmit({
@@ -227,6 +229,7 @@ describe('useEndreSøknadstidspunktForm', () => {
         });
 
         expect(mockMutateAsync).toHaveBeenCalledTimes(1);
+        expect(queryClient.getQueryData(queryKeys.behandling(mockBehandling))).toBeUndefined();
         expect(mockSettÅpenBehandling).not.toHaveBeenCalled();
         expect(lukkModal).not.toHaveBeenCalled();
     });

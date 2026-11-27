@@ -1,8 +1,10 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useConfirmBrowserRefresh } from '@hooks/useConfirmBrowserRefresh';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterVilkårResultat } from '@hooks/useOppdaterVilkårResultat';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useEkspanderbarVilkårResultatRad } from '@sider/Fagsak/Behandling/Sider/Vilkårsvurdering/EkspanderbareVilkårResultatRaderContext';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IGrunnlagPerson } from '@typer/person';
 import type { VedtakBegrunnelse } from '@typer/vedtak';
 import type { IRestPersonResultat, IRestVilkårResultat, Regelverk, UtdypendeVilkårsvurdering } from '@typer/vilkår';
@@ -79,6 +81,8 @@ interface Props {
 }
 
 export function useVilkårResultatSkjema({ vilkårResultat, person, settFokusPåKnapp }: Props) {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { kollapsRad } = useEkspanderbarVilkårResultatRad(vilkårResultat.id);
     const { mutateAsync: oppdaterVilkårResultat } = useOppdaterVilkårResultat();
@@ -111,6 +115,7 @@ export function useVilkårResultatSkjema({ vilkårResultat, person, settFokusPå
                 vilkårResultatId: vilkårResultat.id,
                 personResultat,
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             kollapsRad();
             settFokusPåKnapp();

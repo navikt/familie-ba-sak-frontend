@@ -1,7 +1,9 @@
 import * as ToastContext from '@context/ToastContext';
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { AlertType, ToastTyper } from '@komponenter/Toast/typer';
 import { byggSuksessRessurs } from '@navikt/familie-typer';
 import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
+import { QueryClient } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { server } from '@testutils/mocks/node';
 import { lagBehandling } from '@testutils/testdata/behandlingTestdata';
@@ -9,6 +11,7 @@ import { lagBrevmottakerBehandling } from '@testutils/testdata/brevmottakerTestd
 import { TestProviders } from '@testutils/testrender';
 import { Brevmottakertype } from '@typer/brevmottaker';
 import { HttpResponse, http } from 'msw';
+import { createElement } from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { BrevmottakerField, type BrevmottakerTransformedFormValues } from '../Felles/Form/useBrevmottakerForm';
 import { useBrevmottakerFormBehandling } from './useBrevmottakerFormBehandling';
@@ -20,6 +23,7 @@ const behandling = lagBehandling({ behandlingId: 42 });
 const oppdatertBehandling = lagBehandling({ behandlingId: 42, brevmottakere: [lagBrevmottakerBehandling()] });
 const settÅpenBehandling = vi.fn();
 const settToast = vi.fn();
+let queryClient: QueryClient;
 
 const values: BrevmottakerTransformedFormValues = {
     [BrevmottakerField.BREVMOTTAKERTYPE]: Brevmottakertype.VERGE,
@@ -37,7 +41,7 @@ function renderUseBrevmottakerFormBehandling(onSubmitSuccess = vi.fn()) {
             const { form, onSubmit } = useBrevmottakerFormBehandling({ onSubmitSuccess });
             return { onSubmit, rootFeilmelding: form.formState.errors.root?.message };
         },
-        { wrapper: TestProviders }
+        { wrapper: ({ children }) => createElement(TestProviders, { queryClient }, children) }
     );
     return { result, onSubmitSuccess };
 }
@@ -45,6 +49,7 @@ function renderUseBrevmottakerFormBehandling(onSubmitSuccess = vi.fn()) {
 describe('useBrevmottakerFormBehandling', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        queryClient = new QueryClient();
         vi.mocked(useBehandlingContext).mockReturnValue({ behandling, settÅpenBehandling });
         vi.spyOn(ToastContext, 'useToastContext').mockReturnValue({
             settToast,
@@ -81,6 +86,7 @@ describe('useBrevmottakerFormBehandling', () => {
                 landkode: 'NO',
             },
         });
+        expect(queryClient.getQueryData(queryKeys.behandling(42))).toEqual(oppdatertBehandling);
         expect(settÅpenBehandling).toHaveBeenCalledWith(oppdatertBehandling);
         expect(settToast).toHaveBeenCalledWith(ToastTyper.BREVMOTTAKER_LAGRET, {
             alertType: AlertType.SUCCESS,
@@ -106,6 +112,7 @@ describe('useBrevmottakerFormBehandling', () => {
         await act(() => result.current.onSubmit(values));
 
         expect(result.current.rootFeilmelding).toBe('Brevmottakeren kunne ikke lagres.');
+        expect(queryClient.getQueryData(queryKeys.behandling(42))).toBeUndefined();
         expect(settÅpenBehandling).not.toHaveBeenCalled();
         expect(settToast).not.toHaveBeenCalled();
         expect(onSubmitSuccess).not.toHaveBeenCalled();

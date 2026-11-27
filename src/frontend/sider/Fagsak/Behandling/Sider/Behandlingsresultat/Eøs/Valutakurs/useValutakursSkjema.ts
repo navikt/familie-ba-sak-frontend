@@ -1,6 +1,8 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useOppdaterValutakurs } from '@hooks/useOppdaterValutakurs';
 import { useSlettValutakurs } from '@hooks/useSlettValutakurs';
+import { useQueryClient } from '@tanstack/react-query';
 import type { OptionType } from '@typer/common';
 import type { IRestValutakurs } from '@typer/eøsPerioder';
 import {
@@ -44,6 +46,8 @@ interface Props {
 }
 
 export const useValutakursSkjema = ({ valutakurs, barnIValutakurs, lukkSkjema }: Props) => {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const { mutateAsync: oppdaterValutakurs } = useOppdaterValutakurs();
@@ -83,6 +87,7 @@ export const useValutakursSkjema = ({ valutakurs, barnIValutakurs, lukkSkjema }:
                 valutakursdato: dateTilIsoDatoStringEllerUndefined(values.valutakursdato),
                 kurs: konverterSkjemaverdiTilDesimal(values.kurs),
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {
@@ -98,6 +103,7 @@ export const useValutakursSkjema = ({ valutakurs, barnIValutakurs, lukkSkjema }:
                 behandlingId: behandling.behandlingId,
                 valutakursId: valutakurs.id,
             });
+            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
             settÅpenBehandling(oppdatertBehandling);
             lukkSkjema();
         } catch (error) {

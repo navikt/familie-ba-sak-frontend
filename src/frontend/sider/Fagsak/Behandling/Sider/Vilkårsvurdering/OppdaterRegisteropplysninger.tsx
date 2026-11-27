@@ -1,7 +1,9 @@
+import { queryKeys } from '@hooks/keys/queryKeys';
 import { useErLesevisning } from '@hooks/useErLesevisning';
 import { useOppdaterRegisteropplysninger } from '@hooks/useOppdaterRegisteropplysninger';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Button, Detail, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Datoformat, isoStringTilFormatertString } from '@utils/dato';
 import { useBehandlingContext } from '../../BehandlingContext';
 import { useVilkårsvurderingContext } from './VilkårsvurderingContext';
@@ -21,13 +23,18 @@ function formaterTidspunkt(registeropplysningerHentetTidpsunkt: string | undefin
 }
 
 export function OppdaterRegisteropplysninger() {
+    const queryClient = useQueryClient();
+
     const { behandling, settÅpenBehandling } = useBehandlingContext();
     const { vilkårsvurdering } = useVilkårsvurderingContext();
 
     const erLesevisning = useErLesevisning();
 
     const { mutate, isPending, error } = useOppdaterRegisteropplysninger({
-        onSuccess: behandling => settÅpenBehandling(behandling),
+        onSuccess: behandling => {
+            queryClient.setQueryData(queryKeys.behandling(behandling), behandling);
+            settÅpenBehandling(behandling);
+        },
     });
 
     const registeropplysningerHentetTidpsunkt = vilkårsvurdering[0]?.person?.registerhistorikk?.hentetTidspunkt;
