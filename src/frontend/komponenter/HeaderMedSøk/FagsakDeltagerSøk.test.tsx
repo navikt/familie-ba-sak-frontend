@@ -5,6 +5,7 @@ import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { Adressebeskyttelsegradering } from '@navikt/familie-typer';
 import { render } from '@testutils/testrender';
 import generator from '@testutils/testverktøy/fnr/fnr-generator';
+import type { NoBrand } from '@typer/brand';
 import { FagsakId } from '@typer/fagsak';
 import { FagsakDeltagerRolle, type IFagsakDeltager } from '@typer/fagsakdeltager';
 import { Avvisningskode } from '@typer/tilgang';
@@ -22,15 +23,16 @@ afterEach(() => {
 
 const gyldigFnr = generator(new Date('2020-02-10')).next().value as string;
 
-function lagFagsakDeltager(fagsakDeltager: Partial<IFagsakDeltager> = {}): IFagsakDeltager {
+function lagFagsakDeltager(fagsakDeltager: Partial<NoBrand<IFagsakDeltager>> = {}): IFagsakDeltager {
+    const { fagsakId = 'fagsakId' in fagsakDeltager ? undefined : 1, ...resten } = fagsakDeltager;
     return {
         navn: 'Søker Søkersen',
         ident: gyldigFnr,
         rolle: FagsakDeltagerRolle.Forelder,
         harTilgang: true,
         erEgenAnsatt: false,
-        fagsakId: FagsakId.fra(1),
-        ...fagsakDeltager,
+        ...resten,
+        fagsakId: fagsakId === undefined ? undefined : FagsakId.fra(fagsakId),
     };
 }
 
@@ -133,7 +135,7 @@ describe('FagsakDeltagerSøk', () => {
 
     test('skal navigere til saksoversikten når et treff med fagsak velges', async () => {
         // Arrange
-        vi.mocked(søkFagsakDeltagere).mockResolvedValue([lagFagsakDeltager({ fagsakId: FagsakId.fra(42) })]);
+        vi.mocked(søkFagsakDeltagere).mockResolvedValue([lagFagsakDeltager({ fagsakId: 42 })]);
         const { screen, user } = render(<FagsakDeltagerSøkMedRuter />);
         await user.type(screen.getByRole('searchbox'), gyldigFnr);
 
