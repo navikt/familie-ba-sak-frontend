@@ -3,7 +3,7 @@ import { useSkalObfuskereData } from '@hooks/useSkalObfuskereData';
 import { Behandlingslinje } from '@komponenter/Saklinje/Behandlingslinje';
 import { HenleggBehandlingModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingModal';
 import { HenleggBehandlingVeivalgModal } from '@komponenter/Saklinje/Meny/HenleggBehandling/HenleggBehandlingVeivalgModal';
-import { Box, GlobalAlert, HStack, VStack } from '@navikt/ds-react';
+import { Box, GlobalAlert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useHttp } from '@navikt/familie-http';
 import {
     byggFeiletRessurs,
@@ -71,66 +71,80 @@ export function BehandlingMedUseHttp({ behandlingId }: Props) {
             });
     }, [behandlingId]);
 
-    switch (behandlingRessurs.status) {
-        case RessursStatus.SUKSESS: {
-            const behandling = behandlingRessurs.data;
-            return (
-                <BehandlingProvider
-                    key={behandling.behandlingId}
-                    behandling={behandling}
-                    settBehandling={behandling => {
-                        if (skalObfuskereData) {
-                            obfuskerBehandling(behandling);
-                        }
-                        settBehandlingRessurs(byggSuksessRessurs(behandling));
-                    }}
-                >
-                    <BrevmottakereBehandlingProvider brevmottakere={behandling.brevmottakere}>
-                        <KontrollsiderProvider>
-                            <HenleggBehandlingModal />
-                            <HenleggBehandlingVeivalgModal />
-                            <VStack className={Styles.skrollbarStack}>
-                                <Behandlingslinje />
-                                <UgyldigSideAdvarsel />
-                                <HStack className={Styles.skrollbarStack}>
-                                    <Box className={Styles.venstreKolonne}>
-                                        <Venstremeny />
-                                    </Box>
-                                    <Box className={Styles.midtreKolonne}>
-                                        <Outlet />
-                                    </Box>
-                                    <Box className={Styles.høyreKolonne}>
-                                        <TotrinnskontrollModalContextProvider>
-                                            <TabContextProvider>
-                                                <Høyremeny />
-                                            </TabContextProvider>
-                                        </TotrinnskontrollModalContextProvider>
-                                    </Box>
-                                </HStack>
-                            </VStack>
-                        </KontrollsiderProvider>
-                    </BrevmottakereBehandlingProvider>
-                </BehandlingProvider>
-            );
-        }
-        case RessursStatus.IKKE_TILGANG:
-            return (
-                <GlobalAlert status="warning">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
-            );
-        case RessursStatus.FEILET:
-        case RessursStatus.FUNKSJONELL_FEIL:
-            return (
-                <GlobalAlert status="error">
-                    <GlobalAlert.Header>
-                        <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
-                    </GlobalAlert.Header>
-                </GlobalAlert>
-            );
-        default:
-            return <div />;
+    if (behandlingRessurs.status === RessursStatus.IKKE_HENTET) {
+        return <div />;
     }
+
+    if (behandlingRessurs.status === RessursStatus.HENTER) {
+        return (
+            <HStack gap={'space-16'} margin={'space-16'}>
+                <Loader size={'small'} />
+                Laster behandling...
+            </HStack>
+        );
+    }
+
+    if (behandlingRessurs.status === RessursStatus.IKKE_TILGANG) {
+        return (
+            <GlobalAlert status={'warning'}>
+                <GlobalAlert.Header>
+                    <GlobalAlert.Title>Du har ikke tilgang til å se denne behandlingen.</GlobalAlert.Title>
+                </GlobalAlert.Header>
+            </GlobalAlert>
+        );
+    }
+
+    if (
+        behandlingRessurs.status === RessursStatus.FEILET ||
+        behandlingRessurs.status === RessursStatus.FUNKSJONELL_FEIL
+    ) {
+        return (
+            <GlobalAlert status={'error'}>
+                <GlobalAlert.Header>
+                    <GlobalAlert.Title>{behandlingRessurs.frontendFeilmelding}</GlobalAlert.Title>
+                </GlobalAlert.Header>
+            </GlobalAlert>
+        );
+    }
+
+    const behandling = behandlingRessurs.data;
+
+    return (
+        <BehandlingProvider
+            key={behandling.behandlingId}
+            behandling={behandling}
+            settBehandling={behandling => {
+                if (skalObfuskereData) {
+                    obfuskerBehandling(behandling);
+                }
+                settBehandlingRessurs(byggSuksessRessurs(behandling));
+            }}
+        >
+            <BrevmottakereBehandlingProvider brevmottakere={behandling.brevmottakere}>
+                <KontrollsiderProvider>
+                    <HenleggBehandlingModal />
+                    <HenleggBehandlingVeivalgModal />
+                    <VStack className={Styles.skrollbarStack}>
+                        <Behandlingslinje />
+                        <UgyldigSideAdvarsel />
+                        <HStack className={Styles.skrollbarStack}>
+                            <Box className={Styles.venstreKolonne}>
+                                <Venstremeny />
+                            </Box>
+                            <Box className={Styles.midtreKolonne}>
+                                <Outlet />
+                            </Box>
+                            <Box className={Styles.høyreKolonne}>
+                                <TotrinnskontrollModalContextProvider>
+                                    <TabContextProvider>
+                                        <Høyremeny />
+                                    </TabContextProvider>
+                                </TotrinnskontrollModalContextProvider>
+                            </Box>
+                        </HStack>
+                    </VStack>
+                </KontrollsiderProvider>
+            </BrevmottakereBehandlingProvider>
+        </BehandlingProvider>
+    );
 }
