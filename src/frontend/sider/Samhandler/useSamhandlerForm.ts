@@ -1,13 +1,9 @@
+import { hentSamhandler } from '@api/hentSamhandler';
 import { queryKeys } from '@hooks/keys/queryKeys';
-import { useHttp } from '@navikt/familie-http';
+import { useOnFormSubmitSuccessful } from '@hooks/useOnFormSubmitSuccessful';
 import { useQueryClient } from '@tanstack/react-query';
+import type { ISamhandlerInfo } from '@typer/samhandler';
 import { useForm } from 'react-hook-form';
-
-import { hentSamhandler } from '../../api/hentSamhandler';
-import { useOnFormSubmitSuccessful } from '../../hooks/useOnFormSubmitSuccessful';
-import type { ISamhandlerInfo } from '../../typer/samhandler';
-
-const påvirkerSystemLaster = false;
 
 interface Props {
     settSamhandler: (samhandler: ISamhandlerInfo) => void;
@@ -23,7 +19,6 @@ export enum SamhandlerFeltnavn {
 
 export function useSamhandlerForm({ settSamhandler }: Props) {
     const queryClient = useQueryClient();
-    const { request } = useHttp();
 
     const form = useForm<SamhandlerFormValues>({
         defaultValues: {
@@ -39,7 +34,7 @@ export function useSamhandlerForm({ settSamhandler }: Props) {
         return await queryClient
             .fetchQuery({
                 queryKey: queryKeys.samhandler(values.orgnr),
-                queryFn: () => hentSamhandler(request, values.orgnr, påvirkerSystemLaster),
+                queryFn: () => hentSamhandler(values.orgnr),
             })
             .then(settSamhandler)
             .catch(error => {

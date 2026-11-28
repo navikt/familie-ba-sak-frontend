@@ -1,7 +1,5 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
 import type { Adressebeskyttelsegradering } from '@typer/person';
-
-import { RessursResolver } from '../utils/ressursResolver';
 
 export interface Tilgangsresultat {
     saksbehandlerHarTilgang: boolean;
@@ -12,12 +10,9 @@ interface Payload {
     brukerIdent: string;
 }
 
-export async function sjekkSaksbehandlertilgangTilIdent(request: FamilieRequest, payload: Payload) {
-    const ressurs = await request<Payload, Tilgangsresultat>({
-        method: 'POST',
+export async function sjekkSaksbehandlertilgangTilIdent(payload: Payload): Promise<Tilgangsresultat> {
+    return apiClient.post<Payload, Tilgangsresultat>({
         url: '/familie-ba-sak/api/tilgang',
         data: payload,
-        påvirkerSystemLaster: false,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

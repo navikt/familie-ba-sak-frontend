@@ -1,13 +1,8 @@
-import type { FamilieRequest } from '@navikt/familie-http/dist/HttpProvider';
+import { apiClient } from '@api/client/apiClient';
+import type { ISamhandlerInfo } from '@typer/samhandler';
 
-import type { ISamhandlerInfo } from '../typer/samhandler';
-import { RessursResolver } from '../utils/ressursResolver';
-
-export async function hentSamhandler(request: FamilieRequest, orgnr: string, påvirkerSystemLaster: boolean = true) {
-    const ressurs = await request<void, ISamhandlerInfo>({
-        method: 'GET',
-        url: '/familie-ba-sak/api/samhandler/orgnr/' + orgnr,
-        påvirkerSystemLaster,
+export async function hentSamhandler(orgnr: string): Promise<ISamhandlerInfo> {
+    return apiClient.get<void, ISamhandlerInfo>({
+        url: `/familie-ba-sak/api/samhandler/orgnr/${orgnr}`,
     });
-    return RessursResolver.resolveToPromise(ressurs);
 }

@@ -1,13 +1,12 @@
+import { hentInfotrygdSaker } from '@api/hentInfotrygdSaker';
 import { queryKeys } from '@hooks/keys/queryKeys';
-import { useHttp } from '@navikt/familie-http';
+import { MetaKey } from '@hooks/meta/metaKey';
 import { useQuery } from '@tanstack/react-query';
 
-import { hentInfotrygdSaker } from './hentInfotrygdSaker';
-
 export function useHentInfotrygdSaker(ident: string) {
-    const { request } = useHttp();
     return useQuery({
         queryKey: queryKeys.infotrygdSaker(ident),
-        queryFn: () => hentInfotrygdSaker(request, ident),
+        queryFn: () => hentInfotrygdSaker(ident),
+        meta: { [MetaKey.VIS_SYSTEMET_LASTER]: true },
     });
 }
