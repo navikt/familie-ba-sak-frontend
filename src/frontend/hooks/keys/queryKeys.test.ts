@@ -28,6 +28,7 @@ const fagsaknøkler = {
 };
 
 const behandlingsnøkler = {
+    brevmottakere: queryKeys.brevmottakere(behandlingId),
     endringstidspunkt: queryKeys.endringstidspunkt(behandlingId),
     feilutbetaltValuta: queryKeys.feilutbetaltValuta(behandlingId),
     filtreringsresultater: queryKeys.filtreringsresultater(behandlingId),
