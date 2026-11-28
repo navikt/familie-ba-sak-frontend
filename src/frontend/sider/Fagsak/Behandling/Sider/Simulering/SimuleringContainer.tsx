@@ -18,15 +18,15 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
         error: simuleringError,
     } = useHentSimulering(behandling.behandlingId);
 
+    // Tilbakekrevingen og åpen tilbakekreving er kun relevante når simuleringen har en feilutbetaling eller en avregning.
+    const skalHenteHarÅpenTilbakekreving =
+        erDefinert(simulering) && (simulering.feilutbetaling > 0 || simulering.avregningsperioder.length > 0);
+
     const {
         data: tilbakekreving,
         isPending: tilbakekrevingIsPending,
         error: tilbakekrevingError,
-    } = useHentTilbakekreving(behandling.behandlingId);
-
-    // Åpen tilbakekreving er kun relevant når simuleringen har en feilutbetaling eller en avregning.
-    const skalHenteHarÅpenTilbakekreving =
-        erDefinert(simulering) && (simulering.feilutbetaling > 0 || simulering.avregningsperioder.length > 0);
+    } = useHentTilbakekreving(behandling.behandlingId, { enabled: skalHenteHarÅpenTilbakekreving });
 
     const { data: harÅpenTilbakekreving, isPending: harÅpenTilbakekrevingIsPending } = useHentHarÅpenTilbakekreving(
         fagsakId,
@@ -35,8 +35,7 @@ export function SimuleringContainer({ children }: PropsWithChildren) {
 
     if (
         simuleringIsPending ||
-        tilbakekrevingIsPending ||
-        (skalHenteHarÅpenTilbakekreving && harÅpenTilbakekrevingIsPending)
+        (skalHenteHarÅpenTilbakekreving && (tilbakekrevingIsPending || harÅpenTilbakekrevingIsPending))
     ) {
         return (
             <Box margin={'space-48'}>

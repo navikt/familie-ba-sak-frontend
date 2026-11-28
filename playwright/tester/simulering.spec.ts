@@ -67,10 +67,12 @@ test.describe('Simulering', () => {
                 årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
             })
         );
+        let harHentetTilbakekreving = false;
         apiMock.use(
             ...behandlingsmock.handlers,
-            http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () =>
-                HttpResponse.json(
+            http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () => {
+                harHentetTilbakekreving = true;
+                return HttpResponse.json(
                     byggSuksessRessurs(
                         TilbakekrevingTestdata.lagTilbakekreving({
                             valg: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
@@ -78,8 +80,8 @@ test.describe('Simulering', () => {
                             begrunnelse: 'Begrunnelse fra før feilutbetalingen falt bort',
                         })
                     )
-                )
-            )
+                );
+            })
         );
 
         await page.goto('/fagsak/1/1/simulering');
@@ -94,6 +96,7 @@ test.describe('Simulering', () => {
 
         expect((await stegRequest).postData()).toBeFalsy();
         await expect(page).toHaveURL(/\/fagsak\/1\/1\/vedtak$/);
+        expect(harHentetTilbakekreving).toBe(false);
     });
 
     test('skal kreve valg om tilbakekreving når simuleringen gir feilutbetaling', async ({ page, apiMock }) => {
@@ -194,6 +197,9 @@ test.describe('Simulering', () => {
         const behandlingsmock = lagBehandlingsmock(lagBehandlingPåSteg(BehandlingSteg.VURDER_TILBAKEKREVING));
         apiMock.use(
             ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/simulering', () =>
+                HttpResponse.json(byggSuksessRessurs(lagSimuleringMedFeilutbetaling()))
+            ),
             http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () =>
                 HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente tilbakekreving'))
             )

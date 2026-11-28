@@ -26,6 +26,15 @@ describe('useHentTilbakekreving', () => {
         expect(result.current.data).toBe(tilbakekreving);
     });
 
+    test('henter ikke tilbakekreving når enabled er false', () => {
+        const { result } = renderHook(() => useHentTilbakekreving(123, { enabled: false }), {
+            wrapper: TestProviders,
+        });
+
+        expect(result.current.fetchStatus).toBe('idle');
+        expect(hentTilbakekreving).not.toHaveBeenCalled();
+    });
+
     test('setter isError ved feil fra api-funksjon', async () => {
         vi.mocked(hentTilbakekreving).mockRejectedValue(new Error('Noe gikk galt'));
 
