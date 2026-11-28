@@ -123,12 +123,12 @@ export function skalViseFritekstbegrunnelser(vedtaksperiodeMedBegrunnelser: IVed
 
     const ugyldigeVedtaksperiodetyper = [Vedtaksperiodetype.UTBETALING, Vedtaksperiodetype.ENDRET_UTBETALING];
 
+    const etterEndretUtbetalingEtterbetalingPrefiks = 'Standardbegrunnelse$ETTER_ENDRET_UTBETALING_ETTERBETALING';
+
     const harTillattVedtaksperiodetype = !ugyldigeVedtaksperiodetyper.includes(vedtaksperiodeMedBegrunnelser.type);
 
-    const harEtterbetaling3År = vedtaksperiodeMedBegrunnelser.begrunnelser.some(
-        begrunnelse =>
-            (begrunnelse.standardbegrunnelse as Standardbegrunnelse) ===
-            Standardbegrunnelse.ETTER_ENDRET_UTBETALING_ETTERBETALING
+    const harEtterEndretUtbetalingEtterbetaling = vedtaksperiodeMedBegrunnelser.begrunnelser.some(begrunnelse =>
+        begrunnelse.standardbegrunnelse.startsWith(etterEndretUtbetalingEtterbetalingPrefiks)
     );
 
     const harFritekststøtte = vedtaksperiodeMedBegrunnelser.begrunnelser.some(
@@ -141,5 +141,10 @@ export function skalViseFritekstbegrunnelser(vedtaksperiodeMedBegrunnelser: IVed
             !ugyldigeReduksjonstekster.includes(begrunnelse.standardbegrunnelse as Standardbegrunnelse)
     );
 
-    return harTillattVedtaksperiodetype || harEtterbetaling3År || harFritekststøtte || harGyldigReduksjonsbegrunnelse;
+    return (
+        harTillattVedtaksperiodetype ||
+        harEtterEndretUtbetalingEtterbetaling ||
+        harFritekststøtte ||
+        harGyldigReduksjonsbegrunnelse
+    );
 }
