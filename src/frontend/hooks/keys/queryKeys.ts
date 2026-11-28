@@ -110,6 +110,9 @@ export const queryKeys = {
     simulering: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'simulering'] as const;
     },
+    tilbakekreving: (behandlingId: number) => {
+        return [...behandlingQueryKey(behandlingId), 'tilbakekreving'] as const;
+    },
     validerBehandlingsresultat: (behandlingId: number) => {
         return [...behandlingQueryKey(behandlingId), 'valider-behandlingsresultat'] as const;
     },

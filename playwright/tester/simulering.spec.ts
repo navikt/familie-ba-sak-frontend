@@ -1,5 +1,6 @@
-import { byggSuksessRessurs } from '@navikt/familie-typer';
+import { byggFeiletRessurs, byggSuksessRessurs } from '@navikt/familie-typer';
 import { SimuleringTestdata } from '@testutils/testdata/simuleringTestdata';
+import { TilbakekrevingTestdata } from '@testutils/testdata/tilbakekrevingTestdata';
 import { BehandlingSteg, Behandlingstype, BehandlingÅrsak } from '@typer/behandling';
 import { Tilbakekrevingsvalg } from '@typer/simulering';
 import { HttpResponse, http } from 'msw';
@@ -64,15 +65,24 @@ test.describe('Simulering', () => {
             lagBehandlingPåSteg(BehandlingSteg.VURDER_TILBAKEKREVING, {
                 type: Behandlingstype.REVURDERING,
                 årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
-                tilbakekreving: {
-                    vedtakId: 1,
-                    valg: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
-                    varsel: 'Varsel fra før feilutbetalingen falt bort',
-                    begrunnelse: 'Begrunnelse fra før feilutbetalingen falt bort',
-                },
             })
         );
-        apiMock.use(...behandlingsmock.handlers);
+        let harHentetTilbakekreving = false;
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () => {
+                harHentetTilbakekreving = true;
+                return HttpResponse.json(
+                    byggSuksessRessurs(
+                        TilbakekrevingTestdata.lagTilbakekreving({
+                            valg: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
+                            varsel: 'Varsel fra før feilutbetalingen falt bort',
+                            begrunnelse: 'Begrunnelse fra før feilutbetalingen falt bort',
+                        })
+                    )
+                );
+            })
+        );
 
         await page.goto('/fagsak/1/1/simulering');
 
@@ -86,6 +96,7 @@ test.describe('Simulering', () => {
 
         expect((await stegRequest).postData()).toBeFalsy();
         await expect(page).toHaveURL(/\/fagsak\/1\/1\/vedtak$/);
+        expect(harHentetTilbakekreving).toBe(false);
     });
 
     test('skal kreve valg om tilbakekreving når simuleringen gir feilutbetaling', async ({ page, apiMock }) => {
@@ -146,5 +157,57 @@ test.describe('Simulering', () => {
             begrunnelse: 'Usikkert om januar blir feilutbetalt.',
         });
         await expect(page).toHaveURL(/\/fagsak\/1\/2\/vedtak$/);
+    });
+
+    test('skal vise lagret tilbakekrevingsvalg fra endepunktet', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(
+            lagBehandlingPåSteg(BehandlingSteg.VURDER_TILBAKEKREVING, {
+                behandlingId: 2,
+                type: Behandlingstype.REVURDERING,
+                årsak: BehandlingÅrsak.NYE_OPPLYSNINGER,
+            })
+        );
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/simulering', () =>
+                HttpResponse.json(byggSuksessRessurs(lagSimuleringMedFeilutbetaling()))
+            ),
+            http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () =>
+                HttpResponse.json(
+                    byggSuksessRessurs(
+                        TilbakekrevingTestdata.lagTilbakekreving({
+                            valg: Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_UTEN_VARSEL,
+                            begrunnelse: 'Lagret begrunnelse',
+                        })
+                    )
+                )
+            )
+        );
+
+        await page.goto('/fagsak/1/2/simulering');
+
+        const valg = page.getByRole('radiogroup', { name: /Fastsett videre behandling/ });
+        await expect(valg.getByRole('radio', { name: 'Opprett tilbakekreving, ikke send varsel' })).toBeChecked();
+        await expect(page.getByRole('textbox', { name: /^Årsak til feilutbetaling og videre behandling/ })).toHaveValue(
+            'Lagret begrunnelse'
+        );
+    });
+
+    test('skal vise feilmelding når tilbakekrevingen ikke kan hentes', async ({ page, apiMock }) => {
+        const behandlingsmock = lagBehandlingsmock(lagBehandlingPåSteg(BehandlingSteg.VURDER_TILBAKEKREVING));
+        apiMock.use(
+            ...behandlingsmock.handlers,
+            http.get('/familie-ba-sak/api/behandlinger/:behandlingId/simulering', () =>
+                HttpResponse.json(byggSuksessRessurs(lagSimuleringMedFeilutbetaling()))
+            ),
+            http.get('/familie-ba-sak/api/tilbakekreving/behandling/:behandlingId', () =>
+                HttpResponse.json(byggFeiletRessurs('Klarte ikke å hente tilbakekreving'))
+            )
+        );
+
+        await page.goto('/fagsak/1/1/simulering');
+
+        await expect(page.getByText('Klarte ikke å hente tilbakekreving')).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Neste steg' })).toBeHidden();
     });
 });

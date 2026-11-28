@@ -3,17 +3,24 @@ import {
     type Simuleringsvurdering,
     utledSimuleringsvurdering,
 } from '@sider/Fagsak/Behandling/Sider/Simulering/simuleringsvurdering';
-import type { IAvregningsperiode, IOverlappendePeriodeMedAndreFagsaker, ISimuleringDTO } from '@typer/simulering';
+import type {
+    IAvregningsperiode,
+    IOverlappendePeriodeMedAndreFagsaker,
+    ISimuleringDTO,
+    ITilbakekreving,
+} from '@typer/simulering';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useMemo } from 'react';
 
 interface Props extends PropsWithChildren {
     simulering: ISimuleringDTO;
+    tilbakekreving: ITilbakekreving | undefined;
     harÅpenTilbakekreving: boolean;
 }
 
 interface SimuleringContextValue extends Simuleringsvurdering {
     simulering: ISimuleringDTO;
+    tilbakekreving: ITilbakekreving | undefined;
     harÅpenTilbakekreving: boolean;
     avregningsperioder: IAvregningsperiode[];
     overlappendePerioderMedAndreFagsaker: IOverlappendePeriodeMedAndreFagsaker[];
@@ -21,7 +28,7 @@ interface SimuleringContextValue extends Simuleringsvurdering {
 
 const SimuleringContext = createContext<SimuleringContextValue | undefined>(undefined);
 
-export function SimuleringProvider({ simulering, harÅpenTilbakekreving, children }: Props) {
+export function SimuleringProvider({ simulering, tilbakekreving, harÅpenTilbakekreving, children }: Props) {
     const behandling = useBehandling();
 
     const simuleringsvurdering = useMemo(
@@ -33,11 +40,12 @@ export function SimuleringProvider({ simulering, harÅpenTilbakekreving, childre
         () => ({
             ...simuleringsvurdering,
             simulering,
+            tilbakekreving,
             harÅpenTilbakekreving,
             avregningsperioder: simulering.avregningsperioder,
             overlappendePerioderMedAndreFagsaker: simulering.overlappendePerioderMedAndreFagsaker,
         }),
-        [simuleringsvurdering, simulering, harÅpenTilbakekreving]
+        [simuleringsvurdering, simulering, tilbakekreving, harÅpenTilbakekreving]
     );
 
     return <SimuleringContext.Provider value={value}>{children}</SimuleringContext.Provider>;

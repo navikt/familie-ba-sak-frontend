@@ -4,7 +4,6 @@ import { lagFagsak } from '@testutils/testdata/fagsakTestdata';
 import { lagSaksbehandler } from '@testutils/testdata/saksbehandlerTestdata';
 import { BehandlingResultat, BehandlingStatus, BehandlingSteg, type IBehandling } from '@typer/behandling';
 import type { IMinimalFagsak } from '@typer/fagsak';
-import type { ITilbakekreving } from '@typer/simulering';
 import { TotrinnskontrollBeslutning } from '@typer/totrinnskontroll';
 import type { IRestPersonResultat } from '@typer/vilkår';
 import { HttpResponse, http, type RequestHandler } from 'msw';
@@ -122,11 +121,9 @@ export function lagBehandlingsmock(
                         : behandling.resultat,
             })
         ),
-        http.post(stegUrl('tilbakekreving'), async ({ request }) => {
-            const body = await request.text();
-            const tilbakekreving: ITilbakekreving | undefined = body ? JSON.parse(body) : undefined;
-            return fullførSteg('tilbakekreving', { steg: BehandlingSteg.SEND_TIL_BESLUTTER, tilbakekreving });
-        }),
+        http.post(stegUrl('tilbakekreving'), () =>
+            fullførSteg('tilbakekreving', { steg: BehandlingSteg.SEND_TIL_BESLUTTER })
+        ),
         http.post(stegUrl('send-til-beslutter'), () => {
             const saksbehandler = lagSaksbehandler();
             return fullførSteg('send-til-beslutter', {
