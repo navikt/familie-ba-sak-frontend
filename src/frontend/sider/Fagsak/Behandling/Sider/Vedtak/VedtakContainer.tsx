@@ -5,6 +5,7 @@ import { useHentKorrigertEtterbetaling } from '@hooks/useHentKorrigertEtterbetal
 import { useHentKorrigertVedtak } from '@hooks/useHentKorrigertVedtak';
 import { useHentRefusjonEøs } from '@hooks/useHentRefusjonEøs';
 import { useHentSammensattKontrollsak } from '@hooks/useHentSammensattKontrollsak';
+import { useHentTilbakekrevingsvedtakMotregning } from '@hooks/useHentTilbakekrevingsvedtakMotregning';
 import { useHentVedtaksperioder } from '@hooks/useHentVedtaksperioder';
 import { BodyShort, Box, ErrorMessage, Loader, LocalAlert, Stack, VStack } from '@navikt/ds-react';
 import { EndringstidspunktDialogProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Endringstidspunkt/EndringstidspunktDialogContext';
@@ -14,6 +15,7 @@ import { KorrigertVedtakProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/K
 import { RefusjonEøsTabellProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/RefusjonEøs/RefusjonEøsTabellContext';
 import { SammensattKontrollsakProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/SammensattKontrollsak/SammensattKontrollsakContext';
 import { SendtTilTotrinnskontrollModalProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Totrinnskontroll/SendtTilTotrinnskontrollModalContext';
+import { TilbakekrevingsvedtakMotregningProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/UlovfestetMotregning/TilbakekrevingsvedtakMotregningContext';
 import { AlleBegrunnelserProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/AlleBegrunnelserContext';
 import { VedtaksperioderProvider } from '@sider/Fagsak/Behandling/Sider/Vedtak/Vedtaksperioder/VedtaksperioderContext';
 import { erDefinert } from '@utils/commons';
@@ -64,6 +66,12 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         error: refusjonEøsPerioderError,
     } = useHentRefusjonEøs(behandlingId);
 
+    const {
+        data: tilbakekrevingsvedtakMotregning,
+        isPending: tilbakekrevingsvedtakMotregningIsPending,
+        error: tilbakekrevingsvedtakMotregningError,
+    } = useHentTilbakekrevingsvedtakMotregning(behandlingId);
+
     if (
         vedtaksperioderIsPending ||
         alleBegrunnelserIsPending ||
@@ -71,7 +79,8 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         feilutbetaltValutaPerioderIsPending ||
         refusjonEøsPerioderIsPending ||
         korrigertEtterbetalingIsPending ||
-        korrigertVedtakIsPending
+        korrigertVedtakIsPending ||
+        tilbakekrevingsvedtakMotregningIsPending
     ) {
         return (
             <Box margin={'space-48'}>
@@ -90,7 +99,8 @@ export function VedtakContainer({ children }: PropsWithChildren) {
         feilutbetaltValutaPerioderError ||
         refusjonEøsPerioderError ||
         korrigertEtterbetalingError ||
-        korrigertVedtakError
+        korrigertVedtakError ||
+        tilbakekrevingsvedtakMotregningError
     ) {
         const errors = [
             vedtaksperioderError,
@@ -100,6 +110,7 @@ export function VedtakContainer({ children }: PropsWithChildren) {
             refusjonEøsPerioderError,
             korrigertEtterbetalingError,
             korrigertVedtakError,
+            tilbakekrevingsvedtakMotregningError,
         ].filter(error => erDefinert(error));
         return (
             <Box margin={'space-48'}>
@@ -132,7 +143,13 @@ export function VedtakContainer({ children }: PropsWithChildren) {
                                         korrigertEtterbetaling={korrigertEtterbetaling ?? undefined}
                                     >
                                         <KorrigertVedtakProvider korrigertVedtak={korrigertVedtak ?? undefined}>
-                                            {children}
+                                            <TilbakekrevingsvedtakMotregningProvider
+                                                tilbakekrevingsvedtakMotregning={
+                                                    tilbakekrevingsvedtakMotregning ?? undefined
+                                                }
+                                            >
+                                                {children}
+                                            </TilbakekrevingsvedtakMotregningProvider>
                                         </KorrigertVedtakProvider>
                                     </KorrigertEtterbetalingProvider>
                                 </EndringstidspunktDialogProvider>

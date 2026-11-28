@@ -1,24 +1,26 @@
 import { queryKeys } from '@hooks/keys/queryKeys';
+import { useBehandlingId } from '@hooks/useBehandlingId';
 import { useOppdaterTilbakekrevingsvedtakMotregning } from '@hooks/useOppdaterTilbakekrevingsvedtakMotregning';
 import { useSlettTilbakekrevingsvedtakMotregning } from '@hooks/useSlettTilbakekrevingsvedtakMotregning';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { BodyLong, Button, ErrorMessage, HStack, InfoCard, VStack } from '@navikt/ds-react';
-import { useBehandlingContext } from '@sider/Fagsak/Behandling/BehandlingContext';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function BekreftSamtykkeTilMotregning() {
+    const behandlingId = useBehandlingId();
     const queryClient = useQueryClient();
-
-    const { behandling, settÅpenBehandling } = useBehandlingContext();
 
     const {
         mutate: oppdaterTilbakekrevingsvedtakMotregning,
         isPending: oppdaterer,
         error: oppdaterError,
     } = useOppdaterTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => {
-            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
-            settÅpenBehandling(oppdatertBehandling);
+        onSuccess: lagretTilbakekrevingsvedtakMotregning => {
+            queryClient.setQueryData(
+                queryKeys.tilbakekrevingsvedtakMotregning(behandlingId),
+                lagretTilbakekrevingsvedtakMotregning
+            );
+            queryClient.invalidateQueries({ queryKey: queryKeys.historikkinnslag(behandlingId) });
         },
     });
 
@@ -27,9 +29,8 @@ export function BekreftSamtykkeTilMotregning() {
         isPending: sletter,
         error: slettError,
     } = useSlettTilbakekrevingsvedtakMotregning({
-        onSuccess: oppdatertBehandling => {
-            queryClient.setQueryData(queryKeys.behandling(oppdatertBehandling), oppdatertBehandling);
-            settÅpenBehandling(oppdatertBehandling);
+        onSuccess: () => {
+            queryClient.setQueryData(queryKeys.tilbakekrevingsvedtakMotregning(behandlingId), null);
         },
     });
 
@@ -44,9 +45,7 @@ export function BekreftSamtykkeTilMotregning() {
                 <VStack gap="space-16">
                     <HStack gap="space-16" justify="center">
                         <Button
-                            onClick={() =>
-                                slettTilbakekrevingsvedtakMotregning({ behandlingId: behandling.behandlingId })
-                            }
+                            onClick={() => slettTilbakekrevingsvedtakMotregning({ behandlingId })}
                             loading={sletter}
                             disabled={sletter || oppdaterer}
                             variant="secondary"
@@ -56,7 +55,7 @@ export function BekreftSamtykkeTilMotregning() {
                         <Button
                             onClick={() =>
                                 oppdaterTilbakekrevingsvedtakMotregning({
-                                    behandlingId: behandling.behandlingId,
+                                    behandlingId,
                                     tilbakekrevingsvedtakMotregning: { samtykke: true },
                                 })
                             }

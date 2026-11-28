@@ -37,4 +37,10 @@ export const vedtakHandlers = [
     http.get<{ behandlingId: string }>(encodeURI('/familie-ba-sak/api/refusjon-eøs/behandlinger/:behandlingId'), () => {
         return HttpResponse.json(byggSuksessRessurs<IRestRefusjonEøs[]>([]));
     }),
+    http.get<{ behandlingId: string }>(
+        '/familie-ba-sak/api/behandling/:behandlingId/tilbakekrevingsvedtak-motregning',
+        () => {
+            return HttpResponse.json(byggSuksessRessurs(null));
+        }
+    ),
 ];

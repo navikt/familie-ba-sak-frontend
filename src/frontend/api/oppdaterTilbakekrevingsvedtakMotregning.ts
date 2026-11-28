@@ -1,6 +1,8 @@
 import { apiClient } from '@api/client/apiClient';
-import type { IBehandling } from '@typer/behandling';
-import type { OppdaterTilbakekrevingsvedtakMotregningDTO } from '@typer/tilbakekrevingsvedtakMotregning';
+import type {
+    OppdaterTilbakekrevingsvedtakMotregningDTO,
+    TilbakekrevingsvedtakMotregningDTO,
+} from '@typer/tilbakekrevingsvedtakMotregning';
 
 interface PathParams {
     behandlingId: number;
@@ -11,7 +13,7 @@ export function oppdaterTilbakekrevingsvedtakMotregning(
     payload: OppdaterTilbakekrevingsvedtakMotregningDTO
 ) {
     const { behandlingId } = pathParams;
-    return apiClient.patch<OppdaterTilbakekrevingsvedtakMotregningDTO, IBehandling>({
+    return apiClient.patch<OppdaterTilbakekrevingsvedtakMotregningDTO, TilbakekrevingsvedtakMotregningDTO>({
         url: `/familie-ba-sak/api/behandling/${behandlingId}/tilbakekrevingsvedtak-motregning`,
         data: payload,
     });

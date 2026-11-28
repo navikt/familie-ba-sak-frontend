@@ -1,5 +1,4 @@
 import { apiClient } from '@api/client/apiClient';
-import type { IBehandling } from '@typer/behandling';
 
 interface PathParams {
     behandlingId: number;
@@ -7,7 +6,7 @@ interface PathParams {
 
 export function slettTilbakekrevingsvedtakMotregning(pathParams: PathParams) {
     const { behandlingId } = pathParams;
-    return apiClient.delete<void, IBehandling>({
+    return apiClient.delete<void, null>({
         url: `/familie-ba-sak/api/behandling/${behandlingId}/tilbakekrevingsvedtak-motregning`,
     });
 }

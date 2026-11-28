@@ -24,6 +24,7 @@ export function Simulering() {
 
     const {
         simulering,
+        tilbakekrevingsvedtakMotregning,
         erFeilutbetaling,
         avregningsperioder,
         overlappendePerioderMedAndreFagsaker,
@@ -58,8 +59,6 @@ export function Simulering() {
     }
 
     const erAvregning = avregningsperioder.length > 0;
-
-    const tilbakekrevingsvedtakMotregning = behandling.tilbakekrevingsvedtakMotregning;
 
     const heleBeløpetSkalKrevesTilbake = tilbakekrevingsvedtakMotregning?.heleBeløpetSkalKrevesTilbake === true;
 

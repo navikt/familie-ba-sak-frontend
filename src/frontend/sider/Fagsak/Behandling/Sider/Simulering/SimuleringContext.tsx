@@ -9,18 +9,21 @@ import type {
     ISimuleringDTO,
     ITilbakekreving,
 } from '@typer/simulering';
+import type { TilbakekrevingsvedtakMotregningDTO } from '@typer/tilbakekrevingsvedtakMotregning';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useMemo } from 'react';
 
 interface Props extends PropsWithChildren {
     simulering: ISimuleringDTO;
     tilbakekreving: ITilbakekreving | undefined;
+    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     harÅpenTilbakekreving: boolean;
 }
 
 interface SimuleringContextValue extends Simuleringsvurdering {
     simulering: ISimuleringDTO;
     tilbakekreving: ITilbakekreving | undefined;
+    tilbakekrevingsvedtakMotregning: TilbakekrevingsvedtakMotregningDTO | null;
     harÅpenTilbakekreving: boolean;
     avregningsperioder: IAvregningsperiode[];
     overlappendePerioderMedAndreFagsaker: IOverlappendePeriodeMedAndreFagsaker[];
@@ -28,7 +31,13 @@ interface SimuleringContextValue extends Simuleringsvurdering {
 
 const SimuleringContext = createContext<SimuleringContextValue | undefined>(undefined);
 
-export function SimuleringProvider({ simulering, tilbakekreving, harÅpenTilbakekreving, children }: Props) {
+export function SimuleringProvider({
+    simulering,
+    tilbakekreving,
+    tilbakekrevingsvedtakMotregning,
+    harÅpenTilbakekreving,
+    children,
+}: Props) {
     const behandling = useBehandling();
 
     const simuleringsvurdering = useMemo(
@@ -41,11 +50,12 @@ export function SimuleringProvider({ simulering, tilbakekreving, harÅpenTilbake
             ...simuleringsvurdering,
             simulering,
             tilbakekreving,
+            tilbakekrevingsvedtakMotregning,
             harÅpenTilbakekreving,
             avregningsperioder: simulering.avregningsperioder,
             overlappendePerioderMedAndreFagsaker: simulering.overlappendePerioderMedAndreFagsaker,
         }),
-        [simuleringsvurdering, simulering, tilbakekreving, harÅpenTilbakekreving]
+        [simuleringsvurdering, simulering, tilbakekreving, tilbakekrevingsvedtakMotregning, harÅpenTilbakekreving]
     );
 
     return <SimuleringContext.Provider value={value}>{children}</SimuleringContext.Provider>;
